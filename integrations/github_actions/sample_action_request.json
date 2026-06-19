@@ -1,0 +1,19 @@
+{
+  "action_id": "AI_DEPLOY_PRODUCTION_CHANGE",
+  "description": "AI coding agent proposes deploying a generated infrastructure change to production.",
+  "tool": "github_actions.deploy",
+  "actor": "coding_agent",
+  "confidence": 0.64,
+  "harm": 0.72,
+  "consent": 0.58,
+  "reversibility": 0.34,
+  "external_effect": true,
+  "sensitive_data": false,
+  "context": {
+    "repository": "example/payments-api",
+    "branch": "agent/generated-cloud-change",
+    "environment": "production",
+    "rollback": "manual Terraform revert available but untested"
+  }
+}
+

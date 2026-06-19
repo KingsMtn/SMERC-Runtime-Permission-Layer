@@ -1,0 +1,36 @@
+name: SMERC Runtime Permission Gate Example
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "infra/**"
+      - ".github/workflows/**"
+
+jobs:
+  smerc-permission-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Evaluate proposed agent action
+        id: smerc
+        uses: ./integrations/github_actions
+        with:
+          action-file: integrations/github_actions/sample_action_request.json
+          mode: observe
+          output-file: smerc-decision.json
+          fail-on: DENY,FREEZE
+
+      - name: Upload SMERC decision report
+        uses: actions/upload-artifact@v4
+        with:
+          name: smerc-decision
+          path: smerc-decision.json
+
+      - name: Print posture
+        run: echo "SMERC posture is ${{ steps.smerc.outputs.posture }}"
+

@@ -1,0 +1,63 @@
+[
+  {
+    "action_id": "READ_PUBLIC_DOCS",
+    "description": "Agent reads public documentation to answer a user question.",
+    "tool": "docs.search",
+    "actor": "support_agent",
+    "confidence": 0.9,
+    "harm": 0.08,
+    "consent": 0.95,
+    "reversibility": 0.9,
+    "external_effect": false,
+    "sensitive_data": false
+  },
+  {
+    "action_id": "SEND_EMAIL_TO_CUSTOMER",
+    "description": "Agent sends a customer-facing email.",
+    "tool": "gmail.send",
+    "actor": "sales_agent",
+    "confidence": 0.72,
+    "harm": 0.42,
+    "consent": 0.66,
+    "reversibility": 0.38,
+    "external_effect": true,
+    "sensitive_data": false
+  },
+  {
+    "action_id": "RUN_UNKNOWN_SCRIPT",
+    "description": "Agent executes an unverified shell script from a webpage.",
+    "tool": "shell.exec",
+    "actor": "coding_agent",
+    "confidence": 0.36,
+    "harm": 0.68,
+    "consent": 0.48,
+    "reversibility": 0.28,
+    "external_effect": true,
+    "sensitive_data": true
+  },
+  {
+    "action_id": "DELETE_PRODUCTION_DATA",
+    "description": "Agent attempts to delete production records to resolve a cleanup task.",
+    "tool": "database.delete",
+    "actor": "ops_agent",
+    "confidence": 0.58,
+    "harm": 0.95,
+    "consent": 0.32,
+    "reversibility": 0.05,
+    "external_effect": true,
+    "sensitive_data": true
+  },
+  {
+    "action_id": "WIRE_FUNDS",
+    "description": "Agent proposes initiating a payment to a vendor.",
+    "tool": "payments.transfer",
+    "actor": "finance_agent",
+    "confidence": 0.78,
+    "harm": 0.82,
+    "consent": 0.52,
+    "reversibility": 0.12,
+    "external_effect": true,
+    "sensitive_data": true
+  }
+]
+

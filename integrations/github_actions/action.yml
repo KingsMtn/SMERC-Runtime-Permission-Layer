@@ -1,0 +1,44 @@
+name: "SMERC Runtime Permission Gate"
+description: "Evaluate an AI-agent or automation action and return ALLOW, THROTTLE, FREEZE, DENY, or ESCALATE."
+author: "SMERC"
+
+inputs:
+  action-file:
+    description: "Path to a JSON action request."
+    required: true
+  mode:
+    description: "observe, recommend, or enforce."
+    required: false
+    default: "observe"
+  output-file:
+    description: "Path for the JSON decision report artifact."
+    required: false
+    default: "smerc-decision.json"
+  fail-on:
+    description: "Comma-separated postures that fail the workflow in enforce mode."
+    required: false
+    default: "DENY,FREEZE"
+
+outputs:
+  posture:
+    description: "SMERC runtime permission posture."
+    value: ${{ steps.evaluate.outputs.posture }}
+  risk-score:
+    description: "Risk score from 0.0 to 1.0."
+    value: ${{ steps.evaluate.outputs.risk-score }}
+  replay-id:
+    description: "Replay identifier for the decision."
+    value: ${{ steps.evaluate.outputs.replay-id }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: evaluate
+      shell: bash
+      run: |
+        python "$GITHUB_ACTION_PATH/run_smerc_gate.py" \
+          --action-file "${{ inputs.action-file }}" \
+          --mode "${{ inputs.mode }}" \
+          --output-file "${{ inputs.output-file }}" \
+          --fail-on "${{ inputs.fail-on }}"
+
