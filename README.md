@@ -69,6 +69,13 @@ python integrations/github_actions/run_smerc_gate.py \
   --output-file smerc-decision.json
 ```
 
+Run the optional SMERC-F financial action-governance profile:
+
+```bash
+python -m reference_engine.financial_permission_profile \
+  examples/financial_action_requests.json --pretty
+```
+
 ## GitHub Actions Modes
 
 | Mode | Behavior |
@@ -86,6 +93,13 @@ The recommended first deployment is `observe` mode.
 - Not a production-certified security platform.
 - Not a claim that current thresholds are already calibrated for every enterprise.
 - Not intended to receive production secrets, raw customer data, or full private prompts in a first pilot.
+- Not a cryptocurrency, token, trading system, custody platform, or financial product.
+
+## Optional Domain Profile
+
+`SMERC-F` demonstrates how the core permission engine can govern proposed treasury, settlement, liquidity, collateral, and tokenized-finance actions. It is explicitly labeled exploratory and uses synthetic examples.
+
+See `docs/SMERC_Financial_Action_Governance.md`.
 
 ## Public Review Links
 
@@ -122,3 +136,4 @@ SMERC should be adopted only if a controlled pilot produces evidence that the an
 ## License
 
 See `LICENSE`.
+
