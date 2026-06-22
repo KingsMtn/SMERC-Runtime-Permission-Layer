@@ -78,6 +78,14 @@ python -m reference_engine.financial_permission_profile \
   examples/financial_action_requests.json --pretty
 ```
 
+Run the SMERC-F historical-context replay suite:
+
+```bash
+python -m reference_engine.financial_replay \
+  examples/financial_replay_scenarios.json \
+  --report reports/SMERC_F_Replay_Report.md
+```
+
 ## GitHub Actions Modes
 
 | Mode | Behavior |
@@ -102,6 +110,8 @@ The recommended first deployment is `observe` mode.
 `SMERC-F` demonstrates how the core permission engine can govern proposed treasury, settlement, liquidity, collateral, and tokenized-finance actions. It is explicitly labeled exploratory and uses synthetic examples.
 
 See `docs/SMERC_Financial_Action_Governance.md`.
+
+Replay method and limitations are documented in `docs/SMERC_F_Replay_Validation.md`.
 
 ## Public Review Links
 
