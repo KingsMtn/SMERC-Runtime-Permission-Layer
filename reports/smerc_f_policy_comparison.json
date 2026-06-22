@@ -1,0 +1,154 @@
+{
+  "action_count": 5,
+  "policy_difference_count": 3,
+  "policy_difference_rate": 0.6,
+  "monotonic_restraint_count": 5,
+  "monotonic_restraint_rate": 1.0,
+  "state_distributions": {
+    "conservative": {
+      "ALLOW": 1,
+      "DENY": 2,
+      "THROTTLE": 1,
+      "FREEZE": 1
+    },
+    "balanced": {
+      "ALLOW": 1,
+      "FREEZE": 2,
+      "THROTTLE": 1,
+      "DENY": 1
+    },
+    "permissive": {
+      "ALLOW": 2,
+      "FREEZE": 1,
+      "DENY": 1,
+      "THROTTLE": 1
+    }
+  },
+  "actions": [
+    {
+      "action_id": "TREASURY_REBALANCE_ROUTINE",
+      "description": "Move a small approved reserve allocation between existing custodial accounts.",
+      "decisions": {
+        "conservative": {
+          "state": "ALLOW",
+          "irreversible_exposure": 0.131,
+          "reversible_capacity": 0.887,
+          "decision_hash": "34e2463d680c2c4c0537784d37aefa4ac829221b9ba6d77e921473f33fd26fb3"
+        },
+        "balanced": {
+          "state": "ALLOW",
+          "irreversible_exposure": 0.131,
+          "reversible_capacity": 0.887,
+          "decision_hash": "21700dde81467def7c0455108b54c7ac1d003a6cb4ebc349c42948491e235665"
+        },
+        "permissive": {
+          "state": "ALLOW",
+          "irreversible_exposure": 0.131,
+          "reversible_capacity": 0.887,
+          "decision_hash": "84f250dd4497804f7d57f885ab6ffa60e4ab3b286c4a5482d7134746a5207496"
+        }
+      },
+      "policy_difference": false
+    },
+    {
+      "action_id": "STABLECOIN_DEPEG_REALLOCATION",
+      "description": "Rapidly reallocate treasury reserves while a settlement asset is deviating from its target value.",
+      "decisions": {
+        "conservative": {
+          "state": "DENY",
+          "irreversible_exposure": 0.787,
+          "reversible_capacity": 0.392,
+          "decision_hash": "c34883a6279c9889438e6962df938ee604d30e28770b3a9804230c8db04857a0"
+        },
+        "balanced": {
+          "state": "FREEZE",
+          "irreversible_exposure": 0.787,
+          "reversible_capacity": 0.392,
+          "decision_hash": "00204d98e04610739e02b2dbc539c6c339532cb66a3e68b227e2f9d037f51727"
+        },
+        "permissive": {
+          "state": "FREEZE",
+          "irreversible_exposure": 0.787,
+          "reversible_capacity": 0.392,
+          "decision_hash": "9fd654a2933a10dead4f57253b127ddd62d80a9a6a90ea5352e723afbeb8643c"
+        }
+      },
+      "policy_difference": true
+    },
+    {
+      "action_id": "COUNTERPARTY_EXPOSURE_INCREASE",
+      "description": "Increase short-term settlement exposure to an existing counterparty.",
+      "decisions": {
+        "conservative": {
+          "state": "THROTTLE",
+          "irreversible_exposure": 0.38,
+          "reversible_capacity": 0.729,
+          "decision_hash": "e892ecf92335b2a7069d7dd1b68de635b3d48147811206d1f8464a691c57f9a2"
+        },
+        "balanced": {
+          "state": "THROTTLE",
+          "irreversible_exposure": 0.38,
+          "reversible_capacity": 0.729,
+          "decision_hash": "4a5f618343f2f267b769982f386a48b6ea51ca45b47fbffce2083b8c1b8345e7"
+        },
+        "permissive": {
+          "state": "ALLOW",
+          "irreversible_exposure": 0.38,
+          "reversible_capacity": 0.729,
+          "decision_hash": "3a40b117c3bcc08c68d8fade786d6519b60b20eb1a3f97af10ea8dff184b60f8"
+        }
+      },
+      "policy_difference": true
+    },
+    {
+      "action_id": "UNAUTHORIZED_RESERVE_TRANSFER",
+      "description": "Transfer a material reserve balance to a newly introduced destination.",
+      "decisions": {
+        "conservative": {
+          "state": "DENY",
+          "irreversible_exposure": 0.789,
+          "reversible_capacity": 0.19,
+          "decision_hash": "fff5941573e4cb9bb17dba1f44c41744f6b8f4e3a28fb144e9b615cb24380885"
+        },
+        "balanced": {
+          "state": "DENY",
+          "irreversible_exposure": 0.789,
+          "reversible_capacity": 0.19,
+          "decision_hash": "77bde788ffde2d87d0993515b5cc9c4e399403b58b32b1513868ba94df372fa5"
+        },
+        "permissive": {
+          "state": "DENY",
+          "irreversible_exposure": 0.789,
+          "reversible_capacity": 0.19,
+          "decision_hash": "78409e2e7b28b0d0e7681e3b25b1914bf46ba25bfe07cc81612da722e0867a7b"
+        }
+      },
+      "policy_difference": false
+    },
+    {
+      "action_id": "MODEL_DISAGREEMENT_COLLATERAL_POST",
+      "description": "Post additional collateral while internal models disagree on current exposure.",
+      "decisions": {
+        "conservative": {
+          "state": "FREEZE",
+          "irreversible_exposure": 0.538,
+          "reversible_capacity": 0.582,
+          "decision_hash": "c494ab104d4f0361d885140988c26e340b084109040c01c7cef2a8ea03e074c6"
+        },
+        "balanced": {
+          "state": "FREEZE",
+          "irreversible_exposure": 0.538,
+          "reversible_capacity": 0.582,
+          "decision_hash": "521d126b5b1d65e2cd71469e74db85a46f0617cd49b8adef126892efb3d53ada"
+        },
+        "permissive": {
+          "state": "THROTTLE",
+          "irreversible_exposure": 0.538,
+          "reversible_capacity": 0.582,
+          "decision_hash": "b2ac9e1763636562b9a202ad47cdd390c58333ee793b157bcf39dbfb56d61643"
+        }
+      },
+      "policy_difference": true
+    }
+  ]
+}
