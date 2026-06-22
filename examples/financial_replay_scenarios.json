@@ -1,0 +1,234 @@
+[
+  {
+    "scenario_id": "MARCH_2020_MARKET_STRESS",
+    "title": "March 2020 Treasury and funding-market stress",
+    "event_date": "2020-03",
+    "sources": [
+      {
+        "title": "Federal Reserve Financial Stability Report, November 2020",
+        "url": "https://www.federalreserve.gov/publications/2020-november-financial-stability-report-purpose.htm"
+      }
+    ],
+    "replay_disclaimer": "Historical context is based on the cited Federal Reserve report. All numerical SMERC-F signals are analyst-assigned scenario inputs and are not reconstructed market observations.",
+    "timeline": [
+      {
+        "phase": "Pre-stress baseline",
+        "historical_context": "Baseline phase before severe market dysfunction.",
+        "signal_basis": "Analyst-assigned low-stress baseline.",
+        "action": {
+          "description": "Maintain an existing short-duration treasury allocation.",
+          "action_type": "treasury_allocation",
+          "actor": "treasury_agent",
+          "authorization_support": 0.92,
+          "evidence_validity": 0.90,
+          "reversibility": 0.84,
+          "liquidity_concentration": 0.18,
+          "collateral_stress": 0.14,
+          "settlement_anomaly": 0.10,
+          "stablecoin_imbalance": 0.05,
+          "counterparty_concentration": 0.16,
+          "market_instability": 0.18,
+          "model_disagreement": 0.12,
+          "agent_velocity": 0.14
+        }
+      },
+      {
+        "phase": "Acute dash-for-cash stress",
+        "historical_context": "Severe market stress and impaired liquidity were reported during March 2020.",
+        "signal_basis": "Analyst-assigned high-stress replay assumptions.",
+        "action": {
+          "description": "Accelerate liquidation and collateral reallocation during acute market stress.",
+          "action_type": "liquidity_reallocation",
+          "actor": "treasury_agent",
+          "authorization_support": 0.66,
+          "evidence_validity": 0.58,
+          "reversibility": 0.28,
+          "liquidity_concentration": 0.86,
+          "collateral_stress": 0.82,
+          "settlement_anomaly": 0.70,
+          "stablecoin_imbalance": 0.10,
+          "counterparty_concentration": 0.62,
+          "market_instability": 0.94,
+          "model_disagreement": 0.78,
+          "agent_velocity": 0.88
+        }
+      },
+      {
+        "phase": "Stabilization",
+        "historical_context": "Market functioning improved following policy actions and changing conditions.",
+        "signal_basis": "Analyst-assigned partial-recovery assumptions.",
+        "action": {
+          "description": "Resume limited treasury rebalancing under heightened monitoring.",
+          "action_type": "treasury_rebalance",
+          "actor": "treasury_agent",
+          "authorization_support": 0.84,
+          "evidence_validity": 0.82,
+          "reversibility": 0.68,
+          "liquidity_concentration": 0.42,
+          "collateral_stress": 0.38,
+          "settlement_anomaly": 0.28,
+          "stablecoin_imbalance": 0.06,
+          "counterparty_concentration": 0.34,
+          "market_instability": 0.48,
+          "model_disagreement": 0.30,
+          "agent_velocity": 0.32
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "SVB_2023",
+    "title": "Silicon Valley Bank failure and regional-bank stress",
+    "event_date": "2023-03",
+    "sources": [
+      {
+        "title": "Federal Reserve Review of the Supervision and Regulation of Silicon Valley Bank",
+        "url": "https://www.federalreserve.gov/publications/review-of-the-federal-reserves-supervision-and-regulation-of-silicon-valley-bank.htm"
+      }
+    ],
+    "replay_disclaimer": "The cited review supplies historical context. SMERC-F signal values and proposed actions are synthetic analyst assumptions and do not represent SVB systems or decisions.",
+    "timeline": [
+      {
+        "phase": "Concentration build-up",
+        "historical_context": "The Federal Reserve review discusses vulnerabilities including concentrated funding and risk-management weaknesses.",
+        "signal_basis": "Analyst-assigned elevated concentration assumptions.",
+        "action": {
+          "description": "Increase exposure to a concentrated funding counterparty.",
+          "action_type": "counterparty_limit_change",
+          "actor": "liquidity_agent",
+          "authorization_support": 0.78,
+          "evidence_validity": 0.78,
+          "reversibility": 0.58,
+          "liquidity_concentration": 0.72,
+          "collateral_stress": 0.40,
+          "settlement_anomaly": 0.22,
+          "stablecoin_imbalance": 0.10,
+          "counterparty_concentration": 0.78,
+          "market_instability": 0.36,
+          "model_disagreement": 0.34,
+          "agent_velocity": 0.54
+        }
+      },
+      {
+        "phase": "Rapid liquidity deterioration",
+        "historical_context": "The bank experienced acute liquidity pressure and failed in March 2023.",
+        "signal_basis": "Analyst-assigned acute-stress assumptions.",
+        "action": {
+          "description": "Execute rapid reserve movement while liquidity and counterparty conditions deteriorate.",
+          "action_type": "reserve_transfer",
+          "actor": "liquidity_agent",
+          "authorization_support": 0.54,
+          "evidence_validity": 0.52,
+          "reversibility": 0.18,
+          "liquidity_concentration": 0.94,
+          "collateral_stress": 0.82,
+          "settlement_anomaly": 0.64,
+          "stablecoin_imbalance": 0.14,
+          "counterparty_concentration": 0.90,
+          "market_instability": 0.82,
+          "model_disagreement": 0.76,
+          "agent_velocity": 0.92
+        }
+      },
+      {
+        "phase": "Post-failure containment",
+        "historical_context": "Authorities and institutions moved to contain broader effects.",
+        "signal_basis": "Analyst-assigned containment assumptions.",
+        "action": {
+          "description": "Permit only limited, reviewed counterparty exposure changes.",
+          "action_type": "counterparty_limit_change",
+          "actor": "risk_agent",
+          "authorization_support": 0.88,
+          "evidence_validity": 0.84,
+          "reversibility": 0.72,
+          "liquidity_concentration": 0.50,
+          "collateral_stress": 0.42,
+          "settlement_anomaly": 0.30,
+          "stablecoin_imbalance": 0.10,
+          "counterparty_concentration": 0.58,
+          "market_instability": 0.54,
+          "model_disagreement": 0.28,
+          "agent_velocity": 0.24
+        }
+      }
+    ]
+  },
+  {
+    "scenario_id": "USDC_RESERVE_DISRUPTION_2023",
+    "title": "USDC reserve-access disruption",
+    "event_date": "2023-03",
+    "sources": [
+      {
+        "title": "Circle update on USDC and Silicon Valley Bank",
+        "url": "https://www.circle.com/blog/an-update-on-usdc-and-silicon-valley-bank"
+      }
+    ],
+    "replay_disclaimer": "Circle's public update supplies event context. Numerical signals and proposed treasury actions are synthetic and are not Circle telemetry or reconstructed internal decisions.",
+    "timeline": [
+      {
+        "phase": "Normal reserve operations",
+        "historical_context": "Baseline period before the reported reserve-access disruption.",
+        "signal_basis": "Analyst-assigned low-stress baseline.",
+        "action": {
+          "description": "Maintain normal reserve allocation and redemption operations.",
+          "action_type": "stablecoin_reserve_management",
+          "actor": "reserve_agent",
+          "authorization_support": 0.94,
+          "evidence_validity": 0.92,
+          "reversibility": 0.84,
+          "liquidity_concentration": 0.20,
+          "collateral_stress": 0.12,
+          "settlement_anomaly": 0.10,
+          "stablecoin_imbalance": 0.14,
+          "counterparty_concentration": 0.22,
+          "market_instability": 0.16,
+          "model_disagreement": 0.10,
+          "agent_velocity": 0.18
+        }
+      },
+      {
+        "phase": "Reserve-access uncertainty",
+        "historical_context": "Circle publicly disclosed reserve exposure associated with Silicon Valley Bank and described its response.",
+        "signal_basis": "Analyst-assigned reserve-access and redemption-stress assumptions.",
+        "action": {
+          "description": "Accelerate reserve reallocation while redemption pressure and reserve-access uncertainty rise.",
+          "action_type": "stablecoin_reserve_management",
+          "actor": "reserve_agent",
+          "authorization_support": 0.70,
+          "evidence_validity": 0.56,
+          "reversibility": 0.30,
+          "liquidity_concentration": 0.80,
+          "collateral_stress": 0.58,
+          "settlement_anomaly": 0.66,
+          "stablecoin_imbalance": 0.92,
+          "counterparty_concentration": 0.84,
+          "market_instability": 0.76,
+          "model_disagreement": 0.72,
+          "agent_velocity": 0.86
+        }
+      },
+      {
+        "phase": "Operational normalization",
+        "historical_context": "Public communications described measures intended to support continued USDC operations.",
+        "signal_basis": "Analyst-assigned recovery assumptions.",
+        "action": {
+          "description": "Resume capped reserve rebalancing with explicit review.",
+          "action_type": "stablecoin_reserve_management",
+          "actor": "reserve_agent",
+          "authorization_support": 0.88,
+          "evidence_validity": 0.86,
+          "reversibility": 0.72,
+          "liquidity_concentration": 0.38,
+          "collateral_stress": 0.28,
+          "settlement_anomaly": 0.24,
+          "stablecoin_imbalance": 0.42,
+          "counterparty_concentration": 0.40,
+          "market_instability": 0.36,
+          "model_disagreement": 0.22,
+          "agent_velocity": 0.30
+        }
+      }
+    ]
+  }
+]
+
