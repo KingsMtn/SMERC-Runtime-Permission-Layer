@@ -1,0 +1,147 @@
+{
+  "chain_version": "1.0.0",
+  "record_count": 5,
+  "head_hash": "3c0f7f8ccd5755dad8258481606ea52e4c4ea1e1eff8cc703abb4fa8f7de2517",
+  "records": [
+    {
+      "sequence": 1,
+      "event_type": "DECISION",
+      "recorded_at": "2026-06-22T02:07:14.200563+00:00",
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "action_id": "TREASURY_REBALANCE_ROUTINE",
+      "state": "ALLOW",
+      "decision_hash": "21700dde81467def7c0455108b54c7ac1d003a6cb4ebc349c42948491e235665",
+      "policy": {
+        "name": "balanced",
+        "version": "1.0.0"
+      },
+      "drivers": [
+        "LOW_STRESS_REPLAYABLE_ACTION"
+      ],
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "record_hash": "ab2304d6e3585d1504ca3cb24041c3f421b4f5f45c629ef3cbf912b438043c2a"
+    },
+    {
+      "sequence": 2,
+      "event_type": "DECISION",
+      "recorded_at": "2026-06-22T02:07:14.200563+00:00",
+      "previous_hash": "ab2304d6e3585d1504ca3cb24041c3f421b4f5f45c629ef3cbf912b438043c2a",
+      "action_id": "STABLECOIN_DEPEG_REALLOCATION",
+      "state": "FREEZE",
+      "decision_hash": "00204d98e04610739e02b2dbc539c6c339532cb66a3e68b227e2f9d037f51727",
+      "policy": {
+        "name": "balanced",
+        "version": "1.0.0"
+      },
+      "drivers": [
+        "STABLECOIN_IMBALANCE",
+        "AGENT_VELOCITY",
+        "MARKET_INSTABILITY",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "MODEL_DISAGREEMENT",
+        "COLLATERAL_STRESS",
+        "COUNTERPARTY_CONCENTRATION",
+        "LOW_REVERSIBILITY"
+      ],
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "record_hash": "1d98e0be3b1d33f00c49d526ed5da97ebde277c88c6e748b8ffdd3d94e7d97fb"
+    },
+    {
+      "sequence": 3,
+      "event_type": "DECISION",
+      "recorded_at": "2026-06-22T02:07:14.200563+00:00",
+      "previous_hash": "1d98e0be3b1d33f00c49d526ed5da97ebde277c88c6e748b8ffdd3d94e7d97fb",
+      "action_id": "COUNTERPARTY_EXPOSURE_INCREASE",
+      "state": "THROTTLE",
+      "decision_hash": "4a5f618343f2f267b769982f386a48b6ea51ca45b47fbffce2083b8c1b8345e7",
+      "policy": {
+        "name": "balanced",
+        "version": "1.0.0"
+      },
+      "drivers": [
+        "COUNTERPARTY_CONCENTRATION",
+        "AGENT_VELOCITY"
+      ],
+      "controls": [
+        "reduce_transaction_size",
+        "lower_velocity",
+        "require_dual_approval",
+        "log_replay"
+      ],
+      "record_hash": "ead523d18358cc78d5371ed3b930634d3b1c9c9b38d38e19bf9aeac80a5b5d60"
+    },
+    {
+      "sequence": 4,
+      "event_type": "DECISION",
+      "recorded_at": "2026-06-22T02:07:14.200563+00:00",
+      "previous_hash": "ead523d18358cc78d5371ed3b930634d3b1c9c9b38d38e19bf9aeac80a5b5d60",
+      "action_id": "UNAUTHORIZED_RESERVE_TRANSFER",
+      "state": "DENY",
+      "decision_hash": "77bde788ffde2d87d0993515b5cc9c4e399403b58b32b1513868ba94df372fa5",
+      "policy": {
+        "name": "balanced",
+        "version": "1.0.0"
+      },
+      "drivers": [
+        "AGENT_VELOCITY",
+        "COUNTERPARTY_CONCENTRATION",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "MODEL_DISAGREEMENT",
+        "MARKET_INSTABILITY",
+        "COLLATERAL_STRESS",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "EVIDENCE_VALIDITY_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "controls": [
+        "block_action",
+        "emergency_escalation",
+        "executive_override_required",
+        "preserve_replay"
+      ],
+      "record_hash": "2a79a3806eb29cbbed7434c1b45662bb97b4370a10772a5812b8e2ea96a252db"
+    },
+    {
+      "sequence": 5,
+      "event_type": "DECISION",
+      "recorded_at": "2026-06-22T02:07:14.200563+00:00",
+      "previous_hash": "2a79a3806eb29cbbed7434c1b45662bb97b4370a10772a5812b8e2ea96a252db",
+      "action_id": "MODEL_DISAGREEMENT_COLLATERAL_POST",
+      "state": "FREEZE",
+      "decision_hash": "521d126b5b1d65e2cd71469e74db85a46f0617cd49b8adef126892efb3d53ada",
+      "policy": {
+        "name": "balanced",
+        "version": "1.0.0"
+      },
+      "drivers": [
+        "MODEL_DISAGREEMENT",
+        "COLLATERAL_STRESS",
+        "MARKET_INSTABILITY"
+      ],
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "record_hash": "3c0f7f8ccd5755dad8258481606ea52e4c4ea1e1eff8cc703abb4fa8f7de2517"
+    }
+  ],
+  "verification": {
+    "valid": true,
+    "record_count": 5,
+    "head_hash": "3c0f7f8ccd5755dad8258481606ea52e4c4ea1e1eff8cc703abb4fa8f7de2517",
+    "errors": []
+  }
+}
