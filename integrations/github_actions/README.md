@@ -83,6 +83,19 @@ python integrations/github_actions/run_smerc_gate.py \
   --output-file smerc-decision.json
 ```
 
+## Shadow-Mode Pilot Report
+
+The repository includes 10 realistic GitHub Actions scenarios for product review:
+
+```bash
+python -m reference_engine.pilot_report \
+  examples/github_actions_shadow_mode_scenarios.json \
+  --json-output reports/github_actions_shadow_mode_results.json \
+  --markdown-output reports/GitHub_Actions_Shadow_Mode_Pilot_Report.md
+```
+
+The generated report shows posture distribution, risk/confidence averages, scenario-level reason codes, and the limits of synthetic evidence. It is intended to preview what a design partner would receive after scoring real workflows in shadow mode.
+
 ## CISO Review Notes
 
 This is an MVP/reference integration. It is designed for shadow-mode review first. It is not a production-certified security control, does not replace branch protection, does not replace code review, and does not replace existing IAM or policy engines.

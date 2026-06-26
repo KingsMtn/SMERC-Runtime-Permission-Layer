@@ -14,6 +14,15 @@ SMERC is runtime permission infrastructure for AI-agent actions. It evaluates a 
 
 The first integration is a GitHub Actions gate for AI-assisted code, deployment, and infrastructure workflows.
 
+The current build includes:
+
+- recoverability-aware scoring engine
+- standard-library REST API service
+- GitHub Actions gate
+- synthetic shadow-mode scenario packs
+- evidence/report generators
+- Render deployment profile
+
 ## Why This Repository Exists
 
 This public repository is the external technical review edition of SMERC. It contains the implementation and documentation needed for a security, platform, or product team to determine whether SMERC is worth testing in shadow mode.
@@ -59,7 +68,21 @@ Requires Python 3.10 or later. No third-party Python packages are required.
 
 ```bash
 python -m reference_engine.agent_permission_layer examples/agent_permission_actions.json --pretty
+python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m unittest discover -s tests
+```
+
+Run the recoverability API locally:
+
+```bash
+python api_server.py --host 127.0.0.1 --port 8788
+```
+
+Then call:
+
+```bash
+curl http://127.0.0.1:8788/health
+curl -X POST http://127.0.0.1:8788/evaluate -H "Content-Type: application/json" --data @examples/recoverability_single_action.json
 ```
 
 Run the GitHub Actions gate locally:
@@ -69,6 +92,24 @@ python integrations/github_actions/run_smerc_gate.py \
   --action-file integrations/github_actions/sample_action_request.json \
   --mode observe \
   --output-file smerc-decision.json
+```
+
+Generate a synthetic GitHub Actions shadow-mode pilot report:
+
+```bash
+python -m reference_engine.pilot_report \
+  examples/github_actions_shadow_mode_scenarios.json \
+  --json-output reports/github_actions_shadow_mode_results.json \
+  --markdown-output reports/GitHub_Actions_Shadow_Mode_Pilot_Report.md
+```
+
+Generate a recoverability-engine evidence report:
+
+```bash
+python -m reference_engine.recoverability_report \
+  examples/recoverability_action_requests.json \
+  --json-output reports/recoverability_engine_results.json \
+  --markdown-output reports/Recoverability_Engine_Report.md
 ```
 
 Run the optional SMERC-F financial action-governance profile:
@@ -125,12 +166,23 @@ Policy calibration, deterministic hashes, accountable overrides, and tamper-evid
 ## Current Evidence
 
 - Working Python reference engine
+- Recoverability-focused scoring engine
+- Standard-library REST API service
 - Installable local GitHub Action
 - Deterministic example action requests
+- GitHub Actions shadow-mode scenario pack
+- Generated pilot-style evidence report
 - Automated tests
 - Security and deployment documentation
+- Render deployment profile
 - Public interactive demo
 - Defined shadow-mode pilot
+
+See `reports/GitHub_Actions_Shadow_Mode_Pilot_Report.md` for the current synthetic pilot report. It is not customer evidence; it shows the report shape a design partner should expect after live workflow scoring.
+
+See `reports/Recoverability_Engine_Report.md` for the current recoverability-engine report.
+
+See `docs/Product_Build_Map.md` and `docs/API_Deployment_Guide.md` for the current product architecture and deployment path.
 
 ## Evidence Still Required
 
@@ -150,4 +202,3 @@ SMERC should be adopted only if a controlled pilot produces evidence that the an
 ## License
 
 See `LICENSE`.
-

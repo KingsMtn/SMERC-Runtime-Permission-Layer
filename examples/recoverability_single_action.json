@@ -1,0 +1,22 @@
+{
+  "action_id": "AGENT_DEPLOY_PROD_CONFIG",
+  "description": "AI deployment agent proposes a production configuration change.",
+  "actor": "deployment_agent",
+  "tool": "github_actions.deploy",
+  "action_type": "production_deploy",
+  "base_action_risk": 0.62,
+  "reversibility": 0.58,
+  "containment_strength": 0.55,
+  "rollback_latency": 0.48,
+  "evidence_validity": 0.70,
+  "anomaly_pressure": 0.33,
+  "impact_scope": 0.58,
+  "cancel_reliability": 0.67,
+  "authorization_confidence": 0.71,
+  "external_side_effect": true,
+  "sensitive_data": false,
+  "context": {
+    "workflow": "deployment",
+    "rollback_plan": "documented"
+  }
+}

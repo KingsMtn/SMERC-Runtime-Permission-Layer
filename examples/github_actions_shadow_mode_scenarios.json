@@ -1,0 +1,182 @@
+[
+  {
+    "action_id": "AI_MODIFY_AUTH_MIDDLEWARE",
+    "description": "AI coding agent proposes changing production authentication middleware after resolving a support ticket.",
+    "tool": "github.pull_request",
+    "actor": "coding_agent",
+    "confidence": 0.61,
+    "harm": 0.86,
+    "consent": 0.64,
+    "reversibility": 0.38,
+    "external_effect": true,
+    "sensitive_data": true,
+    "context": {
+      "workflow": "pull_request",
+      "touched_area": "authentication",
+      "rollback_plan": "partial",
+      "existing_controls": ["branch_protection", "code_review"]
+    }
+  },
+  {
+    "action_id": "AI_DEPLOY_CONFIG_CHANGE",
+    "description": "AI agent proposes deploying a production configuration change for a web service.",
+    "tool": "github_actions.deploy",
+    "actor": "deployment_agent",
+    "confidence": 0.67,
+    "harm": 0.69,
+    "consent": 0.71,
+    "reversibility": 0.52,
+    "external_effect": true,
+    "sensitive_data": false,
+    "context": {
+      "workflow": "deployment",
+      "touched_area": "production_config",
+      "rollback_plan": "documented",
+      "existing_controls": ["environment_approval"]
+    }
+  },
+  {
+    "action_id": "AI_DELETE_CI_LOGS",
+    "description": "AI maintenance job proposes deleting historical CI logs to reduce storage.",
+    "tool": "github_actions.cleanup",
+    "actor": "maintenance_agent",
+    "confidence": 0.54,
+    "harm": 0.74,
+    "consent": 0.43,
+    "reversibility": 0.18,
+    "external_effect": true,
+    "sensitive_data": false,
+    "context": {
+      "workflow": "scheduled_cleanup",
+      "touched_area": "audit_logs",
+      "rollback_plan": "none",
+      "existing_controls": ["scheduled_workflow"]
+    }
+  },
+  {
+    "action_id": "AI_RUN_DATABASE_MIGRATION",
+    "description": "AI-assisted workflow proposes running a production database migration.",
+    "tool": "github_actions.database_migration",
+    "actor": "release_agent",
+    "confidence": 0.58,
+    "harm": 0.88,
+    "consent": 0.62,
+    "reversibility": 0.27,
+    "external_effect": true,
+    "sensitive_data": true,
+    "context": {
+      "workflow": "release",
+      "touched_area": "database_schema",
+      "rollback_plan": "manual_restore",
+      "existing_controls": ["review_required", "environment_approval"]
+    }
+  },
+  {
+    "action_id": "AI_UPDATE_README",
+    "description": "AI coding agent proposes a documentation-only README update.",
+    "tool": "github.pull_request",
+    "actor": "coding_agent",
+    "confidence": 0.91,
+    "harm": 0.12,
+    "consent": 0.87,
+    "reversibility": 0.96,
+    "external_effect": false,
+    "sensitive_data": false,
+    "context": {
+      "workflow": "pull_request",
+      "touched_area": "documentation",
+      "rollback_plan": "git_revert",
+      "existing_controls": ["branch_protection"]
+    }
+  },
+  {
+    "action_id": "AI_ROTATE_PRODUCTION_SECRET",
+    "description": "AI operations agent proposes rotating a production API secret and updating dependent services.",
+    "tool": "github_actions.secret_rotation",
+    "actor": "ops_agent",
+    "confidence": 0.63,
+    "harm": 0.81,
+    "consent": 0.69,
+    "reversibility": 0.41,
+    "external_effect": true,
+    "sensitive_data": true,
+    "context": {
+      "workflow": "secret_rotation",
+      "touched_area": "production_secrets",
+      "rollback_plan": "manual_previous_secret_restore",
+      "existing_controls": ["environment_approval", "secrets_manager"]
+    }
+  },
+  {
+    "action_id": "AI_DISABLE_SECURITY_CHECK",
+    "description": "AI workflow proposes disabling a flaky dependency security scan to unblock deployment.",
+    "tool": "github_actions.workflow_edit",
+    "actor": "release_agent",
+    "confidence": 0.49,
+    "harm": 0.79,
+    "consent": 0.38,
+    "reversibility": 0.48,
+    "external_effect": true,
+    "sensitive_data": false,
+    "context": {
+      "workflow": "deployment",
+      "touched_area": "security_controls",
+      "rollback_plan": "git_revert",
+      "existing_controls": ["branch_protection"]
+    }
+  },
+  {
+    "action_id": "AI_MODIFY_TERRAFORM_STATE",
+    "description": "AI infrastructure agent proposes modifying Terraform-managed production networking resources.",
+    "tool": "github_actions.terraform_apply",
+    "actor": "infrastructure_agent",
+    "confidence": 0.57,
+    "harm": 0.9,
+    "consent": 0.66,
+    "reversibility": 0.22,
+    "external_effect": true,
+    "sensitive_data": false,
+    "context": {
+      "workflow": "infrastructure_change",
+      "touched_area": "production_networking",
+      "rollback_plan": "manual",
+      "existing_controls": ["terraform_plan", "environment_approval"]
+    }
+  },
+  {
+    "action_id": "AI_EXPORT_USER_DATA_FOR_DEBUG",
+    "description": "AI support automation proposes exporting user records to debug an incident.",
+    "tool": "github_actions.support_export",
+    "actor": "support_agent",
+    "confidence": 0.62,
+    "harm": 0.83,
+    "consent": 0.46,
+    "reversibility": 0.16,
+    "external_effect": true,
+    "sensitive_data": true,
+    "context": {
+      "workflow": "support_debug",
+      "touched_area": "customer_data",
+      "rollback_plan": "not_reversible_after_export",
+      "existing_controls": ["audit_log"]
+    }
+  },
+  {
+    "action_id": "AI_RUN_TEST_SUITE",
+    "description": "AI coding workflow proposes running the full test suite before opening a pull request.",
+    "tool": "github_actions.test",
+    "actor": "coding_agent",
+    "confidence": 0.88,
+    "harm": 0.18,
+    "consent": 0.9,
+    "reversibility": 0.91,
+    "external_effect": false,
+    "sensitive_data": false,
+    "context": {
+      "workflow": "continuous_integration",
+      "touched_area": "test_execution",
+      "rollback_plan": "not_needed",
+      "existing_controls": ["ci"]
+    }
+  }
+]
