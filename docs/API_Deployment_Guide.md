@@ -1,92 +1,125 @@
-# SMERC Recoverability API Deployment Guide
+# SMERC Pilot API Deployment Guide
 
-## Local Run
+## Deployment Boundary
+
+The API is a controlled pilot vehicle for recoverability-aware action scoring. It separates the deterministic engine from authentication, transport, idempotency, and audit persistence.
+
+It is appropriate for shadow-mode evaluation with action metadata. It is not represented as a production-certified enforcement service.
+
+## Local Development
+
+Unauthenticated mode must be explicit:
 
 ```bash
-python api_server.py --host 127.0.0.1 --port 8788
+python api_server.py \
+  --host 127.0.0.1 \
+  --port 8788 \
+  --audit-db :memory: \
+  --allow-unauthenticated
 ```
-
-Health check:
 
 ```bash
 curl http://127.0.0.1:8788/health
-```
-
-Evaluate one action:
-
-```bash
-curl -X POST http://127.0.0.1:8788/evaluate \
+curl http://127.0.0.1:8788/ready
+curl -X POST http://127.0.0.1:8788/v1/evaluate \
   -H "Content-Type: application/json" \
   --data @examples/recoverability_single_action.json
 ```
 
-The `/evaluate` endpoint expects one JSON object. The `/batch` endpoint expects a list.
+## Authenticated Pilot Mode
 
-Batch example:
+`SMERC_API_KEYS` maps each tenant to a secret. Entries use `tenant=secret` and are separated by commas.
 
 ```bash
-curl -X POST http://127.0.0.1:8788/batch \
-  -H "Content-Type: application/json" \
-  --data @examples/recoverability_action_requests.json
+export SMERC_API_KEYS="platform-team=replace-with-a-long-random-secret"
+export SMERC_AUDIT_DB="./smerc_audit.sqlite3"
+python api_server.py --host 127.0.0.1 --port 8788
 ```
 
-## Render Deployment
+Evaluate and persist one action:
 
-The repository includes `render.yaml`.
+```bash
+curl -X POST http://127.0.0.1:8788/v1/evaluate \
+  -H "Authorization: Bearer replace-with-a-long-random-secret" \
+  -H "Idempotency-Key: github-run-1001" \
+  -H "Content-Type: application/json" \
+  --data @examples/recoverability_single_action.json
+```
 
-Expected Render settings:
+List tenant-scoped decisions:
 
-- runtime: Python
-- build command: `pip install -r requirements.txt`
+```bash
+curl "http://127.0.0.1:8788/v1/decisions?limit=25&posture=THROTTLE" \
+  -H "Authorization: Bearer replace-with-a-long-random-secret"
+```
+
+Retrieve a decision:
+
+```bash
+curl http://127.0.0.1:8788/v1/decisions/REPLAY_ID \
+  -H "Authorization: Bearer replace-with-a-long-random-secret"
+```
+
+## Endpoint Contract
+
+| Endpoint | Authentication | Purpose |
+| --- | --- | --- |
+| `GET /health` | No | Process liveness |
+| `GET /ready` | No | Audit-store readiness |
+| `GET /schema` | No | Input and endpoint contract |
+| `POST /v1/evaluate` | Bearer | Evaluate and store one action |
+| `POST /v1/batch` | Bearer | Evaluate and store a bounded batch |
+| `GET /v1/decisions` | Bearer | List decision summaries for the authenticated tenant |
+| `GET /v1/decisions/{replay_id}` | Bearer | Retrieve one decision for the authenticated tenant |
+
+Legacy `/evaluate` and `/batch` aliases remain available. New integrations should use `/v1`.
+
+## Idempotency
+
+Send `Idempotency-Key` on single evaluations. Repeating the same key and payload returns the original decision and sets `X-SMERC-Idempotent-Replay: true`. Reusing the key with a different payload returns HTTP `409`.
+
+This prevents a workflow retry from producing multiple audit decisions for the same proposed action.
+
+## Configuration
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `SMERC_API_KEYS` | none | Required `tenant=secret` mappings |
+| `SMERC_AUDIT_DB` | `smerc_audit.sqlite3` | SQLite audit path |
+| `SMERC_MAX_BODY_BYTES` | `262144` | Maximum JSON request body |
+| `SMERC_MAX_BATCH_SIZE` | `100` | Maximum actions per batch |
+| `SMERC_CORS_ORIGINS` | none | Comma-separated trusted browser origins |
+| `PORT` | `8788` | Listening port |
+
+Do not commit API keys or put them in URLs. Rotate pilot keys when personnel or integration scope changes.
+
+## Docker
+
+```bash
+export SMERC_API_KEYS="platform-team=replace-with-a-long-random-secret"
+docker compose up --build
+```
+
+The Compose profile mounts `smerc-audit-data` at `/data` and stores the audit database there.
+
+## Render
+
+The included `render.yaml` describes a paid starter service with a persistent disk mounted at `/var/data`. Render's free filesystem is ephemeral and should not be used when pilot audit records must survive restarts or deploys.
+
+During initial Blueprint creation, Render prompts for `SMERC_API_KEYS`. For an existing Blueprint, set or rotate that secret in the Render dashboard because `sync: false` values are not updated automatically.
+
+Expected controls:
+
 - start command: `python api_server.py --host 0.0.0.0 --port $PORT`
-- health check path: `/health`
+- health check: `/health`
+- audit database: `/var/data/smerc_audit.sqlite3`
+- persistent disk: `/var/data`
+- bearer-key secret: dashboard-managed `SMERC_API_KEYS`
 
-## API Input Shape
+## Pilot Limitations
 
-Required fields:
-
-- `action_id`
-- `description`
-- `actor`
-- `tool`
-- `action_type`
-- `base_action_risk`
-- `reversibility`
-- `containment_strength`
-- `rollback_latency`
-- `evidence_validity`
-- `anomaly_pressure`
-- `impact_scope`
-- `cancel_reliability`
-- `authorization_confidence`
-- `external_side_effect`
-- `sensitive_data`
-
-Numeric fields are `0.0` to `1.0`.
-
-## API Output Shape
-
-The API returns:
-
-- `posture`
-- `enforcement_state`
-- `scores`
-- `reason_codes`
-- `controls`
-- `plain_english_summary`
-- `replay_id`
-- `replay`
-
-## Security Notes
-
-This API is a reference implementation for pilot evaluation. A production service would still require:
-
-- authentication
-- authorization
-- tenant isolation
-- request signing or trusted ingress
-- rate limiting
-- persistent audit storage
-- secret management
-- production logging and monitoring
-- legal/security review
+- SQLite is suitable for one pilot-service instance, not horizontal scaling.
+- API keys are a pilot credential model, not enterprise IAM federation.
+- The service does not yet provide managed key rotation, SSO, RBAC, retention automation, SIEM export, or customer-managed encryption keys.
+- Thresholds require customer-specific calibration before enforcement.
+- Security, privacy, legal, and architecture owners must approve production use.

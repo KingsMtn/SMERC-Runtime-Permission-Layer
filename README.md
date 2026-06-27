@@ -17,7 +17,8 @@ The first integration is a GitHub Actions gate for AI-assisted code, deployment,
 The current build includes:
 
 - recoverability-aware scoring engine
-- standard-library REST API service
+- authenticated, tenant-scoped REST API service
+- SQLite pilot audit store with idempotent decision replay
 - GitHub Actions gate
 - synthetic shadow-mode scenario packs
 - evidence/report generators
@@ -33,9 +34,9 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 
 1. Read `docs/CISO_Quick_Review.md`.
 2. Read `docs/Security_Model.md`.
-3. Inspect `reference_engine/agent_permission_layer.py`.
-4. Review `integrations/github_actions/README.md`.
-5. Inspect `examples/agent_permission_actions.json`.
+3. Inspect `reference_engine/recoverability_engine.py`.
+4. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+5. Review `integrations/github_actions/README.md`.
 6. Run the tests.
 7. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
@@ -72,10 +73,10 @@ python -m reference_engine.recoverability_engine examples/recoverability_single_
 python -m unittest discover -s tests
 ```
 
-Run the recoverability API locally:
+Run the recoverability API locally without authentication only for development:
 
 ```bash
-python api_server.py --host 127.0.0.1 --port 8788
+python api_server.py --host 127.0.0.1 --port 8788 --audit-db :memory: --allow-unauthenticated
 ```
 
 Then call:
@@ -84,6 +85,22 @@ Then call:
 curl http://127.0.0.1:8788/health
 curl -X POST http://127.0.0.1:8788/evaluate -H "Content-Type: application/json" --data @examples/recoverability_single_action.json
 ```
+
+Run authenticated pilot mode with durable local audit records:
+
+```bash
+export SMERC_API_KEYS="pilot-team=replace-with-a-long-random-secret"
+export SMERC_AUDIT_DB="./smerc_audit.sqlite3"
+python api_server.py --host 127.0.0.1 --port 8788
+
+curl -X POST http://127.0.0.1:8788/v1/evaluate \
+  -H "Authorization: Bearer replace-with-a-long-random-secret" \
+  -H "Idempotency-Key: workflow-run-1001" \
+  -H "Content-Type: application/json" \
+  --data @examples/recoverability_single_action.json
+```
+
+Pilot API controls include bearer-key tenant mapping, tenant-scoped audit retrieval, idempotent evaluation replay, body and batch limits, allowlisted CORS, liveness/readiness endpoints, and structured request IDs. See `docs/API_Deployment_Guide.md`.
 
 Run the GitHub Actions gate locally:
 

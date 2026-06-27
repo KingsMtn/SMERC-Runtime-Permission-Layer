@@ -2,7 +2,20 @@ services:
   - type: web
     name: smerc-recoverability-api
     runtime: python
-    plan: free
+    plan: starter
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python api_server.py --host 0.0.0.0 --port $PORT"
     healthCheckPath: "/health"
+    envVars:
+      - key: SMERC_API_KEYS
+        sync: false
+      - key: SMERC_AUDIT_DB
+        value: /var/data/smerc_audit.sqlite3
+      - key: SMERC_MAX_BODY_BYTES
+        value: "262144"
+      - key: SMERC_MAX_BATCH_SIZE
+        value: "100"
+    disk:
+      name: smerc-audit-data
+      mountPath: /var/data
+      sizeGB: 1

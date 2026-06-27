@@ -45,13 +45,30 @@ File: `api_server.py`
 Endpoints:
 
 - `GET /health`
+- `GET /ready`
 - `GET /schema`
-- `POST /evaluate`
-- `POST /batch`
+- `POST /v1/evaluate`
+- `POST /v1/batch`
+- `GET /v1/decisions`
+- `GET /v1/decisions/{replay_id}`
 
-The API uses only the Python standard library so a reviewer can run it without a dependency stack.
+The API uses only the Python standard library so a reviewer can run it without a dependency stack. Pilot controls include tenant-mapped bearer keys, idempotency, bounded requests, allowlisted CORS, and structured errors.
 
-### 3. GitHub Actions Gate
+### 3. Pilot Audit Store
+
+File: `reference_engine/audit_store.py`
+
+Purpose:
+
+- persist tenant-scoped decisions
+- replay retry-safe decisions by idempotency key
+- retrieve individual decision evidence
+- list posture-filtered audit summaries
+- expose storage readiness
+
+SQLite is intentionally scoped to a single-instance pilot. It is not presented as the final enterprise storage architecture.
+
+### 4. GitHub Actions Gate
 
 Folder: `integrations/github_actions/`
 
@@ -62,7 +79,7 @@ Purpose:
 - write a decision report artifact
 - publish posture, score, and replay ID as step outputs
 
-### 4. Evidence Generators
+### 5. Evidence Generators
 
 Files:
 
@@ -75,22 +92,24 @@ Purpose:
 - generate markdown and JSON evidence bundles
 - show what a design partner would receive after a shadow-mode pilot
 
-### 5. Deployment Profile
+### 6. Deployment Profile
 
 Files:
 
 - `render.yaml`
+- `Dockerfile`
+- `docker-compose.yml`
 - `requirements.txt`
 
 Purpose:
 
-- let a platform reviewer deploy the API on Render
-- define health check and start command
+- let a platform reviewer deploy the API with Docker or Render
+- define health, secrets, bounded requests, and a persistent pilot audit volume
 
 ## What This Build Proves
 
 - The scoring engine runs.
-- The API can evaluate one action or a batch.
+- The API can authenticate, evaluate, persist, replay, and retrieve tenant-scoped decisions.
 - The GitHub Actions integration can run in observe, recommend, or enforce mode.
 - The repo includes repeatable tests.
 - The evidence workflow produces report artifacts.

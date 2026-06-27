@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List
+from uuid import uuid4
 
 
 class RuntimePosture(str, Enum):
@@ -131,7 +132,10 @@ class RecoverabilityEngine:
         posture = self._posture(action, scores)
         enforcement_state = self._enforcement_state(posture)
         controls = self._controls(action, posture, scores)
-        replay_id = f"replay_{action.action_id}_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+        replay_id = (
+            f"replay_{action.action_id}_{int(datetime.now(timezone.utc).timestamp() * 1000)}_"
+            f"{uuid4().hex[:12]}"
+        )
         summary = self._summary(action, posture, scores, controls)
         evaluated_at = datetime.now(timezone.utc).isoformat()
 

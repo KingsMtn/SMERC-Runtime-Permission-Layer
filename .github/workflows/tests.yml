@@ -26,6 +26,12 @@ jobs:
       - name: Run unit tests
         run: python -m unittest discover -s tests
 
+      - name: Compile service and integration modules
+        run: python -m compileall -q api_server.py reference_engine integrations
+
+      - name: Run recoverability engine smoke test
+        run: python -m reference_engine.recoverability_engine examples/recoverability_single_action.json
+
       - name: Run financial profile smoke test
         run: python -m reference_engine.financial_permission_profile examples/financial_action_requests.json
 
@@ -37,3 +43,43 @@ jobs:
 
       - name: Run audit-chain smoke test
         run: python -m reference_engine.financial_audit examples/financial_action_requests.json
+
+  container-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Build pilot API image
+        run: docker build -t smerc-pilot-api:test .
+
+      - name: Start authenticated pilot API
+        run: |
+          docker run --detach --name smerc-pilot-api --publish 8788:8788 \
+            --env SMERC_API_KEYS=ci-tenant=ci-secret-01234567890123456789 \
+            smerc-pilot-api:test
+
+      - name: Wait for health check
+        run: |
+          for attempt in {1..20}; do
+            if curl --fail --silent http://127.0.0.1:8788/health > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs smerc-pilot-api
+          exit 1
+
+      - name: Evaluate example action through container
+        run: |
+          curl --fail --silent --show-error \
+            --request POST http://127.0.0.1:8788/v1/evaluate \
+            --header "Authorization: Bearer ci-secret-01234567890123456789" \
+            --header "Idempotency-Key: ci-container-smoke" \
+            --header "Content-Type: application/json" \
+            --data @examples/recoverability_single_action.json \
+            | python -m json.tool
+
+      - name: Stop pilot API
+        if: always()
+        run: docker rm --force smerc-pilot-api
