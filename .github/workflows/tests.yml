@@ -80,6 +80,31 @@ jobs:
             --data @examples/recoverability_single_action.json \
             | python -m json.tool
 
+      - name: Evaluate through remote composite action
+        id: remote-smerc
+        uses: ./integrations/github_actions
+        env:
+          SMERC_API_KEY: ci-secret-01234567890123456789
+        with:
+          action-file: examples/recoverability_single_action.json
+          source: remote
+          api-url: http://127.0.0.1:8788
+          tenant: ci-tenant
+          mode: observe
+          api-failure-policy: fail
+          output-file: smerc-remote-ci-decision.json
+
+      - name: Assert remote composite outputs
+        env:
+          SMERC_STATUS: ${{ steps.remote-smerc.outputs.integration-status }}
+          SMERC_POSTURE: ${{ steps.remote-smerc.outputs.posture }}
+          SMERC_REPLAY_ID: ${{ steps.remote-smerc.outputs.replay-id }}
+        run: |
+          test "$SMERC_STATUS" = "evaluated"
+          test -n "$SMERC_POSTURE"
+          test -n "$SMERC_REPLAY_ID"
+          python -m json.tool smerc-remote-ci-decision.json > /dev/null
+
       - name: Stop pilot API
         if: always()
         run: docker rm --force smerc-pilot-api

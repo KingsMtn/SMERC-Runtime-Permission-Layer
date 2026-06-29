@@ -1,0 +1,42 @@
+name: SMERC Remote Shadow Mode Example
+
+on:
+  workflow_dispatch:
+
+jobs:
+  smerc-remote-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Evaluate through authenticated SMERC API
+        id: smerc
+        uses: ./integrations/github_actions
+        env:
+          SMERC_API_KEY: ${{ secrets.SMERC_API_KEY }}
+        with:
+          action-file: examples/recoverability_single_action.json
+          source: remote
+          api-url: ${{ vars.SMERC_API_URL }}
+          tenant: platform-team
+          mode: observe
+          api-failure-policy: report
+          request-timeout: "10"
+          max-retries: "1"
+          output-file: smerc-decision.json
+
+      - name: Upload decision evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: smerc-remote-decision
+          path: smerc-decision.json
+          retention-days: 14
+
+      - name: Report integration status
+        run: |
+          echo "SMERC source: ${{ steps.smerc.outputs.source }}"
+          echo "SMERC integration status: ${{ steps.smerc.outputs.integration-status }}"
+          echo "SMERC posture: ${{ steps.smerc.outputs.posture }}"

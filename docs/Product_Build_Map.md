@@ -75,9 +75,12 @@ Folder: `integrations/github_actions/`
 Purpose:
 
 - run SMERC inside GitHub Actions
+- support bundled local evaluation and authenticated remote API evaluation
 - support observe, recommend, and enforce modes
 - write a decision report artifact
 - publish posture, score, and replay ID as step outputs
+- preserve idempotency across remote retries
+- fail closed on remote-service unavailability in enforce mode
 
 ### 5. Evidence Generators
 

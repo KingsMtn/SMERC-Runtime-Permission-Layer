@@ -10,6 +10,30 @@ inputs:
     description: "observe, recommend, or enforce."
     required: false
     default: "observe"
+  source:
+    description: "local uses the bundled engine; remote calls the authenticated SMERC API."
+    required: false
+    default: "local"
+  api-url:
+    description: "HTTPS base URL for remote evaluation. The API key must be provided through SMERC_API_KEY."
+    required: false
+    default: ""
+  tenant:
+    description: "Optional tenant assertion for remote evaluation."
+    required: false
+    default: ""
+  api-failure-policy:
+    description: "report records unavailability in observe/recommend; fail stops the workflow. Enforce always stops."
+    required: false
+    default: "report"
+  request-timeout:
+    description: "Remote API timeout in seconds, from 1 to 30."
+    required: false
+    default: "10"
+  max-retries:
+    description: "Remote transient retry count, from 0 to 3."
+    required: false
+    default: "1"
   output-file:
     description: "Path for the JSON decision report artifact."
     required: false
@@ -29,16 +53,28 @@ outputs:
   replay-id:
     description: "Replay identifier for the decision."
     value: ${{ steps.evaluate.outputs.replay-id }}
+  integration-status:
+    description: "evaluated or unavailable."
+    value: ${{ steps.evaluate.outputs.integration-status }}
+  source:
+    description: "local or remote."
+    value: ${{ steps.evaluate.outputs.source }}
 
 runs:
   using: "composite"
   steps:
     - id: evaluate
       shell: bash
+      env:
+        SMERC_API_URL: ${{ inputs.api-url }}
+        SMERC_TENANT: ${{ inputs.tenant }}
       run: |
         python "$GITHUB_ACTION_PATH/run_smerc_gate.py" \
           --action-file "${{ inputs.action-file }}" \
           --mode "${{ inputs.mode }}" \
+          --source "${{ inputs.source }}" \
+          --api-failure-policy "${{ inputs.api-failure-policy }}" \
+          --request-timeout "${{ inputs.request-timeout }}" \
+          --max-retries "${{ inputs.max-retries }}" \
           --output-file "${{ inputs.output-file }}" \
           --fail-on "${{ inputs.fail-on }}"
-

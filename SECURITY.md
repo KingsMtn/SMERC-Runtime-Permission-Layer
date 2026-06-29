@@ -35,6 +35,14 @@ The pilot API defaults to refusing startup without at least one tenant-mapped be
 
 SQLite supports a controlled, single-instance pilot. It is not the target enterprise storage architecture. A multi-instance deployment requires an external transactional datastore, managed key rotation, centralized authorization, retention controls, backup testing, and operational monitoring.
 
+## GitHub Actions Remote Mode
+
+Remote evaluation reads the bearer credential only from `SMERC_API_KEY`. The integration requires HTTPS outside loopback testing, refuses cross-origin redirects, bounds response size, validates response structure, and reuses one idempotency key across transient retries.
+
+Do not expose the pilot secret to untrusted fork workflows. Pin the action to a reviewed commit SHA, restrict workflow permissions, use action metadata rather than sensitive payloads, and approve report-artifact retention before a live pilot.
+
+An unavailable remote service never produces a fabricated posture. Observe and recommend modes may report `UNAVAILABLE`; enforce mode always fails closed.
+
 ## Enforcement Warning
 
 Do not use the reference thresholds for production blocking without threat modeling, calibration, accountable approval, override procedures, and an explicit fail-open/fail-closed decision.

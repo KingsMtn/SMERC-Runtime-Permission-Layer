@@ -20,6 +20,7 @@ The current build includes:
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
 - GitHub Actions gate
+- local and authenticated remote GitHub Action evaluation
 - synthetic shadow-mode scenario packs
 - evidence/report generators
 - Render deployment profile
@@ -110,6 +111,8 @@ python integrations/github_actions/run_smerc_gate.py \
   --mode observe \
   --output-file smerc-decision.json
 ```
+
+The GitHub Action can also call the authenticated `/v1/evaluate` endpoint. Remote mode keeps the API key in `SMERC_API_KEY`, requires HTTPS outside loopback tests, reuses an idempotency key across retries, and fails closed in enforce mode. See `integrations/github_actions/README.md`.
 
 Generate a synthetic GitHub Actions shadow-mode pilot report:
 

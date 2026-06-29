@@ -14,7 +14,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Evaluate proposed agent action
         id: smerc
@@ -33,4 +33,3 @@ jobs:
 
       - name: Print posture
         run: echo "SMERC posture is ${{ steps.smerc.outputs.posture }}"
-

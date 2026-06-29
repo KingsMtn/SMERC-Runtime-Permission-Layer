@@ -1,103 +1,113 @@
 # SMERC GitHub Actions Integration
 
-This integration runs SMERC as a runtime permission gate in GitHub Actions.
+The integration can evaluate a proposed action with either:
 
-It evaluates a proposed AI-agent or automation action and returns:
+- `local`: the bundled reference engine, with no network dependency
+- `remote`: the authenticated SMERC pilot API, with tenant-scoped audit persistence
 
-- `ALLOW`
-- `THROTTLE`
-- `FREEZE`
-- `DENY`
-- `ESCALATE`
-
-The first deployment mode is intentionally narrow: AI-assisted code, deployment, and infrastructure workflows where a security or platform team wants a replayable decision before high-impact automation proceeds.
+Both sources return the workflow-facing postures `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE` when evaluation succeeds.
 
 ## Modes
 
-| Mode | Behavior |
-| --- | --- |
-| `observe` | Score the action, write a report, never fail the workflow. |
-| `recommend` | Score the action and surface constraints for reviewer use. |
-| `enforce` | Fail the workflow when the posture matches `fail-on`. |
+| Mode | Decision behavior | API outage behavior |
+| --- | --- | --- |
+| `observe` | Report only | Report `UNAVAILABLE` unless failure policy is `fail` |
+| `recommend` | Surface posture and controls | Report `UNAVAILABLE` unless failure policy is `fail` |
+| `enforce` | Fail when posture matches `fail-on` | Always fail closed |
 
-## Example
+Start every pilot in `observe` mode.
+
+## Local Evaluation
 
 ```yaml
-- name: Evaluate proposed agent action
+- name: Evaluate proposed agent action locally
   id: smerc
   uses: ./integrations/github_actions
   with:
     action-file: integrations/github_actions/sample_action_request.json
+    source: local
     mode: observe
     output-file: smerc-decision.json
-    fail-on: DENY,FREEZE
 ```
 
-## Input Action Shape
+Local mode expects the action shape used by `reference_engine/agent_permission_layer.py`.
 
-```json
-{
-  "action_id": "AI_DEPLOY_PRODUCTION_CHANGE",
-  "description": "AI coding agent proposes deploying a generated infrastructure change to production.",
-  "tool": "github_actions.deploy",
-  "actor": "coding_agent",
-  "confidence": 0.64,
-  "harm": 0.72,
-  "consent": 0.58,
-  "reversibility": 0.34,
-  "external_effect": true,
-  "sensitive_data": false
-}
+## Remote Evaluation
+
+Store the API credential as the GitHub Actions secret `SMERC_API_KEY`. Store the non-secret service URL as the repository variable `SMERC_API_URL`.
+
+```yaml
+- name: Evaluate proposed agent action through SMERC API
+  id: smerc
+  uses: ./integrations/github_actions
+  env:
+    SMERC_API_KEY: ${{ secrets.SMERC_API_KEY }}
+  with:
+    action-file: examples/recoverability_single_action.json
+    source: remote
+    api-url: ${{ vars.SMERC_API_URL }}
+    tenant: platform-team
+    mode: observe
+    api-failure-policy: report
+    request-timeout: "10"
+    max-retries: "1"
+    output-file: smerc-decision.json
 ```
 
-## Output
+Remote mode expects the recoverability action shape documented in `docs/API_Deployment_Guide.md`.
 
-The action writes:
+For an external repository reference, pin a commit SHA during a pilot:
 
-- step outputs: `posture`, `risk-score`, `replay-id`
-- JSON report at `output-file`
-- GitHub step summary with posture, reasons, constraints, and replay ID
-
-## Local Smoke Test
-
-```bash
-python integrations/github_actions/run_smerc_gate.py \
-  --action-file integrations/github_actions/sample_action_request.json \
-  --mode observe \
-  --output-file smerc-decision.json
+```yaml
+uses: KingsMtn/SMERC-Runtime-Permission-Layer/integrations/github_actions@COMMIT_SHA
 ```
 
-Expected behavior:
+Do not use an unpinned branch reference for an enforcement workflow.
 
-- exits successfully in `observe` mode
-- writes `smerc-decision.json`
-- prints the posture and replay ID
+## Remote Safety Behavior
 
-Use `denied_action_request.json` to test enforcement behavior:
+- API keys are read only from `SMERC_API_KEY`; there is no command-line or action input for the secret.
+- Non-loopback remote endpoints require HTTPS.
+- Cross-origin redirects are refused so authorization headers cannot be forwarded to another host.
+- Transient `429`, `500`, `502`, `503`, and `504` responses can be retried up to three times.
+- One idempotency key is reused across retries.
+- API responses are limited to 1 MiB and validated before a posture is accepted.
+- Remote errors produce an explicit `integration_status: unavailable`; they never fabricate an authorization posture.
+- Enforce mode fails closed when the API cannot return a valid decision.
 
-```bash
-python integrations/github_actions/run_smerc_gate.py \
-  --action-file integrations/github_actions/denied_action_request.json \
-  --mode enforce \
-  --fail-on DENY,FREEZE \
-  --output-file smerc-decision.json
-```
+The default idempotency key combines the GitHub run, attempt, job, action ID, and request hash. A caller can override it with `SMERC_IDEMPOTENCY_KEY` when coordinating retries across jobs.
 
-## Shadow-Mode Pilot Report
+## Inputs
 
-The repository includes 10 realistic GitHub Actions scenarios for product review:
+| Input | Default | Purpose |
+| --- | --- | --- |
+| `action-file` | required | Structured JSON action request |
+| `source` | `local` | `local` or `remote` evaluation |
+| `api-url` | empty | HTTPS SMERC service URL for remote mode |
+| `tenant` | empty | Optional tenant assertion |
+| `mode` | `observe` | `observe`, `recommend`, or `enforce` |
+| `api-failure-policy` | `report` | `report` or `fail`; enforce ignores fail-open behavior |
+| `request-timeout` | `10` | API timeout from 1 to 30 seconds |
+| `max-retries` | `1` | Transient retries from 0 to 3 |
+| `output-file` | `smerc-decision.json` | JSON evidence report path |
+| `fail-on` | `DENY,FREEZE` | Enforced postures that fail the workflow |
 
-```bash
-python -m reference_engine.pilot_report \
-  examples/github_actions_shadow_mode_scenarios.json \
-  --json-output reports/github_actions_shadow_mode_results.json \
-  --markdown-output reports/GitHub_Actions_Shadow_Mode_Pilot_Report.md
-```
+## Outputs
 
-The generated report shows posture distribution, risk/confidence averages, scenario-level reason codes, and the limits of synthetic evidence. It is intended to preview what a design partner would receive after scoring real workflows in shadow mode.
+- `posture`: a SMERC posture or `UNAVAILABLE`
+- `risk-score`: local risk or remote irreversible-exposure score
+- `replay-id`: decision replay identifier
+- `integration-status`: `evaluated` or `unavailable`
+- `source`: `local` or `remote`
 
-## CISO Review Notes
+The action also writes a JSON report and a GitHub step summary.
 
-This is an MVP/reference integration. It is designed for shadow-mode review first. It is not a production-certified security control, does not replace branch protection, does not replace code review, and does not replace existing IAM or policy engines.
+## Pilot Guidance
 
-Use `observe` mode first to compare SMERC postures against existing approvals before any enforcement.
+- Use metadata rather than source code, prompts, secrets, or customer payloads.
+- Do not expose the API key to workflows triggered by untrusted forks.
+- Use a GitHub environment with reviewers for protected pilot secrets when appropriate.
+- Upload the decision report as a workflow artifact with a retention period approved by the security owner.
+- Compare SMERC results against existing approvals before enabling enforcement.
+
+See `remote_example_workflow.yml` for a complete shadow-mode workflow.
