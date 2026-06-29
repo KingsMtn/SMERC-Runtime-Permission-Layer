@@ -58,7 +58,7 @@ class APIServerTests(unittest.TestCase):
         health = self.request_json("/health")
         ready = self.request_json("/ready")
         self.assertEqual(health[0], 200)
-        self.assertEqual(health[2]["version"], "0.2")
+        self.assertEqual(health[2]["version"], "0.3")
         self.assertEqual(ready[2]["status"], "ready")
 
     def test_schema_lists_versioned_endpoints_and_postures(self):
@@ -67,6 +67,8 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("reversibility", body["required_fields"])
         self.assertIn("ESCALATE", body["postures"])
         self.assertIn("POST /v1/evaluate", body["endpoints"])
+        self.assertIn("POST /v1/decisions/{replay_id}/reviews", body["endpoints"])
+        self.assertIn("GET /v1/pilot/metrics", body["endpoints"])
 
     def test_evaluate_requires_bearer_authentication(self):
         status, headers, body = self.request_json("/v1/evaluate", method="POST", payload=EXAMPLES[0])
@@ -209,6 +211,185 @@ class LocalDevelopmentModeTests(unittest.TestCase):
     def test_server_requires_auth_unless_local_mode_is_explicit(self):
         with self.assertRaises(ValueError):
             create_server("127.0.0.1", 0, audit_db=":memory:", api_keys={})
+
+
+class PilotReviewAPITests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.server = create_server(
+            "127.0.0.1",
+            0,
+            audit_db=":memory:",
+            api_keys={"alpha": "alpha-secret", "beta": "beta-secret"},
+            max_body_bytes=4096,
+            max_batch_size=2,
+        )
+        cls.port = cls.server.server_address[1]
+        cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
+        cls.thread.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.shutdown()
+        cls.server.server_close()
+        cls.thread.join(timeout=2)
+
+    def url(self, path):
+        return f"http://127.0.0.1:{self.port}{path}"
+
+    def request_json(self, path, *, method="GET", payload=None, key=None, headers=None):
+        request_headers = dict(headers or {})
+        if key:
+            request_headers["authorization"] = f"Bearer {key}"
+        data = None
+        if payload is not None:
+            data = json.dumps(payload).encode("utf-8")
+            request_headers.setdefault("content-type", "application/json")
+        request = Request(self.url(path), data=data, headers=request_headers, method=method)
+        try:
+            with urlopen(request, timeout=5) as response:
+                response_headers = {name.lower(): value for name, value in response.headers.items()}
+                return response.status, response_headers, json.loads(response.read().decode("utf-8"))
+        except HTTPError as exc:
+            response_headers = {name.lower(): value for name, value in exc.headers.items()}
+            return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+
+    def create_decision(self, example_index=0, tenant="alpha"):
+        key = f"{tenant}-secret"
+        status, _, decision = self.request_json(
+            "/v1/evaluate", method="POST", payload=EXAMPLES[example_index], key=key
+        )
+        self.assertEqual(status, 200)
+        return decision
+
+    @staticmethod
+    def review_payload(**overrides):
+        payload = {
+            "reviewer_id": "security-reviewer-1",
+            "verdict": "agree",
+            "review_latency_ms": 1800,
+            "useful_constraint": True,
+        }
+        payload.update(overrides)
+        return payload
+
+    def test_review_lifecycle_is_tenant_scoped_and_idempotent(self):
+        decision = self.create_decision(1)
+        path = f"/v1/decisions/{decision['replay_id']}/reviews"
+        payload = self.review_payload(
+            useful_constraint=decision["posture"] != "ALLOW",
+            false_release=False,
+        )
+        headers = {"idempotency-key": "review-run-1001"}
+        first = self.request_json(path, method="POST", payload=payload, key="alpha-secret", headers=headers)
+        second = self.request_json(path, method="POST", payload=payload, key="alpha-secret", headers=headers)
+        self.assertEqual(first[0], 201)
+        self.assertEqual(second[0], 200)
+        self.assertEqual(second[1]["x-smerc-idempotent-replay"], "true")
+        self.assertEqual(first[2]["review_id"], second[2]["review_id"])
+
+        status, _, listed = self.request_json(path, key="alpha-secret")
+        self.assertEqual(status, 200)
+        self.assertEqual(listed["count"], 1)
+        status, _, body = self.request_json(path, key="beta-secret")
+        self.assertEqual(status, 404)
+        self.assertEqual(body["error"], "decision_not_found")
+
+    def test_review_validation_rejects_incoherent_labels_and_overrides(self):
+        decision = self.create_decision(0)
+        path = f"/v1/decisions/{decision['replay_id']}/reviews"
+        status, _, body = self.request_json(
+            path,
+            method="POST",
+            payload=self.review_payload(verdict="override", recommended_posture=decision["posture"]),
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_override")
+
+        status, _, body = self.request_json(
+            path,
+            method="POST",
+            payload=self.review_payload(false_constraint=True, useful_constraint=True),
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 400)
+        self.assertIn(body["error"], {"invalid_constraint_label", "conflicting_constraint_labels"})
+
+    def test_metrics_report_rates_with_explicit_denominators(self):
+        decision = self.create_decision(1)
+        path = f"/v1/decisions/{decision['replay_id']}/reviews"
+        payload = self.review_payload(useful_constraint=decision["posture"] != "ALLOW")
+        status, _, _ = self.request_json(path, method="POST", payload=payload, key="alpha-secret")
+        self.assertEqual(status, 201)
+
+        status, _, metrics = self.request_json("/v1/pilot/metrics", key="alpha-secret")
+        self.assertEqual(status, 200)
+        self.assertGreaterEqual(metrics["review_count"], 1)
+        self.assertGreaterEqual(metrics["denominators"]["determinate_reviews"], 1)
+        self.assertIn("reviewer_agreement_rate", metrics["metrics"])
+        self.assertIn("average_review_latency_ms", metrics["metrics"])
+
+        status, _, beta_metrics = self.request_json("/v1/pilot/metrics", key="beta-secret")
+        self.assertEqual(status, 200)
+        self.assertEqual(beta_metrics["review_count"], 0)
+        self.assertIsNone(beta_metrics["metrics"]["reviewer_agreement_rate"])
+
+    def test_review_idempotency_and_reviewer_conflicts_are_explicit(self):
+        decision = self.create_decision(1)
+        path = f"/v1/decisions/{decision['replay_id']}/reviews"
+        payload = self.review_payload(
+            reviewer_id="security-reviewer-conflict",
+            useful_constraint=decision["posture"] != "ALLOW",
+        )
+        headers = {"idempotency-key": "review-run-conflict"}
+        status, _, _ = self.request_json(
+            path, method="POST", payload=payload, key="alpha-secret", headers=headers
+        )
+        self.assertEqual(status, 201)
+
+        changed = dict(payload, review_latency_ms=1900)
+        status, _, body = self.request_json(
+            path, method="POST", payload=changed, key="alpha-secret", headers=headers
+        )
+        self.assertEqual(status, 409)
+        self.assertEqual(body["error"], "idempotency_conflict")
+
+        status, _, body = self.request_json(
+            path,
+            method="POST",
+            payload=changed,
+            key="alpha-secret",
+            headers={"idempotency-key": "review-run-conflict-2"},
+        )
+        self.assertEqual(status, 409)
+        self.assertEqual(body["error"], "review_conflict")
+
+    def test_review_idempotency_key_is_bound_to_replay_id(self):
+        first_decision = self.create_decision(1)
+        second_decision = self.create_decision(1)
+        payload = self.review_payload(
+            reviewer_id="security-reviewer-replay-bound",
+            useful_constraint=first_decision["posture"] != "ALLOW",
+        )
+        headers = {"idempotency-key": "review-run-replay-bound"}
+        status, _, _ = self.request_json(
+            f"/v1/decisions/{first_decision['replay_id']}/reviews",
+            method="POST",
+            payload=payload,
+            key="alpha-secret",
+            headers=headers,
+        )
+        self.assertEqual(status, 201)
+        status, _, body = self.request_json(
+            f"/v1/decisions/{second_decision['replay_id']}/reviews",
+            method="POST",
+            payload=payload,
+            key="alpha-secret",
+            headers=headers,
+        )
+        self.assertEqual(status, 409)
+        self.assertEqual(body["error"], "idempotency_conflict")
 
 
 if __name__ == "__main__":

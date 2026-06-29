@@ -105,6 +105,23 @@ jobs:
           test -n "$SMERC_REPLAY_ID"
           python -m json.tool smerc-remote-ci-decision.json > /dev/null
 
+      - name: Record pilot review and assert metrics
+        env:
+          SMERC_REPLAY_ID: ${{ steps.remote-smerc.outputs.replay-id }}
+        run: |
+          curl --fail --silent --show-error \
+            --request POST "http://127.0.0.1:8788/v1/decisions/$SMERC_REPLAY_ID/reviews" \
+            --header "Authorization: Bearer ci-secret-01234567890123456789" \
+            --header "Idempotency-Key: ci-review-$SMERC_REPLAY_ID" \
+            --header "Content-Type: application/json" \
+            --data @examples/pilot_review.json \
+            | python -m json.tool
+          curl --fail --silent --show-error \
+            --header "Authorization: Bearer ci-secret-01234567890123456789" \
+            http://127.0.0.1:8788/v1/pilot/metrics \
+            > /tmp/smerc-pilot-metrics.json
+          python -c 'import json; data=json.load(open("/tmp/smerc-pilot-metrics.json")); assert data["review_count"] == 1; assert data["metrics"]["reviewer_agreement_rate"] == 1.0; assert data["metrics"]["useful_constraint_rate"] == 1.0'
+
       - name: Stop pilot API
         if: always()
         run: docker rm --force smerc-pilot-api

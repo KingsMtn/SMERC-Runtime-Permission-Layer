@@ -51,6 +51,9 @@ Endpoints:
 - `POST /v1/batch`
 - `GET /v1/decisions`
 - `GET /v1/decisions/{replay_id}`
+- `POST /v1/decisions/{replay_id}/reviews`
+- `GET /v1/decisions/{replay_id}/reviews`
+- `GET /v1/pilot/metrics`
 
 The API uses only the Python standard library so a reviewer can run it without a dependency stack. Pilot controls include tenant-mapped bearer keys, idempotency, bounded requests, allowlisted CORS, and structured errors.
 
@@ -64,6 +67,8 @@ Purpose:
 - replay retry-safe decisions by idempotency key
 - retrieve individual decision evidence
 - list posture-filtered audit summaries
+- persist immutable, pseudonymous reviewer annotations
+- calculate agreement, override, false-release, false-constraint, useful-constraint, and latency metrics
 - expose storage readiness
 
 SQLite is intentionally scoped to a single-instance pilot. It is not presented as the final enterprise storage architecture.
@@ -88,11 +93,13 @@ Files:
 
 - `reference_engine/pilot_report.py`
 - `reference_engine/recoverability_report.py`
+- `reference_engine/pilot_metrics_report.py`
 
 Purpose:
 
 - evaluate synthetic pilot scenarios
 - generate markdown and JSON evidence bundles
+- export denominator-aware pilot review metrics
 - show what a design partner would receive after a shadow-mode pilot
 
 ### 6. Deployment Profile
@@ -112,7 +119,8 @@ Purpose:
 ## What This Build Proves
 
 - The scoring engine runs.
-- The API can authenticate, evaluate, persist, replay, and retrieve tenant-scoped decisions.
+- The API can authenticate, evaluate, persist, replay, retrieve, and review tenant-scoped decisions.
+- Pilot metrics preserve explicit denominators and null values when evidence is insufficient.
 - The GitHub Actions integration can run in observe, recommend, or enforce mode.
 - The repo includes repeatable tests.
 - The evidence workflow produces report artifacts.
@@ -127,7 +135,7 @@ Purpose:
 
 ## Next Product Layer
 
-The next layer should be a design-partner pilot that collects:
+The implemented review layer is ready for a design-partner pilot to collect:
 
 - reviewer agreement rate
 - false release rate
@@ -136,3 +144,5 @@ The next layer should be a design-partner pilot that collects:
 - latency impact
 - useful constraint rate
 - examples where existing controls allowed an action but SMERC recommended constraint or review
+
+The software can collect these measurements; only a real pilot can determine whether they support the product thesis.

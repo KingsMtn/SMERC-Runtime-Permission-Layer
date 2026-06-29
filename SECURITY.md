@@ -35,6 +35,8 @@ The pilot API defaults to refusing startup without at least one tenant-mapped be
 
 SQLite supports a controlled, single-instance pilot. It is not the target enterprise storage architecture. A multi-instance deployment requires an external transactional datastore, managed key rotation, centralized authorization, retention controls, backup testing, and operational monitoring.
 
+Pilot reviews use pseudonymous reviewer identifiers and bounded optional comments. Do not place names, email addresses, credentials, source code, personal data, incident payloads, or other sensitive content in review fields. Review records are immutable; corrections should be handled under an approved pilot evidence procedure rather than by editing the audit database.
+
 ## GitHub Actions Remote Mode
 
 Remote evaluation reads the bearer credential only from `SMERC_API_KEY`. The integration requires HTTPS outside loopback testing, refuses cross-origin redirects, bounds response size, validates response structure, and reuses one idempotency key across transient retries.

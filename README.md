@@ -19,6 +19,7 @@ The current build includes:
 - recoverability-aware scoring engine
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
+- immutable pilot review records and denominator-aware metrics
 - GitHub Actions gate
 - local and authenticated remote GitHub Action evaluation
 - synthetic shadow-mode scenario packs
@@ -38,8 +39,9 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 3. Inspect `reference_engine/recoverability_engine.py`.
 4. Inspect `api_server.py` and `reference_engine/audit_store.py`.
 5. Review `integrations/github_actions/README.md`.
-6. Run the tests.
-7. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+6. Read `docs/Pilot_Review_Metrics.md`.
+7. Run the tests.
+8. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -101,7 +103,22 @@ curl -X POST http://127.0.0.1:8788/v1/evaluate \
   --data @examples/recoverability_single_action.json
 ```
 
-Pilot API controls include bearer-key tenant mapping, tenant-scoped audit retrieval, idempotent evaluation replay, body and batch limits, allowlisted CORS, liveness/readiness endpoints, and structured request IDs. See `docs/API_Deployment_Guide.md`.
+Pilot API controls include bearer-key tenant mapping, tenant-scoped audit retrieval, idempotent evaluation replay, immutable reviewer annotations, body and batch limits, allowlisted CORS, liveness/readiness endpoints, and structured request IDs. See `docs/API_Deployment_Guide.md` and `docs/Pilot_Review_Metrics.md`.
+
+After a decision is reviewed, record the pseudonymous reviewer outcome and retrieve pilot metrics:
+
+```bash
+curl -X POST "http://127.0.0.1:8788/v1/decisions/$REPLAY_ID/reviews" \
+  -H "Authorization: Bearer replace-with-a-long-random-secret" \
+  -H "Idempotency-Key: review-$REPLAY_ID-security-1" \
+  -H "Content-Type: application/json" \
+  --data @examples/pilot_review.json
+
+curl "http://127.0.0.1:8788/v1/pilot/metrics" \
+  -H "Authorization: Bearer replace-with-a-long-random-secret"
+```
+
+Rates are returned with denominators and remain `null` when not measurable. They describe reviewed pilot records only; they are not production accuracy claims.
 
 Run the GitHub Actions gate locally:
 
