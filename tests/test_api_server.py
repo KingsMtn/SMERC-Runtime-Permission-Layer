@@ -58,7 +58,7 @@ class APIServerTests(unittest.TestCase):
         health = self.request_json("/health")
         ready = self.request_json("/ready")
         self.assertEqual(health[0], 200)
-        self.assertEqual(health[2]["version"], "0.3")
+        self.assertEqual(health[2]["version"], "0.4")
         self.assertEqual(ready[2]["status"], "ready")
 
     def test_schema_lists_versioned_endpoints_and_postures(self):
@@ -69,6 +69,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/evaluate", body["endpoints"])
         self.assertIn("POST /v1/decisions/{replay_id}/reviews", body["endpoints"])
         self.assertIn("GET /v1/pilot/metrics", body["endpoints"])
+        self.assertIn("GET /v1/review-queue", body["endpoints"])
 
     def test_evaluate_requires_bearer_authentication(self):
         status, headers, body = self.request_json("/v1/evaluate", method="POST", payload=EXAMPLES[0])
@@ -390,6 +391,49 @@ class PilotReviewAPITests(unittest.TestCase):
         )
         self.assertEqual(status, 409)
         self.assertEqual(body["error"], "idempotency_conflict")
+
+    def test_review_queue_is_tenant_scoped_and_filterable(self):
+        pending = self.create_decision(0)
+        reviewed = self.create_decision(1)
+        reviewed_path = f"/v1/decisions/{reviewed['replay_id']}/reviews"
+        status, _, _ = self.request_json(
+            reviewed_path,
+            method="POST",
+            payload=self.review_payload(
+                reviewer_id="security-reviewer-queue",
+                useful_constraint=reviewed["posture"] != "ALLOW",
+            ),
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 201)
+
+        status, _, pending_queue = self.request_json(
+            "/v1/review-queue?status=pending&limit=200", key="alpha-secret"
+        )
+        self.assertEqual(status, 200)
+        self.assertIn(pending["replay_id"], {item["replay_id"] for item in pending_queue["decisions"]})
+        self.assertNotIn(reviewed["replay_id"], {item["replay_id"] for item in pending_queue["decisions"]})
+
+        status, _, reviewed_queue = self.request_json(
+            f"/v1/review-queue?status=reviewed&posture={reviewed['posture']}", key="alpha-secret"
+        )
+        self.assertEqual(status, 200)
+        queue_item = next(
+            item for item in reviewed_queue["decisions"] if item["replay_id"] == reviewed["replay_id"]
+        )
+        self.assertEqual(queue_item["review_status"], "reviewed")
+        self.assertGreaterEqual(queue_item["verdict_counts"]["agree"], 1)
+
+        status, _, beta_queue = self.request_json("/v1/review-queue", key="beta-secret")
+        self.assertEqual(status, 200)
+        self.assertEqual(beta_queue["count"], 0)
+
+    def test_review_queue_rejects_invalid_status(self):
+        status, _, body = self.request_json(
+            "/v1/review-queue?status=unknown", key="alpha-secret"
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_review_status")
 
 
 if __name__ == "__main__":

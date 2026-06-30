@@ -20,6 +20,7 @@ The current build includes:
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
 - immutable pilot review records and denominator-aware metrics
+- dependency-free pilot review console
 - GitHub Actions gate
 - local and authenticated remote GitHub Action evaluation
 - synthetic shadow-mode scenario packs
@@ -40,8 +41,9 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 4. Inspect `api_server.py` and `reference_engine/audit_store.py`.
 5. Review `integrations/github_actions/README.md`.
 6. Read `docs/Pilot_Review_Metrics.md`.
-7. Run the tests.
-8. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+7. Inspect `pilot_console/README.md`.
+8. Run the Python and console tests.
+9. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -119,6 +121,15 @@ curl "http://127.0.0.1:8788/v1/pilot/metrics" \
 ```
 
 Rates are returned with denominators and remain `null` when not measurable. They describe reviewed pilot records only; they are not production accuracy claims.
+
+Run the browser-based pilot review console:
+
+```bash
+export SMERC_CORS_ORIGINS="http://127.0.0.1:8790"
+python -m http.server 8790 --bind 127.0.0.1 --directory pilot_console
+```
+
+Open `http://127.0.0.1:8790` and connect it to the authenticated API. The bearer key remains in memory for that tab; the console uses no browser storage, cookies, analytics, or third-party assets. See `pilot_console/README.md`.
 
 Run the GitHub Actions gate locally:
 
@@ -205,6 +216,7 @@ Policy calibration, deterministic hashes, accountable overrides, and tamper-evid
 - Working Python reference engine
 - Recoverability-focused scoring engine
 - Standard-library REST API service
+- Browser-based pilot review queue and metrics console
 - Installable local GitHub Action
 - Deterministic example action requests
 - GitHub Actions shadow-mode scenario pack

@@ -8,7 +8,7 @@ from reference_engine.pilot_metrics_report import build_report, to_markdown, wri
 
 class PilotMetricsReportTests(unittest.TestCase):
     def setUp(self):
-        self.temp_dir = tempfile.TemporaryDirectory(dir=Path.cwd())
+        self.temp_dir = tempfile.TemporaryDirectory()
         self.database = Path(self.temp_dir.name) / "audit.sqlite3"
         store = AuditStore(self.database)
         store.record(

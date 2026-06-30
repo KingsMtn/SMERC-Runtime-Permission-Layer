@@ -9,6 +9,18 @@ permissions:
   contents: read
 
 jobs:
+  console-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Check console JavaScript syntax
+        run: node --check pilot_console/app.js && node --check pilot_console/model.mjs
+
+      - name: Run console model tests
+        run: node --test tests/js/pilot_console_model.test.mjs
+
   unittest:
     runs-on: ubuntu-latest
     strategy:

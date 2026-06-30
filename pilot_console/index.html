@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>SMERC Pilot Review Console</title>
+    <link rel="stylesheet" href="styles.css?v=1" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="product-label">SMERC Runtime Permission Layer</p>
+        <h1>Pilot review console</h1>
+      </div>
+      <div id="connection-status" class="connection-status" role="status">Not connected</div>
+    </header>
+
+    <main>
+      <section class="connection-band" aria-labelledby="connection-heading">
+        <div>
+          <h2 id="connection-heading">Pilot API connection</h2>
+          <p>The bearer key remains in memory for this browser tab and is never stored by the console.</p>
+        </div>
+        <form id="connection-form" class="connection-form">
+          <label>
+            API URL
+            <input id="api-url" name="apiUrl" type="url" value="http://127.0.0.1:8788" required />
+          </label>
+          <label>
+            Bearer key
+            <input id="api-key" name="apiKey" type="password" autocomplete="off" required />
+          </label>
+          <button class="primary-button" type="submit">Connect</button>
+        </form>
+      </section>
+
+      <section class="metrics-section" aria-labelledby="metrics-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Pilot Evidence</p>
+            <h2 id="metrics-heading">Current review metrics</h2>
+          </div>
+          <button id="download-metrics" class="secondary-button" type="button" disabled>Download JSON</button>
+        </div>
+        <div id="metrics-grid" class="metrics-grid" aria-live="polite">
+          <p class="empty-copy">Connect to a pilot API to load tenant-scoped metrics.</p>
+        </div>
+        <p class="evidence-boundary">Rates describe reviewed pilot records only. They do not establish production accuracy or causality. Read each rate with its denominator.</p>
+      </section>
+
+      <section class="workspace" aria-label="Decision review workspace">
+        <div class="queue-pane">
+          <div class="section-heading queue-heading">
+            <div>
+              <p class="eyebrow">Review Queue</p>
+              <h2>Decisions</h2>
+            </div>
+            <button id="refresh-queue" class="icon-button" type="button" title="Refresh queue" aria-label="Refresh queue" disabled>↻</button>
+          </div>
+          <div class="filters">
+            <label>
+              Review status
+              <select id="status-filter">
+                <option value="pending">Pending</option>
+                <option value="reviewed">Reviewed</option>
+                <option value="all">All</option>
+              </select>
+            </label>
+            <label>
+              Posture
+              <select id="posture-filter">
+                <option value="">All postures</option>
+                <option>ALLOW</option>
+                <option>THROTTLE</option>
+                <option>FREEZE</option>
+                <option>DENY</option>
+                <option>ESCALATE</option>
+              </select>
+            </label>
+          </div>
+          <div id="queue-list" class="queue-list" aria-live="polite">
+            <p class="empty-copy">No queue loaded.</p>
+          </div>
+        </div>
+
+        <div class="detail-pane">
+          <div id="decision-empty" class="detail-empty">
+            <p class="eyebrow">Decision Evidence</p>
+            <h2>Select a decision</h2>
+            <p>Inspect its posture, scores, reason codes, controls, and existing reviews before submitting a verdict.</p>
+          </div>
+
+          <div id="decision-detail" hidden>
+            <div class="detail-header">
+              <div>
+                <p id="detail-action-type" class="eyebrow"></p>
+                <h2 id="detail-action-id"></h2>
+              </div>
+              <span id="detail-posture" class="posture-badge"></span>
+            </div>
+            <p id="detail-summary" class="decision-summary"></p>
+            <div id="score-grid" class="score-grid"></div>
+            <div class="detail-columns">
+              <div>
+                <h3>Reason codes</h3>
+                <ul id="reason-list" class="compact-list"></ul>
+              </div>
+              <div>
+                <h3>Controls</h3>
+                <ul id="control-list" class="compact-list"></ul>
+              </div>
+            </div>
+
+            <section class="existing-reviews" aria-labelledby="existing-reviews-heading">
+              <h3 id="existing-reviews-heading">Existing reviews</h3>
+              <div id="review-list"></div>
+            </section>
+
+            <form id="review-form" class="review-form">
+              <h3>Submit reviewer verdict</h3>
+              <div id="review-error" class="form-error" role="alert" hidden></div>
+              <label>
+                Pseudonymous reviewer ID
+                <input id="reviewer-id" name="reviewerId" pattern="[A-Za-z0-9][A-Za-z0-9._-]{0,63}" maxlength="64" required />
+              </label>
+              <fieldset>
+                <legend>Verdict</legend>
+                <div class="segmented-control">
+                  <label><input type="radio" name="verdict" value="agree" checked /> Agree</label>
+                  <label><input type="radio" name="verdict" value="override" /> Override</label>
+                  <label><input type="radio" name="verdict" value="uncertain" /> Uncertain</label>
+                </div>
+              </fieldset>
+              <label id="recommended-wrap" hidden>
+                Recommended posture
+                <select id="recommended-posture" name="recommendedPosture">
+                  <option value="">Select posture</option>
+                  <option>ALLOW</option>
+                  <option>THROTTLE</option>
+                  <option>FREEZE</option>
+                  <option>DENY</option>
+                  <option>ESCALATE</option>
+                </select>
+              </label>
+              <fieldset>
+                <legend>Outcome labels</legend>
+                <div class="check-grid">
+                  <label><input id="false-release" type="checkbox" name="falseRelease" /> Suspected false release</label>
+                  <label><input id="false-constraint" type="checkbox" name="falseConstraint" /> Suspected false constraint</label>
+                  <label><input id="useful-constraint" type="checkbox" name="usefulConstraint" /> Useful constraint</label>
+                </div>
+              </fieldset>
+              <label>
+                Bounded comment
+                <textarea id="review-comment" name="comment" rows="3" maxlength="500" placeholder="Do not include secrets, personal data, source code, or incident payloads."></textarea>
+              </label>
+              <button id="submit-review" class="primary-button" type="submit">Record immutable review</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Shadow-mode pilot interface. Existing approvals remain authoritative until calibration and accountable security approval.
+    </footer>
+    <script type="module" src="app.js?v=1"></script>
+  </body>
+</html>

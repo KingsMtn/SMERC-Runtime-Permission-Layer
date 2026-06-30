@@ -37,6 +37,8 @@ SQLite supports a controlled, single-instance pilot. It is not the target enterp
 
 Pilot reviews use pseudonymous reviewer identifiers and bounded optional comments. Do not place names, email addresses, credentials, source code, personal data, incident payloads, or other sensitive content in review fields. Review records are immutable; corrections should be handled under an approved pilot evidence procedure rather than by editing the audit database.
 
+The pilot review console keeps its bearer key in JavaScript memory only. It does not persist the key in browser storage or cookies and refuses non-HTTPS remote API URLs. Configure an exact console origin in `SMERC_CORS_ORIGINS`; do not use wildcard CORS. A production console still requires managed identity, RBAC, session controls, monitoring, and an approved credential lifecycle.
+
 ## GitHub Actions Remote Mode
 
 Remote evaluation reads the bearer credential only from `SMERC_API_KEY`. The integration requires HTTPS outside loopback testing, refuses cross-origin redirects, bounds response size, validates response structure, and reuses one idempotency key across transient retries.

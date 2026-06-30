@@ -6,6 +6,9 @@
 - Added agreement, override, false-release, false-constraint, useful-constraint, and latency metrics with explicit denominators.
 - Added JSON and Markdown pilot metrics export.
 - Expanded API validation and automated coverage for review conflicts, retry safety, tenant isolation, and metric interpretation.
+- Added a tenant-scoped pending/reviewed decision queue endpoint.
+- Added a dependency-free pilot review console for replay inspection, immutable verdict submission, metrics display, and JSON export.
+- Added JavaScript model tests and frontend security-contract tests.
 
 ## 0.1.0 - External Review Edition
 

@@ -54,6 +54,7 @@ Endpoints:
 - `POST /v1/decisions/{replay_id}/reviews`
 - `GET /v1/decisions/{replay_id}/reviews`
 - `GET /v1/pilot/metrics`
+- `GET /v1/review-queue`
 
 The API uses only the Python standard library so a reviewer can run it without a dependency stack. Pilot controls include tenant-mapped bearer keys, idempotency, bounded requests, allowlisted CORS, and structured errors.
 
@@ -73,7 +74,21 @@ Purpose:
 
 SQLite is intentionally scoped to a single-instance pilot. It is not presented as the final enterprise storage architecture.
 
-### 4. GitHub Actions Gate
+### 4. Pilot Review Console
+
+Folder: `pilot_console/`
+
+Purpose:
+
+- connect to an authenticated pilot API without persisting the bearer key
+- filter pending and reviewed tenant decisions
+- inspect replay scores, reason codes, controls, and prior reviews
+- submit immutable pseudonymous reviews
+- display and download denominator-aware pilot metrics
+
+The console is a pilot operator surface. It does not provide production identity, RBAC, or enforcement controls.
+
+### 5. GitHub Actions Gate
 
 Folder: `integrations/github_actions/`
 
@@ -87,7 +102,7 @@ Purpose:
 - preserve idempotency across remote retries
 - fail closed on remote-service unavailability in enforce mode
 
-### 5. Evidence Generators
+### 6. Evidence Generators
 
 Files:
 
@@ -102,7 +117,7 @@ Purpose:
 - export denominator-aware pilot review metrics
 - show what a design partner would receive after a shadow-mode pilot
 
-### 6. Deployment Profile
+### 7. Deployment Profile
 
 Files:
 
@@ -121,6 +136,7 @@ Purpose:
 - The scoring engine runs.
 - The API can authenticate, evaluate, persist, replay, retrieve, and review tenant-scoped decisions.
 - Pilot metrics preserve explicit denominators and null values when evidence is insufficient.
+- The review console can exercise the review and metrics workflow without third-party frontend dependencies.
 - The GitHub Actions integration can run in observe, recommend, or enforce mode.
 - The repo includes repeatable tests.
 - The evidence workflow produces report artifacts.

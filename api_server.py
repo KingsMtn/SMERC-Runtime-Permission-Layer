@@ -56,7 +56,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
 
 class SMERCRequestHandler(BaseHTTPRequestHandler):
     server: SMERCAPIServer
-    server_version = "SMERCRecoverabilityAPI/0.3"
+    server_version = "SMERCRecoverabilityAPI/0.4"
 
     def do_OPTIONS(self) -> None:
         origin = self.headers.get("origin")
@@ -82,7 +82,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     {
                         "status": "ok",
                         "service": "smerc-recoverability-api",
-                        "version": "0.3",
+                        "version": "0.4",
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -105,6 +105,28 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 metrics = self.server.audit_store.pilot_metrics(tenant_id)
                 metrics["request_id"] = request_id
                 self._write_json(metrics, request_id=request_id)
+                return
+            if path == "/v1/review-queue":
+                limit = self._parse_limit(query)
+                posture = self._parse_posture(query)
+                review_status = self._parse_review_status(query)
+                queue = self.server.audit_store.review_queue(
+                    tenant_id,
+                    limit=limit,
+                    review_status=review_status,
+                    posture=posture,
+                )
+                self._write_json(
+                    {
+                        "tenant_id": tenant_id,
+                        "count": len(queue),
+                        "status": review_status,
+                        "posture": posture,
+                        "decisions": queue,
+                        "request_id": request_id,
+                    },
+                    request_id=request_id,
+                )
                 return
             if path == "/v1/decisions":
                 limit = self._parse_limit(query)
@@ -149,7 +171,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             raise APIError(
                 HTTPStatus.NOT_FOUND,
                 "not_found",
-                "Use /health, /ready, /schema, /evaluate, /batch, or /v1/decisions.",
+                "Use /health, /ready, /schema, /v1/evaluate, /v1/decisions, /v1/review-queue, or /v1/pilot/metrics.",
             )
         except APIError as exc:
             self._write_error(exc, request_id)
@@ -483,6 +505,17 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             raise APIError(HTTPStatus.BAD_REQUEST, "invalid_posture", "posture is not recognized.")
         return posture
 
+    @staticmethod
+    def _parse_review_status(query: Dict[str, list[str]]) -> str:
+        status = query.get("status", ["all"])[0].lower()
+        if status not in {"all", "pending", "reviewed"}:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_review_status",
+                "status must be all, pending, or reviewed.",
+            )
+        return status
+
     def _write_error(self, error: APIError, request_id: Optional[str] = None) -> None:
         request_id = request_id or self._request_id()
         self._write_json(
@@ -580,6 +613,7 @@ def schema() -> Dict[str, Any]:
             "POST /v1/decisions/{replay_id}/reviews": "record an immutable pilot review",
             "GET /v1/decisions/{replay_id}/reviews": "list tenant-scoped pilot reviews",
             "GET /v1/pilot/metrics": "calculate review agreement and outcome metrics",
+            "GET /v1/review-queue": "list tenant-scoped pending or reviewed decisions",
         },
     }
 

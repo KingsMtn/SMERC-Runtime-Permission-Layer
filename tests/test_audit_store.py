@@ -130,6 +130,28 @@ class AuditStoreTests(unittest.TestCase):
         self.assertEqual(result["metrics"]["useful_constraint_rate"], 1.0)
         self.assertEqual(result["metrics"]["average_review_latency_ms"], 2000.0)
 
+    def test_review_queue_filters_pending_reviewed_and_posture(self):
+        pending = decision("replay_pending", "ALLOW")
+        pending["plain_english_summary"] = "Pending action"
+        reviewed = decision("replay_reviewed", "FREEZE")
+        reviewed["plain_english_summary"] = "Reviewed action"
+        self.store.record("alpha", pending, "hash-pending")
+        self.store.record("alpha", reviewed, "hash-reviewed")
+        reviewed_record = review("review_queue", "security-queue", "agree", "FREEZE")
+        reviewed_record.update({"replay_id": "replay_reviewed"})
+        self.store.record_review(
+            "alpha", "replay_reviewed", reviewed_record, "review-hash-queue"
+        )
+
+        pending_queue = self.store.review_queue("alpha", review_status="pending")
+        reviewed_queue = self.store.review_queue("alpha", review_status="reviewed")
+        frozen_queue = self.store.review_queue("alpha", posture="FREEZE")
+        self.assertEqual([item["replay_id"] for item in pending_queue], ["replay_pending"])
+        self.assertEqual([item["replay_id"] for item in reviewed_queue], ["replay_reviewed"])
+        self.assertEqual(frozen_queue[0]["review_count"], 1)
+        self.assertEqual(frozen_queue[0]["verdict_counts"]["agree"], 1)
+        self.assertEqual(frozen_queue[0]["description"], "Reviewed action")
+
 
 if __name__ == "__main__":
     unittest.main()

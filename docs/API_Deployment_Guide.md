@@ -71,6 +71,10 @@ curl http://127.0.0.1:8788/v1/decisions/REPLAY_ID \
 | `POST /v1/batch` | Bearer | Evaluate and store a bounded batch |
 | `GET /v1/decisions` | Bearer | List decision summaries for the authenticated tenant |
 | `GET /v1/decisions/{replay_id}` | Bearer | Retrieve one decision for the authenticated tenant |
+| `POST /v1/decisions/{replay_id}/reviews` | Bearer | Record one immutable pseudonymous review |
+| `GET /v1/decisions/{replay_id}/reviews` | Bearer | List reviews for one tenant decision |
+| `GET /v1/review-queue` | Bearer | List pending, reviewed, or all tenant decisions |
+| `GET /v1/pilot/metrics` | Bearer | Retrieve denominator-aware pilot measurements |
 
 Legacy `/evaluate` and `/batch` aliases remain available. New integrations should use `/v1`.
 
@@ -92,6 +96,17 @@ This prevents a workflow retry from producing multiple audit decisions for the s
 | `PORT` | `8788` | Listening port |
 
 Do not commit API keys or put them in URLs. Rotate pilot keys when personnel or integration scope changes.
+
+## Pilot Review Console
+
+The dependency-free console in `pilot_console/` requires its exact browser origin in `SMERC_CORS_ORIGINS`. For local use:
+
+```bash
+export SMERC_CORS_ORIGINS="http://127.0.0.1:8790"
+python -m http.server 8790 --bind 127.0.0.1 --directory pilot_console
+```
+
+Remote console deployments must use HTTPS. The bearer key is held only in tab memory. The console intentionally does not use local storage, session storage, cookies, analytics, or third-party runtime assets.
 
 ## Docker
 

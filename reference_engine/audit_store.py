@@ -280,6 +280,66 @@ class AuditStore:
             ).fetchall()
         return [json.loads(row["review_json"]) for row in rows]
 
+    def review_queue(
+        self,
+        tenant_id: str,
+        limit: int = 50,
+        review_status: str = "all",
+        posture: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
+        query = """
+            SELECT
+                d.replay_id,
+                d.action_id,
+                d.posture,
+                d.evaluated_at,
+                d.decision_json,
+                COUNT(r.review_id) AS review_count,
+                SUM(CASE WHEN r.verdict = 'agree' THEN 1 ELSE 0 END) AS agree_count,
+                SUM(CASE WHEN r.verdict = 'override' THEN 1 ELSE 0 END) AS override_count,
+                SUM(CASE WHEN r.verdict = 'uncertain' THEN 1 ELSE 0 END) AS uncertain_count
+            FROM decisions d
+            LEFT JOIN decision_reviews r
+                ON r.tenant_id = d.tenant_id AND r.replay_id = d.replay_id
+            WHERE d.tenant_id = ?
+        """
+        parameters: List[Any] = [tenant_id]
+        if posture is not None:
+            query += " AND d.posture = ?"
+            parameters.append(posture)
+        query += " GROUP BY d.replay_id"
+        if review_status == "pending":
+            query += " HAVING COUNT(r.review_id) = 0"
+        elif review_status == "reviewed":
+            query += " HAVING COUNT(r.review_id) > 0"
+        query += " ORDER BY d.created_at DESC LIMIT ?"
+        parameters.append(limit)
+
+        with self._lock:
+            rows = self._connection.execute(query, parameters).fetchall()
+        queue = []
+        for row in rows:
+            decision = json.loads(row["decision_json"])
+            review_count = int(row["review_count"])
+            queue.append(
+                {
+                    "replay_id": row["replay_id"],
+                    "action_id": row["action_id"],
+                    "description": decision.get("plain_english_summary", ""),
+                    "posture": row["posture"],
+                    "evaluated_at": row["evaluated_at"],
+                    "scores": decision["scores"],
+                    "review_status": "reviewed" if review_count else "pending",
+                    "review_count": review_count,
+                    "verdict_counts": {
+                        "agree": int(row["agree_count"] or 0),
+                        "override": int(row["override_count"] or 0),
+                        "uncertain": int(row["uncertain_count"] or 0),
+                    },
+                }
+            )
+        return queue
+
     def pilot_metrics(self, tenant_id: str) -> Dict[str, Any]:
         with self._lock:
             rows = self._connection.execute(
