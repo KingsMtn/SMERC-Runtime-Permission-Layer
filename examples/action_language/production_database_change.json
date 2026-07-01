@@ -1,0 +1,39 @@
+{
+  "language_version": "smerc.action.v1",
+  "action": {
+    "id": "db-change-2041",
+    "description": "AI coding agent proposes deleting an obsolete production customer table",
+    "actor": "coding-agent-release-7",
+    "tool": "database-admin-api",
+    "type": "delete_table",
+    "target": {
+      "resource": "production/customer_archive",
+      "environment": "production"
+    },
+    "authority": {
+      "basis": "unreviewed agent-generated migration",
+      "confidence": 0.38
+    }
+  },
+  "signals": {
+    "base_action_risk": 0.94,
+    "evidence_validity": 0.42,
+    "anomaly_pressure": 0.71,
+    "impact_scope": 0.88
+  },
+  "recoverability": {
+    "reversibility": 0.12,
+    "containment_strength": 0.24,
+    "rollback_latency": 0.91,
+    "cancel_reliability": 0.18,
+    "rollback_method": "Restore from the last verified backup after blocking writes"
+  },
+  "effects": {
+    "external_side_effect": true,
+    "sensitive_data": true
+  },
+  "context": {
+    "workflow": "agent-generated-database-migration",
+    "change_ticket": "CHG-2041"
+  }
+}

@@ -13,6 +13,7 @@ from typing import Any, Dict, Iterable, Mapping, Optional
 from urllib.parse import parse_qs, urlsplit
 
 from reference_engine.audit_store import AuditStore, IdempotencyConflictError, ReviewConflictError
+from reference_engine.action_language import ACTION_VERSION, DECISION_VERSION, evaluate_language_action
 from reference_engine.recoverability_engine import RecoverabilityEngine, RuntimePosture
 
 
@@ -56,7 +57,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
 
 class SMERCRequestHandler(BaseHTTPRequestHandler):
     server: SMERCAPIServer
-    server_version = "SMERCRecoverabilityAPI/0.4"
+    server_version = "SMERCRecoverabilityAPI/0.5"
 
     def do_OPTIONS(self) -> None:
         origin = self.headers.get("origin")
@@ -82,7 +83,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     {
                         "status": "ok",
                         "service": "smerc-recoverability-api",
-                        "version": "0.4",
+                        "version": "0.5",
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -197,8 +198,16 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 )
                 return
 
-            if path not in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch"}:
+            if path not in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch", "/v1/language/evaluate"}:
                 raise APIError(HTTPStatus.NOT_FOUND, "not_found", "Use /evaluate, /batch, or a review endpoint.")
+
+            if path == "/v1/language/evaluate":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Language evaluation expects one JSON object.")
+                result, replayed = self._evaluate_language_one(tenant_id, payload)
+                headers = {"x-smerc-idempotent-replay": "true"} if replayed else None
+                self._write_json(result, request_id=request_id, extra_headers=headers)
+                return
 
             if path in {"/evaluate", "/v1/evaluate"}:
                 if not isinstance(payload, dict):
@@ -418,6 +427,29 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 return stored["decision"], True
         return self._evaluate_and_record(tenant_id, payload, request_hash, idempotency_key), False
 
+    def _evaluate_language_one(self, tenant_id: str, payload: Dict[str, Any]) -> tuple[Dict[str, Any], bool]:
+        request_hash = payload_hash({"endpoint": "/v1/language/evaluate", "payload": payload})
+        idempotency_key = self._idempotency_key()
+        if idempotency_key is not None:
+            stored = self.server.audit_store.get_by_idempotency_key(tenant_id, idempotency_key)
+            if stored is not None:
+                if not hmac.compare_digest(stored["request_hash"], request_hash):
+                    raise APIError(
+                        HTTPStatus.CONFLICT,
+                        "idempotency_conflict",
+                        "Idempotency-Key was already used with a different request body or endpoint.",
+                    )
+                return stored["decision"], True
+        decision = evaluate_language_action(payload)
+        decision["tenant_id"] = tenant_id
+        try:
+            stored = self.server.audit_store.record(
+                tenant_id, decision, request_hash, idempotency_key=idempotency_key
+            )
+        except IdempotencyConflictError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "idempotency_conflict", str(exc)) from exc
+        return stored, False
+
     def _evaluate_and_record(
         self,
         tenant_id: str,
@@ -582,6 +614,7 @@ def parse_api_keys(value: str) -> Dict[str, str]:
 def schema() -> Dict[str, Any]:
     return {
         "api_version": "v1",
+        "language_versions": {"action": ACTION_VERSION, "decision": DECISION_VERSION},
         "required_fields": [
             "action_id",
             "description",
@@ -607,6 +640,7 @@ def schema() -> Dict[str, Any]:
             "GET /ready": "unauthenticated persistence readiness",
             "GET /schema": "input and endpoint shape",
             "POST /v1/evaluate": "evaluate and persist one action",
+            "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",
             "POST /v1/batch": "evaluate and persist a bounded action list",
             "GET /v1/decisions": "list tenant-scoped decision summaries",
             "GET /v1/decisions/{replay_id}": "retrieve one tenant-scoped decision",

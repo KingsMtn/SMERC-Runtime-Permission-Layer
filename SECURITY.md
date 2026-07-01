@@ -19,6 +19,8 @@ Use the repository owner's private GitHub contact path to report a suspected sec
 
 A first pilot should provide action metadata rather than raw sensitive payloads. SMERC should not require production secrets, customer PII, private keys, raw credentials, full source-code contents, or privileged cloud credentials.
 
+Action Language context is bounded to 16,384 canonical JSON bytes. Contract objects reject unknown fields, but `context` remains caller-defined metadata and must be treated as untrusted input by downstream log, export, and display systems. The deterministic action hash detects equal canonical requests; it is not authentication, a signature, or proof of origin.
+
 ## Pilot API Controls
 
 The pilot API defaults to refusing startup without at least one tenant-mapped bearer key. It provides:

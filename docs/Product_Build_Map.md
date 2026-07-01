@@ -8,7 +8,21 @@ SMERC is a recoverability-aware runtime permission layer for AI-agent and automa
 
 ## Current Product Components
 
-### 1. Recoverability Engine
+### 1. Action And Decision Language
+
+File: `reference_engine/action_language.py`
+
+Purpose:
+
+- validate strict `smerc.action.v1` envelopes
+- compile agent and workflow proposals into engine inputs
+- create deterministic action hashes for replay comparison
+- return structured reasons, controls, and posture-transition conditions
+- preserve compatibility with the recoverability engine and audit store
+
+This is the stable integration boundary. It turns SMERC's vocabulary into an executable contract instead of relying on prose or integration-specific field mappings.
+
+### 2. Recoverability Engine
 
 File: `reference_engine/recoverability_engine.py`
 
@@ -38,7 +52,7 @@ Enforcement states:
 - `block`
 - `review`
 
-### 2. API Vehicle
+### 3. API Vehicle
 
 File: `api_server.py`
 
@@ -48,6 +62,7 @@ Endpoints:
 - `GET /ready`
 - `GET /schema`
 - `POST /v1/evaluate`
+- `POST /v1/language/evaluate`
 - `POST /v1/batch`
 - `GET /v1/decisions`
 - `GET /v1/decisions/{replay_id}`
@@ -58,7 +73,7 @@ Endpoints:
 
 The API uses only the Python standard library so a reviewer can run it without a dependency stack. Pilot controls include tenant-mapped bearer keys, idempotency, bounded requests, allowlisted CORS, and structured errors.
 
-### 3. Pilot Audit Store
+### 4. Pilot Audit Store
 
 File: `reference_engine/audit_store.py`
 
@@ -74,7 +89,7 @@ Purpose:
 
 SQLite is intentionally scoped to a single-instance pilot. It is not presented as the final enterprise storage architecture.
 
-### 4. Pilot Review Console
+### 5. Pilot Review Console
 
 Folder: `pilot_console/`
 
@@ -88,7 +103,7 @@ Purpose:
 
 The console is a pilot operator surface. It does not provide production identity, RBAC, or enforcement controls.
 
-### 5. GitHub Actions Gate
+### 6. GitHub Actions Gate
 
 Folder: `integrations/github_actions/`
 
@@ -102,7 +117,7 @@ Purpose:
 - preserve idempotency across remote retries
 - fail closed on remote-service unavailability in enforce mode
 
-### 6. Evidence Generators
+### 7. Evidence Generators
 
 Files:
 
@@ -117,7 +132,7 @@ Purpose:
 - export denominator-aware pilot review metrics
 - show what a design partner would receive after a shadow-mode pilot
 
-### 7. Deployment Profile
+### 8. Deployment Profile
 
 Files:
 

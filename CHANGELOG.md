@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 - 2026-06-30
+
+- Added strict `smerc.action.v1` and `smerc.decision.v1` machine-readable contracts.
+- Added deterministic action hashing, structured reasons and controls, and measurable posture-transition conditions.
+- Added authenticated `POST /v1/language/evaluate` with tenant-scoped persistence and endpoint-bound idempotency.
+- Added JSON Schemas, a production database example, specification, and contract/API tests.
+
 ## Unreleased - Pilot Evidence Collection
 
 - Added immutable, tenant-scoped reviewer annotations for replayed decisions.
