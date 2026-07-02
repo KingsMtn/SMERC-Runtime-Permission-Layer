@@ -68,6 +68,7 @@ curl http://127.0.0.1:8788/v1/decisions/REPLAY_ID \
 | `GET /ready` | No | Audit-store readiness |
 | `GET /schema` | No | Input and endpoint contract |
 | `POST /v1/evaluate` | Bearer | Evaluate and store one action |
+| `POST /v1/language/evaluate` | Bearer | Validate, compile, evaluate, and store one `smerc.action.v1` envelope |
 | `POST /v1/batch` | Bearer | Evaluate and store a bounded batch |
 | `GET /v1/decisions` | Bearer | List decision summaries for the authenticated tenant |
 | `GET /v1/decisions/{replay_id}` | Bearer | Retrieve one decision for the authenticated tenant |

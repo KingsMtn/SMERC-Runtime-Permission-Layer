@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-action-language-v1.schema.json",
+  "title": "SMERC Action Language v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["language_version", "action", "signals", "recoverability", "effects", "context"],
+  "properties": {
+    "language_version": {"const": "smerc.action.v1"},
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "actor", "tool", "type", "target", "authority"],
+      "properties": {
+        "id": {"$ref": "#/$defs/text"},
+        "description": {"$ref": "#/$defs/text"},
+        "actor": {"$ref": "#/$defs/text"},
+        "tool": {"$ref": "#/$defs/text"},
+        "type": {"$ref": "#/$defs/text"},
+        "target": {
+          "type": "object", "additionalProperties": false,
+          "required": ["resource", "environment"],
+          "properties": {"resource": {"$ref": "#/$defs/text"}, "environment": {"$ref": "#/$defs/text"}}
+        },
+        "authority": {
+          "type": "object", "additionalProperties": false,
+          "required": ["basis", "confidence"],
+          "properties": {"basis": {"$ref": "#/$defs/text"}, "confidence": {"$ref": "#/$defs/score"}}
+        }
+      }
+    },
+    "signals": {
+      "type": "object", "additionalProperties": false,
+      "required": ["base_action_risk", "evidence_validity", "anomaly_pressure", "impact_scope"],
+      "properties": {
+        "base_action_risk": {"$ref": "#/$defs/score"},
+        "evidence_validity": {"$ref": "#/$defs/score"},
+        "anomaly_pressure": {"$ref": "#/$defs/score"},
+        "impact_scope": {"$ref": "#/$defs/score"}
+      }
+    },
+    "recoverability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reversibility", "containment_strength", "rollback_latency", "cancel_reliability", "rollback_method"],
+      "properties": {
+        "reversibility": {"$ref": "#/$defs/score"},
+        "containment_strength": {"$ref": "#/$defs/score"},
+        "rollback_latency": {"$ref": "#/$defs/score"},
+        "cancel_reliability": {"$ref": "#/$defs/score"},
+        "rollback_method": {"$ref": "#/$defs/text"}
+      }
+    },
+    "effects": {
+      "type": "object", "additionalProperties": false,
+      "required": ["external_side_effect", "sensitive_data"],
+      "properties": {"external_side_effect": {"type": "boolean"}, "sensitive_data": {"type": "boolean"}}
+    },
+    "context": {"type": "object"}
+  },
+  "$defs": {
+    "score": {"type": "number", "minimum": 0, "maximum": 1},
+    "text": {"type": "string", "minLength": 1, "maxLength": 512}
+  }
+}

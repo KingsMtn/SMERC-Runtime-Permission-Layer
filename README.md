@@ -16,6 +16,7 @@ The first integration is a GitHub Actions gate for AI-assisted code, deployment,
 
 The current build includes:
 
+- versioned SMERC Action Language and Decision Language contracts
 - recoverability-aware scoring engine
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
@@ -38,12 +39,13 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 1. Read `docs/CISO_Quick_Review.md`.
 2. Read `docs/Security_Model.md`.
 3. Inspect `reference_engine/recoverability_engine.py`.
-4. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-5. Review `integrations/github_actions/README.md`.
-6. Read `docs/Pilot_Review_Metrics.md`.
-7. Inspect `pilot_console/README.md`.
-8. Run the Python and console tests.
-9. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+4. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
+5. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+6. Review `integrations/github_actions/README.md`.
+7. Read `docs/Pilot_Review_Metrics.md`.
+8. Inspect `pilot_console/README.md`.
+9. Run the Python and console tests.
+10. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -67,6 +69,18 @@ It outputs:
 - reason codes
 - recommended constraints
 - replay ID and replay record
+
+## Action Language
+
+`smerc.action.v1` is the machine-readable boundary between an agent proposing an action and SMERC deciding its runtime posture. It separates action identity, authority, risk signals, recoverability, effects, and bounded replay context. `smerc.decision.v1` returns structured reasons, controls, and measurable transition conditions alongside the existing scores and replay record.
+
+This is the practical meaning of Macro Language Model in the current product: SMERC does not generate micro-level content. It provides a versioned macro-level vocabulary for whether automated action may proceed, under what constraints, and what evidence is needed before a posture can change.
+
+```bash
+python -m reference_engine.action_language examples/action_language/production_database_change.json
+```
+
+Schemas and full semantics are in `schemas/` and `specification/SMERC_Action_Language_v1.md`.
 
 ## Quick Start
 
@@ -103,6 +117,16 @@ curl -X POST http://127.0.0.1:8788/v1/evaluate \
   -H "Idempotency-Key: workflow-run-1001" \
   -H "Content-Type: application/json" \
   --data @examples/recoverability_single_action.json
+```
+
+Evaluate the versioned action contract through the authenticated API:
+
+```bash
+curl -X POST http://127.0.0.1:8788/v1/language/evaluate \
+  -H "Authorization: Bearer replace-with-a-long-random-secret" \
+  -H "Idempotency-Key: language-run-1001" \
+  -H "Content-Type: application/json" \
+  --data @examples/action_language/production_database_change.json
 ```
 
 Pilot API controls include bearer-key tenant mapping, tenant-scoped audit retrieval, idempotent evaluation replay, immutable reviewer annotations, body and batch limits, allowlisted CORS, liveness/readiness endpoints, and structured request IDs. See `docs/API_Deployment_Guide.md` and `docs/Pilot_Review_Metrics.md`.

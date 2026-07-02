@@ -92,6 +92,17 @@ jobs:
             --data @examples/recoverability_single_action.json \
             | python -m json.tool
 
+      - name: Evaluate Action Language contract through container
+        run: |
+          curl --fail --silent --show-error \
+            --request POST http://127.0.0.1:8788/v1/language/evaluate \
+            --header "Authorization: Bearer ci-secret-01234567890123456789" \
+            --header "Idempotency-Key: ci-language-smoke" \
+            --header "Content-Type: application/json" \
+            --data @examples/action_language/production_database_change.json \
+            > /tmp/smerc-language-decision.json
+          python -c 'import json; data=json.load(open("/tmp/smerc-language-decision.json")); assert data["language_version"] == "smerc.decision.v1"; assert data["posture"] == "DENY"; assert data["transition"]["requires_new_request"] is True'
+
       - name: Evaluate through remote composite action
         id: remote-smerc
         uses: ./integrations/github_actions
