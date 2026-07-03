@@ -10,7 +10,7 @@ Display SMERC outputs to reviewers and operators while existing controls remain 
 
 ## Enforcement Mode
 
-Authorize the enforcement layer to apply `ALLOW`, `THROTTLE`, `DENY`, and `FREEZE` under approved policy profiles.
+Authorize the enforcement layer to apply `ALLOW`, `THROTTLE`, `DENY`, `FREEZE`, and `ESCALATE` under approved policy profiles. Eligible `ALLOW` and `THROTTLE` decisions may issue short-lived action-bound permits; executors verify and consume them once before acting.
 
 ## Review Requirements
 
@@ -26,3 +26,4 @@ Authorize the enforcement layer to apply `ALLOW`, `THROTTLE`, `DENY`, and `FREEZ
 - Incident rate after `ALLOW`.
 - Review latency.
 - False constraint and missed-risk analysis.
+- Permit issuance, expiry, rejection, replay, and consumption latency.

@@ -177,6 +177,23 @@ Purpose:
 - let a platform reviewer deploy the API with Docker or Render
 - define health, secrets, bounded requests, and a persistent pilot audit volume
 
+### 11. Action-Bound Authorization Permits
+
+Files:
+
+- `reference_engine/authorization_permit.py`
+- `schemas/smerc-action-bound-permit-v1.schema.json`
+
+Purpose:
+
+- convert eligible enforcement decisions into short-lived signed capabilities
+- bind authorization to the exact tenant, executor audience, action, replay, policy, and constraints
+- reject altered, expired, wrong-audience, superseded-policy, and replayed permits
+- carry `THROTTLE` controls to the execution boundary
+- register one issuance per decision/audience and atomically consume it once
+
+The pilot uses tenant HMAC keys and SQLite replay state. This proves the execution contract, not production key management, workload identity, distributed replay prevention, control attestation, or nonrepudiation.
+
 ## What This Build Proves
 
 - The scoring engine runs.
@@ -188,6 +205,7 @@ Purpose:
 - The evidence workflow produces report artifacts.
 - The evidence registry converts unresolved assumptions into enforceable deployment ceilings.
 - Tenant decisions carry replayable policy identity, while evidence provenance limits how far observations may advance deployment.
+- Eligible enforcement decisions can produce action-bound permits that a named executor verifies and consumes once.
 
 ## What This Build Does Not Prove
 

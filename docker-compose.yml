@@ -5,6 +5,7 @@ services:
       - "8788:8788"
     environment:
       SMERC_API_KEYS: ${SMERC_API_KEYS:?Set SMERC_API_KEYS to tenant=secret}
+      SMERC_PERMIT_KEYS: ${SMERC_PERMIT_KEYS:-}
       SMERC_AUDIT_DB: /data/smerc_audit.sqlite3
       SMERC_MAX_BODY_BYTES: "262144"
       SMERC_MAX_BATCH_SIZE: "100"

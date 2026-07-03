@@ -1,0 +1,39 @@
+{
+  "language_version": "smerc.action.v1",
+  "action": {
+    "id": "staged-release-100",
+    "description": "Promote a reversible canary release to a contained staging target",
+    "actor": "coding-agent-release-7",
+    "tool": "deployment-api",
+    "type": "promote_canary",
+    "target": {
+      "resource": "service/canary",
+      "environment": "staging"
+    },
+    "authority": {
+      "basis": "approved deployment ticket",
+      "confidence": 0.96
+    }
+  },
+  "signals": {
+    "base_action_risk": 0.1,
+    "evidence_validity": 0.96,
+    "anomaly_pressure": 0.03,
+    "impact_scope": 0.08
+  },
+  "recoverability": {
+    "reversibility": 0.97,
+    "containment_strength": 0.96,
+    "rollback_latency": 0.03,
+    "cancel_reliability": 0.99,
+    "rollback_method": "Restore the prior canary image"
+  },
+  "effects": {
+    "external_side_effect": false,
+    "sensitive_data": false
+  },
+  "context": {
+    "change_ticket": "CHG-100",
+    "workflow": "staging-canary"
+  }
+}

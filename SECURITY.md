@@ -27,6 +27,12 @@ The reference provenance ledger binds observations and source-artifact digests i
 
 Tenant policy files are trusted configuration. Limit write access, review threshold changes, retain prior policy hashes, and deploy policy revisions through approved change control. The reference server loads policies at startup and does not provide a remote policy-administration endpoint.
 
+Action-bound permits are HMAC-authenticated bearer capabilities. Never log, commit, persist in build artifacts, or expose them as workflow outputs. `SMERC_PERMIT_KEYS` requires separate tenant keys of at least 32 bytes. A compromised key can mint valid-looking permits, and HMAC does not provide public nonrepudiation. The pilot limits permits to five minutes, binds them to one action, tenant, audience, decision, and policy, registers one issuance per decision/audience, and consumes them once in SQLite. Production deployment still requires HSM/KMS-backed rotation, workload identity, distributed atomic replay prevention, revocation, clock monitoring, adapter attestation, and incident procedures.
+
+A consuming adapter's `enforced_controls` list is an assertion, not independent proof that a constraint operated. Production adapters must derive control evidence from native execution results and protect that evidence from caller manipulation.
+
+The pilot bearer credential authorizes evaluation, permit issuance, and permit consumption for its tenant; it does not implement endpoint-level roles. Keep the credential inside one controlled integration boundary. Production deployment requires separate proposer, issuer, and executor identities with least-privilege authorization.
+
 ## Pilot API Controls
 
 The pilot API defaults to refusing startup without at least one tenant-mapped bearer key. It provides:
@@ -38,6 +44,7 @@ The pilot API defaults to refusing startup without at least one tenant-mapped be
 - allowlisted CORS rather than wildcard browser access
 - no-store and content-type response headers
 - opaque request identifiers
+- optional action-bound permit issuance and atomic single-use consumption
 
 `--allow-unauthenticated` is intended only for local development. It must not be used on a network-accessible pilot deployment.
 

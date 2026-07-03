@@ -41,6 +41,10 @@ jobs:
       - name: Compile service and integration modules
         run: python -m compileall -q api_server.py reference_engine integrations
 
+      - name: Validate machine-readable contracts
+        run: |
+          python -c 'import json; paths=["schemas/smerc-action-language-v1.schema.json", "schemas/smerc-decision-language-v1.schema.json", "schemas/smerc-runtime-policy-v1.schema.json", "schemas/smerc-evidence-ledger-v1.schema.json", "schemas/smerc-action-bound-permit-v1.schema.json"]; [json.load(open(path)) for path in paths]'
+
       - name: Run recoverability engine smoke test
         run: python -m reference_engine.recoverability_engine examples/recoverability_single_action.json
 

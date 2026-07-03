@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-action-bound-permit-v1.schema.json",
+  "title": "SMERC Action-Bound Permit v1 Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "permit_id",
+    "tenant_id",
+    "audience",
+    "action_hash",
+    "replay_id",
+    "posture",
+    "authorization",
+    "required_controls",
+    "policy",
+    "issued_at",
+    "not_before",
+    "expires_at",
+    "max_uses"
+  ],
+  "properties": {
+    "version": {"const": "smerc.permit.v1"},
+    "permit_id": {"type": "string", "pattern": "^permit_[0-9a-f]{32}$"},
+    "tenant_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "audience": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "action_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "replay_id": {"type": "string", "minLength": 1, "maxLength": 192},
+    "posture": {"enum": ["ALLOW", "THROTTLE"]},
+    "authorization": {"enum": ["release", "constrain"]},
+    "required_controls": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"}
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_id", "policy_revision", "policy_hash", "mode", "evidence_ceiling"],
+      "properties": {
+        "policy_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "policy_revision": {"type": "string", "minLength": 1, "maxLength": 64},
+        "policy_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "mode": {"const": "ENFORCE"},
+        "evidence_ceiling": {"enum": ["LIMITED_ENFORCE", "CALIBRATED_ENFORCE"]}
+      }
+    },
+    "issued_at": {"type": "integer", "minimum": 0},
+    "not_before": {"type": "integer", "minimum": 0},
+    "expires_at": {"type": "integer", "minimum": 1},
+    "max_uses": {"const": 1}
+  }
+}

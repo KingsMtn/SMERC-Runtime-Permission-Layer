@@ -19,6 +19,7 @@ The current build includes:
 - versioned SMERC Action Language and Decision Language contracts
 - evidence and unknowns registry with deployment-limiting falsification rules
 - tenant-scoped policy calibration and evidence provenance admission
+- signed, action-bound, single-use authorization permits
 - recoverability-aware scoring engine
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
@@ -47,8 +48,9 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 7. Review `integrations/github_actions/README.md`.
 8. Read `docs/Pilot_Review_Metrics.md`.
 9. Inspect `pilot_console/README.md`.
-10. Run the Python and console tests.
-11. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+10. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
+11. Run the Python and console tests.
+12. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -73,6 +75,7 @@ It outputs:
 - recommended constraints
 - policy identity, revision, mode, evidence ceiling, and hash
 - replay ID and replay record
+- an optional short-lived permit for eligible enforcement decisions
 
 ## Action Language
 
@@ -85,6 +88,21 @@ python -m reference_engine.action_language examples/action_language/production_d
 ```
 
 Schemas and full semantics are in `schemas/` and `specification/SMERC_Action_Language_v1.md`.
+
+## Action-Bound Permits
+
+An eligible `smerc.decision.v1` result can be converted into a signed `smerc.permit.v1` capability for the exact original action. The permit binds the authenticated tenant, intended executor, action hash, replay ID, active policy hash, required controls, and a lifetime of no more than five minutes.
+
+Permits are deliberately narrow:
+
+- only an evidence-authorized `ENFORCE` policy may issue one
+- only `ALLOW` and `THROTTLE` decisions qualify
+- `THROTTLE` carries constraints into the execution boundary
+- one decision may issue one permit per executor audience
+- consumption is atomic and single use in the pilot store
+- policy replacement, action mutation, wrong audience, expiry, missing controls, or replay causes rejection
+
+The token is not exposed by the GitHub Action because it is a bearer capability. Executors obtain and consume it through the authenticated API. See `docs/Action_Bound_Permit_Operations.md`.
 
 ## Quick Start
 
@@ -133,7 +151,7 @@ curl -X POST http://127.0.0.1:8788/v1/language/evaluate \
   --data @examples/action_language/production_database_change.json
 ```
 
-Pilot API controls include bearer-key tenant mapping, tenant-scoped audit retrieval, idempotent evaluation replay, immutable reviewer annotations, body and batch limits, allowlisted CORS, liveness/readiness endpoints, and structured request IDs. See `docs/API_Deployment_Guide.md` and `docs/Pilot_Review_Metrics.md`.
+Pilot API controls include bearer-key tenant mapping, tenant-scoped audit retrieval, idempotent evaluation replay, optional action-bound permit issuance and consumption, immutable reviewer annotations, body and batch limits, allowlisted CORS, liveness/readiness endpoints, and structured request IDs. See `docs/API_Deployment_Guide.md` and `docs/Pilot_Review_Metrics.md`.
 
 After a decision is reviewed, record the pseudonymous reviewer outcome and retrieve pilot metrics:
 
@@ -275,6 +293,7 @@ Policy calibration, deterministic hashes, accountable overrides, and tamper-evid
 - Working Python reference engine
 - Recoverability-focused scoring engine
 - Standard-library REST API service
+- Signed action-bound permit contract with single-use pilot consumption
 - Browser-based pilot review queue and metrics console
 - Installable local GitHub Action
 - Deterministic example action requests

@@ -12,8 +12,21 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict, Iterable, Mapping, Optional
 from urllib.parse import parse_qs, urlsplit
 
-from reference_engine.audit_store import AuditStore, IdempotencyConflictError, ReviewConflictError
+from reference_engine.audit_store import (
+    AuditStore,
+    IdempotencyConflictError,
+    PermitIssuanceConflictError,
+    PermitNotIssuedError,
+    PermitReplayError,
+    ReviewConflictError,
+)
 from reference_engine.action_language import ACTION_VERSION, DECISION_VERSION, evaluate_language_action
+from reference_engine.authorization_permit import (
+    PERMIT_VERSION,
+    PermitError,
+    PermitSigner,
+    parse_permit_signers,
+)
 from reference_engine.policy import POLICY_VERSION, PolicyRegistry
 from reference_engine.recoverability_engine import RecoverabilityEngine, RuntimePosture
 
@@ -42,6 +55,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
         max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
         cors_origins: Iterable[str] = (),
         policy_registry: Optional[PolicyRegistry] = None,
+        permit_signers: Optional[Mapping[str, PermitSigner]] = None,
     ) -> None:
         super().__init__(server_address, SMERCRequestHandler)
         self.policy_registry = policy_registry or PolicyRegistry()
@@ -51,11 +65,28 @@ class SMERCAPIServer(ThreadingHTTPServer):
         self.max_body_bytes = max_body_bytes
         self.max_batch_size = max_batch_size
         self.cors_origins = frozenset(cors_origins)
+        self.permit_signers = dict(permit_signers or {})
+        unknown_permit_tenants = sorted(set(self.permit_signers) - set(self.api_keys))
+        if unknown_permit_tenants and not allow_unauthenticated:
+            raise ValueError(
+                "Permit signing tenants must also have API credentials: "
+                + ", ".join(unknown_permit_tenants)
+            )
         for tenant_id in self.api_keys:
             self.policy_registry.for_tenant(tenant_id)
 
     def engine_for(self, tenant_id: str) -> RecoverabilityEngine:
         return RecoverabilityEngine(self.policy_registry.for_tenant(tenant_id))
+
+    def signer_for(self, tenant_id: str) -> PermitSigner:
+        signer = self.permit_signers.get(tenant_id)
+        if signer is None:
+            raise APIError(
+                HTTPStatus.SERVICE_UNAVAILABLE,
+                "permit_signing_unavailable",
+                "No permit signing key is configured for this tenant.",
+            )
+        return signer
 
     def server_close(self) -> None:
         super().server_close()
@@ -64,7 +95,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
 
 class SMERCRequestHandler(BaseHTTPRequestHandler):
     server: SMERCAPIServer
-    server_version = "SMERCRecoverabilityAPI/0.6"
+    server_version = "SMERCRecoverabilityAPI/0.8"
 
     def do_OPTIONS(self) -> None:
         origin = self.headers.get("origin")
@@ -90,8 +121,9 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     {
                         "status": "ok",
                         "service": "smerc-recoverability-api",
-                        "version": "0.6",
+                        "version": "0.8",
                         "tenant_policy_count": self.server.policy_registry.count,
+                        "permit_signer_count": len(self.server.permit_signers),
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -192,6 +224,21 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             tenant_id = self._authenticate()
             payload = self._read_json()
 
+            if path == "/v1/permits/issue":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Permit issuance expects one JSON object.")
+                self._write_json(
+                    self._issue_permit(tenant_id, payload),
+                    HTTPStatus.CREATED,
+                    request_id=request_id,
+                )
+                return
+            if path == "/v1/permits/consume":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Permit consumption expects one JSON object.")
+                self._write_json(self._consume_permit(tenant_id, payload), request_id=request_id)
+                return
+
             review_replay_id = self._review_replay_id(path)
             if review_replay_id is not None:
                 if not isinstance(payload, dict):
@@ -249,6 +296,110 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             self._write_error(exc, request_id)
         except (TypeError, ValueError, json.JSONDecodeError) as exc:
             self._write_error(APIError(HTTPStatus.BAD_REQUEST, "bad_request", str(exc)), request_id)
+
+    def _issue_permit(self, tenant_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+        allowed = {"replay_id", "action", "audience", "ttl_seconds"}
+        unknown = sorted(set(payload) - allowed)
+        missing = sorted({"replay_id", "action", "audience"} - set(payload))
+        if missing or unknown:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_permit_request",
+                "Permit request fields are incomplete or unknown.",
+            )
+        replay_id = payload["replay_id"]
+        if not isinstance(replay_id, str):
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_permit_request", "replay_id must be a string.")
+        action = payload["action"]
+        if not isinstance(action, dict):
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_permit_request", "action must be an Action Language object.")
+        decision = self.server.audit_store.get(tenant_id, replay_id)
+        if decision is None:
+            raise APIError(HTTPStatus.NOT_FOUND, "decision_not_found", "Decision was not found.")
+        current_policy = self.server.policy_registry.for_tenant(tenant_id)
+        if decision.get("policy", {}).get("policy_hash") != current_policy.policy_hash:
+            raise APIError(
+                HTTPStatus.CONFLICT,
+                "policy_superseded",
+                "Decision policy is no longer the active tenant policy.",
+            )
+        try:
+            issued = self.server.signer_for(tenant_id).issue(
+                decision,
+                action,
+                tenant_id=tenant_id,
+                audience=payload["audience"],
+                ttl_seconds=payload.get("ttl_seconds", 60),
+            )
+        except PermitError as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, exc.code, exc.message) from exc
+        try:
+            issued["issuance"] = self.server.audit_store.record_permit_issuance(
+                tenant_id,
+                issued["permit"],
+                hashlib.sha256(issued["permit_token"].encode("ascii")).hexdigest(),
+            )
+        except PermitIssuanceConflictError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "permit_already_issued", str(exc)) from exc
+        return issued
+
+    def _consume_permit(self, tenant_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+        fields = {"permit_token", "action", "audience", "enforced_controls"}
+        if set(payload) != fields:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_permit_request",
+                "Permit consumption fields are incomplete or unknown.",
+            )
+        if not isinstance(payload["action"], dict) or not isinstance(payload["enforced_controls"], list):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_permit_request",
+                "action must be an object and enforced_controls must be a list.",
+            )
+        try:
+            permit = self.server.signer_for(tenant_id).verify(
+                payload["permit_token"],
+                payload["action"],
+                tenant_id=tenant_id,
+                audience=payload["audience"],
+                enforced_controls=payload["enforced_controls"],
+            )
+        except PermitError as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, exc.code, exc.message) from exc
+
+        decision = self.server.audit_store.get(tenant_id, permit["replay_id"])
+        if decision is None:
+            raise APIError(HTTPStatus.NOT_FOUND, "decision_not_found", "Permit decision was not found.")
+        if (
+            decision.get("action_hash") != permit["action_hash"]
+            or decision.get("posture") != permit["posture"]
+            or decision.get("policy", {}).get("policy_hash") != permit["policy"]["policy_hash"]
+        ):
+            raise APIError(
+                HTTPStatus.CONFLICT,
+                "permit_decision_mismatch",
+                "Permit no longer agrees with its stored decision.",
+            )
+        current_policy = self.server.policy_registry.for_tenant(tenant_id)
+        if current_policy.policy_hash != permit["policy"]["policy_hash"]:
+            raise APIError(
+                HTTPStatus.CONFLICT,
+                "policy_superseded",
+                "Permit policy is no longer the active tenant policy.",
+            )
+        try:
+            consumption = self.server.audit_store.consume_permit(
+                tenant_id,
+                permit,
+                payload["enforced_controls"],
+                hashlib.sha256(payload["permit_token"].encode("ascii")).hexdigest(),
+            )
+        except PermitNotIssuedError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "permit_not_issued", str(exc)) from exc
+        except PermitReplayError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "permit_already_consumed", str(exc)) from exc
+        return {"valid": True, "permit": permit, "consumption": consumption}
 
     def _record_review(
         self,
@@ -622,7 +773,11 @@ def parse_api_keys(value: str) -> Dict[str, str]:
 def schema() -> Dict[str, Any]:
     return {
         "api_version": "v1",
-        "language_versions": {"action": ACTION_VERSION, "decision": DECISION_VERSION},
+        "language_versions": {
+            "action": ACTION_VERSION,
+            "decision": DECISION_VERSION,
+            "permit": PERMIT_VERSION,
+        },
         "policy_version": POLICY_VERSION,
         "required_fields": [
             "action_id",
@@ -650,6 +805,8 @@ def schema() -> Dict[str, Any]:
             "GET /schema": "input and endpoint shape",
             "POST /v1/evaluate": "evaluate and persist one action",
             "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",
+            "POST /v1/permits/issue": "issue a short-lived action-bound permit for an enforceable decision",
+            "POST /v1/permits/consume": "verify and atomically consume an action-bound permit",
             "POST /v1/batch": "evaluate and persist a bounded action list",
             "GET /v1/decisions": "list tenant-scoped decision summaries",
             "GET /v1/decisions/{replay_id}": "retrieve one tenant-scoped decision",
@@ -672,6 +829,7 @@ def create_server(
     max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
     cors_origins: Iterable[str] = (),
     policy_registry: Optional[PolicyRegistry] = None,
+    permit_signers: Optional[Mapping[str, PermitSigner]] = None,
 ) -> SMERCAPIServer:
     if not api_keys and not allow_unauthenticated:
         raise ValueError("At least one API key is required unless --allow-unauthenticated is set.")
@@ -684,6 +842,7 @@ def create_server(
         max_batch_size=max_batch_size,
         cors_origins=cors_origins,
         policy_registry=policy_registry,
+        permit_signers=permit_signers,
     )
 
 
@@ -698,6 +857,7 @@ def run(
     max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
     cors_origins: Iterable[str] = (),
     policy_registry: Optional[PolicyRegistry] = None,
+    permit_signers: Optional[Mapping[str, PermitSigner]] = None,
 ) -> None:
     server = create_server(
         host,
@@ -709,6 +869,7 @@ def run(
         max_batch_size=max_batch_size,
         cors_origins=cors_origins,
         policy_registry=policy_registry,
+        permit_signers=permit_signers,
     )
     print(f"SMERC recoverability API listening on http://{host}:{server.server_address[1]}")
     try:
@@ -732,6 +893,7 @@ def main() -> None:
     api_keys = parse_api_keys(os.environ.get("SMERC_API_KEYS", ""))
     cors_origins = [item.strip() for item in os.environ.get("SMERC_CORS_ORIGINS", "").split(",") if item.strip()]
     policy_registry = PolicyRegistry.from_directory(args.policy_dir) if args.policy_dir else PolicyRegistry()
+    permit_signers = parse_permit_signers(os.environ.get("SMERC_PERMIT_KEYS", ""))
     run(
         args.host,
         args.port,
@@ -742,6 +904,7 @@ def main() -> None:
         max_batch_size=int(os.environ.get("SMERC_MAX_BATCH_SIZE", str(DEFAULT_MAX_BATCH_SIZE))),
         cors_origins=cors_origins,
         policy_registry=policy_registry,
+        permit_signers=permit_signers,
     )
 
 

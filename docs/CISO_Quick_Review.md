@@ -34,13 +34,15 @@ SMERC is designed for situations where AI agents or automation can:
 
 SMERC is not primarily a prompt filter. It focuses on the action boundary, where a proposed tool call or workflow action is about to create consequences.
 
-The main distinction is the use of intermediate runtime postures:
+The main distinction is the use of intermediate runtime postures and an action-bound execution contract:
 
 - `THROTTLE`: proceed with constraints
 - `FREEZE`: pause for missing confidence/context
 - `ESCALATE`: route to higher-trust review
 
 These are more operationally useful than simple allow/block decisions.
+
+For evidence-authorized enforcement policies, eligible decisions can issue a signed permit bound to the exact action, executor audience, decision replay, policy hash, required controls, and short expiry. The pilot consumes each permit once. This makes the authorization inspectable at the execution boundary, while remaining explicit that production key management and distributed replay prevention are not yet implemented.
 
 ## What Exists Today?
 
@@ -51,6 +53,7 @@ These are more operationally useful than simple allow/block decisions.
 - Public demo site
 - GitHub Actions integration v0.1
 - Decision report artifacts and replay records
+- Signed action-bound permit and single-use consumption contract
 - Pilot package and validation materials
 
 ## How Would A Team Test It?

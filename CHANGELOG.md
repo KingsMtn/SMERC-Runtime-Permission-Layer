@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.0 - 2026-07-03
+
+- Added signed `smerc.permit.v1` capabilities bound to tenant, audience, action hash, replay, active policy, controls, and expiry.
+- Restricted permit issuance to `ALLOW` and `THROTTLE` decisions under evidence-authorized `ENFORCE` policies.
+- Added one-per-decision/audience issuance registration, token-digest matching, atomic one-time consumption, and replay rejection.
+- Added permit API endpoints, schema, example action, security boundaries, operating guidance, and tests.
+
 ## 0.7.0 - 2026-07-03
 
 - Added tenant-scoped, versioned runtime policy bundles with deterministic policy hashes in decisions and replay records.

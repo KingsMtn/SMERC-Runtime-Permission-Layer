@@ -16,6 +16,18 @@ class ReviewConflictError(ValueError):
     pass
 
 
+class PermitReplayError(ValueError):
+    pass
+
+
+class PermitIssuanceConflictError(ValueError):
+    pass
+
+
+class PermitNotIssuedError(ValueError):
+    pass
+
+
 class AuditStore:
     """Tenant-scoped SQLite decision store for controlled pilot deployments."""
 
@@ -65,6 +77,34 @@ class AuditStore:
                     ON decision_reviews (tenant_id, created_at DESC);
                 CREATE INDEX IF NOT EXISTS idx_reviews_tenant_replay
                     ON decision_reviews (tenant_id, replay_id, created_at ASC);
+                CREATE TABLE IF NOT EXISTS permit_issuances (
+                    permit_id TEXT PRIMARY KEY,
+                    tenant_id TEXT NOT NULL,
+                    replay_id TEXT NOT NULL,
+                    action_hash TEXT NOT NULL,
+                    audience TEXT NOT NULL,
+                    token_hash TEXT NOT NULL,
+                    issued_at INTEGER NOT NULL,
+                    expires_at INTEGER NOT NULL,
+                    created_at TEXT NOT NULL,
+                    FOREIGN KEY (replay_id) REFERENCES decisions (replay_id) ON DELETE CASCADE,
+                    UNIQUE (tenant_id, replay_id, audience)
+                );
+                CREATE INDEX IF NOT EXISTS idx_permit_issuances_tenant_created
+                    ON permit_issuances (tenant_id, created_at DESC);
+                CREATE TABLE IF NOT EXISTS permit_consumptions (
+                    permit_id TEXT PRIMARY KEY,
+                    tenant_id TEXT NOT NULL,
+                    replay_id TEXT NOT NULL,
+                    action_hash TEXT NOT NULL,
+                    audience TEXT NOT NULL,
+                    enforced_controls_json TEXT NOT NULL,
+                    consumed_at TEXT NOT NULL,
+                    FOREIGN KEY (permit_id) REFERENCES permit_issuances (permit_id) ON DELETE CASCADE,
+                    FOREIGN KEY (replay_id) REFERENCES decisions (replay_id) ON DELETE CASCADE
+                );
+                CREATE INDEX IF NOT EXISTS idx_permit_consumptions_tenant_created
+                    ON permit_consumptions (tenant_id, consumed_at DESC);
                 """
             )
             self._connection.commit()
@@ -395,6 +435,124 @@ class AuditStore:
                 "allow_reviews": len(allowed),
                 "constrained_reviews": len(constrained),
             },
+        }
+
+    def record_permit_issuance(
+        self,
+        tenant_id: str,
+        permit: Dict[str, Any],
+        token_hash: str,
+    ) -> Dict[str, Any]:
+        created_at = datetime.now(timezone.utc).isoformat()
+        with self._lock:
+            try:
+                self._connection.execute(
+                    """
+                    INSERT INTO permit_issuances (
+                        permit_id, tenant_id, replay_id, action_hash, audience,
+                        token_hash, issued_at, expires_at, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        permit["permit_id"], tenant_id, permit["replay_id"], permit["action_hash"],
+                        permit["audience"], token_hash, permit["issued_at"], permit["expires_at"], created_at,
+                    ),
+                )
+                self._connection.commit()
+            except sqlite3.IntegrityError as exc:
+                self._connection.rollback()
+                existing = self._connection.execute(
+                    """
+                    SELECT permit_id
+                    FROM permit_issuances
+                    WHERE tenant_id = ? AND replay_id = ? AND audience = ?
+                    """,
+                    (tenant_id, permit["replay_id"], permit["audience"]),
+                ).fetchone()
+                if existing is not None:
+                    raise PermitIssuanceConflictError(
+                        "A permit was already issued for this decision and audience. A new action decision is required."
+                    ) from exc
+                raise
+        return {
+            "permit_id": permit["permit_id"],
+            "tenant_id": tenant_id,
+            "replay_id": permit["replay_id"],
+            "audience": permit["audience"],
+            "issued_at": permit["issued_at"],
+            "expires_at": permit["expires_at"],
+        }
+
+    def consume_permit(
+        self,
+        tenant_id: str,
+        permit: Dict[str, Any],
+        enforced_controls: List[str],
+        token_hash: str,
+    ) -> Dict[str, Any]:
+        consumed_at = datetime.now(timezone.utc).isoformat()
+        controls_json = json.dumps(sorted(enforced_controls), separators=(",", ":"))
+        with self._lock:
+            issuance = self._connection.execute(
+                """
+                SELECT tenant_id, replay_id, action_hash, audience, token_hash
+                FROM permit_issuances
+                WHERE permit_id = ?
+                """,
+                (permit["permit_id"],),
+            ).fetchone()
+            if issuance is None or any(
+                (
+                    issuance["tenant_id"] != tenant_id,
+                    issuance["replay_id"] != permit["replay_id"],
+                    issuance["action_hash"] != permit["action_hash"],
+                    issuance["audience"] != permit["audience"],
+                    issuance["token_hash"] != token_hash,
+                )
+            ):
+                raise PermitNotIssuedError("Permit does not match a registered issuance.")
+            try:
+                self._connection.execute(
+                    """
+                    INSERT INTO permit_consumptions (
+                        permit_id, tenant_id, replay_id, action_hash, audience,
+                        enforced_controls_json, consumed_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        permit["permit_id"],
+                        tenant_id,
+                        permit["replay_id"],
+                        permit["action_hash"],
+                        permit["audience"],
+                        controls_json,
+                        consumed_at,
+                    ),
+                )
+                self._connection.commit()
+            except sqlite3.IntegrityError as exc:
+                self._connection.rollback()
+                existing = self._connection.execute(
+                    """
+                    SELECT tenant_id, replay_id, action_hash, audience, consumed_at
+                    FROM permit_consumptions
+                    WHERE permit_id = ?
+                    """,
+                    (permit["permit_id"],),
+                ).fetchone()
+                if existing is not None:
+                    raise PermitReplayError(
+                        f"Permit was already consumed at {existing['consumed_at']}."
+                    ) from exc
+                raise
+        return {
+            "permit_id": permit["permit_id"],
+            "tenant_id": tenant_id,
+            "replay_id": permit["replay_id"],
+            "action_hash": permit["action_hash"],
+            "audience": permit["audience"],
+            "enforced_controls": sorted(enforced_controls),
+            "consumed_at": consumed_at,
         }
 
     def ping(self) -> bool:
