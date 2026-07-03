@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SMERC Evidence Observations v1",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["observation_id", "claim_id", "criterion_id", "metric", "value", "sample_size", "source_quality", "segments", "source_type", "dataset_id", "collected_at"],
+    "properties": {
+      "observation_id": {"type": "string", "minLength": 1, "maxLength": 128},
+      "claim_id": {"type": "string", "minLength": 1, "maxLength": 64},
+      "criterion_id": {"type": "string", "minLength": 1, "maxLength": 64},
+      "metric": {"type": "string", "minLength": 1, "maxLength": 128},
+      "value": {"type": "number"},
+      "sample_size": {"type": "integer", "minimum": 1},
+      "source_quality": {"type": "number", "minimum": 0, "maximum": 1},
+      "segments": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+      "source_type": {"type": "string", "minLength": 1, "maxLength": 256},
+      "dataset_id": {"type": "string", "minLength": 1, "maxLength": 256},
+      "collected_at": {"type": "string", "format": "date-time"}
+    }
+  }
+}

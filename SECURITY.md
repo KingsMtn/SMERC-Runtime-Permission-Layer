@@ -21,6 +21,8 @@ A first pilot should provide action metadata rather than raw sensitive payloads.
 
 Action Language context is bounded to 16,384 canonical JSON bytes. Contract objects reject unknown fields, but `context` remains caller-defined metadata and must be treated as untrusted input by downstream log, export, and display systems. The deterministic action hash detects equal canonical requests; it is not authentication, a signature, or proof of origin.
 
+Evidence observations are untrusted claims about outcomes. Dataset identifiers and source-quality scores do not prove provenance by themselves. A live evidence pipeline requires authenticated ingestion, append-only records, reviewer identity, source attestation, retention controls, and independent checks against metric manipulation.
+
 ## Pilot API Controls
 
 The pilot API defaults to refusing startup without at least one tenant-mapped bearer key. It provides:

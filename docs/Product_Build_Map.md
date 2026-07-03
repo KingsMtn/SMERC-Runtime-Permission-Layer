@@ -132,7 +132,21 @@ Purpose:
 - export denominator-aware pilot review metrics
 - show what a design partner would receive after a shadow-mode pilot
 
-### 8. Deployment Profile
+### 8. Evidence And Unknowns Program
+
+File: `reference_engine/evidence_program.py`
+
+Purpose:
+
+- register technical, adversarial, operational, normative, commercial, and regulatory unknowns
+- define falsifiable thresholds before observing outcomes
+- reject underpowered, low-quality, or incorrectly segmented observations
+- lower the deployment ceiling when critical evidence is missing or contradictory
+- generate JSON and Markdown readiness reports
+
+The program does not certify safety. It prevents unresolved assumptions from being hidden by implementation progress.
+
+### 9. Deployment Profile
 
 Files:
 
@@ -155,6 +169,7 @@ Purpose:
 - The GitHub Actions integration can run in observe, recommend, or enforce mode.
 - The repo includes repeatable tests.
 - The evidence workflow produces report artifacts.
+- The evidence registry converts unresolved assumptions into enforceable deployment ceilings.
 
 ## What This Build Does Not Prove
 
@@ -162,6 +177,7 @@ Purpose:
 - It does not prove calibrated enterprise thresholds.
 - It does not prove willingness to pay.
 - It does not prove the model improves decisions against live workflow data.
+- It does not turn synthetic evidence into customer or production validation.
 - It does not replace existing security controls.
 
 ## Next Product Layer

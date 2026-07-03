@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0 - 2026-07-02
+
+- Added an executable Evidence and Unknowns Program covering eight core product, safety, integration, authority, performance, and commercial assumptions.
+- Added strict evidence-program and observation validation with sample-size, source-quality, and segment requirements.
+- Added evidence-derived deployment ceilings from `STOP` through `CALIBRATED_ENFORCE`.
+- Added synthetic contradiction examples, schemas, tests, security guidance, and report generation.
+
 ## 0.5.0 - 2026-06-30
 
 - Added strict `smerc.action.v1` and `smerc.decision.v1` machine-readable contracts.

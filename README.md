@@ -17,6 +17,7 @@ The first integration is a GitHub Actions gate for AI-assisted code, deployment,
 The current build includes:
 
 - versioned SMERC Action Language and Decision Language contracts
+- evidence and unknowns registry with deployment-limiting falsification rules
 - recoverability-aware scoring engine
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
@@ -183,6 +184,18 @@ python -m reference_engine.recoverability_report \
   --json-output reports/recoverability_engine_results.json \
   --markdown-output reports/Recoverability_Engine_Report.md
 ```
+
+Evaluate the core assumptions against currently admitted evidence:
+
+```bash
+python -m reference_engine.evidence_program \
+  examples/evidence_program/core_assumptions.json \
+  examples/evidence_program/no_observations.json \
+  --json-output reports/evidence_readiness_baseline.json \
+  --markdown-output reports/SMERC_Evidence_Readiness_Baseline.md
+```
+
+With no qualified observations, the evidence engine limits deployment to `OBSERVE`. A challenged critical claim forces `STOP`. See `docs/Evidence_And_Unknowns_Program.md`.
 
 Run the optional SMERC-F financial action-governance profile:
 

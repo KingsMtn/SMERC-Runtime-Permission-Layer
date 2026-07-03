@@ -1,0 +1,161 @@
+{
+  "version": "smerc.evidence-report.v1",
+  "program_id": "smerc-core-validation-v1",
+  "evaluated_at": "2026-07-03T03:33:42.595792+00:00",
+  "deployment_ceiling": "OBSERVE",
+  "blocking_claim_ids": [
+    "TECH-001",
+    "SAFE-001",
+    "ADVR-001"
+  ],
+  "claim_counts": {
+    "UNTESTED": 8
+  },
+  "unknown_class_counts": {
+    "epistemic": 1,
+    "operational": 3,
+    "adversarial": 1,
+    "normative": 1,
+    "regulatory": 1,
+    "commercial": 1
+  },
+  "claims": [
+    {
+      "claim_id": "TECH-001",
+      "statement": "Irreversible exposure scores are positively associated with consequential incident severity.",
+      "unknown_class": "epistemic",
+      "risk_level": "critical",
+      "status": "UNTESTED",
+      "owner_role": "validation-lead",
+      "failure_consequence": "The central scoring mechanism would not demonstrate operational risk discrimination.",
+      "criteria": [
+        {
+          "criterion_id": "TECH-001-C1",
+          "status": "INSUFFICIENT",
+          "qualified_observations": 0,
+          "latest_value": null
+        }
+      ]
+    },
+    {
+      "claim_id": "SAFE-001",
+      "statement": "Candidate releases classified as acceptable do not create an intolerable false-release rate.",
+      "unknown_class": "operational",
+      "risk_level": "critical",
+      "status": "UNTESTED",
+      "owner_role": "security-validation-lead",
+      "failure_consequence": "SMERC could release actions that qualified reviewers consider unsafe.",
+      "criteria": [
+        {
+          "criterion_id": "SAFE-001-C1",
+          "status": "INSUFFICIENT",
+          "qualified_observations": 0,
+          "latest_value": null
+        }
+      ]
+    },
+    {
+      "claim_id": "ADVR-001",
+      "statement": "Agents cannot routinely gain a less restrictive posture by manipulating descriptive metadata.",
+      "unknown_class": "adversarial",
+      "risk_level": "critical",
+      "status": "UNTESTED",
+      "owner_role": "red-team-lead",
+      "failure_consequence": "The permission boundary could be bypassed through action-envelope manipulation.",
+      "criteria": [
+        {
+          "criterion_id": "ADVR-001-C1",
+          "status": "INSUFFICIENT",
+          "qualified_observations": 0,
+          "latest_value": null
+        }
+      ]
+    },
+    {
+      "claim_id": "HUMN-001",
+      "statement": "Qualified reviewers agree with SMERC postures often enough to support recommendation-mode use.",
+      "unknown_class": "normative",
+      "risk_level": "high",
+      "status": "UNTESTED",
+      "owner_role": "pilot-review-lead",
+      "failure_consequence": "SMERC recommendations would create disputes rather than useful governance evidence.",
+      "criteria": [
+        {
+          "criterion_id": "HUMN-001-C1",
+          "status": "INSUFFICIENT",
+          "qualified_observations": 0,
+          "latest_value": null
+        }
+      ]
+    },
+    {
+      "claim_id": "INTG-001",
+      "statement": "Enforcement adapters faithfully apply the controls returned by the decision language.",
+      "unknown_class": "operational",
+      "risk_level": "high",
+      "status": "UNTESTED",
+      "owner_role": "integration-owner",
+      "failure_consequence": "A correct decision could fail to constrain the real action.",
+      "criteria": [
+        {
+          "criterion_id": "INTG-001-C1",
+          "status": "INSUFFICIENT",
+          "qualified_observations": 0,
+          "latest_value": null
+        }
+      ]
+    },
+    {
+      "claim_id": "AUTH-001",
+      "statement": "High-impact action requests carry verifiable authority provenance rather than self-asserted confidence alone.",
+      "unknown_class": "regulatory",
+      "risk_level": "high",
+      "status": "UNTESTED",
+      "owner_role": "identity-and-access-owner",
+      "failure_consequence": "The system could mistake claimed authority for accountable authorization.",
+      "criteria": [
+        {
+          "criterion_id": "AUTH-001-C1",
+          "status": "INSUFFICIENT",
+          "qualified_observations": 0,
+          "latest_value": null
+        }
+      ]
+    },
+    {
+      "claim_id": "PERF-001",
+      "statement": "Pre-execution evaluation latency remains acceptable for the selected workflow class.",
+      "unknown_class": "operational",
+      "risk_level": "moderate",
+      "status": "UNTESTED",
+      "owner_role": "platform-owner",
+      "failure_consequence": "Teams could bypass or remove SMERC because it delays normal operations.",
+      "criteria": [
+        {
+          "criterion_id": "PERF-001-C1",
+          "status": "INSUFFICIENT",
+          "qualified_observations": 0,
+          "latest_value": null
+        }
+      ]
+    },
+    {
+      "claim_id": "COMM-001",
+      "statement": "Qualified design partners will pay to continue after an evidence-producing pilot.",
+      "unknown_class": "commercial",
+      "risk_level": "moderate",
+      "status": "UNTESTED",
+      "owner_role": "commercial-owner",
+      "failure_consequence": "Technical interest would not translate into a repeatable business.",
+      "criteria": [
+        {
+          "criterion_id": "COMM-001-C1",
+          "status": "INSUFFICIENT",
+          "qualified_observations": 0,
+          "latest_value": null
+        }
+      ]
+    }
+  ],
+  "interpretation": "The deployment ceiling is an evidence gate, not a production certification or safety guarantee."
+}

@@ -56,6 +56,14 @@ jobs:
       - name: Run audit-chain smoke test
         run: python -m reference_engine.financial_audit examples/financial_action_requests.json
 
+      - name: Run evidence ceiling smoke test
+        run: |
+          python -m reference_engine.evidence_program \
+            examples/evidence_program/core_assumptions.json \
+            examples/evidence_program/no_observations.json \
+            --json-output /tmp/smerc-evidence.json
+          python -c 'import json; data=json.load(open("/tmp/smerc-evidence.json")); assert data["deployment_ceiling"] == "OBSERVE"'
+
   container-smoke:
     runs-on: ubuntu-latest
     steps:
