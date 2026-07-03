@@ -33,6 +33,7 @@ curl -X POST http://127.0.0.1:8788/v1/evaluate \
 ```bash
 export SMERC_API_KEYS="platform-team=replace-with-a-long-random-secret"
 export SMERC_AUDIT_DB="./smerc_audit.sqlite3"
+export SMERC_POLICY_DIR="./examples/policies"
 python api_server.py --host 127.0.0.1 --port 8788
 ```
 
@@ -94,9 +95,12 @@ This prevents a workflow retry from producing multiple audit decisions for the s
 | `SMERC_MAX_BODY_BYTES` | `262144` | Maximum JSON request body |
 | `SMERC_MAX_BATCH_SIZE` | `100` | Maximum actions per batch |
 | `SMERC_CORS_ORIGINS` | none | Comma-separated trusted browser origins |
+| `SMERC_POLICY_DIR` | none | Directory of tenant-scoped `smerc.policy.v1` revisions |
 | `PORT` | `8788` | Listening port |
 
 Do not commit API keys or put them in URLs. Rotate pilot keys when personnel or integration scope changes.
+
+The authenticated tenant selects the policy; clients cannot name a policy in an action request. The server chooses the latest effective revision for that tenant and refuses startup when a configured tenant has no effective revision. Tenants without configured policy files use the identified reference policy in `OBSERVE` mode.
 
 ## Pilot Review Console
 

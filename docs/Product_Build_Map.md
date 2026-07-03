@@ -146,7 +146,24 @@ Purpose:
 
 The program does not certify safety. It prevents unresolved assumptions from being hidden by implementation progress.
 
-### 9. Deployment Profile
+### 9. Policy Calibration And Evidence Provenance
+
+Files:
+
+- `reference_engine/policy.py`
+- `reference_engine/evidence_provenance.py`
+
+Purpose:
+
+- bind every decision and replay to an exact tenant policy revision and hash
+- prevent policy mode from exceeding the admitted evidence ceiling
+- activate the latest effective tenant revision without early activation or silent fallback
+- detect mutated, missing, duplicated, or reordered evidence observations
+- cap deployment based on provenance strength
+
+Hash-chain provenance detects mutation but does not establish source truth. HMAC mode provides shared-key authenticity, not public nonrepudiation.
+
+### 10. Deployment Profile
 
 Files:
 
@@ -170,6 +187,7 @@ Purpose:
 - The repo includes repeatable tests.
 - The evidence workflow produces report artifacts.
 - The evidence registry converts unresolved assumptions into enforceable deployment ceilings.
+- Tenant decisions carry replayable policy identity, while evidence provenance limits how far observations may advance deployment.
 
 ## What This Build Does Not Prove
 

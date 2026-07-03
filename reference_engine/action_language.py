@@ -7,7 +7,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
-from reference_engine.recoverability_engine import evaluate_action
+from reference_engine.recoverability_engine import RecoverabilityEngine, evaluate_action
 
 
 ACTION_VERSION = "smerc.action.v1"
@@ -210,10 +210,14 @@ def transition_for(posture: str, controls: List[str]) -> Dict[str, Any]:
     }
 
 
-def evaluate_language_action(payload: Dict[str, Any]) -> Dict[str, Any]:
+def evaluate_language_action(
+    payload: Dict[str, Any],
+    engine: RecoverabilityEngine | None = None,
+) -> Dict[str, Any]:
     normalized = validate_action_envelope(payload)
     digest = hashlib.sha256(canonical_json(normalized).encode("utf-8")).hexdigest()
-    decision = evaluate_action(compile_action(normalized))
+    compiled = compile_action(normalized)
+    decision = engine.evaluate(compiled) if engine is not None else evaluate_action(compiled)
     decision.update({
         "language_version": DECISION_VERSION, "action_language_version": ACTION_VERSION, "action_hash": digest,
         "reasons": [{"code": code, "title": REASON_TITLES.get(code, code.replace("_", " ").title())} for code in decision["reason_codes"]],

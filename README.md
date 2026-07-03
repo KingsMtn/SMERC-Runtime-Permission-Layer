@@ -18,6 +18,7 @@ The current build includes:
 
 - versioned SMERC Action Language and Decision Language contracts
 - evidence and unknowns registry with deployment-limiting falsification rules
+- tenant-scoped policy calibration and evidence provenance admission
 - recoverability-aware scoring engine
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
@@ -41,12 +42,13 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 2. Read `docs/Security_Model.md`.
 3. Inspect `reference_engine/recoverability_engine.py`.
 4. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
-5. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-6. Review `integrations/github_actions/README.md`.
-7. Read `docs/Pilot_Review_Metrics.md`.
-8. Inspect `pilot_console/README.md`.
-9. Run the Python and console tests.
-10. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+5. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
+6. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+7. Review `integrations/github_actions/README.md`.
+8. Read `docs/Pilot_Review_Metrics.md`.
+9. Inspect `pilot_console/README.md`.
+10. Run the Python and console tests.
+11. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -69,6 +71,7 @@ It outputs:
 - confidence score
 - reason codes
 - recommended constraints
+- policy identity, revision, mode, evidence ceiling, and hash
 - replay ID and replay record
 
 ## Action Language
@@ -196,6 +199,25 @@ python -m reference_engine.evidence_program \
 ```
 
 With no qualified observations, the evidence engine limits deployment to `OBSERVE`. A challenged critical claim forces `STOP`. See `docs/Evidence_And_Unknowns_Program.md`.
+
+Bind decisions to a calibrated tenant policy and verify evidence provenance:
+
+```bash
+python -m reference_engine.recoverability_engine \
+  examples/recoverability_single_action.json \
+  --policy examples/policies/alpha_conservative.json \
+  --pretty
+
+python -m reference_engine.evidence_provenance build \
+  examples/evidence_program/synthetic_observations.json \
+  examples/evidence_program/synthetic_artifact_digests.json \
+  reports/synthetic_evidence_ledger.json \
+  --program-id smerc-core-validation-v1 \
+  --collector-id synthetic-collector \
+  --collection-method synthetic-demonstration
+```
+
+See `docs/Policy_Calibration_And_Evidence_Provenance.md` for policy activation, provenance strength, HMAC use, and limitations.
 
 Run the optional SMERC-F financial action-governance profile:
 

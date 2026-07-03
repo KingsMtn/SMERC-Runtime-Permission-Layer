@@ -64,6 +64,24 @@ jobs:
             --json-output /tmp/smerc-evidence.json
           python -c 'import json; data=json.load(open("/tmp/smerc-evidence.json")); assert data["deployment_ceiling"] == "OBSERVE"'
 
+      - name: Run policy and evidence provenance smoke tests
+        run: |
+          python -m reference_engine.recoverability_engine \
+            examples/recoverability_single_action.json \
+            --policy examples/policies/alpha_conservative.json \
+            > /tmp/smerc-policy-decision.json
+          python -c 'import json; data=json.load(open("/tmp/smerc-policy-decision.json")); assert data["policy"]["tenant_id"] == "alpha"; assert len(data["policy"]["policy_hash"]) == 64'
+          python -m reference_engine.evidence_provenance build \
+            examples/evidence_program/synthetic_observations.json \
+            examples/evidence_program/synthetic_artifact_digests.json \
+            /tmp/smerc-evidence-ledger.json \
+            --program-id smerc-core-validation-v1 \
+            --collector-id ci-collector \
+            --collection-method ci-smoke
+          python -m reference_engine.evidence_provenance verify \
+            examples/evidence_program/synthetic_observations.json \
+            /tmp/smerc-evidence-ledger.json
+
   container-smoke:
     runs-on: ubuntu-latest
     steps:

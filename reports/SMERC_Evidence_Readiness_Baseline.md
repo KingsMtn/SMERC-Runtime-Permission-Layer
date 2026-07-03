@@ -1,8 +1,11 @@
 # SMERC Evidence And Unknowns Report
 
 - Program: `smerc-core-validation-v1`
-- Evaluated: `2026-07-03T03:33:42.595792+00:00`
+- Evaluated: `2026-07-03T04:20:16.005028+00:00`
 - Evidence-limited deployment ceiling: **OBSERVE**
+
+- Evidence-only ceiling: **OBSERVE**
+- Provenance status: **NO_OBSERVATIONS**
 
 > This ceiling is an evidence gate, not a production certification or safety guarantee.
 

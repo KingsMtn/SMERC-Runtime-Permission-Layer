@@ -7,12 +7,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
+from reference_engine.evidence_provenance import hmac_key_from_env, verify_ledger
+
 
 PROGRAM_VERSION = "smerc.evidence-program.v1"
 REPORT_VERSION = "smerc.evidence-report.v1"
 RISK_LEVELS = {"critical", "high", "moderate"}
 UNKNOWN_CLASSES = {"epistemic", "adversarial", "operational", "normative", "commercial", "regulatory"}
 OPERATORS = {"gte", "lte"}
+CEILING_RANK = {"STOP": 0, "OBSERVE": 1, "RECOMMEND": 2, "LIMITED_ENFORCE": 3, "CALIBRATED_ENFORCE": 4}
 
 
 def _object(value: Any, path: str) -> Dict[str, Any]:
@@ -220,13 +223,29 @@ def _deployment_ceiling(results: List[Dict[str, Any]]) -> tuple[str, List[str]]:
     return "CALIBRATED_ENFORCE", []
 
 
-def evaluate_evidence(program_payload: Dict[str, Any], observation_payload: Any) -> Dict[str, Any]:
+def evaluate_evidence(
+    program_payload: Dict[str, Any],
+    observation_payload: Any,
+    *,
+    provenance_ledger: Optional[Dict[str, Any]] = None,
+    provenance_hmac_key: Optional[bytes] = None,
+) -> Dict[str, Any]:
     program = validate_program(program_payload)
     criteria = {
         criterion["criterion_id"]: (claim["claim_id"], criterion["metric"])
         for claim in program["claims"] for criterion in claim["criteria"]
     }
     observations = validate_observations(observation_payload, criteria)
+    if provenance_ledger is None:
+        provenance = {
+            "status": "NO_OBSERVATIONS" if not observations else "UNVERIFIED",
+            "record_count": 0,
+            "head_record_hash": None,
+        }
+    else:
+        provenance = verify_ledger(observations, provenance_ledger, hmac_key=provenance_hmac_key)
+        if provenance["program_id"] != program["program_id"]:
+            raise ValueError("Evidence ledger program_id does not match the evidence program")
     results = []
     for claim in program["claims"]:
         claim_observations = [item for item in observations if item["claim_id"] == claim["claim_id"]]
@@ -237,12 +256,22 @@ def evaluate_evidence(program_payload: Dict[str, Any], observation_payload: Any)
             "status": _claim_status(criteria), "owner_role": claim["owner_role"],
             "failure_consequence": claim["failure_consequence"], "criteria": criteria,
         })
-    ceiling, blockers = _deployment_ceiling(results)
+    evidence_ceiling, blockers = _deployment_ceiling(results)
+    provenance_cap = {
+        "UNVERIFIED": "OBSERVE",
+        "HASH_VERIFIED": "RECOMMEND",
+    }.get(provenance["status"])
+    ceiling = evidence_ceiling
+    if provenance_cap and CEILING_RANK[ceiling] > CEILING_RANK[provenance_cap]:
+        ceiling = provenance_cap
     return {
         "version": REPORT_VERSION,
         "program_id": program["program_id"],
         "evaluated_at": datetime.now(timezone.utc).isoformat(),
         "deployment_ceiling": ceiling,
+        "evidence_based_ceiling": evidence_ceiling,
+        "provenance": provenance,
+        "provenance_cap_applied": ceiling != evidence_ceiling,
         "blocking_claim_ids": blockers,
         "claim_counts": dict(Counter(item["status"] for item in results)),
         "unknown_class_counts": dict(Counter(item["unknown_class"] for item in results if item["status"] != "SUPPORTED")),
@@ -257,6 +286,8 @@ def markdown_report(report: Dict[str, Any]) -> str:
         f"- Program: `{report['program_id']}`",
         f"- Evaluated: `{report['evaluated_at']}`",
         f"- Evidence-limited deployment ceiling: **{report['deployment_ceiling']}**", "",
+        f"- Evidence-only ceiling: **{report['evidence_based_ceiling']}**",
+        f"- Provenance status: **{report['provenance']['status']}**", "",
         "> This ceiling is an evidence gate, not a production certification or safety guarantee.", "",
         "## Claim Status", "", "| Claim | Risk | Unknown class | Status |", "| --- | --- | --- | --- |",
     ]
@@ -286,10 +317,15 @@ def main() -> None:
     parser.add_argument("observations", type=Path)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
+    parser.add_argument("--ledger", type=Path)
+    parser.add_argument("--hmac-key-env")
     args = parser.parse_args()
+    ledger = json.loads(args.ledger.read_text(encoding="utf-8")) if args.ledger else None
     report = evaluate_evidence(
         json.loads(args.program.read_text(encoding="utf-8")),
         json.loads(args.observations.read_text(encoding="utf-8")),
+        provenance_ledger=ledger,
+        provenance_hmac_key=hmac_key_from_env(args.hmac_key_env),
     )
     write_report(report, args.json_output, args.markdown_output)
     print(json.dumps(report, indent=2))

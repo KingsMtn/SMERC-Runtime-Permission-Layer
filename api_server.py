@@ -14,6 +14,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from reference_engine.audit_store import AuditStore, IdempotencyConflictError, ReviewConflictError
 from reference_engine.action_language import ACTION_VERSION, DECISION_VERSION, evaluate_language_action
+from reference_engine.policy import POLICY_VERSION, PolicyRegistry
 from reference_engine.recoverability_engine import RecoverabilityEngine, RuntimePosture
 
 
@@ -40,15 +41,21 @@ class SMERCAPIServer(ThreadingHTTPServer):
         max_body_bytes: int = DEFAULT_MAX_BODY_BYTES,
         max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
         cors_origins: Iterable[str] = (),
+        policy_registry: Optional[PolicyRegistry] = None,
     ) -> None:
         super().__init__(server_address, SMERCRequestHandler)
-        self.engine = RecoverabilityEngine()
+        self.policy_registry = policy_registry or PolicyRegistry()
         self.audit_store = audit_store
         self.api_keys = dict(api_keys)
         self.allow_unauthenticated = allow_unauthenticated
         self.max_body_bytes = max_body_bytes
         self.max_batch_size = max_batch_size
         self.cors_origins = frozenset(cors_origins)
+        for tenant_id in self.api_keys:
+            self.policy_registry.for_tenant(tenant_id)
+
+    def engine_for(self, tenant_id: str) -> RecoverabilityEngine:
+        return RecoverabilityEngine(self.policy_registry.for_tenant(tenant_id))
 
     def server_close(self) -> None:
         super().server_close()
@@ -57,7 +64,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
 
 class SMERCRequestHandler(BaseHTTPRequestHandler):
     server: SMERCAPIServer
-    server_version = "SMERCRecoverabilityAPI/0.5"
+    server_version = "SMERCRecoverabilityAPI/0.6"
 
     def do_OPTIONS(self) -> None:
         origin = self.headers.get("origin")
@@ -83,7 +90,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     {
                         "status": "ok",
                         "service": "smerc-recoverability-api",
-                        "version": "0.5",
+                        "version": "0.6",
+                        "tenant_policy_count": self.server.policy_registry.count,
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -440,7 +448,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                         "Idempotency-Key was already used with a different request body or endpoint.",
                     )
                 return stored["decision"], True
-        decision = evaluate_language_action(payload)
+        decision = evaluate_language_action(payload, self.server.engine_for(tenant_id))
         decision["tenant_id"] = tenant_id
         try:
             stored = self.server.audit_store.record(
@@ -459,7 +467,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
     ) -> Dict[str, Any]:
         if not isinstance(payload, dict):
             raise TypeError("Each action must be a JSON object.")
-        decision = self.server.engine.evaluate(payload)
+        decision = self.server.engine_for(tenant_id).evaluate(payload)
         decision["tenant_id"] = tenant_id
         try:
             return self.server.audit_store.record(
@@ -615,6 +623,7 @@ def schema() -> Dict[str, Any]:
     return {
         "api_version": "v1",
         "language_versions": {"action": ACTION_VERSION, "decision": DECISION_VERSION},
+        "policy_version": POLICY_VERSION,
         "required_fields": [
             "action_id",
             "description",
@@ -662,6 +671,7 @@ def create_server(
     max_body_bytes: int = DEFAULT_MAX_BODY_BYTES,
     max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
     cors_origins: Iterable[str] = (),
+    policy_registry: Optional[PolicyRegistry] = None,
 ) -> SMERCAPIServer:
     if not api_keys and not allow_unauthenticated:
         raise ValueError("At least one API key is required unless --allow-unauthenticated is set.")
@@ -673,6 +683,7 @@ def create_server(
         max_body_bytes=max_body_bytes,
         max_batch_size=max_batch_size,
         cors_origins=cors_origins,
+        policy_registry=policy_registry,
     )
 
 
@@ -686,6 +697,7 @@ def run(
     max_body_bytes: int = DEFAULT_MAX_BODY_BYTES,
     max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
     cors_origins: Iterable[str] = (),
+    policy_registry: Optional[PolicyRegistry] = None,
 ) -> None:
     server = create_server(
         host,
@@ -696,6 +708,7 @@ def run(
         max_body_bytes=max_body_bytes,
         max_batch_size=max_batch_size,
         cors_origins=cors_origins,
+        policy_registry=policy_registry,
     )
     print(f"SMERC recoverability API listening on http://{host}:{server.server_address[1]}")
     try:
@@ -709,6 +722,7 @@ def main() -> None:
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8788")))
     parser.add_argument("--audit-db", default=os.environ.get("SMERC_AUDIT_DB", "smerc_audit.sqlite3"))
+    parser.add_argument("--policy-dir", default=os.environ.get("SMERC_POLICY_DIR"))
     parser.add_argument(
         "--allow-unauthenticated",
         action="store_true",
@@ -717,6 +731,7 @@ def main() -> None:
     args = parser.parse_args()
     api_keys = parse_api_keys(os.environ.get("SMERC_API_KEYS", ""))
     cors_origins = [item.strip() for item in os.environ.get("SMERC_CORS_ORIGINS", "").split(",") if item.strip()]
+    policy_registry = PolicyRegistry.from_directory(args.policy_dir) if args.policy_dir else PolicyRegistry()
     run(
         args.host,
         args.port,
@@ -726,6 +741,7 @@ def main() -> None:
         max_body_bytes=int(os.environ.get("SMERC_MAX_BODY_BYTES", str(DEFAULT_MAX_BODY_BYTES))),
         max_batch_size=int(os.environ.get("SMERC_MAX_BATCH_SIZE", str(DEFAULT_MAX_BATCH_SIZE))),
         cors_origins=cors_origins,
+        policy_registry=policy_registry,
     )
 
 
