@@ -3,7 +3,7 @@
 ## Components
 
 1. Action Source: AI agent, workflow engine, fraud system, fleet platform, banking system, insurance workflow, or autonomous controller proposes an action.
-2. Workload Identity Gate: Authenticates a tenant principal and checks endpoint scope before any protected operation.
+2. Workload Identity Gate: Authenticates a static tenant principal or short-lived narrowed session and checks endpoint scope before any protected operation.
 3. Signal Adapter: Converts domain context into normalized SMERC signals.
 4. SMERC Engine: Computes stress, confidence, reason codes, and macro decision.
 5. Permit Layer: For eligible enforcement decisions, binds the exact action, tenant, executor, policy, constraints, and expiry into a signed single-use capability.

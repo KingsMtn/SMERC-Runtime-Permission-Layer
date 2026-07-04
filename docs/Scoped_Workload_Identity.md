@@ -4,7 +4,7 @@
 
 SMERC separates the identity proposing an action from the identities issuing and consuming its authorization permit. This reduces the risk that an agent can treat its own proposal as permission to execute.
 
-The reference API supports static, tenant-bound pilot principals with explicit endpoint scopes. This is separation of duties, not enterprise identity federation.
+The reference API supports static, tenant-bound pilot principals with explicit endpoint scopes. An optional exchange can derive short-lived scope-narrowed sessions from those principals. This is separation of duties and bounded session issuance, not enterprise identity federation.
 
 ## Scope Model
 
@@ -52,12 +52,18 @@ Permit issuance, permit consumption, and review recording append `smerc.security
 
 `GET /v1/security-events` requires `audit.read` and remains tenant scoped.
 
+## Short-Lived Sessions
+
+When configured, `POST /v1/auth/token` accepts only a static bootstrap credential. It returns a signed session with explicit scopes, fixed issuer and audience, and a lifetime from 1 through 900 seconds. A session cannot call the exchange endpoint, gain scopes, change identity, or retain wildcard authority.
+
+See `Short_Lived_Access_Operations.md` for configuration and limitations.
+
 ## Security Boundaries
 
-- Credentials are static bearer secrets, not OIDC, mTLS, SAML, SPIFFE, or cloud workload identity.
-- The service has no credential rotation endpoint, revocation API, expiry claim, or managed secret store.
+- Bootstrap credentials are static bearer secrets, not OIDC, mTLS, SAML, SPIFFE, or cloud workload identity.
+- Derived sessions expire, but the service has no remote revocation, refresh, introspection, exchange rate limiting, or managed secret store.
 - Scope authorization protects API operations; it does not prove the external workload has the claimed real-world role.
-- A stolen scoped credential grants its configured capabilities until operators rotate configuration and restart the pilot service.
+- A stolen bootstrap credential can request sessions within its configured capabilities until operators rotate configuration and restart the pilot service.
 - SQLite security events are append-only through the API, but they are not an immutable external audit ledger.
 - Production deployment requires federated workload identity, short-lived credentials, managed rotation/revocation, centralized policy, monitoring, and export to an approved audit system.
 

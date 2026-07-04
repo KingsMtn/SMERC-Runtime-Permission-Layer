@@ -69,6 +69,7 @@ curl http://127.0.0.1:8788/v1/decisions/REPLAY_ID \
 | `GET /ready` | No | Audit-store readiness |
 | `GET /schema` | No | Input and endpoint contract |
 | `POST /v1/evaluate` | Bearer | Evaluate and store one action |
+| `POST /v1/auth/token` | Static Bearer | Exchange a bootstrap credential for a short-lived narrowed session |
 | `POST /v1/language/evaluate` | Bearer | Validate, compile, evaluate, and store one `smerc.action.v1` envelope |
 | `POST /v1/permits/issue` | Bearer | Issue one short-lived action-bound permit for an eligible enforcement decision |
 | `POST /v1/permits/consume` | Bearer | Verify configured adapter evidence and atomically consume a permit |
@@ -102,9 +103,12 @@ This prevents a workflow retry from producing multiple audit decisions for the s
 | `SMERC_POLICY_DIR` | none | Directory of tenant-scoped `smerc.policy.v1` revisions |
 | `SMERC_PERMIT_KEYS` | none | Optional `tenant=key-id:secret` permit-signing mappings; secrets require at least 32 bytes |
 | `SMERC_CONTROL_EVIDENCE_KEYS` | none | Optional `tenant:audience=adapter-id:key-id:secret` verifier mappings; secrets require at least 32 bytes |
+| `SMERC_ACCESS_TOKEN_KEY` | none | Optional `key-id:secret` short-lived access-token signer; secret requires at least 32 bytes |
 | `PORT` | `8788` | Listening port |
 
 At least one legacy key or scoped principal is required. Do not commit credentials or put them in URLs. Rotate pilot credentials when personnel or integration scope changes. Legacy keys receive all tenant scopes; scoped principals are recommended for new pilots. See `Scoped_Workload_Identity.md`.
+
+When `SMERC_ACCESS_TOKEN_KEY` is configured, workloads can exchange a static credential at `POST /v1/auth/token` and use the returned narrowed session for ordinary calls. Sessions last 1 through 900 seconds and cannot perform another exchange. See `Short_Lived_Access_Operations.md`.
 
 Permit signing is disabled when `SMERC_PERMIT_KEYS` is empty. Signing tenants must also have a legacy or scoped API credential. Permit tokens are bearer capabilities and must not enter logs or report artifacts. Full issuance and consumption procedures are in `Action_Bound_Permit_Operations.md`.
 
@@ -148,12 +152,13 @@ Expected controls:
 - optional legacy all-scope secret: dashboard-managed `SMERC_API_KEYS`
 - optional permit-signing secret: dashboard-managed `SMERC_PERMIT_KEYS`
 - optional adapter evidence secrets: dashboard-managed `SMERC_CONTROL_EVIDENCE_KEYS`
+- optional access-token signing secret: dashboard-managed `SMERC_ACCESS_TOKEN_KEY`
 
 ## Pilot Limitations
 
 - SQLite is suitable for one pilot-service instance, not horizontal scaling.
 - API keys are a pilot credential model, not enterprise IAM federation.
-- Scoped principals provide endpoint separation but remain static bearer credentials without managed expiry or revocation.
+- Scoped principals provide endpoint separation, and optional sessions provide bounded expiry; bootstrap credentials remain static and neither credential type has managed revocation.
 - The service does not yet provide managed key rotation, SSO, RBAC, retention automation, SIEM export, or customer-managed encryption keys.
 - Permit replay prevention is single-instance SQLite state, not a distributed capability service.
 - HMAC control evidence authenticates the configured adapter key but does not independently verify native platform records.

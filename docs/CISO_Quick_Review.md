@@ -46,6 +46,8 @@ For evidence-authorized enforcement policies, eligible decisions can issue a sig
 
 Scoped workload principals keep proposing agents separate from permit issuers and side-effecting executors. Decisions, reviews, permit issuance, and permit consumption retain authenticated principal attribution. The reference implementation uses static pilot secrets rather than enterprise identity federation.
 
+Static pilot principals can optionally derive short-lived, scope-narrowed sessions for routine API calls. Sessions retain principal attribution, expire within 15 minutes, cannot gain wildcard authority, and cannot mint another session. The bootstrap secret and signing key still require managed protection, and this is not external workload federation.
+
 Configured execution adapters must also provide a signed, short-lived control-evidence receipt before permit consumption. The receipt binds native control references to the exact permit and action. This is stronger than a caller-supplied control list, while remaining explicitly short of hardware-backed or independently verified attestation.
 
 ## What Exists Today?
@@ -59,6 +61,7 @@ Configured execution adapters must also provide a signed, short-lived control-ev
 - Decision report artifacts and replay records
 - Signed action-bound permit and single-use consumption contract
 - Scoped workload identity and attributed security events
+- Short-lived scope-narrowed workload sessions
 - Signed adapter control-evidence receipts
 - Pilot package and validation materials
 

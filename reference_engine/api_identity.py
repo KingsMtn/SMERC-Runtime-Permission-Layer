@@ -35,6 +35,9 @@ class APIPrincipal:
     secret: str = field(repr=False)
     scopes: frozenset[str]
     legacy: bool = False
+    credential_type: str = "static_bearer"
+    session_id: Optional[str] = None
+    expires_at: Optional[int] = None
 
     def __post_init__(self) -> None:
         _identifier(self.tenant_id, "principal tenant")
@@ -46,6 +49,21 @@ class APIPrincipal:
         unknown = set(self.scopes) - SCOPES - {ALL_SCOPES}
         if unknown or (ALL_SCOPES in self.scopes and len(self.scopes) != 1):
             raise ValueError("Principal contains an unknown or incoherent scope set.")
+        if self.credential_type not in {
+            "static_bearer", "short_lived_access_token", "local_development"
+        }:
+            raise ValueError("Principal credential_type is not recognized.")
+        is_session = self.credential_type == "short_lived_access_token"
+        if is_session and (self.session_id is None or self.expires_at is None):
+            raise ValueError("Short-lived principal session metadata is incomplete or incoherent.")
+        if not is_session and (self.session_id is not None or self.expires_at is not None):
+            raise ValueError("Non-session principals cannot carry session metadata.")
+        if self.session_id is not None and not re.fullmatch(r"session_[0-9a-f]{32}", self.session_id):
+            raise ValueError("Principal session_id is invalid.")
+        if self.expires_at is not None and (
+            isinstance(self.expires_at, bool) or not isinstance(self.expires_at, int) or self.expires_at < 0
+        ):
+            raise ValueError("Principal expires_at must be a non-negative integer.")
 
     def permits(self, scope: str) -> bool:
         if scope not in SCOPES:
@@ -59,6 +77,9 @@ class APIPrincipal:
             "principal_id": self.principal_id,
             "scopes": sorted(self.scopes),
             "legacy": self.legacy,
+            "credential_type": self.credential_type,
+            "session_id": self.session_id,
+            "expires_at": self.expires_at,
         }
 
 
@@ -90,6 +111,12 @@ class PrincipalRegistry:
             if hmac.compare_digest(candidate, principal.secret):
                 match = principal
         return match
+
+    def uses_secret_bytes(self, candidate: bytes) -> bool:
+        return any(
+            hmac.compare_digest(principal.secret.encode("utf-8"), candidate)
+            for principal in self._principals
+        )
 
     @classmethod
     def from_configuration(

@@ -4,7 +4,10 @@
   "title": "SMERC Authenticated Principal v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["identity_version", "tenant_id", "principal_id", "scopes", "legacy"],
+  "required": [
+    "identity_version", "tenant_id", "principal_id", "scopes", "legacy",
+    "credential_type", "session_id", "expires_at"
+  ],
   "properties": {
     "identity_version": {"const": "smerc.principal.v1"},
     "tenant_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"},
@@ -27,6 +30,14 @@
         ]
       }
     },
-    "legacy": {"type": "boolean"}
+    "legacy": {"type": "boolean"},
+    "credential_type": {
+      "enum": ["static_bearer", "short_lived_access_token", "local_development"]
+    },
+    "session_id": {
+      "type": ["string", "null"],
+      "pattern": "^session_[0-9a-f]{32}$"
+    },
+    "expires_at": {"type": ["integer", "null"], "minimum": 0}
   }
 }

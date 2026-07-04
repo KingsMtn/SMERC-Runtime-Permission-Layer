@@ -19,7 +19,7 @@
     "event_id": {"type": "string", "pattern": "^security_event_[0-9a-f]{32}$"},
     "tenant_id": {"type": "string", "minLength": 1, "maxLength": 64},
     "principal_id": {"type": "string", "minLength": 1, "maxLength": 64},
-    "event_type": {"enum": ["permit.issued", "permit.consumed", "review.recorded"]},
+    "event_type": {"enum": ["permit.issued", "permit.consumed", "review.recorded", "access_token.issued"]},
     "resource_id": {"type": "string", "minLength": 1, "maxLength": 192},
     "metadata": {"type": "object"},
     "created_at": {"type": "string", "format": "date-time"}

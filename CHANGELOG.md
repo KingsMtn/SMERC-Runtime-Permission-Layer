@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.11.0 - 2026-07-04
+
+- Added `smerc.access-token.v1` short-lived workload sessions with fixed issuer/audience and a 15-minute maximum lifetime.
+- Added static-only token exchange, explicit scope narrowing, wildcard removal, session-aware principal attribution, and issuance security events.
+- Added signing-key configuration, claims schema, example, deployment and operations guidance, and fail-closed tests.
+- Retained explicit limits: no federation, refresh, remote revocation, exchange rate limiting, or managed key lifecycle.
+
 ## 0.10.0 - 2026-07-04
 
 - Added signed `smerc.control-evidence.v1` receipts bound to tenant, executor audience, adapter, permit, action hash, applied controls, native references, and freshness.

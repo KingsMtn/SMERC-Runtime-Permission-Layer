@@ -22,6 +22,7 @@ The current build includes:
 - signed, action-bound, single-use authorization permits
 - signed, action-bound control-evidence receipts for configured execution adapters
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
+- short-lived, scope-narrowed workload sessions issued from static pilot principals
 - recoverability-aware scoring engine
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
@@ -53,8 +54,9 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 10. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
 11. Read `docs/Scoped_Workload_Identity.md`.
 12. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
-13. Run the Python and console tests.
-14. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+13. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v1.md`.
+14. Run the Python and console tests.
+15. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -121,6 +123,12 @@ This improves authenticity, freshness, and auditability; it does not prove a com
 New pilots can assign separate tenant credentials to the action proposer, permit issuer, permit consumer, reviewer, decision reader, metrics reader, and auditor. Unauthorized endpoint use fails with `insufficient_scope`; authenticated principal identity is preserved in decisions and security events.
 
 Legacy `SMERC_API_KEYS` remain compatible and retain all tenant scopes. New deployments should use `SMERC_API_PRINCIPALS` for separation of duties. This remains a static bearer-secret pilot model, not enterprise OIDC, mTLS, SPIFFE, or cloud workload identity. See `docs/Scoped_Workload_Identity.md`.
+
+## Short-Lived Workload Sessions
+
+When `SMERC_ACCESS_TOKEN_KEY` is configured, a static principal can exchange its bootstrap credential for a `smerc.access-token.v1` session lasting no more than 15 minutes. The session can only preserve or narrow the principal's explicit scopes; it cannot use wildcard authority or mint another session. Decisions retain the session ID and expiry.
+
+This reduces routine exposure of static credentials but does not prove workload identity or replace federated IAM. See `docs/Short_Lived_Access_Operations.md`.
 
 ## Quick Start
 
@@ -314,6 +322,7 @@ Policy calibration, deterministic hashes, accountable overrides, and tamper-evid
 - Signed action-bound permit contract with single-use pilot consumption
 - Signed adapter control-evidence receipts with permit, action, and freshness binding
 - Scoped workload principals and attributed security-event audit records
+- Short-lived, scope-narrowed workload sessions with issuance attribution
 - Browser-based pilot review queue and metrics console
 - Installable local GitHub Action
 - Deterministic example action requests

@@ -210,7 +210,25 @@ Purpose:
 - append tenant-scoped security events for permit issuance, permit consumption, and review recording
 - preserve legacy all-scope keys for controlled compatibility
 
-This is a static bearer-secret pilot identity model. It does not provide enterprise federation, short-lived workload credentials, managed rotation/revocation, or external immutable audit storage.
+This begins with static bearer-secret pilot principals and can derive expiring, scope-narrowed sessions. It does not provide enterprise federation, managed rotation/revocation, or external immutable audit storage.
+
+### 14. Short-Lived Workload Sessions
+
+Files:
+
+- `reference_engine/access_token.py`
+- `schemas/smerc-access-token-v1.schema.json`
+- `specification/SMERC_Access_Token_v1.md`
+
+Purpose:
+
+- exchange a static bootstrap credential for a session lasting at most 15 minutes
+- preserve tenant and principal while allowing only equal or narrower explicit scopes
+- prevent wildcard sessions and session-to-session token minting
+- bind session ID and expiry into authenticated principal attribution
+- record issuance metadata without retaining bearer tokens
+
+This reduces repeated static-secret exposure in a pilot. It is not OIDC, cloud workload identity, SSO, managed revocation, refresh, or proof of the external workload.
 
 ### 13. Signed Control Evidence
 
@@ -244,6 +262,7 @@ HMAC authenticates the configured pilot adapter key but does not independently p
 - Eligible enforcement decisions can produce action-bound permits that a named executor verifies and consumes once.
 - Scoped principals prevent a proposing agent from automatically inheriting permit-issuance or execution authority.
 - Configured adapters must provide signed, fresh control evidence bound to the exact action and permit.
+- Configured principals can use expiring, scope-narrowed sessions without expanding authority.
 
 ## What This Build Does Not Prove
 

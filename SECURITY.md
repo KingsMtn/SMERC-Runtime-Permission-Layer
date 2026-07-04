@@ -35,7 +35,9 @@ Signed control evidence authenticates possession of the configured adapter key; 
 
 Scoped pilot principals separate action evaluation, decision reading, permit issuance, permit consumption, review, metrics, and audit access. Every new decision records its authenticated principal, and permit/review operations append attributed security events. Legacy `SMERC_API_KEYS` credentials retain wildcard tenant access for compatibility and should not be used where separation of duties is required.
 
-Scoped principals still use static bearer secrets. They are not workload federation, managed identity, mTLS, OIDC, SPIFFE, credential expiry, or automated revocation. Do not give issuer or executor credentials to proposing agents. Production deployment requires short-lived federated credentials, managed rotation and revocation, least-privilege service identity, access monitoring, and external audit export.
+Scoped principals still use static bearer secrets as bootstrap credentials. When `SMERC_ACCESS_TOKEN_KEY` is configured, a bootstrap principal can obtain a signed session lasting at most 900 seconds with the same or fewer explicit scopes. Sessions cannot use wildcard authority or mint another session, and issuance is attributed without storing the token.
+
+The session layer is not workload federation, managed identity, mTLS, OIDC, SPIFFE, automated revocation, or proof of the workload presenting the bootstrap secret. HMAC signing is symmetric; compromise of the signing key permits arbitrary token creation. The reference exchange has no rate limiter or revocation endpoint. Do not give issuer or executor bootstrap credentials to proposing agents. Production requires federated credentials, managed rotation and revocation, least-privilege service identity, access monitoring, and external audit export.
 
 ## Pilot API Controls
 
@@ -51,6 +53,7 @@ The pilot API defaults to refusing startup without at least one configured tenan
 - optional action-bound permit issuance and atomic single-use consumption
 - optional signed adapter control evidence with fail-closed binding and freshness checks
 - endpoint-level scoped principals and attributed security-event records
+- optional short-lived scope-narrowed sessions issued only from static credentials
 
 `--allow-unauthenticated` is intended only for local development. It must not be used on a network-accessible pilot deployment.
 

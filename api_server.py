@@ -21,6 +21,12 @@ from reference_engine.audit_store import (
     ReviewConflictError,
 )
 from reference_engine.action_language import ACTION_VERSION, DECISION_VERSION, action_hash, evaluate_language_action
+from reference_engine.access_token import (
+    ACCESS_TOKEN_VERSION,
+    AccessTokenError,
+    AccessTokenSigner,
+    parse_access_token_signer,
+)
 from reference_engine.api_identity import (
     PRINCIPAL_VERSION,
     APIPrincipal,
@@ -70,11 +76,26 @@ class SMERCAPIServer(ThreadingHTTPServer):
         policy_registry: Optional[PolicyRegistry] = None,
         permit_signers: Optional[Mapping[str, PermitSigner]] = None,
         control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
+        access_token_signer: Optional[AccessTokenSigner] = None,
     ) -> None:
         resolved_policy_registry = policy_registry or PolicyRegistry()
         principal_registry = PrincipalRegistry.from_configuration(api_keys, api_principals)
         resolved_permit_signers = dict(permit_signers or {})
         resolved_control_evidence_signers = dict(control_evidence_signers or {})
+        if access_token_signer is not None and principal_registry.uses_secret_bytes(
+            access_token_signer.secret
+        ):
+            raise ValueError("Access-token signing key must be distinct from API principal secrets.")
+        if access_token_signer is not None and any(
+            hmac.compare_digest(access_token_signer.secret, signer.secret)
+            for signer in resolved_permit_signers.values()
+        ):
+            raise ValueError("Access-token signing key must be distinct from permit signing keys.")
+        if access_token_signer is not None and any(
+            hmac.compare_digest(access_token_signer.secret, signer.secret)
+            for signer in resolved_control_evidence_signers.values()
+        ):
+            raise ValueError("Access-token signing key must be distinct from control-evidence signing keys.")
         for binding, signer in resolved_control_evidence_signers.items():
             if binding != (signer.tenant_id, signer.audience):
                 raise ValueError("Control-evidence signer mapping must match its tenant and audience.")
@@ -116,6 +137,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
         self.cors_origins = frozenset(cors_origins)
         self.permit_signers = resolved_permit_signers
         self.control_evidence_signers = resolved_control_evidence_signers
+        self.access_token_signer = access_token_signer
 
     def engine_for(self, tenant_id: str) -> RecoverabilityEngine:
         return RecoverabilityEngine(self.policy_registry.for_tenant(tenant_id))
@@ -144,7 +166,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
 
 class SMERCRequestHandler(BaseHTTPRequestHandler):
     server: SMERCAPIServer
-    server_version = "SMERCRecoverabilityAPI/0.10"
+    server_version = "SMERCRecoverabilityAPI/0.11"
 
     def do_OPTIONS(self) -> None:
         origin = self.headers.get("origin")
@@ -170,11 +192,12 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     {
                         "status": "ok",
                         "service": "smerc-recoverability-api",
-                        "version": "0.10",
+                        "version": "0.11",
                         "tenant_policy_count": self.server.policy_registry.count,
                         "permit_signer_count": len(self.server.permit_signers),
                         "api_principal_count": self.server.principal_registry.count,
                         "control_evidence_adapter_count": len(self.server.control_evidence_signers),
+                        "short_lived_access_enabled": self.server.access_token_signer is not None,
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -294,6 +317,21 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         request_id = self._request_id()
         try:
             path, _ = self._path_and_query()
+            if path == "/v1/auth/token":
+                principal = self._authenticate_static()
+                payload = self._read_json()
+                if not isinstance(payload, dict):
+                    raise APIError(
+                        HTTPStatus.BAD_REQUEST,
+                        "invalid_access_token_request",
+                        "Access-token exchange expects one JSON object.",
+                    )
+                self._write_json(
+                    self._issue_access_token(principal, payload),
+                    HTTPStatus.CREATED,
+                    request_id=request_id,
+                )
+                return
             principal = self._authenticate(self._post_scope(path))
             tenant_id = principal.tenant_id
             payload = self._read_json()
@@ -370,6 +408,55 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             self._write_error(exc, request_id)
         except (TypeError, ValueError, json.JSONDecodeError) as exc:
             self._write_error(APIError(HTTPStatus.BAD_REQUEST, "bad_request", str(exc)), request_id)
+
+    def _issue_access_token(
+        self,
+        principal: APIPrincipal,
+        payload: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        signer = self.server.access_token_signer
+        if signer is None:
+            raise APIError(
+                HTTPStatus.SERVICE_UNAVAILABLE,
+                "access_token_exchange_unavailable",
+                "Short-lived access-token exchange is not configured.",
+            )
+        if set(payload) - {"scopes", "ttl_seconds"}:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_access_token_request",
+                "Access-token request fields are unknown.",
+            )
+        scopes = payload.get("scopes")
+        if scopes is not None and not isinstance(scopes, list):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_access_token_request",
+                "scopes must be a list when supplied.",
+            )
+        try:
+            issued = signer.issue(
+                principal,
+                requested_scopes=scopes,
+                ttl_seconds=payload.get("ttl_seconds", 300),
+            )
+        except AccessTokenError as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, exc.code, exc.message) from exc
+        session = issued["session"]
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "access_token.issued",
+            session["session_id"],
+            {
+                "scopes": session["scopes"],
+                "issued_at": session["issued_at"],
+                "expires_at": session["expires_at"],
+                "source_legacy": session["source_legacy"],
+                "key_id": signer.key_id,
+            },
+        )
+        return issued
 
     def _issue_permit(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
         tenant_id = principal.tenant_id
@@ -852,18 +939,46 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 secret="local-development-only-secret",
                 scopes=frozenset({"*"}),
                 legacy=True,
+                credential_type="local_development",
             )
 
+        candidate = self._bearer_candidate()
+        principal = self.server.principal_registry.authenticate(candidate)
+        if principal is None and self.server.access_token_signer is not None:
+            try:
+                principal = self.server.access_token_signer.verify(candidate)
+            except AccessTokenError as exc:
+                raise APIError(HTTPStatus.UNAUTHORIZED, exc.code, exc.message) from exc
+        if principal is None:
+            raise APIError(HTTPStatus.UNAUTHORIZED, "invalid_api_key", "Bearer credential is invalid.")
+        return self._authorize_principal(principal, required_scope)
+
+    def _authenticate_static(self) -> APIPrincipal:
+        candidate = self._bearer_candidate()
+        principal = self.server.principal_registry.authenticate(candidate)
+        if principal is None:
+            raise APIError(
+                HTTPStatus.UNAUTHORIZED,
+                "invalid_bootstrap_credential",
+                "A configured static bootstrap credential is required for token exchange.",
+            )
+        return self._authorize_principal(principal)
+
+    def _bearer_candidate(self) -> str:
         authorization = self.headers.get("authorization", "")
         scheme, separator, candidate = authorization.partition(" ")
         if separator != " " or scheme.lower() != "bearer" or not candidate:
             raise APIError(HTTPStatus.UNAUTHORIZED, "authentication_required", "Bearer authentication is required.")
-        principal = self.server.principal_registry.authenticate(candidate)
-        if principal is None:
-            raise APIError(HTTPStatus.UNAUTHORIZED, "invalid_api_key", "Bearer credential is invalid.")
+        return candidate
+
+    def _authorize_principal(
+        self,
+        principal: APIPrincipal,
+        required_scope: Optional[str] = None,
+    ) -> APIPrincipal:
         requested_tenant = self.headers.get("x-smerc-tenant")
         if requested_tenant and not hmac.compare_digest(requested_tenant.strip(), principal.tenant_id):
-            raise APIError(HTTPStatus.FORBIDDEN, "tenant_mismatch", "API key is not valid for that tenant.")
+            raise APIError(HTTPStatus.FORBIDDEN, "tenant_mismatch", "Bearer credential is not valid for that tenant.")
         if required_scope is not None and not principal.permits(required_scope):
             raise APIError(
                 HTTPStatus.FORBIDDEN,
@@ -1015,6 +1130,7 @@ def schema() -> Dict[str, Any]:
             "decision": DECISION_VERSION,
             "permit": PERMIT_VERSION,
             "control_evidence": CONTROL_EVIDENCE_VERSION,
+            "access_token": ACCESS_TOKEN_VERSION,
         },
         "policy_version": POLICY_VERSION,
         "principal_version": PRINCIPAL_VERSION,
@@ -1058,6 +1174,7 @@ def schema() -> Dict[str, Any]:
             "GET /ready": "unauthenticated persistence readiness",
             "GET /schema": "input and endpoint shape",
             "POST /v1/evaluate": "evaluate and persist one action",
+            "POST /v1/auth/token": "exchange a static bootstrap credential for a short-lived narrowed token",
             "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",
             "POST /v1/permits/issue": "issue a short-lived action-bound permit for an enforceable decision",
             "POST /v1/permits/consume": "verify control evidence and atomically consume an action-bound permit",
@@ -1087,6 +1204,7 @@ def create_server(
     policy_registry: Optional[PolicyRegistry] = None,
     permit_signers: Optional[Mapping[str, PermitSigner]] = None,
     control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
+    access_token_signer: Optional[AccessTokenSigner] = None,
 ) -> SMERCAPIServer:
     api_principals = tuple(api_principals)
     if not api_keys and not api_principals and not allow_unauthenticated:
@@ -1105,6 +1223,7 @@ def create_server(
             policy_registry=policy_registry,
             permit_signers=permit_signers,
             control_evidence_signers=control_evidence_signers,
+            access_token_signer=access_token_signer,
         )
     except Exception:
         audit_store.close()
@@ -1125,6 +1244,7 @@ def run(
     policy_registry: Optional[PolicyRegistry] = None,
     permit_signers: Optional[Mapping[str, PermitSigner]] = None,
     control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
+    access_token_signer: Optional[AccessTokenSigner] = None,
 ) -> None:
     server = create_server(
         host,
@@ -1139,6 +1259,7 @@ def run(
         policy_registry=policy_registry,
         permit_signers=permit_signers,
         control_evidence_signers=control_evidence_signers,
+        access_token_signer=access_token_signer,
     )
     print(f"SMERC recoverability API listening on http://{host}:{server.server_address[1]}")
     try:
@@ -1167,6 +1288,9 @@ def main() -> None:
     control_evidence_signers = parse_control_evidence_signers(
         os.environ.get("SMERC_CONTROL_EVIDENCE_KEYS", "")
     )
+    access_token_signer = parse_access_token_signer(
+        os.environ.get("SMERC_ACCESS_TOKEN_KEY", "")
+    )
     run(
         args.host,
         args.port,
@@ -1180,6 +1304,7 @@ def main() -> None:
         policy_registry=policy_registry,
         permit_signers=permit_signers,
         control_evidence_signers=control_evidence_signers,
+        access_token_signer=access_token_signer,
     )
 
 
