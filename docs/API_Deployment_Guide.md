@@ -71,7 +71,7 @@ curl http://127.0.0.1:8788/v1/decisions/REPLAY_ID \
 | `POST /v1/evaluate` | Bearer | Evaluate and store one action |
 | `POST /v1/language/evaluate` | Bearer | Validate, compile, evaluate, and store one `smerc.action.v1` envelope |
 | `POST /v1/permits/issue` | Bearer | Issue one short-lived action-bound permit for an eligible enforcement decision |
-| `POST /v1/permits/consume` | Bearer | Verify, register controls, and atomically consume a permit |
+| `POST /v1/permits/consume` | Bearer | Verify configured adapter evidence and atomically consume a permit |
 | `POST /v1/batch` | Bearer | Evaluate and store a bounded batch |
 | `GET /v1/decisions` | Bearer | List decision summaries for the authenticated tenant |
 | `GET /v1/decisions/{replay_id}` | Bearer | Retrieve one decision for the authenticated tenant |
@@ -101,11 +101,14 @@ This prevents a workflow retry from producing multiple audit decisions for the s
 | `SMERC_CORS_ORIGINS` | none | Comma-separated trusted browser origins |
 | `SMERC_POLICY_DIR` | none | Directory of tenant-scoped `smerc.policy.v1` revisions |
 | `SMERC_PERMIT_KEYS` | none | Optional `tenant=key-id:secret` permit-signing mappings; secrets require at least 32 bytes |
+| `SMERC_CONTROL_EVIDENCE_KEYS` | none | Optional `tenant:audience=adapter-id:key-id:secret` verifier mappings; secrets require at least 32 bytes |
 | `PORT` | `8788` | Listening port |
 
 At least one legacy key or scoped principal is required. Do not commit credentials or put them in URLs. Rotate pilot credentials when personnel or integration scope changes. Legacy keys receive all tenant scopes; scoped principals are recommended for new pilots. See `Scoped_Workload_Identity.md`.
 
 Permit signing is disabled when `SMERC_PERMIT_KEYS` is empty. Signing tenants must also have a legacy or scoped API credential. Permit tokens are bearer capabilities and must not enter logs or report artifacts. Full issuance and consumption procedures are in `Action_Bound_Permit_Operations.md`.
+
+When `SMERC_CONTROL_EVIDENCE_KEYS` contains the authenticated tenant and requested executor audience, permit consumption rejects `enforced_controls` and requires a signed `control_evidence_token`. Unconfigured audiences use the compatibility path labeled `legacy_caller_assertion`. Receipt operations and limitations are in `Control_Evidence_Operations.md`.
 
 The authenticated tenant selects the policy; clients cannot name a policy in an action request. The server chooses the latest effective revision for that tenant and refuses startup when a configured tenant has no effective revision. Tenants without configured policy files use the identified reference policy in `OBSERVE` mode.
 
@@ -144,6 +147,7 @@ Expected controls:
 - scoped-principal secrets: dashboard-managed `SMERC_API_PRINCIPALS`
 - optional legacy all-scope secret: dashboard-managed `SMERC_API_KEYS`
 - optional permit-signing secret: dashboard-managed `SMERC_PERMIT_KEYS`
+- optional adapter evidence secrets: dashboard-managed `SMERC_CONTROL_EVIDENCE_KEYS`
 
 ## Pilot Limitations
 
@@ -152,5 +156,6 @@ Expected controls:
 - Scoped principals provide endpoint separation but remain static bearer credentials without managed expiry or revocation.
 - The service does not yet provide managed key rotation, SSO, RBAC, retention automation, SIEM export, or customer-managed encryption keys.
 - Permit replay prevention is single-instance SQLite state, not a distributed capability service.
+- HMAC control evidence authenticates the configured adapter key but does not independently verify native platform records.
 - Thresholds require customer-specific calibration before enforcement.
 - Security, privacy, legal, and architecture owners must approve production use.

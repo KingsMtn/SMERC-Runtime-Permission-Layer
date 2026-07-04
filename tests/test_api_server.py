@@ -65,10 +65,11 @@ class APIServerTests(unittest.TestCase):
         health = self.request_json("/health")
         ready = self.request_json("/ready")
         self.assertEqual(health[0], 200)
-        self.assertEqual(health[2]["version"], "0.9")
+        self.assertEqual(health[2]["version"], "0.10")
         self.assertEqual(health[2]["tenant_policy_count"], 0)
         self.assertEqual(health[2]["permit_signer_count"], 0)
         self.assertEqual(health[2]["api_principal_count"], 2)
+        self.assertEqual(health[2]["control_evidence_adapter_count"], 0)
         self.assertEqual(ready[2]["status"], "ready")
 
     def test_schema_lists_versioned_endpoints_and_postures(self):
@@ -80,6 +81,10 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/language/evaluate", body["endpoints"])
         self.assertEqual(body["language_versions"]["action"], "smerc.action.v1")
         self.assertEqual(body["language_versions"]["permit"], "smerc.permit.v1")
+        self.assertEqual(
+            body["language_versions"]["control_evidence"],
+            "smerc.control-evidence.v1",
+        )
         self.assertEqual(body["policy_version"], "smerc.policy.v1")
         self.assertIn("POST /v1/decisions/{replay_id}/reviews", body["endpoints"])
         self.assertIn("GET /v1/pilot/metrics", body["endpoints"])

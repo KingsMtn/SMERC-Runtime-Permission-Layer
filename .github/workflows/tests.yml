@@ -43,7 +43,7 @@ jobs:
 
       - name: Validate machine-readable contracts
         run: |
-          python -c 'import json; paths=["schemas/smerc-action-language-v1.schema.json", "schemas/smerc-decision-language-v1.schema.json", "schemas/smerc-runtime-policy-v1.schema.json", "schemas/smerc-evidence-ledger-v1.schema.json", "schemas/smerc-action-bound-permit-v1.schema.json", "schemas/smerc-authenticated-principal-v1.schema.json", "schemas/smerc-security-event-v1.schema.json"]; [json.load(open(path)) for path in paths]'
+          python -c 'import json; paths=["schemas/smerc-action-language-v1.schema.json", "schemas/smerc-decision-language-v1.schema.json", "schemas/smerc-runtime-policy-v1.schema.json", "schemas/smerc-evidence-ledger-v1.schema.json", "schemas/smerc-action-bound-permit-v1.schema.json", "schemas/smerc-authenticated-principal-v1.schema.json", "schemas/smerc-security-event-v1.schema.json", "schemas/smerc-control-evidence-v1.schema.json"]; [json.load(open(path)) for path in paths]'
 
       - name: Run recoverability engine smoke test
         run: python -m reference_engine.recoverability_engine examples/recoverability_single_action.json
@@ -99,6 +99,8 @@ jobs:
         run: |
           docker run --detach --name smerc-pilot-api --publish 8788:8788 \
             --env SMERC_API_PRINCIPALS=ci-tenant:ci-proposer:actions.evaluate=ci-proposer-secret-012345678901,ci-tenant:ci-reviewer:reviews.write=ci-reviewer-secret-012345678901,ci-tenant:ci-auditor:metrics.read=ci-auditor-secret-0123456789012 \
+            --env SMERC_PERMIT_KEYS=ci-tenant=ci-permit-key:ci-permit-signing-secret-012345678901 \
+            --env SMERC_CONTROL_EVIDENCE_KEYS=ci-tenant:ci-executor=ci-adapter:ci-control-key:ci-control-evidence-secret-012345678901 \
             smerc-pilot-api:test
 
       - name: Wait for health check
@@ -114,6 +116,8 @@ jobs:
 
       - name: Evaluate example action through container
         run: |
+          curl --fail --silent http://127.0.0.1:8788/health > /tmp/smerc-health.json
+          python -c 'import json; data=json.load(open("/tmp/smerc-health.json")); assert data["permit_signer_count"] == 1; assert data["control_evidence_adapter_count"] == 1'
           curl --fail --silent --show-error \
             --request POST http://127.0.0.1:8788/v1/evaluate \
             --header "Authorization: Bearer ci-proposer-secret-012345678901" \

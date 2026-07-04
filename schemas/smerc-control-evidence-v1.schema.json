@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-control-evidence-v1.schema.json",
+  "title": "SMERC Control Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version", "evidence_id", "tenant_id", "audience", "adapter_id",
+    "permit_id", "action_hash", "controls", "issued_at", "expires_at"
+  ],
+  "properties": {
+    "version": {"const": "smerc.control-evidence.v1"},
+    "evidence_id": {"type": "string", "pattern": "^control_evidence_[0-9a-f]{32}$"},
+    "tenant_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "audience": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "adapter_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "permit_id": {"type": "string", "pattern": "^permit_[0-9a-f]{32}$"},
+    "action_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "controls": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["control_id", "outcome", "mechanism", "evidence_ref", "observed_at"],
+        "properties": {
+          "control_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+          "outcome": {"const": "applied"},
+          "mechanism": {"type": "string", "minLength": 1, "maxLength": 128},
+          "evidence_ref": {"type": "string", "minLength": 1, "maxLength": 256},
+          "observed_at": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "issued_at": {"type": "integer", "minimum": 0},
+    "expires_at": {"type": "integer", "minimum": 1}
+  }
+}

@@ -192,7 +192,7 @@ Purpose:
 - carry `THROTTLE` controls to the execution boundary
 - register one issuance per decision/audience and atomically consume it once
 
-The pilot uses tenant HMAC keys and SQLite replay state. This proves the execution contract, not production key management, workload identity, distributed replay prevention, control attestation, or nonrepudiation.
+The pilot uses tenant HMAC keys and SQLite replay state. This proves the execution contract, not production key management, workload identity, distributed replay prevention, independent verification of native control operation, or nonrepudiation.
 
 ### 12. Scoped Workload Identity
 
@@ -212,6 +212,24 @@ Purpose:
 
 This is a static bearer-secret pilot identity model. It does not provide enterprise federation, short-lived workload credentials, managed rotation/revocation, or external immutable audit storage.
 
+### 13. Signed Control Evidence
+
+Files:
+
+- `reference_engine/control_evidence.py`
+- `schemas/smerc-control-evidence-v1.schema.json`
+- `specification/SMERC_Control_Evidence_v1.md`
+
+Purpose:
+
+- replace caller-supplied control names with signed adapter receipts when configured
+- bind adapter, permit, action, tenant, audience, controls, native references, and freshness
+- reject failed, stale, altered, missing, wrong-action, wrong-audience, and wrong-permit evidence
+- retain receipt digests and bounded attribution without storing bearer tokens
+- preserve an explicitly labeled compatibility path for unconfigured pilot audiences
+
+HMAC authenticates the configured pilot adapter key but does not independently prove that the adapter or referenced native mechanism is truthful. Production needs managed workload identity, protected signing, native evidence verification, and external audit.
+
 ## What This Build Proves
 
 - The scoring engine runs.
@@ -225,6 +243,7 @@ This is a static bearer-secret pilot identity model. It does not provide enterpr
 - Tenant decisions carry replayable policy identity, while evidence provenance limits how far observations may advance deployment.
 - Eligible enforcement decisions can produce action-bound permits that a named executor verifies and consumes once.
 - Scoped principals prevent a proposing agent from automatically inheriting permit-issuance or execution authority.
+- Configured adapters must provide signed, fresh control evidence bound to the exact action and permit.
 
 ## What This Build Does Not Prove
 

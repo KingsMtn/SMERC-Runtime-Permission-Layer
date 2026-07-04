@@ -49,7 +49,7 @@ Maximum lifetime is 300 seconds. Expiry is exclusive.
 
 An `ALLOW` permit authorizes `release`. A `THROTTLE` permit authorizes only `constrain` and carries every decision control except the bookkeeping controls `execute` and `record_replay`.
 
-The consuming adapter must declare the controls it enforced. Consumption fails when any required control is missing. This declaration is an auditable assertion by the adapter; it is not independent proof that the control operated correctly. A production adapter should derive these assertions from native enforcement results rather than caller-supplied text.
+When a control-evidence verifier is configured, the consuming adapter must provide a signed `smerc.control-evidence.v1` receipt derived from native enforcement results. Consumption fails when the receipt is stale, incorrectly bound, invalidly signed, or missing any required control. Unconfigured audiences retain a migration-only caller-assertion path that is explicitly labeled as legacy.
 
 ## Verification And Consumption
 
@@ -60,7 +60,7 @@ Before execution, the consumer must verify:
 - authenticated tenant and expected audience
 - canonical hash of the proposed action
 - active policy hash and stored decision relationship
-- required control declarations
+- required signed control evidence, when configured
 - registered issuance digest
 - absence of prior consumption
 
@@ -71,11 +71,12 @@ Successful consumption is recorded atomically in SQLite for the single-instance 
 - HMAC provides shared-key authenticity, not public nonrepudiation.
 - A compromised signing key can mint valid-looking tokens.
 - A compromised API credential can request permits for eligible decisions.
-- The pilot API credential does not provide endpoint-level proposer, issuer, and executor roles.
+- Scoped principals separate proposer, issuer, and executor API authority.
 - The pilot has no permit revocation list; policy replacement invalidates outstanding permits.
 - SQLite is not a distributed replay-prevention system.
+- Signed adapter evidence improves authenticity and binding but does not prove the adapter or referenced native mechanism is truthful.
 - The permit proves authorization binding, not successful execution or rollback.
-- Production use requires managed HSM/KMS signing, workload identity, key rotation, distributed atomic consumption, clock monitoring, revocation, and adapter attestation.
+- Production use requires managed HSM/KMS signing, workload identity, key rotation, distributed atomic consumption, clock monitoring, revocation, native evidence verification, and independent audit.
 
 ## Versioning
 

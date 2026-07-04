@@ -20,7 +20,7 @@ from reference_engine.audit_store import (
     PermitReplayError,
     ReviewConflictError,
 )
-from reference_engine.action_language import ACTION_VERSION, DECISION_VERSION, evaluate_language_action
+from reference_engine.action_language import ACTION_VERSION, DECISION_VERSION, action_hash, evaluate_language_action
 from reference_engine.api_identity import (
     PRINCIPAL_VERSION,
     APIPrincipal,
@@ -32,6 +32,12 @@ from reference_engine.authorization_permit import (
     PermitError,
     PermitSigner,
     parse_permit_signers,
+)
+from reference_engine.control_evidence import (
+    CONTROL_EVIDENCE_VERSION,
+    ControlEvidenceError,
+    ControlEvidenceSigner,
+    parse_control_evidence_signers,
 )
 from reference_engine.policy import POLICY_VERSION, PolicyRegistry
 from reference_engine.recoverability_engine import RecoverabilityEngine, RuntimePosture
@@ -63,15 +69,38 @@ class SMERCAPIServer(ThreadingHTTPServer):
         cors_origins: Iterable[str] = (),
         policy_registry: Optional[PolicyRegistry] = None,
         permit_signers: Optional[Mapping[str, PermitSigner]] = None,
+        control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
     ) -> None:
         resolved_policy_registry = policy_registry or PolicyRegistry()
         principal_registry = PrincipalRegistry.from_configuration(api_keys, api_principals)
         resolved_permit_signers = dict(permit_signers or {})
+        resolved_control_evidence_signers = dict(control_evidence_signers or {})
+        for binding, signer in resolved_control_evidence_signers.items():
+            if binding != (signer.tenant_id, signer.audience):
+                raise ValueError("Control-evidence signer mapping must match its tenant and audience.")
         unknown_permit_tenants = sorted(set(resolved_permit_signers) - set(principal_registry.tenant_ids))
         if unknown_permit_tenants and not allow_unauthenticated:
             raise ValueError(
                 "Permit signing tenants must also have API credentials: "
                 + ", ".join(unknown_permit_tenants)
+            )
+        unknown_evidence_tenants = sorted(
+            {tenant_id for tenant_id, _ in resolved_control_evidence_signers}
+            - set(principal_registry.tenant_ids)
+        )
+        if unknown_evidence_tenants and not allow_unauthenticated:
+            raise ValueError(
+                "Control-evidence tenants must also have API credentials: "
+                + ", ".join(unknown_evidence_tenants)
+            )
+        evidence_without_permits = sorted(
+            {tenant_id for tenant_id, _ in resolved_control_evidence_signers}
+            - set(resolved_permit_signers)
+        )
+        if evidence_without_permits:
+            raise ValueError(
+                "Control-evidence tenants must also have permit signing keys: "
+                + ", ".join(evidence_without_permits)
             )
         for tenant_id in principal_registry.tenant_ids:
             resolved_policy_registry.for_tenant(tenant_id)
@@ -86,6 +115,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
         self.max_batch_size = max_batch_size
         self.cors_origins = frozenset(cors_origins)
         self.permit_signers = resolved_permit_signers
+        self.control_evidence_signers = resolved_control_evidence_signers
 
     def engine_for(self, tenant_id: str) -> RecoverabilityEngine:
         return RecoverabilityEngine(self.policy_registry.for_tenant(tenant_id))
@@ -100,6 +130,13 @@ class SMERCAPIServer(ThreadingHTTPServer):
             )
         return signer
 
+    def control_evidence_signer_for(
+        self,
+        tenant_id: str,
+        audience: str,
+    ) -> Optional[ControlEvidenceSigner]:
+        return self.control_evidence_signers.get((tenant_id, audience))
+
     def server_close(self) -> None:
         super().server_close()
         self.audit_store.close()
@@ -107,7 +144,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
 
 class SMERCRequestHandler(BaseHTTPRequestHandler):
     server: SMERCAPIServer
-    server_version = "SMERCRecoverabilityAPI/0.9"
+    server_version = "SMERCRecoverabilityAPI/0.10"
 
     def do_OPTIONS(self) -> None:
         origin = self.headers.get("origin")
@@ -133,10 +170,11 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     {
                         "status": "ok",
                         "service": "smerc-recoverability-api",
-                        "version": "0.9",
+                        "version": "0.10",
                         "tenant_policy_count": self.server.policy_registry.count,
                         "permit_signer_count": len(self.server.permit_signers),
                         "api_principal_count": self.server.principal_registry.count,
+                        "control_evidence_adapter_count": len(self.server.control_evidence_signers),
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -395,29 +433,88 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
 
     def _consume_permit(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
         tenant_id = principal.tenant_id
-        fields = {"permit_token", "action", "audience", "enforced_controls"}
-        if set(payload) != fields:
+        common_fields = {"permit_token", "action", "audience"}
+        if not isinstance(payload.get("audience"), str):
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_permit_request", "audience must be a string.")
+        evidence_signer = self.server.control_evidence_signer_for(tenant_id, payload["audience"])
+        evidence_fields = common_fields | {"control_evidence_token"}
+        legacy_fields = common_fields | {"enforced_controls"}
+        expected_fields = evidence_fields if evidence_signer is not None else legacy_fields
+        if set(payload) != expected_fields:
+            code = "control_evidence_required" if evidence_signer is not None else "invalid_permit_request"
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                code,
+                "Signed control_evidence_token is required for this tenant and executor audience."
+                if evidence_signer is not None
+                else "Permit consumption fields are incomplete or unknown.",
+            )
+        if not isinstance(payload["action"], dict):
             raise APIError(
                 HTTPStatus.BAD_REQUEST,
                 "invalid_permit_request",
-                "Permit consumption fields are incomplete or unknown.",
+                "action must be an object.",
             )
-        if not isinstance(payload["action"], dict) or not isinstance(payload["enforced_controls"], list):
-            raise APIError(
-                HTTPStatus.BAD_REQUEST,
-                "invalid_permit_request",
-                "action must be an object and enforced_controls must be a list.",
-            )
+        if evidence_signer is not None:
+            if not isinstance(payload["control_evidence_token"], str):
+                raise APIError(
+                    HTTPStatus.BAD_REQUEST,
+                    "invalid_control_evidence",
+                    "control_evidence_token must be a string.",
+                )
+            try:
+                evidence = evidence_signer.verify(
+                    payload["control_evidence_token"],
+                    tenant_id=tenant_id,
+                    audience=payload["audience"],
+                    action_hash=action_hash(payload["action"]),
+                )
+            except (ControlEvidenceError, TypeError, ValueError) as exc:
+                if isinstance(exc, ControlEvidenceError):
+                    raise APIError(HTTPStatus.BAD_REQUEST, exc.code, exc.message) from exc
+                raise APIError(HTTPStatus.BAD_REQUEST, "invalid_control_evidence", str(exc)) from exc
+            enforced_controls = evidence_signer.applied_controls(evidence)
+            evidence_summary = {
+                "mode": "signed_adapter_receipt",
+                "version": evidence["version"],
+                "evidence_id": evidence["evidence_id"],
+                "adapter_id": evidence["adapter_id"],
+                "key_id": evidence_signer.key_id,
+                "controls": enforced_controls,
+                "expires_at": evidence["expires_at"],
+                "token_sha256": hashlib.sha256(
+                    payload["control_evidence_token"].encode("ascii")
+                ).hexdigest(),
+            }
+        else:
+            if not isinstance(payload["enforced_controls"], list):
+                raise APIError(
+                    HTTPStatus.BAD_REQUEST,
+                    "invalid_permit_request",
+                    "enforced_controls must be a list.",
+                )
+            enforced_controls = payload["enforced_controls"]
+            evidence = None
+            evidence_summary = {
+                "mode": "legacy_caller_assertion",
+                "controls": sorted(enforced_controls),
+            }
         try:
             permit = self.server.signer_for(tenant_id).verify(
                 payload["permit_token"],
                 payload["action"],
                 tenant_id=tenant_id,
                 audience=payload["audience"],
-                enforced_controls=payload["enforced_controls"],
+                enforced_controls=enforced_controls,
             )
         except PermitError as exc:
             raise APIError(HTTPStatus.BAD_REQUEST, exc.code, exc.message) from exc
+        if evidence is not None and evidence["permit_id"] != permit["permit_id"]:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "control_evidence_permit_mismatch",
+                "Control evidence is not bound to this permit.",
+            )
 
         decision = self.server.audit_store.get(tenant_id, permit["replay_id"])
         if decision is None:
@@ -443,7 +540,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             consumption = self.server.audit_store.consume_permit(
                 tenant_id,
                 permit,
-                payload["enforced_controls"],
+                enforced_controls,
                 hashlib.sha256(payload["permit_token"].encode("ascii")).hexdigest(),
             )
         except PermitNotIssuedError as exc:
@@ -458,10 +555,16 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             {
                 "replay_id": permit["replay_id"],
                 "audience": permit["audience"],
-                "enforced_controls": sorted(payload["enforced_controls"]),
+                "enforced_controls": sorted(enforced_controls),
+                "control_evidence": evidence_summary,
             },
         )
-        return {"valid": True, "permit": permit, "consumption": consumption}
+        return {
+            "valid": True,
+            "permit": permit,
+            "consumption": consumption,
+            "control_evidence": evidence_summary,
+        }
 
     def _record_review(
         self,
@@ -911,6 +1014,7 @@ def schema() -> Dict[str, Any]:
             "action": ACTION_VERSION,
             "decision": DECISION_VERSION,
             "permit": PERMIT_VERSION,
+            "control_evidence": CONTROL_EVIDENCE_VERSION,
         },
         "policy_version": POLICY_VERSION,
         "principal_version": PRINCIPAL_VERSION,
@@ -956,7 +1060,7 @@ def schema() -> Dict[str, Any]:
             "POST /v1/evaluate": "evaluate and persist one action",
             "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",
             "POST /v1/permits/issue": "issue a short-lived action-bound permit for an enforceable decision",
-            "POST /v1/permits/consume": "verify and atomically consume an action-bound permit",
+            "POST /v1/permits/consume": "verify control evidence and atomically consume an action-bound permit",
             "POST /v1/batch": "evaluate and persist a bounded action list",
             "GET /v1/decisions": "list tenant-scoped decision summaries",
             "GET /v1/decisions/{replay_id}": "retrieve one tenant-scoped decision",
@@ -982,6 +1086,7 @@ def create_server(
     cors_origins: Iterable[str] = (),
     policy_registry: Optional[PolicyRegistry] = None,
     permit_signers: Optional[Mapping[str, PermitSigner]] = None,
+    control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
 ) -> SMERCAPIServer:
     api_principals = tuple(api_principals)
     if not api_keys and not api_principals and not allow_unauthenticated:
@@ -999,6 +1104,7 @@ def create_server(
             cors_origins=cors_origins,
             policy_registry=policy_registry,
             permit_signers=permit_signers,
+            control_evidence_signers=control_evidence_signers,
         )
     except Exception:
         audit_store.close()
@@ -1018,6 +1124,7 @@ def run(
     cors_origins: Iterable[str] = (),
     policy_registry: Optional[PolicyRegistry] = None,
     permit_signers: Optional[Mapping[str, PermitSigner]] = None,
+    control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
 ) -> None:
     server = create_server(
         host,
@@ -1031,6 +1138,7 @@ def run(
         cors_origins=cors_origins,
         policy_registry=policy_registry,
         permit_signers=permit_signers,
+        control_evidence_signers=control_evidence_signers,
     )
     print(f"SMERC recoverability API listening on http://{host}:{server.server_address[1]}")
     try:
@@ -1056,6 +1164,9 @@ def main() -> None:
     cors_origins = [item.strip() for item in os.environ.get("SMERC_CORS_ORIGINS", "").split(",") if item.strip()]
     policy_registry = PolicyRegistry.from_directory(args.policy_dir) if args.policy_dir else PolicyRegistry()
     permit_signers = parse_permit_signers(os.environ.get("SMERC_PERMIT_KEYS", ""))
+    control_evidence_signers = parse_control_evidence_signers(
+        os.environ.get("SMERC_CONTROL_EVIDENCE_KEYS", "")
+    )
     run(
         args.host,
         args.port,
@@ -1068,6 +1179,7 @@ def main() -> None:
         cors_origins=cors_origins,
         policy_registry=policy_registry,
         permit_signers=permit_signers,
+        control_evidence_signers=control_evidence_signers,
     )
 
 

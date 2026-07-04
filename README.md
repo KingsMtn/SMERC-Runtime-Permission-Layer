@@ -20,6 +20,7 @@ The current build includes:
 - evidence and unknowns registry with deployment-limiting falsification rules
 - tenant-scoped policy calibration and evidence provenance admission
 - signed, action-bound, single-use authorization permits
+- signed, action-bound control-evidence receipts for configured execution adapters
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - recoverability-aware scoring engine
 - authenticated, tenant-scoped REST API service
@@ -51,8 +52,9 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 9. Inspect `pilot_console/README.md`.
 10. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
 11. Read `docs/Scoped_Workload_Identity.md`.
-12. Run the Python and console tests.
-13. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+12. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
+13. Run the Python and console tests.
+14. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -79,6 +81,7 @@ It outputs:
 - replay ID and replay record
 - an optional short-lived permit for eligible enforcement decisions
 - authenticated principal identity bound into decisions, replays, reviews, and security events
+- signed control-evidence attribution when configured at permit consumption
 
 ## Action Language
 
@@ -106,6 +109,12 @@ Permits are deliberately narrow:
 - policy replacement, action mutation, wrong audience, expiry, missing controls, or replay causes rejection
 
 The token is not exposed by the GitHub Action because it is a bearer capability. Executors obtain and consume it through the authenticated API. See `docs/Action_Bound_Permit_Operations.md`.
+
+## Verifiable Control Evidence
+
+Configured execution adapters replace caller-supplied control names with short-lived `smerc.control-evidence.v1` receipts. Each receipt is signed by a key scoped to one tenant and executor audience and binds the adapter, permit, action hash, applied controls, native mechanisms, evidence references, and observation times.
+
+This improves authenticity, freshness, and auditability; it does not prove a compromised adapter or key is truthful. Unconfigured audiences retain a migration-only path labeled `legacy_caller_assertion`. See `docs/Control_Evidence_Operations.md`.
 
 ## Scoped Workload Identity
 
@@ -303,6 +312,7 @@ Policy calibration, deterministic hashes, accountable overrides, and tamper-evid
 - Recoverability-focused scoring engine
 - Standard-library REST API service
 - Signed action-bound permit contract with single-use pilot consumption
+- Signed adapter control-evidence receipts with permit, action, and freshness binding
 - Scoped workload principals and attributed security-event audit records
 - Browser-based pilot review queue and metrics console
 - Installable local GitHub Action

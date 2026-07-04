@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.0 - 2026-07-04
+
+- Added signed `smerc.control-evidence.v1` receipts bound to tenant, executor audience, adapter, permit, action hash, applied controls, native references, and freshness.
+- Added fail-closed evidence verification for configured adapters and explicit `legacy_caller_assertion` labeling for compatibility paths.
+- Added bounded audit attribution, receipt digests, schema, example, deployment configuration, operations guidance, and tests.
+- Repaired the permit tampering test so it always mutates significant signature data.
+
 ## 0.9.0 - 2026-07-04
 
 - Added tenant-scoped workload principals with explicit evaluation, read, permit, review, metrics, and audit scopes.

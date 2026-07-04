@@ -2,6 +2,7 @@ import copy
 import hashlib
 import json
 import threading
+import time
 import unittest
 from pathlib import Path
 from urllib.error import HTTPError
@@ -16,6 +17,7 @@ from reference_engine.audit_store import (
     PermitReplayError,
 )
 from reference_engine.authorization_permit import PermitError, PermitSigner, parse_permit_signers
+from reference_engine.control_evidence import ControlEvidenceSigner
 from reference_engine.policy import PolicyRegistry, PolicyThresholds, RuntimePolicy
 from reference_engine.recoverability_engine import RecoverabilityEngine
 
@@ -239,6 +241,13 @@ class AuthorizationPermitTests(unittest.TestCase):
 class AuthorizationPermitAPITests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        cls.control_evidence_signer = ControlEvidenceSigner(
+            "alpha",
+            "github-actions-deployer",
+            "github-actions-adapter",
+            "alpha-control-evidence-2026-01",
+            b"c" * 32,
+        )
         cls.server = create_server(
             "127.0.0.1",
             0,
@@ -246,6 +255,9 @@ class AuthorizationPermitAPITests(unittest.TestCase):
             api_keys={"alpha": "alpha-secret"},
             policy_registry=PolicyRegistry([enforce_policy()]),
             permit_signers={"alpha": PermitSigner("alpha-permit-2026-01", b"a" * 32)},
+            control_evidence_signers={
+                ("alpha", "github-actions-deployer"): cls.control_evidence_signer
+            },
         )
         cls.port = cls.server.server_address[1]
         cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
@@ -295,15 +307,77 @@ class AuthorizationPermitAPITests(unittest.TestCase):
         )
         self.assertEqual(duplicate_status, 409)
         self.assertEqual(duplicate["error"], "permit_already_issued")
-        consume_payload = {
+        observed_at = int(time.time())
+        control_receipt = self.control_evidence_signer.issue(
+            issued["permit"],
+            [
+                {
+                    "control_id": "retain_cancel_handle",
+                    "outcome": "applied",
+                    "mechanism": "github-environment-deployment-gate",
+                    "evidence_ref": "github-run:9001:job:deploy-canary",
+                    "observed_at": observed_at,
+                }
+            ],
+            now=observed_at,
+        )
+        wrong_permit = copy.deepcopy(issued["permit"])
+        wrong_permit["permit_id"] = "permit_ffffffffffffffffffffffffffffffff"
+        wrong_receipt = self.control_evidence_signer.issue(
+            wrong_permit,
+            [
+                {
+                    "control_id": "retain_cancel_handle",
+                    "outcome": "applied",
+                    "mechanism": "github-environment-deployment-gate",
+                    "evidence_ref": "github-run:9001:job:wrong-permit",
+                    "observed_at": observed_at,
+                }
+            ],
+            now=observed_at,
+        )
+        legacy_payload = {
             "permit_token": issued["permit_token"],
             "action": action,
             "audience": "github-actions-deployer",
             "enforced_controls": ["retain_cancel_handle"],
         }
+        status, rejected = self.request("/v1/permits/consume", legacy_payload)
+        self.assertEqual(status, 400)
+        self.assertEqual(rejected["error"], "control_evidence_required")
+
+        wrong_receipt_payload = {
+            "permit_token": issued["permit_token"],
+            "action": action,
+            "audience": "github-actions-deployer",
+            "control_evidence_token": wrong_receipt["control_evidence_token"],
+        }
+        status, rejected = self.request("/v1/permits/consume", wrong_receipt_payload)
+        self.assertEqual(status, 400)
+        self.assertEqual(rejected["error"], "control_evidence_permit_mismatch")
+
+        consume_payload = {
+            "permit_token": issued["permit_token"],
+            "action": action,
+            "audience": "github-actions-deployer",
+            "control_evidence_token": control_receipt["control_evidence_token"],
+        }
         status, consumed = self.request("/v1/permits/consume", consume_payload)
         self.assertEqual(status, 200)
         self.assertTrue(consumed["valid"])
+        self.assertEqual(consumed["control_evidence"]["mode"], "signed_adapter_receipt")
+        self.assertEqual(consumed["control_evidence"]["adapter_id"], "github-actions-adapter")
+        self.assertNotIn("control_evidence_token", json.dumps(consumed))
+        consumed_event = next(
+            event
+            for event in self.server.audit_store.list_security_events("alpha")
+            if event["event_type"] == "permit.consumed"
+        )
+        self.assertEqual(
+            consumed_event["metadata"]["control_evidence"]["mode"],
+            "signed_adapter_receipt",
+        )
+        self.assertNotIn("control_evidence_token", json.dumps(consumed_event))
         status, replayed = self.request("/v1/permits/consume", consume_payload)
         self.assertEqual(status, 409)
         self.assertEqual(replayed["error"], "permit_already_consumed")

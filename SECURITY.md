@@ -27,9 +27,11 @@ The reference provenance ledger binds observations and source-artifact digests i
 
 Tenant policy files are trusted configuration. Limit write access, review threshold changes, retain prior policy hashes, and deploy policy revisions through approved change control. The reference server loads policies at startup and does not provide a remote policy-administration endpoint.
 
-Action-bound permits are HMAC-authenticated bearer capabilities. Never log, commit, persist in build artifacts, or expose them as workflow outputs. `SMERC_PERMIT_KEYS` requires separate tenant keys of at least 32 bytes. A compromised key can mint valid-looking permits, and HMAC does not provide public nonrepudiation. The pilot limits permits to five minutes, binds them to one action, tenant, audience, decision, and policy, registers one issuance per decision/audience, and consumes them once in SQLite. Production deployment still requires HSM/KMS-backed rotation, workload identity, distributed atomic replay prevention, revocation, clock monitoring, adapter attestation, and incident procedures.
+Action-bound permits are HMAC-authenticated bearer capabilities. Never log, commit, persist in build artifacts, or expose them as workflow outputs. `SMERC_PERMIT_KEYS` requires separate tenant keys of at least 32 bytes. A compromised key can mint valid-looking permits, and HMAC does not provide public nonrepudiation. The pilot limits permits to five minutes, binds them to one action, tenant, audience, decision, and policy, registers one issuance per decision/audience, and consumes them once in SQLite. Production deployment still requires HSM/KMS-backed rotation, workload identity, distributed atomic replay prevention, revocation, clock monitoring, and incident procedures.
 
-A consuming adapter's `enforced_controls` list is an assertion, not independent proof that a constraint operated. Production adapters must derive control evidence from native execution results and protect that evidence from caller manipulation.
+When `SMERC_CONTROL_EVIDENCE_KEYS` configures an execution adapter, permit consumption requires a signed `smerc.control-evidence.v1` receipt bound to the permit, action, tenant, audience, adapter, control results, and freshness window. Tokens are not stored or returned; audit events retain a SHA-256 digest and bounded receipt attribution. Keep each adapter key out of proposing agents, issuers, and general API clients.
+
+Signed control evidence authenticates possession of the configured adapter key; it is not independent proof that a control operated or that a native evidence reference is truthful. A compromised adapter can sign false results. Unconfigured audiences still accept caller assertions for compatibility and label them `legacy_caller_assertion`. Production requires managed workload identity, protected signing, native result verification, rotation/revocation, clock monitoring, and independent audit export.
 
 Scoped pilot principals separate action evaluation, decision reading, permit issuance, permit consumption, review, metrics, and audit access. Every new decision records its authenticated principal, and permit/review operations append attributed security events. Legacy `SMERC_API_KEYS` credentials retain wildcard tenant access for compatibility and should not be used where separation of duties is required.
 
@@ -47,6 +49,7 @@ The pilot API defaults to refusing startup without at least one configured tenan
 - no-store and content-type response headers
 - opaque request identifiers
 - optional action-bound permit issuance and atomic single-use consumption
+- optional signed adapter control evidence with fail-closed binding and freshness checks
 - endpoint-level scoped principals and attributed security-event records
 
 `--allow-unauthenticated` is intended only for local development. It must not be used on a network-accessible pilot deployment.

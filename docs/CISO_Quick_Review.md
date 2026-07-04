@@ -46,6 +46,8 @@ For evidence-authorized enforcement policies, eligible decisions can issue a sig
 
 Scoped workload principals keep proposing agents separate from permit issuers and side-effecting executors. Decisions, reviews, permit issuance, and permit consumption retain authenticated principal attribution. The reference implementation uses static pilot secrets rather than enterprise identity federation.
 
+Configured execution adapters must also provide a signed, short-lived control-evidence receipt before permit consumption. The receipt binds native control references to the exact permit and action. This is stronger than a caller-supplied control list, while remaining explicitly short of hardware-backed or independently verified attestation.
+
 ## What Exists Today?
 
 - Python reference engine
@@ -57,6 +59,7 @@ Scoped workload principals keep proposing agents separate from permit issuers an
 - Decision report artifacts and replay records
 - Signed action-bound permit and single-use consumption contract
 - Scoped workload identity and attributed security events
+- Signed adapter control-evidence receipts
 - Pilot package and validation materials
 
 ## How Would A Team Test It?
