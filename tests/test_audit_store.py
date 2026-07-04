@@ -76,6 +76,28 @@ class AuditStoreTests(unittest.TestCase):
     def test_ping_confirms_database_readiness(self):
         self.assertTrue(self.store.ping())
 
+    def test_security_events_are_attributed_and_tenant_scoped(self):
+        alpha = self.store.record_security_event(
+            "alpha",
+            "permit-issuer",
+            "permit.issued",
+            "permit-alpha",
+            {"audience": "deployment-executor"},
+        )
+        self.store.record_security_event(
+            "beta",
+            "security-reviewer",
+            "review.recorded",
+            "review-beta",
+            {"replay_id": "replay-beta"},
+        )
+
+        events = self.store.list_security_events("alpha")
+        self.assertEqual(events, [alpha])
+        self.assertEqual(events[0]["principal_id"], "permit-issuer")
+        self.assertEqual(events[0]["event_version"], "smerc.security-event.v1")
+        self.assertNotIn("review-beta", str(events))
+
     def test_review_is_tenant_scoped_and_retry_safe(self):
         self.store.record("alpha", decision(), "hash-a")
         original = self.store.record_review(

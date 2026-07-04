@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-security-event-v1.schema.json",
+  "title": "SMERC Security Event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_version",
+    "event_id",
+    "tenant_id",
+    "principal_id",
+    "event_type",
+    "resource_id",
+    "metadata",
+    "created_at"
+  ],
+  "properties": {
+    "event_version": {"const": "smerc.security-event.v1"},
+    "event_id": {"type": "string", "pattern": "^security_event_[0-9a-f]{32}$"},
+    "tenant_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "principal_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "event_type": {"enum": ["permit.issued", "permit.consumed", "review.recorded"]},
+    "resource_id": {"type": "string", "minLength": 1, "maxLength": 192},
+    "metadata": {"type": "object"},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

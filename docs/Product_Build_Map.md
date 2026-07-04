@@ -71,7 +71,7 @@ Endpoints:
 - `GET /v1/pilot/metrics`
 - `GET /v1/review-queue`
 
-The API uses only the Python standard library so a reviewer can run it without a dependency stack. Pilot controls include tenant-mapped bearer keys, idempotency, bounded requests, allowlisted CORS, and structured errors.
+The API uses only the Python standard library so a reviewer can run it without a dependency stack. Pilot controls include scoped tenant principals, principal-bound idempotency, bounded requests, allowlisted CORS, and structured errors.
 
 ### 4. Pilot Audit Store
 
@@ -194,6 +194,24 @@ Purpose:
 
 The pilot uses tenant HMAC keys and SQLite replay state. This proves the execution contract, not production key management, workload identity, distributed replay prevention, control attestation, or nonrepudiation.
 
+### 12. Scoped Workload Identity
+
+Files:
+
+- `reference_engine/api_identity.py`
+- `schemas/smerc-authenticated-principal-v1.schema.json`
+- `schemas/smerc-security-event-v1.schema.json`
+
+Purpose:
+
+- separate action proposers, permit issuers, permit consumers, reviewers, readers, and auditors
+- deny endpoint operations when the authenticated principal lacks the required scope
+- bind authenticated principal identity into decisions, replays, and reviews
+- append tenant-scoped security events for permit issuance, permit consumption, and review recording
+- preserve legacy all-scope keys for controlled compatibility
+
+This is a static bearer-secret pilot identity model. It does not provide enterprise federation, short-lived workload credentials, managed rotation/revocation, or external immutable audit storage.
+
 ## What This Build Proves
 
 - The scoring engine runs.
@@ -206,6 +224,7 @@ The pilot uses tenant HMAC keys and SQLite replay state. This proves the executi
 - The evidence registry converts unresolved assumptions into enforceable deployment ceilings.
 - Tenant decisions carry replayable policy identity, while evidence provenance limits how far observations may advance deployment.
 - Eligible enforcement decisions can produce action-bound permits that a named executor verifies and consumes once.
+- Scoped principals prevent a proposing agent from automatically inheriting permit-issuance or execution authority.
 
 ## What This Build Does Not Prove
 

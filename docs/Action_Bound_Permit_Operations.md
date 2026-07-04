@@ -2,10 +2,10 @@
 
 ## Configuration
 
-Permit issuance is disabled unless a tenant key is configured:
+Permit issuance is disabled unless a signing tenant has API principals and a permit key configured:
 
 ```powershell
-$env:SMERC_API_KEYS="alpha=alpha-local-api-key-012345678901"
+$env:SMERC_API_PRINCIPALS="alpha:agent-proposer:actions.evaluate=alpha-proposer-local-secret-012345,alpha:permit-issuer:permits.issue=alpha-issuer-local-secret-01234567,alpha:deployment-executor:permits.consume=alpha-executor-local-secret-012345"
 $env:SMERC_PERMIT_KEYS="alpha=alpha-permit-2026-01:alpha-local-permit-signing-secret-0123456789"
 $env:SMERC_POLICY_DIR="examples/policies"
 python api_server.py --host 127.0.0.1 --port 8788 --audit-db smerc_audit.sqlite3
@@ -26,7 +26,7 @@ The issuance body has four fields: the stored `replay_id`, the complete original
 
 Tokens are bearer capabilities. Do not print them in workflow logs, commit them, place them in artifacts, or expose them as GitHub Action outputs.
 
-The pilot API key has all tenant API permissions. It does not separate action proposers, permit issuers, and permit consumers. Keep all three operations inside one controlled pilot integration; do not distribute the key to agents or untrusted workflows.
+Use separate scoped principals for `actions.evaluate`, `permits.issue`, and `permits.consume`. Legacy tenant keys still have all API permissions and should not be distributed to agents or untrusted workflows.
 
 ## Expected Failure Codes
 

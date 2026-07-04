@@ -44,6 +44,8 @@ These are more operationally useful than simple allow/block decisions.
 
 For evidence-authorized enforcement policies, eligible decisions can issue a signed permit bound to the exact action, executor audience, decision replay, policy hash, required controls, and short expiry. The pilot consumes each permit once. This makes the authorization inspectable at the execution boundary, while remaining explicit that production key management and distributed replay prevention are not yet implemented.
 
+Scoped workload principals keep proposing agents separate from permit issuers and side-effecting executors. Decisions, reviews, permit issuance, and permit consumption retain authenticated principal attribution. The reference implementation uses static pilot secrets rather than enterprise identity federation.
+
 ## What Exists Today?
 
 - Python reference engine
@@ -54,6 +56,7 @@ For evidence-authorized enforcement policies, eligible decisions can issue a sig
 - GitHub Actions integration v0.1
 - Decision report artifacts and replay records
 - Signed action-bound permit and single-use consumption contract
+- Scoped workload identity and attributed security events
 - Pilot package and validation materials
 
 ## How Would A Team Test It?

@@ -65,9 +65,10 @@ class APIServerTests(unittest.TestCase):
         health = self.request_json("/health")
         ready = self.request_json("/ready")
         self.assertEqual(health[0], 200)
-        self.assertEqual(health[2]["version"], "0.8")
+        self.assertEqual(health[2]["version"], "0.9")
         self.assertEqual(health[2]["tenant_policy_count"], 0)
         self.assertEqual(health[2]["permit_signer_count"], 0)
+        self.assertEqual(health[2]["api_principal_count"], 2)
         self.assertEqual(ready[2]["status"], "ready")
 
     def test_schema_lists_versioned_endpoints_and_postures(self):
@@ -85,6 +86,10 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("GET /v1/review-queue", body["endpoints"])
         self.assertIn("POST /v1/permits/issue", body["endpoints"])
         self.assertIn("POST /v1/permits/consume", body["endpoints"])
+        self.assertIn("GET /v1/security-events", body["endpoints"])
+        self.assertIn("permits.consume", body["authorization"]["scopes"])
+        self.assertEqual(body["principal_version"], "smerc.principal.v1")
+        self.assertEqual(body["security_event_version"], "smerc.security-event.v1")
 
     def test_evaluate_requires_bearer_authentication(self):
         status, headers, body = self.request_json("/v1/evaluate", method="POST", payload=EXAMPLES[0])
@@ -116,6 +121,7 @@ class APIServerTests(unittest.TestCase):
         )
         self.assertEqual(status, 200)
         self.assertEqual(decision["tenant_id"], "alpha")
+        self.assertEqual(decision["authenticated_principal"]["principal_id"], "legacy-alpha")
 
         status, _, retrieved = self.request_json(
             f"/v1/decisions/{decision['replay_id']}", key="alpha-secret"

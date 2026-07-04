@@ -31,13 +31,15 @@ Action-bound permits are HMAC-authenticated bearer capabilities. Never log, comm
 
 A consuming adapter's `enforced_controls` list is an assertion, not independent proof that a constraint operated. Production adapters must derive control evidence from native execution results and protect that evidence from caller manipulation.
 
-The pilot bearer credential authorizes evaluation, permit issuance, and permit consumption for its tenant; it does not implement endpoint-level roles. Keep the credential inside one controlled integration boundary. Production deployment requires separate proposer, issuer, and executor identities with least-privilege authorization.
+Scoped pilot principals separate action evaluation, decision reading, permit issuance, permit consumption, review, metrics, and audit access. Every new decision records its authenticated principal, and permit/review operations append attributed security events. Legacy `SMERC_API_KEYS` credentials retain wildcard tenant access for compatibility and should not be used where separation of duties is required.
+
+Scoped principals still use static bearer secrets. They are not workload federation, managed identity, mTLS, OIDC, SPIFFE, credential expiry, or automated revocation. Do not give issuer or executor credentials to proposing agents. Production deployment requires short-lived federated credentials, managed rotation and revocation, least-privilege service identity, access monitoring, and external audit export.
 
 ## Pilot API Controls
 
-The pilot API defaults to refusing startup without at least one tenant-mapped bearer key. It provides:
+The pilot API defaults to refusing startup without at least one configured tenant credential. It provides:
 
-- constant-time API-key comparison
+- constant-time credential comparison across configured principals
 - tenant-scoped decision storage and retrieval
 - idempotency conflict detection
 - bounded body and batch sizes
@@ -45,6 +47,7 @@ The pilot API defaults to refusing startup without at least one tenant-mapped be
 - no-store and content-type response headers
 - opaque request identifiers
 - optional action-bound permit issuance and atomic single-use consumption
+- endpoint-level scoped principals and attributed security-event records
 
 `--allow-unauthenticated` is intended only for local development. It must not be used on a network-accessible pilot deployment.
 

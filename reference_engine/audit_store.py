@@ -6,6 +6,7 @@ import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from uuid import uuid4
 
 
 class IdempotencyConflictError(ValueError):
@@ -105,6 +106,17 @@ class AuditStore:
                 );
                 CREATE INDEX IF NOT EXISTS idx_permit_consumptions_tenant_created
                     ON permit_consumptions (tenant_id, consumed_at DESC);
+                CREATE TABLE IF NOT EXISTS security_events (
+                    event_id TEXT PRIMARY KEY,
+                    tenant_id TEXT NOT NULL,
+                    principal_id TEXT NOT NULL,
+                    event_type TEXT NOT NULL,
+                    resource_id TEXT NOT NULL,
+                    event_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_security_events_tenant_created
+                    ON security_events (tenant_id, created_at DESC);
                 """
             )
             self._connection.commit()
@@ -554,6 +566,55 @@ class AuditStore:
             "enforced_controls": sorted(enforced_controls),
             "consumed_at": consumed_at,
         }
+
+    def record_security_event(
+        self,
+        tenant_id: str,
+        principal_id: str,
+        event_type: str,
+        resource_id: str,
+        metadata: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        event = {
+            "event_version": "smerc.security-event.v1",
+            "event_id": f"security_event_{uuid4().hex}",
+            "tenant_id": tenant_id,
+            "principal_id": principal_id,
+            "event_type": event_type,
+            "resource_id": resource_id,
+            "metadata": metadata,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        serialized = json.dumps(event, sort_keys=True, separators=(",", ":"))
+        with self._lock:
+            self._connection.execute(
+                """
+                INSERT INTO security_events (
+                    event_id, tenant_id, principal_id, event_type,
+                    resource_id, event_json, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    event["event_id"], tenant_id, principal_id, event_type,
+                    resource_id, serialized, event["created_at"],
+                ),
+            )
+            self._connection.commit()
+        return event
+
+    def list_security_events(self, tenant_id: str, limit: int = 50) -> List[Dict[str, Any]]:
+        with self._lock:
+            rows = self._connection.execute(
+                """
+                SELECT event_json
+                FROM security_events
+                WHERE tenant_id = ?
+                ORDER BY created_at DESC
+                LIMIT ?
+                """,
+                (tenant_id, limit),
+            ).fetchall()
+        return [json.loads(row["event_json"]) for row in rows]
 
     def ping(self) -> bool:
         with self._lock:

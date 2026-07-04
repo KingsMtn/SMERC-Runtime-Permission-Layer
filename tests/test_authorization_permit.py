@@ -108,7 +108,9 @@ class AuthorizationPermitTests(unittest.TestCase):
     def test_tampering_wrong_action_audience_expiry_and_missing_controls_fail(self):
         issued = self.issue()
         token = issued["permit_token"]
-        corrupted = token[:-1] + ("A" if token[-1] != "A" else "B")
+        payload_segment, signature_segment = token.rsplit(".", 1)
+        replacement = "A" if signature_segment[0] != "A" else "B"
+        corrupted = f"{payload_segment}.{replacement}{signature_segment[1:]}"
         with self.assertRaisesRegex(PermitError, "signature"):
             self.signer.verify(
                 corrupted,

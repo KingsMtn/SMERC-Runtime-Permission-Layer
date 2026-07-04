@@ -21,6 +21,12 @@ from reference_engine.audit_store import (
     ReviewConflictError,
 )
 from reference_engine.action_language import ACTION_VERSION, DECISION_VERSION, evaluate_language_action
+from reference_engine.api_identity import (
+    PRINCIPAL_VERSION,
+    APIPrincipal,
+    PrincipalRegistry,
+    parse_scoped_principals,
+)
 from reference_engine.authorization_permit import (
     PERMIT_VERSION,
     PermitError,
@@ -50,6 +56,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
         *,
         audit_store: AuditStore,
         api_keys: Mapping[str, str],
+        api_principals: Iterable[APIPrincipal] = (),
         allow_unauthenticated: bool = False,
         max_body_bytes: int = DEFAULT_MAX_BODY_BYTES,
         max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
@@ -57,23 +64,28 @@ class SMERCAPIServer(ThreadingHTTPServer):
         policy_registry: Optional[PolicyRegistry] = None,
         permit_signers: Optional[Mapping[str, PermitSigner]] = None,
     ) -> None:
-        super().__init__(server_address, SMERCRequestHandler)
-        self.policy_registry = policy_registry or PolicyRegistry()
-        self.audit_store = audit_store
-        self.api_keys = dict(api_keys)
-        self.allow_unauthenticated = allow_unauthenticated
-        self.max_body_bytes = max_body_bytes
-        self.max_batch_size = max_batch_size
-        self.cors_origins = frozenset(cors_origins)
-        self.permit_signers = dict(permit_signers or {})
-        unknown_permit_tenants = sorted(set(self.permit_signers) - set(self.api_keys))
+        resolved_policy_registry = policy_registry or PolicyRegistry()
+        principal_registry = PrincipalRegistry.from_configuration(api_keys, api_principals)
+        resolved_permit_signers = dict(permit_signers or {})
+        unknown_permit_tenants = sorted(set(resolved_permit_signers) - set(principal_registry.tenant_ids))
         if unknown_permit_tenants and not allow_unauthenticated:
             raise ValueError(
                 "Permit signing tenants must also have API credentials: "
                 + ", ".join(unknown_permit_tenants)
             )
-        for tenant_id in self.api_keys:
-            self.policy_registry.for_tenant(tenant_id)
+        for tenant_id in principal_registry.tenant_ids:
+            resolved_policy_registry.for_tenant(tenant_id)
+
+        super().__init__(server_address, SMERCRequestHandler)
+        self.policy_registry = resolved_policy_registry
+        self.audit_store = audit_store
+        self.api_keys = dict(api_keys)
+        self.principal_registry = principal_registry
+        self.allow_unauthenticated = allow_unauthenticated
+        self.max_body_bytes = max_body_bytes
+        self.max_batch_size = max_batch_size
+        self.cors_origins = frozenset(cors_origins)
+        self.permit_signers = resolved_permit_signers
 
     def engine_for(self, tenant_id: str) -> RecoverabilityEngine:
         return RecoverabilityEngine(self.policy_registry.for_tenant(tenant_id))
@@ -95,7 +107,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
 
 class SMERCRequestHandler(BaseHTTPRequestHandler):
     server: SMERCAPIServer
-    server_version = "SMERCRecoverabilityAPI/0.8"
+    server_version = "SMERCRecoverabilityAPI/0.9"
 
     def do_OPTIONS(self) -> None:
         origin = self.headers.get("origin")
@@ -121,9 +133,10 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     {
                         "status": "ok",
                         "service": "smerc-recoverability-api",
-                        "version": "0.8",
+                        "version": "0.9",
                         "tenant_policy_count": self.server.policy_registry.count,
                         "permit_signer_count": len(self.server.permit_signers),
+                        "api_principal_count": self.server.principal_registry.count,
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -141,7 +154,16 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 self._write_json(schema(), request_id=request_id)
                 return
 
-            tenant_id = self._authenticate()
+            if path == "/v1/pilot/metrics":
+                required_scope = "metrics.read"
+            elif path == "/v1/security-events":
+                required_scope = "audit.read"
+            elif self._review_replay_id(path) is not None:
+                required_scope = "reviews.read"
+            else:
+                required_scope = "decisions.read"
+            principal = self._authenticate(required_scope)
+            tenant_id = principal.tenant_id
             if path == "/v1/pilot/metrics":
                 metrics = self.server.audit_store.pilot_metrics(tenant_id)
                 metrics["request_id"] = request_id
@@ -164,6 +186,19 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                         "status": review_status,
                         "posture": posture,
                         "decisions": queue,
+                        "request_id": request_id,
+                    },
+                    request_id=request_id,
+                )
+                return
+            if path == "/v1/security-events":
+                limit = self._parse_limit(query)
+                events = self.server.audit_store.list_security_events(tenant_id, limit=limit)
+                self._write_json(
+                    {
+                        "tenant_id": tenant_id,
+                        "count": len(events),
+                        "events": events,
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -221,14 +256,15 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         request_id = self._request_id()
         try:
             path, _ = self._path_and_query()
-            tenant_id = self._authenticate()
+            principal = self._authenticate(self._post_scope(path))
+            tenant_id = principal.tenant_id
             payload = self._read_json()
 
             if path == "/v1/permits/issue":
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Permit issuance expects one JSON object.")
                 self._write_json(
-                    self._issue_permit(tenant_id, payload),
+                    self._issue_permit(principal, payload),
                     HTTPStatus.CREATED,
                     request_id=request_id,
                 )
@@ -236,14 +272,14 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             if path == "/v1/permits/consume":
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Permit consumption expects one JSON object.")
-                self._write_json(self._consume_permit(tenant_id, payload), request_id=request_id)
+                self._write_json(self._consume_permit(principal, payload), request_id=request_id)
                 return
 
             review_replay_id = self._review_replay_id(path)
             if review_replay_id is not None:
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Review expects one JSON object.")
-                result, replayed = self._record_review(tenant_id, review_replay_id, payload)
+                result, replayed = self._record_review(principal, review_replay_id, payload)
                 headers = {"x-smerc-idempotent-replay": "true"} if replayed else None
                 self._write_json(
                     result,
@@ -259,7 +295,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             if path == "/v1/language/evaluate":
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Language evaluation expects one JSON object.")
-                result, replayed = self._evaluate_language_one(tenant_id, payload)
+                result, replayed = self._evaluate_language_one(principal, payload)
                 headers = {"x-smerc-idempotent-replay": "true"} if replayed else None
                 self._write_json(result, request_id=request_id, extra_headers=headers)
                 return
@@ -267,7 +303,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             if path in {"/evaluate", "/v1/evaluate"}:
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "/evaluate expects one JSON object.")
-                result, replayed = self._evaluate_one(tenant_id, payload)
+                result, replayed = self._evaluate_one(principal, payload)
                 headers = {"x-smerc-idempotent-replay": "true"} if replayed else None
                 self._write_json(result, request_id=request_id, extra_headers=headers)
                 return
@@ -282,7 +318,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     "batch_too_large",
                     f"Batch exceeds the {self.server.max_batch_size}-action limit.",
                 )
-            results = [self._evaluate_and_record(tenant_id, item) for item in payload]
+            results = [self._evaluate_and_record(principal, item) for item in payload]
             response: Any = results
             if path == "/v1/batch":
                 response = {
@@ -297,7 +333,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         except (TypeError, ValueError, json.JSONDecodeError) as exc:
             self._write_error(APIError(HTTPStatus.BAD_REQUEST, "bad_request", str(exc)), request_id)
 
-    def _issue_permit(self, tenant_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+    def _issue_permit(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        tenant_id = principal.tenant_id
         allowed = {"replay_id", "action", "audience", "ttl_seconds"}
         unknown = sorted(set(payload) - allowed)
         missing = sorted({"replay_id", "action", "audience"} - set(payload))
@@ -341,9 +378,23 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             )
         except PermitIssuanceConflictError as exc:
             raise APIError(HTTPStatus.CONFLICT, "permit_already_issued", str(exc)) from exc
+        self.server.audit_store.record_security_event(
+            tenant_id,
+            principal.principal_id,
+            "permit.issued",
+            issued["permit"]["permit_id"],
+            {
+                "replay_id": issued["permit"]["replay_id"],
+                "audience": issued["permit"]["audience"],
+                "posture": issued["permit"]["posture"],
+                "policy_hash": issued["permit"]["policy"]["policy_hash"],
+                "expires_at": issued["permit"]["expires_at"],
+            },
+        )
         return issued
 
-    def _consume_permit(self, tenant_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+    def _consume_permit(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        tenant_id = principal.tenant_id
         fields = {"permit_token", "action", "audience", "enforced_controls"}
         if set(payload) != fields:
             raise APIError(
@@ -399,14 +450,26 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             raise APIError(HTTPStatus.CONFLICT, "permit_not_issued", str(exc)) from exc
         except PermitReplayError as exc:
             raise APIError(HTTPStatus.CONFLICT, "permit_already_consumed", str(exc)) from exc
+        self.server.audit_store.record_security_event(
+            tenant_id,
+            principal.principal_id,
+            "permit.consumed",
+            permit["permit_id"],
+            {
+                "replay_id": permit["replay_id"],
+                "audience": permit["audience"],
+                "enforced_controls": sorted(payload["enforced_controls"]),
+            },
+        )
         return {"valid": True, "permit": permit, "consumption": consumption}
 
     def _record_review(
         self,
-        tenant_id: str,
+        principal: APIPrincipal,
         replay_id: str,
         payload: Dict[str, Any],
     ) -> tuple[Dict[str, Any], bool]:
+        tenant_id = principal.tenant_id
         decision = self.server.audit_store.get(tenant_id, replay_id)
         if decision is None:
             raise APIError(HTTPStatus.NOT_FOUND, "decision_not_found", "Decision was not found.")
@@ -422,6 +485,13 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                         "idempotency_conflict",
                         "Idempotency-Key was already used with a different review body.",
                     )
+                stored_principal = stored["review"].get("authenticated_principal", {}).get("principal_id")
+                if stored_principal != principal.principal_id:
+                    raise APIError(
+                        HTTPStatus.CONFLICT,
+                        "idempotency_principal_conflict",
+                        "Idempotency-Key belongs to a different authenticated principal.",
+                    )
                 return stored["review"], True
 
         review = self._validate_review(payload, decision["posture"])
@@ -431,6 +501,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 "tenant_id": tenant_id,
                 "replay_id": replay_id,
                 "decision_posture": decision["posture"],
+                "authenticated_principal": principal.public_identity(),
             }
         )
         try:
@@ -445,6 +516,17 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             raise APIError(HTTPStatus.CONFLICT, "idempotency_conflict", str(exc)) from exc
         except ReviewConflictError as exc:
             raise APIError(HTTPStatus.CONFLICT, "review_conflict", str(exc)) from exc
+        self.server.audit_store.record_security_event(
+            tenant_id,
+            principal.principal_id,
+            "review.recorded",
+            stored_review["review_id"],
+            {
+                "replay_id": replay_id,
+                "verdict": stored_review["verdict"],
+                "reviewer_alias": stored_review["reviewer_id"],
+            },
+        )
         return stored_review, False
 
     @staticmethod
@@ -571,7 +653,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             )
         return value
 
-    def _evaluate_one(self, tenant_id: str, payload: Dict[str, Any]) -> tuple[Dict[str, Any], bool]:
+    def _evaluate_one(self, principal: APIPrincipal, payload: Dict[str, Any]) -> tuple[Dict[str, Any], bool]:
+        tenant_id = principal.tenant_id
         request_hash = payload_hash(payload)
         idempotency_key = self._idempotency_key()
         if idempotency_key is not None:
@@ -583,10 +666,16 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                         "idempotency_conflict",
                         "Idempotency-Key was already used with a different request body.",
                     )
+                self._require_same_principal(stored["decision"], principal)
                 return stored["decision"], True
-        return self._evaluate_and_record(tenant_id, payload, request_hash, idempotency_key), False
+        return self._evaluate_and_record(principal, payload, request_hash, idempotency_key), False
 
-    def _evaluate_language_one(self, tenant_id: str, payload: Dict[str, Any]) -> tuple[Dict[str, Any], bool]:
+    def _evaluate_language_one(
+        self,
+        principal: APIPrincipal,
+        payload: Dict[str, Any],
+    ) -> tuple[Dict[str, Any], bool]:
+        tenant_id = principal.tenant_id
         request_hash = payload_hash({"endpoint": "/v1/language/evaluate", "payload": payload})
         idempotency_key = self._idempotency_key()
         if idempotency_key is not None:
@@ -598,9 +687,11 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                         "idempotency_conflict",
                         "Idempotency-Key was already used with a different request body or endpoint.",
                     )
+                self._require_same_principal(stored["decision"], principal)
                 return stored["decision"], True
         decision = evaluate_language_action(payload, self.server.engine_for(tenant_id))
         decision["tenant_id"] = tenant_id
+        self._bind_principal(decision, principal)
         try:
             stored = self.server.audit_store.record(
                 tenant_id, decision, request_hash, idempotency_key=idempotency_key
@@ -611,15 +702,17 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
 
     def _evaluate_and_record(
         self,
-        tenant_id: str,
+        principal: APIPrincipal,
         payload: Dict[str, Any],
         request_hash: Optional[str] = None,
         idempotency_key: Optional[str] = None,
     ) -> Dict[str, Any]:
+        tenant_id = principal.tenant_id
         if not isinstance(payload, dict):
             raise TypeError("Each action must be a JSON object.")
         decision = self.server.engine_for(tenant_id).evaluate(payload)
         decision["tenant_id"] = tenant_id
+        self._bind_principal(decision, principal)
         try:
             return self.server.audit_store.record(
                 tenant_id,
@@ -630,22 +723,63 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         except IdempotencyConflictError as exc:
             raise APIError(HTTPStatus.CONFLICT, "idempotency_conflict", str(exc)) from exc
 
-    def _authenticate(self) -> str:
+    @staticmethod
+    def _bind_principal(decision: Dict[str, Any], principal: APIPrincipal) -> None:
+        identity = principal.public_identity()
+        decision["authenticated_principal"] = identity
+        decision["replay"]["authenticated_principal"] = identity
+
+    @staticmethod
+    def _require_same_principal(decision: Dict[str, Any], principal: APIPrincipal) -> None:
+        stored_principal = decision.get("authenticated_principal", {}).get("principal_id")
+        if stored_principal != principal.principal_id:
+            raise APIError(
+                HTTPStatus.CONFLICT,
+                "idempotency_principal_conflict",
+                "Idempotency-Key belongs to a different authenticated principal.",
+            )
+
+    def _authenticate(self, required_scope: Optional[str] = None) -> APIPrincipal:
         if self.server.allow_unauthenticated:
             tenant = self.headers.get("x-smerc-tenant", "local-development").strip()
-            return tenant or "local-development"
+            tenant = tenant or "local-development"
+            return APIPrincipal(
+                tenant_id=tenant,
+                principal_id="local-development",
+                secret="local-development-only-secret",
+                scopes=frozenset({"*"}),
+                legacy=True,
+            )
 
         authorization = self.headers.get("authorization", "")
         scheme, separator, candidate = authorization.partition(" ")
         if separator != " " or scheme.lower() != "bearer" or not candidate:
             raise APIError(HTTPStatus.UNAUTHORIZED, "authentication_required", "Bearer authentication is required.")
-        for tenant_id, expected_key in self.server.api_keys.items():
-            if hmac.compare_digest(candidate, expected_key):
-                requested_tenant = self.headers.get("x-smerc-tenant")
-                if requested_tenant and not hmac.compare_digest(requested_tenant.strip(), tenant_id):
-                    raise APIError(HTTPStatus.FORBIDDEN, "tenant_mismatch", "API key is not valid for that tenant.")
-                return tenant_id
-        raise APIError(HTTPStatus.UNAUTHORIZED, "invalid_api_key", "Bearer credential is invalid.")
+        principal = self.server.principal_registry.authenticate(candidate)
+        if principal is None:
+            raise APIError(HTTPStatus.UNAUTHORIZED, "invalid_api_key", "Bearer credential is invalid.")
+        requested_tenant = self.headers.get("x-smerc-tenant")
+        if requested_tenant and not hmac.compare_digest(requested_tenant.strip(), principal.tenant_id):
+            raise APIError(HTTPStatus.FORBIDDEN, "tenant_mismatch", "API key is not valid for that tenant.")
+        if required_scope is not None and not principal.permits(required_scope):
+            raise APIError(
+                HTTPStatus.FORBIDDEN,
+                "insufficient_scope",
+                f"Authenticated principal requires scope {required_scope} for this operation.",
+            )
+        return principal
+
+    @staticmethod
+    def _post_scope(path: str) -> Optional[str]:
+        if path == "/v1/permits/issue":
+            return "permits.issue"
+        if path == "/v1/permits/consume":
+            return "permits.consume"
+        if re.fullmatch(r"/v1/decisions/[^/]+/reviews", path):
+            return "reviews.write"
+        if path in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch", "/v1/language/evaluate"}:
+            return "actions.evaluate"
+        return None
 
     def _read_json(self) -> Any:
         content_type = self.headers.get("content-type", "").split(";", 1)[0].strip().lower()
@@ -779,6 +913,22 @@ def schema() -> Dict[str, Any]:
             "permit": PERMIT_VERSION,
         },
         "policy_version": POLICY_VERSION,
+        "principal_version": PRINCIPAL_VERSION,
+        "security_event_version": "smerc.security-event.v1",
+        "authorization": {
+            "legacy_keys": "all tenant scopes",
+            "scoped_principals_env": "SMERC_API_PRINCIPALS",
+            "scopes": [
+                "actions.evaluate",
+                "decisions.read",
+                "permits.issue",
+                "permits.consume",
+                "reviews.read",
+                "reviews.write",
+                "metrics.read",
+                "audit.read",
+            ],
+        },
         "required_fields": [
             "action_id",
             "description",
@@ -814,6 +964,7 @@ def schema() -> Dict[str, Any]:
             "GET /v1/decisions/{replay_id}/reviews": "list tenant-scoped pilot reviews",
             "GET /v1/pilot/metrics": "calculate review agreement and outcome metrics",
             "GET /v1/review-queue": "list tenant-scoped pending or reviewed decisions",
+            "GET /v1/security-events": "list tenant-scoped authenticated security events",
         },
     }
 
@@ -824,6 +975,7 @@ def create_server(
     *,
     audit_db: str,
     api_keys: Mapping[str, str],
+    api_principals: Iterable[APIPrincipal] = (),
     allow_unauthenticated: bool = False,
     max_body_bytes: int = DEFAULT_MAX_BODY_BYTES,
     max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
@@ -831,19 +983,26 @@ def create_server(
     policy_registry: Optional[PolicyRegistry] = None,
     permit_signers: Optional[Mapping[str, PermitSigner]] = None,
 ) -> SMERCAPIServer:
-    if not api_keys and not allow_unauthenticated:
-        raise ValueError("At least one API key is required unless --allow-unauthenticated is set.")
-    return SMERCAPIServer(
-        (host, port),
-        audit_store=AuditStore(audit_db),
-        api_keys=api_keys,
-        allow_unauthenticated=allow_unauthenticated,
-        max_body_bytes=max_body_bytes,
-        max_batch_size=max_batch_size,
-        cors_origins=cors_origins,
-        policy_registry=policy_registry,
-        permit_signers=permit_signers,
-    )
+    api_principals = tuple(api_principals)
+    if not api_keys and not api_principals and not allow_unauthenticated:
+        raise ValueError("At least one API credential is required unless --allow-unauthenticated is set.")
+    audit_store = AuditStore(audit_db)
+    try:
+        return SMERCAPIServer(
+            (host, port),
+            audit_store=audit_store,
+            api_keys=api_keys,
+            api_principals=api_principals,
+            allow_unauthenticated=allow_unauthenticated,
+            max_body_bytes=max_body_bytes,
+            max_batch_size=max_batch_size,
+            cors_origins=cors_origins,
+            policy_registry=policy_registry,
+            permit_signers=permit_signers,
+        )
+    except Exception:
+        audit_store.close()
+        raise
 
 
 def run(
@@ -852,6 +1011,7 @@ def run(
     *,
     audit_db: str,
     api_keys: Mapping[str, str],
+    api_principals: Iterable[APIPrincipal] = (),
     allow_unauthenticated: bool = False,
     max_body_bytes: int = DEFAULT_MAX_BODY_BYTES,
     max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
@@ -864,6 +1024,7 @@ def run(
         port,
         audit_db=audit_db,
         api_keys=api_keys,
+        api_principals=api_principals,
         allow_unauthenticated=allow_unauthenticated,
         max_body_bytes=max_body_bytes,
         max_batch_size=max_batch_size,
@@ -891,6 +1052,7 @@ def main() -> None:
     )
     args = parser.parse_args()
     api_keys = parse_api_keys(os.environ.get("SMERC_API_KEYS", ""))
+    api_principals = parse_scoped_principals(os.environ.get("SMERC_API_PRINCIPALS", ""))
     cors_origins = [item.strip() for item in os.environ.get("SMERC_CORS_ORIGINS", "").split(",") if item.strip()]
     policy_registry = PolicyRegistry.from_directory(args.policy_dir) if args.policy_dir else PolicyRegistry()
     permit_signers = parse_permit_signers(os.environ.get("SMERC_PERMIT_KEYS", ""))
@@ -899,6 +1061,7 @@ def main() -> None:
         args.port,
         audit_db=args.audit_db,
         api_keys=api_keys,
+        api_principals=api_principals,
         allow_unauthenticated=args.allow_unauthenticated,
         max_body_bytes=int(os.environ.get("SMERC_MAX_BODY_BYTES", str(DEFAULT_MAX_BODY_BYTES))),
         max_batch_size=int(os.environ.get("SMERC_MAX_BATCH_SIZE", str(DEFAULT_MAX_BATCH_SIZE))),

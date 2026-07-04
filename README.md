@@ -20,6 +20,7 @@ The current build includes:
 - evidence and unknowns registry with deployment-limiting falsification rules
 - tenant-scoped policy calibration and evidence provenance admission
 - signed, action-bound, single-use authorization permits
+- scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - recoverability-aware scoring engine
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
@@ -49,8 +50,9 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 8. Read `docs/Pilot_Review_Metrics.md`.
 9. Inspect `pilot_console/README.md`.
 10. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
-11. Run the Python and console tests.
-12. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+11. Read `docs/Scoped_Workload_Identity.md`.
+12. Run the Python and console tests.
+13. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -76,6 +78,7 @@ It outputs:
 - policy identity, revision, mode, evidence ceiling, and hash
 - replay ID and replay record
 - an optional short-lived permit for eligible enforcement decisions
+- authenticated principal identity bound into decisions, replays, reviews, and security events
 
 ## Action Language
 
@@ -104,6 +107,12 @@ Permits are deliberately narrow:
 
 The token is not exposed by the GitHub Action because it is a bearer capability. Executors obtain and consume it through the authenticated API. See `docs/Action_Bound_Permit_Operations.md`.
 
+## Scoped Workload Identity
+
+New pilots can assign separate tenant credentials to the action proposer, permit issuer, permit consumer, reviewer, decision reader, metrics reader, and auditor. Unauthorized endpoint use fails with `insufficient_scope`; authenticated principal identity is preserved in decisions and security events.
+
+Legacy `SMERC_API_KEYS` remain compatible and retain all tenant scopes. New deployments should use `SMERC_API_PRINCIPALS` for separation of duties. This remains a static bearer-secret pilot model, not enterprise OIDC, mTLS, SPIFFE, or cloud workload identity. See `docs/Scoped_Workload_Identity.md`.
+
 ## Quick Start
 
 Requires Python 3.10 or later. No third-party Python packages are required.
@@ -130,12 +139,12 @@ curl -X POST http://127.0.0.1:8788/evaluate -H "Content-Type: application/json" 
 Run authenticated pilot mode with durable local audit records:
 
 ```bash
-export SMERC_API_KEYS="pilot-team=replace-with-a-long-random-secret"
+export SMERC_API_PRINCIPALS="pilot-team:pilot-console:actions.evaluate+decisions.read+reviews.read+reviews.write+metrics.read=development-console-secret-2026-rotate"
 export SMERC_AUDIT_DB="./smerc_audit.sqlite3"
 python api_server.py --host 127.0.0.1 --port 8788
 
 curl -X POST http://127.0.0.1:8788/v1/evaluate \
-  -H "Authorization: Bearer replace-with-a-long-random-secret" \
+  -H "Authorization: Bearer development-console-secret-2026-rotate" \
   -H "Idempotency-Key: workflow-run-1001" \
   -H "Content-Type: application/json" \
   --data @examples/recoverability_single_action.json
@@ -145,25 +154,25 @@ Evaluate the versioned action contract through the authenticated API:
 
 ```bash
 curl -X POST http://127.0.0.1:8788/v1/language/evaluate \
-  -H "Authorization: Bearer replace-with-a-long-random-secret" \
+  -H "Authorization: Bearer development-console-secret-2026-rotate" \
   -H "Idempotency-Key: language-run-1001" \
   -H "Content-Type: application/json" \
   --data @examples/action_language/production_database_change.json
 ```
 
-Pilot API controls include bearer-key tenant mapping, tenant-scoped audit retrieval, idempotent evaluation replay, optional action-bound permit issuance and consumption, immutable reviewer annotations, body and batch limits, allowlisted CORS, liveness/readiness endpoints, and structured request IDs. See `docs/API_Deployment_Guide.md` and `docs/Pilot_Review_Metrics.md`.
+Pilot API controls include scoped tenant principals, tenant-scoped audit retrieval, principal-bound idempotent replay, optional action-bound permit issuance and consumption, immutable reviewer annotations, body and batch limits, allowlisted CORS, liveness/readiness endpoints, and structured request IDs. See `docs/API_Deployment_Guide.md` and `docs/Pilot_Review_Metrics.md`.
 
 After a decision is reviewed, record the pseudonymous reviewer outcome and retrieve pilot metrics:
 
 ```bash
 curl -X POST "http://127.0.0.1:8788/v1/decisions/$REPLAY_ID/reviews" \
-  -H "Authorization: Bearer replace-with-a-long-random-secret" \
+  -H "Authorization: Bearer development-console-secret-2026-rotate" \
   -H "Idempotency-Key: review-$REPLAY_ID-security-1" \
   -H "Content-Type: application/json" \
   --data @examples/pilot_review.json
 
 curl "http://127.0.0.1:8788/v1/pilot/metrics" \
-  -H "Authorization: Bearer replace-with-a-long-random-secret"
+  -H "Authorization: Bearer development-console-secret-2026-rotate"
 ```
 
 Rates are returned with denominators and remain `null` when not measurable. They describe reviewed pilot records only; they are not production accuracy claims.
@@ -294,6 +303,7 @@ Policy calibration, deterministic hashes, accountable overrides, and tamper-evid
 - Recoverability-focused scoring engine
 - Standard-library REST API service
 - Signed action-bound permit contract with single-use pilot consumption
+- Scoped workload principals and attributed security-event audit records
 - Browser-based pilot review queue and metrics console
 - Installable local GitHub Action
 - Deterministic example action requests

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.0 - 2026-07-04
+
+- Added tenant-scoped workload principals with explicit evaluation, read, permit, review, metrics, and audit scopes.
+- Bound authenticated principal identity into decisions, replay records, and immutable reviews.
+- Added attributed security events for permit issuance, permit consumption, and review recording.
+- Added fail-closed scope enforcement, cross-principal idempotency protection, legacy-key compatibility, schemas, deployment guidance, and tests.
+
 ## 0.8.0 - 2026-07-03
 
 - Added signed `smerc.permit.v1` capabilities bound to tenant, audience, action hash, replay, active policy, controls, and expiry.
