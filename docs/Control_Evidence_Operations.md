@@ -25,8 +25,9 @@ These are development-only values. Real keys belong in an approved secret manage
 3. Read the native result rather than trusting caller-supplied text.
 4. Create one result with mechanism, evidence reference, and observation time for every applied control.
 5. Sign a receipt with the adapter key assigned to the permit tenant and audience.
-6. Send the receipt token with the action and permit to `POST /v1/permits/consume`.
-7. Execute the side effect only after SMERC returns `valid: true`.
+6. Reserve the authenticated permit through `POST /v1/permits/prepare` before any native control runs.
+7. Send the returned preparation ID and receipt token with the action and permit to `POST /v1/permits/consume`.
+8. Execute the side effect only after SMERC returns `valid: true`.
 
 Configured adapters send exactly:
 

@@ -1,0 +1,39 @@
+{
+  "language_version": "smerc.action.v1",
+  "action": {
+    "id": "production-canary-2042",
+    "description": "Promote an approved image to a bounded five-percent production canary",
+    "actor": "coding-agent-release-7",
+    "tool": "deployment-api",
+    "type": "promote_canary",
+    "target": {
+      "resource": "payments-service/canary",
+      "environment": "production"
+    },
+    "authority": {
+      "basis": "approved CHG-2042 deployment ticket and protected-environment review",
+      "confidence": 0.96
+    }
+  },
+  "signals": {
+    "base_action_risk": 0.32,
+    "evidence_validity": 0.96,
+    "anomaly_pressure": 0.04,
+    "impact_scope": 0.22
+  },
+  "recoverability": {
+    "reversibility": 0.96,
+    "containment_strength": 0.94,
+    "rollback_latency": 0.04,
+    "cancel_reliability": 0.98,
+    "rollback_method": "Restore the prior signed image and route canary traffic to zero"
+  },
+  "effects": {
+    "external_side_effect": true,
+    "sensitive_data": false
+  },
+  "context": {
+    "change_ticket": "CHG-2042",
+    "workflow": "production-five-percent-canary"
+  }
+}

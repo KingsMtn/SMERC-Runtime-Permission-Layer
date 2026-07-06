@@ -73,6 +73,7 @@ curl http://127.0.0.1:8788/v1/decisions/REPLAY_ID \
 | `POST /v1/auth/github` | GitHub OIDC Bearer | Verify a trusted GitHub job and issue one workload-bound session |
 | `POST /v1/language/evaluate` | Bearer | Validate, compile, evaluate, and store one `smerc.action.v1` envelope |
 | `POST /v1/permits/issue` | Bearer | Issue one short-lived action-bound permit for an eligible enforcement decision |
+| `POST /v1/permits/prepare` | Bearer | Authenticate and reserve a permit before native controls run |
 | `POST /v1/permits/consume` | Bearer | Verify configured adapter evidence and atomically consume a permit |
 | `POST /v1/batch` | Bearer | Evaluate and store a bounded batch |
 | `GET /v1/decisions` | Bearer | List decision summaries for the authenticated tenant |

@@ -161,6 +161,32 @@ class PermitSigner:
         enforced_controls: Iterable[str],
         now: Optional[int] = None,
     ) -> Dict[str, Any]:
+        payload = self.verify_claims(
+            token,
+            action,
+            tenant_id=tenant_id,
+            audience=audience,
+            now=now,
+        )
+        applied = set(_controls(enforced_controls, "enforced_controls"))
+        missing = sorted(set(payload["required_controls"]) - applied)
+        if missing:
+            raise PermitError(
+                "required_controls_missing",
+                f"Consuming adapter did not declare required control(s): {', '.join(missing)}.",
+            )
+        return payload
+
+    def verify_claims(
+        self,
+        token: str,
+        action: Mapping[str, Any],
+        *,
+        tenant_id: str,
+        audience: str,
+        now: Optional[int] = None,
+    ) -> Dict[str, Any]:
+        """Authenticate permit claims without asserting that controls have run."""
         tenant_id = _identifier(tenant_id, "tenant_id")
         audience = _identifier(audience, "audience")
         if not isinstance(token, str) or len(token) > 16_384:
@@ -197,13 +223,6 @@ class PermitSigner:
             raise PermitError("audience_mismatch", "Permit audience does not match the consuming executor.")
         if payload["action_hash"] != action_hash(dict(action)):
             raise PermitError("action_mismatch", "Permit is not valid for this action envelope.")
-        applied = set(_controls(enforced_controls, "enforced_controls"))
-        missing = sorted(set(payload["required_controls"]) - applied)
-        if missing:
-            raise PermitError(
-                "required_controls_missing",
-                f"Consuming adapter did not declare required control(s): {', '.join(missing)}.",
-            )
         return payload
 
     @staticmethod

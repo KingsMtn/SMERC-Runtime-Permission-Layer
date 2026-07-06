@@ -19,6 +19,7 @@ from reference_engine.audit_store import (
     IdempotencyConflictError,
     PermitIssuanceConflictError,
     PermitNotIssuedError,
+    PermitPreparationConflictError,
     PermitReplayError,
     ReviewConflictError,
 )
@@ -375,6 +376,11 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     request_id=request_id,
                 )
                 return
+            if path == "/v1/permits/prepare":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Permit preparation expects one JSON object.")
+                self._write_json(self._prepare_permit(principal, payload), request_id=request_id)
+                return
             if path == "/v1/permits/consume":
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Permit consumption expects one JSON object.")
@@ -622,9 +628,82 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         )
         return issued
 
+    def _prepare_permit(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        expected = {"permit_token", "action", "audience", "execution_id"}
+        if set(payload) != expected or not isinstance(payload.get("action"), dict) or not isinstance(
+            payload.get("audience"), str
+        ):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_permit_request",
+                "Permit preparation requires permit_token, action, audience, and execution_id.",
+            )
+        execution_id = payload["execution_id"]
+        if not isinstance(execution_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,191}", execution_id):
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_permit_request", "execution_id is invalid.")
+        tenant_id = principal.tenant_id
+        try:
+            permit = self.server.signer_for(tenant_id).verify_claims(
+                payload["permit_token"],
+                payload["action"],
+                tenant_id=tenant_id,
+                audience=payload["audience"],
+            )
+        except PermitError as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, exc.code, exc.message) from exc
+        decision = self.server.audit_store.get(tenant_id, permit["replay_id"])
+        if decision is None:
+            raise APIError(HTTPStatus.NOT_FOUND, "decision_not_found", "Permit decision was not found.")
+        if (
+            decision.get("action_hash") != permit["action_hash"]
+            or decision.get("posture") != permit["posture"]
+            or decision.get("policy", {}).get("policy_hash") != permit["policy"]["policy_hash"]
+        ):
+            raise APIError(
+                HTTPStatus.CONFLICT,
+                "permit_decision_mismatch",
+                "Permit no longer agrees with its stored decision.",
+            )
+        current_policy = self.server.policy_registry.for_tenant(tenant_id)
+        if current_policy.policy_hash != permit["policy"]["policy_hash"]:
+            raise APIError(
+                HTTPStatus.CONFLICT,
+                "policy_superseded",
+                "Permit policy is no longer the active tenant policy.",
+            )
+        try:
+            preparation = self.server.audit_store.prepare_permit(
+                tenant_id,
+                permit,
+                hashlib.sha256(payload["permit_token"].encode("ascii")).hexdigest(),
+                principal.principal_id,
+                execution_id,
+            )
+        except PermitNotIssuedError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "permit_not_issued", str(exc)) from exc
+        except PermitReplayError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "permit_already_consumed", str(exc)) from exc
+        except PermitPreparationConflictError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "permit_already_prepared", str(exc)) from exc
+        if not preparation["idempotent_replay"]:
+            self.server.audit_store.record_security_event(
+                tenant_id,
+                principal.principal_id,
+                "permit.prepared",
+                permit["permit_id"],
+                {
+                    "preparation_id": preparation["preparation_id"],
+                    "replay_id": permit["replay_id"],
+                    "audience": permit["audience"],
+                    "execution_id": execution_id,
+                    "expires_at": permit["expires_at"],
+                },
+            )
+        return {"valid": True, "permit": permit, "preparation": preparation}
+
     def _consume_permit(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
         tenant_id = principal.tenant_id
-        common_fields = {"permit_token", "action", "audience"}
+        common_fields = {"permit_token", "action", "audience", "preparation_id"}
         if not isinstance(payload.get("audience"), str):
             raise APIError(HTTPStatus.BAD_REQUEST, "invalid_permit_request", "audience must be a string.")
         evidence_signer = self.server.control_evidence_signer_for(tenant_id, payload["audience"])
@@ -639,6 +718,14 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 "Signed control_evidence_token is required for this tenant and executor audience."
                 if evidence_signer is not None
                 else "Permit consumption fields are incomplete or unknown.",
+            )
+        if not isinstance(payload["preparation_id"], str) or not re.fullmatch(
+            r"preparation_[0-9a-f]{32}", payload["preparation_id"]
+        ):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_permit_request",
+                "preparation_id is invalid.",
             )
         if not isinstance(payload["action"], dict):
             raise APIError(
@@ -733,11 +820,15 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 permit,
                 enforced_controls,
                 hashlib.sha256(payload["permit_token"].encode("ascii")).hexdigest(),
+                preparation_id=payload["preparation_id"],
+                principal_id=principal.principal_id,
             )
         except PermitNotIssuedError as exc:
             raise APIError(HTTPStatus.CONFLICT, "permit_not_issued", str(exc)) from exc
         except PermitReplayError as exc:
             raise APIError(HTTPStatus.CONFLICT, "permit_already_consumed", str(exc)) from exc
+        except PermitPreparationConflictError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "permit_preparation_mismatch", str(exc)) from exc
         self.server.audit_store.record_security_event(
             tenant_id,
             principal.principal_id,
@@ -1095,7 +1186,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
     def _post_scope(path: str) -> Optional[str]:
         if path == "/v1/permits/issue":
             return "permits.issue"
-        if path == "/v1/permits/consume":
+        if path in {"/v1/permits/prepare", "/v1/permits/consume"}:
             return "permits.consume"
         if re.fullmatch(r"/v1/decisions/[^/]+/reviews", path):
             return "reviews.write"
@@ -1283,6 +1374,7 @@ def schema() -> Dict[str, Any]:
             "POST /v1/auth/github": "exchange one verified GitHub Actions OIDC token for a workload-bound session",
             "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",
             "POST /v1/permits/issue": "issue a short-lived action-bound permit for an enforceable decision",
+            "POST /v1/permits/prepare": "authenticate an issued, unconsumed permit before native controls run",
             "POST /v1/permits/consume": "verify control evidence and atomically consume an action-bound permit",
             "POST /v1/batch": "evaluate and persist a bounded action list",
             "GET /v1/decisions": "list tenant-scoped decision summaries",

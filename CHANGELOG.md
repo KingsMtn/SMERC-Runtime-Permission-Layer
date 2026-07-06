@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.13.0 - 2026-07-05
+
+- Added strict `smerc.execution-plan.v1` and `smerc.execution-report.v1` contracts.
+- Added a GitHub deployment adapter that authenticates and atomically reserves one permit before controls, signs control evidence, atomically consumes the reservation, and only then executes a shell-free command.
+- Added bounded timeout and cancellation handling, kill escalation, declared rollback, output hashing without raw-output retention, and fail-closed permit-file cleanup.
+- Added a separate-authority permit issuer client, composite Action, protected-environment workflow, examples, operations guidance, and adversarial tests.
+- Retained explicit limits: the adapter is not a sandbox, control-command success is not independent proof, rollback is not guaranteed restoration, and Windows descendant-process termination requires further hardening.
+
 ## 0.12.0 - 2026-07-04
 
 - Added GitHub Actions OIDC verification against GitHub's RS256 JWKS with fixed issuer and `smerc-runtime-api` audience.

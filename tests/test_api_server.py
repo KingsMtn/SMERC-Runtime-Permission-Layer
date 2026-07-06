@@ -94,6 +94,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("GET /v1/pilot/metrics", body["endpoints"])
         self.assertIn("GET /v1/review-queue", body["endpoints"])
         self.assertIn("POST /v1/permits/issue", body["endpoints"])
+        self.assertIn("POST /v1/permits/prepare", body["endpoints"])
         self.assertIn("POST /v1/permits/consume", body["endpoints"])
         self.assertIn("POST /v1/auth/token", body["endpoints"])
         self.assertIn("POST /v1/auth/github", body["endpoints"])

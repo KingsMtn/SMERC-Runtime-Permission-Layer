@@ -42,7 +42,7 @@ The main distinction is the use of intermediate runtime postures and an action-b
 
 These are more operationally useful than simple allow/block decisions.
 
-For evidence-authorized enforcement policies, eligible decisions can issue a signed permit bound to the exact action, executor audience, decision replay, policy hash, required controls, and short expiry. The pilot consumes each permit once. This makes the authorization inspectable at the execution boundary, while remaining explicit that production key management and distributed replay prevention are not yet implemented.
+For evidence-authorized enforcement policies, eligible decisions can issue a signed permit bound to the exact action, executor audience, decision replay, policy hash, required controls, and short expiry. The pilot authenticates and reserves each permit before native controls, then consumes it once after signed evidence verification. This makes the authorization inspectable at the execution boundary, while remaining explicit that production key management and distributed replay prevention are not yet implemented.
 
 Scoped workload principals keep proposing agents separate from permit issuers and side-effecting executors. Decisions, reviews, permit issuance, and permit consumption retain authenticated principal attribution. Static pilot secrets remain available, while an exact GitHub Actions OIDC policy can remove the stored SMERC secret from the action-evaluation workflow.
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hmac
 import json
 import sqlite3
 import threading
@@ -26,6 +27,10 @@ class PermitIssuanceConflictError(ValueError):
 
 
 class PermitNotIssuedError(ValueError):
+    pass
+
+
+class PermitPreparationConflictError(ValueError):
     pass
 
 
@@ -110,6 +115,19 @@ class AuditStore:
                 );
                 CREATE INDEX IF NOT EXISTS idx_permit_consumptions_tenant_created
                     ON permit_consumptions (tenant_id, consumed_at DESC);
+                CREATE TABLE IF NOT EXISTS permit_preparations (
+                    preparation_id TEXT PRIMARY KEY,
+                    permit_id TEXT NOT NULL UNIQUE,
+                    tenant_id TEXT NOT NULL,
+                    replay_id TEXT NOT NULL,
+                    action_hash TEXT NOT NULL,
+                    audience TEXT NOT NULL,
+                    principal_id TEXT NOT NULL,
+                    execution_id TEXT NOT NULL,
+                    prepared_at TEXT NOT NULL,
+                    FOREIGN KEY (permit_id) REFERENCES permit_issuances (permit_id) ON DELETE CASCADE,
+                    FOREIGN KEY (replay_id) REFERENCES decisions (replay_id) ON DELETE CASCADE
+                );
                 CREATE TABLE IF NOT EXISTS security_events (
                     event_id TEXT PRIMARY KEY,
                     tenant_id TEXT NOT NULL,
@@ -517,10 +535,35 @@ class AuditStore:
         permit: Dict[str, Any],
         enforced_controls: List[str],
         token_hash: str,
+        *,
+        preparation_id: Optional[str] = None,
+        principal_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         consumed_at = datetime.now(timezone.utc).isoformat()
         controls_json = json.dumps(sorted(enforced_controls), separators=(",", ":"))
         with self._lock:
+            if preparation_id is not None:
+                preparation = self._connection.execute(
+                    """
+                    SELECT permit_id, tenant_id, replay_id, action_hash, audience, principal_id
+                    FROM permit_preparations
+                    WHERE preparation_id = ?
+                    """,
+                    (preparation_id,),
+                ).fetchone()
+                if preparation is None or principal_id is None or any(
+                    (
+                        preparation["permit_id"] != permit["permit_id"],
+                        preparation["tenant_id"] != tenant_id,
+                        preparation["replay_id"] != permit["replay_id"],
+                        preparation["action_hash"] != permit["action_hash"],
+                        preparation["audience"] != permit["audience"],
+                        not hmac.compare_digest(preparation["principal_id"], principal_id),
+                    )
+                ):
+                    raise PermitPreparationConflictError(
+                        "Permit preparation does not match this executor and permit."
+                    )
             issuance = self._connection.execute(
                 """
                 SELECT tenant_id, replay_id, action_hash, audience, token_hash
@@ -581,6 +624,106 @@ class AuditStore:
             "audience": permit["audience"],
             "enforced_controls": sorted(enforced_controls),
             "consumed_at": consumed_at,
+        }
+
+    def validate_permit_issuance(
+        self,
+        tenant_id: str,
+        permit: Dict[str, Any],
+        token_hash: str,
+    ) -> Dict[str, Any]:
+        """Confirm a permit is registered and unconsumed without reserving it."""
+        with self._lock:
+            issuance = self._connection.execute(
+                """
+                SELECT tenant_id, replay_id, action_hash, audience, token_hash
+                FROM permit_issuances
+                WHERE permit_id = ?
+                """,
+                (permit["permit_id"],),
+            ).fetchone()
+            if issuance is None or any(
+                (
+                    issuance["tenant_id"] != tenant_id,
+                    issuance["replay_id"] != permit["replay_id"],
+                    issuance["action_hash"] != permit["action_hash"],
+                    issuance["audience"] != permit["audience"],
+                    not hmac.compare_digest(issuance["token_hash"], token_hash),
+                )
+            ):
+                raise PermitNotIssuedError("Permit does not match a registered issuance.")
+            consumed = self._connection.execute(
+                "SELECT consumed_at FROM permit_consumptions WHERE permit_id = ?",
+                (permit["permit_id"],),
+            ).fetchone()
+            if consumed is not None:
+                raise PermitReplayError(f"Permit was already consumed at {consumed['consumed_at']}.")
+        return {
+            "permit_id": permit["permit_id"],
+            "tenant_id": tenant_id,
+            "replay_id": permit["replay_id"],
+            "audience": permit["audience"],
+            "expires_at": permit["expires_at"],
+        }
+
+    def prepare_permit(
+        self,
+        tenant_id: str,
+        permit: Dict[str, Any],
+        token_hash: str,
+        principal_id: str,
+        execution_id: str,
+    ) -> Dict[str, Any]:
+        """Atomically reserve one issued permit for one executor operation."""
+        prepared_at = datetime.now(timezone.utc).isoformat()
+        preparation_id = f"preparation_{uuid4().hex}"
+        with self._lock:
+            self.validate_permit_issuance(tenant_id, permit, token_hash)
+            existing = self._connection.execute(
+                """
+                SELECT preparation_id, principal_id, execution_id, prepared_at
+                FROM permit_preparations
+                WHERE permit_id = ?
+                """,
+                (permit["permit_id"],),
+            ).fetchone()
+            if existing is not None:
+                if hmac.compare_digest(existing["principal_id"], principal_id) and hmac.compare_digest(
+                    existing["execution_id"], execution_id
+                ):
+                    return {
+                        "preparation_id": existing["preparation_id"],
+                        "permit_id": permit["permit_id"],
+                        "principal_id": principal_id,
+                        "execution_id": execution_id,
+                        "prepared_at": existing["prepared_at"],
+                        "idempotent_replay": True,
+                    }
+                raise PermitPreparationConflictError("Permit is already reserved by another execution.")
+            try:
+                self._connection.execute(
+                    """
+                    INSERT INTO permit_preparations (
+                        preparation_id, permit_id, tenant_id, replay_id, action_hash,
+                        audience, principal_id, execution_id, prepared_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        preparation_id, permit["permit_id"], tenant_id, permit["replay_id"],
+                        permit["action_hash"], permit["audience"], principal_id, execution_id, prepared_at,
+                    ),
+                )
+                self._connection.commit()
+            except sqlite3.IntegrityError as exc:
+                self._connection.rollback()
+                raise PermitPreparationConflictError("Permit is already reserved by another execution.") from exc
+        return {
+            "preparation_id": preparation_id,
+            "permit_id": permit["permit_id"],
+            "principal_id": principal_id,
+            "execution_id": execution_id,
+            "prepared_at": prepared_at,
+            "idempotent_replay": False,
         }
 
     def record_security_event(

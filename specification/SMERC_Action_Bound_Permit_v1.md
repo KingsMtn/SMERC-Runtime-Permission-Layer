@@ -64,7 +64,7 @@ Before execution, the consumer must verify:
 - registered issuance digest
 - absence of prior consumption
 
-Successful consumption is recorded atomically in SQLite for the single-instance pilot. A second consumption returns `permit_already_consumed`.
+Before native controls run, the executor authenticates and atomically reserves the issued permit using a bounded execution ID. The same executor and execution ID may retry preparation idempotently; a competing execution receives `permit_already_prepared`. Successful consumption must present the preparation ID and is recorded atomically in SQLite for the single-instance pilot. A second consumption returns `permit_already_consumed`.
 
 ## Security Boundaries
 

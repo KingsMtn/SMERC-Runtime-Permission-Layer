@@ -1,0 +1,56 @@
+name: SMERC protected deployment
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Obtain short-lived action-bound permit
+        run: |
+          python integrations/github_deployment/issue_permit.py \
+            --api-url "$SMERC_API_URL" \
+            --action-file examples/action_language/production_canary_release.json \
+            --audience github-production-executor \
+            --output-file "$RUNNER_TEMP/smerc-permit.token" \
+            --ttl-seconds 120
+        env:
+          SMERC_API_URL: ${{ secrets.SMERC_API_URL }}
+          SMERC_PROPOSER_TOKEN: ${{ secrets.SMERC_PROPOSER_TOKEN }}
+          SMERC_ISSUER_TOKEN: ${{ secrets.SMERC_ISSUER_TOKEN }}
+
+      - name: Execute authorized deployment
+        uses: ./integrations/github_deployment
+        env:
+          SMERC_EXECUTOR_TOKEN: ${{ secrets.SMERC_EXECUTOR_TOKEN }}
+          SMERC_CONTROL_EVIDENCE_KEY: ${{ secrets.SMERC_CONTROL_EVIDENCE_KEY }}
+          DEPLOYMENT_TARGET: production
+          CANARY_PERCENT: "5"
+          DEPLOYMENT_PREVIEW_APPROVED: "true"
+          DEPLOYMENT_RATE_LIMIT_RPS: "20"
+        with:
+          mode: enforce
+          api-url: ${{ secrets.SMERC_API_URL }}
+          action-file: examples/action_language/production_canary_release.json
+          plan-file: examples/github_deployment/execution_plan.json
+          permit-token-file: ${{ runner.temp }}/smerc-permit.token
+          report-file: smerc-execution-report.json
+
+      - name: Retain non-secret execution report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smerc-execution-report
+          path: smerc-execution-report.json
+          retention-days: 30

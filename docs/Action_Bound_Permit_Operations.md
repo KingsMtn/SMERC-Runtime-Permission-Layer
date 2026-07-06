@@ -20,12 +20,14 @@ These literal values are development-only examples. Do not reuse or commit real 
 2. Retain the returned replay ID.
 3. Request a permit from `POST /v1/permits/issue` with the same action, replay ID, executor audience, and a lifetime from 1 through 300 seconds.
 4. Send the token to the named executor over a protected channel.
-5. Immediately before the side effect, a configured adapter derives native control results and signs a short-lived control-evidence receipt.
-6. The executor sends the exact action, permit token, audience, and receipt token to `POST /v1/permits/consume`.
-7. SMERC verifies both bindings and atomically consumes the permit.
-8. Execute only after a `200` response with `valid: true`.
+5. The executor sends the exact action, permit token, audience, and execution ID to `POST /v1/permits/prepare`.
+6. SMERC authenticates the permit, verifies its registered issuance and current policy, and atomically reserves it for that executor principal and execution ID.
+7. The configured adapter derives native control results and signs a short-lived control-evidence receipt.
+8. The executor sends the preparation ID, exact action, permit, audience, and receipt to `POST /v1/permits/consume`.
+9. SMERC verifies all bindings and atomically consumes the permit.
+10. Execute only after a `200` response with `valid: true`.
 
-The issuance body has four fields: the stored `replay_id`, the complete original `action` envelope, the executor `audience`, and `ttl_seconds`. Configured adapters consume with the exact `permit_token`, complete original `action`, same `audience`, and `control_evidence_token`. Unconfigured audiences may send `enforced_controls`, and the result is explicitly labeled `legacy_caller_assertion`. Partial action envelopes are rejected.
+The issuance body has four fields: the stored `replay_id`, the complete original `action` envelope, the executor `audience`, and `ttl_seconds`. Preparation adds a bounded `execution_id`. Configured adapters consume with the returned `preparation_id`, exact `permit_token`, complete original `action`, same `audience`, and `control_evidence_token`. Unconfigured audiences may send `enforced_controls`, and the result is explicitly labeled `legacy_caller_assertion`. Partial action envelopes are rejected.
 
 Tokens are bearer capabilities. Do not print them in workflow logs, commit them, place them in artifacts, or expose them as GitHub Action outputs.
 
@@ -47,6 +49,8 @@ Use separate scoped principals for `actions.evaluate`, `permits.issue`, and `per
 | `permit_already_issued` | That decision already produced a permit for the audience. |
 | `permit_not_issued` | The token does not match the issuance registry. |
 | `permit_already_consumed` | Replay prevention rejected a second use. |
+| `permit_already_prepared` | Another execution already reserved this permit. |
+| `permit_preparation_mismatch` | Consumption does not match the reserved executor and permit. |
 
 ## Pilot Boundary
 

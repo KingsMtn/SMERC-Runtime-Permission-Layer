@@ -165,20 +165,36 @@ class ScopedPrincipalAPITests(unittest.TestCase):
         self.assertEqual(status, 403)
         self.assertEqual(denied["error"], "insufficient_scope")
 
+        prepare_request = {
+            "permit_token": issued["permit_token"],
+            "action": action,
+            "audience": "deployment-executor",
+            "execution_id": "identity-test-deployment",
+        }
+        status, denied = self.request(
+            "/v1/permits/prepare",
+            secret="issuer-secret-01234567890123",
+            method="POST",
+            payload=prepare_request,
+        )
+        self.assertEqual(status, 403)
+        self.assertEqual(denied["error"], "insufficient_scope")
+
+        status, prepared = self.request(
+            "/v1/permits/prepare",
+            secret="executor-secret-012345678901",
+            method="POST",
+            payload=prepare_request,
+        )
+        self.assertEqual(status, 200)
+
         consume_request = {
             "permit_token": issued["permit_token"],
             "action": action,
             "audience": "deployment-executor",
+            "preparation_id": prepared["preparation"]["preparation_id"],
             "enforced_controls": ["retain_cancel_handle"],
         }
-        status, denied = self.request(
-            "/v1/permits/consume",
-            secret="issuer-secret-01234567890123",
-            method="POST",
-            payload=consume_request,
-        )
-        self.assertEqual(status, 403)
-        self.assertEqual(denied["error"], "insufficient_scope")
 
         status, consumed = self.request(
             "/v1/permits/consume",
