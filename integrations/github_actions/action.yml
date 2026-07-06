@@ -15,9 +15,13 @@ inputs:
     required: false
     default: "local"
   api-url:
-    description: "HTTPS base URL for remote evaluation. The API key must be provided through SMERC_API_KEY."
+    description: "HTTPS base URL for remote evaluation."
     required: false
     default: ""
+  auth-mode:
+    description: "static uses SMERC_API_KEY; github-oidc uses the job's verified OIDC identity."
+    required: false
+    default: "static"
   tenant:
     description: "Optional tenant assertion for remote evaluation."
     required: false
@@ -68,11 +72,13 @@ runs:
       env:
         SMERC_API_URL: ${{ inputs.api-url }}
         SMERC_TENANT: ${{ inputs.tenant }}
+        SMERC_AUTH_MODE: ${{ inputs.auth-mode }}
       run: |
         python "$GITHUB_ACTION_PATH/run_smerc_gate.py" \
           --action-file "${{ inputs.action-file }}" \
           --mode "${{ inputs.mode }}" \
           --source "${{ inputs.source }}" \
+          --auth-mode "${{ inputs.auth-mode }}" \
           --api-failure-policy "${{ inputs.api-failure-policy }}" \
           --request-timeout "${{ inputs.request-timeout }}" \
           --max-retries "${{ inputs.max-retries }}" \

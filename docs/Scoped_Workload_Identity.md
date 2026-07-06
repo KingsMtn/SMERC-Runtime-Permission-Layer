@@ -4,7 +4,7 @@
 
 SMERC separates the identity proposing an action from the identities issuing and consuming its authorization permit. This reduces the risk that an agent can treat its own proposal as permission to execute.
 
-The reference API supports static, tenant-bound pilot principals with explicit endpoint scopes. An optional exchange can derive short-lived scope-narrowed sessions from those principals. This is separation of duties and bounded session issuance, not enterprise identity federation.
+The reference API supports static, tenant-bound pilot principals with explicit endpoint scopes. Optional exchanges can derive short-lived scope-narrowed sessions from those principals or from an exactly allowlisted GitHub Actions OIDC identity. GitHub federation is bounded to that provider and configured workflows; it is not general enterprise identity federation.
 
 ## Scope Model
 
@@ -56,11 +56,13 @@ Permit issuance, permit consumption, and review recording append `smerc.security
 
 When configured, `POST /v1/auth/token` accepts only a static bootstrap credential. It returns a signed session with explicit scopes, fixed issuer and audience, and a lifetime from 1 through 900 seconds. A session cannot call the exchange endpoint, gain scopes, change identity, or retain wildcard authority.
 
+`POST /v1/auth/github` instead verifies GitHub's signature and exact repository, immutable IDs, subject, ref, workflow, event, environment, and runner policy. It produces a v2 session carrying verified workload context and capped by the source identity lifetime. The source GitHub token can be exchanged once in the pilot audit store.
+
 See `Short_Lived_Access_Operations.md` for configuration and limitations.
 
 ## Security Boundaries
 
-- Bootstrap credentials are static bearer secrets, not OIDC, mTLS, SAML, SPIFFE, or cloud workload identity.
+- Bootstrap credentials remain static bearer secrets where used. GitHub OIDC removes that secret only for exactly configured Actions jobs; mTLS, SAML, SPIFFE, other clouds, and general workforce identity are not provided.
 - Derived sessions expire, but the service has no remote revocation, refresh, introspection, exchange rate limiting, or managed secret store.
 - Scope authorization protects API operations; it does not prove the external workload has the claimed real-world role.
 - A stolen bootstrap credential can request sessions within its configured capabilities until operators rotate configuration and restart the pilot service.

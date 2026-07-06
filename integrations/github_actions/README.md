@@ -32,7 +32,30 @@ Start every pilot in `observe` mode.
 
 Local mode expects the action shape used by `reference_engine/agent_permission_layer.py`.
 
-## Remote Evaluation
+## Remote Evaluation With GitHub OIDC
+
+OIDC is the recommended authentication path for a configured GitHub Actions pilot. It requires no stored `SMERC_API_KEY`:
+
+```yaml
+permissions:
+  contents: read
+  id-token: write
+
+steps:
+  - uses: actions/checkout@v5
+  - name: Evaluate proposed action through SMERC
+    uses: ./integrations/github_actions
+    with:
+      action-file: examples/recoverability_single_action.json
+      source: remote
+      api-url: ${{ vars.SMERC_API_URL }}
+      auth-mode: github-oidc
+      mode: observe
+```
+
+The SMERC server must have a matching exact policy in `SMERC_GITHUB_OIDC_TRUST`. See `docs/GitHub_OIDC_Operations.md`.
+
+## Remote Evaluation With A Static Credential
 
 Store the API credential as the GitHub Actions secret `SMERC_API_KEY`. Store the non-secret service URL as the repository variable `SMERC_API_URL`.
 
@@ -67,6 +90,8 @@ Do not use an unpinned branch reference for an enforcement workflow.
 ## Remote Safety Behavior
 
 - API keys are read only from `SMERC_API_KEY`; there is no command-line or action input for the secret.
+- OIDC mode requests audience `smerc-runtime-api` from GitHub and exchanges it for an `actions.evaluate` session.
+- GitHub runtime and OIDC tokens are not written to reports or action outputs.
 - Non-loopback remote endpoints require HTTPS.
 - Cross-origin redirects are refused so authorization headers cannot be forwarded to another host.
 - Transient `429`, `500`, `502`, `503`, and `504` responses can be retried up to three times.
@@ -84,6 +109,7 @@ The default idempotency key combines the GitHub run, attempt, job, action ID, an
 | `action-file` | required | Structured JSON action request |
 | `source` | `local` | `local` or `remote` evaluation |
 | `api-url` | empty | HTTPS SMERC service URL for remote mode |
+| `auth-mode` | `static` | `static` or `github-oidc` remote authentication |
 | `tenant` | empty | Optional tenant assertion |
 | `mode` | `observe` | `observe`, `recommend`, or `enforce` |
 | `api-failure-policy` | `report` | `report` or `fail`; enforce ignores fail-open behavior |
@@ -105,7 +131,7 @@ The action also writes a JSON report and a GitHub step summary.
 ## Pilot Guidance
 
 - Use metadata rather than source code, prompts, secrets, or customer payloads.
-- Do not expose the API key to workflows triggered by untrusted forks.
+- Prefer exact OIDC trust policy; do not expose static API keys to workflows triggered by untrusted forks.
 - Use a GitHub environment with reviewers for protected pilot secrets when appropriate.
 - Upload the decision report as a workflow artifact with a retention period approved by the security owner.
 - Compare SMERC results against existing approvals before enabling enforcement.

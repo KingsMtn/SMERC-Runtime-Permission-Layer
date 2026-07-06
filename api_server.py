@@ -6,6 +6,7 @@ import hmac
 import json
 import os
 import re
+import time
 import uuid
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -14,6 +15,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from reference_engine.audit_store import (
     AuditStore,
+    FederatedTokenReplayError,
     IdempotencyConflictError,
     PermitIssuanceConflictError,
     PermitNotIssuedError,
@@ -44,6 +46,12 @@ from reference_engine.control_evidence import (
     ControlEvidenceError,
     ControlEvidenceSigner,
     parse_control_evidence_signers,
+)
+from reference_engine.github_oidc import (
+    GITHUB_OIDC_VERSION,
+    GitHubOIDCError,
+    GitHubOIDCVerifier,
+    parse_github_oidc_trust,
 )
 from reference_engine.policy import POLICY_VERSION, PolicyRegistry
 from reference_engine.recoverability_engine import RecoverabilityEngine, RuntimePosture
@@ -77,11 +85,14 @@ class SMERCAPIServer(ThreadingHTTPServer):
         permit_signers: Optional[Mapping[str, PermitSigner]] = None,
         control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
         access_token_signer: Optional[AccessTokenSigner] = None,
+        github_oidc_verifier: Optional[GitHubOIDCVerifier] = None,
     ) -> None:
         resolved_policy_registry = policy_registry or PolicyRegistry()
         principal_registry = PrincipalRegistry.from_configuration(api_keys, api_principals)
         resolved_permit_signers = dict(permit_signers or {})
         resolved_control_evidence_signers = dict(control_evidence_signers or {})
+        if github_oidc_verifier is not None and access_token_signer is None:
+            raise ValueError("GitHub OIDC exchange requires an access-token signing key.")
         if access_token_signer is not None and principal_registry.uses_secret_bytes(
             access_token_signer.secret
         ):
@@ -125,6 +136,9 @@ class SMERCAPIServer(ThreadingHTTPServer):
             )
         for tenant_id in principal_registry.tenant_ids:
             resolved_policy_registry.for_tenant(tenant_id)
+        if github_oidc_verifier is not None:
+            for tenant_id in github_oidc_verifier.tenant_ids:
+                resolved_policy_registry.for_tenant(tenant_id)
 
         super().__init__(server_address, SMERCRequestHandler)
         self.policy_registry = resolved_policy_registry
@@ -138,6 +152,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
         self.permit_signers = resolved_permit_signers
         self.control_evidence_signers = resolved_control_evidence_signers
         self.access_token_signer = access_token_signer
+        self.github_oidc_verifier = github_oidc_verifier
 
     def engine_for(self, tenant_id: str) -> RecoverabilityEngine:
         return RecoverabilityEngine(self.policy_registry.for_tenant(tenant_id))
@@ -166,7 +181,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
 
 class SMERCRequestHandler(BaseHTTPRequestHandler):
     server: SMERCAPIServer
-    server_version = "SMERCRecoverabilityAPI/0.11"
+    server_version = "SMERCRecoverabilityAPI/0.12"
 
     def do_OPTIONS(self) -> None:
         origin = self.headers.get("origin")
@@ -192,12 +207,13 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     {
                         "status": "ok",
                         "service": "smerc-recoverability-api",
-                        "version": "0.11",
+                        "version": "0.12",
                         "tenant_policy_count": self.server.policy_registry.count,
                         "permit_signer_count": len(self.server.permit_signers),
                         "api_principal_count": self.server.principal_registry.count,
                         "control_evidence_adapter_count": len(self.server.control_evidence_signers),
                         "short_lived_access_enabled": self.server.access_token_signer is not None,
+                        "github_oidc_enabled": self.server.github_oidc_verifier is not None,
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -332,6 +348,20 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     request_id=request_id,
                 )
                 return
+            if path == "/v1/auth/github":
+                payload = self._read_json()
+                if not isinstance(payload, dict):
+                    raise APIError(
+                        HTTPStatus.BAD_REQUEST,
+                        "invalid_github_oidc_request",
+                        "GitHub OIDC exchange expects one JSON object.",
+                    )
+                self._write_json(
+                    self._exchange_github_oidc(self._bearer_candidate(), payload),
+                    HTTPStatus.CREATED,
+                    request_id=request_id,
+                )
+                return
             principal = self._authenticate(self._post_scope(path))
             tenant_id = principal.tenant_id
             payload = self._read_json()
@@ -456,6 +486,80 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 "key_id": signer.key_id,
             },
         )
+        return issued
+
+    def _exchange_github_oidc(
+        self,
+        token: str,
+        payload: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        verifier = self.server.github_oidc_verifier
+        signer = self.server.access_token_signer
+        if verifier is None or signer is None:
+            raise APIError(
+                HTTPStatus.SERVICE_UNAVAILABLE,
+                "github_oidc_exchange_unavailable",
+                "GitHub OIDC exchange is not configured.",
+            )
+        if set(payload) - {"scopes", "ttl_seconds"}:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_github_oidc_request",
+                "GitHub OIDC exchange request fields are unknown.",
+            )
+        scopes = payload.get("scopes")
+        if scopes is not None and not isinstance(scopes, list):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_github_oidc_request",
+                "scopes must be a list when supplied.",
+            )
+        try:
+            workload = verifier.verify(token)
+        except GitHubOIDCError as exc:
+            if exc.code == "github_oidc_trust_denied":
+                status = HTTPStatus.FORBIDDEN
+            elif exc.code == "github_oidc_jwks_unavailable":
+                status = HTTPStatus.SERVICE_UNAVAILABLE
+            else:
+                status = HTTPStatus.UNAUTHORIZED
+            raise APIError(status, exc.code, exc.message) from exc
+        requested_ttl = payload.get("ttl_seconds", 300)
+        if isinstance(requested_ttl, bool) or not isinstance(requested_ttl, int):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_access_token_ttl",
+                "ttl_seconds must be an integer.",
+            )
+        issued_at = int(time.time())
+        remaining_identity_lifetime = workload.expires_at - issued_at
+        if remaining_identity_lifetime < 1:
+            raise APIError(
+                HTTPStatus.UNAUTHORIZED,
+                "github_oidc_expired",
+                "GitHub OIDC token has no remaining exchange lifetime.",
+            )
+        try:
+            issued = signer.issue(
+                workload.principal,
+                requested_scopes=scopes,
+                ttl_seconds=min(requested_ttl, remaining_identity_lifetime),
+                now=issued_at,
+            )
+        except AccessTokenError as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, exc.code, exc.message) from exc
+        session = issued["session"]
+        try:
+            self.server.audit_store.register_github_oidc_exchange(
+                workload.principal.tenant_id,
+                workload.principal.principal_id,
+                hashlib.sha256(workload.token_id.encode("utf-8")).hexdigest(),
+                workload.token_hash,
+                session,
+                dict(workload.principal.workload_context or {}),
+            )
+        except FederatedTokenReplayError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "github_oidc_replay", str(exc)) from exc
         return issued
 
     def _issue_permit(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -1131,6 +1235,7 @@ def schema() -> Dict[str, Any]:
             "permit": PERMIT_VERSION,
             "control_evidence": CONTROL_EVIDENCE_VERSION,
             "access_token": ACCESS_TOKEN_VERSION,
+            "github_oidc": GITHUB_OIDC_VERSION,
         },
         "policy_version": POLICY_VERSION,
         "principal_version": PRINCIPAL_VERSION,
@@ -1175,6 +1280,7 @@ def schema() -> Dict[str, Any]:
             "GET /schema": "input and endpoint shape",
             "POST /v1/evaluate": "evaluate and persist one action",
             "POST /v1/auth/token": "exchange a static bootstrap credential for a short-lived narrowed token",
+            "POST /v1/auth/github": "exchange one verified GitHub Actions OIDC token for a workload-bound session",
             "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",
             "POST /v1/permits/issue": "issue a short-lived action-bound permit for an enforceable decision",
             "POST /v1/permits/consume": "verify control evidence and atomically consume an action-bound permit",
@@ -1205,10 +1311,14 @@ def create_server(
     permit_signers: Optional[Mapping[str, PermitSigner]] = None,
     control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
     access_token_signer: Optional[AccessTokenSigner] = None,
+    github_oidc_verifier: Optional[GitHubOIDCVerifier] = None,
 ) -> SMERCAPIServer:
     api_principals = tuple(api_principals)
-    if not api_keys and not api_principals and not allow_unauthenticated:
-        raise ValueError("At least one API credential is required unless --allow-unauthenticated is set.")
+    if not api_keys and not api_principals and github_oidc_verifier is None and not allow_unauthenticated:
+        raise ValueError(
+            "At least one API credential or GitHub OIDC trust policy is required unless "
+            "--allow-unauthenticated is set."
+        )
     audit_store = AuditStore(audit_db)
     try:
         return SMERCAPIServer(
@@ -1224,6 +1334,7 @@ def create_server(
             permit_signers=permit_signers,
             control_evidence_signers=control_evidence_signers,
             access_token_signer=access_token_signer,
+            github_oidc_verifier=github_oidc_verifier,
         )
     except Exception:
         audit_store.close()
@@ -1245,6 +1356,7 @@ def run(
     permit_signers: Optional[Mapping[str, PermitSigner]] = None,
     control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
     access_token_signer: Optional[AccessTokenSigner] = None,
+    github_oidc_verifier: Optional[GitHubOIDCVerifier] = None,
 ) -> None:
     server = create_server(
         host,
@@ -1260,6 +1372,7 @@ def run(
         permit_signers=permit_signers,
         control_evidence_signers=control_evidence_signers,
         access_token_signer=access_token_signer,
+        github_oidc_verifier=github_oidc_verifier,
     )
     print(f"SMERC recoverability API listening on http://{host}:{server.server_address[1]}")
     try:
@@ -1291,6 +1404,12 @@ def main() -> None:
     access_token_signer = parse_access_token_signer(
         os.environ.get("SMERC_ACCESS_TOKEN_KEY", "")
     )
+    github_oidc_policies = parse_github_oidc_trust(
+        os.environ.get("SMERC_GITHUB_OIDC_TRUST", "")
+    )
+    github_oidc_verifier = (
+        GitHubOIDCVerifier(github_oidc_policies) if github_oidc_policies else None
+    )
     run(
         args.host,
         args.port,
@@ -1305,6 +1424,7 @@ def main() -> None:
         permit_signers=permit_signers,
         control_evidence_signers=control_evidence_signers,
         access_token_signer=access_token_signer,
+        github_oidc_verifier=github_oidc_verifier,
     )
 
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.12.0 - 2026-07-04
+
+- Added GitHub Actions OIDC verification against GitHub's RS256 JWKS with fixed issuer and `smerc-runtime-api` audience.
+- Added exact trust policy for repository and owner IDs, subject, ref, workflow, event, environment, runner class, tenant, and explicit scopes.
+- Added atomic one-time source-token exchange registration and `github_oidc.exchanged` audit events without token retention.
+- Added `smerc.access-token.v2` workload context binding while retaining verification compatibility for unexpired v1 sessions.
+- Added OIDC mode to the GitHub Action, real-GitHub-token container CI, schemas, examples, deployment configuration, and operations guidance.
+- Retained explicit limits: GitHub identity does not prove workflow safety, actor intent, runner integrity, or action truthfulness; SQLite replay and JWKS caching remain single-instance pilot controls.
+
 ## 0.11.0 - 2026-07-04
 
 - Added `smerc.access-token.v1` short-lived workload sessions with fixed issuer/audience and a 15-minute maximum lifetime.

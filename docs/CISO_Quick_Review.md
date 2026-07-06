@@ -44,9 +44,11 @@ These are more operationally useful than simple allow/block decisions.
 
 For evidence-authorized enforcement policies, eligible decisions can issue a signed permit bound to the exact action, executor audience, decision replay, policy hash, required controls, and short expiry. The pilot consumes each permit once. This makes the authorization inspectable at the execution boundary, while remaining explicit that production key management and distributed replay prevention are not yet implemented.
 
-Scoped workload principals keep proposing agents separate from permit issuers and side-effecting executors. Decisions, reviews, permit issuance, and permit consumption retain authenticated principal attribution. The reference implementation uses static pilot secrets rather than enterprise identity federation.
+Scoped workload principals keep proposing agents separate from permit issuers and side-effecting executors. Decisions, reviews, permit issuance, and permit consumption retain authenticated principal attribution. Static pilot secrets remain available, while an exact GitHub Actions OIDC policy can remove the stored SMERC secret from the action-evaluation workflow.
 
 Static pilot principals can optionally derive short-lived, scope-narrowed sessions for routine API calls. Sessions retain principal attribution, expire within 15 minutes, cannot gain wildcard authority, and cannot mint another session. The bootstrap secret and signing key still require managed protection, and this is not external workload federation.
+
+GitHub OIDC sessions additionally retain signed repository, workflow, ref, commit, run, actor, and environment context. This verifies GitHub's claims and prevents one source token from being exchanged twice in the pilot database; it does not prove workflow safety or runner integrity.
 
 Configured execution adapters must also provide a signed, short-lived control-evidence receipt before permit consumption. The receipt binds native control references to the exact permit and action. This is stronger than a caller-supplied control list, while remaining explicitly short of hardware-backed or independently verified attestation.
 
@@ -62,6 +64,7 @@ Configured execution adapters must also provide a signed, short-lived control-ev
 - Signed action-bound permit and single-use consumption contract
 - Scoped workload identity and attributed security events
 - Short-lived scope-narrowed workload sessions
+- GitHub Actions OIDC verification and workload-bound decision attribution
 - Signed adapter control-evidence receipts
 - Pilot package and validation materials
 

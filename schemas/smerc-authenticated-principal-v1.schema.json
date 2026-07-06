@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "identity_version", "tenant_id", "principal_id", "scopes", "legacy",
-    "credential_type", "session_id", "expires_at"
+    "credential_type", "session_id", "expires_at", "workload_context"
   ],
   "properties": {
     "identity_version": {"const": "smerc.principal.v1"},
@@ -38,6 +38,12 @@
       "type": ["string", "null"],
       "pattern": "^session_[0-9a-f]{32}$"
     },
-    "expires_at": {"type": ["integer", "null"], "minimum": 0}
+    "expires_at": {"type": ["integer", "null"], "minimum": 0},
+    "workload_context": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "smerc-access-token-v2.schema.json#/$defs/workload_context"}
+      ]
+    }
   }
 }

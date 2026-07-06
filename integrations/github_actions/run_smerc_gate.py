@@ -10,7 +10,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, Iterable, Optional
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 
@@ -54,7 +54,7 @@ def _load_action(path: Path) -> Dict[str, Any]:
     return payload
 
 
-def _api_endpoint(api_url: str) -> str:
+def _service_endpoint(api_url: str, endpoint_path: str) -> str:
     parsed = urlsplit(api_url.strip())
     if not parsed.scheme or not parsed.hostname:
         raise IntegrationError("invalid_api_url", "SMERC API URL must include a scheme and hostname.")
@@ -71,9 +71,97 @@ def _api_endpoint(api_url: str) -> str:
         raise IntegrationError("insecure_api_url", "Remote SMERC API requires HTTPS outside loopback testing.")
 
     path = parsed.path.rstrip("/")
-    if not path.endswith("/v1/evaluate"):
-        path = f"{path}/v1/evaluate" if path else "/v1/evaluate"
+    if path.endswith("/v1/evaluate"):
+        path = path[: -len("/v1/evaluate")]
+    path = f"{path}{endpoint_path}" if path else endpoint_path
     return urlunsplit((scheme, parsed.netloc, path, "", ""))
+
+
+def _api_endpoint(api_url: str) -> str:
+    return _service_endpoint(api_url, "/v1/evaluate")
+
+
+def _github_oidc_token(*, audience: str, timeout: float) -> str:
+    request_url = os.environ.get("ACTIONS_ID_TOKEN_REQUEST_URL", "").strip()
+    request_token = os.environ.get("ACTIONS_ID_TOKEN_REQUEST_TOKEN", "").strip()
+    if not request_url or not request_token:
+        raise IntegrationError(
+            "github_oidc_unavailable",
+            "GitHub OIDC requires id-token: write and the Actions token request environment.",
+        )
+    parsed = urlsplit(request_url)
+    hostname = (parsed.hostname or "").lower()
+    if (
+        parsed.scheme.lower() != "https"
+        or parsed.username
+        or parsed.password
+        or parsed.fragment
+        or not (hostname == "token.actions.githubusercontent.com" or hostname.endswith(".actions.githubusercontent.com"))
+    ):
+        raise IntegrationError("invalid_github_oidc_url", "GitHub OIDC request URL is not trusted.")
+    query = [(key, value) for key, value in parse_qsl(parsed.query, keep_blank_values=True) if key != "audience"]
+    query.append(("audience", audience))
+    endpoint = urlunsplit((parsed.scheme, parsed.netloc, parsed.path, urlencode(query), ""))
+    request = Request(
+        endpoint,
+        headers={
+            "Authorization": f"Bearer {request_token}",
+            "Accept": "application/json",
+            "User-Agent": "SMERC-GitHub-Action/0.3",
+        },
+    )
+    try:
+        with build_opener(SameOriginRedirectHandler()).open(request, timeout=timeout) as response:
+            raw = response.read(MAX_RESPONSE_BYTES + 1)
+    except (HTTPError, URLError, TimeoutError, OSError) as exc:
+        raise IntegrationError("github_oidc_unavailable", "GitHub OIDC token request failed.") from exc
+    if len(raw) > MAX_RESPONSE_BYTES:
+        raise IntegrationError("github_oidc_unavailable", "GitHub OIDC response exceeded 1 MiB.")
+    try:
+        payload = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise IntegrationError("github_oidc_unavailable", "GitHub OIDC response was invalid JSON.") from exc
+    token = payload.get("value") if isinstance(payload, dict) else None
+    if not isinstance(token, str) or len(token) > 16_384 or len(token.split(".")) != 3:
+        raise IntegrationError("github_oidc_unavailable", "GitHub OIDC response did not contain a valid token.")
+    return token
+
+
+def _exchange_github_oidc(api_url: str, *, timeout: float) -> str:
+    oidc_token = _github_oidc_token(audience="smerc-runtime-api", timeout=timeout)
+    endpoint = _service_endpoint(api_url, "/v1/auth/github")
+    body = json.dumps(
+        {"scopes": ["actions.evaluate"], "ttl_seconds": 300},
+        separators=(",", ":"),
+    ).encode("utf-8")
+    request = Request(
+        endpoint,
+        data=body,
+        headers={
+            "Authorization": f"Bearer {oidc_token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "SMERC-GitHub-Action/0.3",
+        },
+        method="POST",
+    )
+    try:
+        with build_opener(SameOriginRedirectHandler()).open(request, timeout=timeout) as response:
+            raw = response.read(MAX_RESPONSE_BYTES + 1)
+    except HTTPError as exc:
+        raise IntegrationError("github_oidc_exchange_denied", f"SMERC OIDC exchange returned HTTP {exc.code}.") from exc
+    except (URLError, TimeoutError, OSError) as exc:
+        raise IntegrationError("github_oidc_exchange_unavailable", "SMERC OIDC exchange could not be reached.") from exc
+    if len(raw) > MAX_RESPONSE_BYTES:
+        raise IntegrationError("github_oidc_exchange_unavailable", "SMERC OIDC exchange response exceeded 1 MiB.")
+    try:
+        payload = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise IntegrationError("github_oidc_exchange_unavailable", "SMERC OIDC exchange returned invalid JSON.") from exc
+    access_token = payload.get("access_token") if isinstance(payload, dict) else None
+    if not isinstance(access_token, str) or len(access_token) > 16_384 or len(access_token.split(".")) != 3:
+        raise IntegrationError("github_oidc_exchange_unavailable", "SMERC OIDC exchange returned no access token.")
+    return access_token
 
 
 def _default_idempotency_key(payload: Dict[str, Any]) -> str:
@@ -261,6 +349,11 @@ def main() -> int:
     parser.add_argument("--mode", default="observe", choices=sorted(VALID_MODES))
     parser.add_argument("--source", default="local", choices=["local", "remote"])
     parser.add_argument("--api-url", default=os.environ.get("SMERC_API_URL", ""))
+    parser.add_argument(
+        "--auth-mode",
+        default=os.environ.get("SMERC_AUTH_MODE", "static"),
+        choices=["static", "github-oidc"],
+    )
     parser.add_argument("--tenant", default=os.environ.get("SMERC_TENANT"))
     parser.add_argument("--idempotency-key", default=os.environ.get("SMERC_IDEMPOTENCY_KEY"))
     parser.add_argument("--api-failure-policy", default="report", choices=["report", "fail"])
@@ -283,11 +376,14 @@ def main() -> int:
         if args.source == "local":
             decision = RuntimePermissionEngine().evaluate(action)
         else:
-            api_key = os.environ.get("SMERC_API_KEY", "").strip()
-            if not api_key:
-                raise IntegrationError("missing_api_key", "SMERC_API_KEY is required for remote evaluation.")
             if not args.api_url:
                 raise IntegrationError("missing_api_url", "SMERC API URL is required for remote evaluation.")
+            if args.auth_mode == "github-oidc":
+                api_key = _exchange_github_oidc(args.api_url, timeout=args.request_timeout)
+            else:
+                api_key = os.environ.get("SMERC_API_KEY", "").strip()
+                if not api_key:
+                    raise IntegrationError("missing_api_key", "SMERC_API_KEY is required for static remote authentication.")
             if "\r" in api_key or "\n" in api_key:
                 raise IntegrationError("invalid_api_key", "SMERC_API_KEY contains invalid control characters.")
             if args.tenant and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}", args.tenant):

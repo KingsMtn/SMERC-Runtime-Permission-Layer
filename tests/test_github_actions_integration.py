@@ -4,8 +4,11 @@ import subprocess
 import sys
 import threading
 import unittest
+from unittest.mock import patch
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+
+from integrations.github_actions import run_smerc_gate as gate
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,6 +18,30 @@ DENIED_SAMPLE = ROOT / "integrations" / "github_actions" / "denied_action_reques
 REMOTE_SAMPLE = ROOT / "examples" / "recoverability_single_action.json"
 OUTPUT_DIR = ROOT / "test_outputs" / "github_action_remote"
 API_SECRET = "test-secret-01234567890123456789"
+
+
+class FakeHTTPResponse:
+    def __init__(self, payload):
+        self.payload = json.dumps(payload).encode("utf-8")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return False
+
+    def read(self, _limit):
+        return self.payload
+
+
+class FakeOpener:
+    def __init__(self, responses):
+        self.responses = list(responses)
+        self.requests = []
+
+    def open(self, request, timeout):
+        self.requests.append((request, timeout))
+        return FakeHTTPResponse(self.responses.pop(0))
 
 
 def remote_decision(posture="THROTTLE"):
@@ -284,6 +311,46 @@ class GitHubActionsIntegrationTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0)
         self.assertEqual(self.read_report()["error"]["code"], "invalid_api_response")
+
+    def test_github_oidc_request_and_exchange_do_not_require_static_secret(self):
+        opener = FakeOpener(
+            [
+                {"value": "github.header.signature"},
+                {"access_token": "smerc.header.signature"},
+            ]
+        )
+        environment = {
+            "ACTIONS_ID_TOKEN_REQUEST_URL": (
+                "https://pipelines.actions.githubusercontent.com/oidc?api-version=2.0"
+            ),
+            "ACTIONS_ID_TOKEN_REQUEST_TOKEN": "github-runtime-secret",
+        }
+        with patch.dict(os.environ, environment, clear=False), patch.object(
+            gate, "build_opener", return_value=opener
+        ):
+            access_token = gate._exchange_github_oidc("https://smerc.example", timeout=5)
+        self.assertEqual(access_token, "smerc.header.signature")
+        oidc_request = opener.requests[0][0]
+        exchange_request = opener.requests[1][0]
+        self.assertIn("audience=smerc-runtime-api", oidc_request.full_url)
+        self.assertEqual(
+            oidc_request.get_header("Authorization"), "Bearer github-runtime-secret"
+        )
+        self.assertEqual(exchange_request.full_url, "https://smerc.example/v1/auth/github")
+        self.assertEqual(
+            exchange_request.get_header("Authorization"),
+            "Bearer github.header.signature",
+        )
+        self.assertNotIn("github-runtime-secret", exchange_request.data.decode("utf-8"))
+
+    def test_github_oidc_rejects_untrusted_request_endpoint(self):
+        environment = {
+            "ACTIONS_ID_TOKEN_REQUEST_URL": "https://attacker.example/oidc",
+            "ACTIONS_ID_TOKEN_REQUEST_TOKEN": "github-runtime-secret",
+        }
+        with patch.dict(os.environ, environment, clear=False):
+            with self.assertRaisesRegex(gate.IntegrationError, "not trusted"):
+                gate._github_oidc_token(audience="smerc-runtime-api", timeout=5)
 
 
 if __name__ == "__main__":

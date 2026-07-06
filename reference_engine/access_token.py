@@ -13,7 +13,8 @@ from uuid import uuid4
 from reference_engine.api_identity import ALL_SCOPES, APIPrincipal, SCOPES
 
 
-ACCESS_TOKEN_VERSION = "smerc.access-token.v1"
+ACCESS_TOKEN_VERSION = "smerc.access-token.v2"
+LEGACY_ACCESS_TOKEN_VERSION = "smerc.access-token.v1"
 ACCESS_TOKEN_TYPE = "SMERC-ACCESS"
 ACCESS_TOKEN_ALGORITHM = "HS256"
 ACCESS_TOKEN_ISSUER = "smerc-pilot-api"
@@ -122,6 +123,9 @@ class AccessTokenSigner:
             "issued_at": issued_at,
             "not_before": issued_at,
             "expires_at": issued_at + ttl_seconds,
+            "workload_context": (
+                None if principal.workload_context is None else dict(principal.workload_context)
+            ),
         }
         header = {"alg": ACCESS_TOKEN_ALGORITHM, "kid": self.key_id, "typ": ACCESS_TOKEN_TYPE}
         encoded_header = _encode(_canonical_json(header))
@@ -178,19 +182,28 @@ class AccessTokenSigner:
             credential_type="short_lived_access_token",
             session_id=payload["session_id"],
             expires_at=payload["expires_at"],
+            workload_context=payload.get("workload_context"),
         )
 
     @staticmethod
     def _validate_payload(payload: Any) -> None:
-        fields = {
+        base_fields = {
             "version", "session_id", "issuer", "audience", "tenant_id",
             "principal_id", "scopes", "source_legacy", "issued_at",
             "not_before", "expires_at",
         }
-        if not isinstance(payload, dict) or set(payload) != fields:
+        if not isinstance(payload, dict):
+            raise AccessTokenError("invalid_access_token", "Access-token claims must be an object.")
+        version = payload.get("version")
+        fields = (
+            base_fields
+            if version == LEGACY_ACCESS_TOKEN_VERSION
+            else base_fields | {"workload_context"}
+        )
+        if set(payload) != fields:
             raise AccessTokenError("invalid_access_token", "Access-token claims are incomplete or unknown.")
         if (
-            payload["version"] != ACCESS_TOKEN_VERSION
+            version not in {LEGACY_ACCESS_TOKEN_VERSION, ACCESS_TOKEN_VERSION}
             or payload["issuer"] != ACCESS_TOKEN_ISSUER
             or payload["audience"] != ACCESS_TOKEN_AUDIENCE
         ):
@@ -202,6 +215,20 @@ class AccessTokenSigner:
         _scopes(payload["scopes"])
         if not isinstance(payload["source_legacy"], bool):
             raise AccessTokenError("invalid_access_token", "source_legacy must be boolean.")
+        if version == ACCESS_TOKEN_VERSION and payload["workload_context"] is not None:
+            try:
+                APIPrincipal(
+                    tenant_id=payload["tenant_id"],
+                    principal_id=payload["principal_id"],
+                    secret="workload-context-validation",
+                    scopes=frozenset(payload["scopes"]),
+                    credential_type="short_lived_access_token",
+                    session_id=payload["session_id"],
+                    expires_at=payload["expires_at"],
+                    workload_context=payload["workload_context"],
+                )
+            except ValueError as exc:
+                raise AccessTokenError("invalid_access_token", str(exc)) from exc
         issued_at = _timestamp(payload["issued_at"], "issued_at")
         not_before = _timestamp(payload["not_before"], "not_before")
         expires_at = _timestamp(payload["expires_at"], "expires_at")

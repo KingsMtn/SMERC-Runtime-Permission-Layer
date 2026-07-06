@@ -1,3 +1,6 @@
+import base64
+import hashlib
+import hmac
 import json
 import threading
 import unittest
@@ -75,6 +78,29 @@ class AccessTokenUnitTests(unittest.TestCase):
         self.assertNotIn("*", principal.scopes)
         self.assertEqual(len(principal.scopes), 8)
         self.assertTrue(principal.legacy)
+
+    def test_unexpired_v1_session_remains_verifiable_during_v2_transition(self):
+        issued = self.signer.issue(
+            bootstrap_principal("actions.evaluate"), now=1_000, ttl_seconds=60
+        )
+        encoded_header, encoded_payload, _ = issued["access_token"].split(".")
+        payload = json.loads(
+            base64.urlsafe_b64decode(encoded_payload + "=" * (-len(encoded_payload) % 4))
+        )
+        payload["version"] = "smerc.access-token.v1"
+        payload.pop("workload_context")
+        encoded_payload = base64.urlsafe_b64encode(
+            json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).rstrip(b"=").decode("ascii")
+        message = f"{encoded_header}.{encoded_payload}".encode("ascii")
+        signature = base64.urlsafe_b64encode(
+            hmac.new(self.signer.secret, message, hashlib.sha256).digest()
+        ).rstrip(b"=").decode("ascii")
+        principal = self.signer.verify(
+            f"{encoded_header}.{encoded_payload}.{signature}", now=1_001
+        )
+        self.assertEqual(principal.scopes, frozenset({"actions.evaluate"}))
+        self.assertIsNone(principal.workload_context)
 
     def test_parser_requires_one_long_signing_secret(self):
         parsed = parse_access_token_signer(

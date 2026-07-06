@@ -21,7 +21,7 @@ curl -X POST http://127.0.0.1:8788/v1/auth/token \
   --data '{"scopes":["actions.evaluate"],"ttl_seconds":300}'
 ```
 
-The response contains `access_token`, `token_type`, `expires_in`, `expires_at`, and the non-secret session claims. Keep the token in process memory and send it as the Bearer credential for ordinary API calls.
+The response contains `access_token`, `token_type`, `expires_in`, `expires_at`, and the non-secret session claims. New issuance uses `smerc.access-token.v2`; the server still verifies unexpired v1 tokens. Keep the token in process memory and send it as the Bearer credential for ordinary API calls.
 
 Omit `scopes` to receive every explicit scope available to the bootstrap principal. Prefer requesting only the scopes needed for one workload stage.
 
@@ -41,6 +41,6 @@ Each exchange records tenant, principal, session ID, scopes, key ID, issuance, e
 - No wildcard session scopes
 - No remote revocation or introspection endpoint
 - No built-in exchange rate limiting
-- No OIDC, cloud identity, SSO, or hardware-backed key integration
+- Static exchange provides no OIDC, cloud identity, SSO, or hardware-backed key integration. GitHub OIDC is a separate, provider-specific exchange described in `GitHub_OIDC_Operations.md`.
 
 Use this layer to reduce static-secret exposure in a controlled pilot, not as a substitute for enterprise identity federation.

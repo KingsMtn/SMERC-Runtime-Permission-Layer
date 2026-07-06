@@ -43,7 +43,7 @@ jobs:
 
       - name: Validate machine-readable contracts
         run: |
-          python -c 'import json; paths=["schemas/smerc-action-language-v1.schema.json", "schemas/smerc-decision-language-v1.schema.json", "schemas/smerc-runtime-policy-v1.schema.json", "schemas/smerc-evidence-ledger-v1.schema.json", "schemas/smerc-action-bound-permit-v1.schema.json", "schemas/smerc-authenticated-principal-v1.schema.json", "schemas/smerc-security-event-v1.schema.json", "schemas/smerc-control-evidence-v1.schema.json", "schemas/smerc-access-token-v1.schema.json"]; [json.load(open(path)) for path in paths]'
+          python -c 'import json; paths=["schemas/smerc-action-language-v1.schema.json", "schemas/smerc-decision-language-v1.schema.json", "schemas/smerc-runtime-policy-v1.schema.json", "schemas/smerc-evidence-ledger-v1.schema.json", "schemas/smerc-action-bound-permit-v1.schema.json", "schemas/smerc-authenticated-principal-v1.schema.json", "schemas/smerc-security-event-v1.schema.json", "schemas/smerc-control-evidence-v1.schema.json", "schemas/smerc-access-token-v1.schema.json", "schemas/smerc-access-token-v2.schema.json", "schemas/smerc-github-oidc-trust-v1.schema.json"]; [json.load(open(path)) for path in paths]'
 
       - name: Run recoverability engine smoke test
         run: python -m reference_engine.recoverability_engine examples/recoverability_single_action.json
@@ -88,12 +88,47 @@ jobs:
 
   container-smoke:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
       - name: Build pilot API image
         run: docker build -t smerc-pilot-api:test .
+
+      - name: Request GitHub OIDC identity and prepare exact CI trust
+        run: |
+          curl --fail --silent --show-error \
+            --header "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=smerc-runtime-api" \
+            > /tmp/github-oidc-response.json
+          python - <<'PY'
+          import base64, json
+          response = json.load(open('/tmp/github-oidc-response.json'))
+          token = response['value']
+          payload = token.split('.')[1]
+          claims = json.loads(base64.urlsafe_b64decode(payload + '=' * (-len(payload) % 4)))
+          trust = [{
+              'tenant_id': 'ci-tenant',
+              'repository': claims['repository'],
+              'repository_id': str(claims['repository_id']),
+              'repository_owner_id': str(claims['repository_owner_id']),
+              'subjects': [claims['sub']],
+              'refs': [claims['ref']],
+              'workflow_refs': [claims['workflow_ref']],
+              'workflow_shas': [claims['workflow_sha']],
+              'events': [claims['event_name']],
+              'environments': [claims['environment']] if claims.get('environment') else [],
+              'scopes': ['actions.evaluate'],
+              'runner_environments': [claims['runner_environment']],
+          }]
+          open('/tmp/github-oidc-token.txt', 'w').write(token)
+          json.dump(trust, open('/tmp/github-oidc-trust.json', 'w'), separators=(',', ':'))
+          PY
+          chmod 600 /tmp/github-oidc-token.txt
+          rm /tmp/github-oidc-response.json
 
       - name: Start authenticated pilot API
         run: |
@@ -102,6 +137,7 @@ jobs:
             --env SMERC_PERMIT_KEYS=ci-tenant=ci-permit-key:ci-permit-signing-secret-012345678901 \
             --env SMERC_CONTROL_EVIDENCE_KEYS=ci-tenant:ci-executor=ci-adapter:ci-control-key:ci-control-evidence-secret-012345678901 \
             --env SMERC_ACCESS_TOKEN_KEY=ci-access-key:ci-access-token-secret-01234567890123 \
+            --env SMERC_GITHUB_OIDC_TRUST="$(cat /tmp/github-oidc-trust.json)" \
             smerc-pilot-api:test
 
       - name: Wait for health check
@@ -118,7 +154,7 @@ jobs:
       - name: Evaluate example action through container
         run: |
           curl --fail --silent http://127.0.0.1:8788/health > /tmp/smerc-health.json
-          python -c 'import json; data=json.load(open("/tmp/smerc-health.json")); assert data["permit_signer_count"] == 1; assert data["control_evidence_adapter_count"] == 1; assert data["short_lived_access_enabled"] is True'
+          python -c 'import json; data=json.load(open("/tmp/smerc-health.json")); assert data["permit_signer_count"] == 1; assert data["control_evidence_adapter_count"] == 1; assert data["short_lived_access_enabled"] is True; assert data["github_oidc_enabled"] is True'
           curl --fail --silent --show-error \
             --request POST http://127.0.0.1:8788/v1/auth/token \
             --header "Authorization: Bearer ci-proposer-secret-012345678901" \
@@ -133,7 +169,27 @@ jobs:
             --header "Content-Type: application/json" \
             --data @examples/recoverability_single_action.json \
             > /tmp/smerc-session-decision.json
-          python -c 'import json; data=json.load(open("/tmp/smerc-session-decision.json")); assert data["authenticated_principal"]["credential_type"] == "short_lived_access_token"; assert data["authenticated_principal"]["scopes"] == ["actions.evaluate"]'
+          python -c 'import json; session=json.load(open("/tmp/smerc-session.json")); data=json.load(open("/tmp/smerc-session-decision.json")); assert session["session"]["version"] == "smerc.access-token.v2"; assert data["authenticated_principal"]["credential_type"] == "short_lived_access_token"; assert data["authenticated_principal"]["scopes"] == ["actions.evaluate"]'
+
+      - name: Exchange real GitHub OIDC identity and evaluate through container
+        run: |
+          GITHUB_OIDC_TOKEN=$(cat /tmp/github-oidc-token.txt)
+          curl --fail --silent --show-error \
+            --request POST http://127.0.0.1:8788/v1/auth/github \
+            --header "Authorization: Bearer $GITHUB_OIDC_TOKEN" \
+            --header "Content-Type: application/json" \
+            --data '{"scopes":["actions.evaluate"],"ttl_seconds":300}' \
+            > /tmp/smerc-oidc-session.json
+          SMERC_OIDC_SESSION=$(python -c 'import json; print(json.load(open("/tmp/smerc-oidc-session.json"))["access_token"])')
+          curl --fail --silent --show-error \
+            --request POST http://127.0.0.1:8788/v1/evaluate \
+            --header "Authorization: Bearer $SMERC_OIDC_SESSION" \
+            --header "Idempotency-Key: ci-oidc-container-smoke" \
+            --header "Content-Type: application/json" \
+            --data @examples/recoverability_single_action.json \
+            > /tmp/smerc-oidc-decision.json
+          python -c 'import json; data=json.load(open("/tmp/smerc-oidc-decision.json")); context=data["authenticated_principal"]["workload_context"]; assert context["provider"] == "github_actions_oidc"; assert context["repository"] == "${{ github.repository }}"; assert context["run_id"] == "${{ github.run_id }}"'
+          rm /tmp/github-oidc-token.txt
 
       - name: Evaluate Action Language contract through container
         run: |

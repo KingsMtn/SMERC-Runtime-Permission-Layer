@@ -37,7 +37,11 @@ Scoped pilot principals separate action evaluation, decision reading, permit iss
 
 Scoped principals still use static bearer secrets as bootstrap credentials. When `SMERC_ACCESS_TOKEN_KEY` is configured, a bootstrap principal can obtain a signed session lasting at most 900 seconds with the same or fewer explicit scopes. Sessions cannot use wildcard authority or mint another session, and issuance is attributed without storing the token.
 
-The session layer is not workload federation, managed identity, mTLS, OIDC, SPIFFE, automated revocation, or proof of the workload presenting the bootstrap secret. HMAC signing is symmetric; compromise of the signing key permits arbitrary token creation. The reference exchange has no rate limiter or revocation endpoint. Do not give issuer or executor bootstrap credentials to proposing agents. Production requires federated credentials, managed rotation and revocation, least-privilege service identity, access monitoring, and external audit export.
+Static session exchange is not workload federation, managed identity, mTLS, OIDC, SPIFFE, automated revocation, or proof of the workload presenting the bootstrap secret. HMAC signing is symmetric; compromise of the signing key permits arbitrary token creation. The reference exchange has no rate limiter or revocation endpoint. Do not give issuer or executor bootstrap credentials to proposing agents.
+
+The optional GitHub Actions OIDC exchange verifies GitHub's RS256 signature against its fixed JWKS endpoint and requires exact issuer, audience, repository name, immutable repository and owner IDs, subject, ref, workflow ref, event, environment policy, runner class, and time bounds. The source token ID and digest are registered atomically for one exchange in SQLite. The resulting v2 session cannot outlive the GitHub identity and carries verified workload context into decisions.
+
+OIDC does not prove workflow safety, actor intent, runner integrity, or action truthfulness. A compromised trusted workflow or self-hosted runner can obtain valid tokens within configured claims. Replay protection is shared only by processes using the same SQLite database, JWKS caching is process-local, and there is no exchange rate limiter or remote revocation. Production expansion requires shared replay state, managed signing and rotation, monitoring, rate limits, least-privilege trust policy, and external audit export.
 
 ## Pilot API Controls
 
@@ -54,6 +58,7 @@ The pilot API defaults to refusing startup without at least one configured tenan
 - optional signed adapter control evidence with fail-closed binding and freshness checks
 - endpoint-level scoped principals and attributed security-event records
 - optional short-lived scope-narrowed sessions issued only from static credentials
+- optional GitHub OIDC exchange with exact trust matching and workload-bound sessions
 
 `--allow-unauthenticated` is intended only for local development. It must not be used on a network-accessible pilot deployment.
 
@@ -65,7 +70,7 @@ The pilot review console keeps its bearer key in JavaScript memory only. It does
 
 ## GitHub Actions Remote Mode
 
-Remote evaluation reads the bearer credential only from `SMERC_API_KEY`. The integration requires HTTPS outside loopback testing, refuses cross-origin redirects, bounds response size, validates response structure, and reuses one idempotency key across transient retries.
+Remote evaluation supports static `SMERC_API_KEY` or GitHub OIDC. OIDC mode requests audience `smerc-runtime-api` only from a GitHub Actions token endpoint and exchanges it for an `actions.evaluate` session. The integration requires HTTPS outside loopback testing, refuses cross-origin redirects, bounds response size, validates response structure, and reuses one idempotency key across transient evaluation retries.
 
 Do not expose the pilot secret to untrusted fork workflows. Pin the action to a reviewed commit SHA, restrict workflow permissions, use action metadata rather than sensitive payloads, and approve report-artifact retention before a live pilot.
 

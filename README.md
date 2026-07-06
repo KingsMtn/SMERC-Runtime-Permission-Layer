@@ -23,6 +23,7 @@ The current build includes:
 - signed, action-bound control-evidence receipts for configured execution adapters
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
+- GitHub Actions OIDC verification with repository-, workflow-, ref-, environment-, and run-bound attribution
 - recoverability-aware scoring engine
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
@@ -54,9 +55,10 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 10. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
 11. Read `docs/Scoped_Workload_Identity.md`.
 12. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
-13. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v1.md`.
-14. Run the Python and console tests.
-15. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+13. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
+14. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
+15. Run the Python and console tests.
+16. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -122,13 +124,19 @@ This improves authenticity, freshness, and auditability; it does not prove a com
 
 New pilots can assign separate tenant credentials to the action proposer, permit issuer, permit consumer, reviewer, decision reader, metrics reader, and auditor. Unauthorized endpoint use fails with `insufficient_scope`; authenticated principal identity is preserved in decisions and security events.
 
-Legacy `SMERC_API_KEYS` remain compatible and retain all tenant scopes. New deployments should use `SMERC_API_PRINCIPALS` for separation of duties. This remains a static bearer-secret pilot model, not enterprise OIDC, mTLS, SPIFFE, or cloud workload identity. See `docs/Scoped_Workload_Identity.md`.
+Legacy `SMERC_API_KEYS` remain compatible and retain all tenant scopes. New non-federated deployments should use `SMERC_API_PRINCIPALS` for separation of duties. Static credentials remain a pilot compatibility model. GitHub Actions may instead use the bounded OIDC path described below. See `docs/Scoped_Workload_Identity.md`.
 
 ## Short-Lived Workload Sessions
 
-When `SMERC_ACCESS_TOKEN_KEY` is configured, a static principal can exchange its bootstrap credential for a `smerc.access-token.v1` session lasting no more than 15 minutes. The session can only preserve or narrow the principal's explicit scopes; it cannot use wildcard authority or mint another session. Decisions retain the session ID and expiry.
+When `SMERC_ACCESS_TOKEN_KEY` is configured, a static principal can exchange its bootstrap credential for a `smerc.access-token.v2` session lasting no more than 15 minutes. The session can only preserve or narrow the principal's explicit scopes; it cannot use wildcard authority or mint another session. Decisions retain the session ID and expiry. The verifier remains compatible with unexpired v1 sessions.
 
 This reduces routine exposure of static credentials but does not prove workload identity or replace federated IAM. See `docs/Short_Lived_Access_Operations.md`.
+
+## GitHub Actions OIDC
+
+When `SMERC_GITHUB_OIDC_TRUST` is configured, a GitHub Actions job can exchange GitHub's signed OIDC identity for a workload-bound SMERC session without storing `SMERC_API_KEY`. SMERC verifies the GitHub signature, fixed issuer and audience, time window, and exact configured repository, immutable IDs, subject, ref, workflow ref and commit SHA, event, environment, and runner class. The source token is exchangeable once in the pilot audit store.
+
+The resulting decision records verified repository, workflow, commit, run, actor, and environment context. This proves signed GitHub claims, not workflow safety or authorization by itself. See `docs/GitHub_OIDC_Operations.md`.
 
 ## Quick Start
 
@@ -212,7 +220,7 @@ python integrations/github_actions/run_smerc_gate.py \
   --output-file smerc-decision.json
 ```
 
-The GitHub Action can also call the authenticated `/v1/evaluate` endpoint. Remote mode keeps the API key in `SMERC_API_KEY`, requires HTTPS outside loopback tests, reuses an idempotency key across retries, and fails closed in enforce mode. See `integrations/github_actions/README.md`.
+The GitHub Action can also call the authenticated `/v1/evaluate` endpoint. Remote mode supports an exact GitHub OIDC trust policy or the static `SMERC_API_KEY` compatibility path, requires HTTPS outside loopback tests, reuses an idempotency key across evaluation retries, and fails closed in enforce mode. See `integrations/github_actions/README.md`.
 
 Generate a synthetic GitHub Actions shadow-mode pilot report:
 
@@ -323,6 +331,7 @@ Policy calibration, deterministic hashes, accountable overrides, and tamper-evid
 - Signed adapter control-evidence receipts with permit, action, and freshness binding
 - Scoped workload principals and attributed security-event audit records
 - Short-lived, scope-narrowed workload sessions with issuance attribution
+- GitHub Actions OIDC exchange with exact trust policy and one-time source-token replay prevention
 - Browser-based pilot review queue and metrics console
 - Installable local GitHub Action
 - Deterministic example action requests

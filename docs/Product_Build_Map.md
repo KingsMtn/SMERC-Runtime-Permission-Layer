@@ -210,7 +210,7 @@ Purpose:
 - append tenant-scoped security events for permit issuance, permit consumption, and review recording
 - preserve legacy all-scope keys for controlled compatibility
 
-This begins with static bearer-secret pilot principals and can derive expiring, scope-narrowed sessions. It does not provide enterprise federation, managed rotation/revocation, or external immutable audit storage.
+This begins with static bearer-secret pilot principals and can derive expiring, scope-narrowed sessions. GitHub Actions can additionally use provider-specific OIDC trust. General enterprise federation, managed rotation/revocation, and external immutable audit storage remain outside the reference build.
 
 ### 14. Short-Lived Workload Sessions
 
@@ -218,7 +218,9 @@ Files:
 
 - `reference_engine/access_token.py`
 - `schemas/smerc-access-token-v1.schema.json`
+- `schemas/smerc-access-token-v2.schema.json`
 - `specification/SMERC_Access_Token_v1.md`
+- `specification/SMERC_Access_Token_v2.md`
 
 Purpose:
 
@@ -228,7 +230,26 @@ Purpose:
 - bind session ID and expiry into authenticated principal attribution
 - record issuance metadata without retaining bearer tokens
 
-This reduces repeated static-secret exposure in a pilot. It is not OIDC, cloud workload identity, SSO, managed revocation, refresh, or proof of the external workload.
+Static exchange reduces repeated secret exposure but does not prove the external workload. V2 can additionally carry context supplied by a verified federation boundary.
+
+### 15. GitHub Actions OIDC Trust
+
+Files:
+
+- `reference_engine/github_oidc.py`
+- `schemas/smerc-github-oidc-trust-v1.schema.json`
+- `specification/SMERC_GitHub_OIDC_Trust_v1.md`
+- `docs/GitHub_OIDC_Operations.md`
+
+Purpose:
+
+- verify GitHub's RS256 OIDC signature and fixed issuer/audience
+- require exact repository, immutable IDs, subject, ref, workflow, event, environment, and runner policy
+- exchange each source token once for a narrower SMERC session
+- bind repository, workflow, commit, run, actor, and environment context into decisions
+- remove stored `SMERC_API_KEY` from the configured Actions evaluation path
+
+This proves a bounded GitHub workload identity claim, not the safety of its workflow, runner, actor, or proposed action. SQLite replay state and process-local JWKS caching remain single-instance pilot controls.
 
 ### 13. Signed Control Evidence
 

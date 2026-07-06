@@ -3,6 +3,7 @@ from __future__ import annotations
 import hmac
 import re
 from dataclasses import dataclass, field
+from types import MappingProxyType
 from typing import Dict, Iterable, Mapping, Optional
 
 
@@ -20,6 +21,22 @@ SCOPES = frozenset(
 )
 ALL_SCOPES = "*"
 PRINCIPAL_VERSION = "smerc.principal.v1"
+WORKLOAD_CONTEXT_FIELDS = frozenset(
+    {
+        "provider", "subject", "repository", "repository_id",
+        "repository_owner_id", "workflow_ref", "workflow_sha", "ref",
+        "commit_sha", "run_id", "run_attempt", "actor_id", "event_name",
+        "runner_environment", "environment", "job_workflow_ref", "token_id",
+    }
+)
+REQUIRED_WORKLOAD_CONTEXT_FIELDS = frozenset(
+    {
+        "provider", "subject", "repository", "repository_id",
+        "repository_owner_id", "workflow_ref", "workflow_sha", "ref",
+        "commit_sha", "run_id", "run_attempt", "actor_id", "event_name",
+        "runner_environment", "token_id",
+    }
+)
 
 
 def _identifier(value: str, path: str) -> str:
@@ -38,6 +55,7 @@ class APIPrincipal:
     credential_type: str = "static_bearer"
     session_id: Optional[str] = None
     expires_at: Optional[int] = None
+    workload_context: Optional[Mapping[str, str]] = None
 
     def __post_init__(self) -> None:
         _identifier(self.tenant_id, "principal tenant")
@@ -64,6 +82,27 @@ class APIPrincipal:
             isinstance(self.expires_at, bool) or not isinstance(self.expires_at, int) or self.expires_at < 0
         ):
             raise ValueError("Principal expires_at must be a non-negative integer.")
+        if self.workload_context is not None:
+            context = dict(self.workload_context)
+            if set(context) - WORKLOAD_CONTEXT_FIELDS:
+                raise ValueError("Principal workload_context contains unknown fields.")
+            if REQUIRED_WORKLOAD_CONTEXT_FIELDS - set(context):
+                raise ValueError("Principal workload_context is missing required fields.")
+            if context.get("provider") != "github_actions_oidc":
+                raise ValueError("Principal workload_context provider is not recognized.")
+            if any(
+                not isinstance(value, str) or not value or len(value) > 512
+                for value in context.values()
+            ):
+                raise ValueError("Principal workload_context values must be bounded non-empty strings.")
+            if not context["repository_id"].isdigit() or not context["repository_owner_id"].isdigit():
+                raise ValueError("Principal workload_context repository IDs must be decimal strings.")
+            if any(
+                not re.fullmatch(r"(?:[0-9a-f]{40}|[0-9a-f]{64})", context[field])
+                for field in ("workflow_sha", "commit_sha")
+            ):
+                raise ValueError("Principal workload_context Git object IDs are invalid.")
+            object.__setattr__(self, "workload_context", MappingProxyType(context))
 
     def permits(self, scope: str) -> bool:
         if scope not in SCOPES:
@@ -80,6 +119,7 @@ class APIPrincipal:
             "credential_type": self.credential_type,
             "session_id": self.session_id,
             "expires_at": self.expires_at,
+            "workload_context": None if self.workload_context is None else dict(self.workload_context),
         }
 
 

@@ -3,20 +3,20 @@
 ## Components
 
 1. Action Source: AI agent, workflow engine, fraud system, fleet platform, banking system, insurance workflow, or autonomous controller proposes an action.
-2. Workload Identity Gate: Authenticates a static tenant principal or short-lived narrowed session and checks endpoint scope before any protected operation.
+2. Workload Identity Gate: Authenticates a static tenant principal, a short-lived narrowed session, or an exactly allowlisted GitHub OIDC workload and checks endpoint scope before any protected operation.
 3. Signal Adapter: Converts domain context into normalized SMERC signals.
 4. SMERC Engine: Computes stress, confidence, reason codes, and macro decision.
 5. Permit Layer: For eligible enforcement decisions, binds the exact action, tenant, executor, policy, constraints, and expiry into a signed single-use capability.
 6. Control Evidence Layer: A configured execution adapter signs fresh native control results bound to the exact permit and action.
 7. Enforcement Layer: Verifies control evidence and consumes the permit immediately before applying `ALLOW` or `THROTTLE`; `DENY`, `FREEZE`, and `ESCALATE` do not receive permits.
-8. Audit Layer: Stores authenticated principal, input signals, decision, policy, permit issuance/consumption, bounded control-evidence attribution, reviewer identity, override status, and final outcome.
+8. Audit Layer: Stores authenticated principal and verified workload context, input signals, decision, policy, permit issuance/consumption, bounded control-evidence attribution, reviewer identity, override status, and final outcome.
 9. Review Layer: Routes constrained, denied, frozen, or escalated actions to accountable humans.
 
 ## Reference Flow
 
 ```mermaid
 flowchart LR
-  A["Action source"] --> W["Scoped workload identity"]
+  A["Action source"] --> W["Scoped or federated workload identity"]
   W --> B["Signal adapter"]
   B --> C["SMERC engine"]
   C --> D{"Macro decision"}

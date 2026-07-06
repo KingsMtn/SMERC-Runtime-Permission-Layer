@@ -65,12 +65,13 @@ class APIServerTests(unittest.TestCase):
         health = self.request_json("/health")
         ready = self.request_json("/ready")
         self.assertEqual(health[0], 200)
-        self.assertEqual(health[2]["version"], "0.11")
+        self.assertEqual(health[2]["version"], "0.12")
         self.assertEqual(health[2]["tenant_policy_count"], 0)
         self.assertEqual(health[2]["permit_signer_count"], 0)
         self.assertEqual(health[2]["api_principal_count"], 2)
         self.assertEqual(health[2]["control_evidence_adapter_count"], 0)
         self.assertFalse(health[2]["short_lived_access_enabled"])
+        self.assertFalse(health[2]["github_oidc_enabled"])
         self.assertEqual(ready[2]["status"], "ready")
 
     def test_schema_lists_versioned_endpoints_and_postures(self):
@@ -86,7 +87,8 @@ class APIServerTests(unittest.TestCase):
             body["language_versions"]["control_evidence"],
             "smerc.control-evidence.v1",
         )
-        self.assertEqual(body["language_versions"]["access_token"], "smerc.access-token.v1")
+        self.assertEqual(body["language_versions"]["access_token"], "smerc.access-token.v2")
+        self.assertEqual(body["language_versions"]["github_oidc"], "smerc.github-oidc.v1")
         self.assertEqual(body["policy_version"], "smerc.policy.v1")
         self.assertIn("POST /v1/decisions/{replay_id}/reviews", body["endpoints"])
         self.assertIn("GET /v1/pilot/metrics", body["endpoints"])
@@ -94,6 +96,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/permits/issue", body["endpoints"])
         self.assertIn("POST /v1/permits/consume", body["endpoints"])
         self.assertIn("POST /v1/auth/token", body["endpoints"])
+        self.assertIn("POST /v1/auth/github", body["endpoints"])
         self.assertIn("GET /v1/security-events", body["endpoints"])
         self.assertIn("permits.consume", body["authorization"]["scopes"])
         self.assertEqual(body["principal_version"], "smerc.principal.v1")

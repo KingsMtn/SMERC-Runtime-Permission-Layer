@@ -29,6 +29,10 @@ class PermitNotIssuedError(ValueError):
     pass
 
 
+class FederatedTokenReplayError(ValueError):
+    pass
+
+
 class AuditStore:
     """Tenant-scoped SQLite decision store for controlled pilot deployments."""
 
@@ -117,6 +121,18 @@ class AuditStore:
                 );
                 CREATE INDEX IF NOT EXISTS idx_security_events_tenant_created
                     ON security_events (tenant_id, created_at DESC);
+                CREATE TABLE IF NOT EXISTS federated_token_exchanges (
+                    token_id_hash TEXT PRIMARY KEY,
+                    token_hash TEXT NOT NULL UNIQUE,
+                    tenant_id TEXT NOT NULL,
+                    principal_id TEXT NOT NULL,
+                    session_id TEXT NOT NULL UNIQUE,
+                    repository_id TEXT NOT NULL,
+                    run_id TEXT NOT NULL,
+                    exchanged_at TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_federated_exchanges_tenant_created
+                    ON federated_token_exchanges (tenant_id, exchanged_at DESC);
                 """
             )
             self._connection.commit()
@@ -600,6 +616,85 @@ class AuditStore:
                 ),
             )
             self._connection.commit()
+        return event
+
+    def register_github_oidc_exchange(
+        self,
+        tenant_id: str,
+        principal_id: str,
+        token_id_hash: str,
+        token_hash: str,
+        session: Dict[str, Any],
+        workload_context: Dict[str, str],
+    ) -> Dict[str, Any]:
+        event = {
+            "event_version": "smerc.security-event.v1",
+            "event_id": f"security_event_{uuid4().hex}",
+            "tenant_id": tenant_id,
+            "principal_id": principal_id,
+            "event_type": "github_oidc.exchanged",
+            "resource_id": session["session_id"],
+            "metadata": {
+                "token_id_hash": token_id_hash,
+                "repository": workload_context["repository"],
+                "repository_id": workload_context["repository_id"],
+                "workflow_ref": workload_context["workflow_ref"],
+                "workflow_sha": workload_context["workflow_sha"],
+                "ref": workload_context["ref"],
+                "commit_sha": workload_context["commit_sha"],
+                "run_id": workload_context["run_id"],
+                "run_attempt": workload_context["run_attempt"],
+                "actor_id": workload_context["actor_id"],
+                "event_name": workload_context["event_name"],
+                "environment": workload_context.get("environment"),
+                "scopes": session["scopes"],
+                "expires_at": session["expires_at"],
+            },
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        serialized = json.dumps(event, sort_keys=True, separators=(",", ":"))
+        with self._lock:
+            try:
+                self._connection.execute("BEGIN IMMEDIATE")
+                self._connection.execute(
+                    """
+                    INSERT INTO federated_token_exchanges (
+                        token_id_hash, token_hash, tenant_id, principal_id,
+                        session_id, repository_id, run_id, exchanged_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        token_id_hash,
+                        token_hash,
+                        tenant_id,
+                        principal_id,
+                        session["session_id"],
+                        workload_context["repository_id"],
+                        workload_context["run_id"],
+                        event["created_at"],
+                    ),
+                )
+                self._connection.execute(
+                    """
+                    INSERT INTO security_events (
+                        event_id, tenant_id, principal_id, event_type,
+                        resource_id, event_json, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        event["event_id"], tenant_id, principal_id, event["event_type"],
+                        event["resource_id"], serialized, event["created_at"],
+                    ),
+                )
+                self._connection.commit()
+            except sqlite3.IntegrityError as exc:
+                self._connection.rollback()
+                raise FederatedTokenReplayError(
+                    "GitHub OIDC token was already exchanged."
+                ) from exc
+            except Exception:
+                self._connection.rollback()
+                raise
         return event
 
     def list_security_events(self, tenant_id: str, limit: int = 50) -> List[Dict[str, Any]]:
