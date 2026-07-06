@@ -31,6 +31,7 @@ The current build includes:
 - dependency-free pilot review console
 - GitHub Actions gate
 - local and authenticated remote GitHub Action evaluation
+- permit-consuming GitHub deployment adapter with native controls, cancellation, rollback, and non-secret execution reports
 - synthetic shadow-mode scenario packs
 - evidence/report generators
 - Render deployment profile
@@ -57,8 +58,9 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 12. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
 13. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
 14. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
-15. Run the Python and console tests.
-16. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+15. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
+16. Run the Python and console tests.
+17. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -110,13 +112,14 @@ Permits are deliberately narrow:
 - `THROTTLE` carries constraints into the execution boundary
 - one decision may issue one permit per executor audience
 - consumption is atomic and single use in the pilot store
+- preparation authenticates and reserves one permit before native controls can run
 - policy replacement, action mutation, wrong audience, expiry, missing controls, or replay causes rejection
 
 The token is not exposed by the GitHub Action because it is a bearer capability. Executors obtain and consume it through the authenticated API. See `docs/Action_Bound_Permit_Operations.md`.
 
 ## Verifiable Control Evidence
 
-Configured execution adapters replace caller-supplied control names with short-lived `smerc.control-evidence.v1` receipts. Each receipt is signed by a key scoped to one tenant and executor audience and binds the adapter, permit, action hash, applied controls, native mechanisms, evidence references, and observation times.
+Configured execution adapters first authenticate and reserve a permit, then replace caller-supplied control names with short-lived `smerc.control-evidence.v1` receipts. Each receipt is signed by a key scoped to one tenant and executor audience and binds the adapter, permit, action hash, applied controls, native mechanisms, evidence references, and observation times.
 
 This improves authenticity, freshness, and auditability; it does not prove a compromised adapter or key is truthful. Unconfigured audiences retain a migration-only path labeled `legacy_caller_assertion`. See `docs/Control_Evidence_Operations.md`.
 
@@ -147,6 +150,17 @@ python -m reference_engine.agent_permission_layer examples/agent_permission_acti
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m unittest discover -s tests
 ```
+
+Validate a deployment plan without issuing permission or executing its command:
+
+```bash
+python integrations/github_deployment/deployment_adapter.py \
+  --action-file examples/action_language/production_canary_release.json \
+  --plan-file examples/github_deployment/execution_plan.json \
+  --mode validate
+```
+
+The enforce path requires separate proposer, issuer, executor, and control-evidence authorities. See `integrations/github_deployment/README.md`; do not substitute the public simulation commands for a reviewed deployment procedure.
 
 Run the recoverability API locally without authentication only for development:
 

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-execution-report-v1.schema.json",
+  "title": "SMERC Execution Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["report_version", "execution_id", "outcome"],
+  "properties": {
+    "report_version": {"const": "smerc.execution-report.v1"},
+    "execution_id": {"type": "string", "minLength": 1, "maxLength": 192},
+    "outcome": {"enum": ["VALIDATED", "BLOCKED", "SUCCEEDED", "FAILED", "TIMED_OUT", "CANCELLED"]},
+    "error": {"type": "string", "minLength": 1, "maxLength": 128},
+    "message": {"type": "string", "minLength": 1, "maxLength": 512},
+    "tenant_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "audience": {"type": "string", "minLength": 1, "maxLength": 128},
+    "action_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "plan_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "required_external_inputs": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 128}
+    },
+    "permit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["permit_id", "replay_id", "posture", "authorization", "required_controls", "expires_at"],
+      "properties": {
+        "permit_id": {"type": "string", "pattern": "^permit_[0-9a-f]{32}$"},
+        "replay_id": {"type": "string", "minLength": 1, "maxLength": 192},
+        "posture": {"enum": ["ALLOW", "THROTTLE"]},
+        "authorization": {"enum": ["release", "constrain"]},
+        "required_controls": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"}
+        },
+        "expires_at": {"type": "integer", "minimum": 1}
+      }
+    },
+    "control_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "adapter_id", "controls"],
+      "properties": {
+        "evidence_id": {"type": "string", "pattern": "^control_evidence_[0-9a-f]{32}$"},
+        "adapter_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "controls": {"type": "object", "maxProperties": 64}
+      }
+    },
+    "permit_consumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid", "preparation_id", "consumed_at", "control_evidence_mode"],
+      "properties": {
+        "valid": {"const": true},
+        "preparation_id": {"type": "string", "pattern": "^preparation_[0-9a-f]{32}$"},
+        "consumed_at": {"type": "string", "format": "date-time"},
+        "control_evidence_mode": {"enum": ["signed_adapter_receipt", "legacy_caller_assertion"]}
+      }
+    },
+    "execution": {"$ref": "#/$defs/processResult"},
+    "rollback": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/processResult"}]},
+    "environment_names": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Z_][A-Z0-9_]{0,127}$"}
+    }
+  },
+  "$defs": {
+    "processResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "exit_code", "started_at", "finished_at", "duration_ms", "output_sha256", "output_bytes"],
+      "properties": {
+        "status": {"enum": ["succeeded", "failed", "start_failed", "timed_out", "cancelled"]},
+        "exit_code": {"type": ["integer", "null"]},
+        "started_at": {"type": "string", "format": "date-time"},
+        "finished_at": {"type": "string", "format": "date-time"},
+        "duration_ms": {"type": "integer", "minimum": 0},
+        "output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "output_bytes": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

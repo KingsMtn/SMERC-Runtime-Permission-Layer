@@ -1,0 +1,40 @@
+{
+  "version": "smerc.execution-plan.v1",
+  "execution_id": "production-release-2042",
+  "audience": "github-production-executor",
+  "working_directory": ".",
+  "command": ["python", "-c", "print('deployment adapter simulation: replace with an approved argv array')"],
+  "timeout_seconds": 300,
+  "cancel_grace_seconds": 10,
+  "environment_allowlist": [
+    "CANARY_PERCENT",
+    "DEPLOYMENT_PREVIEW_APPROVED",
+    "DEPLOYMENT_RATE_LIMIT_RPS",
+    "DEPLOYMENT_TARGET"
+  ],
+  "controls": {
+    "limit_scope": {
+      "command": ["python", "-c", "import os; assert os.environ['DEPLOYMENT_TARGET'] == 'production'; assert 0 < int(os.environ['CANARY_PERCENT']) <= 5"],
+      "timeout_seconds": 30,
+      "mechanism": "bounded canary scope assertion"
+    },
+    "preview_before_execution": {
+      "command": ["python", "-c", "import os; assert os.environ['DEPLOYMENT_PREVIEW_APPROVED'] == 'true'"],
+      "timeout_seconds": 30,
+      "mechanism": "approved deployment preview assertion"
+    },
+    "rate_limit_external_side_effect": {
+      "command": ["python", "-c", "import os; assert 0 < int(os.environ['DEPLOYMENT_RATE_LIMIT_RPS']) <= 20"],
+      "timeout_seconds": 30,
+      "mechanism": "bounded request-rate assertion"
+    }
+  },
+  "rollback": {
+    "command": ["python", "-c", "print('rollback simulation: replace with an approved argv array')"],
+    "timeout_seconds": 300,
+    "mechanism": "approved rollback command",
+    "on_failure": true,
+    "on_timeout": true,
+    "on_cancel": true
+  }
+}

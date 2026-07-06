@@ -1,0 +1,61 @@
+name: "SMERC Authorized Deployment"
+description: "Consume an action-bound SMERC permit and execute one bounded deployment plan."
+author: "SMERC"
+
+inputs:
+  action-file:
+    description: "Path to the exact smerc.action.v1 request bound to the permit."
+    required: true
+  plan-file:
+    description: "Path to a strict smerc.execution-plan.v1 document."
+    required: true
+  permit-token-file:
+    description: "Path to the short-lived permit file. The adapter removes it before execution."
+    required: false
+    default: ""
+  api-url:
+    description: "HTTPS SMERC API base URL."
+    required: false
+    default: ""
+  mode:
+    description: "validate checks contracts without executing; enforce requires and consumes a permit."
+    required: false
+    default: "validate"
+  report-file:
+    description: "Path for the execution report."
+    required: false
+    default: "smerc-execution-report.json"
+
+outputs:
+  outcome:
+    value: ${{ steps.execute.outputs.outcome }}
+    description: "VALIDATED, BLOCKED, SUCCEEDED, FAILED, TIMED_OUT, or CANCELLED."
+  execution-id:
+    value: ${{ steps.execute.outputs.execution-id }}
+    description: "Execution identifier from the plan."
+  rollback-status:
+    value: ${{ steps.execute.outputs.rollback-status }}
+    description: "Rollback process status or not_run."
+  report-path:
+    value: ${{ steps.execute.outputs.report-path }}
+    description: "Local path to the non-secret execution report."
+
+runs:
+  using: "composite"
+  steps:
+    - id: execute
+      shell: bash
+      env:
+        SMERC_API_URL: ${{ inputs.api-url }}
+      run: |
+        args=(
+          --action-file "${{ inputs.action-file }}"
+          --plan-file "${{ inputs.plan-file }}"
+          --mode "${{ inputs.mode }}"
+          --report-file "${{ inputs.report-file }}"
+          --workspace "$GITHUB_WORKSPACE"
+        )
+        if [[ "${{ inputs.mode }}" == "enforce" ]]; then
+          args+=(--permit-token-file "${{ inputs.permit-token-file }}")
+        fi
+        python "$GITHUB_ACTION_PATH/deployment_adapter.py" "${args[@]}"

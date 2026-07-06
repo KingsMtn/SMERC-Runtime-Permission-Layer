@@ -190,7 +190,7 @@ Purpose:
 - bind authorization to the exact tenant, executor audience, action, replay, policy, and constraints
 - reject altered, expired, wrong-audience, superseded-policy, and replayed permits
 - carry `THROTTLE` controls to the execution boundary
-- register one issuance per decision/audience and atomically consume it once
+- register one issuance per decision/audience, reserve it for one execution, and atomically consume it once
 
 The pilot uses tenant HMAC keys and SQLite replay state. This proves the execution contract, not production key management, workload identity, distributed replay prevention, independent verification of native control operation, or nonrepudiation.
 
@@ -211,6 +211,24 @@ Purpose:
 - preserve legacy all-scope keys for controlled compatibility
 
 This begins with static bearer-secret pilot principals and can derive expiring, scope-narrowed sessions. GitHub Actions can additionally use provider-specific OIDC trust. General enterprise federation, managed rotation/revocation, and external immutable audit storage remain outside the reference build.
+
+### 13. Signed Control Evidence
+
+Files:
+
+- `reference_engine/control_evidence.py`
+- `schemas/smerc-control-evidence-v1.schema.json`
+- `specification/SMERC_Control_Evidence_v1.md`
+
+Purpose:
+
+- replace caller-supplied control names with signed adapter receipts when configured
+- bind adapter, permit, action, tenant, audience, controls, native references, and freshness
+- reject failed, stale, altered, missing, wrong-action, wrong-audience, and wrong-permit evidence
+- retain receipt digests and bounded attribution without storing bearer tokens
+- preserve an explicitly labeled compatibility path for unconfigured pilot audiences
+
+HMAC authenticates the configured pilot adapter key but does not independently prove that the adapter or referenced native mechanism is truthful. Production needs managed workload identity, protected signing, native evidence verification, and external audit.
 
 ### 14. Short-Lived Workload Sessions
 
@@ -251,23 +269,26 @@ Purpose:
 
 This proves a bounded GitHub workload identity claim, not the safety of its workflow, runner, actor, or proposed action. SQLite replay state and process-local JWKS caching remain single-instance pilot controls.
 
-### 13. Signed Control Evidence
+### 16. GitHub Deployment Execution Adapter
 
 Files:
 
-- `reference_engine/control_evidence.py`
-- `schemas/smerc-control-evidence-v1.schema.json`
-- `specification/SMERC_Control_Evidence_v1.md`
+- `integrations/github_deployment/deployment_adapter.py`
+- `integrations/github_deployment/issue_permit.py`
+- `integrations/github_deployment/action.yml`
+- `schemas/smerc-execution-plan-v1.schema.json`
+- `schemas/smerc-execution-report-v1.schema.json`
 
 Purpose:
 
-- replace caller-supplied control names with signed adapter receipts when configured
-- bind adapter, permit, action, tenant, audience, controls, native references, and freshness
-- reject failed, stale, altered, missing, wrong-action, wrong-audience, and wrong-permit evidence
-- retain receipt digests and bounded attribution without storing bearer tokens
-- preserve an explicitly labeled compatibility path for unconfigured pilot audiences
+- require an action-bound permit before a declared side effect
+- map every permit-required control to a successful native command or internal cancellation mechanism
+- authenticate and reserve the permit before controls, then sign control evidence and atomically consume the reservation before execution
+- execute argument arrays without shell interpretation
+- terminate timed-out or cancelled processes and attempt declared rollback
+- produce a hash- and status-based report without raw output, secrets, or tokens
 
-HMAC authenticates the configured pilot adapter key but does not independently prove that the adapter or referenced native mechanism is truthful. Production needs managed workload identity, protected signing, native evidence verification, and external audit.
+This creates an executable pilot lifecycle, not a sandbox or production-certified deployment controller. Native control commands, runner integrity, descendant-process handling, external state restoration, and multi-instance replay prevention remain validation and hardening requirements.
 
 ## What This Build Proves
 
@@ -284,6 +305,7 @@ HMAC authenticates the configured pilot adapter key but does not independently p
 - Scoped principals prevent a proposing agent from automatically inheriting permit-issuance or execution authority.
 - Configured adapters must provide signed, fresh control evidence bound to the exact action and permit.
 - Configured principals can use expiring, scope-narrowed sessions without expanding authority.
+- The GitHub deployment adapter can order native controls, one-time permit consumption, bounded execution, cancellation, rollback attempt, and non-secret reporting in one tested path.
 
 ## What This Build Does Not Prove
 
@@ -293,6 +315,7 @@ HMAC authenticates the configured pilot adapter key but does not independently p
 - It does not prove the model improves decisions against live workflow data.
 - It does not turn synthetic evidence into customer or production validation.
 - It does not replace existing security controls.
+- It does not prove process isolation, native-control truth, guaranteed rollback, or production runner integrity.
 
 ## Next Product Layer
 

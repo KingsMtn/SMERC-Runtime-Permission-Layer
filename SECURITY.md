@@ -76,6 +76,12 @@ Do not expose the pilot secret to untrusted fork workflows. Pin the action to a 
 
 An unavailable remote service never produces a fabricated posture. Observe and recommend modes may report `UNAVAILABLE`; enforce mode always fails closed.
 
+## GitHub Deployment Adapter
+
+The deployment adapter requires a short-lived action-bound permit and signed control evidence before a declared command starts. It authenticates and atomically reserves the permit before native controls run, then atomically consumes that reservation after evidence verification. It reads the permit from a file, refuses to continue unless that file is removed, uses argument arrays with `shell=False`, limits inherited environment names, confines the working directory to the workspace, hashes and discards process output, and attempts configured rollback after execution failure, timeout, or cancellation.
+
+This is not process isolation. A permitted command can use the runner's network and filesystem authority. Native control success is only as trustworthy as the command, runner, evidence key, and external evidence reference. Rollback command success does not prove target-state restoration. On Windows, the current adapter terminates the directly managed process but does not guarantee descendant termination. Use hardened ephemeral runners, protected GitHub environments, reviewed immutable plan files, scoped credentials, target-platform audit comparison, and non-production trials before limited enforcement.
+
 ## Enforcement Warning
 
 Do not use the reference thresholds for production blocking without threat modeling, calibration, accountable approval, override procedures, and an explicit fail-open/fail-closed decision.

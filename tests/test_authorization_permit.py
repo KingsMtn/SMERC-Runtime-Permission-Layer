@@ -307,6 +307,31 @@ class AuthorizationPermitAPITests(unittest.TestCase):
         )
         self.assertEqual(duplicate_status, 409)
         self.assertEqual(duplicate["error"], "permit_already_issued")
+        prepare_payload = {
+            "permit_token": issued["permit_token"],
+            "action": action,
+            "audience": "github-actions-deployer",
+            "execution_id": "github-deployment-9001",
+        }
+        status, prepared = self.request("/v1/permits/prepare", prepare_payload)
+        self.assertEqual(status, 200)
+        self.assertTrue(prepared["valid"])
+        self.assertEqual(prepared["permit"]["permit_id"], issued["permit"]["permit_id"])
+        preparation_id = prepared["preparation"]["preparation_id"]
+        duplicate_prepare_status, duplicate_prepared = self.request("/v1/permits/prepare", prepare_payload)
+        self.assertEqual(duplicate_prepare_status, 200)
+        self.assertEqual(duplicate_prepared["preparation"]["preparation_id"], preparation_id)
+        competing_prepare = dict(prepare_payload, execution_id="github-deployment-9002")
+        competing_status, competing = self.request("/v1/permits/prepare", competing_prepare)
+        self.assertEqual(competing_status, 409)
+        self.assertEqual(competing["error"], "permit_already_prepared")
+
+        token_parts = issued["permit_token"].split(".")
+        token_parts[2] = ("A" if token_parts[2][0] != "A" else "B") + token_parts[2][1:]
+        forged_prepare = dict(prepare_payload, permit_token=".".join(token_parts))
+        status, rejected = self.request("/v1/permits/prepare", forged_prepare)
+        self.assertEqual(status, 400)
+        self.assertEqual(rejected["error"], "invalid_permit_signature")
         observed_at = int(time.time())
         control_receipt = self.control_evidence_signer.issue(
             issued["permit"],
@@ -340,6 +365,7 @@ class AuthorizationPermitAPITests(unittest.TestCase):
             "permit_token": issued["permit_token"],
             "action": action,
             "audience": "github-actions-deployer",
+            "preparation_id": preparation_id,
             "enforced_controls": ["retain_cancel_handle"],
         }
         status, rejected = self.request("/v1/permits/consume", legacy_payload)
@@ -350,6 +376,7 @@ class AuthorizationPermitAPITests(unittest.TestCase):
             "permit_token": issued["permit_token"],
             "action": action,
             "audience": "github-actions-deployer",
+            "preparation_id": preparation_id,
             "control_evidence_token": wrong_receipt["control_evidence_token"],
         }
         status, rejected = self.request("/v1/permits/consume", wrong_receipt_payload)
@@ -360,6 +387,7 @@ class AuthorizationPermitAPITests(unittest.TestCase):
             "permit_token": issued["permit_token"],
             "action": action,
             "audience": "github-actions-deployer",
+            "preparation_id": preparation_id,
             "control_evidence_token": control_receipt["control_evidence_token"],
         }
         status, consumed = self.request("/v1/permits/consume", consume_payload)
@@ -381,6 +409,9 @@ class AuthorizationPermitAPITests(unittest.TestCase):
         status, replayed = self.request("/v1/permits/consume", consume_payload)
         self.assertEqual(status, 409)
         self.assertEqual(replayed["error"], "permit_already_consumed")
+        status, replayed_prepare = self.request("/v1/permits/prepare", prepare_payload)
+        self.assertEqual(status, 409)
+        self.assertEqual(replayed_prepare["error"], "permit_already_consumed")
 
 
 if __name__ == "__main__":
