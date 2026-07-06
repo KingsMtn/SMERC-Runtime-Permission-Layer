@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Added a plain-English product overview for nontechnical and CISO-facing review.
+- Added a GitHub inspection guide that maps reviewers to the implementation, permits, audit path, deployment adapter, and tests.
+- Added a founder explanation card with concise language for applications, customer calls, and design-partner conversations.
+- Updated the README and CISO quick review to make the repository easier to understand without a live walkthrough.
+
 ## 0.13.0 - 2026-07-05
 
 - Added strict `smerc.execution-plan.v1` and `smerc.execution-report.v1` contracts.

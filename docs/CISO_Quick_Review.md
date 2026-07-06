@@ -10,6 +10,10 @@ SMERC is runtime permission infrastructure for AI agents. It evaluates proposed 
 - `DENY`
 - `ESCALATE`
 
+In plain English:
+
+> SMERC helps companies decide whether AI-agent and automation actions are recoverable enough to execute now.
+
 ## Where Does It Sit?
 
 SMERC sits between an agent or automation system and a side-effecting tool:
@@ -67,6 +71,9 @@ Configured execution adapters must also provide a signed, short-lived control-ev
 - GitHub Actions OIDC verification and workload-bound decision attribution
 - Signed adapter control-evidence receipts
 - Pilot package and validation materials
+
+For a nontechnical starting point, read `docs/Plain_English_Product_Overview.md`.
+For a structured GitHub review path, read `docs/CISO_GitHub_Inspection_Guide.md`.
 
 ## How Would A Team Test It?
 
