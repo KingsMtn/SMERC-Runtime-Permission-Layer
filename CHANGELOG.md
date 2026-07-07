@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added starter `smerc.spl.v0` policy-language profile, compiler, example policy, specification, and tests.
 - Added a developer quickstart for local engine, API, deployment-plan validation, and first-pilot review.
 - Added a pilot evaluation checklist and structured JSON checklist for design-partner review.
 - Added tests that keep the structured checklist linked to real repository evidence.

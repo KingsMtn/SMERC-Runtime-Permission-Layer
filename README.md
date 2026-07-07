@@ -51,6 +51,7 @@ Start here before reading the code:
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
+- `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
 
 The shortest accurate explanation is:
 
@@ -118,6 +119,17 @@ python -m reference_engine.action_language examples/action_language/production_d
 ```
 
 Schemas and full semantics are in `schemas/` and `specification/SMERC_Action_Language_v1.md`.
+
+## SMERC Policy Language
+
+`smerc.spl.v0` is a starter policy-language profile for pilot review. It gives reviewers a human-oriented way to define tenant, mode, evidence ceiling, and posture thresholds, then compiles into the existing strict `smerc.policy.v1` runtime contract.
+
+```bash
+python -m reference_engine.spl examples/policies/github_actions_shadow_spl.json --pretty
+python -m reference_engine.spl examples/policies/github_actions_shadow_spl.json --hash
+```
+
+SPL v0 is deliberately narrow. It is not yet a full policy language with grammar tooling, imports, IDE support, or formal verification. See `specification/SMERC_SPL_v0.md`.
 
 ## Action-Bound Permits
 

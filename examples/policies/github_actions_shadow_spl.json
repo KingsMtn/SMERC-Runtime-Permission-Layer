@@ -1,0 +1,39 @@
+{
+  "version": "smerc.spl.v0",
+  "tenant": {
+    "id": "platform-team"
+  },
+  "policy": {
+    "id": "github-actions-shadow-mode",
+    "revision": "2026.07.07",
+    "mode": "OBSERVE",
+    "fail_behavior": "report_unavailable",
+    "approved_by_role": "security-architecture-review",
+    "effective_at": "2026-07-07T00:00:00Z"
+  },
+  "evidence": {
+    "program_id": "smerc-core-validation-v1",
+    "ceiling": "OBSERVE"
+  },
+  "thresholds": {
+    "throttle": {
+      "authorization_min": 0.62,
+      "exposure_min": 0.45
+    },
+    "freeze": {
+      "confidence_max": 0.45,
+      "capacity_max": 0.36
+    },
+    "deny": {
+      "exposure_min": 0.78,
+      "capacity_max": 0.42,
+      "confidence_max": 0.48,
+      "cancel_reliability_max": 0.3,
+      "cancel_exposure_min": 0.62
+    },
+    "escalate": {
+      "stress_min": 0.7
+    }
+  }
+}
+
