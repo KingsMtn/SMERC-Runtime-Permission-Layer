@@ -32,6 +32,7 @@ The current build includes:
 - GitHub Actions gate
 - local and authenticated remote GitHub Action evaluation
 - permit-consuming GitHub deployment adapter with native controls, cancellation, rollback, and non-secret execution reports
+- dependency-free Python SDK for API pilots and integration tests
 - synthetic shadow-mode scenario packs
 - evidence/report generators
 - Render deployment profile
@@ -50,6 +51,7 @@ Start here before reading the code:
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
+- `docs/Python_SDK_Quickstart.md` shows how to call the SMERC API from Python without third-party dependencies.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
 - `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
 
@@ -78,8 +80,9 @@ The shortest accurate explanation is:
 17. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
 18. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
 19. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
-20. Run the Python and console tests.
-21. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+20. Read `docs/Python_SDK_Quickstart.md`.
+21. Run the Python and console tests.
+22. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -218,6 +221,25 @@ curl -X POST http://127.0.0.1:8788/v1/evaluate \
   -H "Content-Type: application/json" \
   --data @examples/recoverability_single_action.json
 ```
+
+Call the same authenticated API from Python:
+
+```python
+import json
+from pathlib import Path
+
+from smerc_sdk import SMERCClient
+
+client = SMERCClient(
+    "http://127.0.0.1:8788",
+    token="development-console-secret-2026-rotate",
+)
+action = json.loads(Path("examples/recoverability_single_action.json").read_text())
+decision = client.evaluate(action, idempotency_key="workflow-run-1001")
+print(decision["posture"], decision["replay_id"])
+```
+
+See `docs/Python_SDK_Quickstart.md` for replay, review, metrics, and queue examples.
 
 Evaluate the versioned action contract through the authenticated API:
 

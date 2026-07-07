@@ -114,7 +114,30 @@ The GitHub CI suite also runs:
 - console contract tests
 - container smoke tests
 
-## 8. First Pilot Shape
+## 8. Call The API From Python
+
+Use the dependency-free SDK when a pilot needs a small service, notebook, or test harness to call SMERC without hand-written HTTP code.
+
+```python
+import json
+from pathlib import Path
+
+from smerc_sdk import SMERCClient
+
+client = SMERCClient(
+    "http://127.0.0.1:8788",
+    token="development-console-secret-2026-rotate",
+)
+action = json.loads(Path("examples/recoverability_single_action.json").read_text())
+
+decision = client.evaluate(action, idempotency_key="quickstart-1001")
+replay = client.get_decision(decision["replay_id"])
+metrics = client.pilot_metrics()
+```
+
+See `docs/Python_SDK_Quickstart.md` for review queue and Action Language examples.
+
+## 9. First Pilot Shape
 
 The recommended first design-partner pilot is GitHub Actions shadow mode:
 
@@ -132,7 +155,7 @@ Read:
 - `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`
 - `examples/pilot_evaluation_checklist.json`
 
-## 9. What To Inspect If You Have 30 Minutes
+## 10. What To Inspect If You Have 30 Minutes
 
 | Question | Inspect |
 | --- | --- |
@@ -145,7 +168,7 @@ Read:
 | How does deployment enforcement work? | `integrations/github_deployment/deployment_adapter.py` |
 | What are the honest limits? | `SECURITY.md` |
 
-## 10. What This Quickstart Does Not Prove
+## 11. What This Quickstart Does Not Prove
 
 This quickstart does not prove:
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a dependency-free Python SDK for health, schema, evaluation, Action Language evaluation, batch decisions, replay, reviews, pilot metrics, review queue, security events, and permit API calls.
+- Added Python SDK quickstart documentation and live API client tests.
 - Added starter `smerc.spl.v0` policy-language profile, compiler, example policy, specification, and tests.
 - Added a developer quickstart for local engine, API, deployment-plan validation, and first-pilot review.
 - Added a pilot evaluation checklist and structured JSON checklist for design-partner review.
