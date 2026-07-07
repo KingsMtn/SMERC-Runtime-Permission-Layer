@@ -50,7 +50,18 @@ curl -X POST http://127.0.0.1:8788/v1/evaluate \
 
 For any shared, remote, or pilot deployment, use scoped authenticated principals instead. See `docs/API_Deployment_Guide.md`.
 
-## 4. Validate A Deployment Plan
+## 4. Compile A Starter SPL Policy
+
+Compile the pilot-friendly SMERC Policy Language profile into the strict runtime policy contract:
+
+```bash
+python -m reference_engine.spl examples/policies/github_actions_shadow_spl.json --pretty
+python -m reference_engine.spl examples/policies/github_actions_shadow_spl.json --hash
+```
+
+Read `specification/SMERC_SPL_v0.md` for the policy surface and its current limits.
+
+## 5. Validate A Deployment Plan
 
 This validates the GitHub deployment adapter without issuing permission or running a deployment command:
 
@@ -67,7 +78,7 @@ Expected result:
 - no permit consumption
 - no native command execution
 
-## 5. Understand The Enforce Path
+## 6. Understand The Enforce Path
 
 The enforce path is intentionally stricter than the demo path:
 
@@ -90,7 +101,7 @@ Read:
 - `docs/GitHub_Deployment_Adapter_Operations.md`
 - `specification/SMERC_Execution_Plan_v1.md`
 
-## 6. Run Tests
+## 7. Run Tests
 
 ```bash
 python -m unittest discover -s tests -v
@@ -103,7 +114,7 @@ The GitHub CI suite also runs:
 - console contract tests
 - container smoke tests
 
-## 7. First Pilot Shape
+## 8. First Pilot Shape
 
 The recommended first design-partner pilot is GitHub Actions shadow mode:
 
@@ -121,19 +132,20 @@ Read:
 - `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`
 - `examples/pilot_evaluation_checklist.json`
 
-## 8. What To Inspect If You Have 30 Minutes
+## 9. What To Inspect If You Have 30 Minutes
 
 | Question | Inspect |
 | --- | --- |
 | What does SMERC decide? | `reference_engine/recoverability_engine.py` |
 | What is the action contract? | `specification/SMERC_Action_Language_v1.md` |
+| How are runtime thresholds configured? | `specification/SMERC_SPL_v0.md` |
 | How are decisions stored? | `reference_engine/audit_store.py` |
 | How are permits bound to actions? | `reference_engine/authorization_permit.py` |
 | How does GitHub identity enter? | `reference_engine/github_oidc.py` |
 | How does deployment enforcement work? | `integrations/github_deployment/deployment_adapter.py` |
 | What are the honest limits? | `SECURITY.md` |
 
-## 9. What This Quickstart Does Not Prove
+## 10. What This Quickstart Does Not Prove
 
 This quickstart does not prove:
 
@@ -146,4 +158,3 @@ This quickstart does not prove:
 - compliance certification
 
 Those require design-partner pilots and production hardening.
-

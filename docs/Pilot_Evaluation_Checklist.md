@@ -42,7 +42,9 @@ Primary files:
 Primary files:
 
 - `reference_engine/recoverability_engine.py`
+- `specification/SMERC_SPL_v0.md`
 - `examples/recoverability_action_requests.json`
+- `examples/policies/github_actions_shadow_spl.json`
 - `reports/Recoverability_Engine_Report.md`
 
 ### API And Audit
@@ -126,4 +128,3 @@ At the end of the pilot, produce:
 - false release and false constraint cases
 - recommended calibration changes
 - a go/no-go recommendation for limited enforcement
-
