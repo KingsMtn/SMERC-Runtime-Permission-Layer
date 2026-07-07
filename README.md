@@ -56,6 +56,7 @@ Start here before reading the code:
 - `docs/JavaScript_SDK_Quickstart.md` shows how to call the SMERC API from Node or browser-compatible JavaScript.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
 - `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
+- `reports/Proxy_Incident_Replay_Benchmark.md` shows proxy incident-replay evidence comparing simple allow/deny policy with SMERC recoverability-weighted posture decisions.
 
 The shortest accurate explanation is:
 
@@ -84,8 +85,9 @@ The shortest accurate explanation is:
 19. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
 20. Read `docs/Python_SDK_Quickstart.md`.
 21. Read `docs/JavaScript_SDK_Quickstart.md`.
-22. Run the Python and console tests.
-23. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+22. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+23. Run the Python and console tests.
+24. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -286,6 +288,17 @@ curl "http://127.0.0.1:8788/v1/pilot/metrics" \
 ```
 
 Rates are returned with denominators and remain `null` when not measurable. They describe reviewed pilot records only; they are not production accuracy claims.
+
+Generate the proxy incident-replay benchmark:
+
+```bash
+python -m reference_engine.proxy_evidence_benchmark \
+  examples/proxy_incident_replay_scenarios.json \
+  --json-output reports/proxy_incident_replay_benchmark.json \
+  --markdown-output reports/Proxy_Incident_Replay_Benchmark.md
+```
+
+This benchmark is scenario-based proxy evidence. It is useful for review and hypothesis testing; it is not production validation or a claim that SMERC reduces incidents in live environments.
 
 Run the browser-based pilot review console:
 

@@ -175,20 +175,36 @@ Read:
 - `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`
 - `examples/pilot_evaluation_checklist.json`
 
-## 11. What To Inspect If You Have 30 Minutes
+## 11. Generate Proxy Evidence
+
+Before a design partner supplies live workflow data, reviewers can inspect a proxy incident-replay benchmark:
+
+```bash
+python -m reference_engine.proxy_evidence_benchmark \
+  examples/proxy_incident_replay_scenarios.json \
+  --json-output reports/proxy_incident_replay_benchmark.json \
+  --markdown-output reports/Proxy_Incident_Replay_Benchmark.md
+```
+
+Read `reports/Proxy_Incident_Replay_Benchmark.md`.
+
+This is scenario-based proxy evidence, not production validation. It helps test whether recoverability scoring changes decisions in plausible incident patterns.
+
+## 12. What To Inspect If You Have 30 Minutes
 
 | Question | Inspect |
 | --- | --- |
 | What does SMERC decide? | `reference_engine/recoverability_engine.py` |
 | What is the action contract? | `specification/SMERC_Action_Language_v1.md` |
 | How are runtime thresholds configured? | `specification/SMERC_SPL_v0.md` |
+| What proxy evidence exists? | `reports/Proxy_Incident_Replay_Benchmark.md` |
 | How are decisions stored? | `reference_engine/audit_store.py` |
 | How are permits bound to actions? | `reference_engine/authorization_permit.py` |
 | How does GitHub identity enter? | `reference_engine/github_oidc.py` |
 | How does deployment enforcement work? | `integrations/github_deployment/deployment_adapter.py` |
 | What are the honest limits? | `SECURITY.md` |
 
-## 12. What This Quickstart Does Not Prove
+## 13. What This Quickstart Does Not Prove
 
 This quickstart does not prove:
 
