@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a dependency-free JavaScript SDK for health, schema, evaluation, Action Language evaluation, batch decisions, replay, reviews, pilot metrics, review queue, security events, permit calls, and short-lived token exchange.
+- Added JavaScript SDK quickstart documentation and Node test coverage.
 - Added a dependency-free Python SDK for health, schema, evaluation, Action Language evaluation, batch decisions, replay, reviews, pilot metrics, review queue, security events, and permit API calls.
 - Added Python SDK quickstart documentation and live API client tests.
 - Added starter `smerc.spl.v0` policy-language profile, compiler, example policy, specification, and tests.

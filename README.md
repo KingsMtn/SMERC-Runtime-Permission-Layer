@@ -33,6 +33,7 @@ The current build includes:
 - local and authenticated remote GitHub Action evaluation
 - permit-consuming GitHub deployment adapter with native controls, cancellation, rollback, and non-secret execution reports
 - dependency-free Python SDK for API pilots and integration tests
+- dependency-free JavaScript SDK for Node, agent runners, GitHub tooling, and browser pilot utilities
 - synthetic shadow-mode scenario packs
 - evidence/report generators
 - Render deployment profile
@@ -52,6 +53,7 @@ Start here before reading the code:
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
 - `docs/Python_SDK_Quickstart.md` shows how to call the SMERC API from Python without third-party dependencies.
+- `docs/JavaScript_SDK_Quickstart.md` shows how to call the SMERC API from Node or browser-compatible JavaScript.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
 - `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
 
@@ -81,8 +83,9 @@ The shortest accurate explanation is:
 18. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
 19. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
 20. Read `docs/Python_SDK_Quickstart.md`.
-21. Run the Python and console tests.
-22. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+21. Read `docs/JavaScript_SDK_Quickstart.md`.
+22. Run the Python and console tests.
+23. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -240,6 +243,22 @@ print(decision["posture"], decision["replay_id"])
 ```
 
 See `docs/Python_SDK_Quickstart.md` for replay, review, metrics, and queue examples.
+
+Call the same authenticated API from JavaScript:
+
+```js
+import { readFile } from 'node:fs/promises';
+import { SMERCClient } from './smerc_js_sdk/index.mjs';
+
+const client = new SMERCClient('http://127.0.0.1:8788', {
+  token: 'development-console-secret-2026-rotate',
+});
+const action = JSON.parse(await readFile('examples/recoverability_single_action.json', 'utf8'));
+const decision = await client.evaluate(action, { idempotencyKey: 'workflow-run-1001' });
+console.log(decision.posture, decision.replay_id);
+```
+
+See `docs/JavaScript_SDK_Quickstart.md` for replay, review, metrics, and queue examples.
 
 Evaluate the versioned action contract through the authenticated API:
 

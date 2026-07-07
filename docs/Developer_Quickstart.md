@@ -137,7 +137,27 @@ metrics = client.pilot_metrics()
 
 See `docs/Python_SDK_Quickstart.md` for review queue and Action Language examples.
 
-## 9. First Pilot Shape
+## 9. Call The API From JavaScript
+
+Use the dependency-free JavaScript SDK when a pilot needs a Node service, agent runner, GitHub tool, or browser-compatible utility to call SMERC.
+
+```js
+import { readFile } from 'node:fs/promises';
+import { SMERCClient } from './smerc_js_sdk/index.mjs';
+
+const client = new SMERCClient('http://127.0.0.1:8788', {
+  token: 'development-console-secret-2026-rotate',
+});
+const action = JSON.parse(await readFile('examples/recoverability_single_action.json', 'utf8'));
+
+const decision = await client.evaluate(action, { idempotencyKey: 'quickstart-1001' });
+const replay = await client.getDecision(decision.replay_id);
+const metrics = await client.pilotMetrics();
+```
+
+See `docs/JavaScript_SDK_Quickstart.md` for review queue and Action Language examples.
+
+## 10. First Pilot Shape
 
 The recommended first design-partner pilot is GitHub Actions shadow mode:
 
@@ -155,7 +175,7 @@ Read:
 - `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`
 - `examples/pilot_evaluation_checklist.json`
 
-## 10. What To Inspect If You Have 30 Minutes
+## 11. What To Inspect If You Have 30 Minutes
 
 | Question | Inspect |
 | --- | --- |
@@ -168,7 +188,7 @@ Read:
 | How does deployment enforcement work? | `integrations/github_deployment/deployment_adapter.py` |
 | What are the honest limits? | `SECURITY.md` |
 
-## 11. What This Quickstart Does Not Prove
+## 12. What This Quickstart Does Not Prove
 
 This quickstart does not prove:
 

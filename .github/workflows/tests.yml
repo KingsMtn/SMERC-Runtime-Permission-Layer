@@ -16,10 +16,14 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Check console JavaScript syntax
-        run: node --check pilot_console/app.js && node --check pilot_console/model.mjs
+        run: |
+          node --check pilot_console/app.js
+          node --check pilot_console/model.mjs
+          node --check smerc_js_sdk/client.mjs
+          node --check smerc_js_sdk/index.mjs
 
       - name: Run console model tests
-        run: node --test tests/js/pilot_console_model.test.mjs
+        run: node --test tests/js/*.test.mjs
 
   unittest:
     runs-on: ubuntu-latest
