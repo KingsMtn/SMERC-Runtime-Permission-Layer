@@ -4,6 +4,8 @@
 
 Determine whether runtime permission postures improve governance of AI-assisted code, deployment, and infrastructure workflows.
 
+Use `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` as the practical design-partner checklist. The checklist is deliberately written to identify both fit and reasons to stop or narrow the pilot.
+
 ## First Pilot Scope
 
 Recommended first scope:

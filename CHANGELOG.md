@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added a developer quickstart for local engine, API, deployment-plan validation, and first-pilot review.
+- Added a pilot evaluation checklist and structured JSON checklist for design-partner review.
+- Added tests that keep the structured checklist linked to real repository evidence.
 - Added a plain-English product overview for nontechnical and CISO-facing review.
 - Added a GitHub inspection guide that maps reviewers to the implementation, permits, audit path, deployment adapter, and tests.
 - Added a founder explanation card with concise language for applications, customer calls, and design-partner conversations.

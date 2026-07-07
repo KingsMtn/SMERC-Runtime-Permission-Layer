@@ -1,0 +1,149 @@
+# SMERC Developer Quickstart
+
+## Goal
+
+This quickstart lets a technical reviewer run SMERC locally, evaluate one action, inspect the replayable decision, and understand the first pilot path without reading the whole repository.
+
+SMERC is a pilot-grade runtime permission layer. The purpose of this quickstart is to prove mechanics, not production certification.
+
+## 1. Run The Local Engine
+
+Requires Python 3.10 or later. The reference path uses only the Python standard library.
+
+```bash
+python -m reference_engine.action_language examples/action_language/production_database_change.json
+```
+
+Expected result:
+
+- a structured `smerc.decision.v1` response
+- posture, scores, reason codes, controls, and replay metadata
+- no external service dependency
+
+## 2. Run The Recoverability Engine
+
+```bash
+python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
+```
+
+This demonstrates the core recoverability signal:
+
+```text
+proposed action -> reversibility/containment/evidence/anomaly/scope -> posture
+```
+
+## 3. Run The Pilot API Locally
+
+Start the API in explicit unauthenticated development mode:
+
+```bash
+python api_server.py --host 127.0.0.1 --port 8788 --audit-db :memory: --allow-unauthenticated
+```
+
+Then evaluate one action:
+
+```bash
+curl -X POST http://127.0.0.1:8788/v1/evaluate \
+  -H "Content-Type: application/json" \
+  --data @examples/recoverability_single_action.json
+```
+
+For any shared, remote, or pilot deployment, use scoped authenticated principals instead. See `docs/API_Deployment_Guide.md`.
+
+## 4. Validate A Deployment Plan
+
+This validates the GitHub deployment adapter without issuing permission or running a deployment command:
+
+```bash
+python integrations/github_deployment/deployment_adapter.py \
+  --action-file examples/action_language/production_canary_release.json \
+  --plan-file examples/github_deployment/execution_plan.json \
+  --mode validate
+```
+
+Expected result:
+
+- strict execution-plan validation
+- no permit consumption
+- no native command execution
+
+## 5. Understand The Enforce Path
+
+The enforce path is intentionally stricter than the demo path:
+
+```text
+action proposal
+  -> SMERC decision
+  -> action-bound permit issuance
+  -> permit preparation and reservation
+  -> native controls
+  -> signed control evidence
+  -> single-use permit consumption
+  -> bounded command execution
+  -> execution report
+```
+
+Read:
+
+- `docs/Action_Bound_Permit_Operations.md`
+- `docs/Control_Evidence_Operations.md`
+- `docs/GitHub_Deployment_Adapter_Operations.md`
+- `specification/SMERC_Execution_Plan_v1.md`
+
+## 6. Run Tests
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The GitHub CI suite also runs:
+
+- Python unit tests on 3.10
+- Python unit tests on 3.12
+- console contract tests
+- container smoke tests
+
+## 7. First Pilot Shape
+
+The recommended first design-partner pilot is GitHub Actions shadow mode:
+
+1. Choose several CI/CD, infrastructure, or AI-assisted workflow actions.
+2. Generate or supply `smerc.action.v1` metadata for each proposed action.
+3. Let SMERC score actions without blocking.
+4. Have reviewers mark agreement, disagreement, override, false release, false constraint, and useful constraint.
+5. Compare SMERC posture with existing approval behavior.
+6. Decide whether any narrow non-production enforcement is justified.
+
+Read:
+
+- `docs/Pilot_Readiness.md`
+- `docs/Pilot_Review_Metrics.md`
+- `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`
+- `examples/pilot_evaluation_checklist.json`
+
+## 8. What To Inspect If You Have 30 Minutes
+
+| Question | Inspect |
+| --- | --- |
+| What does SMERC decide? | `reference_engine/recoverability_engine.py` |
+| What is the action contract? | `specification/SMERC_Action_Language_v1.md` |
+| How are decisions stored? | `reference_engine/audit_store.py` |
+| How are permits bound to actions? | `reference_engine/authorization_permit.py` |
+| How does GitHub identity enter? | `reference_engine/github_oidc.py` |
+| How does deployment enforcement work? | `integrations/github_deployment/deployment_adapter.py` |
+| What are the honest limits? | `SECURITY.md` |
+
+## 9. What This Quickstart Does Not Prove
+
+This quickstart does not prove:
+
+- customer demand
+- production-scale reliability
+- production key management
+- independent native-control attestation
+- distributed replay prevention
+- real-world reduction in incidents
+- compliance certification
+
+Those require design-partner pilots and production hardening.
+

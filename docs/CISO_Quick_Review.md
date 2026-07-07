@@ -74,6 +74,8 @@ Configured execution adapters must also provide a signed, short-lived control-ev
 
 For a nontechnical starting point, read `docs/Plain_English_Product_Overview.md`.
 For a structured GitHub review path, read `docs/CISO_GitHub_Inspection_Guide.md`.
+For a technical run-and-inspect path, read `docs/Developer_Quickstart.md`.
+For a design-partner evaluation path, read `docs/Pilot_Evaluation_Checklist.md`.
 
 ## How Would A Team Test It?
 
