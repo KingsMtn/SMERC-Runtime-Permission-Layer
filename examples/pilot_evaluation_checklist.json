@@ -1,0 +1,135 @@
+{
+  "schema": "smerc.pilot-evaluation-checklist.v1",
+  "purpose": "Help a design partner evaluate whether SMERC is worth a controlled shadow-mode pilot.",
+  "minimum_fit": {
+    "required_true_count": 3,
+    "criteria": [
+      {
+        "id": "agentic_side_effects",
+        "question": "Can AI agents, copilots, scripts, or automations propose or trigger meaningful side effects?"
+      },
+      {
+        "id": "workflow_boundary",
+        "question": "Are GitHub Actions, CI/CD, infrastructure workflows, security automation, or agent tool calls in scope?"
+      },
+      {
+        "id": "replay_gap",
+        "question": "Are existing approval controls difficult to replay or explain after the fact?"
+      },
+      {
+        "id": "allow_block_gap",
+        "question": "Are simple allow/block decisions too blunt for some workflows?"
+      },
+      {
+        "id": "recoverability_concern",
+        "question": "Are rollback, containment, or blast radius recurring concerns?"
+      },
+      {
+        "id": "reviewer_capacity",
+        "question": "Can reviewers spend time calibrating SMERC decisions during shadow mode?"
+      }
+    ]
+  },
+  "review_areas": [
+    {
+      "id": "action_contract",
+      "title": "Action contract",
+      "evidence_files": [
+        "specification/SMERC_Action_Language_v1.md",
+        "schemas/smerc-action-language-v1.schema.json",
+        "reference_engine/action_language.py"
+      ],
+      "checks": [
+        "Proposed actions can be expressed as smerc.action.v1.",
+        "Action metadata avoids secrets, credentials, customer PII, and unnecessary source-code contents.",
+        "Action hashes are deterministic for replay.",
+        "Posture outputs include reason codes and controls."
+      ]
+    },
+    {
+      "id": "runtime_decision_behavior",
+      "title": "Runtime decision behavior",
+      "evidence_files": [
+        "reference_engine/recoverability_engine.py",
+        "examples/recoverability_action_requests.json",
+        "reports/Recoverability_Engine_Report.md"
+      ],
+      "checks": [
+        "Representative actions can be evaluated locally.",
+        "High-reversibility actions do not receive unnecessary blocking.",
+        "High-exposure, low-recovery actions do not receive ALLOW.",
+        "Reason codes are useful to reviewers."
+      ]
+    },
+    {
+      "id": "api_and_audit",
+      "title": "API and audit",
+      "evidence_files": [
+        "api_server.py",
+        "reference_engine/audit_store.py",
+        "docs/API_Deployment_Guide.md",
+        "docs/Pilot_Review_Metrics.md"
+      ],
+      "checks": [
+        "Authentication is enabled for shared environments.",
+        "Idempotency is used for workflow retries.",
+        "Replay IDs and decision records are tenant-scoped and retrievable.",
+        "Reviews are immutable and denominator-aware metrics are available."
+      ]
+    },
+    {
+      "id": "permit_and_evidence",
+      "title": "Permit and evidence path",
+      "evidence_files": [
+        "reference_engine/authorization_permit.py",
+        "reference_engine/control_evidence.py",
+        "docs/Action_Bound_Permit_Operations.md",
+        "docs/Control_Evidence_Operations.md"
+      ],
+      "checks": [
+        "Eligible enforcement decisions can issue action-bound permits.",
+        "Permit preparation occurs before native controls run.",
+        "Signed control evidence is required for configured executor audiences.",
+        "Permit consumption is atomic and single use."
+      ]
+    },
+    {
+      "id": "github_deployment_adapter",
+      "title": "GitHub deployment adapter",
+      "evidence_files": [
+        "integrations/github_deployment/deployment_adapter.py",
+        "docs/GitHub_Deployment_Adapter_Operations.md",
+        "examples/github_deployment/execution_plan.json",
+        "schemas/smerc-execution-plan-v1.schema.json",
+        "schemas/smerc-execution-report-v1.schema.json"
+      ],
+      "checks": [
+        "Execution plans validate in validate mode.",
+        "The adapter uses argument arrays rather than shell strings.",
+        "Report artifacts exclude raw command output and secrets.",
+        "Timeout, cancellation, and rollback behavior are understood."
+      ]
+    }
+  ],
+  "shadow_mode_metrics": [
+    "decision_volume_by_posture",
+    "reviewer_agreement_rate",
+    "false_release_rate",
+    "false_constraint_rate",
+    "useful_constraint_rate",
+    "override_rate",
+    "review_latency",
+    "approval_latency_impact",
+    "workflow_changes_recommended"
+  ],
+  "stop_conditions": [
+    "reviewers_cannot_understand_posture_reasons",
+    "frequent_constraints_on_low_risk_reversible_work",
+    "releases_actions_reviewers_consider_obviously_dangerous",
+    "metadata_collection_requires_sensitive_payloads",
+    "workflow_latency_unacceptable",
+    "existing_controls_produce_same_decision_quality_with_less_complexity",
+    "no_reviewer_capacity"
+  ]
+}
+

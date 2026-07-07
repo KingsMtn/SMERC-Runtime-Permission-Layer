@@ -49,6 +49,8 @@ Start here before reading the code:
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
+- `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
+- `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
 
 The shortest accurate explanation is:
 
@@ -58,23 +60,25 @@ The shortest accurate explanation is:
 
 1. Read `docs/Plain_English_Product_Overview.md`.
 2. Read `docs/CISO_GitHub_Inspection_Guide.md`.
-3. Read `docs/CISO_Quick_Review.md`.
-4. Read `docs/Security_Model.md`.
-5. Inspect `reference_engine/recoverability_engine.py`.
-6. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
-7. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
-8. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-9. Review `integrations/github_actions/README.md`.
-10. Read `docs/Pilot_Review_Metrics.md`.
-11. Inspect `pilot_console/README.md`.
-12. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
-13. Read `docs/Scoped_Workload_Identity.md`.
-14. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
-15. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
-16. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
-17. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
-18. Run the Python and console tests.
-19. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+3. Read `docs/Developer_Quickstart.md`.
+4. Read `docs/Pilot_Evaluation_Checklist.md`.
+5. Read `docs/CISO_Quick_Review.md`.
+6. Read `docs/Security_Model.md`.
+7. Inspect `reference_engine/recoverability_engine.py`.
+8. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
+9. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
+10. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+11. Review `integrations/github_actions/README.md`.
+12. Read `docs/Pilot_Review_Metrics.md`.
+13. Inspect `pilot_console/README.md`.
+14. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
+15. Read `docs/Scoped_Workload_Identity.md`.
+16. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
+17. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
+18. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
+19. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
+20. Run the Python and console tests.
+21. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
