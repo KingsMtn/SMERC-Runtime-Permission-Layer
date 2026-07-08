@@ -68,8 +68,11 @@ Useful contributions include:
 
 Use GitHub Issues or Pull Requests.
 
+Start with `docs/Public_Review_And_Feedback.md` if you found SMERC through a public post, Microsoft/Azure community link, CISO review page, or the Netlify site.
+
 Suggested first issue titles:
 
+- `Public review feedback: [area]`
 - `Design partner: evaluate SMERC against GitHub Actions shadow mode`
 - `Integration idea: connect SMERC to [tool/platform]`
 - `Scenario contribution: [category] recoverability examples`
