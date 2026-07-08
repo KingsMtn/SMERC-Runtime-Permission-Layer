@@ -7,6 +7,7 @@ from urllib.request import Request, urlopen
 
 from api_server import create_server, parse_api_keys
 from reference_engine.policy import PolicyRegistry, RuntimePolicy
+from reference_engine.recoverability_engine import load_domain_profile_dir
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,6 +18,7 @@ LANGUAGE_EXAMPLE = json.loads(
 POLICY_EXAMPLE = json.loads(
     (ROOT / "examples" / "policies" / "alpha_conservative.json").read_text(encoding="utf-8")
 )
+DOMAIN_PROFILE_DIR = ROOT / "examples" / "domain_profiles"
 
 
 class APIServerTests(unittest.TestCase):
@@ -67,6 +69,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(health[0], 200)
         self.assertEqual(health[2]["version"], "0.12")
         self.assertEqual(health[2]["tenant_policy_count"], 0)
+        self.assertEqual(health[2]["custom_domain_profile_count"], 0)
         self.assertEqual(health[2]["permit_signer_count"], 0)
         self.assertEqual(health[2]["api_principal_count"], 2)
         self.assertEqual(health[2]["control_evidence_adapter_count"], 0)
@@ -90,6 +93,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(body["language_versions"]["access_token"], "smerc.access-token.v2")
         self.assertEqual(body["language_versions"]["github_oidc"], "smerc.github-oidc.v1")
         self.assertEqual(body["policy_version"], "smerc.policy.v1")
+        self.assertEqual(body["domain_profile_version"], "smerc.domain_profile.v1")
         self.assertIn("POST /v1/decisions/{replay_id}/reviews", body["endpoints"])
         self.assertIn("GET /v1/pilot/metrics", body["endpoints"])
         self.assertIn("GET /v1/review-queue", body["endpoints"])
@@ -288,6 +292,39 @@ class LocalDevelopmentModeTests(unittest.TestCase):
             self.assertNotEqual(alpha["policy"]["policy_hash"], beta["policy"]["policy_hash"])
         finally:
             server.server_close()
+
+    def test_server_uses_custom_domain_profiles_when_configured(self):
+        server = create_server(
+            "127.0.0.1",
+            0,
+            audit_db=":memory:",
+            api_keys={"alpha": "alpha-secret"},
+            domain_profiles=load_domain_profile_dir(DOMAIN_PROFILE_DIR),
+        )
+        port = server.server_address[1]
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            action = dict(EXAMPLES[1])
+            action["context"] = {**action.get("context", {}), "domain_profile": "github_actions_strict"}
+            request = Request(
+                f"http://127.0.0.1:{port}/v1/evaluate",
+                data=json.dumps(action).encode("utf-8"),
+                headers={"authorization": "Bearer alpha-secret", "content-type": "application/json"},
+                method="POST",
+            )
+            with urlopen(request, timeout=5) as response:
+                body = json.loads(response.read().decode("utf-8"))
+
+            self.assertEqual(body["domain_profile"]["profile_id"], "github_actions_strict")
+            self.assertEqual(
+                body["decision_trace"]["score_contributions"]["operational_stress_score"]["profile_multiplier"],
+                1.08,
+            )
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=2)
 
 
 class PilotReviewAPITests(unittest.TestCase):

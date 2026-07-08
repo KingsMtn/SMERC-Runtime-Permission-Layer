@@ -1,0 +1,15 @@
+{
+  "version": "smerc.domain_profile.v1",
+  "profile_id": "github_actions_strict",
+  "label": "GitHub Actions strict deployment profile",
+  "exposure_multiplier": 1.08,
+  "capacity_multiplier": 0.95,
+  "confidence_multiplier": 0.98,
+  "stress_multiplier": 1.08,
+  "authorization_multiplier": 0.96,
+  "allow_external_side_effect_without_throttle": false,
+  "notes": [
+    "Tuned for shadow-mode review of production deployment and infrastructure workflows.",
+    "Raises exposure and stress modestly while requiring stronger recovery capacity before release."
+  ]
+}

@@ -32,6 +32,58 @@ Profiles can be selected per action:
 
 If no profile is supplied, SMERC uses `general`.
 
+## Custom Profiles
+
+Design partners can load strict custom profiles without editing engine code.
+
+Custom profiles use `smerc.domain_profile.v1` and are validated with exact fields. Unknown fields, missing fields, invalid multipliers, duplicate IDs, and unsafe identifiers are rejected.
+
+Example:
+
+```json
+{
+  "version": "smerc.domain_profile.v1",
+  "profile_id": "github_actions_strict",
+  "label": "GitHub Actions strict deployment profile",
+  "exposure_multiplier": 1.08,
+  "capacity_multiplier": 0.95,
+  "confidence_multiplier": 0.98,
+  "stress_multiplier": 1.08,
+  "authorization_multiplier": 0.96,
+  "allow_external_side_effect_without_throttle": false,
+  "notes": [
+    "Tuned for shadow-mode review of production deployment and infrastructure workflows."
+  ]
+}
+```
+
+Run the CLI with a single profile file:
+
+```bash
+python -m reference_engine.recoverability_engine \
+  examples/recoverability_single_action.json \
+  --domain-profile-file examples/domain_profiles/github_actions_strict.json \
+  --domain-profile github_actions_strict \
+  --pretty
+```
+
+Run the API with a directory of approved profiles:
+
+```bash
+python api_server.py \
+  --host 127.0.0.1 \
+  --port 8788 \
+  --audit-db :memory: \
+  --allow-unauthenticated \
+  --domain-profile-dir examples/domain_profiles
+```
+
+The same setting can be supplied with `SMERC_DOMAIN_PROFILE_DIR`.
+
+Schema:
+
+- `schemas/smerc-domain-profile-v1.schema.json`
+
 ## Decision Trace
 
 Each decision includes:

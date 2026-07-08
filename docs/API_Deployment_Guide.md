@@ -34,6 +34,7 @@ Use `SMERC_API_PRINCIPALS` for scoped tenant credentials. Entries use `tenant:pr
 export SMERC_API_PRINCIPALS="platform-team:github-proposer:actions.evaluate=platform-proposer-local-secret-012345,platform-team:pilot-reader:decisions.read=platform-reader-local-secret-01234567"
 export SMERC_AUDIT_DB="./smerc_audit.sqlite3"
 export SMERC_POLICY_DIR="./examples/policies"
+export SMERC_DOMAIN_PROFILE_DIR="./examples/domain_profiles"
 python api_server.py --host 127.0.0.1 --port 8788
 ```
 
@@ -103,6 +104,7 @@ This prevents a workflow retry from producing multiple audit decisions for the s
 | `SMERC_MAX_BATCH_SIZE` | `100` | Maximum actions per batch |
 | `SMERC_CORS_ORIGINS` | none | Comma-separated trusted browser origins |
 | `SMERC_POLICY_DIR` | none | Directory of tenant-scoped `smerc.policy.v1` revisions |
+| `SMERC_DOMAIN_PROFILE_DIR` | none | Directory of strict `smerc.domain_profile.v1` calibration profiles |
 | `SMERC_PERMIT_KEYS` | none | Optional `tenant=key-id:secret` permit-signing mappings; secrets require at least 32 bytes |
 | `SMERC_CONTROL_EVIDENCE_KEYS` | none | Optional `tenant:audience=adapter-id:key-id:secret` verifier mappings; secrets require at least 32 bytes |
 | `SMERC_ACCESS_TOKEN_KEY` | none | Optional `key-id:secret` short-lived access-token signer; secret requires at least 32 bytes |
@@ -120,6 +122,8 @@ Permit signing is disabled when `SMERC_PERMIT_KEYS` is empty. Signing tenants mu
 When `SMERC_CONTROL_EVIDENCE_KEYS` contains the authenticated tenant and requested executor audience, permit consumption rejects `enforced_controls` and requires a signed `control_evidence_token`. Unconfigured audiences use the compatibility path labeled `legacy_caller_assertion`. Receipt operations and limitations are in `Control_Evidence_Operations.md`.
 
 The authenticated tenant selects the policy; clients cannot name a policy in an action request. The server chooses the latest effective revision for that tenant and refuses startup when a configured tenant has no effective revision. Tenants without configured policy files use the identified reference policy in `OBSERVE` mode.
+
+Actions may name an approved `context.domain_profile`. Built-in profiles are always available. Profiles from `SMERC_DOMAIN_PROFILE_DIR` are loaded at startup and rejected if they contain unknown fields, duplicate IDs, invalid multipliers, or unsafe identifiers. This is a pilot calibration surface, not evidence that a profile is correct for production enforcement.
 
 ## Pilot Review Console
 

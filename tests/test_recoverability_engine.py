@@ -2,11 +2,18 @@ import json
 import unittest
 from pathlib import Path
 
-from reference_engine.recoverability_engine import RecoverabilityEngine, evaluate_batch
+from reference_engine.recoverability_engine import (
+    DomainProfile,
+    RecoverabilityEngine,
+    evaluate_batch,
+    load_domain_profile,
+    load_domain_profile_dir,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "examples" / "recoverability_action_requests.json"
+PROFILE = ROOT / "examples" / "domain_profiles" / "github_actions_strict.json"
 
 
 class RecoverabilityEngineTests(unittest.TestCase):
@@ -75,6 +82,34 @@ class RecoverabilityEngineTests(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.engine.evaluate(action)
+
+    def test_custom_domain_profile_loads_and_scores(self):
+        profile = load_domain_profile(PROFILE)
+        self.assertIsInstance(profile, DomainProfile)
+        self.assertEqual(profile.profile_id, "github_actions_strict")
+
+        action = dict(self.by_id("AGENT_DEPLOY_PROD_CONFIG"))
+        action["context"] = {**action.get("context", {}), "domain_profile": "github_actions_strict"}
+        result = RecoverabilityEngine(domain_profiles={profile.profile_id: profile}).evaluate(action)
+
+        self.assertEqual(result["domain_profile"]["profile_id"], "github_actions_strict")
+        self.assertEqual(
+            result["decision_trace"]["score_contributions"]["operational_stress_score"]["profile_multiplier"],
+            1.08,
+        )
+
+    def test_custom_domain_profile_directory_loads_strict_files(self):
+        profiles = load_domain_profile_dir(PROFILE.parent)
+
+        self.assertIn("github_actions_strict", profiles)
+        self.assertEqual(profiles["github_actions_strict"].label, "GitHub Actions strict deployment profile")
+
+    def test_custom_domain_profile_rejects_unknown_fields(self):
+        payload = load_domain_profile(PROFILE).to_dict()
+        payload["unexpected"] = True
+
+        with self.assertRaisesRegex(ValueError, "unknown field"):
+            DomainProfile.from_dict(payload)
 
 
 if __name__ == "__main__":

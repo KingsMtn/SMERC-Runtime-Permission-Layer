@@ -64,6 +64,7 @@ Start here before reading the code:
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
+- `examples/domain_profiles/github_actions_strict.json` shows how a design partner can load a strict custom calibration profile without editing engine code.
 - `docs/Python_SDK_Quickstart.md` shows how to call the SMERC API from Python without third-party dependencies.
 - `docs/JavaScript_SDK_Quickstart.md` shows how to call the SMERC API from Node or browser-compatible JavaScript.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.

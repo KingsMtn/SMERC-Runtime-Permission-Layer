@@ -6,10 +6,13 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Mapping, Optional
 from uuid import uuid4
 
 from reference_engine.policy import DEFAULT_POLICY, RuntimePolicy, load_policy
+
+
+DOMAIN_PROFILE_VERSION = "smerc.domain_profile.v1"
 
 
 class RuntimePosture(str, Enum):
@@ -39,6 +42,64 @@ class DomainProfile:
     authorization_multiplier: float = 1.0
     allow_external_side_effect_without_throttle: bool = False
     notes: tuple[str, ...] = ()
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, Any]) -> "DomainProfile":
+        required = {
+            "version",
+            "profile_id",
+            "label",
+            "exposure_multiplier",
+            "capacity_multiplier",
+            "confidence_multiplier",
+            "stress_multiplier",
+            "authorization_multiplier",
+            "allow_external_side_effect_without_throttle",
+            "notes",
+        }
+        exact_fields(payload, required, "domain_profile")
+        if payload["version"] != DOMAIN_PROFILE_VERSION:
+            raise ValueError(f"domain_profile.version must be {DOMAIN_PROFILE_VERSION}")
+        notes = payload["notes"]
+        if not isinstance(notes, list):
+            raise TypeError("domain_profile.notes must be a list")
+        if len(notes) > 8:
+            raise ValueError("domain_profile.notes may contain at most 8 items")
+        parsed_notes = tuple(
+            profile_text(item, f"domain_profile.notes[{index}]", 256) for index, item in enumerate(notes)
+        )
+        return cls(
+            profile_id=profile_identifier(payload["profile_id"], "domain_profile.profile_id"),
+            label=profile_text(payload["label"], "domain_profile.label", 128),
+            exposure_multiplier=profile_multiplier(payload["exposure_multiplier"], "domain_profile.exposure_multiplier"),
+            capacity_multiplier=profile_multiplier(payload["capacity_multiplier"], "domain_profile.capacity_multiplier"),
+            confidence_multiplier=profile_multiplier(
+                payload["confidence_multiplier"], "domain_profile.confidence_multiplier"
+            ),
+            stress_multiplier=profile_multiplier(payload["stress_multiplier"], "domain_profile.stress_multiplier"),
+            authorization_multiplier=profile_multiplier(
+                payload["authorization_multiplier"], "domain_profile.authorization_multiplier"
+            ),
+            allow_external_side_effect_without_throttle=profile_bool(
+                payload["allow_external_side_effect_without_throttle"],
+                "domain_profile.allow_external_side_effect_without_throttle",
+            ),
+            notes=parsed_notes,
+        )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "version": DOMAIN_PROFILE_VERSION,
+            "profile_id": self.profile_id,
+            "label": self.label,
+            "exposure_multiplier": self.exposure_multiplier,
+            "capacity_multiplier": self.capacity_multiplier,
+            "confidence_multiplier": self.confidence_multiplier,
+            "stress_multiplier": self.stress_multiplier,
+            "authorization_multiplier": self.authorization_multiplier,
+            "allow_external_side_effect_without_throttle": self.allow_external_side_effect_without_throttle,
+            "notes": list(self.notes),
+        }
 
 
 DOMAIN_PROFILES: Dict[str, DomainProfile] = {
@@ -193,9 +254,15 @@ class RecoverabilityAction:
 class RecoverabilityEngine:
     """Recoverability-aware runtime permission engine for automated actions."""
 
-    def __init__(self, policy: RuntimePolicy = DEFAULT_POLICY, domain_profile: str = "general") -> None:
+    def __init__(
+        self,
+        policy: RuntimePolicy = DEFAULT_POLICY,
+        domain_profile: str = "general",
+        domain_profiles: Optional[Mapping[str, DomainProfile]] = None,
+    ) -> None:
         self.policy = policy
-        self.domain_profile = resolve_domain_profile(domain_profile)
+        self.domain_profiles = build_domain_profile_catalog(domain_profiles)
+        self.domain_profile = resolve_domain_profile(domain_profile, self.domain_profiles)
 
     def evaluate(self, payload: Dict[str, Any] | RecoverabilityAction) -> Dict[str, Any]:
         action = payload if isinstance(payload, RecoverabilityAction) else RecoverabilityAction.from_dict(payload)
@@ -261,7 +328,7 @@ class RecoverabilityEngine:
             return self.domain_profile
         if not isinstance(requested, str):
             raise TypeError("context.domain_profile must be a string when provided")
-        return resolve_domain_profile(requested)
+        return resolve_domain_profile(requested, self.domain_profiles)
 
     @staticmethod
     def _score_trace(action: RecoverabilityAction, profile: DomainProfile) -> Dict[str, Any]:
@@ -544,10 +611,44 @@ def clamp(value: float) -> float:
     return max(0.0, min(1.0, value))
 
 
-def resolve_domain_profile(profile_id: str) -> DomainProfile:
-    if profile_id not in DOMAIN_PROFILES:
+def build_domain_profile_catalog(
+    custom_profiles: Optional[Mapping[str, DomainProfile]] = None,
+) -> Dict[str, DomainProfile]:
+    catalog = dict(DOMAIN_PROFILES)
+    for key, profile in dict(custom_profiles or {}).items():
+        if key != profile.profile_id:
+            raise ValueError(f"Domain profile catalog key {key} does not match profile_id {profile.profile_id}")
+        catalog[key] = profile
+    return catalog
+
+
+def resolve_domain_profile(
+    profile_id: str,
+    profiles: Optional[Mapping[str, DomainProfile]] = None,
+) -> DomainProfile:
+    catalog = profiles or DOMAIN_PROFILES
+    if profile_id not in catalog:
         raise ValueError(f"Unknown SMERC domain profile: {profile_id}")
-    return DOMAIN_PROFILES[profile_id]
+    return catalog[profile_id]
+
+
+def load_domain_profile(path: str | Path) -> DomainProfile:
+    return DomainProfile.from_dict(json.loads(Path(path).read_text(encoding="utf-8")))
+
+
+def load_domain_profile_dir(directory: str | Path) -> Dict[str, DomainProfile]:
+    path = Path(directory)
+    if not path.is_dir():
+        raise ValueError(f"Domain profile directory does not exist: {path}")
+    profiles = [load_domain_profile(item) for item in sorted(path.glob("*.json"))]
+    if not profiles:
+        raise ValueError("Domain profile directory must contain at least one JSON profile")
+    result: Dict[str, DomainProfile] = {}
+    for profile in profiles:
+        if profile.profile_id in result:
+            raise ValueError(f"Duplicate domain profile_id: {profile.profile_id}")
+        result[profile.profile_id] = profile
+    return result
 
 
 def profile_payload(profile: DomainProfile) -> Dict[str, Any]:
@@ -581,20 +682,62 @@ def threshold_step(
     }
 
 
+def exact_fields(value: Mapping[str, Any], required: set[str], path: str) -> None:
+    missing = sorted(required - set(value))
+    unknown = sorted(set(value) - required)
+    if missing:
+        raise ValueError(f"{path} is missing field(s): {', '.join(missing)}")
+    if unknown:
+        raise ValueError(f"{path} contains unknown field(s): {', '.join(unknown)}")
+
+
+def profile_text(value: Any, path: str, maximum: int) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise TypeError(f"{path} must be a non-empty string")
+    if len(value) > maximum:
+        raise ValueError(f"{path} must be at most {maximum} characters")
+    return value.strip()
+
+
+def profile_identifier(value: Any, path: str) -> str:
+    result = profile_text(value, path, 128)
+    if not result.replace("_", "-").replace(".", "-").replace("-", "").isalnum():
+        raise ValueError(f"{path} must be a safe identifier")
+    if not result[0].isalnum():
+        raise ValueError(f"{path} must start with a letter or number")
+    return result
+
+
+def profile_multiplier(value: Any, path: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise TypeError(f"{path} must be a number from 0.5 through 1.5")
+    if not 0.5 <= value <= 1.5:
+        raise ValueError(f"{path} must be from 0.5 through 1.5")
+    return float(value)
+
+
+def profile_bool(value: Any, path: str) -> bool:
+    if not isinstance(value, bool):
+        raise TypeError(f"{path} must be a boolean")
+    return value
+
+
 def evaluate_action(
     payload: Dict[str, Any] | RecoverabilityAction,
     policy: RuntimePolicy = DEFAULT_POLICY,
     domain_profile: str = "general",
+    domain_profiles: Optional[Mapping[str, DomainProfile]] = None,
 ) -> Dict[str, Any]:
-    return RecoverabilityEngine(policy, domain_profile).evaluate(payload)
+    return RecoverabilityEngine(policy, domain_profile, domain_profiles).evaluate(payload)
 
 
 def evaluate_batch(
     items: List[Dict[str, Any]],
     policy: RuntimePolicy = DEFAULT_POLICY,
     domain_profile: str = "general",
+    domain_profiles: Optional[Mapping[str, DomainProfile]] = None,
 ) -> List[Dict[str, Any]]:
-    engine = RecoverabilityEngine(policy, domain_profile)
+    engine = RecoverabilityEngine(policy, domain_profile, domain_profiles)
     return [engine.evaluate(item) for item in items]
 
 
@@ -603,14 +746,22 @@ def main() -> None:
     parser.add_argument("path", help="Path to a JSON action request or JSON list of requests.")
     parser.add_argument("--policy", type=Path, help="Optional SMERC policy bundle.")
     parser.add_argument("--domain-profile", default="general", help="Optional default domain profile.")
+    parser.add_argument("--domain-profile-file", type=Path, help="Optional custom smerc.domain_profile.v1 JSON file.")
+    parser.add_argument("--domain-profile-dir", type=Path, help="Optional directory of custom domain profile files.")
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON output.")
     args = parser.parse_args()
     payload = json.loads(Path(args.path).read_text(encoding="utf-8"))
     policy = load_policy(args.policy) if args.policy else DEFAULT_POLICY
+    domain_profiles: Dict[str, DomainProfile] = {}
+    if args.domain_profile_file:
+        profile = load_domain_profile(args.domain_profile_file)
+        domain_profiles[profile.profile_id] = profile
+    if args.domain_profile_dir:
+        domain_profiles.update(load_domain_profile_dir(args.domain_profile_dir))
     result = (
-        evaluate_batch(payload, policy, args.domain_profile)
+        evaluate_batch(payload, policy, args.domain_profile, domain_profiles)
         if isinstance(payload, list)
-        else evaluate_action(payload, policy, args.domain_profile)
+        else evaluate_action(payload, policy, args.domain_profile, domain_profiles)
     )
     print(json.dumps(result, indent=2 if args.pretty else None))
 

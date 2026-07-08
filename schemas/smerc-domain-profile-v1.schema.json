@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.local/schemas/smerc-domain-profile-v1.schema.json",
+  "title": "SMERC Domain Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "profile_id",
+    "label",
+    "exposure_multiplier",
+    "capacity_multiplier",
+    "confidence_multiplier",
+    "stress_multiplier",
+    "authorization_multiplier",
+    "allow_external_side_effect_without_throttle",
+    "notes"
+  ],
+  "properties": {
+    "version": {
+      "const": "smerc.domain_profile.v1"
+    },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "exposure_multiplier": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1.5
+    },
+    "capacity_multiplier": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1.5
+    },
+    "confidence_multiplier": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1.5
+    },
+    "stress_multiplier": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1.5
+    },
+    "authorization_multiplier": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1.5
+    },
+    "allow_external_side_effect_without_throttle": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    }
+  }
+}

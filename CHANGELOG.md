@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added strict `smerc.domain_profile.v1` custom profile loading for the recoverability engine, CLI, and API server.
 - Added recoverability-engine domain profiles, score-contribution trace, posture-threshold trace, and transition guidance.
 - Added community and partner materials covering design-partner pilots, integration partners, research reviewers, contribution paths, outreach language, issue templates, and pull-request claims checks.
 - Added a proxy incident-replay benchmark with structured scenarios, report generation, summary metrics, demo-ready examples, and explicit production-validation limits.

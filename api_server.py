@@ -55,7 +55,13 @@ from reference_engine.github_oidc import (
     parse_github_oidc_trust,
 )
 from reference_engine.policy import POLICY_VERSION, PolicyRegistry
-from reference_engine.recoverability_engine import RecoverabilityEngine, RuntimePosture
+from reference_engine.recoverability_engine import (
+    DOMAIN_PROFILE_VERSION,
+    DomainProfile,
+    RecoverabilityEngine,
+    RuntimePosture,
+    load_domain_profile_dir,
+)
 
 
 DEFAULT_MAX_BODY_BYTES = 256 * 1024
@@ -83,6 +89,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
         max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
         cors_origins: Iterable[str] = (),
         policy_registry: Optional[PolicyRegistry] = None,
+        domain_profiles: Optional[Mapping[str, DomainProfile]] = None,
         permit_signers: Optional[Mapping[str, PermitSigner]] = None,
         control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
         access_token_signer: Optional[AccessTokenSigner] = None,
@@ -143,6 +150,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
 
         super().__init__(server_address, SMERCRequestHandler)
         self.policy_registry = resolved_policy_registry
+        self.domain_profiles = dict(domain_profiles or {})
         self.audit_store = audit_store
         self.api_keys = dict(api_keys)
         self.principal_registry = principal_registry
@@ -156,7 +164,10 @@ class SMERCAPIServer(ThreadingHTTPServer):
         self.github_oidc_verifier = github_oidc_verifier
 
     def engine_for(self, tenant_id: str) -> RecoverabilityEngine:
-        return RecoverabilityEngine(self.policy_registry.for_tenant(tenant_id))
+        return RecoverabilityEngine(
+            self.policy_registry.for_tenant(tenant_id),
+            domain_profiles=self.domain_profiles,
+        )
 
     def signer_for(self, tenant_id: str) -> PermitSigner:
         signer = self.permit_signers.get(tenant_id)
@@ -210,6 +221,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                         "service": "smerc-recoverability-api",
                         "version": "0.12",
                         "tenant_policy_count": self.server.policy_registry.count,
+                        "custom_domain_profile_count": len(self.server.domain_profiles),
                         "permit_signer_count": len(self.server.permit_signers),
                         "api_principal_count": self.server.principal_registry.count,
                         "control_evidence_adapter_count": len(self.server.control_evidence_signers),
@@ -1329,6 +1341,7 @@ def schema() -> Dict[str, Any]:
             "github_oidc": GITHUB_OIDC_VERSION,
         },
         "policy_version": POLICY_VERSION,
+        "domain_profile_version": DOMAIN_PROFILE_VERSION,
         "principal_version": PRINCIPAL_VERSION,
         "security_event_version": "smerc.security-event.v1",
         "authorization": {
@@ -1400,6 +1413,7 @@ def create_server(
     max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
     cors_origins: Iterable[str] = (),
     policy_registry: Optional[PolicyRegistry] = None,
+    domain_profiles: Optional[Mapping[str, DomainProfile]] = None,
     permit_signers: Optional[Mapping[str, PermitSigner]] = None,
     control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
     access_token_signer: Optional[AccessTokenSigner] = None,
@@ -1423,6 +1437,7 @@ def create_server(
             max_batch_size=max_batch_size,
             cors_origins=cors_origins,
             policy_registry=policy_registry,
+            domain_profiles=domain_profiles,
             permit_signers=permit_signers,
             control_evidence_signers=control_evidence_signers,
             access_token_signer=access_token_signer,
@@ -1445,6 +1460,7 @@ def run(
     max_batch_size: int = DEFAULT_MAX_BATCH_SIZE,
     cors_origins: Iterable[str] = (),
     policy_registry: Optional[PolicyRegistry] = None,
+    domain_profiles: Optional[Mapping[str, DomainProfile]] = None,
     permit_signers: Optional[Mapping[str, PermitSigner]] = None,
     control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
     access_token_signer: Optional[AccessTokenSigner] = None,
@@ -1461,6 +1477,7 @@ def run(
         max_batch_size=max_batch_size,
         cors_origins=cors_origins,
         policy_registry=policy_registry,
+        domain_profiles=domain_profiles,
         permit_signers=permit_signers,
         control_evidence_signers=control_evidence_signers,
         access_token_signer=access_token_signer,
@@ -1479,6 +1496,7 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8788")))
     parser.add_argument("--audit-db", default=os.environ.get("SMERC_AUDIT_DB", "smerc_audit.sqlite3"))
     parser.add_argument("--policy-dir", default=os.environ.get("SMERC_POLICY_DIR"))
+    parser.add_argument("--domain-profile-dir", default=os.environ.get("SMERC_DOMAIN_PROFILE_DIR"))
     parser.add_argument(
         "--allow-unauthenticated",
         action="store_true",
@@ -1489,6 +1507,7 @@ def main() -> None:
     api_principals = parse_scoped_principals(os.environ.get("SMERC_API_PRINCIPALS", ""))
     cors_origins = [item.strip() for item in os.environ.get("SMERC_CORS_ORIGINS", "").split(",") if item.strip()]
     policy_registry = PolicyRegistry.from_directory(args.policy_dir) if args.policy_dir else PolicyRegistry()
+    domain_profiles = load_domain_profile_dir(args.domain_profile_dir) if args.domain_profile_dir else {}
     permit_signers = parse_permit_signers(os.environ.get("SMERC_PERMIT_KEYS", ""))
     control_evidence_signers = parse_control_evidence_signers(
         os.environ.get("SMERC_CONTROL_EVIDENCE_KEYS", "")
@@ -1513,6 +1532,7 @@ def main() -> None:
         max_batch_size=int(os.environ.get("SMERC_MAX_BATCH_SIZE", str(DEFAULT_MAX_BATCH_SIZE))),
         cors_origins=cors_origins,
         policy_registry=policy_registry,
+        domain_profiles=domain_profiles,
         permit_signers=permit_signers,
         control_evidence_signers=control_evidence_signers,
         access_token_signer=access_token_signer,

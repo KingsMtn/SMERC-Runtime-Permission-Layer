@@ -43,6 +43,16 @@ python -m reference_engine.recoverability_engine \
 
 Read `docs/Engine_Profile_And_Trace.md` for available profiles, score contributions, threshold trace, and transition guidance.
 
+Load a strict custom profile without changing engine code:
+
+```bash
+python -m reference_engine.recoverability_engine \
+  examples/recoverability_single_action.json \
+  --domain-profile-file examples/domain_profiles/github_actions_strict.json \
+  --domain-profile github_actions_strict \
+  --pretty
+```
+
 ## 3. Run The Pilot API Locally
 
 Start the API in explicit unauthenticated development mode:
@@ -50,6 +60,8 @@ Start the API in explicit unauthenticated development mode:
 ```bash
 python api_server.py --host 127.0.0.1 --port 8788 --audit-db :memory: --allow-unauthenticated
 ```
+
+To test custom profile loading in the API, add `--domain-profile-dir examples/domain_profiles`.
 
 Then evaluate one action:
 
