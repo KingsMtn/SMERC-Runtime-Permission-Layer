@@ -32,6 +32,17 @@ This demonstrates the core recoverability signal:
 proposed action -> reversibility/containment/evidence/anomaly/scope -> posture
 ```
 
+Run the same action with an explicit domain profile and inspect the decision trace:
+
+```bash
+python -m reference_engine.recoverability_engine \
+  examples/recoverability_single_action.json \
+  --domain-profile github_actions \
+  --pretty
+```
+
+Read `docs/Engine_Profile_And_Trace.md` for available profiles, score contributions, threshold trace, and transition guidance.
+
 ## 3. Run The Pilot API Locally
 
 Start the API in explicit unauthenticated development mode:

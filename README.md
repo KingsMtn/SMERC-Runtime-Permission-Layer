@@ -63,6 +63,7 @@ Start here before reading the code:
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
+- `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
 - `docs/Python_SDK_Quickstart.md` shows how to call the SMERC API from Python without third-party dependencies.
 - `docs/JavaScript_SDK_Quickstart.md` shows how to call the SMERC API from Node or browser-compatible JavaScript.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
@@ -83,24 +84,25 @@ The shortest accurate explanation is:
 5. Read `docs/CISO_Quick_Review.md`.
 6. Read `docs/Security_Model.md`.
 7. Inspect `reference_engine/recoverability_engine.py`.
-8. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
-9. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
-10. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-11. Review `integrations/github_actions/README.md`.
-12. Read `docs/Pilot_Review_Metrics.md`.
-13. Inspect `pilot_console/README.md`.
-14. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
-15. Read `docs/Scoped_Workload_Identity.md`.
-16. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
-17. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
-18. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
-19. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
-20. Read `docs/Python_SDK_Quickstart.md`.
-21. Read `docs/JavaScript_SDK_Quickstart.md`.
-22. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-23. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-24. Run the Python and console tests.
-25. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+8. Read `docs/Engine_Profile_And_Trace.md`.
+9. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
+10. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
+11. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+12. Review `integrations/github_actions/README.md`.
+13. Read `docs/Pilot_Review_Metrics.md`.
+14. Inspect `pilot_console/README.md`.
+15. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
+16. Read `docs/Scoped_Workload_Identity.md`.
+17. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
+18. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
+19. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
+20. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
+21. Read `docs/Python_SDK_Quickstart.md`.
+22. Read `docs/JavaScript_SDK_Quickstart.md`.
+23. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+24. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+25. Run the Python and console tests.
+26. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -123,6 +125,8 @@ It outputs:
 - confidence score
 - reason codes
 - recommended constraints
+- domain profile, score contribution trace, and posture-threshold trace
+- transition guidance showing what evidence or controls would move a decision toward a less restrictive posture
 - policy identity, revision, mode, evidence ceiling, and hash
 - replay ID and replay record
 - an optional short-lived permit for eligible enforcement decisions
