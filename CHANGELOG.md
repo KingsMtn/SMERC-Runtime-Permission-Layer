@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added community and partner materials covering design-partner pilots, integration partners, research reviewers, contribution paths, outreach language, issue templates, and pull-request claims checks.
 - Added a proxy incident-replay benchmark with structured scenarios, report generation, summary metrics, demo-ready examples, and explicit production-validation limits.
 - Added a dependency-free JavaScript SDK for health, schema, evaluation, Action Language evaluation, batch decisions, replay, reviews, pilot metrics, review queue, security events, permit calls, and short-lived token exchange.
 - Added JavaScript SDK quickstart documentation and Node test coverage.

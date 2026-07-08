@@ -1,0 +1,44 @@
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class CommunityPartnerDocsTests(unittest.TestCase):
+    def test_partner_docs_invite_interest_without_overclaiming(self):
+        community = (ROOT / "COMMUNITY.md").read_text(encoding="utf-8")
+        partner = (ROOT / "docs" / "Partner_Program.md").read_text(encoding="utf-8")
+        outreach = (ROOT / "docs" / "Community_Outreach_Kit.md").read_text(encoding="utf-8")
+
+        combined = "\n".join([community, partner, outreach])
+        self.assertIn("Design Partners", community)
+        self.assertIn("Integration Partners", community)
+        self.assertIn("Research Reviewers", community)
+        self.assertIn("proxy evidence, not production validation", outreach)
+        self.assertIn("production certification", partner)
+        self.assertNotIn("SMERC prevents incidents", combined.replace('"SMERC prevents incidents."', ""))
+
+    def test_issue_templates_cover_partner_and_scenario_paths(self):
+        templates = ROOT / ".github" / "ISSUE_TEMPLATE"
+
+        self.assertTrue((templates / "design_partner_interest.md").exists())
+        self.assertTrue((templates / "integration_partner_interest.md").exists())
+        self.assertTrue((templates / "scenario_contribution.md").exists())
+
+        design = (templates / "design_partner_interest.md").read_text(encoding="utf-8")
+        scenario = (templates / "scenario_contribution.md").read_text(encoding="utf-8")
+        self.assertIn("Shadow Mode Feasibility", design)
+        self.assertIn("Recoverability Analysis", scenario)
+        self.assertIn("Do not include secrets", design)
+
+    def test_pull_request_template_requires_claims_check(self):
+        template = (ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md").read_text(encoding="utf-8")
+
+        self.assertIn("Evidence Type", template)
+        self.assertIn("Claims Check", template)
+        self.assertIn("does not claim production validation", template)
+
+
+if __name__ == "__main__":
+    unittest.main()

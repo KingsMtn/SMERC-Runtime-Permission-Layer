@@ -44,6 +44,17 @@ This public repository is the external technical review edition of SMERC. It con
 
 It intentionally excludes private legal drafts, patent strategy, competition submissions, investor materials, outreach records, and internal commercial planning.
 
+## Partners And Community Review
+
+SMERC is open to design-partner, integration-partner, research-review, and open-source contribution paths.
+
+- Read `COMMUNITY.md` for the overall engagement model.
+- Read `docs/Partner_Program.md` for design-partner and integration-partner fit.
+- Read `docs/Community_Outreach_Kit.md` for consistent public language.
+- Use the GitHub issue templates to suggest pilots, integrations, scenarios, or research review.
+
+The current project is ready for technical review and shadow-mode pilot discussion. It is not production-certified, compliance-attested, or proven to reduce incidents in live environments.
+
 ## If You Are New To SMERC
 
 Start here before reading the code:
@@ -57,6 +68,7 @@ Start here before reading the code:
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
 - `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
 - `reports/Proxy_Incident_Replay_Benchmark.md` shows proxy incident-replay evidence comparing simple allow/deny policy with SMERC recoverability-weighted posture decisions.
+- `COMMUNITY.md`, `CONTRIBUTING.md`, `docs/Partner_Program.md`, and `docs/Community_Outreach_Kit.md` describe how design partners, integration partners, researchers, and open-source contributors can engage.
 
 The shortest accurate explanation is:
 
@@ -86,8 +98,9 @@ The shortest accurate explanation is:
 20. Read `docs/Python_SDK_Quickstart.md`.
 21. Read `docs/JavaScript_SDK_Quickstart.md`.
 22. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-23. Run the Python and console tests.
-24. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+23. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+24. Run the Python and console tests.
+25. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
