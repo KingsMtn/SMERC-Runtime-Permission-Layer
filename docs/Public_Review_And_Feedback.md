@@ -13,6 +13,7 @@ The project is not asking reviewers to accept a broad claim. It is asking review
 - Public feedback page: `https://admirable-sorbet-9986d5.netlify.app/community.html`
 - Repository: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer`
 - Community guide: `COMMUNITY.md`
+- Community submission kit: `docs/Community_Submission_Kit.md`
 - Technical quickstart: `docs/Developer_Quickstart.md`
 - Engine trace guide: `docs/Engine_Profile_And_Trace.md`
 
