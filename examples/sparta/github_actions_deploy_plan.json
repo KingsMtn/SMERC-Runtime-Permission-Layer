@@ -1,0 +1,20 @@
+{
+  "version": "smerc.sparta-plan.v1",
+  "plan_id": "github-prod-canary-deploy",
+  "tool": "github_actions",
+  "action": "deploy_canary",
+  "requested_capability": "deployment",
+  "supports_dry_run": true,
+  "supports_scope_limit": true,
+  "supports_checkpoint": true,
+  "supports_rollback": true,
+  "supports_human_approval": true,
+  "max_scope_units": 100,
+  "requested_scope_units": 80,
+  "side_effect_level": "external",
+  "metadata": {
+    "environment": "production",
+    "workflow": "deploy.yml",
+    "service": "payments-api"
+  }
+}

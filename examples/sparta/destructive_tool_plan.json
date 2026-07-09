@@ -1,0 +1,20 @@
+{
+  "version": "smerc.sparta-plan.v1",
+  "plan_id": "customer-db-delete",
+  "tool": "database_admin_console",
+  "action": "delete_customer_table",
+  "requested_capability": "destructive_data_change",
+  "supports_dry_run": false,
+  "supports_scope_limit": false,
+  "supports_checkpoint": false,
+  "supports_rollback": false,
+  "supports_human_approval": false,
+  "max_scope_units": 100000,
+  "requested_scope_units": 100000,
+  "side_effect_level": "destructive",
+  "metadata": {
+    "database": "customer-prod",
+    "table": "customers",
+    "requested_by": "autonomous-agent"
+  }
+}

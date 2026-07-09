@@ -21,6 +21,7 @@ The current build includes:
 - tenant-scoped policy calibration and evidence provenance admission
 - signed, action-bound, single-use authorization permits
 - signed, action-bound control-evidence receipts for configured execution adapters
+- SPARTa posture-aware router that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
 - GitHub Actions OIDC verification with repository-, workflow-, ref-, environment-, and run-bound attribution
@@ -64,6 +65,7 @@ Start here before reading the code:
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
+- `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
 - `docs/Community_Submission_Kit.md` gives careful, non-exaggerated public post drafts for Microsoft Tech Community, GitHub Community, LinkedIn, Hacker News, and Product Hunt.
 - `docs/Public_Indexing_Assets.md` records the public status page, sitemap, robots file, `llms.txt`, and `humans.txt`.
@@ -101,12 +103,13 @@ The shortest accurate explanation is:
 18. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
 19. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
 20. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
-21. Read `docs/Python_SDK_Quickstart.md`.
-22. Read `docs/JavaScript_SDK_Quickstart.md`.
-23. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-24. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-25. Run the Python and console tests.
-26. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+21. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
+22. Read `docs/Python_SDK_Quickstart.md`.
+23. Read `docs/JavaScript_SDK_Quickstart.md`.
+24. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+25. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+26. Run the Python and console tests.
+27. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -136,6 +139,7 @@ It outputs:
 - an optional short-lived permit for eligible enforcement decisions
 - authenticated principal identity bound into decisions, replays, reviews, and security events
 - signed control-evidence attribution when configured at permit consumption
+- a SPARTa route report when a posture must be converted into an executable tool plan
 
 ## Action Language
 
@@ -176,6 +180,19 @@ Permits are deliberately narrow:
 
 The token is not exposed by the GitHub Action because it is a bearer capability. Executors obtain and consume it through the authenticated API. See `docs/Action_Bound_Permit_Operations.md`.
 
+## SPARTa Router
+
+`smerc.sparta-route.v1` turns a SMERC posture and a declared tool plan into a concrete route: execute, constrained execute, pause, block, require review, or block because escalation is unavailable. This is the first SPARTa component and sits between the decision engine and execution adapters.
+
+```bash
+python -m reference_engine.sparta_router \
+  --decision examples/sparta/throttle_decision.json \
+  --plan examples/sparta/github_actions_deploy_plan.json \
+  --pretty
+```
+
+SPARTa v1 is intentionally conservative. If SMERC returns `THROTTLE` but the tool plan cannot apply scope limits, dry runs, checkpoints, or rollback as required, the router marks the plan non-executable and routes it to review. See `specification/SMERC_SPARTa_Router_v1.md`.
+
 ## Verifiable Control Evidence
 
 Configured execution adapters first authenticate and reserve a permit, then replace caller-supplied control names with short-lived `smerc.control-evidence.v1` receipts. Each receipt is signed by a key scoped to one tenant and executor audience and binds the adapter, permit, action hash, applied controls, native mechanisms, evidence references, and observation times.
@@ -207,6 +224,7 @@ Requires Python 3.10 or later. No third-party Python packages are required.
 ```bash
 python -m reference_engine.agent_permission_layer examples/agent_permission_actions.json --pretty
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
+python -m reference_engine.sparta_router --decision examples/sparta/throttle_decision.json --plan examples/sparta/github_actions_deploy_plan.json --pretty
 python -m unittest discover -s tests
 ```
 

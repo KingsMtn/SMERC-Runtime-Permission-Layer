@@ -84,7 +84,27 @@ python -m reference_engine.spl examples/policies/github_actions_shadow_spl.json 
 
 Read `specification/SMERC_SPL_v0.md` for the policy surface and its current limits.
 
-## 5. Validate A Deployment Plan
+## 5. Route A Posture Through SPARTa
+
+Route a throttled SMERC decision into a concrete execution path for a declared GitHub Actions plan:
+
+```bash
+python -m reference_engine.sparta_router \
+  --decision examples/sparta/throttle_decision.json \
+  --plan examples/sparta/github_actions_deploy_plan.json \
+  --pretty
+```
+
+Expected result:
+
+- `source_posture` is `THROTTLE`
+- `route_state` is `CONSTRAINED_EXECUTE`
+- `effective_scope_units` is reduced
+- native controls are listed for the adapter to enforce
+
+Read `docs/SPARTa_Router_Operations.md` and `specification/SMERC_SPARTa_Router_v1.md`.
+
+## 6. Validate A Deployment Plan
 
 This validates the GitHub deployment adapter without issuing permission or running a deployment command:
 
@@ -101,13 +121,14 @@ Expected result:
 - no permit consumption
 - no native command execution
 
-## 6. Understand The Enforce Path
+## 7. Understand The Enforce Path
 
 The enforce path is intentionally stricter than the demo path:
 
 ```text
 action proposal
   -> SMERC decision
+  -> SPARTa route
   -> action-bound permit issuance
   -> permit preparation and reservation
   -> native controls
@@ -124,7 +145,7 @@ Read:
 - `docs/GitHub_Deployment_Adapter_Operations.md`
 - `specification/SMERC_Execution_Plan_v1.md`
 
-## 7. Run Tests
+## 8. Run Tests
 
 ```bash
 python -m unittest discover -s tests -v
@@ -137,7 +158,7 @@ The GitHub CI suite also runs:
 - console contract tests
 - container smoke tests
 
-## 8. Call The API From Python
+## 9. Call The API From Python
 
 Use the dependency-free SDK when a pilot needs a small service, notebook, or test harness to call SMERC without hand-written HTTP code.
 
@@ -160,7 +181,7 @@ metrics = client.pilot_metrics()
 
 See `docs/Python_SDK_Quickstart.md` for review queue and Action Language examples.
 
-## 9. Call The API From JavaScript
+## 10. Call The API From JavaScript
 
 Use the dependency-free JavaScript SDK when a pilot needs a Node service, agent runner, GitHub tool, or browser-compatible utility to call SMERC.
 
@@ -180,7 +201,7 @@ const metrics = await client.pilotMetrics();
 
 See `docs/JavaScript_SDK_Quickstart.md` for review queue and Action Language examples.
 
-## 10. First Pilot Shape
+## 11. First Pilot Shape
 
 The recommended first design-partner pilot is GitHub Actions shadow mode:
 
@@ -198,7 +219,7 @@ Read:
 - `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`
 - `examples/pilot_evaluation_checklist.json`
 
-## 11. Generate Proxy Evidence
+## 12. Generate Proxy Evidence
 
 Before a design partner supplies live workflow data, reviewers can inspect a proxy incident-replay benchmark:
 
@@ -213,13 +234,14 @@ Read `reports/Proxy_Incident_Replay_Benchmark.md`.
 
 This is scenario-based proxy evidence, not production validation. It helps test whether recoverability scoring changes decisions in plausible incident patterns.
 
-## 12. What To Inspect If You Have 30 Minutes
+## 13. What To Inspect If You Have 30 Minutes
 
 | Question | Inspect |
 | --- | --- |
 | What does SMERC decide? | `reference_engine/recoverability_engine.py` |
 | What is the action contract? | `specification/SMERC_Action_Language_v1.md` |
 | How are runtime thresholds configured? | `specification/SMERC_SPL_v0.md` |
+| How do postures become tool routes? | `reference_engine/sparta_router.py` |
 | What proxy evidence exists? | `reports/Proxy_Incident_Replay_Benchmark.md` |
 | How are decisions stored? | `reference_engine/audit_store.py` |
 | How are permits bound to actions? | `reference_engine/authorization_permit.py` |
@@ -227,7 +249,7 @@ This is scenario-based proxy evidence, not production validation. It helps test 
 | How does deployment enforcement work? | `integrations/github_deployment/deployment_adapter.py` |
 | What are the honest limits? | `SECURITY.md` |
 
-## 13. What This Quickstart Does Not Prove
+## 14. What This Quickstart Does Not Prove
 
 This quickstart does not prove:
 
