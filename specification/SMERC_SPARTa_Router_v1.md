@@ -40,6 +40,32 @@ Required fields:
 
 Unknown fields are rejected. `requested_scope_units` cannot exceed `max_scope_units`.
 
+## Input: Adapter Registry
+
+`smerc.sparta-adapter-registry.v1` lets the API derive a tool plan from a configured adapter instead of trusting each caller to send the whole plan.
+
+An adapter declares:
+
+- `adapter_id`
+- `tool`
+- `supported_actions`
+- `supported_capabilities`
+- native control support
+- `max_scope_units`
+- `allowed_side_effect_levels`
+- bounded metadata
+
+The API request supplies:
+
+- `adapter_id`
+- `action`
+- `requested_capability`
+- `requested_scope_units`
+- `side_effect_level`
+- optional metadata
+
+The registry rejects unsupported actions, unsupported capabilities, side-effect levels outside the adapter boundary, and scope requests above the adapter maximum.
+
 ## Input: SMERC Decision
 
 The router requires:
@@ -113,6 +139,11 @@ The route report includes:
 - recommended next action
 - sanitized tool plan
 
+When produced by the API, the route report also includes:
+
+- `tenant_id`
+- authenticated principal identity
+
 ## Security Boundaries
 
 SPARTa v1 is a router, not a sandbox or executor.
@@ -138,3 +169,51 @@ python -m reference_engine.sparta_router \
 ```
 
 Expected result: `THROTTLE` becomes `CONSTRAINED_EXECUTE` with reduced effective scope and native controls.
+
+## API Endpoint
+
+`POST /v1/sparta/route` routes one stored tenant decision.
+
+Required scope: `routes.write`.
+
+Direct plan request:
+
+```json
+{
+  "replay_id": "replay_example_throttle_001",
+  "plan": {
+    "version": "smerc.sparta-plan.v1",
+    "plan_id": "github-prod-canary-deploy",
+    "tool": "github_actions",
+    "action": "deploy_canary",
+    "requested_capability": "deployment",
+    "supports_dry_run": true,
+    "supports_scope_limit": true,
+    "supports_checkpoint": true,
+    "supports_rollback": true,
+    "supports_human_approval": true,
+    "max_scope_units": 100,
+    "requested_scope_units": 80,
+    "side_effect_level": "external",
+    "metadata": {}
+  }
+}
+```
+
+Registry-backed request:
+
+```json
+{
+  "replay_id": "replay_example_throttle_001",
+  "adapter_id": "github-actions-deployer",
+  "action": "deploy_canary",
+  "requested_capability": "deployment",
+  "requested_scope_units": 80,
+  "side_effect_level": "external",
+  "metadata": {
+    "workflow_run": "1001"
+  }
+}
+```
+
+The API reads the stored decision by `replay_id`; callers cannot invent a posture inside the route request.

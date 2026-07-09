@@ -10,6 +10,7 @@ from typing import Dict, Iterable, Mapping, Optional
 SCOPES = frozenset(
     {
         "actions.evaluate",
+        "routes.write",
         "decisions.read",
         "permits.issue",
         "permits.consume",

@@ -22,6 +22,7 @@ The current build includes:
 - signed, action-bound, single-use authorization permits
 - signed, action-bound control-evidence receipts for configured execution adapters
 - SPARTa posture-aware router that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes
+- SPARTa adapter registry and authenticated API route endpoint for stored SMERC decisions
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
 - GitHub Actions OIDC verification with repository-, workflow-, ref-, environment-, and run-bound attribution
@@ -182,7 +183,7 @@ The token is not exposed by the GitHub Action because it is a bearer capability.
 
 ## SPARTa Router
 
-`smerc.sparta-route.v1` turns a SMERC posture and a declared tool plan into a concrete route: execute, constrained execute, pause, block, require review, or block because escalation is unavailable. This is the first SPARTa component and sits between the decision engine and execution adapters.
+`smerc.sparta-route.v1` turns a stored SMERC decision and a declared tool plan into a concrete route: execute, constrained execute, pause, block, require review, or block because escalation is unavailable. This is the first SPARTa component and sits between the decision engine and execution adapters.
 
 ```bash
 python -m reference_engine.sparta_router \
@@ -192,6 +193,15 @@ python -m reference_engine.sparta_router \
 ```
 
 SPARTa v1 is intentionally conservative. If SMERC returns `THROTTLE` but the tool plan cannot apply scope limits, dry runs, checkpoints, or rollback as required, the router marks the plan non-executable and routes it to review. See `specification/SMERC_SPARTa_Router_v1.md`.
+
+The API can also route a stored decision by `replay_id`:
+
+```bash
+curl -X POST http://127.0.0.1:8788/v1/sparta/route \
+  -H "Authorization: Bearer development-console-secret-2026-rotate" \
+  -H "Content-Type: application/json" \
+  --data '{"replay_id":"replay_...","adapter_id":"github-actions-deployer","action":"deploy_canary","requested_capability":"deployment","requested_scope_units":80,"side_effect_level":"external","metadata":{"workflow_run":"1001"}}'
+```
 
 ## Verifiable Control Evidence
 

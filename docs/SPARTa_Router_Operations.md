@@ -18,7 +18,7 @@ Example:
 
 1. An AI-assisted workflow proposes a production deployment.
 2. SMERC evaluates recoverability and returns `THROTTLE`.
-3. SPARTa checks whether the execution plan supports dry run, scope limiting, checkpoint, rollback, and human approval.
+3. SPARTa checks whether the execution plan or configured adapter supports dry run, scope limiting, checkpoint, rollback, and human approval.
 4. If the plan supports the required controls, SPARTa returns `CONSTRAINED_EXECUTE`.
 5. If the plan cannot enforce the constraints, SPARTa returns `REVIEW_REQUIRED`.
 
@@ -41,6 +41,29 @@ python -m reference_engine.sparta_router \
   --plan examples/sparta/destructive_tool_plan.json \
   --pretty
 ```
+
+## API Route Endpoint
+
+Start the API with the example adapter registry:
+
+```bash
+python api_server.py \
+  --host 127.0.0.1 \
+  --port 8788 \
+  --audit-db :memory: \
+  --allow-unauthenticated \
+  --sparta-adapter-registry examples/sparta/adapter_registry.json
+```
+
+Evaluate an action first, then route the returned `replay_id`:
+
+```bash
+curl -X POST http://127.0.0.1:8788/v1/sparta/route \
+  -H "Content-Type: application/json" \
+  --data '{"replay_id":"replay_...","adapter_id":"github-actions-deployer","action":"deploy_canary","requested_capability":"deployment","requested_scope_units":80,"side_effect_level":"external","metadata":{"workflow_run":"1001"}}'
+```
+
+Authenticated deployments require `routes.write`. The API records a `sparta.route.created` security event with the route state, replay ID, and plan ID.
 
 ## How To Read A Route Report
 
@@ -68,7 +91,7 @@ The product claim should stay modest: SPARTa v1 is not a full workflow engine. I
 ## Current Limits
 
 - No adapter registry yet.
-- No API endpoint yet.
+- No dynamic adapter registration endpoint yet.
 - No signed route reports yet.
 - No formal policy language binding yet.
 - No live evidence that SPARTa routes reduce real-world incidents.

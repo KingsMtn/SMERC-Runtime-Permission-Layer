@@ -8,6 +8,7 @@ from urllib.request import Request, urlopen
 from api_server import create_server, parse_api_keys
 from reference_engine.policy import PolicyRegistry, RuntimePolicy
 from reference_engine.recoverability_engine import load_domain_profile_dir
+from reference_engine.sparta_registry import load_sparta_adapter_registry
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +20,8 @@ POLICY_EXAMPLE = json.loads(
     (ROOT / "examples" / "policies" / "alpha_conservative.json").read_text(encoding="utf-8")
 )
 DOMAIN_PROFILE_DIR = ROOT / "examples" / "domain_profiles"
+SPARTA_REGISTRY = load_sparta_adapter_registry(ROOT / "examples" / "sparta" / "adapter_registry.json")
+SPARTA_PLAN = json.loads((ROOT / "examples" / "sparta" / "github_actions_deploy_plan.json").read_text(encoding="utf-8"))
 
 
 class APIServerTests(unittest.TestCase):
@@ -32,6 +35,7 @@ class APIServerTests(unittest.TestCase):
             max_body_bytes=4096,
             max_batch_size=2,
             cors_origins=["https://console.example"],
+            sparta_adapter_registry=SPARTA_REGISTRY,
         )
         cls.port = cls.server.server_address[1]
         cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
@@ -75,6 +79,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(health[2]["control_evidence_adapter_count"], 0)
         self.assertFalse(health[2]["short_lived_access_enabled"])
         self.assertFalse(health[2]["github_oidc_enabled"])
+        self.assertEqual(health[2]["sparta_adapter_count"], 2)
         self.assertEqual(ready[2]["status"], "ready")
 
     def test_schema_lists_versioned_endpoints_and_postures(self):
@@ -92,6 +97,12 @@ class APIServerTests(unittest.TestCase):
         )
         self.assertEqual(body["language_versions"]["access_token"], "smerc.access-token.v2")
         self.assertEqual(body["language_versions"]["github_oidc"], "smerc.github-oidc.v1")
+        self.assertEqual(body["language_versions"]["sparta_plan"], "smerc.sparta-plan.v1")
+        self.assertEqual(body["language_versions"]["sparta_route"], "smerc.sparta-route.v1")
+        self.assertEqual(
+            body["language_versions"]["sparta_adapter_registry"],
+            "smerc.sparta-adapter-registry.v1",
+        )
         self.assertEqual(body["policy_version"], "smerc.policy.v1")
         self.assertEqual(body["domain_profile_version"], "smerc.domain_profile.v1")
         self.assertIn("POST /v1/decisions/{replay_id}/reviews", body["endpoints"])
@@ -102,7 +113,9 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/permits/consume", body["endpoints"])
         self.assertIn("POST /v1/auth/token", body["endpoints"])
         self.assertIn("POST /v1/auth/github", body["endpoints"])
+        self.assertIn("POST /v1/sparta/route", body["endpoints"])
         self.assertIn("GET /v1/security-events", body["endpoints"])
+        self.assertIn("routes.write", body["authorization"]["scopes"])
         self.assertIn("permits.consume", body["authorization"]["scopes"])
         self.assertEqual(body["principal_version"], "smerc.principal.v1")
         self.assertEqual(body["security_event_version"], "smerc.security-event.v1")
@@ -172,6 +185,76 @@ class APIServerTests(unittest.TestCase):
         )
         self.assertEqual(status, 400)
         self.assertEqual(body["error"], "bad_request")
+
+    def test_sparta_route_endpoint_routes_stored_decision_with_direct_plan(self):
+        status, _, decision = self.request_json(
+            "/v1/evaluate", method="POST", payload=EXAMPLES[1], key="alpha-secret"
+        )
+        self.assertEqual(status, 200)
+
+        status, _, route = self.request_json(
+            "/v1/sparta/route",
+            method="POST",
+            payload={"replay_id": decision["replay_id"], "plan": SPARTA_PLAN},
+            key="alpha-secret",
+        )
+
+        self.assertEqual(status, 200)
+        self.assertEqual(route["tenant_id"], "alpha")
+        self.assertEqual(route["decision_replay_id"], decision["replay_id"])
+        self.assertEqual(route["source_posture"], decision["posture"])
+        self.assertIn(route["route_state"], {"EXECUTE", "CONSTRAINED_EXECUTE", "PAUSE", "BLOCK", "REVIEW_REQUIRED"})
+        self.assertEqual(route["authenticated_principal"]["principal_id"], "legacy-alpha")
+
+    def test_sparta_route_endpoint_uses_configured_adapter_registry(self):
+        status, _, decision = self.request_json(
+            "/v1/evaluate", method="POST", payload=EXAMPLES[1], key="alpha-secret"
+        )
+        self.assertEqual(status, 200)
+        payload = {
+            "replay_id": decision["replay_id"],
+            "adapter_id": "github-actions-deployer",
+            "action": "deploy_canary",
+            "requested_capability": "deployment",
+            "requested_scope_units": 80,
+            "side_effect_level": "external",
+            "metadata": {"workflow_run": "2002"},
+        }
+
+        status, _, route = self.request_json(
+            "/v1/sparta/route",
+            method="POST",
+            payload=payload,
+            key="alpha-secret",
+        )
+
+        self.assertEqual(status, 200)
+        self.assertEqual(route["tool_plan"]["plan_id"], "github-actions-deployer:deploy_canary:deployment")
+        self.assertEqual(route["tool_plan"]["metadata"]["workflow_run"], "2002")
+
+    def test_sparta_route_endpoint_fails_closed_on_missing_decision_and_bad_plan(self):
+        status, _, body = self.request_json(
+            "/v1/sparta/route",
+            method="POST",
+            payload={"replay_id": "replay_missing", "plan": SPARTA_PLAN},
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 404)
+        self.assertEqual(body["error"], "decision_not_found")
+
+        status, _, decision = self.request_json(
+            "/v1/evaluate", method="POST", payload=EXAMPLES[1], key="alpha-secret"
+        )
+        bad_plan = dict(SPARTA_PLAN)
+        bad_plan["unexpected"] = True
+        status, _, body = self.request_json(
+            "/v1/sparta/route",
+            method="POST",
+            payload={"replay_id": decision["replay_id"], "plan": bad_plan},
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_sparta_route_request")
 
     def test_idempotency_replays_same_decision(self):
         headers = {"idempotency-key": "deploy-run-1001"}

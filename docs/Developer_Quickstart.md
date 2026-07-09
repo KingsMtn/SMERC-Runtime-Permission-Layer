@@ -104,6 +104,19 @@ Expected result:
 
 Read `docs/SPARTa_Router_Operations.md` and `specification/SMERC_SPARTa_Router_v1.md`.
 
+The API can route stored decisions when started with an adapter registry:
+
+```bash
+python api_server.py \
+  --host 127.0.0.1 \
+  --port 8788 \
+  --audit-db :memory: \
+  --allow-unauthenticated \
+  --sparta-adapter-registry examples/sparta/adapter_registry.json
+```
+
+After evaluating an action, call `POST /v1/sparta/route` with the returned `replay_id`.
+
 ## 6. Validate A Deployment Plan
 
 This validates the GitHub deployment adapter without issuing permission or running a deployment command:
@@ -241,7 +254,7 @@ This is scenario-based proxy evidence, not production validation. It helps test 
 | What does SMERC decide? | `reference_engine/recoverability_engine.py` |
 | What is the action contract? | `specification/SMERC_Action_Language_v1.md` |
 | How are runtime thresholds configured? | `specification/SMERC_SPL_v0.md` |
-| How do postures become tool routes? | `reference_engine/sparta_router.py` |
+| How do postures become tool routes? | `reference_engine/sparta_router.py` and `reference_engine/sparta_registry.py` |
 | What proxy evidence exists? | `reports/Proxy_Incident_Replay_Benchmark.md` |
 | How are decisions stored? | `reference_engine/audit_store.py` |
 | How are permits bound to actions? | `reference_engine/authorization_permit.py` |

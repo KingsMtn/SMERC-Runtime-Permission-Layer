@@ -62,6 +62,13 @@ from reference_engine.recoverability_engine import (
     RuntimePosture,
     load_domain_profile_dir,
 )
+from reference_engine.sparta_registry import (
+    SPARTA_ADAPTER_REGISTRY_VERSION,
+    SPARTaAdapterRegistry,
+    load_sparta_adapter_registry,
+    plan_from_payload,
+)
+from reference_engine.sparta_router import SPARTA_PLAN_VERSION, SPARTA_ROUTE_VERSION, route_decision
 
 
 DEFAULT_MAX_BODY_BYTES = 256 * 1024
@@ -94,6 +101,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
         control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
         access_token_signer: Optional[AccessTokenSigner] = None,
         github_oidc_verifier: Optional[GitHubOIDCVerifier] = None,
+        sparta_adapter_registry: Optional[SPARTaAdapterRegistry] = None,
     ) -> None:
         resolved_policy_registry = policy_registry or PolicyRegistry()
         principal_registry = PrincipalRegistry.from_configuration(api_keys, api_principals)
@@ -162,6 +170,7 @@ class SMERCAPIServer(ThreadingHTTPServer):
         self.control_evidence_signers = resolved_control_evidence_signers
         self.access_token_signer = access_token_signer
         self.github_oidc_verifier = github_oidc_verifier
+        self.sparta_adapter_registry = sparta_adapter_registry
 
     def engine_for(self, tenant_id: str) -> RecoverabilityEngine:
         return RecoverabilityEngine(
@@ -227,6 +236,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                         "control_evidence_adapter_count": len(self.server.control_evidence_signers),
                         "short_lived_access_enabled": self.server.access_token_signer is not None,
                         "github_oidc_enabled": self.server.github_oidc_verifier is not None,
+                        "sparta_adapter_count": 0 if self.server.sparta_adapter_registry is None else self.server.sparta_adapter_registry.count,
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -397,6 +407,12 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Permit consumption expects one JSON object.")
                 self._write_json(self._consume_permit(principal, payload), request_id=request_id)
+                return
+
+            if path == "/v1/sparta/route":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "SPARTa route expects one JSON object.")
+                self._write_json(self._route_sparta(principal, payload), request_id=request_id)
                 return
 
             review_replay_id = self._review_replay_id(path)
@@ -860,6 +876,48 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             "control_evidence": evidence_summary,
         }
 
+    def _route_sparta(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        allowed = {"replay_id", "plan", "adapter_id", "action", "requested_capability", "requested_scope_units", "side_effect_level", "metadata"}
+        unknown = sorted(set(payload) - allowed)
+        if unknown:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_sparta_route_request",
+                f"Unknown SPARTa route field(s): {', '.join(unknown)}.",
+            )
+        replay_id = payload.get("replay_id")
+        if not isinstance(replay_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,191}", replay_id):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_sparta_route_request",
+                "replay_id must be a safe identifier.",
+            )
+        decision = self.server.audit_store.get(principal.tenant_id, replay_id)
+        if decision is None:
+            raise APIError(HTTPStatus.NOT_FOUND, "decision_not_found", "Decision was not found.")
+        route_payload = {key: value for key, value in payload.items() if key != "replay_id"}
+        try:
+            plan = plan_from_payload(route_payload, self.server.sparta_adapter_registry)
+            route = route_decision(decision, plan)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_sparta_route_request", str(exc)) from exc
+        route["tenant_id"] = principal.tenant_id
+        route["authenticated_principal"] = principal.public_identity()
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "sparta.route.created",
+            route["route_id"],
+            {
+                "replay_id": replay_id,
+                "source_posture": route["source_posture"],
+                "route_state": route["route_state"],
+                "executable": route["executable"],
+                "plan_id": route["plan_id"],
+            },
+        )
+        return route
+
     def _record_review(
         self,
         principal: APIPrincipal,
@@ -1200,6 +1258,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             return "permits.issue"
         if path in {"/v1/permits/prepare", "/v1/permits/consume"}:
             return "permits.consume"
+        if path == "/v1/sparta/route":
+            return "routes.write"
         if re.fullmatch(r"/v1/decisions/[^/]+/reviews", path):
             return "reviews.write"
         if path in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch", "/v1/language/evaluate"}:
@@ -1339,6 +1399,9 @@ def schema() -> Dict[str, Any]:
             "control_evidence": CONTROL_EVIDENCE_VERSION,
             "access_token": ACCESS_TOKEN_VERSION,
             "github_oidc": GITHUB_OIDC_VERSION,
+            "sparta_plan": SPARTA_PLAN_VERSION,
+            "sparta_route": SPARTA_ROUTE_VERSION,
+            "sparta_adapter_registry": SPARTA_ADAPTER_REGISTRY_VERSION,
         },
         "policy_version": POLICY_VERSION,
         "domain_profile_version": DOMAIN_PROFILE_VERSION,
@@ -1349,6 +1412,7 @@ def schema() -> Dict[str, Any]:
             "scoped_principals_env": "SMERC_API_PRINCIPALS",
             "scopes": [
                 "actions.evaluate",
+                "routes.write",
                 "decisions.read",
                 "permits.issue",
                 "permits.consume",
@@ -1389,6 +1453,7 @@ def schema() -> Dict[str, Any]:
             "POST /v1/permits/issue": "issue a short-lived action-bound permit for an enforceable decision",
             "POST /v1/permits/prepare": "authenticate an issued, unconsumed permit before native controls run",
             "POST /v1/permits/consume": "verify control evidence and atomically consume an action-bound permit",
+            "POST /v1/sparta/route": "route one stored SMERC decision through a declared plan or configured adapter",
             "POST /v1/batch": "evaluate and persist a bounded action list",
             "GET /v1/decisions": "list tenant-scoped decision summaries",
             "GET /v1/decisions/{replay_id}": "retrieve one tenant-scoped decision",
@@ -1418,6 +1483,7 @@ def create_server(
     control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
     access_token_signer: Optional[AccessTokenSigner] = None,
     github_oidc_verifier: Optional[GitHubOIDCVerifier] = None,
+    sparta_adapter_registry: Optional[SPARTaAdapterRegistry] = None,
 ) -> SMERCAPIServer:
     api_principals = tuple(api_principals)
     if not api_keys and not api_principals and github_oidc_verifier is None and not allow_unauthenticated:
@@ -1442,6 +1508,7 @@ def create_server(
             control_evidence_signers=control_evidence_signers,
             access_token_signer=access_token_signer,
             github_oidc_verifier=github_oidc_verifier,
+            sparta_adapter_registry=sparta_adapter_registry,
         )
     except Exception:
         audit_store.close()
@@ -1465,6 +1532,7 @@ def run(
     control_evidence_signers: Optional[Mapping[tuple[str, str], ControlEvidenceSigner]] = None,
     access_token_signer: Optional[AccessTokenSigner] = None,
     github_oidc_verifier: Optional[GitHubOIDCVerifier] = None,
+    sparta_adapter_registry: Optional[SPARTaAdapterRegistry] = None,
 ) -> None:
     server = create_server(
         host,
@@ -1482,6 +1550,7 @@ def run(
         control_evidence_signers=control_evidence_signers,
         access_token_signer=access_token_signer,
         github_oidc_verifier=github_oidc_verifier,
+        sparta_adapter_registry=sparta_adapter_registry,
     )
     print(f"SMERC recoverability API listening on http://{host}:{server.server_address[1]}")
     try:
@@ -1497,6 +1566,7 @@ def main() -> None:
     parser.add_argument("--audit-db", default=os.environ.get("SMERC_AUDIT_DB", "smerc_audit.sqlite3"))
     parser.add_argument("--policy-dir", default=os.environ.get("SMERC_POLICY_DIR"))
     parser.add_argument("--domain-profile-dir", default=os.environ.get("SMERC_DOMAIN_PROFILE_DIR"))
+    parser.add_argument("--sparta-adapter-registry", default=os.environ.get("SMERC_SPARTA_ADAPTER_REGISTRY"))
     parser.add_argument(
         "--allow-unauthenticated",
         action="store_true",
@@ -1508,6 +1578,11 @@ def main() -> None:
     cors_origins = [item.strip() for item in os.environ.get("SMERC_CORS_ORIGINS", "").split(",") if item.strip()]
     policy_registry = PolicyRegistry.from_directory(args.policy_dir) if args.policy_dir else PolicyRegistry()
     domain_profiles = load_domain_profile_dir(args.domain_profile_dir) if args.domain_profile_dir else {}
+    sparta_adapter_registry = (
+        load_sparta_adapter_registry(Path(args.sparta_adapter_registry))
+        if args.sparta_adapter_registry
+        else None
+    )
     permit_signers = parse_permit_signers(os.environ.get("SMERC_PERMIT_KEYS", ""))
     control_evidence_signers = parse_control_evidence_signers(
         os.environ.get("SMERC_CONTROL_EVIDENCE_KEYS", "")
@@ -1537,6 +1612,7 @@ def main() -> None:
         control_evidence_signers=control_evidence_signers,
         access_token_signer=access_token_signer,
         github_oidc_verifier=github_oidc_verifier,
+        sparta_adapter_registry=sparta_adapter_registry,
     )
 
 

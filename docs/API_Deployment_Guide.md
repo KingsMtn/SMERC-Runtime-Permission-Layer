@@ -76,6 +76,7 @@ curl http://127.0.0.1:8788/v1/decisions/REPLAY_ID \
 | `POST /v1/permits/issue` | Bearer | Issue one short-lived action-bound permit for an eligible enforcement decision |
 | `POST /v1/permits/prepare` | Bearer | Authenticate and reserve a permit before native controls run |
 | `POST /v1/permits/consume` | Bearer | Verify configured adapter evidence and atomically consume a permit |
+| `POST /v1/sparta/route` | Bearer | Route one stored decision through a direct plan or configured adapter |
 | `POST /v1/batch` | Bearer | Evaluate and store a bounded batch |
 | `GET /v1/decisions` | Bearer | List decision summaries for the authenticated tenant |
 | `GET /v1/decisions/{replay_id}` | Bearer | Retrieve one decision for the authenticated tenant |
@@ -109,6 +110,7 @@ This prevents a workflow retry from producing multiple audit decisions for the s
 | `SMERC_CONTROL_EVIDENCE_KEYS` | none | Optional `tenant:audience=adapter-id:key-id:secret` verifier mappings; secrets require at least 32 bytes |
 | `SMERC_ACCESS_TOKEN_KEY` | none | Optional `key-id:secret` short-lived access-token signer; secret requires at least 32 bytes |
 | `SMERC_GITHUB_OIDC_TRUST` | none | Optional JSON array of exact GitHub repository, workflow, ref, environment, event, runner, scope, and subject trust policies |
+| `SMERC_SPARTA_ADAPTER_REGISTRY` | none | Optional path to a strict `smerc.sparta-adapter-registry.v1` registry |
 | `PORT` | `8788` | Listening port |
 
 At least one legacy key, scoped principal, or GitHub OIDC trust policy is required. OIDC also requires `SMERC_ACCESS_TOKEN_KEY`. Do not commit credentials or put them in URLs. Rotate pilot credentials when personnel or integration scope changes. Legacy keys receive all tenant scopes; scoped principals or exact OIDC policy are recommended for new pilots. See `Scoped_Workload_Identity.md`.
@@ -124,6 +126,28 @@ When `SMERC_CONTROL_EVIDENCE_KEYS` contains the authenticated tenant and request
 The authenticated tenant selects the policy; clients cannot name a policy in an action request. The server chooses the latest effective revision for that tenant and refuses startup when a configured tenant has no effective revision. Tenants without configured policy files use the identified reference policy in `OBSERVE` mode.
 
 Actions may name an approved `context.domain_profile`. Built-in profiles are always available. Profiles from `SMERC_DOMAIN_PROFILE_DIR` are loaded at startup and rejected if they contain unknown fields, duplicate IDs, invalid multipliers, or unsafe identifiers. This is a pilot calibration surface, not evidence that a profile is correct for production enforcement.
+
+## SPARTa Route API
+
+`POST /v1/sparta/route` requires `routes.write`. It routes an already stored SMERC decision by `replay_id`; callers cannot submit an invented posture. A request can include a full `smerc.sparta-plan.v1` object or reference a configured adapter from `SMERC_SPARTA_ADAPTER_REGISTRY`.
+
+Example scoped principal:
+
+```bash
+export SMERC_API_PRINCIPALS="platform-team:sparta-router:actions.evaluate+routes.write+decisions.read=platform-sparta-local-secret-012345"
+export SMERC_SPARTA_ADAPTER_REGISTRY="./examples/sparta/adapter_registry.json"
+```
+
+Registry-backed route request:
+
+```bash
+curl -X POST http://127.0.0.1:8788/v1/sparta/route \
+  -H "Authorization: Bearer platform-sparta-local-secret-012345" \
+  -H "Content-Type: application/json" \
+  --data '{"replay_id":"REPLAY_ID","adapter_id":"github-actions-deployer","action":"deploy_canary","requested_capability":"deployment","requested_scope_units":80,"side_effect_level":"external","metadata":{"workflow_run":"1001"}}'
+```
+
+The response is a `smerc.sparta-route.v1` report. The API also records a `sparta.route.created` security event.
 
 ## Pilot Review Console
 
@@ -163,6 +187,7 @@ Expected controls:
 - optional adapter evidence secrets: dashboard-managed `SMERC_CONTROL_EVIDENCE_KEYS`
 - optional access-token signing secret: dashboard-managed `SMERC_ACCESS_TOKEN_KEY`
 - optional GitHub OIDC trust policy: dashboard-managed `SMERC_GITHUB_OIDC_TRUST`
+- optional SPARTa adapter registry path: dashboard-managed `SMERC_SPARTA_ADAPTER_REGISTRY`
 
 ## Pilot Limitations
 
@@ -173,5 +198,6 @@ Expected controls:
 - The service does not yet provide managed key rotation, SSO, RBAC, retention automation, SIEM export, or customer-managed encryption keys.
 - Permit replay prevention is single-instance SQLite state, not a distributed capability service.
 - HMAC control evidence authenticates the configured adapter key but does not independently verify native platform records.
+- SPARTa route reports are not signed yet and do not prove the downstream adapter executed the route.
 - Thresholds require customer-specific calibration before enforcement.
 - Security, privacy, legal, and architecture owners must approve production use.

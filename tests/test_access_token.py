@@ -9,7 +9,7 @@ from urllib.request import Request, urlopen
 
 from api_server import create_server
 from reference_engine.access_token import AccessTokenError, AccessTokenSigner, parse_access_token_signer
-from reference_engine.api_identity import APIPrincipal
+from reference_engine.api_identity import SCOPES, APIPrincipal
 from reference_engine.authorization_permit import PermitSigner
 from reference_engine.control_evidence import ControlEvidenceSigner
 from tests.test_authorization_permit import low_risk_action
@@ -76,7 +76,7 @@ class AccessTokenUnitTests(unittest.TestCase):
         issued = self.signer.issue(bootstrap_principal("*", legacy=True), now=1_000)
         principal = self.signer.verify(issued["access_token"], now=1_001)
         self.assertNotIn("*", principal.scopes)
-        self.assertEqual(len(principal.scopes), 8)
+        self.assertEqual(principal.scopes, SCOPES)
         self.assertTrue(principal.legacy)
 
     def test_unexpired_v1_session_remains_verifiable_during_v2_transition(self):

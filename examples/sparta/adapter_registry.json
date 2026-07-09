@@ -1,0 +1,60 @@
+{
+  "version": "smerc.sparta-adapter-registry.v1",
+  "adapters": [
+    {
+      "version": "smerc.sparta-adapter-registry.v1",
+      "adapter_id": "github-actions-deployer",
+      "tool": "github_actions",
+      "supported_actions": [
+        "deploy_canary",
+        "deploy_rollback",
+        "run_infrastructure_plan"
+      ],
+      "supported_capabilities": [
+        "deployment",
+        "rollback",
+        "infrastructure_change"
+      ],
+      "supports_dry_run": true,
+      "supports_scope_limit": true,
+      "supports_checkpoint": true,
+      "supports_rollback": true,
+      "supports_human_approval": true,
+      "max_scope_units": 100,
+      "allowed_side_effect_levels": [
+        "internal",
+        "external"
+      ],
+      "metadata": {
+        "owner": "platform-engineering",
+        "evidence_mode": "signed_control_evidence"
+      }
+    },
+    {
+      "version": "smerc.sparta-adapter-registry.v1",
+      "adapter_id": "readonly-observer",
+      "tool": "audit_observer",
+      "supported_actions": [
+        "read_audit_log",
+        "summarize_status"
+      ],
+      "supported_capabilities": [
+        "observation"
+      ],
+      "supports_dry_run": true,
+      "supports_scope_limit": false,
+      "supports_checkpoint": false,
+      "supports_rollback": false,
+      "supports_human_approval": true,
+      "max_scope_units": 1000,
+      "allowed_side_effect_levels": [
+        "none",
+        "internal"
+      ],
+      "metadata": {
+        "owner": "security-operations",
+        "evidence_mode": "read_only"
+      }
+    }
+  ]
+}
