@@ -66,6 +66,7 @@ Start here before reading the code:
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
 - `docs/Community_Submission_Kit.md` gives careful, non-exaggerated public post drafts for Microsoft Tech Community, GitHub Community, LinkedIn, Hacker News, and Product Hunt.
+- `docs/Public_Indexing_Assets.md` records the public status page, sitemap, robots file, `llms.txt`, and `humans.txt`.
 - `examples/domain_profiles/github_actions_strict.json` shows how a design partner can load a strict custom calibration profile without editing engine code.
 - `docs/Python_SDK_Quickstart.md` shows how to call the SMERC API from Python without third-party dependencies.
 - `docs/JavaScript_SDK_Quickstart.md` shows how to call the SMERC API from Node or browser-compatible JavaScript.
@@ -437,6 +438,7 @@ Policy calibration, deterministic hashes, accountable overrides, and tamper-evid
 
 - CISO review: https://admirable-sorbet-9986d5.netlify.app/ciso.html
 - Public feedback: https://admirable-sorbet-9986d5.netlify.app/community.html
+- Project status: https://admirable-sorbet-9986d5.netlify.app/status.html
 - Interactive demo: https://admirable-sorbet-9986d5.netlify.app
 - GitHub Actions pilot: https://admirable-sorbet-9986d5.netlify.app/github-action.html
 - Pilot options: https://admirable-sorbet-9986d5.netlify.app/pilot.html
