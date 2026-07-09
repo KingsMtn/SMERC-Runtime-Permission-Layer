@@ -12,6 +12,7 @@ The SMERC public Netlify site includes lightweight discovery files and status pa
 - Robots file: `https://admirable-sorbet-9986d5.netlify.app/robots.txt`
 - AI-readable summary: `https://admirable-sorbet-9986d5.netlify.app/llms.txt`
 - Human-readable project card: `https://admirable-sorbet-9986d5.netlify.app/humans.txt`
+- Structured project profile: `https://admirable-sorbet-9986d5.netlify.app/project.json`
 
 ## Intended Summary
 
@@ -37,3 +38,19 @@ The preferred public flow is:
 2. Inspect the repository.
 3. Use the public review issue template for specific critique.
 4. Discuss shadow-mode pilot fit only after the workflow and evidence boundaries are clear.
+
+## Structured Profile
+
+`project.json` is a small public JSON profile intended for tools and reviewers that need a concise project summary without scraping the website.
+
+It includes:
+
+- one-line summary
+- primary review question
+- posture vocabulary
+- core recoverability signals
+- current pilot-grade status
+- implemented surfaces
+- non-claims
+- reviewer profiles
+- canonical links

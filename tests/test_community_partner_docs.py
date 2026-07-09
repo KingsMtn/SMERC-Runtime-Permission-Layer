@@ -27,6 +27,8 @@ class CommunityPartnerDocsTests(unittest.TestCase):
         self.assertIn("Do not claim incident reduction", submission)
         self.assertIn("llms.txt", indexing)
         self.assertIn("humans.txt", indexing)
+        self.assertIn("project.json", indexing)
+        self.assertIn("Structured Profile", indexing)
         self.assertIn("Project status", indexing)
         self.assertIn("not production-certified", indexing)
         self.assertIn("proxy evidence, not production validation", outreach)
