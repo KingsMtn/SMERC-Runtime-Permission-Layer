@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Level 5 pilot-readiness maturity model, machine-readable readiness gates, generated readiness report, shadow-mode pilot packet, and tests that verify required evidence links exist.
 - Added the first SPARTa posture-aware router, adapter registry, authenticated route API endpoint, example tool plans, route reports, specification, operations guide, CLI, and fail-closed tests.
 - Added strict `smerc.domain_profile.v1` custom profile loading for the recoverability engine, CLI, and API server.
 - Added recoverability-engine domain profiles, score-contribution trace, posture-threshold trace, and transition guidance.

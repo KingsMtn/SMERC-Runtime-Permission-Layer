@@ -4,6 +4,19 @@
 
 Determine whether runtime permission postures improve governance of AI-assisted code, deployment, and infrastructure workflows.
 
+## Current Maturity Classification
+
+SMERC is a Level 5 candidate: pilot-ready for bounded shadow-mode review.
+
+Evidence:
+
+- `docs/Maturity_Model.md`
+- `examples/pilot_level5_readiness.json`
+- `reports/Pilot_Level_5_Readiness_Assessment.md`
+- `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`
+
+This classification does not assert production readiness, customer validation, compliance certification, or incident-reduction proof.
+
 Use `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` as the practical design-partner checklist. The checklist is deliberately written to identify both fit and reasons to stop or narrow the pilot.
 
 ## First Pilot Scope

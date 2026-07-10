@@ -1,0 +1,172 @@
+{
+  "assessment_date": "2026-07-09",
+  "gates": [
+    {
+      "evidence_path_count": 4,
+      "evidence_paths": [
+        "reference_engine/recoverability_engine.py",
+        "reference_engine/action_language.py",
+        "tests/test_recoverability_engine.py",
+        "tests/test_action_language.py"
+      ],
+      "evidence_present": true,
+      "id": "working_engine",
+      "label": "Working deterministic engine",
+      "missing_evidence_paths": [],
+      "notes": "Engine and action language are implemented and covered by unit tests.",
+      "required": true,
+      "status": "met"
+    },
+    {
+      "evidence_path_count": 5,
+      "evidence_paths": [
+        "api_server.py",
+        "reference_engine/api_identity.py",
+        "docs/API_Deployment_Guide.md",
+        "tests/test_api_server.py",
+        "tests/test_api_identity.py"
+      ],
+      "evidence_present": true,
+      "id": "api_and_auth",
+      "label": "Authenticated pilot API",
+      "missing_evidence_paths": [],
+      "notes": "API supports scoped principals, tenant decisions, replay, reviews, permits, route API, and audit/security events.",
+      "required": true,
+      "status": "met"
+    },
+    {
+      "evidence_path_count": 6,
+      "evidence_paths": [
+        "reference_engine/sparta_router.py",
+        "reference_engine/sparta_registry.py",
+        "specification/SMERC_SPARTa_Router_v1.md",
+        "docs/SPARTa_Router_Operations.md",
+        "tests/test_sparta_router.py",
+        "tests/test_sparta_registry.py"
+      ],
+      "evidence_present": true,
+      "id": "sparta_routing",
+      "label": "Posture-aware route layer",
+      "missing_evidence_paths": [],
+      "notes": "SPARTa converts stored SMERC decisions into executable, constrained, paused, blocked, or review-required routes.",
+      "required": true,
+      "status": "met"
+    },
+    {
+      "evidence_path_count": 6,
+      "evidence_paths": [
+        "integrations/github_actions/README.md",
+        "integrations/github_actions/action.yml",
+        "integrations/github_actions/example_workflow.yml",
+        "examples/github_actions_shadow_mode_scenarios.json",
+        "reports/GitHub_Actions_Shadow_Mode_Pilot_Report.md",
+        "tests/test_github_actions_integration.py"
+      ],
+      "evidence_present": true,
+      "id": "shadow_mode_integration",
+      "label": "First shadow-mode integration path",
+      "missing_evidence_paths": [],
+      "notes": "GitHub Actions shadow-mode path exists for AI-assisted code, deployment, and infrastructure workflows.",
+      "required": true,
+      "status": "met"
+    },
+    {
+      "evidence_path_count": 6,
+      "evidence_paths": [
+        "reference_engine/audit_store.py",
+        "reference_engine/pilot_metrics_report.py",
+        "docs/Pilot_Review_Metrics.md",
+        "pilot_console/README.md",
+        "tests/test_pilot_metrics_report.py",
+        "tests/test_pilot_console_contract.py"
+      ],
+      "evidence_present": true,
+      "id": "review_metrics",
+      "label": "Pilot review and metrics loop",
+      "missing_evidence_paths": [],
+      "notes": "Pilot reviewers can record agreement, overrides, false release, false constraint, useful constraint, and latency.",
+      "required": true,
+      "status": "met"
+    },
+    {
+      "evidence_path_count": 5,
+      "evidence_paths": [
+        "Dockerfile",
+        "docker-compose.yml",
+        "render.yaml",
+        "docs/API_Deployment_Guide.md",
+        "docs/Deployment_Model.md"
+      ],
+      "evidence_present": true,
+      "id": "deployment_path",
+      "label": "Documented local and hosted deployment path",
+      "missing_evidence_paths": [],
+      "notes": "Local, Docker, and Render deployment paths are documented for pilot review.",
+      "required": true,
+      "status": "met"
+    },
+    {
+      "evidence_path_count": 4,
+      "evidence_paths": [
+        "SECURITY.md",
+        "docs/Pilot_Readiness.md",
+        "docs/Evidence_And_Unknowns_Program.md",
+        "docs/Public_Review_And_Feedback.md"
+      ],
+      "evidence_present": true,
+      "id": "limits_and_stop_conditions",
+      "label": "Explicit limitations and stop conditions",
+      "missing_evidence_paths": [],
+      "notes": "Repository states that SMERC is not production-certified and names unresolved validation areas.",
+      "required": true,
+      "status": "met"
+    },
+    {
+      "evidence_path_count": 0,
+      "evidence_paths": [],
+      "evidence_present": true,
+      "id": "external_pilot_data",
+      "label": "External pilot data",
+      "missing_evidence_paths": [],
+      "notes": "No outside design-partner pilot data has been recorded yet. This is not required to start Level 5 shadow-mode outreach, but it is required to move toward Level 6.",
+      "required": false,
+      "status": "not_met"
+    },
+    {
+      "evidence_path_count": 0,
+      "evidence_paths": [],
+      "evidence_present": true,
+      "id": "production_security_review",
+      "label": "Independent production security review",
+      "missing_evidence_paths": [],
+      "notes": "No independent security assessment, compliance attestation, or production approval exists.",
+      "required": false,
+      "status": "not_met"
+    },
+    {
+      "evidence_path_count": 2,
+      "evidence_paths": [
+        "reference_engine/sparta_router.py",
+        "docs/SPARTa_Router_Operations.md"
+      ],
+      "evidence_present": true,
+      "id": "signed_sparta_routes",
+      "label": "Signed SPARTa route artifacts",
+      "missing_evidence_paths": [],
+      "notes": "SPARTa route reports exist, but route reports are not signed yet.",
+      "required": false,
+      "status": "partial"
+    }
+  ],
+  "gates_missing_evidence": [],
+  "level5_shadow_mode_ready": true,
+  "optional_gate_count": 3,
+  "optional_met_count": 0,
+  "project": "SMERC Runtime Permission Layer",
+  "required_failures": [],
+  "required_gate_count": 7,
+  "required_met_count": 7,
+  "summary": "Assess whether SMERC is ready for an outside technical team to run a bounded shadow-mode pilot.",
+  "target_level": "Level 5: Pilot-ready",
+  "version": "smerc.pilot-readiness.v1"
+}
