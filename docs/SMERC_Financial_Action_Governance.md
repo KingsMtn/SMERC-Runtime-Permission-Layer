@@ -73,6 +73,17 @@ python -m reference_engine.financial_permission_profile \
   examples/financial_action_requests.json --pretty
 ```
 
+For a profile-level packet across multiple policies:
+
+```bash
+python -m reference_engine.smerc_f_profile_packet \
+  examples/financial_action_requests.json \
+  --policies conservative balanced permissive \
+  --pretty
+```
+
+See `docs/SMERC_F_Profile_Packet.md` and `reports/SMERC_F_Profile_Packet.md`.
+
 ## Intended Validation
 
 The profile should first be evaluated through historical replay and shadow-mode workflow simulation. The objective is not to claim prediction accuracy. It is to measure whether state transitions and controls remain coherent under changing financial stress and recoverability conditions.

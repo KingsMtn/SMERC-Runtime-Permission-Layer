@@ -1,0 +1,451 @@
+{
+  "action_count": 5,
+  "commercial_limits": [
+    "SMERC-F is not a bank, broker-dealer, exchange, custodian, token, stablecoin, cryptocurrency, trading system, or investment product.",
+    "The current profile is a reference governance profile, not institution-calibrated financial risk infrastructure.",
+    "The profile does not predict market prices, solvency, depegs, liquidity events, or settlement failures.",
+    "Production use requires institution-specific calibration, model-risk review, security review, compliance review, legal review, and accountable human ownership."
+  ],
+  "evaluations": [
+    {
+      "action_id": "TREASURY_REBALANCE_ROUTINE",
+      "action_type": "treasury_rebalance",
+      "confidence": 0.92,
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "34e2463d680c2c4c0537784d37aefa4ac829221b9ba6d77e921473f33fd26fb3",
+      "drivers": [
+        "LOW_STRESS_REPLAYABLE_ACTION"
+      ],
+      "irreversible_exposure": 0.131,
+      "policy": "conservative",
+      "recommended_action": "Proceed with normal monitoring and retain a reversal path.",
+      "reversible_capacity": 0.887,
+      "signal_risk": 0.125,
+      "state": "ALLOW"
+    },
+    {
+      "action_id": "STABLECOIN_DEPEG_REALLOCATION",
+      "action_type": "stablecoin_reallocation",
+      "confidence": 0.465,
+      "controls": [
+        "block_action",
+        "emergency_escalation",
+        "executive_override_required",
+        "preserve_replay"
+      ],
+      "decision_hash": "c34883a6279c9889438e6962df938ee604d30e28770b3a9804230c8db04857a0",
+      "drivers": [
+        "STABLECOIN_IMBALANCE",
+        "AGENT_VELOCITY",
+        "MARKET_INSTABILITY",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "MODEL_DISAGREEMENT",
+        "COLLATERAL_STRESS",
+        "COUNTERPARTY_CONCENTRATION",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "EVIDENCE_VALIDITY_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "irreversible_exposure": 0.787,
+      "policy": "conservative",
+      "recommended_action": "Block automated progression; require emergency escalation for any override.",
+      "reversible_capacity": 0.392,
+      "signal_risk": 0.803,
+      "state": "DENY"
+    },
+    {
+      "action_id": "COUNTERPARTY_EXPOSURE_INCREASE",
+      "action_type": "counterparty_limit_change",
+      "confidence": 0.821,
+      "controls": [
+        "reduce_transaction_size",
+        "lower_velocity",
+        "require_dual_approval",
+        "log_replay"
+      ],
+      "decision_hash": "e892ecf92335b2a7069d7dd1b68de635b3d48147811206d1f8464a691c57f9a2",
+      "drivers": [
+        "COUNTERPARTY_CONCENTRATION",
+        "AGENT_VELOCITY"
+      ],
+      "irreversible_exposure": 0.38,
+      "policy": "conservative",
+      "recommended_action": "Reduce exposure and transaction velocity; require dual approval.",
+      "reversible_capacity": 0.729,
+      "signal_risk": 0.404,
+      "state": "THROTTLE"
+    },
+    {
+      "action_id": "UNAUTHORIZED_RESERVE_TRANSFER",
+      "action_type": "reserve_transfer",
+      "confidence": 0.415,
+      "controls": [
+        "block_action",
+        "emergency_escalation",
+        "executive_override_required",
+        "preserve_replay"
+      ],
+      "decision_hash": "fff5941573e4cb9bb17dba1f44c41744f6b8f4e3a28fb144e9b615cb24380885",
+      "drivers": [
+        "AGENT_VELOCITY",
+        "COUNTERPARTY_CONCENTRATION",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "MODEL_DISAGREEMENT",
+        "MARKET_INSTABILITY",
+        "COLLATERAL_STRESS",
+        "STABLECOIN_IMBALANCE",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "EVIDENCE_VALIDITY_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "irreversible_exposure": 0.789,
+      "policy": "conservative",
+      "recommended_action": "Block automated progression; require emergency escalation for any override.",
+      "reversible_capacity": 0.19,
+      "signal_risk": 0.722,
+      "state": "DENY"
+    },
+    {
+      "action_id": "MODEL_DISAGREEMENT_COLLATERAL_POST",
+      "action_type": "collateral_posting",
+      "confidence": 0.547,
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "decision_hash": "c494ab104d4f0361d885140988c26e340b084109040c01c7cef2a8ea03e074c6",
+      "drivers": [
+        "MODEL_DISAGREEMENT",
+        "COLLATERAL_STRESS",
+        "MARKET_INSTABILITY",
+        "COUNTERPARTY_CONCENTRATION",
+        "LIQUIDITY_CONCENTRATION",
+        "AGENT_VELOCITY",
+        "LOW_REVERSIBILITY"
+      ],
+      "irreversible_exposure": 0.538,
+      "policy": "conservative",
+      "recommended_action": "Pause financial automation pending secondary validation and supervisor review.",
+      "reversible_capacity": 0.582,
+      "signal_risk": 0.55,
+      "state": "FREEZE"
+    },
+    {
+      "action_id": "TREASURY_REBALANCE_ROUTINE",
+      "action_type": "treasury_rebalance",
+      "confidence": 0.92,
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "21700dde81467def7c0455108b54c7ac1d003a6cb4ebc349c42948491e235665",
+      "drivers": [
+        "LOW_STRESS_REPLAYABLE_ACTION"
+      ],
+      "irreversible_exposure": 0.131,
+      "policy": "balanced",
+      "recommended_action": "Proceed with normal monitoring and retain a reversal path.",
+      "reversible_capacity": 0.887,
+      "signal_risk": 0.125,
+      "state": "ALLOW"
+    },
+    {
+      "action_id": "STABLECOIN_DEPEG_REALLOCATION",
+      "action_type": "stablecoin_reallocation",
+      "confidence": 0.465,
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "decision_hash": "00204d98e04610739e02b2dbc539c6c339532cb66a3e68b227e2f9d037f51727",
+      "drivers": [
+        "STABLECOIN_IMBALANCE",
+        "AGENT_VELOCITY",
+        "MARKET_INSTABILITY",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "MODEL_DISAGREEMENT",
+        "COLLATERAL_STRESS",
+        "COUNTERPARTY_CONCENTRATION",
+        "LOW_REVERSIBILITY"
+      ],
+      "irreversible_exposure": 0.787,
+      "policy": "balanced",
+      "recommended_action": "Pause financial automation pending secondary validation and supervisor review.",
+      "reversible_capacity": 0.392,
+      "signal_risk": 0.803,
+      "state": "FREEZE"
+    },
+    {
+      "action_id": "COUNTERPARTY_EXPOSURE_INCREASE",
+      "action_type": "counterparty_limit_change",
+      "confidence": 0.821,
+      "controls": [
+        "reduce_transaction_size",
+        "lower_velocity",
+        "require_dual_approval",
+        "log_replay"
+      ],
+      "decision_hash": "4a5f618343f2f267b769982f386a48b6ea51ca45b47fbffce2083b8c1b8345e7",
+      "drivers": [
+        "COUNTERPARTY_CONCENTRATION",
+        "AGENT_VELOCITY"
+      ],
+      "irreversible_exposure": 0.38,
+      "policy": "balanced",
+      "recommended_action": "Reduce exposure and transaction velocity; require dual approval.",
+      "reversible_capacity": 0.729,
+      "signal_risk": 0.404,
+      "state": "THROTTLE"
+    },
+    {
+      "action_id": "UNAUTHORIZED_RESERVE_TRANSFER",
+      "action_type": "reserve_transfer",
+      "confidence": 0.415,
+      "controls": [
+        "block_action",
+        "emergency_escalation",
+        "executive_override_required",
+        "preserve_replay"
+      ],
+      "decision_hash": "77bde788ffde2d87d0993515b5cc9c4e399403b58b32b1513868ba94df372fa5",
+      "drivers": [
+        "AGENT_VELOCITY",
+        "COUNTERPARTY_CONCENTRATION",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "MODEL_DISAGREEMENT",
+        "MARKET_INSTABILITY",
+        "COLLATERAL_STRESS",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "EVIDENCE_VALIDITY_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "irreversible_exposure": 0.789,
+      "policy": "balanced",
+      "recommended_action": "Block automated progression; require emergency escalation for any override.",
+      "reversible_capacity": 0.19,
+      "signal_risk": 0.722,
+      "state": "DENY"
+    },
+    {
+      "action_id": "MODEL_DISAGREEMENT_COLLATERAL_POST",
+      "action_type": "collateral_posting",
+      "confidence": 0.547,
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "decision_hash": "521d126b5b1d65e2cd71469e74db85a46f0617cd49b8adef126892efb3d53ada",
+      "drivers": [
+        "MODEL_DISAGREEMENT",
+        "COLLATERAL_STRESS",
+        "MARKET_INSTABILITY"
+      ],
+      "irreversible_exposure": 0.538,
+      "policy": "balanced",
+      "recommended_action": "Pause financial automation pending secondary validation and supervisor review.",
+      "reversible_capacity": 0.582,
+      "signal_risk": 0.55,
+      "state": "FREEZE"
+    },
+    {
+      "action_id": "TREASURY_REBALANCE_ROUTINE",
+      "action_type": "treasury_rebalance",
+      "confidence": 0.92,
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "84f250dd4497804f7d57f885ab6ffa60e4ab3b286c4a5482d7134746a5207496",
+      "drivers": [
+        "LOW_STRESS_REPLAYABLE_ACTION"
+      ],
+      "irreversible_exposure": 0.131,
+      "policy": "permissive",
+      "recommended_action": "Proceed with normal monitoring and retain a reversal path.",
+      "reversible_capacity": 0.887,
+      "signal_risk": 0.125,
+      "state": "ALLOW"
+    },
+    {
+      "action_id": "STABLECOIN_DEPEG_REALLOCATION",
+      "action_type": "stablecoin_reallocation",
+      "confidence": 0.465,
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "decision_hash": "9fd654a2933a10dead4f57253b127ddd62d80a9a6a90ea5352e723afbeb8643c",
+      "drivers": [
+        "STABLECOIN_IMBALANCE",
+        "AGENT_VELOCITY",
+        "MARKET_INSTABILITY",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "MODEL_DISAGREEMENT",
+        "COLLATERAL_STRESS",
+        "COUNTERPARTY_CONCENTRATION",
+        "LOW_REVERSIBILITY"
+      ],
+      "irreversible_exposure": 0.787,
+      "policy": "permissive",
+      "recommended_action": "Pause financial automation pending secondary validation and supervisor review.",
+      "reversible_capacity": 0.392,
+      "signal_risk": 0.803,
+      "state": "FREEZE"
+    },
+    {
+      "action_id": "COUNTERPARTY_EXPOSURE_INCREASE",
+      "action_type": "counterparty_limit_change",
+      "confidence": 0.821,
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "3a40b117c3bcc08c68d8fade786d6519b60b20eb1a3f97af10ea8dff184b60f8",
+      "drivers": [
+        "COUNTERPARTY_CONCENTRATION"
+      ],
+      "irreversible_exposure": 0.38,
+      "policy": "permissive",
+      "recommended_action": "Proceed with normal monitoring and retain a reversal path.",
+      "reversible_capacity": 0.729,
+      "signal_risk": 0.404,
+      "state": "ALLOW"
+    },
+    {
+      "action_id": "UNAUTHORIZED_RESERVE_TRANSFER",
+      "action_type": "reserve_transfer",
+      "confidence": 0.415,
+      "controls": [
+        "block_action",
+        "emergency_escalation",
+        "executive_override_required",
+        "preserve_replay"
+      ],
+      "decision_hash": "78409e2e7b28b0d0e7681e3b25b1914bf46ba25bfe07cc81612da722e0867a7b",
+      "drivers": [
+        "AGENT_VELOCITY",
+        "COUNTERPARTY_CONCENTRATION",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "MODEL_DISAGREEMENT",
+        "MARKET_INSTABILITY",
+        "COLLATERAL_STRESS",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "EVIDENCE_VALIDITY_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "irreversible_exposure": 0.789,
+      "policy": "permissive",
+      "recommended_action": "Block automated progression; require emergency escalation for any override.",
+      "reversible_capacity": 0.19,
+      "signal_risk": 0.722,
+      "state": "DENY"
+    },
+    {
+      "action_id": "MODEL_DISAGREEMENT_COLLATERAL_POST",
+      "action_type": "collateral_posting",
+      "confidence": 0.547,
+      "controls": [
+        "reduce_transaction_size",
+        "lower_velocity",
+        "require_dual_approval",
+        "log_replay"
+      ],
+      "decision_hash": "b2ac9e1763636562b9a202ad47cdd390c58333ee793b157bcf39dbfb56d61643",
+      "drivers": [
+        "MODEL_DISAGREEMENT",
+        "COLLATERAL_STRESS",
+        "MARKET_INSTABILITY"
+      ],
+      "irreversible_exposure": 0.538,
+      "policy": "permissive",
+      "recommended_action": "Reduce exposure and transaction velocity; require dual approval.",
+      "reversible_capacity": 0.582,
+      "signal_risk": 0.55,
+      "state": "THROTTLE"
+    }
+  ],
+  "high_restraint_count": 8,
+  "policies": [
+    "conservative",
+    "balanced",
+    "permissive"
+  ],
+  "positioning": "Pre-execution permission governance for proposed autonomous-capital actions.",
+  "profile": "SMERC-F",
+  "recommended_pilot_scope": [
+    "Historical replay and synthetic scenario review before live workflow use.",
+    "Shadow-mode scoring only for first financial workflow pilot.",
+    "No automated money movement, custody action, settlement instruction, or production blocking without legal, compliance, security, and operational approval."
+  ],
+  "signal_taxonomy": {
+    "agent": [
+      "agent_velocity"
+    ],
+    "behavioral": [
+      "model_disagreement"
+    ],
+    "counterparty": [
+      "counterparty_concentration"
+    ],
+    "governance": [
+      "authorization_support",
+      "evidence_validity",
+      "reversibility"
+    ],
+    "market": [
+      "market_instability"
+    ],
+    "settlement": [
+      "settlement_anomaly"
+    ],
+    "stablecoin": [
+      "stablecoin_imbalance"
+    ],
+    "treasury": [
+      "liquidity_concentration",
+      "collateral_stress"
+    ]
+  },
+  "state_distribution": {
+    "balanced": {
+      "ALLOW": 1,
+      "DENY": 1,
+      "FREEZE": 2,
+      "THROTTLE": 1
+    },
+    "conservative": {
+      "ALLOW": 1,
+      "DENY": 2,
+      "FREEZE": 1,
+      "THROTTLE": 1
+    },
+    "permissive": {
+      "ALLOW": 2,
+      "DENY": 1,
+      "FREEZE": 1,
+      "THROTTLE": 1
+    }
+  },
+  "version": "smerc-f.profile-packet.v1"
+}
