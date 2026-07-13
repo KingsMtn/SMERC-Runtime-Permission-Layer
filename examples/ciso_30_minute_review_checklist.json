@@ -1,0 +1,69 @@
+{
+  "version": "smerc.ciso-30-minute-review-checklist.v1",
+  "audience": "Chief Information Security Officer or delegated security architect",
+  "review_goal": "Determine whether SMERC is credible enough for a bounded shadow-mode pilot, not whether it is production-certified.",
+  "sections": [
+    {
+      "timebox_minutes": 5,
+      "question": "Is the product claim clear and bounded?",
+      "evidence": [
+        "docs/Plain_English_Product_Overview.md",
+        "docs/Maturity_Model.md"
+      ],
+      "pass_signal": "Reviewer can explain SMERC as runtime permission infrastructure without interpreting it as a prompt firewall or production-certified platform."
+    },
+    {
+      "timebox_minutes": 5,
+      "question": "Does SMERC evaluate the action boundary before side effects?",
+      "evidence": [
+        "reference_engine/action_language.py",
+        "specification/SMERC_Action_Language_v1.md"
+      ],
+      "pass_signal": "Reviewer sees structured action metadata, deterministic hashes, and versioned decision output."
+    },
+    {
+      "timebox_minutes": 5,
+      "question": "Does recoverability affect posture?",
+      "evidence": [
+        "reference_engine/recoverability_engine.py",
+        "reports/Recoverability_Engine_Report.md"
+      ],
+      "pass_signal": "Reviewer sees that low confidence or weak recoverability can move actions toward THROTTLE, FREEZE, DENY, or ESCALATE."
+    },
+    {
+      "timebox_minutes": 5,
+      "question": "Can postures become enforceable controls?",
+      "evidence": [
+        "docs/SPARTa_Router_Operations.md",
+        "docs/Control_Mapping_Library.md",
+        "docs/Control_Evidence_Operations.md"
+      ],
+      "pass_signal": "Reviewer sees route states, native control mappings, and signed control-evidence receipts with explicit limitations."
+    },
+    {
+      "timebox_minutes": 5,
+      "question": "Can decisions be replayed and audited?",
+      "evidence": [
+        "docs/Governance_Report_Generator.md",
+        "reports/Governance_Report_Example.md",
+        "docs/Decision_Lifecycle_Ledger.md"
+      ],
+      "pass_signal": "Reviewer sees one report linking decision, route, controls, and lifecycle evidence without claiming production proof."
+    },
+    {
+      "timebox_minutes": 5,
+      "question": "Is a shadow-mode pilot justified?",
+      "evidence": [
+        "pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md",
+        "docs/Pilot_Evaluation_Checklist.md"
+      ],
+      "pass_signal": "Reviewer can identify a bounded workflow, reviewer owners, metrics, and stop conditions."
+    }
+  ],
+  "do_not_claim": [
+    "production-certified security platform",
+    "compliance-attested governance system",
+    "proven incident reduction",
+    "replacement for IAM, OPA, SIEM, EDR, code review, or approval systems"
+  ]
+}
