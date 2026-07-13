@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a SMERC-F profile packet generator with signal taxonomy, multi-policy financial-action evaluation, generated reports, documentation, and commercial-limit tests.
 - Added a CISO 30-minute review package and structured checklist that guide a security reviewer through claim, action boundary, recoverability, controls, replayability, and pilot decision evidence.
 - Added a replayable governance report generator that assembles SMERC decision, SPARTa route, control mapping, and DLL artifacts into one CISO-readable review package with cross-checks and explicit limits.
 - Added a SMERC control mapping library with strict schema, GitHub Actions example mappings, CLI report generation, documentation, and tests for missing or unsupported native controls.
