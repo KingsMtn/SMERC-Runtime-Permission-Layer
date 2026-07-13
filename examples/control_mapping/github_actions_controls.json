@@ -1,0 +1,186 @@
+{
+  "version": "smerc.control-mapping-library.v1",
+  "library_id": "github-actions-control-library-v1",
+  "description": "Pilot control mapping library for SMERC/SPARTa routes executed through GitHub Actions and the GitHub deployment adapter.",
+  "tools": [
+    {
+      "tool": "github_actions",
+      "native_capabilities": [
+        "environment_protection",
+        "job_permissions",
+        "dry_run_step",
+        "concurrency_cancellation",
+        "artifact_upload",
+        "rollback_workflow",
+        "deployment_status",
+        "reviewer_gate"
+      ],
+      "notes": "GitHub Actions can enforce practical pilot controls when workflows declare environments, scoped permissions, dry-run steps, rollback jobs, and artifact retention."
+    },
+    {
+      "tool": "github_deployment_adapter",
+      "native_capabilities": [
+        "permit_consumption",
+        "control_evidence_receipt",
+        "cancellation_handle",
+        "rollback_command",
+        "execution_report"
+      ],
+      "notes": "The SMERC GitHub deployment adapter can consume permits, execute bounded deployment steps, and return non-secret execution reports."
+    }
+  ],
+  "controls": [
+    {
+      "control_id": "record_replay",
+      "description": "Persist the decision replay reference and policy evidence used to produce the posture.",
+      "required_for_postures": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"],
+      "supported_tools": ["github_actions", "github_deployment_adapter"],
+      "native_mechanism": {
+        "github_actions": "Upload SMERC replay JSON as a retained workflow artifact.",
+        "github_deployment_adapter": "Bind replay_id and decision digest into the adapter execution report."
+      },
+      "evidence_required": ["replay_id", "decision_digest", "artifact_ref"],
+      "failure_behavior": "fail_closed"
+    },
+    {
+      "control_id": "preserve_replay",
+      "description": "Ensure the governed decision can be reconstructed after routing, review, or execution.",
+      "required_for_postures": ["THROTTLE", "FREEZE", "DENY", "ESCALATE"],
+      "supported_tools": ["github_actions", "github_deployment_adapter"],
+      "native_mechanism": {
+        "github_actions": "Store route report, action request, and workflow run URL as artifacts.",
+        "github_deployment_adapter": "Return route digest and execution report references to the caller."
+      },
+      "evidence_required": ["route_report_ref", "action_request_ref", "workflow_run_url"],
+      "failure_behavior": "fail_closed"
+    },
+    {
+      "control_id": "limit_scope",
+      "description": "Reduce execution blast radius before permitting a constrained action.",
+      "required_for_postures": ["THROTTLE"],
+      "supported_tools": ["github_actions", "github_deployment_adapter"],
+      "native_mechanism": {
+        "github_actions": "Run canary, single-environment, or scoped path workflow with least-privilege permissions.",
+        "github_deployment_adapter": "Execute only the permit-bound capability, scope units, and target environment."
+      },
+      "evidence_required": ["effective_scope", "permissions_summary", "target_environment"],
+      "failure_behavior": "fail_closed"
+    },
+    {
+      "control_id": "preview_before_execution",
+      "description": "Produce a dry-run or plan preview before side effects are allowed.",
+      "required_for_postures": ["THROTTLE"],
+      "supported_tools": ["github_actions"],
+      "native_mechanism": {
+        "github_actions": "Run a dry-run, plan, diff, or validation job before the deployment job."
+      },
+      "evidence_required": ["dry_run_status", "preview_artifact_ref"],
+      "failure_behavior": "route_to_review"
+    },
+    {
+      "control_id": "checkpoint_before_execution",
+      "description": "Capture enough state to support rollback or forensic review before execution.",
+      "required_for_postures": ["ALLOW", "THROTTLE", "FREEZE"],
+      "supported_tools": ["github_actions", "github_deployment_adapter"],
+      "native_mechanism": {
+        "github_actions": "Record current deployment SHA, environment status, and configuration digest before changes.",
+        "github_deployment_adapter": "Store pre-execution state reference in the execution report."
+      },
+      "evidence_required": ["checkpoint_ref", "state_digest"],
+      "failure_behavior": "fail_closed"
+    },
+    {
+      "control_id": "require_rollback_plan",
+      "description": "Require an executable rollback path before constrained execution proceeds.",
+      "required_for_postures": ["THROTTLE"],
+      "supported_tools": ["github_actions", "github_deployment_adapter"],
+      "native_mechanism": {
+        "github_actions": "Require rollback workflow, rollback command, or previous deployment redeploy target.",
+        "github_deployment_adapter": "Require a permit-bound rollback command or rollback workflow reference."
+      },
+      "evidence_required": ["rollback_ref", "rollback_owner"],
+      "failure_behavior": "fail_closed"
+    },
+    {
+      "control_id": "pause_execution",
+      "description": "Pause automation while preserving evidence and preventing further side effects.",
+      "required_for_postures": ["FREEZE"],
+      "supported_tools": ["github_actions", "github_deployment_adapter"],
+      "native_mechanism": {
+        "github_actions": "Stop before deployment jobs and mark the run as requiring review.",
+        "github_deployment_adapter": "Return paused status without invoking the executor."
+      },
+      "evidence_required": ["pause_reason", "workflow_run_url"],
+      "failure_behavior": "block_execution"
+    },
+    {
+      "control_id": "snapshot_current_state",
+      "description": "Capture state at the time automation is frozen.",
+      "required_for_postures": ["FREEZE"],
+      "supported_tools": ["github_actions"],
+      "native_mechanism": {
+        "github_actions": "Collect current SHA, environment, deployment status, and pending job list as artifacts."
+      },
+      "evidence_required": ["snapshot_artifact_ref", "snapshot_time"],
+      "failure_behavior": "route_to_review"
+    },
+    {
+      "control_id": "block_execution",
+      "description": "Prevent execution of the requested action.",
+      "required_for_postures": ["DENY", "ESCALATE"],
+      "supported_tools": ["github_actions", "github_deployment_adapter"],
+      "native_mechanism": {
+        "github_actions": "Fail the protected deployment job before credentials or deployment steps are reached.",
+        "github_deployment_adapter": "Reject permit consumption and do not call the executor."
+      },
+      "evidence_required": ["blocked_at", "blocking_reason"],
+      "failure_behavior": "block_execution"
+    },
+    {
+      "control_id": "explain_denial",
+      "description": "Return structured reason codes and reviewer-facing explanation when execution is denied.",
+      "required_for_postures": ["DENY"],
+      "supported_tools": ["github_actions", "github_deployment_adapter"],
+      "native_mechanism": {
+        "github_actions": "Write reason codes to the workflow summary and retained artifact.",
+        "github_deployment_adapter": "Return denial reason codes in the adapter response."
+      },
+      "evidence_required": ["reason_codes", "summary_ref"],
+      "failure_behavior": "record_only"
+    },
+    {
+      "control_id": "route_to_accountable_reviewer",
+      "description": "Route a decision to a named review path rather than allowing automatic execution.",
+      "required_for_postures": ["ESCALATE"],
+      "supported_tools": ["github_actions"],
+      "native_mechanism": {
+        "github_actions": "Use protected environments, CODEOWNERS, or a reviewer issue with named accountable reviewers."
+      },
+      "evidence_required": ["reviewer_ref", "review_queue_ref"],
+      "failure_behavior": "fail_closed"
+    },
+    {
+      "control_id": "require_explicit_approval",
+      "description": "Require accountable approval before a previously escalated action can proceed.",
+      "required_for_postures": ["ESCALATE"],
+      "supported_tools": ["github_actions"],
+      "native_mechanism": {
+        "github_actions": "Require environment approval or explicit reviewer comment before deployment continuation."
+      },
+      "evidence_required": ["approval_actor", "approval_time", "approval_rationale"],
+      "failure_behavior": "fail_closed"
+    },
+    {
+      "control_id": "record_execution_report",
+      "description": "Record what actually happened after a permitted or constrained action executes.",
+      "required_for_postures": ["ALLOW", "THROTTLE"],
+      "supported_tools": ["github_actions", "github_deployment_adapter"],
+      "native_mechanism": {
+        "github_actions": "Upload execution report artifact with status, duration, target, and rollback status.",
+        "github_deployment_adapter": "Return structured non-secret execution report to the SMERC caller."
+      },
+      "evidence_required": ["execution_status", "duration_ms", "target_ref"],
+      "failure_behavior": "fail_closed"
+    }
+  ]
+}

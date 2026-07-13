@@ -1,0 +1,74 @@
+{
+  "capability": "deploy_production",
+  "evidence_requirements": [
+    "action_request_ref",
+    "dry_run_status",
+    "effective_scope",
+    "permissions_summary",
+    "preview_artifact_ref",
+    "rollback_owner",
+    "rollback_ref",
+    "route_report_ref",
+    "target_environment",
+    "workflow_run_url"
+  ],
+  "executable": true,
+  "library_id": "github-actions-control-library-v1",
+  "mapped_controls": [
+    {
+      "control_id": "limit_scope",
+      "evidence_required": [
+        "effective_scope",
+        "permissions_summary",
+        "target_environment"
+      ],
+      "failure_behavior": "fail_closed",
+      "native_mechanism": "Run canary, single-environment, or scoped path workflow with least-privilege permissions.",
+      "outcome": "mapped"
+    },
+    {
+      "control_id": "preserve_replay",
+      "evidence_required": [
+        "route_report_ref",
+        "action_request_ref",
+        "workflow_run_url"
+      ],
+      "failure_behavior": "fail_closed",
+      "native_mechanism": "Store route report, action request, and workflow run URL as artifacts.",
+      "outcome": "mapped"
+    },
+    {
+      "control_id": "preview_before_execution",
+      "evidence_required": [
+        "dry_run_status",
+        "preview_artifact_ref"
+      ],
+      "failure_behavior": "route_to_review",
+      "native_mechanism": "Run a dry-run, plan, diff, or validation job before the deployment job.",
+      "outcome": "mapped"
+    },
+    {
+      "control_id": "require_rollback_plan",
+      "evidence_required": [
+        "rollback_ref",
+        "rollback_owner"
+      ],
+      "failure_behavior": "fail_closed",
+      "native_mechanism": "Require rollback workflow, rollback command, or previous deployment redeploy target.",
+      "outcome": "mapped"
+    }
+  ],
+  "missing_controls": [],
+  "not_required_controls": [],
+  "plain_english_summary": "SMERC posture THROTTLE maps to 4 native control(s) for github_actions; execution should remain evidence-bound.",
+  "posture": "THROTTLE",
+  "recommended_next_action": "Proceed only through an adapter that applies the mapped native controls and records evidence.",
+  "requested_controls": [
+    "limit_scope",
+    "preserve_replay",
+    "preview_before_execution",
+    "require_rollback_plan"
+  ],
+  "tool": "github_actions",
+  "version": "smerc.control-mapping-report.v1"
+}

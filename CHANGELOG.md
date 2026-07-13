@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a SMERC control mapping library with strict schema, GitHub Actions example mappings, CLI report generation, documentation, and tests for missing or unsupported native controls.
 - Added optional HMAC-signed SPARTa route reports with verification, a signed route example, documentation, and tamper-detection tests.
 - Added the SMERC Decision Lifecycle Ledger with a strict append-only hash chain, lifecycle event contract, example report, documentation, schema, CLI, and tests.
 - Added a Level 5 pilot-readiness maturity model, machine-readable readiness gates, generated readiness report, shadow-mode pilot packet, and tests that verify required evidence links exist.
