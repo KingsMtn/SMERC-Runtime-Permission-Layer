@@ -25,6 +25,7 @@ The current build includes:
 - SPARTa adapter registry and authenticated API route endpoint for stored SMERC decisions
 - optional HMAC-signed SPARTa route reports for pilot-grade tamper detection
 - control mapping library that maps SMERC/SPARTa controls to declared native tool mechanisms and evidence requirements
+- replayable governance report generator that assembles decision, route, control mapping, and lifecycle evidence into one review package
 - Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
@@ -72,6 +73,7 @@ Start here before reading the code:
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
+- `docs/Governance_Report_Generator.md` explains how to assemble decision, route, control mapping, and DLL artifacts into one replayable review report.
 - `docs/Decision_Lifecycle_Ledger.md` explains how SMERC records the full governed life of a decision.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
 - `docs/Community_Submission_Kit.md` gives careful, non-exaggerated public post drafts for Microsoft Tech Community, GitHub Community, LinkedIn, Hacker News, and Product Hunt.
@@ -117,15 +119,17 @@ The shortest accurate explanation is:
 22. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
 23. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
 24. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
-25. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
-26. Read `docs/Python_SDK_Quickstart.md`.
-27. Read `docs/JavaScript_SDK_Quickstart.md`.
-28. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-29. Review `reports/Control_Mapping_Library_Example.md`.
-30. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-31. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-32. Run the Python and console tests.
-33. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+25. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
+26. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+27. Read `docs/Python_SDK_Quickstart.md`.
+28. Read `docs/JavaScript_SDK_Quickstart.md`.
+29. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+30. Review `reports/Control_Mapping_Library_Example.md`.
+31. Review `reports/Governance_Report_Example.md`.
+32. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+33. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+34. Run the Python and console tests.
+35. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
 
 ## What SMERC Evaluates
 
@@ -157,6 +161,7 @@ It outputs:
 - signed control-evidence attribution when configured at permit consumption
 - a SPARTa route report when a posture must be converted into an executable tool plan
 - a control mapping report showing whether required controls map to native tool mechanisms and evidence requirements
+- a governance report that cross-checks decision, route, control mapping, and lifecycle artifacts
 - an optional Decision Lifecycle Ledger record for request, evidence, evaluation, review, execution, outcome, and learning recommendation
 
 ## Action Language
@@ -238,6 +243,18 @@ python -m reference_engine.control_mapping \
 
 The report is executable only when every requested control required for the selected posture is declared and supported by the selected tool. Unsupported or undeclared controls fail closed into review or blocking behavior. See `docs/Control_Mapping_Library.md` and `reports/Control_Mapping_Library_Example.md`.
 
+## Governance Report Generator
+
+`smerc.governance-report.v1` assembles existing SMERC artifacts into one replayable pilot review package.
+
+```bash
+python -m reference_engine.governance_report \
+  examples/governance_report/github_actions_governance_bundle.json \
+  --pretty
+```
+
+The generator cross-checks whether the decision posture matches the SPARTa route, the replay IDs agree, route controls are mapped or documented, missing controls are visible, and the Decision Lifecycle Ledger verifies. See `docs/Governance_Report_Generator.md` and `reports/Governance_Report_Example.md`.
+
 ## Decision Lifecycle Ledger
 
 `smerc.decision-lifecycle-ledger.v1` records the complete governed life of one decision. It chains request, evidence, evaluation, human interaction, execution, delayed outcome, and learning recommendation records.
@@ -285,6 +302,7 @@ python -m reference_engine.agent_permission_layer examples/agent_permission_acti
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m reference_engine.sparta_router --decision examples/sparta/throttle_decision.json --plan examples/sparta/github_actions_deploy_plan.json --pretty
 python -m reference_engine.control_mapping examples/control_mapping/github_actions_controls.json --posture THROTTLE --tool github_actions --capability deploy_production --controls limit_scope preview_before_execution require_rollback_plan preserve_replay --pretty
+python -m reference_engine.governance_report examples/governance_report/github_actions_governance_bundle.json --pretty
 python -m reference_engine.decision_lifecycle_ledger --example --pretty
 python -m unittest discover -s tests
 ```

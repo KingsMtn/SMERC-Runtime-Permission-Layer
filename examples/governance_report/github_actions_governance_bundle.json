@@ -1,0 +1,22 @@
+{
+  "version": "smerc.governance-report-bundle.v1",
+  "report_id": "github-actions-governance-report-example",
+  "title": "SMERC GitHub Actions Governance Report",
+  "audience": "CISO, security architect, platform engineering reviewer",
+  "scenario": "AI-assisted production deployment request where SMERC returns THROTTLE, SPARTa routes to constrained execution, controls map to GitHub Actions mechanisms, and DLL records the governed decision lifecycle.",
+  "decision_path": "examples/sparta/throttle_decision.json",
+  "route_report_path": "reports/signed_sparta_route_example.json",
+  "control_mapping_report_path": "reports/control_mapping_example.json",
+  "decision_lifecycle_ledger_path": "reports/decision_lifecycle_ledger_example.json",
+  "review_notes": [
+    "Use this report to inspect whether the decision, route, controls, and lifecycle evidence agree.",
+    "Treat the report as pilot evidence for review, not as a claim of production certification.",
+    "Reviewer should confirm the native controls are actually enforced by the target workflow before enabling enforcement mode."
+  ],
+  "known_limits": [
+    "The example uses repository artifacts and synthetic pilot evidence.",
+    "The signed SPARTa route uses pilot-grade HMAC signing, not managed production key infrastructure.",
+    "Control mapping declares expected mechanisms; adapter validation is still required.",
+    "The report does not prove live incident reduction or regulatory compliance."
+  ]
+}

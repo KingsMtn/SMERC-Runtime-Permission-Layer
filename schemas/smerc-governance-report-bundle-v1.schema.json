@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-governance-report-bundle-v1.schema.json",
+  "title": "SMERC Governance Report Bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "report_id",
+    "title",
+    "audience",
+    "scenario",
+    "decision_path",
+    "route_report_path",
+    "control_mapping_report_path",
+    "decision_lifecycle_ledger_path",
+    "review_notes",
+    "known_limits"
+  ],
+  "properties": {
+    "version": {"const": "smerc.governance-report-bundle.v1"},
+    "report_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "title": {"type": "string", "minLength": 1, "maxLength": 256},
+    "audience": {"type": "string", "minLength": 1, "maxLength": 256},
+    "scenario": {"type": "string", "minLength": 1, "maxLength": 1024},
+    "decision_path": {"type": "string", "minLength": 1, "maxLength": 260},
+    "route_report_path": {"type": "string", "minLength": 1, "maxLength": 260},
+    "control_mapping_report_path": {"type": "string", "minLength": 1, "maxLength": 260},
+    "decision_lifecycle_ledger_path": {"type": "string", "minLength": 1, "maxLength": 260},
+    "review_notes": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {"type": "string", "minLength": 1, "maxLength": 256}
+    },
+    "known_limits": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {"type": "string", "minLength": 1, "maxLength": 256}
+    }
+  }
+}
