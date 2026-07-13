@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a pilot ledger intake path that appends reviewer, execution, outcome, and learning evidence to existing DLL records while enforcing lifecycle ordering and evidence boundaries.
 - Added a benchmark decision-time ledger builder that converts runtime benchmark decisions into hash-chained DLL records while explicitly preserving execution and outcome evidence gaps.
 - Added an expanded runtime governance benchmark suite that deterministically expands seed proxy scenarios, compares SMERC postures with allow/deny policy, generates JSON/Markdown evidence reports, and tests proxy-evidence limits.
 - Added a SMERC-F profile packet generator with signal taxonomy, multi-policy financial-action evaluation, generated reports, documentation, and commercial-limit tests.
