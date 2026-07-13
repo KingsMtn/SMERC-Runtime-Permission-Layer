@@ -23,6 +23,7 @@ The current build includes:
 - signed, action-bound control-evidence receipts for configured execution adapters
 - SPARTa posture-aware router that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes
 - SPARTa adapter registry and authenticated API route endpoint for stored SMERC decisions
+- Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
 - GitHub Actions OIDC verification with repository-, workflow-, ref-, environment-, and run-bound attribution
@@ -68,6 +69,7 @@ Start here before reading the code:
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
+- `docs/Decision_Lifecycle_Ledger.md` explains how SMERC records the full governed life of a decision.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
 - `docs/Community_Submission_Kit.md` gives careful, non-exaggerated public post drafts for Microsoft Tech Community, GitHub Community, LinkedIn, Hacker News, and Product Hunt.
 - `docs/Public_Indexing_Assets.md` records the public status page, sitemap, robots file, `llms.txt`, and `humans.txt`.
@@ -79,6 +81,7 @@ Start here before reading the code:
 - `reports/Pilot_Level_5_Readiness_Assessment.md` shows the generated readiness assessment and unresolved gaps.
 - `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
 - `reports/Proxy_Incident_Replay_Benchmark.md` shows proxy incident-replay evidence comparing simple allow/deny policy with SMERC recoverability-weighted posture decisions.
+- `reports/Decision_Lifecycle_Ledger_Example.md` shows a full pilot-grade lifecycle record from request through learning recommendation.
 - `COMMUNITY.md`, `CONTRIBUTING.md`, `docs/Partner_Program.md`, and `docs/Community_Outreach_Kit.md` describe how design partners, integration partners, researchers, and open-source contributors can engage.
 
 The shortest accurate explanation is:
@@ -110,12 +113,14 @@ The shortest accurate explanation is:
 21. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
 22. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
 23. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
-24. Read `docs/Python_SDK_Quickstart.md`.
-25. Read `docs/JavaScript_SDK_Quickstart.md`.
-26. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-27. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-28. Run the Python and console tests.
-29. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+24. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+25. Read `docs/Python_SDK_Quickstart.md`.
+26. Read `docs/JavaScript_SDK_Quickstart.md`.
+27. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+28. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+29. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+30. Run the Python and console tests.
+31. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
 
 ## What SMERC Evaluates
 
@@ -146,6 +151,7 @@ It outputs:
 - authenticated principal identity bound into decisions, replays, reviews, and security events
 - signed control-evidence attribution when configured at permit consumption
 - a SPARTa route report when a posture must be converted into an executable tool plan
+- an optional Decision Lifecycle Ledger record for request, evidence, evaluation, review, execution, outcome, and learning recommendation
 
 ## Action Language
 
@@ -208,6 +214,20 @@ curl -X POST http://127.0.0.1:8788/v1/sparta/route \
   --data '{"replay_id":"replay_...","adapter_id":"github-actions-deployer","action":"deploy_canary","requested_capability":"deployment","requested_scope_units":80,"side_effect_level":"external","metadata":{"workflow_run":"1001"}}'
 ```
 
+## Decision Lifecycle Ledger
+
+`smerc.decision-lifecycle-ledger.v1` records the complete governed life of one decision. It chains request, evidence, evaluation, human interaction, execution, delayed outcome, and learning recommendation records.
+
+```bash
+python -m reference_engine.decision_lifecycle_ledger \
+  --example \
+  --json-output reports/decision_lifecycle_ledger_example.json \
+  --markdown-output reports/Decision_Lifecycle_Ledger_Example.md \
+  --pretty
+```
+
+DLL is intentionally not an automatic learning system. It can recommend policy or calibration changes, but each learning recommendation remains `requires_review` until an accountable reviewer activates a policy through normal governance. See `docs/Decision_Lifecycle_Ledger.md`.
+
 ## Verifiable Control Evidence
 
 Configured execution adapters first authenticate and reserve a permit, then replace caller-supplied control names with short-lived `smerc.control-evidence.v1` receipts. Each receipt is signed by a key scoped to one tenant and executor audience and binds the adapter, permit, action hash, applied controls, native mechanisms, evidence references, and observation times.
@@ -240,6 +260,7 @@ Requires Python 3.10 or later. No third-party Python packages are required.
 python -m reference_engine.agent_permission_layer examples/agent_permission_actions.json --pretty
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m reference_engine.sparta_router --decision examples/sparta/throttle_decision.json --plan examples/sparta/github_actions_deploy_plan.json --pretty
+python -m reference_engine.decision_lifecycle_ledger --example --pretty
 python -m unittest discover -s tests
 ```
 
