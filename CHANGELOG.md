@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added optional HMAC-signed SPARTa route reports with verification, a signed route example, documentation, and tamper-detection tests.
 - Added the SMERC Decision Lifecycle Ledger with a strict append-only hash chain, lifecycle event contract, example report, documentation, schema, CLI, and tests.
 - Added a Level 5 pilot-readiness maturity model, machine-readable readiness gates, generated readiness report, shadow-mode pilot packet, and tests that verify required evidence links exist.
 - Added the first SPARTa posture-aware router, adapter registry, authenticated route API endpoint, example tool plans, route reports, specification, operations guide, CLI, and fail-closed tests.

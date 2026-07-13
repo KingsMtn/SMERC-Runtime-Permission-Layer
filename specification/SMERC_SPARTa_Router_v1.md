@@ -138,11 +138,28 @@ The route report includes:
 - plain-English summary
 - recommended next action
 - sanitized tool plan
+- optional signature object
 
 When produced by the API, the route report also includes:
 
 - `tenant_id`
 - authenticated principal identity
+
+## Optional Signature
+
+When signed, the route report includes a `signature` object:
+
+```json
+{
+  "version": "smerc.sparta-route-signature.v1",
+  "algorithm": "HMAC-SHA256",
+  "key_id": "development-sparta-key",
+  "route_report_digest": "64 lowercase hex characters",
+  "signature": "64 lowercase hex characters"
+}
+```
+
+The `route_report_digest` is computed over canonical JSON for the route report excluding the `signature` field. The HMAC signature is computed over that digest. Verification fails if signed route content changes after signature generation.
 
 ## Security Boundaries
 
@@ -156,6 +173,7 @@ It does not:
 - replace signed permits
 - replace control-evidence receipts
 - replace the GitHub deployment adapter
+- provide managed key custody or non-repudiation by itself
 
 Its job is to fail closed when a tool plan cannot apply the constraints implied by the SMERC posture.
 
@@ -165,6 +183,9 @@ Its job is to fail closed when a tool plan cannot apply the constraints implied 
 python -m reference_engine.sparta_router \
   --decision examples/sparta/throttle_decision.json \
   --plan examples/sparta/github_actions_deploy_plan.json \
+  --signing-key development-sparta-route-signing-key-rotate \
+  --key-id development-sparta-key \
+  --verify \
   --pretty
 ```
 

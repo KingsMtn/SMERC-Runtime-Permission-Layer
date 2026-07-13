@@ -33,6 +33,20 @@ python -m reference_engine.sparta_router \
   --pretty
 ```
 
+Generate and verify a signed route report:
+
+```bash
+python -m reference_engine.sparta_router \
+  --decision examples/sparta/throttle_decision.json \
+  --plan examples/sparta/github_actions_deploy_plan.json \
+  --signing-key development-sparta-route-signing-key-rotate \
+  --key-id development-sparta-key \
+  --verify \
+  --pretty
+```
+
+Example output is stored in `reports/signed_sparta_route_example.json`.
+
 Try the freeze path:
 
 ```bash
@@ -76,6 +90,21 @@ Important fields:
 - `applied_controls`: controls the route expects the adapter to apply.
 - `blocked_controls`: controls or routes that are unavailable.
 - `decision_digest`: digest binding the route to the relevant SMERC decision fields.
+- `signature`: optional HMAC signature over the canonical route report digest.
+
+## Signed Route Reports
+
+`smerc.sparta-route-signature.v1` signs the route report digest using HMAC-SHA256 when a signing key is supplied. The signature covers the route report except the `signature` field itself. Verification fails if the route state, source posture, applied controls, blocked controls, effective scope, decision digest, tool plan, or other signed route content changes after signing.
+
+The signature fields are:
+
+- `version`
+- `algorithm`
+- `key_id`
+- `route_report_digest`
+- `signature`
+
+This is pilot-grade integrity evidence. It does not provide managed key custody, non-repudiation, hardware-backed signing, cross-service trust, revocation, rotation, or proof that the downstream adapter actually enforced the route. Production deployment would require managed KMS or HSM-backed signing, key rotation, tenant-specific key policy, durable storage, and independent security review.
 
 ## Commercial Meaning
 
@@ -92,7 +121,7 @@ The product claim should stay modest: SPARTa v1 is not a full workflow engine. I
 
 - No adapter registry yet.
 - No dynamic adapter registration endpoint yet.
-- No signed route reports yet.
+- Signed route reports provide pilot-grade tamper detection only. They are not a production trust root.
 - No formal policy language binding yet.
 - No live evidence that SPARTa routes reduce real-world incidents.
 

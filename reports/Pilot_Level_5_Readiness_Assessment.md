@@ -138,10 +138,11 @@ Optional gates met: 0 of 3
 - Required: no
 - Status: `partial`
 - Evidence paths present: yes
-- Notes: SPARTa route reports exist, but route reports are not signed yet.
+- Notes: SPARTa route reports can be signed and verified with pilot-grade HMAC artifacts, but production key management, non-repudiation, and downstream enforcement proof are not present.
 - Evidence:
   - `reference_engine/sparta_router.py`
   - `docs/SPARTa_Router_Operations.md`
+  - `reports/signed_sparta_route_example.json`
 
 ## Interpretation
 

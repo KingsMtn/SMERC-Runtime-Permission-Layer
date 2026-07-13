@@ -1,0 +1,59 @@
+﻿{
+  "applied_controls": [
+    "checkpoint_before_execution",
+    "limit_scope",
+    "preserve_replay",
+    "preview_before_execution",
+    "record_execution_report",
+    "require_rollback_plan"
+  ],
+  "blocked_controls": [],
+  "decision_digest": "a24eeffb897da91c63dd27175d3afaa1a0a4c8e5e65f8bd1126bd5eee767717b",
+  "decision_replay_id": "replay_example_throttle_001",
+  "effective_scope_units": 25,
+  "executable": true,
+  "plain_english_summary": "SPARTa converted the throttled SMERC posture into a constrained execution route with smaller scope and recovery controls.",
+  "plan_id": "github-prod-canary-deploy",
+  "reason_codes": [
+    "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
+  ],
+  "recommended_next_action": "Execute only through an adapter that enforces the listed controls and records control evidence.",
+  "route_id": "sparta_github-prod-canary-deploy_57b3c3c9fae7",
+  "route_state": "CONSTRAINED_EXECUTE",
+  "routed_at": "2026-07-13T02:33:29+00:00",
+  "signature": {
+    "algorithm": "HMAC-SHA256",
+    "key_id": "development-sparta-key",
+    "route_report_digest": "bb81da02ac9ecdae27a433b9b850eaac21858b983d543ba12f2f3f7691e75f00",
+    "signature": "a47aa7d985c91b72af54647746a12a8a783be755f2d97504601d77e355389794",
+    "version": "smerc.sparta-route-signature.v1"
+  },
+  "signature_verification": {
+    "errors": [],
+    "key_id": "development-sparta-key",
+    "route_report_digest": "bb81da02ac9ecdae27a433b9b850eaac21858b983d543ba12f2f3f7691e75f00",
+    "valid": true
+  },
+  "source_posture": "THROTTLE",
+  "tool_plan": {
+    "action": "deploy_canary",
+    "max_scope_units": 100,
+    "metadata": {
+      "environment": "production",
+      "service": "payments-api",
+      "workflow": "deploy.yml"
+    },
+    "plan_id": "github-prod-canary-deploy",
+    "requested_capability": "deployment",
+    "requested_scope_units": 80,
+    "side_effect_level": "external",
+    "supports_checkpoint": true,
+    "supports_dry_run": true,
+    "supports_human_approval": true,
+    "supports_rollback": true,
+    "supports_scope_limit": true,
+    "tool": "github_actions",
+    "version": "smerc.sparta-plan.v1"
+  },
+  "version": "smerc.sparta-route.v1"
+}

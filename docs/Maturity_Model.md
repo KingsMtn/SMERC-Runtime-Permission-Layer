@@ -46,7 +46,7 @@ Optional gaps that remain:
 
 - no external design-partner pilot data
 - no independent production security review
-- SPARTa route reports are not signed yet
+- signed SPARTa route reports are pilot-grade HMAC artifacts, not production key-management infrastructure
 
 ## Language Rules
 

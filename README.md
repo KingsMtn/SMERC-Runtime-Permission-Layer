@@ -23,6 +23,7 @@ The current build includes:
 - signed, action-bound control-evidence receipts for configured execution adapters
 - SPARTa posture-aware router that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes
 - SPARTa adapter registry and authenticated API route endpoint for stored SMERC decisions
+- optional HMAC-signed SPARTa route reports for pilot-grade tamper detection
 - Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
@@ -204,6 +205,8 @@ python -m reference_engine.sparta_router \
 ```
 
 SPARTa v1 is intentionally conservative. If SMERC returns `THROTTLE` but the tool plan cannot apply scope limits, dry runs, checkpoints, or rollback as required, the router marks the plan non-executable and routes it to review. See `specification/SMERC_SPARTa_Router_v1.md`.
+
+Route reports can optionally be signed with `smerc.sparta-route-signature.v1` HMAC metadata for pilot-grade tamper detection. This does not replace managed production key infrastructure or prove downstream enforcement. See `reports/signed_sparta_route_example.json`.
 
 The API can also route a stored decision by `replay_id`:
 

@@ -2,7 +2,14 @@ import json
 import unittest
 from pathlib import Path
 
-from reference_engine.sparta_router import SPARTA_ROUTE_VERSION, ToolPlan, route_decision
+from reference_engine.sparta_router import (
+    SPARTA_ROUTE_SIGNATURE_VERSION,
+    SPARTA_ROUTE_VERSION,
+    ToolPlan,
+    route_decision,
+    sign_route_report,
+    verify_signed_route_report,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -135,6 +142,25 @@ class SPARTaRouterTests(unittest.TestCase):
         self.assertEqual(routed["route_state"], "CONSTRAINED_EXECUTE")
         self.assertEqual(routed["decision_replay_id"], "replay_example_throttle_001")
         self.assertEqual(routed["tool_plan"]["tool"], "github_actions")
+
+    def test_signed_route_report_verifies(self):
+        routed = route_decision(load_example("throttle_decision.json"), load_example("github_actions_deploy_plan.json"))
+        signed = sign_route_report(routed, "test-sparta-route-signing-key", key_id="test-key-1")
+
+        self.assertEqual(signed["signature"]["version"], SPARTA_ROUTE_SIGNATURE_VERSION)
+        self.assertEqual(signed["signature"]["algorithm"], "HMAC-SHA256")
+        verification = verify_signed_route_report(signed, "test-sparta-route-signing-key")
+        self.assertTrue(verification["valid"])
+        self.assertEqual(verification["key_id"], "test-key-1")
+
+    def test_signed_route_report_detects_tampering(self):
+        routed = route_decision(load_example("throttle_decision.json"), load_example("github_actions_deploy_plan.json"))
+        signed = sign_route_report(routed, "test-sparta-route-signing-key")
+        signed["route_state"] = "EXECUTE"
+
+        verification = verify_signed_route_report(signed, "test-sparta-route-signing-key")
+        self.assertFalse(verification["valid"])
+        self.assertIn("route report digest mismatch", verification["errors"])
 
 
 if __name__ == "__main__":

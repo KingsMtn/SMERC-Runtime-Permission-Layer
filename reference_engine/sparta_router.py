@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import hmac
 import json
 import math
 import re
@@ -14,6 +15,7 @@ from uuid import uuid4
 
 SPARTA_PLAN_VERSION = "smerc.sparta-plan.v1"
 SPARTA_ROUTE_VERSION = "smerc.sparta-route.v1"
+SPARTA_ROUTE_SIGNATURE_VERSION = "smerc.sparta-route-signature.v1"
 SUPPORTED_POSTURES = {"ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"}
 SIDE_EFFECT_LEVELS = {"none", "internal", "external", "financial", "destructive"}
 
@@ -106,6 +108,63 @@ def _decision_digest(decision: Mapping[str, Any]) -> str:
         "policy": decision.get("policy", {}),
     }
     return hashlib.sha256(_canonical_json(selected).encode("utf-8")).hexdigest()
+
+
+def route_report_digest(route_report: Mapping[str, Any]) -> str:
+    material = {key: value for key, value in dict(route_report).items() if key != "signature"}
+    return hashlib.sha256(_canonical_json(material).encode("utf-8")).hexdigest()
+
+
+def sign_route_report(
+    route_report: Mapping[str, Any],
+    signing_key: str,
+    *,
+    key_id: str = "local-sparta-route-key",
+) -> Dict[str, Any]:
+    if not isinstance(signing_key, str) or len(signing_key) < 16:
+        raise ValueError("signing_key must be a string of at least 16 characters")
+    key_id = _identifier(key_id, "key_id", 128)
+    report = dict(route_report)
+    digest = route_report_digest(report)
+    signature_value = hmac.new(signing_key.encode("utf-8"), digest.encode("ascii"), hashlib.sha256).hexdigest()
+    report["signature"] = {
+        "version": SPARTA_ROUTE_SIGNATURE_VERSION,
+        "algorithm": "HMAC-SHA256",
+        "key_id": key_id,
+        "route_report_digest": digest,
+        "signature": signature_value,
+    }
+    return report
+
+
+def verify_signed_route_report(route_report: Mapping[str, Any], signing_key: str) -> Dict[str, Any]:
+    signature = route_report.get("signature")
+    if not isinstance(signature, dict):
+        return {"valid": False, "errors": ["missing signature"]}
+    required = {"version", "algorithm", "key_id", "route_report_digest", "signature"}
+    missing = sorted(required - set(signature))
+    if missing:
+        return {"valid": False, "errors": [f"signature missing field(s): {', '.join(missing)}"]}
+    if signature.get("version") != SPARTA_ROUTE_SIGNATURE_VERSION:
+        return {"valid": False, "errors": ["invalid signature version"]}
+    if signature.get("algorithm") != "HMAC-SHA256":
+        return {"valid": False, "errors": ["invalid signature algorithm"]}
+    expected_digest = route_report_digest(route_report)
+    if not hmac.compare_digest(str(signature["route_report_digest"]), expected_digest):
+        return {"valid": False, "errors": ["route report digest mismatch"]}
+    expected_signature = hmac.new(
+        signing_key.encode("utf-8"),
+        expected_digest.encode("ascii"),
+        hashlib.sha256,
+    ).hexdigest()
+    if not hmac.compare_digest(str(signature["signature"]), expected_signature):
+        return {"valid": False, "errors": ["signature mismatch"]}
+    return {
+        "valid": True,
+        "errors": [],
+        "key_id": signature["key_id"],
+        "route_report_digest": expected_digest,
+    }
 
 
 @dataclass(frozen=True)
@@ -340,10 +399,17 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Route a SMERC decision through a SPARTa tool plan.")
     parser.add_argument("--decision", required=True, type=Path, help="Path to a SMERC decision JSON object.")
     parser.add_argument("--plan", required=True, type=Path, help="Path to a SPARTa tool-plan JSON object.")
+    parser.add_argument("--signing-key", help="Optional HMAC key used to sign the route report.")
+    parser.add_argument("--key-id", default="local-sparta-route-key", help="Identifier for the signing key.")
+    parser.add_argument("--verify", action="store_true", help="Verify the signed report before printing.")
     parser.add_argument("--pretty", action="store_true", help="Print indented JSON.")
     args = parser.parse_args()
 
     report = route_decision(load_json(args.decision), load_json(args.plan))
+    if args.signing_key:
+        report = sign_route_report(report, args.signing_key, key_id=args.key_id)
+        if args.verify:
+            report["signature_verification"] = verify_signed_route_report(report, args.signing_key)
     if args.pretty:
         print(json.dumps(report, indent=2, sort_keys=True))
     else:
