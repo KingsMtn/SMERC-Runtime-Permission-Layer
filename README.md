@@ -24,6 +24,7 @@ The current build includes:
 - SPARTa posture-aware router that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes
 - SPARTa adapter registry and authenticated API route endpoint for stored SMERC decisions
 - optional HMAC-signed SPARTa route reports for pilot-grade tamper detection
+- control mapping library that maps SMERC/SPARTa controls to declared native tool mechanisms and evidence requirements
 - Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
@@ -70,6 +71,7 @@ Start here before reading the code:
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
+- `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
 - `docs/Decision_Lifecycle_Ledger.md` explains how SMERC records the full governed life of a decision.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
 - `docs/Community_Submission_Kit.md` gives careful, non-exaggerated public post drafts for Microsoft Tech Community, GitHub Community, LinkedIn, Hacker News, and Product Hunt.
@@ -114,14 +116,16 @@ The shortest accurate explanation is:
 21. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
 22. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
 23. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
-24. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
-25. Read `docs/Python_SDK_Quickstart.md`.
-26. Read `docs/JavaScript_SDK_Quickstart.md`.
-27. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-28. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-29. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-30. Run the Python and console tests.
-31. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+24. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
+25. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+26. Read `docs/Python_SDK_Quickstart.md`.
+27. Read `docs/JavaScript_SDK_Quickstart.md`.
+28. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+29. Review `reports/Control_Mapping_Library_Example.md`.
+30. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+31. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+32. Run the Python and console tests.
+33. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
 
 ## What SMERC Evaluates
 
@@ -152,6 +156,7 @@ It outputs:
 - authenticated principal identity bound into decisions, replays, reviews, and security events
 - signed control-evidence attribution when configured at permit consumption
 - a SPARTa route report when a posture must be converted into an executable tool plan
+- a control mapping report showing whether required controls map to native tool mechanisms and evidence requirements
 - an optional Decision Lifecycle Ledger record for request, evidence, evaluation, review, execution, outcome, and learning recommendation
 
 ## Action Language
@@ -217,6 +222,22 @@ curl -X POST http://127.0.0.1:8788/v1/sparta/route \
   --data '{"replay_id":"replay_...","adapter_id":"github-actions-deployer","action":"deploy_canary","requested_capability":"deployment","requested_scope_units":80,"side_effect_level":"external","metadata":{"workflow_run":"1001"}}'
 ```
 
+## Control Mapping Library
+
+`smerc.control-mapping-library.v1` maps abstract SMERC/SPARTa controls to declared native mechanisms and evidence requirements for a tool path.
+
+```bash
+python -m reference_engine.control_mapping \
+  examples/control_mapping/github_actions_controls.json \
+  --posture THROTTLE \
+  --tool github_actions \
+  --capability deploy_production \
+  --controls limit_scope preview_before_execution require_rollback_plan preserve_replay \
+  --pretty
+```
+
+The report is executable only when every requested control required for the selected posture is declared and supported by the selected tool. Unsupported or undeclared controls fail closed into review or blocking behavior. See `docs/Control_Mapping_Library.md` and `reports/Control_Mapping_Library_Example.md`.
+
 ## Decision Lifecycle Ledger
 
 `smerc.decision-lifecycle-ledger.v1` records the complete governed life of one decision. It chains request, evidence, evaluation, human interaction, execution, delayed outcome, and learning recommendation records.
@@ -263,6 +284,7 @@ Requires Python 3.10 or later. No third-party Python packages are required.
 python -m reference_engine.agent_permission_layer examples/agent_permission_actions.json --pretty
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m reference_engine.sparta_router --decision examples/sparta/throttle_decision.json --plan examples/sparta/github_actions_deploy_plan.json --pretty
+python -m reference_engine.control_mapping examples/control_mapping/github_actions_controls.json --posture THROTTLE --tool github_actions --capability deploy_production --controls limit_scope preview_before_execution require_rollback_plan preserve_replay --pretty
 python -m reference_engine.decision_lifecycle_ledger --example --pretty
 python -m unittest discover -s tests
 ```

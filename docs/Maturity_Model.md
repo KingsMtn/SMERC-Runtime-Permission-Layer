@@ -37,6 +37,7 @@ Required Level 5 gates currently met:
 - working deterministic engine
 - authenticated pilot API
 - SPARTa posture-aware route layer
+- control mapping library for native tool mechanisms and evidence requirements
 - GitHub Actions shadow-mode integration path
 - pilot review and metrics loop
 - documented local and hosted deployment path
@@ -47,6 +48,7 @@ Optional gaps that remain:
 - no external design-partner pilot data
 - no independent production security review
 - signed SPARTa route reports are pilot-grade HMAC artifacts, not production key-management infrastructure
+- control mappings are declared pilot contracts and require adapter validation before they should be treated as production enforcement
 
 ## Language Rules
 

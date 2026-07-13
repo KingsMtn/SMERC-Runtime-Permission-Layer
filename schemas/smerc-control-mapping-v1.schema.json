@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-control-mapping-v1.schema.json",
+  "title": "SMERC Control Mapping Library v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "library_id", "description", "tools", "controls"],
+  "properties": {
+    "version": {"const": "smerc.control-mapping-library.v1"},
+    "library_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "description": {"type": "string", "minLength": 1, "maxLength": 512},
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tool", "native_capabilities", "notes"],
+        "properties": {
+          "tool": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+          "native_capabilities": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"}
+          },
+          "notes": {"type": "string", "minLength": 1, "maxLength": 512}
+        }
+      }
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "control_id",
+          "description",
+          "required_for_postures",
+          "supported_tools",
+          "native_mechanism",
+          "evidence_required",
+          "failure_behavior"
+        ],
+        "properties": {
+          "control_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+          "description": {"type": "string", "minLength": 1, "maxLength": 512},
+          "required_for_postures": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 5,
+            "items": {"enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"]},
+            "uniqueItems": true
+          },
+          "supported_tools": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 64,
+            "items": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+            "uniqueItems": true
+          },
+          "native_mechanism": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {"type": "string", "minLength": 1, "maxLength": 256}
+          },
+          "evidence_required": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"}
+          },
+          "failure_behavior": {"enum": ["fail_closed", "route_to_review", "block_execution", "record_only"]}
+        }
+      }
+    }
+  }
+}
