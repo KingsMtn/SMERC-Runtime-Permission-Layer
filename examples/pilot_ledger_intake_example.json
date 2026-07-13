@@ -1,0 +1,70 @@
+{
+  "version": "smerc.pilot-ledger-intake.v1",
+  "intake_id": "pilot-intake-proxy-deploy-001-baseline",
+  "decision_id": "dll:proxy-deploy-001::baseline",
+  "tenant_id": "benchmark-suite",
+  "operator_notes": "Synthetic pilot-style intake example used to demonstrate how real reviewer, execution, outcome, and learning evidence would be appended after a shadow-mode pilot. This is not customer evidence.",
+  "events": [
+    {
+      "event_type": "HUMAN_INTERACTION",
+      "actor": "pilot-reviewer-1",
+      "recorded_at": "2026-07-13T12:04:00+00:00",
+      "payload": {
+        "interaction": "accepted",
+        "reviewer_id": "pilot-reviewer-1",
+        "original_recommendation": "THROTTLE",
+        "final_recommendation": "THROTTLE",
+        "rationale": "Reviewer agreed that production configuration change should proceed only with scope limits and rollback plan."
+      }
+    },
+    {
+      "event_type": "EXECUTION",
+      "actor": "deployment-adapter",
+      "recorded_at": "2026-07-13T12:08:00+00:00",
+      "payload": {
+        "executed_operation": "Canary execution of production configuration change with rollout limits.",
+        "execution_status": "succeeded",
+        "started_at": "2026-07-13T12:05:00+00:00",
+        "duration_ms": 180000,
+        "rollback_performed": false,
+        "rollback_success": null
+      }
+    },
+    {
+      "event_type": "OUTCOME",
+      "actor": "pilot-review-lead",
+      "recorded_at": "2026-07-14T12:00:00+00:00",
+      "payload": {
+        "judged_correct": true,
+        "unexpected_consequences": false,
+        "controls_sufficient": true,
+        "cost_incurred": 0,
+        "time_to_recover_minutes": 0,
+        "customer_impact": "none observed in example",
+        "security_impact": "none observed in example",
+        "financial_impact": "none observed in example"
+      }
+    },
+    {
+      "event_type": "LEARNING_RECOMMENDATION",
+      "actor": "smerc-pilot-review",
+      "recorded_at": "2026-07-14T12:05:00+00:00",
+      "payload": {
+        "expected_outcome": "Constrained canary deploy should complete without material customer impact.",
+        "actual_outcome": "Example canary deploy completed without observed impact.",
+        "prediction_error": "low",
+        "human_override_effectiveness": "reviewer accepted SMERC recommendation; no override occurred",
+        "recommended_policy_updates": [
+          "Keep partial-rollback production configuration changes out of direct ALLOW until more pilot evidence is collected."
+        ],
+        "confidence_calibration_changes": [
+          "No automatic confidence calibration change from one example."
+        ],
+        "suggested_rule_modifications": [
+          "Require explicit rollback-plan evidence before considering ALLOW for this action class."
+        ],
+        "activation_status": "requires_review"
+      }
+    }
+  ]
+}
