@@ -126,6 +126,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/pilot/dll/ledgers", body["endpoints"])
         self.assertIn("GET /v1/pilot/dll/ledgers", body["endpoints"])
         self.assertIn("GET /v1/pilot/dll/ledgers/{decision_id}", body["endpoints"])
+        self.assertIn("POST /v1/pilot/dll/ledgers/{decision_id}/certificate", body["endpoints"])
         self.assertIn("GET /v1/security-events", body["endpoints"])
         self.assertIn("routes.write", body["authorization"]["scopes"])
         self.assertIn("permits.consume", body["authorization"]["scopes"])
@@ -817,6 +818,45 @@ class PilotDLLAPITests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertIn("pilot.dll_ledger.stored", {item["event_type"] for item in security["events"]})
 
+    def test_pilot_dll_certificate_can_be_issued_from_stored_ledger(self):
+        status, _, intake_result = self.request_json(
+            "/v1/pilot/dll/intake",
+            method="POST",
+            payload=self.intake_payload(),
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        status, _, stored = self.request_json(
+            "/v1/pilot/dll/ledgers",
+            method="POST",
+            payload={"ledger": intake_result},
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        decision_id = stored["stored_ledger"]["decision_id"]
+
+        status, _, response = self.request_json(
+            f"/v1/pilot/dll/ledgers/{decision_id}/certificate",
+            method="POST",
+            payload={"issuer": "stored-ledger-api-test"},
+            key="metrics-reader-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        self.assertEqual(response["version"], "smerc.pilot-dll-certificate-response.v1")
+        self.assertEqual(response["source"]["type"], "stored_decision_lifecycle_ledger")
+        self.assertEqual(response["source"]["decision_id"], decision_id)
+        certificate = response["certificate"]
+        self.assertEqual(certificate["decision_id"], decision_id)
+        self.assertEqual(certificate["issuer"], "stored-ledger-api-test")
+        self.assertTrue(verify_decision_certificate(certificate)["valid"])
+
+        status, _, security = self.request_json(
+            "/v1/security-events?limit=20",
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 200)
+        self.assertIn("pilot.dll_certificate.issued_from_store", {item["event_type"] for item in security["events"]})
+
     def test_pilot_dll_intake_requires_write_scope_and_tenant_match(self):
         bad = self.intake_payload()
         bad["intake"] = dict(PILOT_DLL_INTAKE, tenant_id="other-tenant")
@@ -897,6 +937,16 @@ class PilotDLLAPITests(unittest.TestCase):
         )
         self.assertEqual(status, 400)
         self.assertEqual(body["error"], "invalid_pilot_dll_ledger")
+
+    def test_stored_pilot_dll_certificate_reports_missing_ledger(self):
+        status, _, body = self.request_json(
+            "/v1/pilot/dll/ledgers/missing-decision/certificate",
+            method="POST",
+            payload={},
+            key="metrics-reader-secret-012345",
+        )
+        self.assertEqual(status, 404)
+        self.assertEqual(body["error"], "dll_ledger_not_found")
 
 
 if __name__ == "__main__":
