@@ -38,6 +38,10 @@ class FederatedTokenReplayError(ValueError):
     pass
 
 
+class LedgerConflictError(ValueError):
+    pass
+
+
 class AuditStore:
     """Tenant-scoped SQLite decision store for controlled pilot deployments."""
 
@@ -151,6 +155,21 @@ class AuditStore:
                 );
                 CREATE INDEX IF NOT EXISTS idx_federated_exchanges_tenant_created
                     ON federated_token_exchanges (tenant_id, exchanged_at DESC);
+                CREATE TABLE IF NOT EXISTS decision_lifecycle_ledgers (
+                    decision_id TEXT NOT NULL,
+                    tenant_id TEXT NOT NULL,
+                    record_count INTEGER NOT NULL,
+                    head_record_hash TEXT NOT NULL,
+                    complete_lifecycle INTEGER NOT NULL,
+                    ledger_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    PRIMARY KEY (tenant_id, decision_id)
+                );
+                CREATE INDEX IF NOT EXISTS idx_dll_tenant_updated
+                    ON decision_lifecycle_ledgers (tenant_id, updated_at DESC);
+                CREATE INDEX IF NOT EXISTS idx_dll_tenant_head
+                    ON decision_lifecycle_ledgers (tenant_id, head_record_hash);
                 """
             )
             self._connection.commit()
@@ -853,6 +872,138 @@ class AuditStore:
                 (tenant_id, limit),
             ).fetchall()
         return [json.loads(row["event_json"]) for row in rows]
+
+    def record_decision_lifecycle_ledger(
+        self,
+        tenant_id: str,
+        ledger: Dict[str, Any],
+        *,
+        principal_id: str,
+    ) -> Dict[str, Any]:
+        now = datetime.now(timezone.utc).isoformat()
+        decision_id = ledger["decision_id"]
+        head_record_hash = ledger["head_record_hash"]
+        record_count = int(ledger["record_count"])
+        summary = ledger.get("summary", {})
+        event_counts = summary.get("event_counts", {}) if isinstance(summary, dict) else {}
+        complete_lifecycle = int(
+            all(
+                event_counts.get(event_type, 0) > 0
+                for event_type in {
+                    "REQUEST",
+                    "EVIDENCE",
+                    "EVALUATION",
+                    "HUMAN_INTERACTION",
+                    "EXECUTION",
+                    "OUTCOME",
+                    "LEARNING_RECOMMENDATION",
+                }
+            )
+        )
+        serialized = json.dumps(ledger, sort_keys=True, separators=(",", ":"))
+        with self._lock:
+            existing = self._connection.execute(
+                """
+                SELECT head_record_hash, ledger_json, created_at
+                FROM decision_lifecycle_ledgers
+                WHERE tenant_id = ? AND decision_id = ?
+                """,
+                (tenant_id, decision_id),
+            ).fetchone()
+            if existing is not None and existing["head_record_hash"] != head_record_hash:
+                raise LedgerConflictError(
+                    "A different Decision Lifecycle Ledger already exists for this tenant and decision_id."
+                )
+            if existing is None:
+                self._connection.execute(
+                    """
+                    INSERT INTO decision_lifecycle_ledgers (
+                        decision_id, tenant_id, record_count, head_record_hash,
+                        complete_lifecycle, ledger_json, created_at, updated_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        decision_id,
+                        tenant_id,
+                        record_count,
+                        head_record_hash,
+                        complete_lifecycle,
+                        serialized,
+                        now,
+                        now,
+                    ),
+                )
+                stored_at = now
+            else:
+                self._connection.execute(
+                    """
+                    UPDATE decision_lifecycle_ledgers
+                    SET record_count = ?, complete_lifecycle = ?, ledger_json = ?, updated_at = ?
+                    WHERE tenant_id = ? AND decision_id = ?
+                    """,
+                    (record_count, complete_lifecycle, serialized, now, tenant_id, decision_id),
+                )
+                stored_at = existing["created_at"]
+            self._connection.commit()
+        return {
+            "tenant_id": tenant_id,
+            "decision_id": decision_id,
+            "record_count": record_count,
+            "head_record_hash": head_record_hash,
+            "complete_lifecycle": bool(complete_lifecycle),
+            "stored_at": stored_at,
+            "updated_at": now,
+            "stored_by": principal_id,
+        }
+
+    def get_decision_lifecycle_ledger(self, tenant_id: str, decision_id: str) -> Optional[Dict[str, Any]]:
+        with self._lock:
+            row = self._connection.execute(
+                """
+                SELECT ledger_json, created_at, updated_at
+                FROM decision_lifecycle_ledgers
+                WHERE tenant_id = ? AND decision_id = ?
+                """,
+                (tenant_id, decision_id),
+            ).fetchone()
+        if row is None:
+            return None
+        ledger = json.loads(row["ledger_json"])
+        ledger["stored_at"] = row["created_at"]
+        ledger["updated_at"] = row["updated_at"]
+        return ledger
+
+    def list_decision_lifecycle_ledgers(self, tenant_id: str, limit: int = 50) -> List[Dict[str, Any]]:
+        with self._lock:
+            rows = self._connection.execute(
+                """
+                SELECT decision_id, record_count, head_record_hash, complete_lifecycle, created_at, updated_at
+                FROM decision_lifecycle_ledgers
+                WHERE tenant_id = ?
+                ORDER BY updated_at DESC
+                LIMIT ?
+                """,
+                (tenant_id, limit),
+            ).fetchall()
+        return [
+            {
+                "decision_id": row["decision_id"],
+                "record_count": int(row["record_count"]),
+                "head_record_hash": row["head_record_hash"],
+                "complete_lifecycle": bool(row["complete_lifecycle"]),
+                "stored_at": row["created_at"],
+                "updated_at": row["updated_at"],
+            }
+            for row in rows
+        ]
+
+    def count_decision_lifecycle_ledgers(self, tenant_id: str) -> int:
+        with self._lock:
+            row = self._connection.execute(
+                "SELECT COUNT(*) AS total FROM decision_lifecycle_ledgers WHERE tenant_id = ?",
+                (tenant_id,),
+            ).fetchone()
+        return int(row["total"])
 
     def ping(self) -> bool:
         with self._lock:

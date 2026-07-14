@@ -123,6 +123,9 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/pilot/dll/intake", body["endpoints"])
         self.assertIn("POST /v1/pilot/dll/metrics", body["endpoints"])
         self.assertIn("POST /v1/pilot/dll/certificate", body["endpoints"])
+        self.assertIn("POST /v1/pilot/dll/ledgers", body["endpoints"])
+        self.assertIn("GET /v1/pilot/dll/ledgers", body["endpoints"])
+        self.assertIn("GET /v1/pilot/dll/ledgers/{decision_id}", body["endpoints"])
         self.assertIn("GET /v1/security-events", body["endpoints"])
         self.assertIn("routes.write", body["authorization"]["scopes"])
         self.assertIn("permits.consume", body["authorization"]["scopes"])
@@ -769,6 +772,51 @@ class PilotDLLAPITests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertIn("pilot.dll_certificate.issued", {item["event_type"] for item in security["events"]})
 
+    def test_pilot_dll_ledger_store_list_and_fetch_are_available_over_api(self):
+        status, _, intake_result = self.request_json(
+            "/v1/pilot/dll/intake",
+            method="POST",
+            payload=self.intake_payload(),
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+
+        status, _, stored = self.request_json(
+            "/v1/pilot/dll/ledgers",
+            method="POST",
+            payload={"ledger": intake_result},
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        self.assertEqual(stored["version"], "smerc.stored-dll-ledger-write.v1")
+        self.assertEqual(stored["stored_ledger"]["decision_id"], "dll:proxy-deploy-001::baseline")
+        self.assertTrue(stored["stored_ledger"]["complete_lifecycle"])
+
+        status, _, listing = self.request_json(
+            "/v1/pilot/dll/ledgers?limit=5",
+            key="metrics-reader-secret-012345",
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(listing["version"], "smerc.stored-dll-ledger-list.v1")
+        self.assertGreaterEqual(listing["total"], 1)
+        self.assertIn("dll:proxy-deploy-001::baseline", {item["decision_id"] for item in listing["ledgers"]})
+
+        status, _, fetched = self.request_json(
+            "/v1/pilot/dll/ledgers/dll:proxy-deploy-001::baseline",
+            key="metrics-reader-secret-012345",
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(fetched["version"], "smerc.stored-dll-ledger.v1")
+        self.assertEqual(fetched["ledger"]["decision_id"], "dll:proxy-deploy-001::baseline")
+        self.assertTrue(fetched["ledger"]["verification"]["valid"])
+
+        status, _, security = self.request_json(
+            "/v1/security-events?limit=10",
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 200)
+        self.assertIn("pilot.dll_ledger.stored", {item["event_type"] for item in security["events"]})
+
     def test_pilot_dll_intake_requires_write_scope_and_tenant_match(self):
         bad = self.intake_payload()
         bad["intake"] = dict(PILOT_DLL_INTAKE, tenant_id="other-tenant")
@@ -829,6 +877,26 @@ class PilotDLLAPITests(unittest.TestCase):
         )
         self.assertEqual(status, 400)
         self.assertEqual(body["error"], "invalid_pilot_dll_certificate")
+
+    def test_pilot_dll_ledger_store_rejects_wrong_tenant(self):
+        status, _, intake_result = self.request_json(
+            "/v1/pilot/dll/intake",
+            method="POST",
+            payload=self.intake_payload(),
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        bad_result = json.loads(json.dumps(intake_result))
+        bad_result["ledger"]["tenant_id"] = "other-tenant"
+
+        status, _, body = self.request_json(
+            "/v1/pilot/dll/ledgers",
+            method="POST",
+            payload={"ledger": bad_result},
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_pilot_dll_ledger")
 
 
 if __name__ == "__main__":

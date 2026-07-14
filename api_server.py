@@ -11,12 +11,13 @@ import uuid
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict, Iterable, Mapping, Optional
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
 from reference_engine.audit_store import (
     AuditStore,
     FederatedTokenReplayError,
     IdempotencyConflictError,
+    LedgerConflictError,
     PermitIssuanceConflictError,
     PermitNotIssuedError,
     PermitPreparationConflictError,
@@ -265,7 +266,10 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 self._write_json(schema(), request_id=request_id)
                 return
 
+            stored_dll_decision_id = self._stored_dll_decision_id(path)
             if path == "/v1/pilot/metrics":
+                required_scope = "metrics.read"
+            elif path == "/v1/pilot/dll/ledgers" or stored_dll_decision_id is not None:
                 required_scope = "metrics.read"
             elif path == "/v1/security-events":
                 required_scope = "audit.read"
@@ -310,6 +314,35 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                         "tenant_id": tenant_id,
                         "count": len(events),
                         "events": events,
+                        "request_id": request_id,
+                    },
+                    request_id=request_id,
+                )
+                return
+            if path == "/v1/pilot/dll/ledgers":
+                limit = self._parse_limit(query)
+                ledgers = self.server.audit_store.list_decision_lifecycle_ledgers(tenant_id, limit=limit)
+                self._write_json(
+                    {
+                        "version": "smerc.stored-dll-ledger-list.v1",
+                        "tenant_id": tenant_id,
+                        "count": len(ledgers),
+                        "total": self.server.audit_store.count_decision_lifecycle_ledgers(tenant_id),
+                        "ledgers": ledgers,
+                        "request_id": request_id,
+                    },
+                    request_id=request_id,
+                )
+                return
+            if stored_dll_decision_id is not None:
+                ledger = self.server.audit_store.get_decision_lifecycle_ledger(tenant_id, stored_dll_decision_id)
+                if ledger is None:
+                    raise APIError(HTTPStatus.NOT_FOUND, "dll_ledger_not_found", "Decision Lifecycle Ledger was not found.")
+                self._write_json(
+                    {
+                        "version": "smerc.stored-dll-ledger.v1",
+                        "tenant_id": tenant_id,
+                        "ledger": ledger,
                         "request_id": request_id,
                     },
                     request_id=request_id,
@@ -447,6 +480,16 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Pilot DLL certificate expects one JSON object.")
                 self._write_json(
                     self._build_pilot_dll_certificate(principal, payload),
+                    HTTPStatus.CREATED,
+                    request_id=request_id,
+                )
+                return
+
+            if path == "/v1/pilot/dll/ledgers":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Pilot DLL ledger storage expects one JSON object.")
+                self._write_json(
+                    self._store_pilot_dll_ledger(principal, payload),
                     HTTPStatus.CREATED,
                     request_id=request_id,
                 )
@@ -1075,6 +1118,51 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             "authenticated_principal": principal.public_identity(),
         }
 
+    def _store_pilot_dll_ledger(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        allowed = {"ledger", "decision_id"}
+        unknown = sorted(set(payload) - allowed)
+        if unknown or not isinstance(payload.get("ledger"), dict):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_pilot_dll_ledger",
+                "Pilot DLL ledger storage requires a ledger object and optional decision_id.",
+            )
+        decision_id = payload.get("decision_id")
+        if decision_id is not None and not isinstance(decision_id, str):
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_pilot_dll_ledger", "decision_id must be a string.")
+        try:
+            ledger = ledger_source_from_payload(payload["ledger"], decision_id=decision_id)
+            ledger_data = ledger.to_dict()
+            if ledger.tenant_id != principal.tenant_id:
+                raise ValueError("ledger tenant_id must match authenticated tenant")
+            if not ledger_data["verification"]["valid"]:
+                raise ValueError("ledger must verify before storage")
+            stored = self.server.audit_store.record_decision_lifecycle_ledger(
+                principal.tenant_id,
+                ledger_data,
+                principal_id=principal.principal_id,
+            )
+        except LedgerConflictError as exc:
+            raise APIError(HTTPStatus.CONFLICT, "dll_ledger_conflict", str(exc)) from exc
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_pilot_dll_ledger", str(exc)) from exc
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "pilot.dll_ledger.stored",
+            stored["decision_id"],
+            {
+                "record_count": stored["record_count"],
+                "head_record_hash": stored["head_record_hash"],
+                "complete_lifecycle": stored["complete_lifecycle"],
+            },
+        )
+        return {
+            "version": "smerc.stored-dll-ledger-write.v1",
+            "stored_ledger": stored,
+            "authenticated_principal": principal.public_identity(),
+        }
+
     def _record_review(
         self,
         principal: APIPrincipal,
@@ -1252,6 +1340,14 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         match = re.fullmatch(r"/v1/decisions/([^/]+)/reviews", path)
         return None if match is None else match.group(1)
 
+    @staticmethod
+    def _stored_dll_decision_id(path: str) -> Optional[str]:
+        prefix = "/v1/pilot/dll/ledgers/"
+        if not path.startswith(prefix) or len(path) <= len(prefix):
+            return None
+        decision_id = unquote(path[len(prefix) :])
+        return decision_id or None
+
     def _idempotency_key(self) -> Optional[str]:
         value = self.headers.get("idempotency-key")
         if value is None:
@@ -1423,6 +1519,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             return "metrics.read"
         if path == "/v1/pilot/dll/certificate":
             return "metrics.read"
+        if path == "/v1/pilot/dll/ledgers":
+            return "reviews.write"
         if re.fullmatch(r"/v1/decisions/[^/]+/reviews", path):
             return "reviews.write"
         if path in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch", "/v1/language/evaluate"}:
@@ -1622,6 +1720,9 @@ def schema() -> Dict[str, Any]:
             "POST /v1/pilot/dll/intake": "append pilot evidence to a supplied DLL or benchmark DLL bundle",
             "POST /v1/pilot/dll/metrics": "summarize supplied DLL pilot evidence with denominators and caveats",
             "POST /v1/pilot/dll/certificate": "issue a digest-bound pilot Decision Certificate from a supplied verified DLL",
+            "POST /v1/pilot/dll/ledgers": "persist a verified pilot Decision Lifecycle Ledger",
+            "GET /v1/pilot/dll/ledgers": "list stored tenant-scoped Decision Lifecycle Ledgers",
+            "GET /v1/pilot/dll/ledgers/{decision_id}": "retrieve one stored tenant-scoped Decision Lifecycle Ledger",
             "POST /v1/batch": "evaluate and persist a bounded action list",
             "GET /v1/decisions": "list tenant-scoped decision summaries",
             "GET /v1/decisions/{replay_id}": "retrieve one tenant-scoped decision",
