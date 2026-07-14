@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added API issuance of Decision Certificates directly from stored pilot DLL records.
 - Added pilot-grade durable Decision Lifecycle Ledger storage with tenant-scoped store, list, and retrieve APIs.
 - Added stateless API issuance for pilot Decision Certificates from supplied DLL evidence.
 - Added Decision Certificate v1 for digest-bound summaries of verified Decision Lifecycle Ledgers, with optional HMAC signing and SPARTa route binding.

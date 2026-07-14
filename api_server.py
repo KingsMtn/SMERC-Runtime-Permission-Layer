@@ -495,6 +495,17 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 )
                 return
 
+            stored_certificate_decision_id = self._stored_dll_certificate_decision_id(path)
+            if stored_certificate_decision_id is not None:
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Stored DLL certificate expects one JSON object.")
+                self._write_json(
+                    self._build_stored_pilot_dll_certificate(principal, stored_certificate_decision_id, payload),
+                    HTTPStatus.CREATED,
+                    request_id=request_id,
+                )
+                return
+
             review_replay_id = self._review_replay_id(path)
             if review_replay_id is not None:
                 if not isinstance(payload, dict):
@@ -1118,6 +1129,59 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             "authenticated_principal": principal.public_identity(),
         }
 
+    def _build_stored_pilot_dll_certificate(
+        self,
+        principal: APIPrincipal,
+        decision_id: str,
+        payload: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        allowed = {"route_report", "issuer"}
+        unknown = sorted(set(payload) - allowed)
+        if unknown:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_stored_pilot_dll_certificate",
+                f"Unknown certificate field(s): {', '.join(unknown)}.",
+            )
+        route_report = payload.get("route_report")
+        if route_report is not None and not isinstance(route_report, dict):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_stored_pilot_dll_certificate",
+                "route_report must be an object when supplied.",
+            )
+        issuer = payload.get("issuer", f"smerc-api:{principal.principal_id}")
+        if not isinstance(issuer, str):
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_stored_pilot_dll_certificate", "issuer must be a string.")
+        ledger_data = self.server.audit_store.get_decision_lifecycle_ledger(principal.tenant_id, decision_id)
+        if ledger_data is None:
+            raise APIError(HTTPStatus.NOT_FOUND, "dll_ledger_not_found", "Decision Lifecycle Ledger was not found.")
+        try:
+            certificate = build_decision_certificate(ledger_data, route_report=route_report, issuer=issuer)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_stored_pilot_dll_certificate", str(exc)) from exc
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "pilot.dll_certificate.issued_from_store",
+            certificate["certificate_id"],
+            {
+                "decision_id": certificate["decision_id"],
+                "certificate_digest": certificate["certificate_digest"],
+                "head_record_hash": certificate["lifecycle_binding"]["head_record_hash"],
+                "route_bound": certificate["route_binding"] is not None,
+            },
+        )
+        return {
+            "version": "smerc.pilot-dll-certificate-response.v1",
+            "certificate": certificate,
+            "source": {
+                "type": "stored_decision_lifecycle_ledger",
+                "decision_id": decision_id,
+            },
+            "authenticated_principal": principal.public_identity(),
+        }
+
     def _store_pilot_dll_ledger(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
         allowed = {"ledger", "decision_id"}
         unknown = sorted(set(payload) - allowed)
@@ -1343,10 +1407,23 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
     @staticmethod
     def _stored_dll_decision_id(path: str) -> Optional[str]:
         prefix = "/v1/pilot/dll/ledgers/"
+        if path.endswith("/certificate"):
+            return None
         if not path.startswith(prefix) or len(path) <= len(prefix):
             return None
         decision_id = unquote(path[len(prefix) :])
         return decision_id or None
+
+    @staticmethod
+    def _stored_dll_certificate_decision_id(path: str) -> Optional[str]:
+        prefix = "/v1/pilot/dll/ledgers/"
+        suffix = "/certificate"
+        if not path.startswith(prefix) or not path.endswith(suffix):
+            return None
+        encoded = path[len(prefix) : -len(suffix)]
+        if not encoded:
+            return None
+        return unquote(encoded)
 
     def _idempotency_key(self) -> Optional[str]:
         value = self.headers.get("idempotency-key")
@@ -1521,6 +1598,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             return "metrics.read"
         if path == "/v1/pilot/dll/ledgers":
             return "reviews.write"
+        if SMERCRequestHandler._stored_dll_certificate_decision_id(path) is not None:
+            return "metrics.read"
         if re.fullmatch(r"/v1/decisions/[^/]+/reviews", path):
             return "reviews.write"
         if path in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch", "/v1/language/evaluate"}:
@@ -1723,6 +1802,7 @@ def schema() -> Dict[str, Any]:
             "POST /v1/pilot/dll/ledgers": "persist a verified pilot Decision Lifecycle Ledger",
             "GET /v1/pilot/dll/ledgers": "list stored tenant-scoped Decision Lifecycle Ledgers",
             "GET /v1/pilot/dll/ledgers/{decision_id}": "retrieve one stored tenant-scoped Decision Lifecycle Ledger",
+            "POST /v1/pilot/dll/ledgers/{decision_id}/certificate": "issue a Decision Certificate from one stored DLL",
             "POST /v1/batch": "evaluate and persist a bounded action list",
             "GET /v1/decisions": "list tenant-scoped decision summaries",
             "GET /v1/decisions/{replay_id}": "retrieve one tenant-scoped decision",

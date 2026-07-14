@@ -123,6 +123,25 @@ Required scope: `metrics.read`
 
 Retrieves one stored tenant-scoped DLL by decision ID.
 
+### `POST /v1/pilot/dll/ledgers/{decision_id}/certificate`
+
+Required scope: `metrics.read`
+
+Issues a Decision Certificate from a stored tenant-scoped DLL.
+
+Request shape:
+
+```json
+{
+  "issuer": "smerc-api:pilot-reviewer",
+  "route_report": {}
+}
+```
+
+The `route_report` field is optional. When supplied, it must be a `smerc.sparta-route.v1` report and the returned certificate binds to that route-report digest.
+
+This endpoint avoids resubmitting the full DLL when the ledger has already been retained by `POST /v1/pilot/dll/ledgers`.
+
 ## Boundary
 
 These endpoints make pilot evidence easier to submit, retain, summarize, and package for review. The storage path is pilot-grade SQLite persistence. It does not provide managed immutable infrastructure, legal recordkeeping, regulatory retention, managed certificate signing, SIEM integration, or compliance certification.
