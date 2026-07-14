@@ -1,6 +1,8 @@
+import copy
 import unittest
 
-from reference_engine.audit_store import AuditStore, IdempotencyConflictError, ReviewConflictError
+from reference_engine.audit_store import AuditStore, IdempotencyConflictError, LedgerConflictError, ReviewConflictError
+from reference_engine.decision_lifecycle_ledger import build_example_ledger
 
 
 def decision(replay_id="replay_a", posture="THROTTLE"):
@@ -97,6 +99,44 @@ class AuditStoreTests(unittest.TestCase):
         self.assertEqual(events[0]["principal_id"], "permit-issuer")
         self.assertEqual(events[0]["event_version"], "smerc.security-event.v1")
         self.assertNotIn("review-beta", str(events))
+
+    def test_decision_lifecycle_ledgers_are_tenant_scoped_and_conflict_checked(self):
+        ledger = build_example_ledger().to_dict()
+        stored = self.store.record_decision_lifecycle_ledger(
+            "design-partner",
+            ledger,
+            principal_id="pilot-writer",
+        )
+        self.assertEqual(stored["decision_id"], ledger["decision_id"])
+        self.assertEqual(stored["head_record_hash"], ledger["head_record_hash"])
+        self.assertTrue(stored["complete_lifecycle"])
+
+        replayed = self.store.record_decision_lifecycle_ledger(
+            "design-partner",
+            ledger,
+            principal_id="pilot-writer",
+        )
+        self.assertEqual(replayed["decision_id"], stored["decision_id"])
+        self.assertEqual(self.store.count_decision_lifecycle_ledgers("design-partner"), 1)
+        self.assertEqual(self.store.count_decision_lifecycle_ledgers("other-tenant"), 0)
+        self.assertEqual(
+            self.store.get_decision_lifecycle_ledger("design-partner", ledger["decision_id"])["head_record_hash"],
+            ledger["head_record_hash"],
+        )
+        self.assertIsNone(self.store.get_decision_lifecycle_ledger("other-tenant", ledger["decision_id"]))
+        self.assertEqual(
+            self.store.list_decision_lifecycle_ledgers("design-partner")[0]["decision_id"],
+            ledger["decision_id"],
+        )
+
+        changed = copy.deepcopy(ledger)
+        changed["head_record_hash"] = "f" * 64
+        with self.assertRaises(LedgerConflictError):
+            self.store.record_decision_lifecycle_ledger(
+                "design-partner",
+                changed,
+                principal_id="pilot-writer",
+            )
 
     def test_review_is_tenant_scoped_and_retry_safe(self):
         self.store.record("alpha", decision(), "hash-a")

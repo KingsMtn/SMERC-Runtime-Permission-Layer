@@ -2,7 +2,7 @@
 
 The Pilot DLL API exposes the Decision Lifecycle Ledger pilot loop over authenticated HTTP.
 
-It is intentionally stateless in this version: callers submit the source ledger or benchmark DLL bundle with the request, and the API returns the appended ledger, metrics report, or Decision Certificate. Durable hosted ledger storage is a later deployment concern.
+The intake, metrics, and certificate endpoints remain stateless: callers submit the source ledger or benchmark DLL bundle with the request. The ledger storage endpoints persist verified pilot DLL records in the configured audit database for later review and export.
 
 ## Endpoints
 
@@ -84,6 +84,45 @@ The response is an envelope containing:
 
 The API does not accept a signing key in the JSON body. Hosted certificate signing should be configured as server-side key management in a later production deployment.
 
+### `POST /v1/pilot/dll/ledgers`
+
+Required scope: `reviews.write`
+
+Persists a verified pilot DLL in the configured audit database.
+
+Request shape:
+
+```json
+{
+  "ledger": {},
+  "decision_id": "dll:proxy-deploy-001::baseline"
+}
+```
+
+The `ledger` field may be:
+
+- a `smerc.pilot-ledger-intake-result.v1` object
+- a `smerc.decision-lifecycle-ledger.v1` object
+- a `smerc.benchmark-ledger-bundle.v1` object plus `decision_id`
+
+The authenticated tenant must match the ledger tenant. Re-submitting the same tenant and decision ID with the same head record hash is treated as a safe replay. Re-submitting the same tenant and decision ID with a different head record hash returns a conflict.
+
+### `GET /v1/pilot/dll/ledgers`
+
+Required scope: `metrics.read`
+
+Lists stored tenant-scoped DLL summaries.
+
+Optional query parameters:
+
+- `limit`: 1 through 500
+
+### `GET /v1/pilot/dll/ledgers/{decision_id}`
+
+Required scope: `metrics.read`
+
+Retrieves one stored tenant-scoped DLL by decision ID.
+
 ## Boundary
 
-These endpoints make pilot evidence easier to submit, summarize, and package for review. They do not provide durable storage, legal recordkeeping, immutable infrastructure, managed certificate signing, SIEM integration, or compliance certification.
+These endpoints make pilot evidence easier to submit, retain, summarize, and package for review. The storage path is pilot-grade SQLite persistence. It does not provide managed immutable infrastructure, legal recordkeeping, regulatory retention, managed certificate signing, SIEM integration, or compliance certification.
