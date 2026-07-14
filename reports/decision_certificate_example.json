@@ -1,0 +1,121 @@
+{
+  "boundary": {
+    "claims": [
+      "summarizes a verified Decision Lifecycle Ledger at issuance time",
+      "detects certificate tampering through a deterministic digest",
+      "can bind the certificate to a SPARTa route report digest"
+    ],
+    "limits": [
+      "does not provide immutable storage by itself",
+      "does not establish legal recordkeeping or regulatory retention by itself",
+      "does not prove source-system facts were accurate unless source evidence is independently retained",
+      "does not automatically activate learning recommendations"
+    ],
+    "record_type": "pilot decision certificate"
+  },
+  "certificate_digest": "7f6289bbf207a9324f0b0e4c395d083a28691c9e5e7f939df03726124f59ea5a",
+  "certificate_id": "cert:dll_example_ai_deploy_001:f3e79040a33cae7a",
+  "decision_id": "dll_example_ai_deploy_001",
+  "evaluation": {
+    "authorization_recommendation": "THROTTLE",
+    "reason_codes": [
+      "EVIDENCE_INCOMPLETE",
+      "RECOVERY_PATH_PARTIAL"
+    ],
+    "recommended_safeguards": [
+      "limit_scope",
+      "preview_before_execution",
+      "require_rollback_plan"
+    ],
+    "recoverability_score": 0.48
+  },
+  "evidence": {
+    "confidence_score": 0.62,
+    "external_dependencies": [
+      "github_actions",
+      "deployment_adapter"
+    ],
+    "missing_evidence": [
+      "security_review",
+      "rollback_drill"
+    ],
+    "model_version": "agent-model-unknown",
+    "policy_version": "smerc.policy.v1:github-actions-strict"
+  },
+  "execution": {
+    "executed_operation": "Canary deploy to 10 percent of production traffic.",
+    "execution_status": "succeeded",
+    "rollback_performed": false,
+    "rollback_success": null
+  },
+  "human_interaction": {
+    "final_recommendation": "THROTTLE",
+    "interaction": "accepted",
+    "original_recommendation": "THROTTLE",
+    "reviewer_id": "security-reviewer-7"
+  },
+  "issued_at": "2026-07-14T00:55:50+00:00",
+  "issuer": "smerc-reference-engine",
+  "learning": {
+    "activation_status": "requires_review",
+    "confidence_calibration_changes": [
+      "No automatic calibration change; collect more samples."
+    ],
+    "recommended_policy_updates": [
+      "Keep auth-boundary production changes out of direct ALLOW."
+    ],
+    "suggested_rule_modifications": [
+      "Require rollback drill evidence before considering ALLOW."
+    ]
+  },
+  "lifecycle_binding": {
+    "complete_lifecycle": true,
+    "event_types": [
+      "REQUEST",
+      "EVIDENCE",
+      "EVALUATION",
+      "HUMAN_INTERACTION",
+      "EXECUTION",
+      "OUTCOME",
+      "LEARNING_RECOMMENDATION"
+    ],
+    "head_record_hash": "f3e79040a33cae7ac2f40b2cf6b9c8a3e9a23b8db6f8d3bfafc4c93cdc5b1f07",
+    "ledger_verification": {
+      "errors": [],
+      "valid": true
+    },
+    "ledger_version": "smerc.decision-lifecycle-ledger.v1",
+    "record_count": 7
+  },
+  "outcome": {
+    "controls_sufficient": true,
+    "customer_impact": "none observed",
+    "financial_impact": "none observed",
+    "judged_correct": true,
+    "security_impact": "none observed",
+    "time_to_recover_minutes": 0.0,
+    "unexpected_consequences": false
+  },
+  "request": {
+    "environment": "production",
+    "initiated_by": "coding_agent",
+    "requested_operation": "Deploy generated authentication middleware change to production.",
+    "risk_profile": "github_actions_deployment"
+  },
+  "route_binding": null,
+  "signature": {
+    "algorithm": "HMAC-SHA256",
+    "certificate_digest": "7f6289bbf207a9324f0b0e4c395d083a28691c9e5e7f939df03726124f59ea5a",
+    "key_id": "local-demo-key",
+    "signature": "565ef9804c74803e692130d719fd215c0b904357053d9d2da0c2aaa205062ce0",
+    "version": "smerc.decision-certificate-signature.v1"
+  },
+  "tenant_id": "design-partner",
+  "verification": {
+    "certificate_digest": "7f6289bbf207a9324f0b0e4c395d083a28691c9e5e7f939df03726124f59ea5a",
+    "errors": [],
+    "signature_checked": true,
+    "valid": true
+  },
+  "version": "smerc.decision-certificate.v1"
+}

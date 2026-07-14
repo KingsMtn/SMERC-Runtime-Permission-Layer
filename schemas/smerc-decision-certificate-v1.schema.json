@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-decision-certificate-v1.schema.json",
+  "title": "SMERC Decision Certificate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "certificate_id",
+    "issued_at",
+    "issuer",
+    "tenant_id",
+    "decision_id",
+    "lifecycle_binding",
+    "request",
+    "evidence",
+    "evaluation",
+    "human_interaction",
+    "execution",
+    "outcome",
+    "learning",
+    "route_binding",
+    "boundary",
+    "certificate_digest",
+    "verification"
+  ],
+  "properties": {
+    "version": { "const": "smerc.decision-certificate.v1" },
+    "certificate_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "issued_at": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "issuer": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "tenant_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "decision_id": { "type": "string", "minLength": 1, "maxLength": 192 },
+    "certificate_digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "lifecycle_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ledger_version",
+        "record_count",
+        "head_record_hash",
+        "event_types",
+        "complete_lifecycle",
+        "ledger_verification"
+      ],
+      "properties": {
+        "ledger_version": { "const": "smerc.decision-lifecycle-ledger.v1" },
+        "record_count": { "type": "integer", "minimum": 0 },
+        "head_record_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "event_types": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "complete_lifecycle": { "type": "boolean" },
+        "ledger_verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["valid", "errors"],
+          "properties": {
+            "valid": { "type": "boolean" },
+            "errors": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "request": { "$ref": "#/$defs/openObject" },
+    "evidence": { "$ref": "#/$defs/openObject" },
+    "evaluation": { "$ref": "#/$defs/openObject" },
+    "human_interaction": { "$ref": "#/$defs/openObject" },
+    "execution": { "$ref": "#/$defs/openObject" },
+    "outcome": { "$ref": "#/$defs/openObject" },
+    "learning": { "$ref": "#/$defs/openObject" },
+    "route_binding": {
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/openObject" }
+      ]
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_type", "claims", "limits"],
+      "properties": {
+        "record_type": { "const": "pilot decision certificate" },
+        "claims": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "limits": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "algorithm", "key_id", "certificate_digest", "signature"],
+      "properties": {
+        "version": { "const": "smerc.decision-certificate-signature.v1" },
+        "algorithm": { "const": "HMAC-SHA256" },
+        "key_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "certificate_digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "signature": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "verification": { "$ref": "#/$defs/openObject" }
+  },
+  "$defs": {
+    "openObject": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
