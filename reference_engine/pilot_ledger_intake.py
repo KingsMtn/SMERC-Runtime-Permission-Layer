@@ -103,6 +103,14 @@ def load_intake(path: str | Path) -> Dict[str, Any]:
 def ledger_source_from_payload(payload: Mapping[str, Any], *, decision_id: str | None = None) -> DecisionLifecycleLedger:
     if not isinstance(payload, dict):
         raise TypeError("ledger source must be a JSON object")
+    if payload.get("version") == PILOT_LEDGER_RESULT_VERSION:
+        ledger_payload = payload.get("ledger")
+        if not isinstance(ledger_payload, dict):
+            raise ValueError("pilot ledger intake result is missing a ledger object")
+        ledger = DecisionLifecycleLedger.from_dict(ledger_payload)
+        if decision_id is not None and ledger.decision_id != decision_id:
+            raise ValueError("decision_id does not match pilot ledger intake result")
+        return ledger
     if payload.get("version") == LEDGER_VERSION:
         ledger = DecisionLifecycleLedger.from_dict(payload)
         if decision_id is not None and ledger.decision_id != decision_id:
@@ -115,7 +123,7 @@ def ledger_source_from_payload(payload: Mapping[str, Any], *, decision_id: str |
             if isinstance(ledger_payload, dict) and ledger_payload.get("decision_id") == decision_id:
                 return DecisionLifecycleLedger.from_dict(ledger_payload)
         raise ValueError(f"decision_id not found in benchmark ledger bundle: {decision_id}")
-    raise ValueError("ledger source must be a DLL JSON file or benchmark DLL bundle")
+    raise ValueError("ledger source must be a DLL JSON file, pilot intake result, or benchmark DLL bundle")
 
 
 def load_ledger_source(path: str | Path, *, decision_id: str | None = None) -> DecisionLifecycleLedger:

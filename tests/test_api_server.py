@@ -7,6 +7,7 @@ from urllib.request import Request, urlopen
 
 from api_server import create_server, parse_api_keys
 from reference_engine.api_identity import APIPrincipal
+from reference_engine.decision_certificate import verify_decision_certificate
 from reference_engine.policy import PolicyRegistry, RuntimePolicy
 from reference_engine.recoverability_engine import load_domain_profile_dir
 from reference_engine.sparta_registry import load_sparta_adapter_registry
@@ -100,6 +101,7 @@ class APIServerTests(unittest.TestCase):
         )
         self.assertEqual(body["language_versions"]["access_token"], "smerc.access-token.v2")
         self.assertEqual(body["language_versions"]["github_oidc"], "smerc.github-oidc.v1")
+        self.assertEqual(body["language_versions"]["decision_certificate"], "smerc.decision-certificate.v1")
         self.assertEqual(body["language_versions"]["pilot_ledger_metrics"], "smerc.pilot-ledger-metrics.v1")
         self.assertEqual(body["language_versions"]["sparta_plan"], "smerc.sparta-plan.v1")
         self.assertEqual(body["language_versions"]["sparta_route"], "smerc.sparta-route.v1")
@@ -120,6 +122,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/sparta/route", body["endpoints"])
         self.assertIn("POST /v1/pilot/dll/intake", body["endpoints"])
         self.assertIn("POST /v1/pilot/dll/metrics", body["endpoints"])
+        self.assertIn("POST /v1/pilot/dll/certificate", body["endpoints"])
         self.assertIn("GET /v1/security-events", body["endpoints"])
         self.assertIn("routes.write", body["authorization"]["scopes"])
         self.assertIn("permits.consume", body["authorization"]["scopes"])
@@ -734,6 +737,38 @@ class PilotDLLAPITests(unittest.TestCase):
         self.assertIn("pilot.dll_intake.applied", event_types)
         self.assertIn("pilot.dll_metrics.generated", event_types)
 
+    def test_pilot_dll_certificate_is_available_over_api(self):
+        status, _, intake_result = self.request_json(
+            "/v1/pilot/dll/intake",
+            method="POST",
+            payload=self.intake_payload(),
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+
+        status, _, response = self.request_json(
+            "/v1/pilot/dll/certificate",
+            method="POST",
+            payload={"ledger": intake_result, "issuer": "smerc-api-test"},
+            key="metrics-reader-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        self.assertEqual(response["version"], "smerc.pilot-dll-certificate-response.v1")
+        self.assertEqual(response["authenticated_principal"]["principal_id"], "metrics-reader")
+        certificate = response["certificate"]
+        self.assertEqual(certificate["version"], "smerc.decision-certificate.v1")
+        self.assertEqual(certificate["issuer"], "smerc-api-test")
+        self.assertEqual(certificate["tenant_id"], "benchmark-suite")
+        self.assertTrue(certificate["verification"]["valid"])
+        self.assertTrue(verify_decision_certificate(certificate)["valid"])
+
+        status, _, security = self.request_json(
+            "/v1/security-events?limit=10",
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 200)
+        self.assertIn("pilot.dll_certificate.issued", {item["event_type"] for item in security["events"]})
+
     def test_pilot_dll_intake_requires_write_scope_and_tenant_match(self):
         bad = self.intake_payload()
         bad["intake"] = dict(PILOT_DLL_INTAKE, tenant_id="other-tenant")
@@ -774,6 +809,26 @@ class PilotDLLAPITests(unittest.TestCase):
         )
         self.assertEqual(status, 413)
         self.assertEqual(body["error"], "pilot_dll_metrics_batch_invalid")
+
+    def test_pilot_dll_certificate_rejects_wrong_tenant(self):
+        status, _, intake_result = self.request_json(
+            "/v1/pilot/dll/intake",
+            method="POST",
+            payload=self.intake_payload(),
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        bad_result = json.loads(json.dumps(intake_result))
+        bad_result["ledger"]["tenant_id"] = "other-tenant"
+
+        status, _, body = self.request_json(
+            "/v1/pilot/dll/certificate",
+            method="POST",
+            payload={"ledger": bad_result},
+            key="metrics-reader-secret-012345",
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_pilot_dll_certificate")
 
 
 if __name__ == "__main__":
