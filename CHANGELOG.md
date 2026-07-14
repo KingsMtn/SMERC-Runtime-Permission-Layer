@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added Decision Certificate v1 for digest-bound summaries of verified Decision Lifecycle Ledgers, with optional HMAC signing and SPARTa route binding.
 - Added stateless API endpoints for pilot DLL evidence intake and DLL metrics reporting, with authenticated tenant checks and API tests.
 - Added pilot ledger metrics that summarize completed DLL evidence with reviewer, execution, outcome, rollback, learning, denominator, and sample-size caveat reporting.
 - Added a pilot ledger intake path that appends reviewer, execution, outcome, and learning evidence to existing DLL records while enforcing lifecycle ordering and evidence boundaries.
