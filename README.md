@@ -91,6 +91,7 @@ Start here before reading the code:
 - `reports/Runtime_Governance_Benchmark.md` shows an expanded deterministic benchmark comparing SMERC postures against a simple allow/deny baseline across 84 scenarios.
 - `reports/Runtime_Benchmark_DLL_Bundle.md` converts those benchmark decisions into hash-chained decision-time ledgers without fabricating live execution or outcome evidence.
 - `reports/Pilot_Ledger_Intake_Result.md` shows how pilot-supplied reviewer, execution, outcome, and learning evidence can be appended to a DLL with ordering checks.
+- `reports/Pilot_Ledger_Metrics_Report.md` summarizes completed DLL evidence with explicit denominators and sample-size caveats.
 - `reports/Decision_Lifecycle_Ledger_Example.md` shows a full pilot-grade lifecycle record from request through learning recommendation.
 - `reports/SMERC_F_Profile_Packet.md` shows a financial-action profile packet across conservative, balanced, and permissive policies.
 - `COMMUNITY.md`, `CONTRIBUTING.md`, `docs/Partner_Program.md`, and `docs/Community_Outreach_Kit.md` describe how design partners, integration partners, researchers, and open-source contributors can engage.
@@ -315,6 +316,7 @@ python -m reference_engine.smerc_f_profile_packet examples/financial_action_requ
 python -m reference_engine.runtime_benchmark_suite examples/proxy_incident_replay_scenarios.json --pretty
 python -m reference_engine.benchmark_ledger_builder reports/runtime_governance_benchmark.json --pretty
 python -m reference_engine.pilot_ledger_intake reports/runtime_benchmark_dll_bundle.json examples/pilot_ledger_intake_example.json --decision-id "dll:proxy-deploy-001::baseline" --pretty
+python -m reference_engine.pilot_ledger_metrics reports/pilot_ledger_intake_result.json --pretty
 python -m unittest discover -s tests
 ```
 
