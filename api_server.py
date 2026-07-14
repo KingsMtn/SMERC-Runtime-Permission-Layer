@@ -55,6 +55,16 @@ from reference_engine.github_oidc import (
     parse_github_oidc_trust,
 )
 from reference_engine.policy import POLICY_VERSION, PolicyRegistry
+from reference_engine.pilot_ledger_intake import (
+    apply_pilot_intake,
+    ledger_source_from_payload,
+    parse_intake_payload,
+)
+from reference_engine.pilot_ledger_metrics import (
+    PILOT_LEDGER_METRICS_VERSION,
+    build_metrics_from_ledgers,
+    ledgers_from_payloads,
+)
 from reference_engine.recoverability_engine import (
     DOMAIN_PROFILE_VERSION,
     DomainProfile,
@@ -413,6 +423,22 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "SPARTa route expects one JSON object.")
                 self._write_json(self._route_sparta(principal, payload), request_id=request_id)
+                return
+
+            if path == "/v1/pilot/dll/intake":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Pilot DLL intake expects one JSON object.")
+                self._write_json(
+                    self._apply_pilot_dll_intake(principal, payload),
+                    HTTPStatus.CREATED,
+                    request_id=request_id,
+                )
+                return
+
+            if path == "/v1/pilot/dll/metrics":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Pilot DLL metrics expects one JSON object.")
+                self._write_json(self._build_pilot_dll_metrics(principal, payload), request_id=request_id)
                 return
 
             review_replay_id = self._review_replay_id(path)
@@ -918,6 +944,79 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         )
         return route
 
+    def _apply_pilot_dll_intake(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        allowed = {"ledger", "intake", "decision_id"}
+        unknown = sorted(set(payload) - allowed)
+        if unknown or not isinstance(payload.get("ledger"), dict) or not isinstance(payload.get("intake"), dict):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_pilot_dll_intake",
+                "Pilot DLL intake requires ledger and intake objects.",
+            )
+        try:
+            intake = parse_intake_payload(payload["intake"])
+            if intake["tenant_id"] != principal.tenant_id:
+                raise ValueError("pilot intake tenant_id must match authenticated tenant")
+            decision_id = payload.get("decision_id") or intake["decision_id"]
+            if not isinstance(decision_id, str):
+                raise ValueError("decision_id must be a string when supplied")
+            ledger = ledger_source_from_payload(payload["ledger"], decision_id=decision_id)
+            if ledger.tenant_id != principal.tenant_id:
+                raise ValueError("ledger tenant_id must match authenticated tenant")
+            result = apply_pilot_intake(ledger, intake)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_pilot_dll_intake", str(exc)) from exc
+        result["authenticated_principal"] = principal.public_identity()
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "pilot.dll_intake.applied",
+            result["decision_id"],
+            {
+                "intake_id": result["intake_id"],
+                "records_appended": result["records_appended"],
+                "records_after": result["records_after"],
+                "head_record_hash_after": result["head_record_hash_after"],
+            },
+        )
+        return result
+
+    def _build_pilot_dll_metrics(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        allowed = {"ledgers"}
+        if set(payload) != allowed or not isinstance(payload.get("ledgers"), list):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_pilot_dll_metrics",
+                "Pilot DLL metrics requires a ledgers list.",
+            )
+        if not payload["ledgers"] or len(payload["ledgers"]) > self.server.max_batch_size:
+            raise APIError(
+                HTTPStatus.REQUEST_ENTITY_TOO_LARGE if len(payload["ledgers"]) > self.server.max_batch_size else HTTPStatus.BAD_REQUEST,
+                "pilot_dll_metrics_batch_invalid",
+                f"Pilot DLL metrics requires 1 to {self.server.max_batch_size} ledger objects.",
+            )
+        try:
+            ledgers = ledgers_from_payloads(payload["ledgers"])
+            tenant_ids = {ledger.get("tenant_id") for ledger in ledgers}
+            if tenant_ids != {principal.tenant_id}:
+                raise ValueError("all ledgers must match the authenticated tenant")
+            metrics = build_metrics_from_ledgers(ledgers)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_pilot_dll_metrics", str(exc)) from exc
+        metrics["authenticated_principal"] = principal.public_identity()
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "pilot.dll_metrics.generated",
+            metrics["version"],
+            {
+                "ledger_count": metrics["summary"]["ledger_count"],
+                "valid_ledger_count": metrics["summary"]["valid_ledger_count"],
+                "complete_lifecycle_count": metrics["summary"]["complete_lifecycle_count"],
+            },
+        )
+        return metrics
+
     def _record_review(
         self,
         principal: APIPrincipal,
@@ -1260,6 +1359,10 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             return "permits.consume"
         if path == "/v1/sparta/route":
             return "routes.write"
+        if path == "/v1/pilot/dll/intake":
+            return "reviews.write"
+        if path == "/v1/pilot/dll/metrics":
+            return "metrics.read"
         if re.fullmatch(r"/v1/decisions/[^/]+/reviews", path):
             return "reviews.write"
         if path in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch", "/v1/language/evaluate"}:
@@ -1399,6 +1502,7 @@ def schema() -> Dict[str, Any]:
             "control_evidence": CONTROL_EVIDENCE_VERSION,
             "access_token": ACCESS_TOKEN_VERSION,
             "github_oidc": GITHUB_OIDC_VERSION,
+            "pilot_ledger_metrics": PILOT_LEDGER_METRICS_VERSION,
             "sparta_plan": SPARTA_PLAN_VERSION,
             "sparta_route": SPARTA_ROUTE_VERSION,
             "sparta_adapter_registry": SPARTA_ADAPTER_REGISTRY_VERSION,
@@ -1454,6 +1558,8 @@ def schema() -> Dict[str, Any]:
             "POST /v1/permits/prepare": "authenticate an issued, unconsumed permit before native controls run",
             "POST /v1/permits/consume": "verify control evidence and atomically consume an action-bound permit",
             "POST /v1/sparta/route": "route one stored SMERC decision through a declared plan or configured adapter",
+            "POST /v1/pilot/dll/intake": "append pilot evidence to a supplied DLL or benchmark DLL bundle",
+            "POST /v1/pilot/dll/metrics": "summarize supplied DLL pilot evidence with denominators and caveats",
             "POST /v1/batch": "evaluate and persist a bounded action list",
             "GET /v1/decisions": "list tenant-scoped decision summaries",
             "GET /v1/decisions/{replay_id}": "retrieve one tenant-scoped decision",

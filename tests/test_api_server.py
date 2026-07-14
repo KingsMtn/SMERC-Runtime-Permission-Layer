@@ -6,6 +6,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from api_server import create_server, parse_api_keys
+from reference_engine.api_identity import APIPrincipal
 from reference_engine.policy import PolicyRegistry, RuntimePolicy
 from reference_engine.recoverability_engine import load_domain_profile_dir
 from reference_engine.sparta_registry import load_sparta_adapter_registry
@@ -22,6 +23,8 @@ POLICY_EXAMPLE = json.loads(
 DOMAIN_PROFILE_DIR = ROOT / "examples" / "domain_profiles"
 SPARTA_REGISTRY = load_sparta_adapter_registry(ROOT / "examples" / "sparta" / "adapter_registry.json")
 SPARTA_PLAN = json.loads((ROOT / "examples" / "sparta" / "github_actions_deploy_plan.json").read_text(encoding="utf-8"))
+PILOT_DLL_BUNDLE = json.loads((ROOT / "reports" / "runtime_benchmark_dll_bundle.json").read_text(encoding="utf-8"))
+PILOT_DLL_INTAKE = json.loads((ROOT / "examples" / "pilot_ledger_intake_example.json").read_text(encoding="utf-8"))
 
 
 class APIServerTests(unittest.TestCase):
@@ -97,6 +100,7 @@ class APIServerTests(unittest.TestCase):
         )
         self.assertEqual(body["language_versions"]["access_token"], "smerc.access-token.v2")
         self.assertEqual(body["language_versions"]["github_oidc"], "smerc.github-oidc.v1")
+        self.assertEqual(body["language_versions"]["pilot_ledger_metrics"], "smerc.pilot-ledger-metrics.v1")
         self.assertEqual(body["language_versions"]["sparta_plan"], "smerc.sparta-plan.v1")
         self.assertEqual(body["language_versions"]["sparta_route"], "smerc.sparta-route.v1")
         self.assertEqual(
@@ -114,6 +118,8 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/auth/token", body["endpoints"])
         self.assertIn("POST /v1/auth/github", body["endpoints"])
         self.assertIn("POST /v1/sparta/route", body["endpoints"])
+        self.assertIn("POST /v1/pilot/dll/intake", body["endpoints"])
+        self.assertIn("POST /v1/pilot/dll/metrics", body["endpoints"])
         self.assertIn("GET /v1/security-events", body["endpoints"])
         self.assertIn("routes.write", body["authorization"]["scopes"])
         self.assertIn("permits.consume", body["authorization"]["scopes"])
@@ -630,6 +636,144 @@ class PilotReviewAPITests(unittest.TestCase):
         )
         self.assertEqual(status, 400)
         self.assertEqual(body["error"], "invalid_review_status")
+
+
+class PilotDLLAPITests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.server = create_server(
+            "127.0.0.1",
+            0,
+            audit_db=":memory:",
+            api_keys={},
+            api_principals=[
+                APIPrincipal(
+                    tenant_id="benchmark-suite",
+                    principal_id="pilot-writer",
+                    secret="pilot-writer-secret-012345",
+                    scopes=frozenset({"reviews.write", "metrics.read", "audit.read"}),
+                ),
+                APIPrincipal(
+                    tenant_id="benchmark-suite",
+                    principal_id="metrics-reader",
+                    secret="metrics-reader-secret-012345",
+                    scopes=frozenset({"metrics.read"}),
+                ),
+            ],
+            max_body_bytes=2 * 1024 * 1024,
+            max_batch_size=2,
+        )
+        cls.port = cls.server.server_address[1]
+        cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
+        cls.thread.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.shutdown()
+        cls.server.server_close()
+        cls.thread.join(timeout=2)
+
+    def url(self, path):
+        return f"http://127.0.0.1:{self.port}{path}"
+
+    def request_json(self, path, *, method="GET", payload=None, key=None, headers=None):
+        request_headers = dict(headers or {})
+        if key:
+            request_headers["authorization"] = f"Bearer {key}"
+        data = None
+        if payload is not None:
+            data = json.dumps(payload).encode("utf-8")
+            request_headers.setdefault("content-type", "application/json")
+        request = Request(self.url(path), data=data, headers=request_headers, method=method)
+        try:
+            with urlopen(request, timeout=5) as response:
+                response_headers = {name.lower(): value for name, value in response.headers.items()}
+                return response.status, response_headers, json.loads(response.read().decode("utf-8"))
+        except HTTPError as exc:
+            response_headers = {name.lower(): value for name, value in exc.headers.items()}
+            return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+
+    def intake_payload(self):
+        return {
+            "ledger": PILOT_DLL_BUNDLE,
+            "decision_id": "dll:proxy-deploy-001::baseline",
+            "intake": PILOT_DLL_INTAKE,
+        }
+
+    def test_pilot_dll_intake_and_metrics_are_available_over_api(self):
+        status, _, result = self.request_json(
+            "/v1/pilot/dll/intake",
+            method="POST",
+            payload=self.intake_payload(),
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        self.assertEqual(result["records_before"], 3)
+        self.assertEqual(result["records_after"], 7)
+        self.assertTrue(result["verification"]["valid"])
+        self.assertEqual(result["authenticated_principal"]["principal_id"], "pilot-writer")
+
+        status, _, metrics = self.request_json(
+            "/v1/pilot/dll/metrics",
+            method="POST",
+            payload={"ledgers": [result]},
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(metrics["summary"]["ledger_count"], 1)
+        self.assertEqual(metrics["summary"]["complete_lifecycle_count"], 1)
+        self.assertEqual(metrics["summary"]["reviewer_agreement_rate"], 1.0)
+        self.assertIn("below 30 ledgers", " ".join(metrics["caveats"]))
+
+        status, _, security = self.request_json(
+            "/v1/security-events?limit=10",
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 200)
+        event_types = {item["event_type"] for item in security["events"]}
+        self.assertIn("pilot.dll_intake.applied", event_types)
+        self.assertIn("pilot.dll_metrics.generated", event_types)
+
+    def test_pilot_dll_intake_requires_write_scope_and_tenant_match(self):
+        bad = self.intake_payload()
+        bad["intake"] = dict(PILOT_DLL_INTAKE, tenant_id="other-tenant")
+        status, _, body = self.request_json(
+            "/v1/pilot/dll/intake",
+            method="POST",
+            payload=bad,
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_pilot_dll_intake")
+
+    def test_pilot_dll_metrics_rejects_wrong_tenant_and_large_batches(self):
+        status, _, intake_result = self.request_json(
+            "/v1/pilot/dll/intake",
+            method="POST",
+            payload=self.intake_payload(),
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        bad_result = json.loads(json.dumps(intake_result))
+        bad_result["ledger"]["tenant_id"] = "other-tenant"
+
+        status, _, body = self.request_json(
+            "/v1/pilot/dll/metrics",
+            method="POST",
+            payload={"ledgers": [bad_result]},
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_pilot_dll_metrics")
+
+        status, _, body = self.request_json(
+            "/v1/pilot/dll/metrics",
+            method="POST",
+            payload={"ledgers": [intake_result, intake_result, intake_result]},
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 413)
+        self.assertEqual(body["error"], "pilot_dll_metrics_batch_invalid")
 
 
 if __name__ == "__main__":

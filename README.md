@@ -92,6 +92,7 @@ Start here before reading the code:
 - `reports/Runtime_Benchmark_DLL_Bundle.md` converts those benchmark decisions into hash-chained decision-time ledgers without fabricating live execution or outcome evidence.
 - `reports/Pilot_Ledger_Intake_Result.md` shows how pilot-supplied reviewer, execution, outcome, and learning evidence can be appended to a DLL with ordering checks.
 - `reports/Pilot_Ledger_Metrics_Report.md` summarizes completed DLL evidence with explicit denominators and sample-size caveats.
+- `docs/Pilot_DLL_API.md` describes stateless API endpoints for submitting pilot DLL intake evidence and calculating DLL metrics.
 - `reports/Decision_Lifecycle_Ledger_Example.md` shows a full pilot-grade lifecycle record from request through learning recommendation.
 - `reports/SMERC_F_Profile_Packet.md` shows a financial-action profile packet across conservative, balanced, and permissive policies.
 - `COMMUNITY.md`, `CONTRIBUTING.md`, `docs/Partner_Program.md`, and `docs/Community_Outreach_Kit.md` describe how design partners, integration partners, researchers, and open-source contributors can engage.
