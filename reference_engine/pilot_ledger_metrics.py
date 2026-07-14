@@ -45,6 +45,25 @@ def load_ledgers(paths: Iterable[str | Path]) -> list[Dict[str, Any]]:
     return ledgers
 
 
+def ledgers_from_payloads(payloads: Iterable[Mapping[str, Any]]) -> list[Dict[str, Any]]:
+    ledgers: list[Dict[str, Any]] = []
+    for index, payload in enumerate(payloads):
+        if not isinstance(payload, dict):
+            raise TypeError(f"ledger payload {index} must be a JSON object")
+        if payload.get("version") == PILOT_LEDGER_RESULT_VERSION:
+            ledger = payload.get("ledger")
+            if not isinstance(ledger, dict):
+                raise ValueError(f"ledger payload {index} is missing a ledger object")
+            ledgers.append(ledger)
+        elif payload.get("version") == LEDGER_VERSION:
+            ledgers.append(dict(payload))
+        else:
+            raise ValueError(f"ledger payload {index} must be a pilot intake result or DLL ledger")
+    if not ledgers:
+        raise ValueError("at least one ledger or pilot intake result is required")
+    return ledgers
+
+
 def _records_by_type(ledger: Mapping[str, Any], event_type: str) -> list[Mapping[str, Any]]:
     return [record for record in ledger.get("records", []) if record.get("event_type") == event_type]
 
@@ -159,8 +178,8 @@ def summarize_ledgers(ledgers: list[Mapping[str, Any]]) -> Dict[str, Any]:
     }
 
 
-def build_metrics(paths: Iterable[str | Path]) -> Dict[str, Any]:
-    summary = summarize_ledgers(load_ledgers(paths))
+def build_metrics_from_ledgers(ledgers: list[Mapping[str, Any]]) -> Dict[str, Any]:
+    summary = summarize_ledgers(ledgers)
     caveats = [
         "Metrics disclose denominators and must not be generalized beyond the supplied ledger set.",
         "Synthetic examples are useful for workflow testing, not customer validation.",
@@ -177,6 +196,10 @@ def build_metrics(paths: Iterable[str | Path]) -> Dict[str, Any]:
         "caveats": caveats,
         "recommended_next_action": recommended_next_action(summary),
     }
+
+
+def build_metrics(paths: Iterable[str | Path]) -> Dict[str, Any]:
+    return build_metrics_from_ledgers(load_ledgers(paths))
 
 
 def recommended_next_action(summary: Mapping[str, Any]) -> str:

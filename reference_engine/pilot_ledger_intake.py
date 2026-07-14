@@ -59,10 +59,9 @@ def _validate_recorded_at(value: Any, path: str) -> str:
     return text
 
 
-def load_intake(path: str | Path) -> Dict[str, Any]:
-    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+def parse_intake_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
     if not isinstance(payload, dict):
-        raise TypeError("pilot intake file must contain a JSON object")
+        raise TypeError("pilot intake must be a JSON object")
     if payload.get("version") != PILOT_LEDGER_INTAKE_VERSION:
         raise ValueError(f"pilot intake version must be {PILOT_LEDGER_INTAKE_VERSION}")
     events = payload.get("events")
@@ -94,10 +93,16 @@ def load_intake(path: str | Path) -> Dict[str, Any]:
     }
 
 
-def load_ledger_source(path: str | Path, *, decision_id: str | None = None) -> DecisionLifecycleLedger:
+def load_intake(path: str | Path) -> Dict[str, Any]:
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
-        raise TypeError("ledger source must contain a JSON object")
+        raise TypeError("pilot intake file must contain a JSON object")
+    return parse_intake_payload(payload)
+
+
+def ledger_source_from_payload(payload: Mapping[str, Any], *, decision_id: str | None = None) -> DecisionLifecycleLedger:
+    if not isinstance(payload, dict):
+        raise TypeError("ledger source must be a JSON object")
     if payload.get("version") == LEDGER_VERSION:
         ledger = DecisionLifecycleLedger.from_dict(payload)
         if decision_id is not None and ledger.decision_id != decision_id:
@@ -111,6 +116,13 @@ def load_ledger_source(path: str | Path, *, decision_id: str | None = None) -> D
                 return DecisionLifecycleLedger.from_dict(ledger_payload)
         raise ValueError(f"decision_id not found in benchmark ledger bundle: {decision_id}")
     raise ValueError("ledger source must be a DLL JSON file or benchmark DLL bundle")
+
+
+def load_ledger_source(path: str | Path, *, decision_id: str | None = None) -> DecisionLifecycleLedger:
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise TypeError("ledger source must contain a JSON object")
+    return ledger_source_from_payload(payload, decision_id=decision_id)
 
 
 def apply_pilot_intake(ledger: DecisionLifecycleLedger, intake: Mapping[str, Any]) -> Dict[str, Any]:
