@@ -27,6 +27,8 @@ SMERC is runtime permission infrastructure that evaluates whether AI-agent and a
 | 20-25 min | Inspect replayability and auditability. | `docs/Governance_Report_Generator.md`, `reports/Governance_Report_Example.md`, `docs/Decision_Lifecycle_Ledger.md` |
 | 25-30 min | Decide whether a shadow-mode pilot is justified. | `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`, `docs/Pilot_Evaluation_Checklist.md` |
 
+For a local product-flow demonstration, run `docs/CISO_Evidence_Walkthrough.md` after the timed review. It seeds realistic decisions, opens them through the pilot console, and generates stored DLL evidence packages.
+
 ## The System Flow To Verify
 
 ```text

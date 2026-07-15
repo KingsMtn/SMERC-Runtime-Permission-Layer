@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a CISO evidence walkthrough seed command, realistic seed action set, walkthrough documentation, and tests for review queue plus DLL evidence package readiness.
 - Added a CISO evidence package panel to the dependency-free pilot console for stored DLL package generation, JSON export, and Markdown export.
 - Added Python and JavaScript SDK helpers for retained DLL storage, stored certificate issuance, and pilot evidence package generation.
 - Added pilot evidence package generation from stored DLL records for CISO review.

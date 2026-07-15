@@ -63,7 +63,7 @@ Those are validation and productization requirements, not claims in this reposit
 | --- | --- | --- |
 | CISO or security executive | `docs/CISO_30_Minute_Review_Package.md` | Decide whether a shadow-mode pilot is worth discussing. |
 | Security architect | `docs/CISO_GitHub_Inspection_Guide.md` | Inspect action boundary, scoring, permits, controls, and audit path. |
-| Platform engineer | `docs/Developer_Quickstart.md` | Run the engine, API, tests, and GitHub integration locally. |
+| Platform engineer | `docs/CISO_Evidence_Walkthrough.md` and `docs/Developer_Quickstart.md` | Run the seeded evidence flow, engine, API, tests, and GitHub integration locally. |
 | Design partner | `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md` | Understand pilot scope, stop conditions, and evidence required. |
 | Open-source reviewer | `CONTRIBUTING.md` and `docs/Public_Review_And_Feedback.md` | Challenge assumptions, scenarios, and implementation details. |
 | YC or startup reviewer | `docs/Plain_English_Product_Overview.md` and `docs/Founder_Explanation_Card.md` | Understand the product wedge without overreading the technical material. |
@@ -80,11 +80,12 @@ Those are validation and productization requirements, not claims in this reposit
 ## Recommended 30-Minute Technical Review
 
 1. Follow `docs/CISO_30_Minute_Review_Package.md`.
-2. Run `python -m unittest discover -s tests`.
-3. Run one recoverability example from `examples/recoverability_single_action.json`.
-4. Inspect the GitHub Actions integration in `integrations/github_actions/`.
-5. Inspect the deployment adapter in `integrations/github_deployment/`.
-6. Inspect the pilot console in `pilot_console/`.
+2. Run `docs/CISO_Evidence_Walkthrough.md`.
+3. Run `python -m unittest discover -s tests`.
+4. Run one recoverability example from `examples/recoverability_single_action.json`.
+5. Inspect the GitHub Actions integration in `integrations/github_actions/`.
+6. Inspect the deployment adapter in `integrations/github_deployment/`.
+7. Inspect the pilot console in `pilot_console/`.
 
 ## Pilot Path
 
