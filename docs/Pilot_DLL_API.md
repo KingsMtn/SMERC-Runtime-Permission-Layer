@@ -142,6 +142,35 @@ The `route_report` field is optional. When supplied, it must be a `smerc.sparta-
 
 This endpoint avoids resubmitting the full DLL when the ledger has already been retained by `POST /v1/pilot/dll/ledgers`.
 
+### `POST /v1/pilot/evidence-packages`
+
+Required scope: `audit.read`
+
+Builds a CISO-readable pilot evidence package from a stored tenant-scoped DLL.
+
+Request shape:
+
+```json
+{
+  "decision_id": "dll:proxy-deploy-001::baseline",
+  "issuer": "smerc-api:pilot-reviewer",
+  "route_report": {},
+  "security_event_limit": 50
+}
+```
+
+The endpoint:
+
+- retrieves the stored DLL by `decision_id`
+- issues a digest-bound Decision Certificate for that DLL
+- verifies the certificate against the source DLL
+- includes related tenant-scoped security events
+- returns a JSON evidence package plus a Markdown report suitable for pilot review
+
+The `route_report` field is optional. When supplied, it must be a `smerc.sparta-route.v1` report and the returned certificate binds to that route-report digest.
+
+The package is meant for CISO review, design-partner pilots, and internal audit discussion. It is not compliance certification, managed immutable storage, legal recordkeeping, or proof that source-system facts were accurate.
+
 ## Boundary
 
 These endpoints make pilot evidence easier to submit, retain, summarize, and package for review. The storage path is pilot-grade SQLite persistence. It does not provide managed immutable infrastructure, legal recordkeeping, regulatory retention, managed certificate signing, SIEM integration, or compliance certification.

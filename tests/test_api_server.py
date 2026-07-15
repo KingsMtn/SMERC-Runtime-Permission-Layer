@@ -103,6 +103,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(body["language_versions"]["github_oidc"], "smerc.github-oidc.v1")
         self.assertEqual(body["language_versions"]["decision_certificate"], "smerc.decision-certificate.v1")
         self.assertEqual(body["language_versions"]["pilot_ledger_metrics"], "smerc.pilot-ledger-metrics.v1")
+        self.assertEqual(body["language_versions"]["pilot_evidence_package"], "smerc.pilot-evidence-package.v1")
         self.assertEqual(body["language_versions"]["sparta_plan"], "smerc.sparta-plan.v1")
         self.assertEqual(body["language_versions"]["sparta_route"], "smerc.sparta-route.v1")
         self.assertEqual(
@@ -127,6 +128,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("GET /v1/pilot/dll/ledgers", body["endpoints"])
         self.assertIn("GET /v1/pilot/dll/ledgers/{decision_id}", body["endpoints"])
         self.assertIn("POST /v1/pilot/dll/ledgers/{decision_id}/certificate", body["endpoints"])
+        self.assertIn("POST /v1/pilot/evidence-packages", body["endpoints"])
         self.assertIn("GET /v1/security-events", body["endpoints"])
         self.assertIn("routes.write", body["authorization"]["scopes"])
         self.assertIn("permits.consume", body["authorization"]["scopes"])
@@ -856,6 +858,71 @@ class PilotDLLAPITests(unittest.TestCase):
         )
         self.assertEqual(status, 200)
         self.assertIn("pilot.dll_certificate.issued_from_store", {item["event_type"] for item in security["events"]})
+
+    def test_pilot_evidence_package_can_be_built_from_stored_ledger(self):
+        status, _, intake_result = self.request_json(
+            "/v1/pilot/dll/intake",
+            method="POST",
+            payload=self.intake_payload(),
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        status, _, stored = self.request_json(
+            "/v1/pilot/dll/ledgers",
+            method="POST",
+            payload={"ledger": intake_result},
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        decision_id = stored["stored_ledger"]["decision_id"]
+
+        status, _, response = self.request_json(
+            "/v1/pilot/evidence-packages",
+            method="POST",
+            payload={
+                "decision_id": decision_id,
+                "issuer": "evidence-package-api-test",
+                "security_event_limit": 20,
+            },
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 201)
+        self.assertEqual(response["version"], "smerc.pilot-evidence-package-response.v1")
+        package = response["package"]
+        self.assertEqual(package["version"], "smerc.pilot-evidence-package.v1")
+        self.assertEqual(package["decision_id"], decision_id)
+        self.assertEqual(package["decision_certificate"]["issuer"], "evidence-package-api-test")
+        self.assertTrue(package["certificate_verification"]["valid"])
+        self.assertIn("SMERC Pilot Evidence Package", package["markdown_report"])
+        event_types = set(package["audit_event_summary"]["event_types"])
+        self.assertIn("pilot.dll_ledger.stored", event_types)
+        self.assertIn("pilot.dll_certificate.issued_for_evidence_package", event_types)
+
+        status, _, security = self.request_json(
+            "/v1/security-events?limit=20",
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 200)
+        self.assertIn("pilot.evidence_package.generated", {item["event_type"] for item in security["events"]})
+
+    def test_pilot_evidence_package_requires_audit_scope_and_existing_ledger(self):
+        status, _, body = self.request_json(
+            "/v1/pilot/evidence-packages",
+            method="POST",
+            payload={"decision_id": "missing-decision"},
+            key="metrics-reader-secret-012345",
+        )
+        self.assertEqual(status, 403)
+        self.assertEqual(body["error"], "insufficient_scope")
+
+        status, _, body = self.request_json(
+            "/v1/pilot/evidence-packages",
+            method="POST",
+            payload={"decision_id": "missing-decision"},
+            key="pilot-writer-secret-012345",
+        )
+        self.assertEqual(status, 404)
+        self.assertEqual(body["error"], "dll_ledger_not_found")
 
     def test_pilot_dll_intake_requires_write_scope_and_tenant_match(self):
         bad = self.intake_payload()

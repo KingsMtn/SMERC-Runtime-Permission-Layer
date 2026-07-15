@@ -67,6 +67,10 @@ from reference_engine.pilot_ledger_metrics import (
     build_metrics_from_ledgers,
     ledgers_from_payloads,
 )
+from reference_engine.pilot_evidence_package import (
+    PILOT_EVIDENCE_PACKAGE_VERSION,
+    build_pilot_evidence_package,
+)
 from reference_engine.recoverability_engine import (
     DOMAIN_PROFILE_VERSION,
     DomainProfile,
@@ -490,6 +494,16 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Pilot DLL ledger storage expects one JSON object.")
                 self._write_json(
                     self._store_pilot_dll_ledger(principal, payload),
+                    HTTPStatus.CREATED,
+                    request_id=request_id,
+                )
+                return
+
+            if path == "/v1/pilot/evidence-packages":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Pilot evidence package expects one JSON object.")
+                self._write_json(
+                    self._build_pilot_evidence_package(principal, payload),
                     HTTPStatus.CREATED,
                     request_id=request_id,
                 )
@@ -1182,6 +1196,81 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             "authenticated_principal": principal.public_identity(),
         }
 
+    def _build_pilot_evidence_package(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        allowed = {"decision_id", "route_report", "issuer", "security_event_limit"}
+        unknown = sorted(set(payload) - allowed)
+        decision_id = payload.get("decision_id")
+        if unknown or not isinstance(decision_id, str) or not decision_id.strip():
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_pilot_evidence_package",
+                "Pilot evidence package requires decision_id and optional route_report, issuer, and security_event_limit fields.",
+            )
+        decision_id = decision_id.strip()
+        route_report = payload.get("route_report")
+        if route_report is not None and not isinstance(route_report, dict):
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_pilot_evidence_package",
+                "route_report must be an object when supplied.",
+            )
+        issuer = payload.get("issuer", f"smerc-api:{principal.principal_id}")
+        if not isinstance(issuer, str):
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_pilot_evidence_package", "issuer must be a string.")
+        event_limit = payload.get("security_event_limit", 50)
+        if not isinstance(event_limit, int) or event_limit < 1 or event_limit > 200:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_pilot_evidence_package",
+                "security_event_limit must be an integer between 1 and 200.",
+            )
+        ledger_data = self.server.audit_store.get_decision_lifecycle_ledger(principal.tenant_id, decision_id)
+        if ledger_data is None:
+            raise APIError(HTTPStatus.NOT_FOUND, "dll_ledger_not_found", "Decision Lifecycle Ledger was not found.")
+        try:
+            certificate = build_decision_certificate(ledger_data, route_report=route_report, issuer=issuer)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_pilot_evidence_package", str(exc)) from exc
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "pilot.dll_certificate.issued_for_evidence_package",
+            certificate["certificate_id"],
+            {
+                "decision_id": certificate["decision_id"],
+                "certificate_digest": certificate["certificate_digest"],
+                "head_record_hash": certificate["lifecycle_binding"]["head_record_hash"],
+                "route_bound": certificate["route_binding"] is not None,
+            },
+        )
+        security_events = self.server.audit_store.list_security_events(principal.tenant_id, limit=event_limit)
+        try:
+            package = build_pilot_evidence_package(
+                ledger_data,
+                certificate=certificate,
+                route_report=route_report,
+                security_events=security_events,
+                generated_by=f"smerc-api:{principal.principal_id}",
+            )
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_pilot_evidence_package", str(exc)) from exc
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "pilot.evidence_package.generated",
+            decision_id,
+            {
+                "certificate_id": certificate["certificate_id"],
+                "certificate_digest": certificate["certificate_digest"],
+                "included_audit_event_count": package["audit_event_summary"]["included_event_count"],
+            },
+        )
+        return {
+            "version": "smerc.pilot-evidence-package-response.v1",
+            "package": package,
+            "authenticated_principal": principal.public_identity(),
+        }
+
     def _store_pilot_dll_ledger(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
         allowed = {"ledger", "decision_id"}
         unknown = sorted(set(payload) - allowed)
@@ -1598,6 +1687,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             return "metrics.read"
         if path == "/v1/pilot/dll/ledgers":
             return "reviews.write"
+        if path == "/v1/pilot/evidence-packages":
+            return "audit.read"
         if SMERCRequestHandler._stored_dll_certificate_decision_id(path) is not None:
             return "metrics.read"
         if re.fullmatch(r"/v1/decisions/[^/]+/reviews", path):
@@ -1741,6 +1832,7 @@ def schema() -> Dict[str, Any]:
             "github_oidc": GITHUB_OIDC_VERSION,
             "decision_certificate": CERTIFICATE_VERSION,
             "pilot_ledger_metrics": PILOT_LEDGER_METRICS_VERSION,
+            "pilot_evidence_package": PILOT_EVIDENCE_PACKAGE_VERSION,
             "sparta_plan": SPARTA_PLAN_VERSION,
             "sparta_route": SPARTA_ROUTE_VERSION,
             "sparta_adapter_registry": SPARTA_ADAPTER_REGISTRY_VERSION,
@@ -1803,6 +1895,7 @@ def schema() -> Dict[str, Any]:
             "GET /v1/pilot/dll/ledgers": "list stored tenant-scoped Decision Lifecycle Ledgers",
             "GET /v1/pilot/dll/ledgers/{decision_id}": "retrieve one stored tenant-scoped Decision Lifecycle Ledger",
             "POST /v1/pilot/dll/ledgers/{decision_id}/certificate": "issue a Decision Certificate from one stored DLL",
+            "POST /v1/pilot/evidence-packages": "build a CISO-readable evidence package from a stored DLL",
             "POST /v1/batch": "evaluate and persist a bounded action list",
             "GET /v1/decisions": "list tenant-scoped decision summaries",
             "GET /v1/decisions/{replay_id}": "retrieve one tenant-scoped decision",
