@@ -68,6 +68,33 @@ await client.reviewDecision(decision.replay_id, review, { idempotencyKey: 'revie
 const reviews = await client.listReviews(decision.replay_id);
 ```
 
+## Retained Pilot Evidence
+
+Use this path when a pilot has produced a Decision Lifecycle Ledger and the security team needs a portable review package.
+
+```js
+import { readFile } from 'node:fs/promises';
+
+const ledger = JSON.parse(await readFile('reports/decision_lifecycle_ledger_example.json', 'utf8'));
+
+const stored = await client.storePilotDllLedger(ledger);
+const decisionId = stored.stored_ledger.decision_id;
+
+const certificate = await client.issueStoredPilotDllCertificate(decisionId, {
+  issuer: 'smerc-api:pilot-reviewer',
+});
+
+const evidencePackage = await client.pilotEvidencePackage(decisionId, {
+  issuer: 'smerc-api:pilot-reviewer',
+  securityEventLimit: 50,
+});
+
+console.log(certificate.certificate.certificate_digest);
+console.log(evidencePackage.package.markdown_report);
+```
+
+The evidence package is a pilot-review artifact. It does not provide immutable storage, legal retention, SIEM export, production assurance, or compliance certification by itself.
+
 ## Errors
 
 Non-2xx API responses throw `SMERCAPIError` with `status`, `code`, and the parsed JSON `body`.

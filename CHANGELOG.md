@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added Python and JavaScript SDK helpers for retained DLL storage, stored certificate issuance, and pilot evidence package generation.
 - Added pilot evidence package generation from stored DLL records for CISO review.
 - Added API issuance of Decision Certificates directly from stored pilot DLL records.
 - Added pilot-grade durable Decision Lifecycle Ledger storage with tenant-scoped store, list, and retrieve APIs.

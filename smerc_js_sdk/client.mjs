@@ -91,6 +91,39 @@ export class SMERCClient {
     });
   }
 
+  storePilotDllLedger(ledger, options = {}) {
+    return this.request('POST', '/v1/pilot/dll/ledgers', {
+      body: cleanBody({ ledger, decision_id: options.decisionId }),
+    });
+  }
+
+  listPilotDllLedgers(options = {}) {
+    return this.request('GET', '/v1/pilot/dll/ledgers', {
+      query: cleanQuery({ limit: options.limit }),
+    });
+  }
+
+  getPilotDllLedger(decisionId) {
+    return this.request('GET', `/v1/pilot/dll/ledgers/${pathToken(decisionId)}`);
+  }
+
+  issueStoredPilotDllCertificate(decisionId, options = {}) {
+    return this.request('POST', `/v1/pilot/dll/ledgers/${pathToken(decisionId)}/certificate`, {
+      body: cleanBody({ issuer: options.issuer, route_report: options.routeReport }),
+    });
+  }
+
+  pilotEvidencePackage(decisionId, options = {}) {
+    return this.request('POST', '/v1/pilot/evidence-packages', {
+      body: cleanBody({
+        decision_id: decisionId,
+        issuer: options.issuer,
+        route_report: options.routeReport,
+        security_event_limit: options.securityEventLimit,
+      }),
+    });
+  }
+
   issuePermit(payload) {
     return this.request('POST', '/v1/permits/issue', { body: payload });
   }
@@ -170,6 +203,10 @@ async function decodeJson(response) {
 }
 
 function cleanQuery(values) {
+  return Object.fromEntries(Object.entries(values).filter(([, value]) => value !== undefined && value !== null));
+}
+
+function cleanBody(values) {
   return Object.fromEntries(Object.entries(values).filter(([, value]) => value !== undefined && value !== null));
 }
 

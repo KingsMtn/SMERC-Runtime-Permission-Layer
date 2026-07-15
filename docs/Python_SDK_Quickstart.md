@@ -72,6 +72,36 @@ client.review_decision(decision["replay_id"], review, idempotency_key="review-20
 reviews = client.list_reviews(decision["replay_id"])
 ```
 
+## Retained Pilot Evidence
+
+Use this path when a pilot has produced a Decision Lifecycle Ledger and the security team needs a portable review package.
+
+```python
+import json
+from pathlib import Path
+
+ledger = json.loads(Path("reports/decision_lifecycle_ledger_example.json").read_text())
+
+stored = client.store_pilot_dll_ledger(ledger)
+decision_id = stored["stored_ledger"]["decision_id"]
+
+certificate = client.issue_stored_pilot_dll_certificate(
+    decision_id,
+    issuer="smerc-api:pilot-reviewer",
+)
+
+evidence_package = client.pilot_evidence_package(
+    decision_id,
+    issuer="smerc-api:pilot-reviewer",
+    security_event_limit=50,
+)
+
+print(certificate["certificate"]["certificate_digest"])
+print(evidence_package["package"]["markdown_report"])
+```
+
+The evidence package is a pilot-review artifact. It does not provide immutable storage, legal retention, SIEM export, production assurance, or compliance certification by itself.
+
 ## Errors
 
 Non-2xx API responses raise `SMERCAPIError` with the HTTP status, SMERC error code, message, and parsed JSON body.
