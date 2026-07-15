@@ -129,6 +129,54 @@ class SMERCClient:
     def security_events(self, *, limit: Optional[int] = None) -> JsonObject:
         return self._request("GET", "/v1/security-events", query=_query(limit=limit))
 
+    def store_pilot_dll_ledger(
+        self,
+        ledger: Mapping[str, Any],
+        *,
+        decision_id: Optional[str] = None,
+    ) -> JsonObject:
+        body: JsonObject = {"ledger": dict(ledger)}
+        if decision_id is not None:
+            body["decision_id"] = decision_id
+        return self._request("POST", "/v1/pilot/dll/ledgers", body=body)
+
+    def list_pilot_dll_ledgers(self, *, limit: Optional[int] = None) -> JsonObject:
+        return self._request("GET", "/v1/pilot/dll/ledgers", query=_query(limit=limit))
+
+    def get_pilot_dll_ledger(self, decision_id: str) -> JsonObject:
+        return self._request("GET", f"/v1/pilot/dll/ledgers/{_path_token(decision_id)}")
+
+    def issue_stored_pilot_dll_certificate(
+        self,
+        decision_id: str,
+        *,
+        issuer: Optional[str] = None,
+        route_report: Optional[Mapping[str, Any]] = None,
+    ) -> JsonObject:
+        body: JsonObject = {}
+        if issuer is not None:
+            body["issuer"] = issuer
+        if route_report is not None:
+            body["route_report"] = dict(route_report)
+        return self._request("POST", f"/v1/pilot/dll/ledgers/{_path_token(decision_id)}/certificate", body=body)
+
+    def pilot_evidence_package(
+        self,
+        decision_id: str,
+        *,
+        issuer: Optional[str] = None,
+        route_report: Optional[Mapping[str, Any]] = None,
+        security_event_limit: Optional[int] = None,
+    ) -> JsonObject:
+        body: JsonObject = {"decision_id": decision_id}
+        if issuer is not None:
+            body["issuer"] = issuer
+        if route_report is not None:
+            body["route_report"] = dict(route_report)
+        if security_event_limit is not None:
+            body["security_event_limit"] = security_event_limit
+        return self._request("POST", "/v1/pilot/evidence-packages", body=body)
+
     def issue_permit(self, payload: Mapping[str, Any]) -> JsonObject:
         return self._request("POST", "/v1/permits/issue", body=dict(payload))
 

@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from api_server import create_server
+from reference_engine.decision_lifecycle_ledger import DecisionLifecycleLedger, build_example_ledger
 from smerc_sdk import SMERCAPIError, SMERCClient
 
 
@@ -14,6 +15,19 @@ LANGUAGE_EXAMPLE = json.loads(
 )
 
 
+def example_ledger_for(tenant_id: str, decision_id: str):
+    source = build_example_ledger().to_dict()
+    ledger = DecisionLifecycleLedger(decision_id, tenant_id=tenant_id)
+    for record in source["records"]:
+        ledger.append(
+            record["event_type"],
+            record["actor"],
+            record["payload"],
+            recorded_at=record["recorded_at"],
+        )
+    return ledger
+
+
 class PythonSDKTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -22,7 +36,7 @@ class PythonSDKTests(unittest.TestCase):
             0,
             audit_db=":memory:",
             api_keys={"alpha": "alpha-secret"},
-            max_body_bytes=8192,
+            max_body_bytes=262144,
             max_batch_size=5,
         )
         cls.port = cls.server.server_address[1]
@@ -98,6 +112,29 @@ class PythonSDKTests(unittest.TestCase):
         self.assertEqual(events["tenant_id"], "alpha")
         self.assertIn("events", events)
 
+    def test_pilot_evidence_package_flow(self):
+        client = self.client()
+        ledger = example_ledger_for("alpha", "sdk-dll-001").to_dict()
+
+        stored = client.store_pilot_dll_ledger(ledger)
+        decision_id = stored["stored_ledger"]["decision_id"]
+        listed = client.list_pilot_dll_ledgers(limit=5)
+        fetched = client.get_pilot_dll_ledger(decision_id)
+        certificate = client.issue_stored_pilot_dll_certificate(decision_id, issuer="python-sdk-test")
+        package = client.pilot_evidence_package(
+            decision_id,
+            issuer="python-sdk-test",
+            security_event_limit=20,
+        )
+
+        self.assertEqual(decision_id, "sdk-dll-001")
+        self.assertIn(decision_id, {item["decision_id"] for item in listed["ledgers"]})
+        self.assertEqual(fetched["ledger"]["decision_id"], decision_id)
+        self.assertTrue(certificate["certificate"]["verification"]["valid"])
+        self.assertEqual(package["package"]["version"], "smerc.pilot-evidence-package.v1")
+        self.assertTrue(package["package"]["certificate_verification"]["valid"])
+        self.assertIn("SMERC Pilot Evidence Package", package["package"]["markdown_report"])
+
     def test_unauthenticated_evaluate_raises_structured_api_error(self):
         client = SMERCClient(self.base_url, timeout=5)
 
@@ -112,6 +149,9 @@ class PythonSDKTests(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             client.get_decision("../bad")
+
+        with self.assertRaises(ValueError):
+            client.get_pilot_dll_ledger("../bad")
 
 
 if __name__ == "__main__":

@@ -72,6 +72,11 @@ test('client exposes replay, review, language, batch, permit, and token endpoint
   await client.preparePermit({ permit_token: 'token' });
   await client.consumePermit({ permit_token: 'token' });
   await client.exchangeToken({ scopes: ['actions.evaluate'] });
+  await client.storePilotDllLedger({ version: 'smerc.decision-lifecycle-ledger.v1' }, { decisionId: 'dll_1' });
+  await client.listPilotDllLedgers({ limit: 3 });
+  await client.getPilotDllLedger('dll_1');
+  await client.issueStoredPilotDllCertificate('dll_1', { issuer: 'js-sdk-test' });
+  await client.pilotEvidencePackage('dll_1', { issuer: 'js-sdk-test', securityEventLimit: 10 });
 
   assert.deepEqual(calls.map((call) => `${call.method} ${new URL(call.url).pathname}`), [
     'GET /v1/health',
@@ -86,7 +91,17 @@ test('client exposes replay, review, language, batch, permit, and token endpoint
     'POST /v1/permits/prepare',
     'POST /v1/permits/consume',
     'POST /v1/auth/token',
+    'POST /v1/pilot/dll/ledgers',
+    'GET /v1/pilot/dll/ledgers',
+    'GET /v1/pilot/dll/ledgers/dll_1',
+    'POST /v1/pilot/dll/ledgers/dll_1/certificate',
+    'POST /v1/pilot/evidence-packages',
   ]);
+  assert.deepEqual(JSON.parse(calls.at(-1).body), {
+    decision_id: 'dll_1',
+    issuer: 'js-sdk-test',
+    security_event_limit: 10,
+  });
 });
 
 test('non-2xx responses throw structured SMERCAPIError', async () => {
