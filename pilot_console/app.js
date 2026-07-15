@@ -1,4 +1,10 @@
-import { buildReviewPayload, formatLatency, formatRatio, normalizeBaseUrl } from './model.mjs';
+import {
+  buildEvidencePackageRequest,
+  buildReviewPayload,
+  formatLatency,
+  formatRatio,
+  normalizeBaseUrl,
+} from './model.mjs';
 
 const state = {
   apiUrl: null,
@@ -7,6 +13,7 @@ const state = {
   queue: [],
   selected: null,
   selectedAt: null,
+  evidencePackage: null,
 };
 
 const byId = (id) => document.getElementById(id);
@@ -22,6 +29,12 @@ const decisionEmpty = byId('decision-empty');
 const decisionDetail = byId('decision-detail');
 const reviewForm = byId('review-form');
 const reviewError = byId('review-error');
+const evidenceForm = byId('evidence-package-form');
+const evidenceError = byId('evidence-error');
+const evidenceOutput = byId('evidence-package-output');
+const downloadEvidenceJson = byId('download-evidence-json');
+const downloadEvidenceMarkdown = byId('download-evidence-markdown');
+const generateEvidenceButton = byId('generate-evidence-package');
 
 function setConnectionStatus(message, tone = '') {
   connectionStatus.textContent = message;
@@ -136,7 +149,7 @@ function renderExistingReviews(reviews) {
     const verdict = document.createElement('strong');
     verdict.textContent = review.verdict.toUpperCase();
     const detail = document.createElement('span');
-    detail.textContent = `${review.reviewer_id} · ${new Date(review.created_at).toLocaleString()}`;
+    detail.textContent = `${review.reviewer_id} - ${new Date(review.created_at).toLocaleString()}`;
     record.append(verdict, detail);
     container.append(record);
   }
@@ -157,7 +170,7 @@ function configureReviewLabels(posture) {
 function renderDecision(decision, reviews) {
   decisionEmpty.hidden = true;
   decisionDetail.hidden = false;
-  byId('detail-action-type').textContent = `${decision.replay.actor} · ${decision.replay.tool}`;
+  byId('detail-action-type').textContent = `${decision.replay.actor} - ${decision.replay.tool}`;
   byId('detail-action-id').textContent = decision.action_id;
   byId('detail-posture').textContent = decision.posture;
   byId('detail-posture').className = postureClass(decision.posture);
@@ -212,10 +225,47 @@ async function loadQueue() {
   renderQueue();
 }
 
+function createEvidenceCard(label, value) {
+  const card = document.createElement('div');
+  card.className = 'evidence-card';
+  const strong = document.createElement('strong');
+  strong.textContent = value ?? 'Not provided';
+  const span = document.createElement('span');
+  span.textContent = label;
+  card.append(strong, span);
+  return card;
+}
+
+function renderEvidencePackage(envelope) {
+  evidenceOutput.replaceChildren();
+  const pkg = envelope.package || {};
+  const summary = pkg.decision_summary || {};
+  const source = pkg.source_ledger || {};
+  const certificate = pkg.decision_certificate || {};
+  const audit = pkg.audit_event_summary || {};
+  const grid = document.createElement('div');
+  grid.className = 'evidence-summary-grid';
+  grid.append(
+    createEvidenceCard('Decision ID', pkg.decision_id),
+    createEvidenceCard('Recommendation', summary.recommendation),
+    createEvidenceCard('Recoverability score', summary.recoverability_score),
+    createEvidenceCard('Ledger head hash', source.ledger_head_hash),
+    createEvidenceCard('Certificate digest', certificate.certificate_digest),
+    createEvidenceCard('Certificate valid', certificate.valid === true ? 'Yes' : 'No'),
+    createEvidenceCard('Included audit events', String(audit.included_events ?? 0)),
+    createEvidenceCard('Report generated', pkg.generated_at),
+  );
+  const preview = document.createElement('pre');
+  preview.className = 'markdown-preview';
+  preview.textContent = pkg.markdown_report || 'No Markdown report returned.';
+  evidenceOutput.append(grid, preview);
+}
+
 async function refreshAll() {
-  setConnectionStatus('Loading…');
+  setConnectionStatus('Loading...');
   await Promise.all([loadMetrics(), loadQueue()]);
   refreshQueueButton.disabled = false;
+  generateEvidenceButton.disabled = false;
   setConnectionStatus('Connected', 'connected');
 }
 
@@ -229,6 +279,7 @@ connectionForm.addEventListener('submit', async (event) => {
     await refreshAll();
   } catch (error) {
     state.apiKey = null;
+    generateEvidenceButton.disabled = true;
     setConnectionStatus(error.message, 'error');
   }
 });
@@ -282,13 +333,60 @@ reviewForm.addEventListener('submit', async (event) => {
   }
 });
 
-downloadMetrics.addEventListener('click', () => {
-  if (!state.metrics) return;
-  const blob = new Blob([`${JSON.stringify(state.metrics, null, 2)}\n`], { type: 'application/json' });
+function downloadText(filename, text, type) {
+  const blob = new Blob([text], { type });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = 'smerc-pilot-metrics.json';
+  anchor.download = filename;
   anchor.click();
   URL.revokeObjectURL(url);
+}
+
+downloadMetrics.addEventListener('click', () => {
+  if (!state.metrics) return;
+  downloadText('smerc-pilot-metrics.json', `${JSON.stringify(state.metrics, null, 2)}\n`, 'application/json');
+});
+
+evidenceForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  evidenceError.hidden = true;
+  generateEvidenceButton.disabled = true;
+  try {
+    const form = new FormData(evidenceForm);
+    const payload = buildEvidencePackageRequest({
+      decisionId: form.get('decisionId'),
+      issuer: form.get('issuer'),
+      securityEventLimit: form.get('securityEventLimit'),
+    });
+    const envelope = await apiFetch('/v1/pilot/evidence-packages', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    state.evidencePackage = envelope;
+    renderEvidencePackage(envelope);
+    downloadEvidenceJson.disabled = false;
+    downloadEvidenceMarkdown.disabled = false;
+    setConnectionStatus('Evidence package generated', 'connected');
+  } catch (error) {
+    evidenceError.textContent = error.message;
+    evidenceError.hidden = false;
+  } finally {
+    generateEvidenceButton.disabled = !state.apiKey;
+  }
+});
+
+downloadEvidenceJson.addEventListener('click', () => {
+  if (!state.evidencePackage) return;
+  downloadText(
+    'smerc-pilot-evidence-package.json',
+    `${JSON.stringify(state.evidencePackage.package, null, 2)}\n`,
+    'application/json',
+  );
+});
+
+downloadEvidenceMarkdown.addEventListener('click', () => {
+  const markdown = state.evidencePackage?.package?.markdown_report;
+  if (!markdown) return;
+  downloadText('smerc-pilot-evidence-package.md', markdown, 'text/markdown');
 });

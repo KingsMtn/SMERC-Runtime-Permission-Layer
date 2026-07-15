@@ -1,6 +1,6 @@
 # SMERC Pilot Review Console
 
-The console is a dependency-free browser interface for a controlled SMERC shadow-mode pilot. It loads the authenticated tenant review queue, displays replay evidence, records immutable reviewer verdicts, and shows denominator-aware pilot metrics.
+The console is a dependency-free browser interface for a controlled SMERC shadow-mode pilot. It loads the authenticated tenant review queue, displays replay evidence, records immutable reviewer verdicts, shows denominator-aware pilot metrics, and generates stored Decision Lifecycle Ledger evidence packages for CISO review.
 
 ## Local Run
 
@@ -19,6 +19,16 @@ python -m http.server 8790 --bind 127.0.0.1 --directory pilot_console
 ```
 
 Open `http://127.0.0.1:8790`, enter the API URL and bearer key, and connect.
+
+## CISO Evidence Packages
+
+The Stored DLL evidence package panel calls `POST /v1/pilot/evidence-packages` for an existing ledger-backed decision ID. The authenticated principal must include `audit.read`. Generated packages can be downloaded as JSON for machine review or Markdown for an executive/security review packet.
+
+Example scoped development principal:
+
+```bash
+export SMERC_API_PRINCIPALS="pilot-team:pilot-console:decisions.read+reviews.read+reviews.write+metrics.read+audit.read=development-console-secret-2026-rotate"
+```
 
 ## Security Boundary
 

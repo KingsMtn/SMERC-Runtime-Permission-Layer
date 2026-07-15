@@ -38,6 +38,12 @@ class PilotConsoleContractTests(unittest.TestCase):
             "review-form",
             "reviewer-id",
             "download-metrics",
+            "evidence-package-form",
+            "evidence-decision-id",
+            "evidence-event-limit",
+            "generate-evidence-package",
+            "download-evidence-json",
+            "download-evidence-markdown",
         }
         self.assertTrue(required.issubset(parser.ids))
         self.assertEqual(parser.scripts, ["app.js?v=1"])

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a CISO evidence package panel to the dependency-free pilot console for stored DLL package generation, JSON export, and Markdown export.
 - Added Python and JavaScript SDK helpers for retained DLL storage, stored certificate issuance, and pilot evidence package generation.
 - Added pilot evidence package generation from stored DLL records for CISO review.
 - Added API issuance of Decision Certificates directly from stored pilot DLL records.

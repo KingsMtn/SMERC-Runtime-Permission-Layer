@@ -56,7 +56,7 @@
               <p class="eyebrow">Review Queue</p>
               <h2>Decisions</h2>
             </div>
-            <button id="refresh-queue" class="icon-button" type="button" title="Refresh queue" aria-label="Refresh queue" disabled>↻</button>
+            <button id="refresh-queue" class="icon-button" type="button" title="Refresh queue" aria-label="Refresh queue" disabled>R</button>
           </div>
           <div class="filters">
             <label>
@@ -158,6 +158,38 @@
               <button id="submit-review" class="primary-button" type="submit">Record immutable review</button>
             </form>
           </div>
+        </div>
+      </section>
+
+      <section class="evidence-review-section" aria-labelledby="evidence-package-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CISO Evidence Review</p>
+            <h2 id="evidence-package-heading">Stored DLL evidence package</h2>
+          </div>
+          <div class="evidence-actions">
+            <button id="download-evidence-json" class="secondary-button" type="button" disabled>Download JSON</button>
+            <button id="download-evidence-markdown" class="secondary-button" type="button" disabled>Download Markdown</button>
+          </div>
+        </div>
+        <form id="evidence-package-form" class="evidence-form">
+          <label>
+            Stored DLL decision ID
+            <input id="evidence-decision-id" name="decisionId" maxlength="192" placeholder="dll:proxy-deploy-001::baseline" required />
+          </label>
+          <label>
+            Issuer
+            <input id="evidence-issuer" name="issuer" maxlength="128" placeholder="smerc-api:pilot-reviewer" />
+          </label>
+          <label>
+            Security event limit
+            <input id="evidence-event-limit" name="securityEventLimit" type="number" min="1" max="200" value="50" required />
+          </label>
+          <button id="generate-evidence-package" class="primary-button" type="submit" disabled>Generate package</button>
+        </form>
+        <div id="evidence-error" class="form-error" role="alert" hidden></div>
+        <div id="evidence-package-output" class="evidence-output" aria-live="polite">
+          <p class="empty-copy">Generate a package from a stored Decision Lifecycle Ledger after connecting with an audit.read principal.</p>
         </div>
       </section>
     </main>

@@ -441,7 +441,7 @@ export SMERC_CORS_ORIGINS="http://127.0.0.1:8790"
 python -m http.server 8790 --bind 127.0.0.1 --directory pilot_console
 ```
 
-Open `http://127.0.0.1:8790` and connect it to the authenticated API. The bearer key remains in memory for that tab; the console uses no browser storage, cookies, analytics, or third-party assets. See `pilot_console/README.md`.
+Open `http://127.0.0.1:8790` and connect it to the authenticated API. The bearer key remains in memory for that tab; the console uses no browser storage, cookies, analytics, or third-party assets. It can also generate stored DLL evidence packages for CISO review when the principal has `audit.read`. See `pilot_console/README.md`.
 
 Run the GitHub Actions gate locally:
 
