@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
+  buildEvidencePackageRequest,
   buildReviewPayload,
   formatLatency,
   formatRatio,
@@ -116,4 +117,30 @@ test('bounds review identity, comments, and latency', () => {
     999999999,
   );
   assert.equal(payload.review_latency_ms, 604800000);
+});
+
+test('builds an evidence package request', () => {
+  assert.deepEqual(
+    buildEvidencePackageRequest({
+      decisionId: ' dll:proxy-deploy-001::baseline ',
+      issuer: ' smerc-api:pilot-reviewer ',
+      securityEventLimit: '20',
+    }),
+    {
+      decision_id: 'dll:proxy-deploy-001::baseline',
+      issuer: 'smerc-api:pilot-reviewer',
+      security_event_limit: 20,
+    },
+  );
+});
+
+test('rejects invalid evidence package inputs', () => {
+  assert.throws(
+    () => buildEvidencePackageRequest({ decisionId: '../bad' }),
+    /Decision ID/,
+  );
+  assert.throws(
+    () => buildEvidencePackageRequest({ decisionId: 'dll:proxy-deploy-001::baseline', securityEventLimit: '201' }),
+    /Security event limit/,
+  );
 });

@@ -158,12 +158,12 @@ export SMERC_CORS_ORIGINS="http://127.0.0.1:8790"
 python -m http.server 8790 --bind 127.0.0.1 --directory pilot_console
 ```
 
-Remote console deployments must use HTTPS. The bearer key is held only in tab memory. The console intentionally does not use local storage, session storage, cookies, analytics, or third-party runtime assets.
+Remote console deployments must use HTTPS. The bearer key is held only in tab memory. The console intentionally does not use local storage, session storage, cookies, analytics, or third-party runtime assets. Stored Decision Lifecycle Ledger evidence package generation additionally requires an `audit.read` principal scope.
 
 ## Docker
 
 ```bash
-export SMERC_API_PRINCIPALS="platform-team:pilot-console:actions.evaluate+decisions.read+reviews.read+reviews.write+metrics.read=development-console-secret-2026-rotate"
+export SMERC_API_PRINCIPALS="platform-team:pilot-console:decisions.read+reviews.read+reviews.write+metrics.read+audit.read=development-console-secret-2026-rotate"
 docker compose up --build
 ```
 

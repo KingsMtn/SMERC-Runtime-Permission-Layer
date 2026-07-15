@@ -82,3 +82,23 @@ export function buildReviewPayload(input, decisionPosture, elapsedMs) {
     comment: comment || null,
   };
 }
+
+export function buildEvidencePackageRequest(input) {
+  const decisionId = String(input.decisionId || '').trim();
+  if (!decisionId || /[/?#]/.test(decisionId) || decisionId.length > 192) {
+    throw new Error('Decision ID must be a non-empty stored DLL decision identifier without path separators.');
+  }
+  const issuer = String(input.issuer || '').trim();
+  if (issuer.length > 128) throw new Error('Issuer cannot exceed 128 characters.');
+  const limitRaw = input.securityEventLimit ?? 50;
+  const securityEventLimit = Number(limitRaw);
+  if (!Number.isInteger(securityEventLimit) || securityEventLimit < 1 || securityEventLimit > 200) {
+    throw new Error('Security event limit must be an integer between 1 and 200.');
+  }
+  const payload = {
+    decision_id: decisionId,
+    security_event_limit: securityEventLimit,
+  };
+  if (issuer) payload.issuer = issuer;
+  return payload;
+}
