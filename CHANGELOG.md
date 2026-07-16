@@ -11,6 +11,7 @@
 - Added a generic Agent Handshake integration runner that maps SMERC postures into safe agent-runner states without executing actions.
 - Added an OpenAPI 3.1 pilot API contract with endpoint-coverage tests against the server discovery schema.
 - Added a customer pilot operating kit covering kickoff, integration questionnaire, data boundary, weekly review, 30/60/90 plan, sample report, responsibilities, and go/no-go criteria.
+- Added a GitHub Actions pilot launch runbook and machine-readable pilot manifest covering local shadow mode, remote API mode, OIDC mode, evidence collection, and stop conditions.
 - Added scoring-invariant verification for recoverability and Model/Agent Fitness math, including generated JSON/Markdown reports and tests.
 - Added a CISO evidence walkthrough seed command, realistic seed action set, walkthrough documentation, and tests for review queue plus DLL evidence package readiness.
 - Added a CISO evidence package panel to the dependency-free pilot console for stored DLL package generation, JSON export, and Markdown export.

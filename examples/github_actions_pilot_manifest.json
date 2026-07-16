@@ -1,0 +1,97 @@
+{
+  "schema": "smerc.github_actions_pilot_manifest.v1",
+  "pilot_name": "github-actions-shadow-mode-platform-team",
+  "pilot_status": "proposed",
+  "pilot_boundary": {
+    "mode": "observe",
+    "not_production_certified": true,
+    "approved_data": [
+      "workflow metadata",
+      "repository identifier",
+      "environment name",
+      "action category",
+      "impact scope",
+      "recoverability ratings",
+      "rollback latency estimate",
+      "containment strength estimate",
+      "reviewer labels"
+    ],
+    "excluded_data": [
+      "production secrets",
+      "raw customer records",
+      "private prompts",
+      "full proprietary source code",
+      "regulated payloads without separate approval"
+    ]
+  },
+  "target_workflows": [
+    {
+      "workflow_name": "production-deployment",
+      "repository_scope": "one selected pilot repository",
+      "trigger_scope": [
+        "workflow_dispatch",
+        "pull_request"
+      ],
+      "initial_mode": "observe",
+      "evidence_artifact": "smerc-decision.json"
+    }
+  ],
+  "authentication_options": {
+    "preferred": "github-oidc",
+    "accepted": [
+      "github-oidc",
+      "scoped-static-credential"
+    ],
+    "static_credential_secret_name": "SMERC_API_KEY",
+    "api_url_variable_name": "SMERC_API_URL"
+  },
+  "customer_roles": [
+    "security owner",
+    "platform owner",
+    "GitHub Actions owner",
+    "pilot reviewer",
+    "business sponsor"
+  ],
+  "smerc_roles": [
+    "pilot setup support",
+    "weekly metrics review",
+    "evidence package preparation",
+    "recommendation for next pilot mode"
+  ],
+  "weekly_metrics": [
+    "scored_action_count",
+    "posture_distribution",
+    "integration_unavailable_count",
+    "reviewer_agreement_rate",
+    "override_rate",
+    "false_release_candidate_count",
+    "false_constraint_candidate_count",
+    "approval_latency_observation",
+    "top_reason_codes",
+    "top_recommended_controls"
+  ],
+  "stop_conditions": [
+    "metadata boundary violation",
+    "unapproved sensitive data collection",
+    "reviewers cannot interpret recommendations",
+    "unavailable evaluations make evidence unreliable",
+    "artifact retention exceeds approved period",
+    "security owner withdraws approval"
+  ],
+  "go_no_go_options": [
+    "stop",
+    "narrow",
+    "continue_observe",
+    "move_to_recommend"
+  ],
+  "required_repository_evidence": [
+    "integrations/github_actions/README.md",
+    "integrations/github_actions/remote_example_workflow.yml",
+    "docs/API_Deployment_Guide.md",
+    "docs/GitHub_OIDC_Operations.md",
+    "pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md",
+    "pilot_package/Weekly_Review_Template.md",
+    "pilot_package/Go_No_Go_Criteria.md"
+  ]
+}
+

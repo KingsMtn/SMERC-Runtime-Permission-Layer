@@ -99,6 +99,7 @@ Start here before reading the code:
 - `integrations/agent_handshake/README.md` shows how an agent runner should call the handshake API and map postures into safe execution states.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
 - `pilot_package/Pilot_Kickoff_Packet.md` and the adjacent pilot operating templates define how a customer pilot starts, runs, reviews, and reaches go/no-go decisions.
+- `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md` and `examples/github_actions_pilot_manifest.json` give a concrete first-workflow launch path for a GitHub Actions shadow-mode pilot.
 - `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md` gives a bounded design-partner pilot path and stop conditions.
 - `reports/Pilot_Level_5_Readiness_Assessment.md` shows the generated readiness assessment and unresolved gaps.
 - `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
@@ -163,6 +164,7 @@ The shortest accurate explanation is:
 41. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
 42. Run the Python and console tests.
 43. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+44. Review `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md`.
 
 ## What SMERC Evaluates
 
