@@ -31,6 +31,7 @@ The current build includes:
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
 - GitHub Actions OIDC verification with repository-, workflow-, ref-, environment-, and run-bound attribution
 - recoverability-aware scoring engine
+- model and agent fitness routing for selecting qualified executors
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
 - immutable pilot review records and denominator-aware metrics
@@ -74,6 +75,7 @@ Start here before reading the code:
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
+- `docs/Model_Agent_Fitness_Layer.md` explains how SMERC selects the qualified model, agent, or automation executor for a specific task.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
 - `docs/Governance_Report_Generator.md` explains how to assemble decision, route, control mapping, and DLL artifacts into one replayable review report.
@@ -119,31 +121,32 @@ The shortest accurate explanation is:
 10. Read `docs/Security_Model.md`.
 11. Inspect `reference_engine/recoverability_engine.py`.
 12. Read `docs/Engine_Profile_And_Trace.md`.
-13. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
-14. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
-15. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-16. Review `integrations/github_actions/README.md`.
-17. Read `docs/Pilot_Review_Metrics.md`.
-18. Inspect `pilot_console/README.md`.
-19. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
-20. Read `docs/Scoped_Workload_Identity.md`.
-21. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
-22. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
-23. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
-24. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
-25. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
-26. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
-27. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
-28. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
-29. Read `docs/Python_SDK_Quickstart.md`.
-30. Read `docs/JavaScript_SDK_Quickstart.md`.
-31. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-32. Review `reports/Control_Mapping_Library_Example.md`.
-33. Review `reports/Governance_Report_Example.md`.
-34. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-35. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-36. Run the Python and console tests.
-37. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+13. Inspect `reference_engine/model_fitness.py` and read `docs/Model_Agent_Fitness_Layer.md`.
+14. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
+15. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
+16. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+17. Review `integrations/github_actions/README.md`.
+18. Read `docs/Pilot_Review_Metrics.md`.
+19. Inspect `pilot_console/README.md`.
+20. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
+21. Read `docs/Scoped_Workload_Identity.md`.
+22. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
+23. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
+24. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
+25. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
+26. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
+27. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
+28. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
+29. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+30. Read `docs/Python_SDK_Quickstart.md`.
+31. Read `docs/JavaScript_SDK_Quickstart.md`.
+32. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+33. Review `reports/Control_Mapping_Library_Example.md`.
+34. Review `reports/Governance_Report_Example.md`.
+35. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+36. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+37. Run the Python and console tests.
+38. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
 
 ## What SMERC Evaluates
 
@@ -177,6 +180,17 @@ It outputs:
 - a control mapping report showing whether required controls map to native tool mechanisms and evidence requirements
 - a governance report that cross-checks decision, route, control mapping, and lifecycle artifacts
 - an optional Decision Lifecycle Ledger record for request, evidence, evaluation, review, execution, outcome, and learning recommendation
+
+## Model and Agent Fitness
+
+`reference_engine/model_fitness.py` evaluates which model, agent, or automation executor is qualified for a proposed task. It is not a generic model leaderboard. It scores executor fit against required capabilities, data sensitivity, tool authority, recoverability, reliability history, cost, latency, impact scope, and anomaly pressure.
+
+The output includes a recommended executor, allowed and blocked executors, execution posture, candidate rankings, model fitness score, risk-adjusted executor score, controls, reason codes, and a replay record.
+
+```bash
+python -m reference_engine.model_fitness examples/model_agent_routing_examples.json --pretty
+python -m unittest tests.test_model_fitness -v
+```
 
 ## Action Language
 
