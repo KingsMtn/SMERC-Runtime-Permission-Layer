@@ -245,3 +245,14 @@ The pilot should produce:
 
 The evidence package should clearly distinguish customer-observed data from synthetic examples and illustrative values.
 
+## Summarize Decision Artifacts
+
+After the workflow has produced one or more `smerc-decision.json` artifacts, download the JSON files into one local directory and generate a pilot artifact summary:
+
+```bash
+python -m reference_engine.github_actions_pilot_summary downloaded-smerc-decisions \
+  --json-output reports/github_actions_pilot_artifact_summary.json \
+  --markdown-output reports/GitHub_Actions_Pilot_Artifact_Summary.md
+```
+
+The summary reports posture distribution, unavailable evaluations, would-fail count, average risk and confidence, top reason codes, and top controls. It intentionally does not claim false release, false constraint, reviewer agreement, or incident reduction without customer review labels and outcome evidence.

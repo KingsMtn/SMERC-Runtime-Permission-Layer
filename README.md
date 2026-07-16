@@ -391,6 +391,7 @@ python -m reference_engine.runtime_benchmark_suite examples/proxy_incident_repla
 python -m reference_engine.benchmark_ledger_builder reports/runtime_governance_benchmark.json --pretty
 python -m reference_engine.pilot_ledger_intake reports/runtime_benchmark_dll_bundle.json examples/pilot_ledger_intake_example.json --decision-id "dll:proxy-deploy-001::baseline" --pretty
 python -m reference_engine.pilot_ledger_metrics reports/pilot_ledger_intake_result.json --pretty
+python -m reference_engine.github_actions_pilot_summary test_outputs/github_action_remote
 python -m unittest discover -s tests
 ```
 
@@ -532,6 +533,14 @@ python -m reference_engine.pilot_report \
   examples/github_actions_shadow_mode_scenarios.json \
   --json-output reports/github_actions_shadow_mode_results.json \
   --markdown-output reports/GitHub_Actions_Shadow_Mode_Pilot_Report.md
+```
+
+Summarize downloaded `smerc-decision.json` artifacts from an actual GitHub Actions pilot:
+
+```bash
+python -m reference_engine.github_actions_pilot_summary downloaded-smerc-decisions \
+  --json-output reports/github_actions_pilot_artifact_summary.json \
+  --markdown-output reports/GitHub_Actions_Pilot_Artifact_Summary.md
 ```
 
 Generate a recoverability-engine evidence report:
