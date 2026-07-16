@@ -75,6 +75,19 @@ Score each category from 0 to 3.
 | 16-21 | Moderate fit | Offer a 30-day shadow-mode pilot if reviewer time is confirmed. |
 | 22-24 | Strong fit | Offer a 90-day design partner pilot with DLL evidence package. |
 
+## Machine-Readable Assessment
+
+Use `examples/design_partner_fit_example.json` and `reference_engine.design_partner_fit` to score a prospect consistently:
+
+```bash
+python -m reference_engine.design_partner_fit examples/design_partner_fit_example.json --pretty
+python -m reference_engine.design_partner_fit examples/design_partner_fit_example.json \
+  --json-output reports/design_partner_fit.json \
+  --markdown-output reports/Design_Partner_Fit_Assessment.md
+```
+
+The generated assessment is a qualification screen only. It is not proof of buyer intent, product-market fit, or pilot success.
+
 ## Recommended Offer By Fit
 
 | Fit | Offer |
@@ -104,4 +117,3 @@ Before a paid pilot starts, confirm:
 A design partner is not a customer reference by default. Do not use the company's name, results, screenshots, or workflow details externally unless the company approves that use in writing.
 
 Do not treat design-partner interest as proof of product-market fit. The design partner is evidence collection, not the final market answer.
-
