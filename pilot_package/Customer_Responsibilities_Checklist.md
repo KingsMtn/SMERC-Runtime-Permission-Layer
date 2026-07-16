@@ -56,6 +56,8 @@ Reviewers should:
 - flag confusing reason codes
 - attend weekly review or provide asynchronous notes
 
+Reviewer labels should be entered or approved by humans. AI-generated labels may be used as drafts, but they should not be treated as final pilot evidence without human approval.
+
 ## Business Responsibilities
 
 Customer sponsor should:
@@ -64,6 +66,7 @@ Customer sponsor should:
 - protect team time for weekly review
 - decide at day 30, 60, or 90 whether to stop, narrow, continue, or expand
 - avoid treating pilot results as compliance certification
+- confirm that AI agents and automation do not own go/no-go decisions
 
 ## SMERC Responsibilities
 

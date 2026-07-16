@@ -36,6 +36,12 @@ SMERC-side responsibilities:
 - help interpret pilot reports
 - produce final findings package
 
+## Human/AI Operating Model
+
+The pilot should be human-owned and automation-assisted. AI agents, bots, scripts, and GitHub Actions may propose actions and generate metadata. SMERC may score those actions. Customer humans remain accountable for pilot scope, data boundary, reviewer labels, false release and false constraint judgments, and go/no-go decisions.
+
+Use `pilot_package/Human_AI_Pilot_Operating_Model.md` as the operating model before the first workflow is connected.
+
 ## Pilot Boundary
 
 Recommended scope:
