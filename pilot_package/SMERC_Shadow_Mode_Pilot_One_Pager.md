@@ -32,9 +32,18 @@ Decision reports include risk score, confidence score, reason codes, recommended
 
 | Package | Price | Scope |
 | --- | ---: | --- |
-| Technical Review | `$0-$2,500` | Repo review, integration walkthrough, feedback call, fit assessment. |
-| 30-Day Shadow-Mode Pilot | `$7,500` | One GitHub Actions workflow, observe mode, weekly review, final findings report. |
-| 90-Day Design Partner Pilot | `$25,000+` | Multiple workflows, observe/recommend/enforce-readiness, calibration support, executive report. |
+| CISO Technical Review | `$0-$2,500` | Repo review, integration walkthrough, fit assessment, and pilot scoping. Free review should be reserved for serious design-partner candidates. |
+| 30-Day Shadow-Mode Pilot | `$7,500-$15,000` | One GitHub Actions workflow, observe mode, weekly review, decision artifacts, reviewer labels, and final findings report. |
+| 90-Day Design Partner Pilot | `$25,000-$50,000` | Multiple workflows, observe/recommend/enforce-readiness, calibration support, Decision Lifecycle Ledger evidence package, and executive report. |
+| Enterprise Expansion | Custom | Additional workflows, API usage, integration support, security review, retention requirements, and customer-specific deployment needs. |
+
+## Pricing Rationale
+
+SMERC should not sell the Decision Lifecycle Ledger as a standalone compliance artifact before customer evidence exists. The commercial offer is the pilot outcome:
+
+> In 30 to 90 days, determine whether recoverability-aware scoring changes reviewer judgment in a useful, measurable way before AI-agent or automation actions create side effects.
+
+The ledger is the evidence engine underneath that promise. It becomes valuable when it contains real decision artifacts, human review labels, override reasons, execution outcomes, rollback observations, and delayed outcome review.
 
 ## What Is Included
 
@@ -42,11 +51,14 @@ Decision reports include risk score, confidence score, reason codes, recommended
 - action metadata review
 - posture reports
 - reason-code review
+- Decision Lifecycle Ledger evidence path for paid pilots
 - weekly review for paid pilots
 - final findings and enforcement-readiness recommendation
 
 ## What Is Not Included
 
+- guarantee of incident reduction
+- validated production accuracy
 - production enforcement before calibration
 - compliance certification
 - replacement of IAM, OPA, code review, branch protection, or existing approvals
