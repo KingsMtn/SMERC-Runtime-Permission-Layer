@@ -32,6 +32,7 @@ The current build includes:
 - GitHub Actions OIDC verification with repository-, workflow-, ref-, environment-, and run-bound attribution
 - recoverability-aware scoring engine
 - model and agent fitness routing for selecting qualified executors
+- machine-readable SMERC Beacon manifest for AI/tool discovery
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
 - immutable pilot review records and denominator-aware metrics
@@ -76,6 +77,7 @@ Start here before reading the code:
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
 - `docs/Model_Agent_Fitness_Layer.md` explains how SMERC selects the qualified model, agent, or automation executor for a specific task.
+- `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
 - `docs/Governance_Report_Generator.md` explains how to assemble decision, route, control mapping, and DLL artifacts into one replayable review report.
@@ -122,31 +124,32 @@ The shortest accurate explanation is:
 11. Inspect `reference_engine/recoverability_engine.py`.
 12. Read `docs/Engine_Profile_And_Trace.md`.
 13. Inspect `reference_engine/model_fitness.py` and read `docs/Model_Agent_Fitness_Layer.md`.
-14. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
-15. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
-16. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-17. Review `integrations/github_actions/README.md`.
-18. Read `docs/Pilot_Review_Metrics.md`.
-19. Inspect `pilot_console/README.md`.
-20. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
-21. Read `docs/Scoped_Workload_Identity.md`.
-22. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
-23. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
-24. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
-25. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
-26. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
-27. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
-28. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
-29. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
-30. Read `docs/Python_SDK_Quickstart.md`.
-31. Read `docs/JavaScript_SDK_Quickstart.md`.
-32. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-33. Review `reports/Control_Mapping_Library_Example.md`.
-34. Review `reports/Governance_Report_Example.md`.
-35. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-36. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-37. Run the Python and console tests.
-38. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+14. Inspect `reference_engine/beacon.py` and read `docs/SMERC_Beacon.md`.
+15. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
+16. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
+17. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+18. Review `integrations/github_actions/README.md`.
+19. Read `docs/Pilot_Review_Metrics.md`.
+20. Inspect `pilot_console/README.md`.
+21. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
+22. Read `docs/Scoped_Workload_Identity.md`.
+23. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
+24. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
+25. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
+26. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
+27. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
+28. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
+29. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
+30. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+31. Read `docs/Python_SDK_Quickstart.md`.
+32. Read `docs/JavaScript_SDK_Quickstart.md`.
+33. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+34. Review `reports/Control_Mapping_Library_Example.md`.
+35. Review `reports/Governance_Report_Example.md`.
+36. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+37. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+38. Run the Python and console tests.
+39. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
 
 ## What SMERC Evaluates
 
@@ -190,6 +193,15 @@ The output includes a recommended executor, allowed and blocked executors, execu
 ```bash
 python -m reference_engine.model_fitness examples/model_agent_routing_examples.json --pretty
 python -m unittest tests.test_model_fitness -v
+```
+
+## SMERC Beacon
+
+`examples/smerc_beacon.json` is a machine-readable discovery manifest for AI agents, automation tools, reviewers, and search systems. It points to canonical SMERC resources, declares governance surfaces, lists discovery endpoints, describes Model and Agent Fitness inputs and outputs, and preserves non-claims so tools do not overstate the project.
+
+```bash
+python -m reference_engine.beacon examples/smerc_beacon.json --pretty
+python -m unittest tests.test_beacon -v
 ```
 
 ## Action Language

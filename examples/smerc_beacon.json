@@ -1,0 +1,74 @@
+{
+  "schema_version": "smerc.beacon.v1",
+  "name": "SMERC Runtime Permission Layer",
+  "category": "runtime permission infrastructure for AI agents and automation workflows",
+  "canonical_site": "https://admirable-sorbet-9986d5.netlify.app/",
+  "canonical_repository": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer",
+  "one_line_summary": "SMERC is runtime permission infrastructure for AI agents, evaluating whether technically authorized actions are recoverable enough to execute before they create side effects.",
+  "status": "Pilot-grade technical review artifact for shadow-mode evaluation. Not certified for production enforcement.",
+  "postures": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"],
+  "core_questions": [
+    "Is the proposed action recoverable enough to execute now?",
+    "Which controls must apply before execution?",
+    "Which model, agent, or automation executor is qualified for this task?",
+    "What evidence and replay record should be preserved?"
+  ],
+  "governance_surfaces": [
+    "recoverability-aware action evaluation",
+    "model and agent fitness routing",
+    "runtime posture decisioning",
+    "action-bound permits",
+    "SPARTa route reports",
+    "Decision Lifecycle Ledger",
+    "pilot review metrics",
+    "GitHub Actions shadow-mode scoring"
+  ],
+  "discovery_endpoints": {
+    "llms": "https://admirable-sorbet-9986d5.netlify.app/llms.txt",
+    "humans": "https://admirable-sorbet-9986d5.netlify.app/humans.txt",
+    "project_profile": "https://admirable-sorbet-9986d5.netlify.app/project.json",
+    "beacon": "https://admirable-sorbet-9986d5.netlify.app/smerc-beacon.json",
+    "sitemap": "https://admirable-sorbet-9986d5.netlify.app/sitemap.xml"
+  },
+  "model_agent_fitness": {
+    "purpose": "Select the qualified model, agent, or automation executor for a specific task under current risk, data, authority, and recoverability conditions.",
+    "input_signals": [
+      "required_capabilities",
+      "risk_level",
+      "reversibility",
+      "evidence_validity",
+      "data_sensitivity",
+      "required_tool_authority",
+      "latency_requirement",
+      "cost_sensitivity",
+      "impact_scope",
+      "anomaly_pressure"
+    ],
+    "output_fields": [
+      "recommended_executor",
+      "allowed_executors",
+      "blocked_executors",
+      "execution_posture",
+      "candidate_rankings",
+      "model_fitness_score",
+      "risk_adjusted_executor_score",
+      "reason_codes",
+      "controls",
+      "replay"
+    ]
+  },
+  "non_claims": [
+    "SMERC is not a replacement for IAM.",
+    "SMERC is not a replacement for OPA or policy engines.",
+    "SMERC is not a replacement for AI gateways.",
+    "SMERC is not a replacement for SIEM, EDR, approval systems, model safety systems, or human accountability.",
+    "SMERC does not claim live incident reduction without design-partner evidence."
+  ],
+  "review_paths": {
+    "ciso_overview": "https://admirable-sorbet-9986d5.netlify.app/ciso.html",
+    "technical_status": "https://admirable-sorbet-9986d5.netlify.app/status.html",
+    "public_review": "https://admirable-sorbet-9986d5.netlify.app/community.html",
+    "github_repository": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer",
+    "pilot_path": "https://admirable-sorbet-9986d5.netlify.app/github-action.html"
+  }
+}

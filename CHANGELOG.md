@@ -4,6 +4,7 @@
 
 - Added a Model and Agent Fitness Layer that scores candidate executors by task fit, data boundary, tool authority, recoverability, reliability history, cost, and latency before selecting an execution posture.
 - Added model and agent routing examples, documentation, CLI support, and tests.
+- Added `smerc.beacon.v1`, a machine-readable public discovery manifest for agents, tools, reviewers, and search systems, with validation and overclaim checks.
 - Added a CISO evidence walkthrough seed command, realistic seed action set, walkthrough documentation, and tests for review queue plus DLL evidence package readiness.
 - Added a CISO evidence package panel to the dependency-free pilot console for stored DLL package generation, JSON export, and Markdown export.
 - Added Python and JavaScript SDK helpers for retained DLL storage, stored certificate issuance, and pilot evidence package generation.
