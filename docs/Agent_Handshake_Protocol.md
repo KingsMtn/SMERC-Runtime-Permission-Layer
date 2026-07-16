@@ -57,6 +57,22 @@ python -m reference_engine.agent_handshake examples/agent_handshake_request.json
 python -m unittest tests.test_agent_handshake -v
 ```
 
+## API
+
+The authenticated runtime API exposes the same protocol at `POST /v1/agent/handshake`.
+
+```bash
+export SMERC_API_KEYS="pilot-team=development-secret-with-at-least-24-chars"
+python api_server.py --host 127.0.0.1 --port 8788 --audit-db .runtime/smerc-api.sqlite
+
+curl -X POST http://127.0.0.1:8788/v1/agent/handshake \
+  -H "Authorization: Bearer development-secret-with-at-least-24-chars" \
+  -H "Content-Type: application/json" \
+  --data @examples/agent_handshake_request.json
+```
+
+The endpoint requires `actions.evaluate` scope, evaluates the handshake with the tenant's active recoverability policy, returns the replay record in the response, and records an `agent.handshake.evaluated` security event. The handshake response is not forced into the standard action-decision table because it combines beacon, agent, routing, and action evidence rather than representing only one action posture.
+
 ## Boundary
 
 The handshake is a pilot-grade reference protocol. It does not authenticate remote agents by itself, replace identity infrastructure, prove agent honesty, or provide production enforcement. In a deployment, it should be paired with scoped workload identity, signed permits, SPARTa routing, Decision Lifecycle Ledger records, and customer-specific policy.

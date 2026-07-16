@@ -25,6 +25,7 @@ from reference_engine.audit_store import (
     ReviewConflictError,
 )
 from reference_engine.action_language import ACTION_VERSION, DECISION_VERSION, action_hash, evaluate_language_action
+from reference_engine.agent_handshake import HANDSHAKE_VERSION, AgentHandshakeEngine
 from reference_engine.access_token import (
     ACCESS_TOKEN_VERSION,
     AccessTokenError,
@@ -463,6 +464,12 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 self._write_json(self._route_sparta(principal, payload), request_id=request_id)
                 return
 
+            if path == "/v1/agent/handshake":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Agent handshake expects one JSON object.")
+                self._write_json(self._evaluate_agent_handshake(principal, payload), request_id=request_id)
+                return
+
             if path == "/v1/pilot/dll/intake":
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Pilot DLL intake expects one JSON object.")
@@ -535,7 +542,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 return
 
             if path not in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch", "/v1/language/evaluate"}:
-                raise APIError(HTTPStatus.NOT_FOUND, "not_found", "Use /evaluate, /batch, or a review endpoint.")
+                raise APIError(HTTPStatus.NOT_FOUND, "not_found", "Use /evaluate, /batch, /v1/agent/handshake, or a review endpoint.")
 
             if path == "/v1/language/evaluate":
                 if not isinstance(payload, dict):
@@ -1022,6 +1029,34 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             },
         )
         return route
+
+    def _evaluate_agent_handshake(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        try:
+            result = AgentHandshakeEngine(
+                recoverability_engine=self.server.engine_for(principal.tenant_id)
+            ).evaluate(payload)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_agent_handshake_request", str(exc)) from exc
+        identity = principal.public_identity()
+        result["tenant_id"] = principal.tenant_id
+        result["authenticated_principal"] = identity
+        result["replay"]["tenant_id"] = principal.tenant_id
+        result["replay"]["authenticated_principal"] = identity
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "agent.handshake.evaluated",
+            result["replay_id"],
+            {
+                "handshake_id": result["handshake_id"],
+                "agent_id": result["agent_id"],
+                "handshake_posture": result["handshake_posture"],
+                "executor_posture": result["executor_posture"],
+                "action_posture": result["action_posture"],
+                "recommended_executor": result["recommended_executor"],
+            },
+        )
+        return result
 
     def _apply_pilot_dll_intake(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
         allowed = {"ledger", "intake", "decision_id"}
@@ -1679,6 +1714,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             return "permits.consume"
         if path == "/v1/sparta/route":
             return "routes.write"
+        if path == "/v1/agent/handshake":
+            return "actions.evaluate"
         if path == "/v1/pilot/dll/intake":
             return "reviews.write"
         if path == "/v1/pilot/dll/metrics":
@@ -1826,6 +1863,7 @@ def schema() -> Dict[str, Any]:
         "language_versions": {
             "action": ACTION_VERSION,
             "decision": DECISION_VERSION,
+            "agent_handshake": HANDSHAKE_VERSION,
             "permit": PERMIT_VERSION,
             "control_evidence": CONTROL_EVIDENCE_VERSION,
             "access_token": ACCESS_TOKEN_VERSION,
@@ -1884,6 +1922,7 @@ def schema() -> Dict[str, Any]:
             "POST /v1/auth/token": "exchange a static bootstrap credential for a short-lived narrowed token",
             "POST /v1/auth/github": "exchange one verified GitHub Actions OIDC token for a workload-bound session",
             "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",
+            "POST /v1/agent/handshake": "validate beacon discovery, executor fitness, and action posture before an agent acts",
             "POST /v1/permits/issue": "issue a short-lived action-bound permit for an enforceable decision",
             "POST /v1/permits/prepare": "authenticate an issued, unconsumed permit before native controls run",
             "POST /v1/permits/consume": "verify control evidence and atomically consume an action-bound permit",

@@ -24,6 +24,7 @@ POLICY_EXAMPLE = json.loads(
 DOMAIN_PROFILE_DIR = ROOT / "examples" / "domain_profiles"
 SPARTA_REGISTRY = load_sparta_adapter_registry(ROOT / "examples" / "sparta" / "adapter_registry.json")
 SPARTA_PLAN = json.loads((ROOT / "examples" / "sparta" / "github_actions_deploy_plan.json").read_text(encoding="utf-8"))
+AGENT_HANDSHAKE_EXAMPLE = json.loads((ROOT / "examples" / "agent_handshake_request.json").read_text(encoding="utf-8"))
 PILOT_DLL_BUNDLE = json.loads((ROOT / "reports" / "runtime_benchmark_dll_bundle.json").read_text(encoding="utf-8"))
 PILOT_DLL_INTAKE = json.loads((ROOT / "examples" / "pilot_ledger_intake_example.json").read_text(encoding="utf-8"))
 
@@ -36,7 +37,7 @@ class APIServerTests(unittest.TestCase):
             0,
             audit_db=":memory:",
             api_keys={"alpha": "alpha-secret", "beta": "beta-secret"},
-            max_body_bytes=4096,
+            max_body_bytes=8192,
             max_batch_size=2,
             cors_origins=["https://console.example"],
             sparta_adapter_registry=SPARTA_REGISTRY,
@@ -94,6 +95,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/evaluate", body["endpoints"])
         self.assertIn("POST /v1/language/evaluate", body["endpoints"])
         self.assertEqual(body["language_versions"]["action"], "smerc.action.v1")
+        self.assertEqual(body["language_versions"]["agent_handshake"], "smerc.agent_handshake.v1")
         self.assertEqual(body["language_versions"]["permit"], "smerc.permit.v1")
         self.assertEqual(
             body["language_versions"]["control_evidence"],
@@ -120,6 +122,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/permits/consume", body["endpoints"])
         self.assertIn("POST /v1/auth/token", body["endpoints"])
         self.assertIn("POST /v1/auth/github", body["endpoints"])
+        self.assertIn("POST /v1/agent/handshake", body["endpoints"])
         self.assertIn("POST /v1/sparta/route", body["endpoints"])
         self.assertIn("POST /v1/pilot/dll/intake", body["endpoints"])
         self.assertIn("POST /v1/pilot/dll/metrics", body["endpoints"])
@@ -200,6 +203,51 @@ class APIServerTests(unittest.TestCase):
         )
         self.assertEqual(status, 400)
         self.assertEqual(body["error"], "bad_request")
+
+    def test_agent_handshake_endpoint_requires_bearer_authentication(self):
+        status, _, body = self.request_json("/v1/agent/handshake", method="POST", payload=AGENT_HANDSHAKE_EXAMPLE)
+        self.assertEqual(status, 401)
+        self.assertEqual(body["error"], "authentication_required")
+
+    def test_agent_handshake_endpoint_evaluates_and_records_security_event(self):
+        status, _, body = self.request_json(
+            "/v1/agent/handshake",
+            method="POST",
+            payload=AGENT_HANDSHAKE_EXAMPLE,
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(body["schema_version"], "smerc.agent_handshake.v1")
+        self.assertEqual(body["tenant_id"], "alpha")
+        self.assertEqual(body["authenticated_principal"]["principal_id"], "legacy-alpha")
+        self.assertTrue(body["beacon_valid"])
+        self.assertEqual(body["handshake_posture"], "THROTTLE")
+        self.assertEqual(body["recommended_executor"], "github_deployment_agent")
+        self.assertEqual(body["replay"]["tenant_id"], "alpha")
+        self.assertIn("fitness_replay_id", body["replay"])
+        self.assertIn("action_replay_id", body["replay"])
+
+        events_status, _, events = self.request_json("/v1/security-events?limit=5", key="alpha-secret")
+        self.assertEqual(events_status, 200)
+        self.assertTrue(
+            any(
+                event["event_type"] == "agent.handshake.evaluated"
+                and event["resource_id"] == body["replay_id"]
+                for event in events["events"]
+            )
+        )
+
+    def test_agent_handshake_endpoint_rejects_invalid_contract(self):
+        payload = dict(AGENT_HANDSHAKE_EXAMPLE)
+        payload["schema_version"] = "wrong.version"
+        status, _, body = self.request_json(
+            "/v1/agent/handshake",
+            method="POST",
+            payload=payload,
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_agent_handshake_request")
 
     def test_sparta_route_endpoint_routes_stored_decision_with_direct_plan(self):
         status, _, decision = self.request_json(
@@ -336,7 +384,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(body["error"], "unsupported_media_type")
 
         oversized = dict(EXAMPLES[0])
-        oversized["context"] = {"note": "x" * 5000}
+        oversized["context"] = {"note": "x" * 10000}
         status, _, body = self.request_json(
             "/v1/evaluate", method="POST", payload=oversized, key="alpha-secret"
         )

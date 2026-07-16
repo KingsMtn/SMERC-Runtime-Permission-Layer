@@ -220,6 +220,8 @@ python -m reference_engine.agent_handshake examples/agent_handshake_request.json
 python -m unittest tests.test_agent_handshake -v
 ```
 
+The same protocol is available through the authenticated runtime service at `POST /v1/agent/handshake` with `actions.evaluate` scope. The endpoint returns the combined handshake posture and replay record, then records an `agent.handshake.evaluated` security event for review.
+
 The reference handshake is pilot-grade. It does not authenticate remote agents by itself or replace scoped workload identity, signed permits, SPARTa routing, Decision Lifecycle Ledger evidence, or customer-specific policy.
 
 ## Scoring Invariants
