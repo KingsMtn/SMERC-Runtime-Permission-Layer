@@ -16,6 +16,10 @@ AI agents and automation are moving closer to high-impact workflows: code change
 
 GitHub Actions shadow-mode scoring for AI-assisted code, deployment, and infrastructure workflows.
 
+## First Pilot Path
+
+Use `pilot_package/First_Pilot_Path.md` when a prospect asks what happens next. It defines the week-zero qualification screen, week-one observe setup, 30-day review, success metrics, evidence package, and commercial boundary for the first paid pilot.
+
 ## What SMERC Does
 
 Before a proposed action executes, SMERC returns a replayable posture:

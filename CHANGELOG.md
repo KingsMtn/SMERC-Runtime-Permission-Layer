@@ -14,6 +14,7 @@
 - Added a customer pilot operating kit covering kickoff, integration questionnaire, data boundary, weekly review, 30/60/90 plan, sample report, responsibilities, and go/no-go criteria.
 - Added a design-partner qualification checklist that screens workflow fit, recoverability pain, metadata readiness, reviewer capacity, buyer ownership, data boundary, measurement readiness, and urgency before offering a pilot.
 - Added a machine-readable design-partner fit scorer with example input, CLI JSON/Markdown output, blocker detection, offer recommendation, and tests.
+- Added a first-pilot path that defines week-zero qualification, week-one observe setup, 30-day review, success metrics, evidence package, and commercial boundary.
 - Added a Human/AI Pilot Operating Model defining the split between AI-proposed actions, SMERC scoring, and human-owned validation, labels, accountability, and go/no-go decisions.
 - Added a GitHub Actions pilot launch runbook and machine-readable pilot manifest covering local shadow mode, remote API mode, OIDC mode, evidence collection, and stop conditions.
 - Added a GitHub Actions pilot artifact summarizer that converts downloaded `smerc-decision.json` reports into JSON/Markdown operating summaries without claiming customer outcome evidence.

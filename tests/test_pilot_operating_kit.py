@@ -17,6 +17,7 @@ REQUIRED_FILES = [
     "Go_No_Go_Criteria.md",
     "Design_Partner_Qualification_Checklist.md",
     "Pricing_And_Pilot_Evidence_Position.md",
+    "First_Pilot_Path.md",
 ]
 
 
@@ -67,6 +68,18 @@ class PilotOperatingKitTests(unittest.TestCase):
         self.assertIn("reviewer agreement", checklist.lower())
         self.assertIn("metadata-only", checklist)
         self.assertIn("Do not pursue a paid pilot", checklist)
+
+    def test_first_pilot_path_is_specific_and_bounded(self):
+        path = (PILOT_PACKAGE / "First_Pilot_Path.md").read_text(encoding="utf-8")
+        self.assertIn("Week Zero: Qualification", path)
+        self.assertIn("Week One: Observe", path)
+        self.assertIn("30-Day Decision", path)
+        self.assertIn("GitHub Actions", path)
+        self.assertIn("metadata-only", path)
+        self.assertIn("not require production secrets", path)
+        self.assertIn("reviewer agreement rate", path)
+        self.assertIn("$7,500-$15,000", path)
+        self.assertIn("not about proving that SMERC is universally correct", path)
 
 
 if __name__ == "__main__":
