@@ -74,6 +74,9 @@ class SMERCClient:
             idempotency_key=idempotency_key,
         )
 
+    def agent_handshake(self, handshake: Mapping[str, Any]) -> JsonObject:
+        return self._request("POST", "/v1/agent/handshake", body=dict(handshake))
+
     def batch(self, actions: list[Mapping[str, Any]], *, idempotency_key: Optional[str] = None) -> JsonObject:
         return self._request(
             "POST",

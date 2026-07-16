@@ -13,6 +13,7 @@ EXAMPLE = json.loads((ROOT / "examples" / "recoverability_single_action.json").r
 LANGUAGE_EXAMPLE = json.loads(
     (ROOT / "examples" / "action_language" / "production_database_change.json").read_text(encoding="utf-8")
 )
+AGENT_HANDSHAKE_EXAMPLE = json.loads((ROOT / "examples" / "agent_handshake_request.json").read_text(encoding="utf-8"))
 
 
 def example_ledger_for(tenant_id: str, decision_id: str):
@@ -80,6 +81,18 @@ class PythonSDKTests(unittest.TestCase):
 
         self.assertEqual(first["language_version"], "smerc.decision.v1")
         self.assertEqual(first["replay_id"], second["replay_id"])
+
+    def test_agent_handshake_calls_runtime_api(self):
+        client = self.client()
+
+        handshake = client.agent_handshake(AGENT_HANDSHAKE_EXAMPLE)
+
+        self.assertEqual(handshake["schema_version"], "smerc.agent_handshake.v1")
+        self.assertEqual(handshake["tenant_id"], "alpha")
+        self.assertEqual(handshake["handshake_posture"], "THROTTLE")
+        self.assertEqual(handshake["recommended_executor"], "github_deployment_agent")
+        self.assertIn("fitness_replay_id", handshake["replay"])
+        self.assertIn("action_replay_id", handshake["replay"])
 
     def test_batch_review_queue_review_and_metrics(self):
         client = self.client()

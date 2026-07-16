@@ -50,6 +50,10 @@ export class SMERCClient {
     });
   }
 
+  agentHandshake(handshake) {
+    return this.request('POST', '/v1/agent/handshake', { body: handshake });
+  }
+
   batch(actions, options = {}) {
     return this.request('POST', '/v1/batch', { body: actions, idempotencyKey: options.idempotencyKey });
   }
