@@ -36,6 +36,7 @@ The current build includes:
 - Agent Handshake Protocol connecting beacon discovery to executor routing and action posture evaluation
 - scoring-invariant verification for recoverability and executor fitness math
 - authenticated, tenant-scoped REST API service
+- OpenAPI 3.1 pilot API contract
 - SQLite pilot audit store with idempotent decision replay
 - immutable pilot review records and denominator-aware metrics
 - dependency-free pilot review console
@@ -78,6 +79,7 @@ Start here before reading the code:
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
+- `schemas/smerc-runtime-api-openapi-v1.json` gives integration partners a reviewable OpenAPI 3.1 contract for the pilot API.
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
 - `docs/Model_Agent_Fitness_Layer.md` explains how SMERC selects the qualified model, agent, or automation executor for a specific task.
 - `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.

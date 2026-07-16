@@ -64,6 +64,8 @@ curl http://127.0.0.1:8788/v1/decisions/REPLAY_ID \
 
 ## Endpoint Contract
 
+The reviewable OpenAPI 3.1 contract is `schemas/smerc-runtime-api-openapi-v1.json`. It is a pilot integration contract for external review and SDK work; the live server's discovery response remains available at `GET /schema` and `GET /v1/schema`.
+
 | Endpoint | Authentication | Purpose |
 | --- | --- | --- |
 | `GET /health` | No | Process liveness |
@@ -73,10 +75,19 @@ curl http://127.0.0.1:8788/v1/decisions/REPLAY_ID \
 | `POST /v1/auth/token` | Static Bearer | Exchange a bootstrap credential for a short-lived narrowed session |
 | `POST /v1/auth/github` | GitHub OIDC Bearer | Verify a trusted GitHub job and issue one workload-bound session |
 | `POST /v1/language/evaluate` | Bearer | Validate, compile, evaluate, and store one `smerc.action.v1` envelope |
+| `POST /v1/agent/handshake` | Bearer | Validate beacon discovery, agent declaration, executor fitness, and action posture before an agent acts |
 | `POST /v1/permits/issue` | Bearer | Issue one short-lived action-bound permit for an eligible enforcement decision |
 | `POST /v1/permits/prepare` | Bearer | Authenticate and reserve a permit before native controls run |
 | `POST /v1/permits/consume` | Bearer | Verify configured adapter evidence and atomically consume a permit |
 | `POST /v1/sparta/route` | Bearer | Route one stored decision through a direct plan or configured adapter |
+| `POST /v1/pilot/dll/intake` | Bearer | Append pilot review, execution, outcome, or learning evidence to a supplied DLL |
+| `POST /v1/pilot/dll/metrics` | Bearer | Summarize supplied DLL pilot evidence |
+| `POST /v1/pilot/dll/certificate` | Bearer | Issue a digest-bound certificate from supplied DLL evidence |
+| `POST /v1/pilot/dll/ledgers` | Bearer | Persist a verified pilot Decision Lifecycle Ledger |
+| `GET /v1/pilot/dll/ledgers` | Bearer | List stored tenant-scoped Decision Lifecycle Ledgers |
+| `GET /v1/pilot/dll/ledgers/{decision_id}` | Bearer | Retrieve one stored tenant-scoped Decision Lifecycle Ledger |
+| `POST /v1/pilot/dll/ledgers/{decision_id}/certificate` | Bearer | Issue a Decision Certificate from one stored DLL |
+| `POST /v1/pilot/evidence-packages` | Bearer | Build a CISO-readable evidence package from a stored DLL |
 | `POST /v1/batch` | Bearer | Evaluate and store a bounded batch |
 | `GET /v1/decisions` | Bearer | List decision summaries for the authenticated tenant |
 | `GET /v1/decisions/{replay_id}` | Bearer | Retrieve one decision for the authenticated tenant |

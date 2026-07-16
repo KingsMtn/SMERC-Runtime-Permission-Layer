@@ -1,0 +1,928 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SMERC Runtime Permission API",
+    "version": "smerc.runtime-api.v1",
+    "summary": "Pilot-grade runtime permission API for recoverability-aware AI-agent and automation governance.",
+    "description": "This contract documents the external pilot API surface. It is intended for technical review, SDK integration, and shadow-mode pilots. It is not a production certification, managed service SLA, or compliance attestation."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8788",
+      "description": "Local development API"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Health"
+    },
+    {
+      "name": "Schema"
+    },
+    {
+      "name": "Evaluation"
+    },
+    {
+      "name": "Agent Governance"
+    },
+    {
+      "name": "Replay"
+    },
+    {
+      "name": "Review"
+    },
+    {
+      "name": "Permits"
+    },
+    {
+      "name": "Routing"
+    },
+    {
+      "name": "Pilot Evidence"
+    },
+    {
+      "name": "Security Events"
+    }
+  ],
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Unauthenticated liveness check",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service is reachable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ready": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Unauthenticated persistence readiness check",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Persistence layer is ready",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/schema": {
+      "get": {
+        "tags": ["Schema"],
+        "summary": "Runtime API discovery schema",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Endpoint, posture, version, field, and scope discovery response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchemaResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/evaluate": {
+      "post": {
+        "tags": ["Evaluation"],
+        "summary": "Evaluate one recoverability action request",
+        "description": "Requires actions.evaluate scope. Persists a tenant-scoped replayable decision.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecoverabilityActionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recoverability decision",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecoverabilityDecision"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/language/evaluate": {
+      "post": {
+        "tags": ["Evaluation"],
+        "summary": "Validate and evaluate one SMERC Action Language envelope",
+        "description": "Requires actions.evaluate scope. Compiles the action-language request through the runtime engine and persists the decision.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "smerc-action-language-v1.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Versioned SMERC decision",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "smerc-decision-language-v1.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent/handshake": {
+      "post": {
+        "tags": ["Agent Governance"],
+        "summary": "Evaluate a discovered agent handshake before action",
+        "description": "Requires actions.evaluate scope. Validates beacon discovery, agent declaration, executor fitness, recoverability posture, controls, reason codes, and replay IDs before an agent or automation runner acts.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentHandshakeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent handshake result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentHandshakeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v1/batch": {
+      "post": {
+        "tags": ["Evaluation"],
+        "summary": "Evaluate a bounded action batch",
+        "description": "Requires actions.evaluate scope.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/components/schemas/RecoverabilityActionRequest"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Batch decision envelope"
+          }
+        }
+      }
+    },
+    "/v1/decisions": {
+      "get": {
+        "tags": ["Replay"],
+        "summary": "List tenant-scoped decision summaries",
+        "description": "Requires decisions.read scope.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          },
+          {
+            "name": "posture",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Posture"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Decision summaries"
+          }
+        }
+      }
+    },
+    "/v1/decisions/{replay_id}": {
+      "get": {
+        "tags": ["Replay"],
+        "summary": "Retrieve one tenant-scoped decision by replay ID",
+        "description": "Requires decisions.read scope.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ReplayId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Persisted decision"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/decisions/{replay_id}/reviews": {
+      "get": {
+        "tags": ["Review"],
+        "summary": "List reviews for one decision",
+        "description": "Requires reviews.read scope.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ReplayId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Decision reviews"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Review"],
+        "summary": "Record one immutable pilot review",
+        "description": "Requires reviews.write scope.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ReplayId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Review created"
+          }
+        }
+      }
+    },
+    "/v1/review-queue": {
+      "get": {
+        "tags": ["Review"],
+        "summary": "List tenant-scoped pending or reviewed decisions",
+        "description": "Requires reviews.read scope.",
+        "responses": {
+          "200": {
+            "description": "Review queue envelope"
+          }
+        }
+      }
+    },
+    "/v1/pilot/metrics": {
+      "get": {
+        "tags": ["Review"],
+        "summary": "Calculate pilot review metrics",
+        "description": "Requires metrics.read scope.",
+        "responses": {
+          "200": {
+            "description": "Pilot metrics"
+          }
+        }
+      }
+    },
+    "/v1/security-events": {
+      "get": {
+        "tags": ["Security Events"],
+        "summary": "List tenant-scoped authenticated security events",
+        "description": "Requires audit.read scope.",
+        "responses": {
+          "200": {
+            "description": "Security event list"
+          }
+        }
+      }
+    },
+    "/v1/permits/issue": {
+      "post": {
+        "tags": ["Permits"],
+        "summary": "Issue a short-lived action-bound permit",
+        "description": "Requires permits.issue scope.",
+        "responses": {
+          "201": {
+            "description": "Permit issued"
+          }
+        }
+      }
+    },
+    "/v1/permits/prepare": {
+      "post": {
+        "tags": ["Permits"],
+        "summary": "Authenticate and reserve an issued permit before native controls",
+        "description": "Requires permits.consume scope.",
+        "responses": {
+          "200": {
+            "description": "Permit prepared"
+          }
+        }
+      }
+    },
+    "/v1/permits/consume": {
+      "post": {
+        "tags": ["Permits"],
+        "summary": "Verify evidence and consume a prepared permit",
+        "description": "Requires permits.consume scope.",
+        "responses": {
+          "200": {
+            "description": "Permit consumed"
+          }
+        }
+      }
+    },
+    "/v1/sparta/route": {
+      "post": {
+        "tags": ["Routing"],
+        "summary": "Route a stored decision through a declared SPARTa plan or adapter",
+        "description": "Requires routes.write scope.",
+        "responses": {
+          "200": {
+            "description": "SPARTa route report"
+          }
+        }
+      }
+    },
+    "/v1/pilot/dll/intake": {
+      "post": {
+        "tags": ["Pilot Evidence"],
+        "summary": "Append pilot evidence to a supplied DLL",
+        "description": "Requires reviews.write scope.",
+        "responses": {
+          "201": {
+            "description": "Pilot evidence intake result"
+          }
+        }
+      }
+    },
+    "/v1/pilot/dll/metrics": {
+      "post": {
+        "tags": ["Pilot Evidence"],
+        "summary": "Summarize supplied DLL evidence",
+        "description": "Requires metrics.read scope.",
+        "responses": {
+          "200": {
+            "description": "DLL metrics"
+          }
+        }
+      }
+    },
+    "/v1/pilot/dll/certificate": {
+      "post": {
+        "tags": ["Pilot Evidence"],
+        "summary": "Issue a digest-bound certificate from supplied DLL evidence",
+        "description": "Requires metrics.read scope.",
+        "responses": {
+          "201": {
+            "description": "Decision certificate"
+          }
+        }
+      }
+    },
+    "/v1/pilot/dll/ledgers": {
+      "get": {
+        "tags": ["Pilot Evidence"],
+        "summary": "List stored tenant-scoped Decision Lifecycle Ledgers",
+        "description": "Requires reviews.read scope.",
+        "responses": {
+          "200": {
+            "description": "Stored ledger list"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Pilot Evidence"],
+        "summary": "Persist a verified pilot Decision Lifecycle Ledger",
+        "description": "Requires reviews.write scope.",
+        "responses": {
+          "201": {
+            "description": "Stored ledger"
+          }
+        }
+      }
+    },
+    "/v1/pilot/dll/ledgers/{decision_id}": {
+      "get": {
+        "tags": ["Pilot Evidence"],
+        "summary": "Retrieve one stored tenant-scoped Decision Lifecycle Ledger",
+        "description": "Requires reviews.read scope.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DecisionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stored ledger"
+          }
+        }
+      }
+    },
+    "/v1/pilot/dll/ledgers/{decision_id}/certificate": {
+      "post": {
+        "tags": ["Pilot Evidence"],
+        "summary": "Issue a Decision Certificate from one stored DLL",
+        "description": "Requires metrics.read scope.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DecisionId"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Stored-ledger certificate"
+          }
+        }
+      }
+    },
+    "/v1/pilot/evidence-packages": {
+      "post": {
+        "tags": ["Pilot Evidence"],
+        "summary": "Build a CISO-readable evidence package from a stored DLL",
+        "description": "Requires audit.read scope.",
+        "responses": {
+          "201": {
+            "description": "Pilot evidence package"
+          }
+        }
+      }
+    },
+    "/v1/auth/token": {
+      "post": {
+        "tags": ["Security Events"],
+        "summary": "Exchange a static bootstrap credential for a short-lived narrowed token",
+        "responses": {
+          "201": {
+            "description": "Short-lived access token"
+          }
+        }
+      }
+    },
+    "/v1/auth/github": {
+      "post": {
+        "tags": ["Security Events"],
+        "summary": "Exchange a verified GitHub Actions OIDC token for a workload-bound session",
+        "responses": {
+          "201": {
+            "description": "Workload-bound access token"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Tenant-scoped pilot bearer credential, short-lived SMERC access token, or verified workload token depending on deployment configuration."
+      }
+    },
+    "parameters": {
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "ReplayId": {
+        "name": "replay_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,191}$"
+        }
+      },
+      "DecisionId": {
+        "name": "decision_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Invalid request"
+      },
+      "Unauthorized": {
+        "description": "Bearer authentication is missing or invalid"
+      },
+      "Forbidden": {
+        "description": "Credential does not carry the required tenant or scope"
+      },
+      "NotFound": {
+        "description": "Requested resource was not found in the authenticated tenant"
+      }
+    },
+    "schemas": {
+      "Posture": {
+        "type": "string",
+        "enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"]
+      },
+      "HealthResponse": {
+        "type": "object",
+        "required": ["status", "version"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "ReadyResponse": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ready"
+          }
+        },
+        "additionalProperties": true
+      },
+      "SchemaResponse": {
+        "type": "object",
+        "required": ["api_version", "language_versions", "authorization", "postures", "endpoints"],
+        "properties": {
+          "api_version": {
+            "type": "string",
+            "const": "v1"
+          },
+          "language_versions": {
+            "type": "object"
+          },
+          "authorization": {
+            "type": "object"
+          },
+          "postures": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Posture"
+            }
+          },
+          "endpoints": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      },
+      "RecoverabilityActionRequest": {
+        "type": "object",
+        "required": [
+          "action_id",
+          "description",
+          "actor",
+          "tool",
+          "action_type",
+          "base_action_risk",
+          "reversibility",
+          "containment_strength",
+          "rollback_latency",
+          "evidence_validity",
+          "anomaly_pressure",
+          "impact_scope",
+          "cancel_reliability",
+          "authorization_confidence",
+          "external_side_effect",
+          "sensitive_data"
+        ],
+        "properties": {
+          "action_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "tool": {
+            "type": "string"
+          },
+          "action_type": {
+            "type": "string"
+          },
+          "base_action_risk": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "reversibility": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "containment_strength": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "rollback_latency": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "evidence_validity": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "anomaly_pressure": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "impact_scope": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "cancel_reliability": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "authorization_confidence": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "external_side_effect": {
+            "type": "boolean"
+          },
+          "sensitive_data": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      },
+      "RecoverabilityDecision": {
+        "type": "object",
+        "required": ["replay_id", "action_id", "posture", "reason_codes", "controls", "replay"],
+        "properties": {
+          "replay_id": {
+            "type": "string"
+          },
+          "action_id": {
+            "type": "string"
+          },
+          "posture": {
+            "$ref": "#/components/schemas/Posture"
+          },
+          "reason_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "controls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "replay": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      },
+      "AgentHandshakeRequest": {
+        "type": "object",
+        "required": ["schema_version", "handshake_id", "beacon", "agent", "task_route", "action_request"],
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "smerc.agent_handshake.v1"
+          },
+          "handshake_id": {
+            "type": "string"
+          },
+          "beacon": {
+            "type": "object"
+          },
+          "agent": {
+            "type": "object",
+            "required": ["agent_id", "display_name", "provider", "capabilities", "requested_tool_authority", "requested_data_access"],
+            "properties": {
+              "agent_id": {
+                "type": "string"
+              },
+              "display_name": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "capabilities": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "requested_tool_authority": {
+                "type": "string"
+              },
+              "requested_data_access": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          },
+          "task_route": {
+            "type": "object"
+          },
+          "action_request": {
+            "$ref": "#/components/schemas/RecoverabilityActionRequest"
+          }
+        },
+        "additionalProperties": true
+      },
+      "AgentHandshakeResponse": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "handshake_id",
+          "handshake_posture",
+          "agent_id",
+          "beacon_valid",
+          "recommended_executor",
+          "executor_posture",
+          "action_posture",
+          "reason_codes",
+          "controls",
+          "replay_id",
+          "replay"
+        ],
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "smerc.agent_handshake.v1"
+          },
+          "handshake_id": {
+            "type": "string"
+          },
+          "handshake_posture": {
+            "$ref": "#/components/schemas/Posture"
+          },
+          "agent_id": {
+            "type": "string"
+          },
+          "beacon_valid": {
+            "type": "boolean"
+          },
+          "recommended_executor": {
+            "type": ["string", "null"]
+          },
+          "executor_posture": {
+            "$ref": "#/components/schemas/Posture"
+          },
+          "action_posture": {
+            "$ref": "#/components/schemas/Posture"
+          },
+          "reason_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "controls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "replay_id": {
+            "type": "string"
+          },
+          "replay": {
+            "type": "object",
+            "required": ["fitness_replay_id", "action_replay_id"]
+          }
+        },
+        "additionalProperties": true
+      },
+      "ReviewRequest": {
+        "type": "object",
+        "required": ["reviewer_id", "verdict"],
+        "properties": {
+          "reviewer_id": {
+            "type": "string"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": ["agree", "override"]
+          },
+          "review_latency_ms": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "useful_constraint": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      },
+      "UnitScore": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["error", "message"],
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "request_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}
