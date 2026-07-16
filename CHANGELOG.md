@@ -8,6 +8,7 @@
 - Added `smerc.agent_handshake.v1`, a reference protocol connecting beacon discovery, agent declaration, executor fitness, recoverability scoring, controls, and replay.
 - Added authenticated `POST /v1/agent/handshake` runtime API support with tenant policy evaluation, scoped authorization, schema discovery, security-event logging, and API tests.
 - Added Python and JavaScript SDK helpers for calling authenticated agent handshakes.
+- Added a generic Agent Handshake integration runner that maps SMERC postures into safe agent-runner states without executing actions.
 - Added scoring-invariant verification for recoverability and Model/Agent Fitness math, including generated JSON/Markdown reports and tests.
 - Added a CISO evidence walkthrough seed command, realistic seed action set, walkthrough documentation, and tests for review queue plus DLL evidence package readiness.
 - Added a CISO evidence package panel to the dependency-free pilot console for stored DLL package generation, JSON export, and Markdown export.
