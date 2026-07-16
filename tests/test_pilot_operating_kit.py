@@ -15,6 +15,7 @@ REQUIRED_FILES = [
     "Sample_Pilot_Report.md",
     "Customer_Responsibilities_Checklist.md",
     "Go_No_Go_Criteria.md",
+    "Design_Partner_Qualification_Checklist.md",
     "Pricing_And_Pilot_Evidence_Position.md",
 ]
 
@@ -56,6 +57,16 @@ class PilotOperatingKitTests(unittest.TestCase):
         self.assertIn("The ledger is the evidence engine underneath that promise", combined)
         self.assertIn("not be sold as a standalone compliance guarantee", combined)
         self.assertIn("30-day GitHub Actions shadow-mode pilot", combined)
+
+    def test_design_partner_checklist_screens_for_fit_before_pilot(self):
+        checklist = (PILOT_PACKAGE / "Design_Partner_Qualification_Checklist.md").read_text(encoding="utf-8")
+        self.assertIn("Weak fit", checklist)
+        self.assertIn("Exploratory fit", checklist)
+        self.assertIn("Moderate fit", checklist)
+        self.assertIn("Strong fit", checklist)
+        self.assertIn("reviewer agreement", checklist.lower())
+        self.assertIn("metadata-only", checklist)
+        self.assertIn("Do not pursue a paid pilot", checklist)
 
 
 if __name__ == "__main__":

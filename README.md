@@ -100,6 +100,7 @@ Start here before reading the code:
 - `integrations/agent_handshake/README.md` shows how an agent runner should call the handshake API and map postures into safe execution states.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
 - `pilot_package/Pilot_Kickoff_Packet.md` and the adjacent pilot operating templates define how a customer pilot starts, runs, reviews, and reaches go/no-go decisions.
+- `pilot_package/Design_Partner_Qualification_Checklist.md` helps screen whether a prospect is weak, exploratory, moderate, or strong fit before offering a pilot.
 - `pilot_package/Human_AI_Pilot_Operating_Model.md` defines the split between AI-generated actions, SMERC scoring, and human-owned review, labels, and go/no-go decisions.
 - `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md` and `examples/github_actions_pilot_manifest.json` give a concrete first-workflow launch path for a GitHub Actions shadow-mode pilot.
 - `pilot_package/Pricing_And_Pilot_Evidence_Position.md` explains early pilot pricing and why the Decision Lifecycle Ledger should be positioned as evidence support, not a standalone compliance guarantee.
