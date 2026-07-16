@@ -33,6 +33,7 @@ The current build includes:
 - recoverability-aware scoring engine
 - model and agent fitness routing for selecting qualified executors
 - machine-readable SMERC Beacon manifest for AI/tool discovery
+- Agent Handshake Protocol connecting beacon discovery to executor routing and action posture evaluation
 - scoring-invariant verification for recoverability and executor fitness math
 - authenticated, tenant-scoped REST API service
 - SQLite pilot audit store with idempotent decision replay
@@ -79,6 +80,7 @@ Start here before reading the code:
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
 - `docs/Model_Agent_Fitness_Layer.md` explains how SMERC selects the qualified model, agent, or automation executor for a specific task.
 - `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.
+- `docs/Agent_Handshake_Protocol.md` explains how an agent discovers SMERC, declares itself, proposes an action, receives a posture, and preserves a replay record.
 - `docs/Scoring_Invariants_And_Calibration.md` explains the declared scoring invariants, what passes today, and what still requires design-partner calibration.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
@@ -127,33 +129,34 @@ The shortest accurate explanation is:
 12. Read `docs/Engine_Profile_And_Trace.md`.
 13. Inspect `reference_engine/model_fitness.py` and read `docs/Model_Agent_Fitness_Layer.md`.
 14. Inspect `reference_engine/beacon.py` and read `docs/SMERC_Beacon.md`.
-15. Inspect `reference_engine/scoring_invariants.py` and read `docs/Scoring_Invariants_And_Calibration.md`.
-16. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
-17. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
-18. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-19. Review `integrations/github_actions/README.md`.
-20. Read `docs/Pilot_Review_Metrics.md`.
-21. Inspect `pilot_console/README.md`.
-22. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
-23. Read `docs/Scoped_Workload_Identity.md`.
-24. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
-25. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
-26. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
-27. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
-28. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
-29. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
-30. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
-31. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
-32. Read `docs/Python_SDK_Quickstart.md`.
-33. Read `docs/JavaScript_SDK_Quickstart.md`.
-34. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-35. Review `reports/Scoring_Invariants_Report.md`.
-36. Review `reports/Control_Mapping_Library_Example.md`.
-37. Review `reports/Governance_Report_Example.md`.
-38. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-39. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-40. Run the Python and console tests.
-41. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+15. Inspect `reference_engine/agent_handshake.py` and read `docs/Agent_Handshake_Protocol.md`.
+16. Inspect `reference_engine/scoring_invariants.py` and read `docs/Scoring_Invariants_And_Calibration.md`.
+17. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
+18. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
+19. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+20. Review `integrations/github_actions/README.md`.
+21. Read `docs/Pilot_Review_Metrics.md`.
+22. Inspect `pilot_console/README.md`.
+23. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
+24. Read `docs/Scoped_Workload_Identity.md`.
+25. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
+26. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
+27. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
+28. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
+29. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
+30. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
+31. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
+32. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+33. Read `docs/Python_SDK_Quickstart.md`.
+34. Read `docs/JavaScript_SDK_Quickstart.md`.
+35. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+36. Review `reports/Scoring_Invariants_Report.md`.
+37. Review `reports/Control_Mapping_Library_Example.md`.
+38. Review `reports/Governance_Report_Example.md`.
+39. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+40. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+41. Run the Python and console tests.
+42. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
 
 ## What SMERC Evaluates
 
@@ -207,6 +210,17 @@ python -m unittest tests.test_model_fitness -v
 python -m reference_engine.beacon examples/smerc_beacon.json --pretty
 python -m unittest tests.test_beacon -v
 ```
+
+## Agent Handshake Protocol
+
+`reference_engine/agent_handshake.py` connects SMERC Beacon discovery, agent declaration, Model/Agent Fitness routing, recoverability scoring, and replay into a single handshake response.
+
+```bash
+python -m reference_engine.agent_handshake examples/agent_handshake_request.json --pretty
+python -m unittest tests.test_agent_handshake -v
+```
+
+The reference handshake is pilot-grade. It does not authenticate remote agents by itself or replace scoped workload identity, signed permits, SPARTa routing, Decision Lifecycle Ledger evidence, or customer-specific policy.
 
 ## Scoring Invariants
 
