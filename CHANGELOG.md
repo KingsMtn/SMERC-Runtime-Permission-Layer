@@ -4,6 +4,7 @@
 
 - Added a Model and Agent Fitness Layer that scores candidate executors by task fit, data boundary, tool authority, recoverability, reliability history, cost, and latency before selecting an execution posture.
 - Added model and agent routing examples, documentation, CLI support, and tests.
+- Added an AI-assisted build and red-team strategy that assigns roles to coding agents, second-opinion reviewers, GitHub-native agents, long-running agents, and human experts without treating AI output as validation.
 - Added `smerc.beacon.v1`, a machine-readable public discovery manifest for agents, tools, reviewers, and search systems, with validation and overclaim checks.
 - Added `smerc.agent_handshake.v1`, a reference protocol connecting beacon discovery, agent declaration, executor fitness, recoverability scoring, controls, and replay.
 - Added authenticated `POST /v1/agent/handshake` runtime API support with tenant policy evaluation, scoped authorization, schema discovery, security-event logging, and API tests.

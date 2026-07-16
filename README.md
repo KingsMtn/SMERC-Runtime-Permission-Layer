@@ -84,6 +84,7 @@ Start here before reading the code:
 - `docs/Model_Agent_Fitness_Layer.md` explains how SMERC selects the qualified model, agent, or automation executor for a specific task.
 - `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.
 - `docs/Agent_Handshake_Protocol.md` explains how an agent discovers SMERC, declares itself, proposes an action, receives a posture, and preserves a replay record.
+- `docs/AI_Assisted_Build_And_Red_Team_Strategy.md` explains how outside AI tools can help with engineering critique and agent simulation without replacing human validation.
 - `docs/Scoring_Invariants_And_Calibration.md` explains the declared scoring invariants, what passes today, and what still requires design-partner calibration.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
@@ -137,36 +138,37 @@ The shortest accurate explanation is:
 13. Inspect `reference_engine/model_fitness.py` and read `docs/Model_Agent_Fitness_Layer.md`.
 14. Inspect `reference_engine/beacon.py` and read `docs/SMERC_Beacon.md`.
 15. Inspect `reference_engine/agent_handshake.py` and read `docs/Agent_Handshake_Protocol.md`.
-16. Inspect `reference_engine/scoring_invariants.py` and read `docs/Scoring_Invariants_And_Calibration.md`.
-17. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
-18. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
-19. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-20. Review `integrations/agent_handshake/README.md`.
-21. Review `integrations/github_actions/README.md`.
-22. Read `docs/Pilot_Review_Metrics.md`.
-23. Inspect `pilot_console/README.md`.
-24. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
-25. Read `docs/Scoped_Workload_Identity.md`.
-26. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
-27. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
-28. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
-29. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
-30. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
-31. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
-32. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
-33. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
-34. Read `docs/Python_SDK_Quickstart.md`.
-35. Read `docs/JavaScript_SDK_Quickstart.md`.
-36. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-37. Review `reports/Scoring_Invariants_Report.md`.
-38. Review `reports/Control_Mapping_Library_Example.md`.
-39. Review `reports/Governance_Report_Example.md`.
-40. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-41. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-42. Run the Python and console tests.
-43. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
-44. Review `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md`.
-45. Review `pilot_package/Human_AI_Pilot_Operating_Model.md`.
+16. Read `docs/AI_Assisted_Build_And_Red_Team_Strategy.md`.
+17. Inspect `reference_engine/scoring_invariants.py` and read `docs/Scoring_Invariants_And_Calibration.md`.
+18. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
+19. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
+20. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+21. Review `integrations/agent_handshake/README.md`.
+22. Review `integrations/github_actions/README.md`.
+23. Read `docs/Pilot_Review_Metrics.md`.
+24. Inspect `pilot_console/README.md`.
+25. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
+26. Read `docs/Scoped_Workload_Identity.md`.
+27. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
+28. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
+29. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
+30. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
+31. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
+32. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
+33. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
+34. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+35. Read `docs/Python_SDK_Quickstart.md`.
+36. Read `docs/JavaScript_SDK_Quickstart.md`.
+37. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+38. Review `reports/Scoring_Invariants_Report.md`.
+39. Review `reports/Control_Mapping_Library_Example.md`.
+40. Review `reports/Governance_Report_Example.md`.
+41. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+42. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+43. Run the Python and console tests.
+44. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+45. Review `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md`.
+46. Review `pilot_package/Human_AI_Pilot_Operating_Model.md`.
 
 ## What SMERC Evaluates
 
