@@ -140,6 +140,24 @@ Example requests live in:
 
 These examples are intentionally marked with `production_boundary: example_adapter_only`. They prove the SPARTa contract can route an `ESCALATE` posture into accountable human review without pretending that a live ServiceNow, Jira, Slack, or Teams integration exists.
 
+## Vendor-Neutral Human Review Package
+
+The repository also includes `integrations/human_review/`.
+
+This adapter does not call Slack, Teams, Jira, ServiceNow, email, or any other live workflow system. It creates and verifies signed review packages:
+
+- `smerc.human-review-request.v1` binds a review request to a SPARTa route ID, decision replay ID, route digest, reviewer group, blocked controls, and callback reference.
+- `smerc.human-review-response.v1` binds a reviewer verdict back to the request digest, route ID, replay ID, reviewer group, and final posture.
+
+This provides a concrete bridge between mock review routing and future live vendor integrations. A future Slack, Teams, Jira, or ServiceNow adapter should preserve the same signed request and response evidence while adding external delivery, reviewer identity assurance, timeout handling, and ledger return.
+
+Example artifacts:
+
+- `reports/human_review_route_example.json`
+- `reports/human_review_request_example.json`
+- `reports/human_review_response_example.json`
+- `reports/human_review_verification_example.json`
+
 ### Kubernetes Or Cloud Deployment Adapter
 
 Higher risk and later-stage.
@@ -234,11 +252,12 @@ Its proper claim is narrower:
 
 1. Standardize the adapter lifecycle contract.
 2. Extend the GitHub deployment adapter to emit complete SPARTa v2 evidence.
-3. Promote the mock ticket-review adapter into a live ServiceNow or Jira integration prototype.
-4. Promote the mock chat-review adapter into a live Slack or Teams integration prototype.
-5. Append route and execution evidence into the Decision Lifecycle Ledger.
-6. Generate one replayable governance report that includes SMERC decision, SPARTa route, permit, control evidence, execution result, and reviewer outcome.
-7. Use the 30-minute workflow proof to show the difference between allow/deny and SPARTa-constrained execution.
+3. Use the vendor-neutral human-review package as the common contract for live review adapters.
+4. Promote the mock ticket-review adapter into a live ServiceNow or Jira integration prototype.
+5. Promote the mock chat-review adapter into a live Slack or Teams integration prototype.
+6. Append route and execution evidence into the Decision Lifecycle Ledger.
+7. Generate one replayable governance report that includes SMERC decision, SPARTa route, permit, control evidence, execution result, and reviewer outcome.
+8. Use the 30-minute workflow proof to show the difference between allow/deny and SPARTa-constrained execution.
 
 ## Bottom Line
 

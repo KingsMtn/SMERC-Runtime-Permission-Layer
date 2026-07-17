@@ -1,0 +1,48 @@
+{
+  "applied_controls": [
+    "route_to_accountable_reviewer",
+    "require_explicit_approval",
+    "preserve_replay"
+  ],
+  "blocked_controls": [
+    "execute"
+  ],
+  "decision_digest": "83898b43dca3d7ed2d2af55c2145c53a6a638cba95a42d92e56135ab588f468c",
+  "decision_replay_id": "replay_human_review_example_001",
+  "effective_scope_units": 0,
+  "executable": false,
+  "plain_english_summary": "SPARTa routed the action to accountable human review because SMERC required escalation.",
+  "plan_id": "service-ticket-review:create_change_review:human_review",
+  "reason_codes": [
+    "SPARTA_ESCALATE_TO_ACCOUNTABLE_REVIEWER"
+  ],
+  "recommended_next_action": "Assign a reviewer, document the decision, and issue a new request if approval changes the posture.",
+  "route_id": "sparta_service-ticket-review:create_change_review:human_review_ae1f8d25b127",
+  "route_state": "REVIEW_REQUIRED",
+  "routed_at": "2026-07-17T19:49:18+00:00",
+  "source_posture": "ESCALATE",
+  "tool_plan": {
+    "action": "create_change_review",
+    "max_scope_units": 25,
+    "metadata": {
+      "evidence_mode": "mock_ticket_reference",
+      "evidence_reference": "smerc-route-report-pending",
+      "owner": "security-operations",
+      "production_boundary": "example_adapter_only",
+      "requested_reviewer_group": "security-operations",
+      "source_workflow": "production-canary-deploy"
+    },
+    "plan_id": "service-ticket-review:create_change_review:human_review",
+    "requested_capability": "human_review",
+    "requested_scope_units": 5,
+    "side_effect_level": "internal",
+    "supports_checkpoint": false,
+    "supports_dry_run": true,
+    "supports_human_approval": true,
+    "supports_rollback": false,
+    "supports_scope_limit": false,
+    "tool": "ticketing_review",
+    "version": "smerc.sparta-plan.v1"
+  },
+  "version": "smerc.sparta-route.v1"
+}

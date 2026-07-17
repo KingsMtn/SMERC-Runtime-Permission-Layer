@@ -107,6 +107,7 @@ Start here before reading the code:
 - `docs/Python_SDK_Quickstart.md` shows how to call the SMERC API from Python without third-party dependencies.
 - `docs/JavaScript_SDK_Quickstart.md` shows how to call the SMERC API from Node or browser-compatible JavaScript.
 - `integrations/agent_handshake/README.md` shows how an agent runner should call the handshake API and map postures into safe execution states.
+- `integrations/human_review/README.md` shows how SPARTa can package a review-required route into signed human-review request and response evidence before a live Slack, Teams, Jira, or ServiceNow adapter exists.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
 - `pilot_package/Pilot_Kickoff_Packet.md` and the adjacent pilot operating templates define how a customer pilot starts, runs, reviews, and reaches go/no-go decisions.
 - `pilot_package/Design_Partner_Qualification_Checklist.md` helps screen whether a prospect is weak, exploratory, moderate, or strong fit before offering a pilot.
@@ -170,17 +171,18 @@ The shortest accurate explanation is:
 31. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
 32. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
 33. Read `docs/SPARTa_v2_Execution_Adapter_Framework.md`.
-34. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
-35. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
-36. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
-37. Read `docs/Python_SDK_Quickstart.md`.
-38. Read `docs/JavaScript_SDK_Quickstart.md`.
-39. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-40. Review `reports/Scoring_Invariants_Report.md`.
-41. Review `reports/Control_Mapping_Library_Example.md`.
-42. Review `reports/Governance_Report_Example.md`.
-43. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-44. Review `reports/Commercial_Readiness_Language_Audit.md`.
+34. Inspect `integrations/human_review/README.md`.
+35. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
+36. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
+37. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+38. Read `docs/Python_SDK_Quickstart.md`.
+39. Read `docs/JavaScript_SDK_Quickstart.md`.
+40. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+41. Review `reports/Scoring_Invariants_Report.md`.
+42. Review `reports/Control_Mapping_Library_Example.md`.
+43. Review `reports/Governance_Report_Example.md`.
+44. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+45. Review `reports/Commercial_Readiness_Language_Audit.md`.
 45. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
 46. Run the Python and console tests.
 47. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
@@ -320,6 +322,19 @@ python -m reference_engine.sparta_router \
 SPARTa v1 is intentionally conservative. If SMERC returns `THROTTLE` but the tool plan cannot apply scope limits, dry runs, checkpoints, or rollback as required, the router marks the plan non-executable and routes it to review. See `specification/SMERC_SPARTa_Router_v1.md`.
 
 Route reports can optionally be signed with `smerc.sparta-route-signature.v1` HMAC metadata for pilot-grade tamper detection. This does not replace managed production key infrastructure or prove downstream enforcement. See `reports/signed_sparta_route_example.json`.
+
+When a route is `REVIEW_REQUIRED`, the vendor-neutral human-review adapter can package the route into signed review request and response evidence:
+
+```bash
+python integrations/human_review/review_adapter.py verify-response \
+  --review-request reports/human_review_request_example.json \
+  --review-response reports/human_review_response_example.json \
+  --request-secret development-human-review-request-secret \
+  --response-secret development-human-review-response-secret \
+  --pretty
+```
+
+This proves request/response binding before a live Slack, Teams, Jira, or ServiceNow delivery adapter exists. It does not prove external identity-provider assurance by itself.
 
 The API can also route a stored decision by `replay_id`:
 
