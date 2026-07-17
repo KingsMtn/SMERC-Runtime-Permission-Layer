@@ -35,6 +35,7 @@ The current build includes:
 - machine-readable SMERC Beacon manifest for AI/tool discovery
 - Agent Handshake Protocol connecting beacon discovery to executor routing and action posture evaluation
 - scoring-invariant verification for recoverability and executor fitness math
+- commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service
 - OpenAPI 3.1 pilot API contract
 - SQLite pilot audit store with idempotent decision replay
@@ -123,6 +124,7 @@ Start here before reading the code:
 - `reports/Decision_Lifecycle_Ledger_Example.md` shows a full pilot-grade lifecycle record from request through learning recommendation.
 - `reports/SMERC_F_Profile_Packet.md` shows a financial-action profile packet across conservative, balanced, and permissive policies.
 - `reports/Public_Discovery_Audit.md` shows the latest local audit of the public site's discovery metadata and AI-readable files.
+- `reports/Commercial_Readiness_Language_Audit.md` shows the latest audit of public-facing repository language for positioning clarity, evidence boundaries, and unsupported claim risk.
 - `COMMUNITY.md`, `CONTRIBUTING.md`, `docs/Partner_Program.md`, and `docs/Community_Outreach_Kit.md` describe how design partners, integration partners, researchers, and open-source contributors can engage.
 
 The shortest accurate explanation is:
@@ -172,11 +174,12 @@ The shortest accurate explanation is:
 39. Review `reports/Control_Mapping_Library_Example.md`.
 40. Review `reports/Governance_Report_Example.md`.
 41. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-42. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-43. Run the Python and console tests.
-44. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
-45. Review `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md`.
-46. Review `pilot_package/Human_AI_Pilot_Operating_Model.md`.
+42. Review `reports/Commercial_Readiness_Language_Audit.md`.
+43. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+44. Run the Python and console tests.
+45. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+46. Review `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md`.
+47. Review `pilot_package/Human_AI_Pilot_Operating_Model.md`.
 
 ## What SMERC Evaluates
 

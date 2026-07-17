@@ -98,10 +98,10 @@ A pilot is useful if it can answer:
 
 Partners should not expect:
 
-- production certification
+- not production certification
 - compliance attestation
 - managed SaaS operations
-- guaranteed incident reduction
+- no guaranteed incident reduction
 - calibrated thresholds for their environment without pilot data
 - replacement of existing IAM, policy, EDR, SIEM, code review, or approval tools
 

@@ -10,7 +10,7 @@ The review question is narrow:
 
 The review question is not:
 
-> Is SMERC already a production-certified security platform?
+> Is SMERC already production-ready? No; that claim should not be made without external validation, certification, and live customer evidence.
 
 ## One-Sentence Positioning
 

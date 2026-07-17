@@ -103,9 +103,9 @@ Start with:
 
 Do not claim SMERC is:
 
-- production-certified
-- compliance-attested
-- proven to reduce incidents
+- not production-certified
+- not compliance-attested
+- not proven to reduce incidents
 - customer-validated
 - a replacement for IAM, OPA, AI gateways, SIEM, EDR, code review, approval systems, or human accountability
 - a general AI firewall
