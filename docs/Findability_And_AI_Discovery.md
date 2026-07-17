@@ -77,6 +77,15 @@ The public site should maintain:
 
 These assets are not proof that search engines or AI crawlers will rank SMERC. They are low-cost signals that reduce ambiguity once a crawler or agent reaches the site.
 
+Run the local discovery audit before deploying site changes:
+
+```bash
+python -m reference_engine.public_discovery_audit ../SMERC-Macro-Language-Model/site --pretty
+python -m reference_engine.public_discovery_audit ../SMERC-Macro-Language-Model/site \
+  --json-output reports/public_discovery_audit.json \
+  --markdown-output reports/Public_Discovery_Audit.md
+```
+
 ## GitHub Repository Findability
 
 Recommended GitHub repository topics:

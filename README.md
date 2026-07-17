@@ -403,6 +403,7 @@ python -m reference_engine.pilot_ledger_metrics reports/pilot_ledger_intake_resu
 python -m reference_engine.github_actions_pilot_summary test_outputs/github_action_remote
 python -m reference_engine.design_partner_fit examples/design_partner_fit_example.json --pretty
 python -m reference_engine.first_pilot_packet --pretty
+python -m reference_engine.public_discovery_audit ../SMERC-Macro-Language-Model/site --pretty
 python -m unittest discover -s tests
 ```
 
