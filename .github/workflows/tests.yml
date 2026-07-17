@@ -42,6 +42,9 @@ jobs:
       - name: Run unit tests
         run: python -m unittest discover -s tests
 
+      - name: Run commercial readiness language audit
+        run: python -m reference_engine.commercial_readiness_audit . --pretty
+
       - name: Compile service and integration modules
         run: python -m compileall -q api_server.py reference_engine integrations
 

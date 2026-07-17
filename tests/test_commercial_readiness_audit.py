@@ -74,6 +74,14 @@ class CommercialReadinessAuditTests(unittest.TestCase):
         self.assertIn("Passed: `true`", report)
         self.assertIn("does not prove legal clearance", report)
 
+    def test_ci_and_pr_template_require_commercial_readiness_check(self):
+        workflow = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+        template = (ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md").read_text(encoding="utf-8")
+
+        self.assertIn("Run commercial readiness language audit", workflow)
+        self.assertIn("python -m reference_engine.commercial_readiness_audit . --pretty", workflow)
+        self.assertIn("Commercial readiness language audit passes", template)
+
     def _write_public_materials(self, repo: Path) -> None:
         (repo / "docs").mkdir()
         readme = (
