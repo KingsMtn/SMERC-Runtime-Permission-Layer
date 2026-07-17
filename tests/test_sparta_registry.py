@@ -2,6 +2,7 @@ import json
 import unittest
 from pathlib import Path
 
+from reference_engine.sparta_router import route_decision
 from reference_engine.sparta_registry import (
     SPARTA_ADAPTER_REGISTRY_VERSION,
     SPARTaAdapterRegistry,
@@ -26,12 +27,40 @@ class SPARTaAdapterRegistryTests(unittest.TestCase):
             }
         )
 
-        self.assertEqual(registry.count, 2)
+        self.assertEqual(registry.count, 4)
         self.assertEqual(plan.tool, "github_actions")
         self.assertEqual(plan.action, "deploy_canary")
         self.assertEqual(plan.requested_scope_units, 40)
         self.assertTrue(plan.supports_rollback)
         self.assertEqual(plan.metadata["workflow_run"], "1001")
+
+    def test_mock_review_adapters_route_escalation_to_human_review(self):
+        registry = load_sparta_adapter_registry(ROOT / "examples" / "sparta" / "adapter_registry.json")
+        decision = {
+            "posture": "ESCALATE",
+            "replay_id": "replay_mock_review_escalation",
+            "reason_codes": ["REQUIRES_ACCOUNTABLE_REVIEW"],
+            "controls": ["route_to_accountable_reviewer", "preserve_replay"],
+            "policy": {
+                "policy_id": "test-policy",
+                "policy_revision": "1.0.0",
+                "mode": "ENFORCE",
+                "policy_hash": "test-hash",
+            },
+        }
+        for filename, expected_tool in [
+            ("service_ticket_review_request.json", "ticketing_review"),
+            ("chat_review_request.json", "chat_review"),
+        ]:
+            request = json.loads((ROOT / "examples" / "sparta" / filename).read_text(encoding="utf-8"))
+            plan = registry.plan_from_request(request)
+            route = route_decision(decision, plan)
+
+            self.assertEqual(plan.tool, expected_tool)
+            self.assertEqual(route["route_state"], "REVIEW_REQUIRED")
+            self.assertFalse(route["executable"])
+            self.assertIn("route_to_accountable_reviewer", route["applied_controls"])
+            self.assertEqual(route["tool_plan"]["metadata"]["production_boundary"], "example_adapter_only")
 
     def test_registry_rejects_duplicate_unknown_and_excessive_requests(self):
         source = json.loads((ROOT / "examples" / "sparta" / "adapter_registry.json").read_text(encoding="utf-8"))

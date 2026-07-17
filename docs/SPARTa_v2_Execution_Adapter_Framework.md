@@ -126,6 +126,20 @@ Native controls:
 - reviewer identity capture
 - decision comment capture
 
+## Current Mock Review Adapters
+
+The example registry now includes two non-vendor mock review adapters:
+
+- `service-ticket-review` maps review-required actions to a ticket-style review plan.
+- `chat-review-bridge` maps review-required actions to a chat-style review plan.
+
+Example requests live in:
+
+- `examples/sparta/service_ticket_review_request.json`
+- `examples/sparta/chat_review_request.json`
+
+These examples are intentionally marked with `production_boundary: example_adapter_only`. They prove the SPARTa contract can route an `ESCALATE` posture into accountable human review without pretending that a live ServiceNow, Jira, Slack, or Teams integration exists.
+
 ### Kubernetes Or Cloud Deployment Adapter
 
 Higher risk and later-stage.
@@ -220,8 +234,8 @@ Its proper claim is narrower:
 
 1. Standardize the adapter lifecycle contract.
 2. Extend the GitHub deployment adapter to emit complete SPARTa v2 evidence.
-3. Add a mock ServiceNow/Jira adapter for approval routing.
-4. Add a mock Slack/Teams review adapter for escalation demos.
+3. Promote the mock ticket-review adapter into a live ServiceNow or Jira integration prototype.
+4. Promote the mock chat-review adapter into a live Slack or Teams integration prototype.
 5. Append route and execution evidence into the Decision Lifecycle Ledger.
 6. Generate one replayable governance report that includes SMERC decision, SPARTa route, permit, control evidence, execution result, and reviewer outcome.
 7. Use the 30-minute workflow proof to show the difference between allow/deny and SPARTa-constrained execution.

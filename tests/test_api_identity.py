@@ -108,11 +108,16 @@ class ScopedPrincipalAPITests(unittest.TestCase):
             headers=request_headers,
             method=method,
         )
-        try:
-            with urlopen(request, timeout=5) as response:
-                return response.status, json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            return exc.code, json.loads(exc.read().decode("utf-8"))
+        for attempt in range(2):
+            try:
+                with urlopen(request, timeout=5) as response:
+                    return response.status, json.loads(response.read().decode("utf-8"))
+            except HTTPError as exc:
+                return exc.code, json.loads(exc.read().decode("utf-8"))
+            except ConnectionAbortedError:
+                if attempt:
+                    raise
+        raise AssertionError("unreachable request retry state")
 
     def test_separation_of_duties_and_attributed_security_events(self):
         action = low_risk_action()

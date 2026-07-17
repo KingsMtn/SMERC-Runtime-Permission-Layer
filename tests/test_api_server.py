@@ -85,7 +85,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(health[2]["control_evidence_adapter_count"], 0)
         self.assertFalse(health[2]["short_lived_access_enabled"])
         self.assertFalse(health[2]["github_oidc_enabled"])
-        self.assertEqual(health[2]["sparta_adapter_count"], 2)
+        self.assertEqual(health[2]["sparta_adapter_count"], 4)
         self.assertEqual(ready[2]["status"], "ready")
 
     def test_schema_lists_versioned_endpoints_and_postures(self):

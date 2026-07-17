@@ -55,6 +55,65 @@
         "owner": "security-operations",
         "evidence_mode": "read_only"
       }
+    },
+    {
+      "version": "smerc.sparta-adapter-registry.v1",
+      "adapter_id": "service-ticket-review",
+      "tool": "ticketing_review",
+      "supported_actions": [
+        "create_change_review",
+        "create_security_review",
+        "attach_governance_evidence"
+      ],
+      "supported_capabilities": [
+        "human_review",
+        "change_management",
+        "evidence_attachment"
+      ],
+      "supports_dry_run": true,
+      "supports_scope_limit": false,
+      "supports_checkpoint": false,
+      "supports_rollback": false,
+      "supports_human_approval": true,
+      "max_scope_units": 25,
+      "allowed_side_effect_levels": [
+        "internal"
+      ],
+      "metadata": {
+        "owner": "security-operations",
+        "evidence_mode": "mock_ticket_reference",
+        "production_boundary": "example_adapter_only"
+      }
+    },
+    {
+      "version": "smerc.sparta-adapter-registry.v1",
+      "adapter_id": "chat-review-bridge",
+      "tool": "chat_review",
+      "supported_actions": [
+        "request_approval",
+        "notify_reviewer",
+        "record_reviewer_response"
+      ],
+      "supported_capabilities": [
+        "human_review",
+        "notification",
+        "review_capture"
+      ],
+      "supports_dry_run": true,
+      "supports_scope_limit": false,
+      "supports_checkpoint": false,
+      "supports_rollback": false,
+      "supports_human_approval": true,
+      "max_scope_units": 10,
+      "allowed_side_effect_levels": [
+        "none",
+        "internal"
+      ],
+      "metadata": {
+        "owner": "platform-engineering",
+        "evidence_mode": "mock_chat_review",
+        "production_boundary": "example_adapter_only"
+      }
     }
   ]
 }
