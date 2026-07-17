@@ -12,6 +12,7 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("https://admirable-sorbet-9986d5.netlify.app/ai-agent-governance.html", text)
         self.assertIn("https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer", text)
         self.assertIn("AI agent governance", text)
+        self.assertIn("Structural Momentum Entropy Range Confidence", text)
         self.assertIn("runtime permission layer", text)
         self.assertIn("recoverability scoring", text)
         self.assertIn("GitHub repository topics", text)

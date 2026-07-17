@@ -27,6 +27,7 @@ That means discoverability should be treated as an operating requirement, not a 
 Use these terms consistently in public titles, descriptions, documentation, and repository topics:
 
 - SMERC
+- Structural Momentum Entropy Range Confidence
 - runtime permission infrastructure
 - runtime permission layer
 - AI agent governance
@@ -45,6 +46,10 @@ Use these terms consistently in public titles, descriptions, documentation, and 
 SMERC should be described as:
 
 > Recoverability-aware runtime permission infrastructure for AI agents and high-impact automation workflows.
+
+When expanding the name for search and AI summaries, use:
+
+> SMERC, short for Structural Momentum Entropy Range Confidence, is recoverability-aware runtime permission infrastructure for AI agents and high-impact automation workflows.
 
 SMERC should not be described only as:
 
@@ -91,6 +96,10 @@ The README should keep the first paragraph direct:
 
 > SMERC is runtime permission infrastructure for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture.
 
+Expanded version for pages that need acronym context:
+
+> SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture.
+
 ## Distribution Checklist
 
 Before assuming SMERC is discoverable, complete:
@@ -112,6 +121,7 @@ Before assuming SMERC is discoverable, complete:
 Repeat these searches periodically:
 
 - `SMERC Runtime Permission Layer`
+- `Structural Momentum Entropy Range Confidence`
 - `SMERC AI agent governance`
 - `SMERC recoverability scoring`
 - `SMERC runtime permission infrastructure`

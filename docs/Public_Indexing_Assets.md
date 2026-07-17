@@ -19,7 +19,7 @@ The SMERC public Netlify site includes lightweight discovery files and status pa
 
 Preferred one-line public summary:
 
-> SMERC is runtime permission infrastructure for AI agents, evaluating whether technically authorized actions are recoverable enough to execute before they create side effects.
+> SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI agents, evaluating whether technically authorized actions are recoverable enough to execute before they create side effects.
 
 ## Claims Boundary
 

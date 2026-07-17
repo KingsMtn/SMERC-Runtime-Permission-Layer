@@ -17,6 +17,7 @@
 - Added a first-pilot path that defines week-zero qualification, week-one observe setup, 30-day review, success metrics, evidence package, and commercial boundary.
 - Added a first-pilot packet generator that combines the GitHub Actions pilot manifest with the design-partner fit screen to produce JSON/Markdown start-decision packets.
 - Added a findability and AI-discovery guide covering canonical public links, search language, indexing assets, GitHub topics, and distribution checklist.
+- Added acronym-expansion guidance for Structural Momentum Entropy Range Confidence on key discovery surfaces.
 - Added a Human/AI Pilot Operating Model defining the split between AI-proposed actions, SMERC scoring, and human-owned validation, labels, accountability, and go/no-go decisions.
 - Added a GitHub Actions pilot launch runbook and machine-readable pilot manifest covering local shadow mode, remote API mode, OIDC mode, evidence collection, and stop conditions.
 - Added a GitHub Actions pilot artifact summarizer that converts downloaded `smerc-decision.json` reports into JSON/Markdown operating summaries without claiming customer outcome evidence.
