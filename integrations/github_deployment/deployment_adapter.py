@@ -34,6 +34,7 @@ from reference_engine.action_language import action_hash  # noqa: E402
 
 EXECUTION_PLAN_VERSION = "smerc.execution-plan.v1"
 EXECUTION_REPORT_VERSION = "smerc.execution-report.v1"
+SPARTA_EXECUTION_EVIDENCE_VERSION = "smerc.sparta-execution-evidence.v1"
 MAX_PLAN_BYTES = 128 * 1024
 MAX_API_RESPONSE_BYTES = 1024 * 1024
 MAX_ARGUMENTS = 128
@@ -113,6 +114,60 @@ def _argv(value: Any, path: str) -> tuple[str, ...]:
 def _canonical_digest(value: Any) -> str:
     encoded = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
+
+
+def _route_report_digest(route_report: Mapping[str, Any]) -> str:
+    material = {key: value for key, value in dict(route_report).items() if key != "signature"}
+    return _canonical_digest(material)
+
+
+def _sparta_execution_evidence(
+    route_report: Mapping[str, Any],
+    *,
+    permit: Mapping[str, Any],
+) -> Dict[str, Any]:
+    if route_report.get("version") != "smerc.sparta-route.v1":
+        raise DeploymentAdapterError("invalid_sparta_route", "SPARTa route report version is unsupported.")
+    route_id = _identifier(route_report.get("route_id"), "sparta.route_id", 192)
+    decision_replay_id = _identifier(route_report.get("decision_replay_id"), "sparta.decision_replay_id", 192)
+    source_posture = _bounded_text(route_report.get("source_posture"), "sparta.source_posture", 32)
+    route_state = _bounded_text(route_report.get("route_state"), "sparta.route_state", 64)
+    executable = route_report.get("executable")
+    if not isinstance(executable, bool):
+        raise DeploymentAdapterError("invalid_sparta_route", "SPARTa route executable flag is invalid.")
+    applied_controls = route_report.get("applied_controls")
+    if not isinstance(applied_controls, list) or any(not isinstance(item, str) for item in applied_controls):
+        raise DeploymentAdapterError("invalid_sparta_route", "SPARTa route controls are invalid.")
+    required_controls = set(permit["required_controls"]) - INTERNAL_CONTROLS
+    missing_controls = sorted(required_controls - set(applied_controls))
+    checks = {
+        "replay_id_matches": decision_replay_id == permit["replay_id"],
+        "posture_matches": source_posture == permit["posture"],
+        "route_is_executable": executable is True,
+        "required_controls_declared_by_route": not missing_controls,
+    }
+    if not all(checks.values()):
+        raise DeploymentAdapterError(
+            "sparta_binding_mismatch",
+            "SPARTa route does not bind to the permit replay, posture, executable state, or required controls.",
+        )
+    return {
+        "version": SPARTA_EXECUTION_EVIDENCE_VERSION,
+        "route_id": route_id,
+        "route_report_digest": _route_report_digest(route_report),
+        "decision_replay_id": decision_replay_id,
+        "source_posture": source_posture,
+        "route_state": route_state,
+        "binding": {
+            "valid": True,
+            "checks": checks,
+            "missing_required_controls": missing_controls,
+        },
+        "adapter_boundary": (
+            "The GitHub deployment adapter verifies route-to-permit binding before execution; "
+            "live GitHub environment protections and target-platform restoration remain external evidence."
+        ),
+    }
 
 
 @dataclass(frozen=True)
@@ -627,6 +682,7 @@ def execute(
     executor_token: str,
     evidence_signer: ControlEvidenceSigner,
     workspace: Path,
+    sparta_route_report: Optional[Mapping[str, Any]] = None,
     cancel_event: Optional[threading.Event] = None,
 ) -> Dict[str, Any]:
     prepared = _prepare_permit(
@@ -644,6 +700,9 @@ def execute(
         raise DeploymentAdapterError("audience_mismatch", "Execution plan and permit audience differ.")
     if permit["action_hash"] != action_hash(action):
         raise DeploymentAdapterError("action_mismatch", "Execution action does not match the permit action hash.")
+    sparta_evidence = None
+    if sparta_route_report is not None:
+        sparta_evidence = _sparta_execution_evidence(sparta_route_report, permit=permit)
     cwd = plan.resolve_working_directory(workspace)
     environment = _execution_environment(plan.environment_allowlist)
     supervisor = ProcessSupervisor(cancel_event)
@@ -734,6 +793,7 @@ def execute(
             "consumed_at": consumption["consumption"]["consumed_at"],
             "control_evidence_mode": consumption.get("control_evidence", {}).get("mode"),
         },
+        "sparta": sparta_evidence,
         "execution": execution.public(),
         "rollback": rollback_report,
         "environment_names": sorted(key for key in environment if key in plan.environment_allowlist),
@@ -784,6 +844,7 @@ def main() -> int:
     parser.add_argument("--action-file", required=True)
     parser.add_argument("--plan-file", required=True)
     parser.add_argument("--permit-token-file")
+    parser.add_argument("--sparta-route-file")
     parser.add_argument("--api-url", default=os.environ.get("SMERC_API_URL", ""))
     parser.add_argument("--workspace", default=os.environ.get("GITHUB_WORKSPACE", "."))
     parser.add_argument("--report-file", default="smerc-execution-report.json")
@@ -793,6 +854,9 @@ def main() -> int:
     action = _load_json(Path(args.action_file), maximum=MAX_PLAN_BYTES, label="action")
     plan_source = _load_json(Path(args.plan_file), maximum=MAX_PLAN_BYTES, label="execution_plan")
     plan = ExecutionPlan.from_mapping(plan_source)
+    sparta_route_report = None
+    if args.sparta_route_file:
+        sparta_route_report = _load_json(Path(args.sparta_route_file), maximum=MAX_PLAN_BYTES, label="sparta_route")
     workspace = Path(args.workspace)
     plan.resolve_working_directory(workspace)
     report_path = Path(args.report_file)
@@ -803,6 +867,20 @@ def main() -> int:
             "outcome": "VALIDATED",
             "action_hash": action_hash(action),
             "plan_hash": _canonical_digest(plan.source),
+            "sparta": (
+                {
+                    "version": SPARTA_EXECUTION_EVIDENCE_VERSION,
+                    "route_id": sparta_route_report.get("route_id"),
+                    "route_report_digest": _route_report_digest(sparta_route_report),
+                    "binding": {
+                        "valid": None,
+                        "checks": {},
+                        "note": "Validate mode records the supplied SPARTa route digest; enforce mode verifies permit binding before execution.",
+                    },
+                }
+                if sparta_route_report is not None
+                else None
+            ),
             "required_external_inputs": [
                 "permit_token_file", "SMERC_EXECUTOR_TOKEN", "SMERC_CONTROL_EVIDENCE_KEY"
             ],
@@ -848,6 +926,7 @@ def main() -> int:
                 executor_token=os.environ.get("SMERC_EXECUTOR_TOKEN", ""),
                 evidence_signer=signer,
                 workspace=workspace,
+                sparta_route_report=sparta_route_report,
                 cancel_event=cancel_event,
             )
         except DeploymentAdapterError as exc:

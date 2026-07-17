@@ -25,6 +25,7 @@ The current build includes:
 - SPARTa adapter registry and authenticated API route endpoint for stored SMERC decisions
 - optional HMAC-signed SPARTa route reports for pilot-grade tamper detection
 - static SPARTa adapter conformance report that checks declared adapter capabilities across ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE route behavior
+- GitHub deployment adapter SPARTa binding that verifies route replay, posture, executable state, and required controls before command execution
 - control mapping library that maps SMERC/SPARTa controls to declared native tool mechanisms and evidence requirements
 - replayable governance report generator that assembles decision, route, control mapping, and lifecycle evidence into one review package
 - Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
@@ -94,6 +95,7 @@ Start here before reading the code:
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
 - `docs/SPARTa_v2_Execution_Adapter_Framework.md` explains how SPARTa can mature into the execution-adapter layer for GitHub Actions, ticketing, review, cloud, and financial workflows.
 - `docs/SPARTa_Adapter_Conformance.md` explains how the static adapter conformance harness checks declared SPARTa capabilities before pilot use.
+- `docs/GitHub_Deployment_Adapter_Operations.md` explains how a supplied SPARTa route artifact can be bound to a one-time permit before GitHub deployment execution.
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
 - `docs/Governance_Report_Generator.md` explains how to assemble decision, route, control mapping, and DLL artifacts into one replayable review report.
 - `docs/Decision_Lifecycle_Ledger.md` explains how SMERC records the full governed life of a decision.

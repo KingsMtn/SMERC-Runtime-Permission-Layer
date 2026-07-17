@@ -9,6 +9,10 @@ inputs:
   plan-file:
     description: "Path to a strict smerc.execution-plan.v1 document."
     required: true
+  sparta-route-file:
+    description: "Optional path to a smerc.sparta-route.v1 report that must bind to the permit before execution."
+    required: false
+    default: ""
   permit-token-file:
     description: "Path to the short-lived permit file. The adapter removes it before execution."
     required: false
@@ -57,5 +61,8 @@ runs:
         )
         if [[ "${{ inputs.mode }}" == "enforce" ]]; then
           args+=(--permit-token-file "${{ inputs.permit-token-file }}")
+        fi
+        if [[ -n "${{ inputs.sparta-route-file }}" ]]; then
+          args+=(--sparta-route-file "${{ inputs.sparta-route-file }}")
         fi
         python "$GITHUB_ACTION_PATH/deployment_adapter.py" "${args[@]}"

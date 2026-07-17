@@ -170,6 +170,41 @@ class GitHubDeploymentAdapterTests(unittest.TestCase):
             cancel_event=cancel_event,
         )
 
+    def sparta_route(self, *, replay_id="replay_adapter_1001", posture="THROTTLE", controls=None):
+        return {
+            "version": "smerc.sparta-route.v1",
+            "route_id": "sparta_deployment_1001",
+            "routed_at": "2026-07-17T12:00:00+00:00",
+            "plan_id": "github-production-deployment",
+            "decision_replay_id": replay_id,
+            "decision_digest": "a" * 64,
+            "source_posture": posture,
+            "route_state": "CONSTRAINED_EXECUTE",
+            "executable": True,
+            "effective_scope_units": 1,
+            "applied_controls": controls or ["checkpoint_before_execution", "record_execution_report"],
+            "blocked_controls": [],
+            "reason_codes": ["SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"],
+            "plain_english_summary": "Route is constrained for deployment.",
+            "recommended_next_action": "Execute through the configured adapter.",
+            "tool_plan": {
+                "version": "smerc.sparta-plan.v1",
+                "plan_id": "github-production-deployment",
+                "tool": "github_actions",
+                "action": "deploy",
+                "requested_capability": "deployment",
+                "supports_dry_run": True,
+                "supports_scope_limit": True,
+                "supports_checkpoint": True,
+                "supports_rollback": True,
+                "supports_human_approval": True,
+                "max_scope_units": 10,
+                "requested_scope_units": 1,
+                "side_effect_level": "external",
+                "metadata": {},
+            },
+        }
+
     def allow_consumption(self):
         self.server.responses.append(
             (
@@ -214,6 +249,58 @@ class GitHubDeploymentAdapterTests(unittest.TestCase):
         self.assertEqual(request["authorization"], "Bearer executor-secret-012345678901")
         self.assertEqual(request["tenant"], "alpha")
         self.assertIn("control_evidence_token", request["payload"])
+
+    def test_sparta_route_binding_is_included_in_execution_report(self):
+        self.allow_consumption()
+        controls = {
+            "checkpoint_before_execution": command([sys.executable, "-c", "print('checkpoint')"])
+        }
+        report = execute(
+            action=self.action,
+            plan=ExecutionPlan.from_mapping(
+                plan_mapping([sys.executable, "-c", "print('deploy')"], controls=controls)
+            ),
+            permit_token=permit_token(self.action, ["retain_cancel_handle", "checkpoint_before_execution"]),
+            api_url=self.api_url,
+            executor_token="executor-secret-012345678901",
+            evidence_signer=self.signer,
+            workspace=self.workspace,
+            sparta_route_report=self.sparta_route(),
+        )
+        self.assertEqual(report["outcome"], "SUCCEEDED")
+        self.assertEqual(report["sparta"]["version"], "smerc.sparta-execution-evidence.v1")
+        self.assertEqual(report["sparta"]["route_id"], "sparta_deployment_1001")
+        self.assertTrue(report["sparta"]["binding"]["valid"])
+        self.assertEqual(report["sparta"]["binding"]["missing_required_controls"], [])
+
+    def test_sparta_route_mismatch_blocks_before_control_consumption_and_deploy(self):
+        marker = self.workspace / "must-not-deploy.txt"
+        controls = {
+            "checkpoint_before_execution": command([sys.executable, "-c", "print('checkpoint')"])
+        }
+        with self.assertRaisesRegex(DeploymentAdapterError, "SPARTa route does not bind"):
+            execute(
+                action=self.action,
+                plan=ExecutionPlan.from_mapping(
+                    plan_mapping(
+                        [
+                            sys.executable,
+                            "-c",
+                            "import pathlib,sys; pathlib.Path(sys.argv[1]).write_text('bad')",
+                            str(marker),
+                        ],
+                        controls=controls,
+                    )
+                ),
+                permit_token=permit_token(self.action, ["retain_cancel_handle", "checkpoint_before_execution"]),
+                api_url=self.api_url,
+                executor_token="executor-secret-012345678901",
+                evidence_signer=self.signer,
+                workspace=self.workspace,
+                sparta_route_report=self.sparta_route(replay_id="wrong_replay"),
+            )
+        self.assertFalse(marker.exists())
+        self.assertEqual([item["path"] for item in self.server.requests], ["/v1/permits/prepare"])
 
     def test_missing_or_failed_required_control_stops_before_consumption_and_deploy(self):
         marker = self.workspace / "deployed.txt"

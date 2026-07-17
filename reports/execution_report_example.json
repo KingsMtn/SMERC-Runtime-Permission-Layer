@@ -44,6 +44,25 @@
     "consumed_at": "2026-07-12T12:08:10Z",
     "control_evidence_mode": "signed_adapter_receipt"
   },
+  "sparta": {
+    "version": "smerc.sparta-execution-evidence.v1",
+    "route_id": "sparta_github-prod-canary-deploy_57b3c3c9fae7",
+    "route_report_digest": "24dc753d607c5ff621dff0cf393198a3df411b682798c92c048dbb720c1296cf",
+    "decision_replay_id": "replay_example_throttle_001",
+    "source_posture": "THROTTLE",
+    "route_state": "CONSTRAINED_EXECUTE",
+    "binding": {
+      "valid": true,
+      "checks": {
+        "replay_id_matches": true,
+        "posture_matches": true,
+        "route_is_executable": true,
+        "required_controls_declared_by_route": true
+      },
+      "missing_required_controls": []
+    },
+    "adapter_boundary": "The GitHub deployment adapter verifies route-to-permit binding before execution; live GitHub environment protections and target-platform restoration remain external evidence."
+  },
   "execution": {
     "status": "succeeded",
     "exit_code": 0,

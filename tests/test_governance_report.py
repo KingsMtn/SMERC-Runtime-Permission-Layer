@@ -27,6 +27,7 @@ class GovernanceReportTests(unittest.TestCase):
         self.assertEqual(report["summary"]["reviewer_verdict"], "agree")
         self.assertTrue(all(check["passed"] for check in report["cross_checks"]))
         self.assertIn("control_evidence_satisfies_permit", {check["check_id"] for check in report["cross_checks"]})
+        self.assertIn("execution_sparta_route_matches_route_report", {check["check_id"] for check in report["cross_checks"]})
         self.assertIn("pilot review evidence", report["recommended_next_action"])
 
     def test_markdown_is_ciso_readable_and_does_not_overclaim(self):

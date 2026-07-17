@@ -42,6 +42,11 @@ def _sha256(value: Any) -> str:
     return hashlib.sha256(_canonical_json(value).encode("utf-8")).hexdigest()
 
 
+def _route_report_digest(route_report: Mapping[str, Any]) -> str:
+    material = {key: value for key, value in dict(route_report).items() if key != "signature"}
+    return _sha256(material)
+
+
 def _strict_object(value: Any, fields: set[str], path: str) -> Dict[str, Any]:
     if not isinstance(value, dict):
         raise TypeError(f"{path} must be an object")
@@ -195,6 +200,7 @@ def _cross_checks(
     permit = evidence["permit_report_path"]
     control_evidence = evidence["control_evidence_report_path"]
     execution = evidence["execution_report_path"]
+    sparta_execution = execution.get("sparta", {})
     reviewer_outcome = evidence["reviewer_outcome_path"]
     applied_controls = set(route.get("applied_controls", []))
     permit_controls = set(permit.get("required_controls", []))
@@ -253,6 +259,15 @@ def _cross_checks(
             "execution_consumed_same_permit",
             execution.get("permit", {}).get("permit_id") == permit.get("permit_id"),
             f"execution permit {execution.get('permit', {}).get('permit_id')} vs permit {permit.get('permit_id')}",
+        ),
+        _check(
+            "execution_sparta_route_matches_route_report",
+            isinstance(sparta_execution, Mapping)
+            and sparta_execution.get("route_id") == route.get("route_id")
+            and sparta_execution.get("decision_replay_id") == route.get("decision_replay_id")
+            and sparta_execution.get("source_posture") == route.get("source_posture")
+            and sparta_execution.get("route_report_digest") == _route_report_digest(route),
+            "execution report SPARTa evidence should bind to the supplied route report",
         ),
         _check(
             "reviewer_outcome_matches_decision",

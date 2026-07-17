@@ -36,6 +36,7 @@ AI-assisted production deployment request where SMERC returns THROTTLE, SPARTa r
 | `permit_controls_are_route_controls` | `pass` | permit required controls should be a subset of SPARTa applied controls |
 | `control_evidence_satisfies_permit` | `pass` | control evidence should show each permit-required control was observed |
 | `execution_consumed_same_permit` | `pass` | execution permit permit_0123456789abcdef0123456789abcdef vs permit permit_0123456789abcdef0123456789abcdef |
+| `execution_sparta_route_matches_route_report` | `pass` | execution report SPARTa evidence should bind to the supplied route report |
 | `reviewer_outcome_matches_decision` | `pass` | reviewer outcome replay replay_example_throttle_001 vs decision replay replay_example_throttle_001 |
 
 ## Artifacts
@@ -47,7 +48,7 @@ AI-assisted production deployment request where SMERC returns THROTTLE, SPARTa r
 | `control_mapping_report`: `reports/control_mapping_example.json` | `smerc.control-mapping-report.v1` | `837a816ab187d9045584facf143ee56a8cf4f45684575e57905b9ae7347571e9` |
 | `decision_lifecycle_ledger`: `reports/decision_lifecycle_ledger_example.json` | `smerc.decision-lifecycle-ledger.v1` | `f1c06132003d4fe32fe21c4c7980da703df7d815b00a1c78d50e1e20cd5b9c30` |
 | `control_evidence_report`: `reports/control_evidence_receipt_example.json` | `smerc.control-evidence.v1` | `7ee021c5ef5d2f7201b58d70f667d027529f5a95e71e5b0f79c02ab78548ed1b` |
-| `execution_report`: `reports/execution_report_example.json` | `smerc.execution-report.v1` | `b3121dc773a26d8453b831639489ae0062ce5b43426d5c7c9152bf95b15811e2` |
+| `execution_report`: `reports/execution_report_example.json` | `smerc.execution-report.v1` | `8687c347456247e127194e2f4d2bb9c3ed33d37eea2020927a24a27b8c006c18` |
 | `permit_report`: `reports/action_bound_permit_example.json` | `smerc.permit.v1` | `9ab55e8a5fa11c8d0b860fba4eff8c3b17933bf224375f6f3298ba234e5d1e09` |
 | `reviewer_outcome`: `reports/reviewer_outcome_example.json` | `smerc.reviewer-outcome.v1` | `6c34d1a4b11547809418a0f6d55c88dcec106fd94789c756951c11cc2c01ee68` |
 
