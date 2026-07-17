@@ -120,6 +120,7 @@ Start here before reading the code:
 - `reports/Decision_Certificate_Example.md` shows an example signed pilot certificate generated from a verified Decision Lifecycle Ledger.
 - `reports/Decision_Lifecycle_Ledger_Example.md` shows a full pilot-grade lifecycle record from request through learning recommendation.
 - `reports/SMERC_F_Profile_Packet.md` shows a financial-action profile packet across conservative, balanced, and permissive policies.
+- `reports/Public_Discovery_Audit.md` shows the latest local audit of the public site's discovery metadata and AI-readable files.
 - `COMMUNITY.md`, `CONTRIBUTING.md`, `docs/Partner_Program.md`, and `docs/Community_Outreach_Kit.md` describe how design partners, integration partners, researchers, and open-source contributors can engage.
 
 The shortest accurate explanation is:

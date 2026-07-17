@@ -6,6 +6,9 @@ from pathlib import Path
 from reference_engine.public_discovery_audit import audit_site, markdown
 
 
+ROOT = Path(__file__).resolve().parents[1]
+
+
 class PublicDiscoveryAuditTests(unittest.TestCase):
     def test_valid_site_export_passes(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -42,6 +45,19 @@ class PublicDiscoveryAuditTests(unittest.TestCase):
             self.assertIn("SMERC Public Discovery Audit", report)
             self.assertIn("Passed: `true`", report)
             self.assertIn("Local site-export audit only", report)
+
+    def test_checked_in_report_records_current_public_discovery_audit(self):
+        payload = json.loads((ROOT / "reports" / "public_discovery_audit.json").read_text(encoding="utf-8"))
+        report = (ROOT / "reports" / "Public_Discovery_Audit.md").read_text(encoding="utf-8")
+
+        self.assertEqual(payload["schema"], "smerc.public-discovery-audit.v1")
+        self.assertTrue(payload["passed"])
+        self.assertEqual(payload["blocking_count"], 0)
+        self.assertEqual(payload["warning_count"], 0)
+        self.assertIn("Structural Momentum Entropy Range Confidence", payload["required_terms"])
+        self.assertIn("AI agent governance", payload["required_terms"])
+        self.assertIn("Passed: `true`", report)
+        self.assertIn("does not prove search indexing", report)
 
     def _write_valid_site(self, site: Path) -> None:
         (site / ".well-known").mkdir()

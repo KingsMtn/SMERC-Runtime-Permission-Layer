@@ -20,6 +20,7 @@
 - Added acronym-expansion guidance for Structural Momentum Entropy Range Confidence on key discovery surfaces.
 - Added a naming and search style guide using the brand/category/problem pattern for public labels.
 - Added a public discovery audit CLI that checks local site exports for required search, AI-readable, beacon, sitemap, and naming metadata.
+- Added generated public discovery audit JSON/Markdown reports and tests for the current public site metadata.
 - Added a Human/AI Pilot Operating Model defining the split between AI-proposed actions, SMERC scoring, and human-owned validation, labels, accountability, and go/no-go decisions.
 - Added a GitHub Actions pilot launch runbook and machine-readable pilot manifest covering local shadow mode, remote API mode, OIDC mode, evidence collection, and stop conditions.
 - Added a GitHub Actions pilot artifact summarizer that converts downloaded `smerc-decision.json` reports into JSON/Markdown operating summaries without claiming customer outcome evidence.
