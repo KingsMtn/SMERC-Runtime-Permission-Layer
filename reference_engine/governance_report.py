@@ -21,8 +21,16 @@ BUNDLE_FIELDS = {
     "route_report_path",
     "control_mapping_report_path",
     "decision_lifecycle_ledger_path",
+    "evidence_paths",
     "review_notes",
     "known_limits",
+}
+
+EVIDENCE_PATH_FIELDS = {
+    "permit_report_path",
+    "control_evidence_report_path",
+    "execution_report_path",
+    "reviewer_outcome_path",
 }
 
 
@@ -105,10 +113,19 @@ def load_bundle(path: str | Path) -> Dict[str, Any]:
             "governance_bundle.decision_lifecycle_ledger_path",
             260,
         ),
+        "evidence_paths": _parse_evidence_paths(bundle["evidence_paths"]),
         "review_notes": _list_of_text(bundle["review_notes"], "governance_bundle.review_notes"),
         "known_limits": _list_of_text(bundle["known_limits"], "governance_bundle.known_limits"),
     }
     return parsed
+
+
+def _parse_evidence_paths(value: Any) -> Dict[str, str]:
+    paths = _strict_object(value, EVIDENCE_PATH_FIELDS, "governance_bundle.evidence_paths")
+    return {
+        key: _text(paths[key], f"governance_bundle.evidence_paths.{key}", 260)
+        for key in sorted(EVIDENCE_PATH_FIELDS)
+    }
 
 
 def build_report(bundle_path: str | Path, *, repository_root: str | Path = ".") -> Dict[str, Any]:
@@ -118,13 +135,19 @@ def build_report(bundle_path: str | Path, *, repository_root: str | Path = ".") 
     route = _load_json(root, bundle["route_report_path"], "route_report_path")
     control_mapping = _load_json(root, bundle["control_mapping_report_path"], "control_mapping_report_path")
     ledger = _load_json(root, bundle["decision_lifecycle_ledger_path"], "decision_lifecycle_ledger_path")
-    checks = _cross_checks(decision, route, control_mapping, ledger)
+    evidence = {
+        key: _load_json(root, path, f"evidence_paths.{key}")
+        for key, path in bundle["evidence_paths"].items()
+    }
+    checks = _cross_checks(decision, route, control_mapping, ledger, evidence)
     artifacts = {
         "decision": _artifact(bundle["decision_path"], decision),
         "route_report": _artifact(bundle["route_report_path"], route),
         "control_mapping_report": _artifact(bundle["control_mapping_report_path"], control_mapping),
         "decision_lifecycle_ledger": _artifact(bundle["decision_lifecycle_ledger_path"], ledger),
     }
+    for key, path in bundle["evidence_paths"].items():
+        artifacts[key.removesuffix("_path")] = _artifact(path, evidence[key])
     return {
         "version": GOVERNANCE_REPORT_VERSION,
         "report_id": bundle["report_id"],
@@ -140,6 +163,10 @@ def build_report(bundle_path: str | Path, *, repository_root: str | Path = ".") 
             "missing_control_count": len(control_mapping.get("missing_controls", [])),
             "ledger_record_count": ledger.get("record_count"),
             "ledger_valid": bool(ledger.get("verification", {}).get("valid")),
+            "evidence_artifact_count": len(evidence),
+            "permit_id": evidence["permit_report_path"].get("permit_id"),
+            "execution_outcome": evidence["execution_report_path"].get("outcome"),
+            "reviewer_verdict": evidence["reviewer_outcome_path"].get("verdict"),
         },
         "cross_checks": checks,
         "artifacts": artifacts,
@@ -153,7 +180,7 @@ def build_report(bundle_path: str | Path, *, repository_root: str | Path = ".") 
 def _artifact(path: str, payload: Mapping[str, Any]) -> Dict[str, Any]:
     return {
         "path": path,
-        "version": payload.get("version", "unversioned"),
+        "version": payload.get("version", payload.get("report_version", "unversioned")),
         "digest": _sha256(payload),
     }
 
@@ -163,7 +190,19 @@ def _cross_checks(
     route: Mapping[str, Any],
     control_mapping: Mapping[str, Any],
     ledger: Mapping[str, Any],
+    evidence: Mapping[str, Mapping[str, Any]],
 ) -> list[Dict[str, Any]]:
+    permit = evidence["permit_report_path"]
+    control_evidence = evidence["control_evidence_report_path"]
+    execution = evidence["execution_report_path"]
+    reviewer_outcome = evidence["reviewer_outcome_path"]
+    applied_controls = set(route.get("applied_controls", []))
+    permit_controls = set(permit.get("required_controls", []))
+    observed_controls = {
+        control_id
+        for control_id, result in control_evidence.get("controls", {}).items()
+        if isinstance(result, Mapping) and result.get("outcome") in {"passed", "succeeded", "observed"}
+    }
     checks = [
         _check(
             "decision_posture_matches_route_source",
@@ -195,6 +234,31 @@ def _cross_checks(
             bool(ledger.get("verification", {}).get("valid")),
             "decision lifecycle ledger must verify before being used as evidence",
         ),
+        _check(
+            "permit_replay_matches_decision",
+            permit.get("replay_id") == decision.get("replay_id"),
+            f"permit replay {permit.get('replay_id')} vs decision replay {decision.get('replay_id')}",
+        ),
+        _check(
+            "permit_controls_are_route_controls",
+            permit_controls <= applied_controls,
+            "permit required controls should be a subset of SPARTa applied controls",
+        ),
+        _check(
+            "control_evidence_satisfies_permit",
+            permit_controls <= observed_controls,
+            "control evidence should show each permit-required control was observed",
+        ),
+        _check(
+            "execution_consumed_same_permit",
+            execution.get("permit", {}).get("permit_id") == permit.get("permit_id"),
+            f"execution permit {execution.get('permit', {}).get('permit_id')} vs permit {permit.get('permit_id')}",
+        ),
+        _check(
+            "reviewer_outcome_matches_decision",
+            reviewer_outcome.get("replay_id") == decision.get("replay_id"),
+            f"reviewer outcome replay {reviewer_outcome.get('replay_id')} vs decision replay {decision.get('replay_id')}",
+        ),
     ]
     return checks
 
@@ -224,7 +288,7 @@ def _summary(
     return (
         f"SMERC returned {decision.get('posture')}; SPARTa routed it to {route.get('route_state')}; "
         f"control mapping executable is {str(bool(control_mapping.get('executable'))).lower()}; "
-        f"{failed} cross-check(s) failed."
+        f"{failed} cross-check(s) failed. Permit, control evidence, execution, and reviewer outcome are included when supplied by the bundle."
     )
 
 
@@ -251,6 +315,10 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Missing controls: `{summary['missing_control_count']}`",
         f"- DLL records: `{summary['ledger_record_count']}`",
         f"- DLL valid: `{str(summary['ledger_valid']).lower()}`",
+        f"- Evidence artifacts: `{summary['evidence_artifact_count']}`",
+        f"- Permit ID: `{summary['permit_id']}`",
+        f"- Execution outcome: `{summary['execution_outcome']}`",
+        f"- Reviewer verdict: `{summary['reviewer_verdict']}`",
         "",
         "## Cross-Checks",
         "",

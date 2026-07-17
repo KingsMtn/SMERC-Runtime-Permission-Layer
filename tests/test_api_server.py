@@ -65,13 +65,18 @@ class APIServerTests(unittest.TestCase):
             data = json.dumps(payload).encode("utf-8")
             request_headers.setdefault("content-type", "application/json")
         request = Request(self.url(path), data=data, headers=request_headers, method=method)
-        try:
-            with urlopen(request, timeout=5) as response:
-                response_headers = {name.lower(): value for name, value in response.headers.items()}
-                return response.status, response_headers, json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            response_headers = {name.lower(): value for name, value in exc.headers.items()}
-            return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+        for attempt in range(2):
+            try:
+                with urlopen(request, timeout=5) as response:
+                    response_headers = {name.lower(): value for name, value in response.headers.items()}
+                    return response.status, response_headers, json.loads(response.read().decode("utf-8"))
+            except HTTPError as exc:
+                response_headers = {name.lower(): value for name, value in exc.headers.items()}
+                return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+            except ConnectionAbortedError:
+                if attempt:
+                    raise
+        raise AssertionError("unreachable request retry state")
 
     def test_health_and_ready_do_not_require_authentication(self):
         health = self.request_json("/health")
@@ -508,13 +513,18 @@ class PilotReviewAPITests(unittest.TestCase):
             data = json.dumps(payload).encode("utf-8")
             request_headers.setdefault("content-type", "application/json")
         request = Request(self.url(path), data=data, headers=request_headers, method=method)
-        try:
-            with urlopen(request, timeout=5) as response:
-                response_headers = {name.lower(): value for name, value in response.headers.items()}
-                return response.status, response_headers, json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            response_headers = {name.lower(): value for name, value in exc.headers.items()}
-            return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+        for attempt in range(2):
+            try:
+                with urlopen(request, timeout=5) as response:
+                    response_headers = {name.lower(): value for name, value in response.headers.items()}
+                    return response.status, response_headers, json.loads(response.read().decode("utf-8"))
+            except HTTPError as exc:
+                response_headers = {name.lower(): value for name, value in exc.headers.items()}
+                return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+            except ConnectionAbortedError:
+                if attempt:
+                    raise
+        raise AssertionError("unreachable request retry state")
 
     def create_decision(self, example_index=0, tenant="alpha"):
         key = f"{tenant}-secret"
@@ -745,13 +755,18 @@ class PilotDLLAPITests(unittest.TestCase):
             data = json.dumps(payload).encode("utf-8")
             request_headers.setdefault("content-type", "application/json")
         request = Request(self.url(path), data=data, headers=request_headers, method=method)
-        try:
-            with urlopen(request, timeout=5) as response:
-                response_headers = {name.lower(): value for name, value in response.headers.items()}
-                return response.status, response_headers, json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            response_headers = {name.lower(): value for name, value in exc.headers.items()}
-            return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+        for attempt in range(2):
+            try:
+                with urlopen(request, timeout=5) as response:
+                    response_headers = {name.lower(): value for name, value in response.headers.items()}
+                    return response.status, response_headers, json.loads(response.read().decode("utf-8"))
+            except HTTPError as exc:
+                response_headers = {name.lower(): value for name, value in exc.headers.items()}
+                return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+            except ConnectionAbortedError:
+                if attempt:
+                    raise
+        raise AssertionError("unreachable request retry state")
 
     def intake_payload(self):
         return {

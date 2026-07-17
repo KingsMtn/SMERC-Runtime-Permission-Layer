@@ -1,0 +1,60 @@
+{
+  "report_version": "smerc.execution-report.v1",
+  "execution_id": "github-run-1001-payments-canary",
+  "outcome": "SUCCEEDED",
+  "tenant_id": "design-partner",
+  "audience": "github-actions-deployer",
+  "action_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "plan_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "required_external_inputs": [
+    "github_environment_protection",
+    "rollback_plan_reference",
+    "route_report_artifact"
+  ],
+  "permit": {
+    "permit_id": "permit_0123456789abcdef0123456789abcdef",
+    "replay_id": "replay_example_throttle_001",
+    "posture": "THROTTLE",
+    "authorization": "constrain",
+    "required_controls": [
+      "checkpoint_before_execution",
+      "limit_scope",
+      "preserve_replay",
+      "preview_before_execution",
+      "record_execution_report",
+      "require_rollback_plan"
+    ],
+    "expires_at": 1783904400
+  },
+  "control_evidence": {
+    "evidence_id": "control_evidence_0123456789abcdef0123456789abcdef",
+    "adapter_id": "github-actions-deployer",
+    "controls": {
+      "checkpoint_before_execution": "observed",
+      "limit_scope": "observed",
+      "preserve_replay": "observed",
+      "preview_before_execution": "observed",
+      "record_execution_report": "observed",
+      "require_rollback_plan": "observed"
+    }
+  },
+  "permit_consumption": {
+    "valid": true,
+    "preparation_id": "preparation_0123456789abcdef0123456789abcdef",
+    "consumed_at": "2026-07-12T12:08:10Z",
+    "control_evidence_mode": "signed_adapter_receipt"
+  },
+  "execution": {
+    "status": "succeeded",
+    "exit_code": 0,
+    "started_at": "2026-07-12T12:05:00Z",
+    "finished_at": "2026-07-12T12:08:04Z",
+    "duration_ms": 184000,
+    "output_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "output_bytes": 4096
+  },
+  "rollback": null,
+  "environment_names": [
+    "PRODUCTION_CANARY"
+  ]
+}

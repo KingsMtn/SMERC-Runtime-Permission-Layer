@@ -18,6 +18,10 @@ AI-assisted production deployment request where SMERC returns THROTTLE, SPARTa r
 - Missing controls: `0`
 - DLL records: `7`
 - DLL valid: `true`
+- Evidence artifacts: `4`
+- Permit ID: `permit_0123456789abcdef0123456789abcdef`
+- Execution outcome: `SUCCEEDED`
+- Reviewer verdict: `agree`
 
 ## Cross-Checks
 
@@ -28,6 +32,11 @@ AI-assisted production deployment request where SMERC returns THROTTLE, SPARTa r
 | `route_controls_are_mapped_or_not_required` | `pass` | route controls should be explainable by the control mapping library or documented as route-level controls |
 | `control_mapping_has_no_missing_required_controls` | `pass` | control mapping should not hide missing native mechanisms |
 | `ledger_hash_chain_valid` | `pass` | decision lifecycle ledger must verify before being used as evidence |
+| `permit_replay_matches_decision` | `pass` | permit replay replay_example_throttle_001 vs decision replay replay_example_throttle_001 |
+| `permit_controls_are_route_controls` | `pass` | permit required controls should be a subset of SPARTa applied controls |
+| `control_evidence_satisfies_permit` | `pass` | control evidence should show each permit-required control was observed |
+| `execution_consumed_same_permit` | `pass` | execution permit permit_0123456789abcdef0123456789abcdef vs permit permit_0123456789abcdef0123456789abcdef |
+| `reviewer_outcome_matches_decision` | `pass` | reviewer outcome replay replay_example_throttle_001 vs decision replay replay_example_throttle_001 |
 
 ## Artifacts
 
@@ -37,6 +46,10 @@ AI-assisted production deployment request where SMERC returns THROTTLE, SPARTa r
 | `route_report`: `reports/signed_sparta_route_example.json` | `smerc.sparta-route.v1` | `385b45c38646960770c8949c3cc755dac9781967755f63c3e589ae518201a923` |
 | `control_mapping_report`: `reports/control_mapping_example.json` | `smerc.control-mapping-report.v1` | `837a816ab187d9045584facf143ee56a8cf4f45684575e57905b9ae7347571e9` |
 | `decision_lifecycle_ledger`: `reports/decision_lifecycle_ledger_example.json` | `smerc.decision-lifecycle-ledger.v1` | `f1c06132003d4fe32fe21c4c7980da703df7d815b00a1c78d50e1e20cd5b9c30` |
+| `control_evidence_report`: `reports/control_evidence_receipt_example.json` | `smerc.control-evidence.v1` | `7ee021c5ef5d2f7201b58d70f667d027529f5a95e71e5b0f79c02ab78548ed1b` |
+| `execution_report`: `reports/execution_report_example.json` | `smerc.execution-report.v1` | `b3121dc773a26d8453b831639489ae0062ce5b43426d5c7c9152bf95b15811e2` |
+| `permit_report`: `reports/action_bound_permit_example.json` | `smerc.permit.v1` | `9ab55e8a5fa11c8d0b860fba4eff8c3b17933bf224375f6f3298ba234e5d1e09` |
+| `reviewer_outcome`: `reports/reviewer_outcome_example.json` | `smerc.reviewer-outcome.v1` | `6c34d1a4b11547809418a0f6d55c88dcec106fd94789c756951c11cc2c01ee68` |
 
 ## Review Notes
 
@@ -55,4 +68,4 @@ AI-assisted production deployment request where SMERC returns THROTTLE, SPARTa r
 
 Use this bundle as pilot review evidence; validate native enforcement and collect external reviewer feedback before production claims.
 
-SMERC returned THROTTLE; SPARTa routed it to CONSTRAINED_EXECUTE; control mapping executable is true; 0 cross-check(s) failed.
+SMERC returned THROTTLE; SPARTa routed it to CONSTRAINED_EXECUTE; control mapping executable is true; 0 cross-check(s) failed. Permit, control evidence, execution, and reviewer outcome are included when supplied by the bundle.

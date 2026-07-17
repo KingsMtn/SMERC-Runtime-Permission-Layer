@@ -1,5 +1,10 @@
 {
   "artifacts": {
+    "control_evidence_report": {
+      "digest": "7ee021c5ef5d2f7201b58d70f667d027529f5a95e71e5b0f79c02ab78548ed1b",
+      "path": "reports/control_evidence_receipt_example.json",
+      "version": "smerc.control-evidence.v1"
+    },
     "control_mapping_report": {
       "digest": "837a816ab187d9045584facf143ee56a8cf4f45684575e57905b9ae7347571e9",
       "path": "reports/control_mapping_example.json",
@@ -14,6 +19,21 @@
       "digest": "f1c06132003d4fe32fe21c4c7980da703df7d815b00a1c78d50e1e20cd5b9c30",
       "path": "reports/decision_lifecycle_ledger_example.json",
       "version": "smerc.decision-lifecycle-ledger.v1"
+    },
+    "execution_report": {
+      "digest": "b3121dc773a26d8453b831639489ae0062ce5b43426d5c7c9152bf95b15811e2",
+      "path": "reports/execution_report_example.json",
+      "version": "smerc.execution-report.v1"
+    },
+    "permit_report": {
+      "digest": "9ab55e8a5fa11c8d0b860fba4eff8c3b17933bf224375f6f3298ba234e5d1e09",
+      "path": "reports/action_bound_permit_example.json",
+      "version": "smerc.permit.v1"
+    },
+    "reviewer_outcome": {
+      "digest": "6c34d1a4b11547809418a0f6d55c88dcec106fd94789c756951c11cc2c01ee68",
+      "path": "reports/reviewer_outcome_example.json",
+      "version": "smerc.reviewer-outcome.v1"
     },
     "route_report": {
       "digest": "385b45c38646960770c8949c3cc755dac9781967755f63c3e589ae518201a923",
@@ -47,6 +67,31 @@
       "check_id": "ledger_hash_chain_valid",
       "detail": "decision lifecycle ledger must verify before being used as evidence",
       "passed": true
+    },
+    {
+      "check_id": "permit_replay_matches_decision",
+      "detail": "permit replay replay_example_throttle_001 vs decision replay replay_example_throttle_001",
+      "passed": true
+    },
+    {
+      "check_id": "permit_controls_are_route_controls",
+      "detail": "permit required controls should be a subset of SPARTa applied controls",
+      "passed": true
+    },
+    {
+      "check_id": "control_evidence_satisfies_permit",
+      "detail": "control evidence should show each permit-required control was observed",
+      "passed": true
+    },
+    {
+      "check_id": "execution_consumed_same_permit",
+      "detail": "execution permit permit_0123456789abcdef0123456789abcdef vs permit permit_0123456789abcdef0123456789abcdef",
+      "passed": true
+    },
+    {
+      "check_id": "reviewer_outcome_matches_decision",
+      "detail": "reviewer outcome replay replay_example_throttle_001 vs decision replay replay_example_throttle_001",
+      "passed": true
     }
   ],
   "known_limits": [
@@ -55,7 +100,7 @@
     "Control mapping declares expected mechanisms; adapter validation is still required.",
     "The report does not prove live incident reduction or regulatory compliance."
   ],
-  "plain_english_summary": "SMERC returned THROTTLE; SPARTa routed it to CONSTRAINED_EXECUTE; control mapping executable is true; 0 cross-check(s) failed.",
+  "plain_english_summary": "SMERC returned THROTTLE; SPARTa routed it to CONSTRAINED_EXECUTE; control mapping executable is true; 0 cross-check(s) failed. Permit, control evidence, execution, and reviewer outcome are included when supplied by the bundle.",
   "recommended_next_action": "Use this bundle as pilot review evidence; validate native enforcement and collect external reviewer feedback before production claims.",
   "report_id": "github-actions-governance-report-example",
   "review_notes": [
@@ -66,11 +111,15 @@
   "scenario": "AI-assisted production deployment request where SMERC returns THROTTLE, SPARTa routes to constrained execution, controls map to GitHub Actions mechanisms, and DLL records the governed decision lifecycle.",
   "summary": {
     "control_mapping_executable": true,
+    "evidence_artifact_count": 4,
+    "execution_outcome": "SUCCEEDED",
     "ledger_record_count": 7,
     "ledger_valid": true,
     "mapped_control_count": 4,
     "missing_control_count": 0,
+    "permit_id": "permit_0123456789abcdef0123456789abcdef",
     "posture": "THROTTLE",
+    "reviewer_verdict": "agree",
     "route_executable": true,
     "route_state": "CONSTRAINED_EXECUTE"
   },

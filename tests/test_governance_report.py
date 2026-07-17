@@ -21,7 +21,12 @@ class GovernanceReportTests(unittest.TestCase):
         self.assertEqual(report["summary"]["route_state"], "CONSTRAINED_EXECUTE")
         self.assertTrue(report["summary"]["control_mapping_executable"])
         self.assertTrue(report["summary"]["ledger_valid"])
+        self.assertEqual(report["summary"]["evidence_artifact_count"], 4)
+        self.assertEqual(report["summary"]["permit_id"], "permit_0123456789abcdef0123456789abcdef")
+        self.assertEqual(report["summary"]["execution_outcome"], "SUCCEEDED")
+        self.assertEqual(report["summary"]["reviewer_verdict"], "agree")
         self.assertTrue(all(check["passed"] for check in report["cross_checks"]))
+        self.assertIn("control_evidence_satisfies_permit", {check["check_id"] for check in report["cross_checks"]})
         self.assertIn("pilot review evidence", report["recommended_next_action"])
 
     def test_markdown_is_ciso_readable_and_does_not_overclaim(self):
@@ -29,6 +34,8 @@ class GovernanceReportTests(unittest.TestCase):
         self.assertIn("SMERC GitHub Actions Governance Report", markdown)
         self.assertIn("not production certification", markdown)
         self.assertIn("Control mapping executable", markdown)
+        self.assertIn("Evidence artifacts", markdown)
+        self.assertIn("Reviewer verdict", markdown)
         self.assertIn("known_limits", markdown.lower().replace(" ", "_"))
 
     def test_bundle_validation_is_strict(self):
@@ -56,6 +63,15 @@ class GovernanceReportTests(unittest.TestCase):
         temp.write_text(__import__("json").dumps(bundle), encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "inside the repository root"):
             build_report(temp)
+
+    def test_evidence_paths_are_required_and_strict(self):
+        bundle = load_bundle(BUNDLE)
+        del bundle["evidence_paths"]["execution_report_path"]
+        temp = Path("test_outputs/bad_governance_evidence_bundle.json")
+        temp.parent.mkdir(exist_ok=True)
+        temp.write_text(__import__("json").dumps(bundle), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "missing required"):
+            load_bundle(temp)
 
 
 if __name__ == "__main__":

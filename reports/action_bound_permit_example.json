@@ -1,0 +1,28 @@
+{
+  "version": "smerc.permit.v1",
+  "permit_id": "permit_0123456789abcdef0123456789abcdef",
+  "tenant_id": "design-partner",
+  "audience": "github-actions-deployer",
+  "replay_id": "replay_example_throttle_001",
+  "posture": "THROTTLE",
+  "authorization": "constrain",
+  "action_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "policy": {
+    "policy_id": "github-actions-shadow",
+    "policy_revision": "1.0.0",
+    "mode": "ENFORCE",
+    "policy_hash": "example-policy-hash-for-router-demo"
+  },
+  "required_controls": [
+    "checkpoint_before_execution",
+    "limit_scope",
+    "preserve_replay",
+    "preview_before_execution",
+    "record_execution_report",
+    "require_rollback_plan"
+  ],
+  "issued_at": 1783900800,
+  "expires_at": 1783904400,
+  "max_uses": 1,
+  "evidence_boundary": "Example pilot permit artifact. It is not a production credential and contains no usable secret."
+}
