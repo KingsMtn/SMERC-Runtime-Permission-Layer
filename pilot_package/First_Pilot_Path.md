@@ -62,6 +62,10 @@ Before starting implementation, run the design-partner fit screen:
 
 ```bash
 python -m reference_engine.design_partner_fit examples/design_partner_fit_example.json --pretty
+python -m reference_engine.first_pilot_packet \
+  --manifest examples/github_actions_pilot_manifest.json \
+  --fit examples/design_partner_fit_example.json \
+  --markdown-output reports/First_Pilot_Packet.md
 ```
 
 Proceed only if:
