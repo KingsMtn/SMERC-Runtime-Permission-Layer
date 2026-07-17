@@ -24,6 +24,8 @@ That means discoverability should be treated as an operating requirement, not a 
 
 ## Preferred Search Language
 
+Use `docs/Naming_And_Search_Style_Guide.md` as the source of truth for public naming.
+
 Use these terms consistently in public titles, descriptions, documentation, and repository topics:
 
 - SMERC

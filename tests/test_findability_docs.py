@@ -24,6 +24,15 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("ai-agent-governance.html", text)
         self.assertIn("Findability_And_AI_Discovery.md", text)
 
+    def test_naming_guide_preserves_brand_category_problem_order(self):
+        text = (ROOT / "docs" / "Naming_And_Search_Style_Guide.md").read_text(encoding="utf-8")
+
+        self.assertIn("Brand first, category second, searchable problem third", text)
+        self.assertIn("SMERC | Runtime Permission Infrastructure for AI Agents", text)
+        self.assertIn("Structural Momentum Entropy Range Confidence", text)
+        self.assertIn("Recoverability scoring before automated actions execute", text)
+        self.assertIn("Do not overstate", text)
+
 
 if __name__ == "__main__":
     unittest.main()
