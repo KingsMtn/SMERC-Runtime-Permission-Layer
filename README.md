@@ -72,6 +72,7 @@ The current project is ready for technical review and shadow-mode pilot discussi
 Start here before reading the code:
 
 - `docs/External_Review_Start_Here.md` gives external reviewers the shortest safe path through the repository.
+- `docs/Public_Review_Snapshot.md` gives a compact current-status snapshot for reviewers who need the fastest honest orientation.
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
 - `docs/Maturity_Model.md` defines the evidence-based maturity scale used for SMERC claims.
 - `docs/CISO_30_Minute_Review_Package.md` gives CISOs a timed review path for deciding whether a shadow-mode pilot is justified.

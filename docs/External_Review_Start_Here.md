@@ -70,12 +70,13 @@ Those are validation and productization requirements, not claims in this reposit
 
 ## Recommended 15-Minute Review
 
-1. Read `docs/Plain_English_Product_Overview.md`.
-2. Read `docs/CISO_Quick_Review.md`.
-3. Inspect `reference_engine/recoverability_engine.py`.
-4. Inspect `api_server.py`.
-5. Read `docs/CISO_GitHub_Inspection_Guide.md`.
-6. Review the latest GitHub Actions test status.
+1. Read `docs/Public_Review_Snapshot.md`.
+2. Read `docs/Plain_English_Product_Overview.md`.
+3. Read `docs/CISO_Quick_Review.md`.
+4. Inspect `reference_engine/recoverability_engine.py`.
+5. Inspect `api_server.py`.
+6. Read `docs/CISO_GitHub_Inspection_Guide.md`.
+7. Review the latest GitHub Actions test status.
 
 ## Recommended 30-Minute Technical Review
 
