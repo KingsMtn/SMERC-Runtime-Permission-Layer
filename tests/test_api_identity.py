@@ -97,7 +97,7 @@ class ScopedPrincipalAPITests(unittest.TestCase):
         cls.thread.join(timeout=2)
 
     def request(self, path, *, secret, method="GET", payload=None, headers=None):
-        request_headers = {"authorization": f"Bearer {secret}", **(headers or {})}
+        request_headers = {"authorization": f"Bearer {secret}", "connection": "close", **(headers or {})}
         data = None
         if payload is not None:
             data = json.dumps(payload).encode("utf-8")

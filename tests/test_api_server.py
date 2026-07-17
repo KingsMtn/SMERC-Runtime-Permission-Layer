@@ -57,6 +57,7 @@ class APIServerTests(unittest.TestCase):
 
     def request_json(self, path, *, method="GET", payload=None, key=None, headers=None):
         request_headers = dict(headers or {})
+        request_headers.setdefault("connection", "close")
         if key:
             request_headers["authorization"] = f"Bearer {key}"
         data = None
@@ -499,6 +500,7 @@ class PilotReviewAPITests(unittest.TestCase):
 
     def request_json(self, path, *, method="GET", payload=None, key=None, headers=None):
         request_headers = dict(headers or {})
+        request_headers.setdefault("connection", "close")
         if key:
             request_headers["authorization"] = f"Bearer {key}"
         data = None
@@ -735,6 +737,7 @@ class PilotDLLAPITests(unittest.TestCase):
 
     def request_json(self, path, *, method="GET", payload=None, key=None, headers=None):
         request_headers = dict(headers or {})
+        request_headers.setdefault("connection", "close")
         if key:
             request_headers["authorization"] = f"Bearer {key}"
         data = None
