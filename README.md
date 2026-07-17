@@ -91,6 +91,7 @@ Start here before reading the code:
 - `docs/AI_Assisted_Build_And_Red_Team_Strategy.md` explains how outside AI tools can help with engineering critique and agent simulation without replacing human validation.
 - `docs/Scoring_Invariants_And_Calibration.md` explains the declared scoring invariants, what passes today, and what still requires design-partner calibration.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
+- `docs/SPARTa_v2_Execution_Adapter_Framework.md` explains how SPARTa can mature into the execution-adapter layer for GitHub Actions, ticketing, review, cloud, and financial workflows.
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
 - `docs/Governance_Report_Generator.md` explains how to assemble decision, route, control mapping, and DLL artifacts into one replayable review report.
 - `docs/Decision_Lifecycle_Ledger.md` explains how SMERC records the full governed life of a decision.
@@ -166,22 +167,23 @@ The shortest accurate explanation is:
 30. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
 31. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
 32. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
-33. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
-34. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
-35. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
-36. Read `docs/Python_SDK_Quickstart.md`.
-37. Read `docs/JavaScript_SDK_Quickstart.md`.
-38. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-39. Review `reports/Scoring_Invariants_Report.md`.
-40. Review `reports/Control_Mapping_Library_Example.md`.
-41. Review `reports/Governance_Report_Example.md`.
-42. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-43. Review `reports/Commercial_Readiness_Language_Audit.md`.
-44. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-45. Run the Python and console tests.
-46. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
-47. Review `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md`.
-48. Review `pilot_package/Human_AI_Pilot_Operating_Model.md`.
+33. Read `docs/SPARTa_v2_Execution_Adapter_Framework.md`.
+34. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
+35. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
+36. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+37. Read `docs/Python_SDK_Quickstart.md`.
+38. Read `docs/JavaScript_SDK_Quickstart.md`.
+39. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+40. Review `reports/Scoring_Invariants_Report.md`.
+41. Review `reports/Control_Mapping_Library_Example.md`.
+42. Review `reports/Governance_Report_Example.md`.
+43. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+44. Review `reports/Commercial_Readiness_Language_Audit.md`.
+45. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+46. Run the Python and console tests.
+47. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+48. Review `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md`.
+49. Review `pilot_package/Human_AI_Pilot_Operating_Model.md`.
 
 ## What SMERC Evaluates
 
