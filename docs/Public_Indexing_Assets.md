@@ -5,6 +5,7 @@ The SMERC public Netlify site includes lightweight discovery files and status pa
 ## Live Assets
 
 - Public site: `https://admirable-sorbet-9986d5.netlify.app/`
+- AI agent governance explainer: `https://admirable-sorbet-9986d5.netlify.app/ai-agent-governance.html`
 - Public review: `https://admirable-sorbet-9986d5.netlify.app/community.html`
 - Submission kit: `https://admirable-sorbet-9986d5.netlify.app/submit.html`
 - Project status: `https://admirable-sorbet-9986d5.netlify.app/status.html`
@@ -38,6 +39,10 @@ The preferred public flow is:
 2. Inspect the repository.
 3. Use the public review issue template for specific critique.
 4. Discuss shadow-mode pilot fit only after the workflow and evidence boundaries are clear.
+
+## Findability Operating Note
+
+See `docs/Findability_And_AI_Discovery.md` for the current search-status finding, preferred public search language, repository topic recommendations, and distribution checklist.
 
 ## Structured Profile
 
