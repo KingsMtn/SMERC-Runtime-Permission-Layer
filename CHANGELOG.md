@@ -22,6 +22,7 @@
 - Added a public discovery audit CLI that checks local site exports for required search, AI-readable, beacon, sitemap, and naming metadata.
 - Added generated public discovery audit JSON/Markdown reports and tests for the current public site metadata.
 - Added a public review snapshot summarizing current maturity, working artifacts, recent improvements, first review path, pilot path, and remaining evidence gaps.
+- Added v0.14 public-review release notes for external reviewers, validation, pilot discussion, and claim boundaries.
 - Added a Human/AI Pilot Operating Model defining the split between AI-proposed actions, SMERC scoring, and human-owned validation, labels, accountability, and go/no-go decisions.
 - Added a GitHub Actions pilot launch runbook and machine-readable pilot manifest covering local shadow mode, remote API mode, OIDC mode, evidence collection, and stop conditions.
 - Added a GitHub Actions pilot artifact summarizer that converts downloaded `smerc-decision.json` reports into JSON/Markdown operating summaries without claiming customer outcome evidence.

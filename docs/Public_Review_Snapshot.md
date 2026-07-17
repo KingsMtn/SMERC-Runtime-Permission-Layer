@@ -65,8 +65,9 @@ For a 10-minute review:
 1. Read `docs/Plain_English_Product_Overview.md`.
 2. Read `docs/CISO_Quick_Review.md`.
 3. Read `docs/Public_Review_Snapshot.md`.
-4. Inspect `reference_engine/recoverability_engine.py`.
-5. Review `reports/Public_Discovery_Audit.md`.
+4. Read `docs/Release_Notes_v0_14_Public_Review.md`.
+5. Inspect `reference_engine/recoverability_engine.py`.
+6. Review `reports/Public_Discovery_Audit.md`.
 
 For a 30-minute technical review:
 
