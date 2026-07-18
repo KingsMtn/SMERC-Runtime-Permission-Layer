@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RUNBOOK = ROOT / "pilot_package" / "GitHub_Actions_Pilot_Launch_Runbook.md"
 MANIFEST = ROOT / "examples" / "github_actions_pilot_manifest.json"
+PROTECTED_DEPLOYMENT = ROOT / "examples" / "github_deployment" / "protected_deployment.yml"
 
 
 class GitHubActionsPilotLaunchTests(unittest.TestCase):
@@ -43,7 +44,12 @@ class GitHubActionsPilotLaunchTests(unittest.TestCase):
         for relative_path in manifest["required_repository_evidence"]:
             self.assertTrue((ROOT / relative_path).exists(), relative_path)
 
+    def test_protected_deployment_binds_sparta_route_to_execution(self):
+        text = PROTECTED_DEPLOYMENT.read_text(encoding="utf-8")
+        self.assertIn("sparta-route-file:", text)
+        self.assertIn("reports/signed_sparta_route_example.json", text)
+        self.assertIn("permit-token-file:", text)
+
 
 if __name__ == "__main__":
     unittest.main()
-
