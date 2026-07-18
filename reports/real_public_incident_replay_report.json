@@ -1,0 +1,447 @@
+{
+  "boundary": {
+    "claims": [
+      "replays real public incident patterns through the SMERC reference engine",
+      "preserves source URLs, source facts, and analyst-assigned signal boundaries",
+      "shows whether SMERC would add restraint compared with simple allow/deny assumptions"
+    ],
+    "limits": [
+      "does not prove SMERC would have prevented the public incident",
+      "does not use private telemetry from the source organization",
+      "does not calibrate thresholds from ground-truth customer labels",
+      "does not replace a design-partner pilot"
+    ]
+  },
+  "markdown_report": "# SMERC Real Public Incident Replay Report\n\nThis report replays public incident patterns through SMERC. Public source facts are real; SMERC numeric signals are analyst-assigned replay inputs.\n\n## Summary\n\n- Scenario count: `6`\n- Public source count: `4`\n- Decision difference rate: `1.0`\n- Average irreversible exposure: `0.645`\n- Average reversible capacity: `0.497`\n\n## Replay Results\n\n| Scenario | Source | Traditional | SMERC | Exposure | Capacity | Question |\n|---|---|---:|---:|---:|---:|---|\n| public-github-actions-runner-degradation-2026-05-05 | [GitHub Blog](https://github.blog/news-insights/company-news/github-availability-report-may-2026/) | `ALLOW` | `THROTTLE` | `0.52` | `0.599` | Should an automated runner scale-up or retry action continue at full speed while regional allocation failures are rising? |\n| public-github-actions-failover-routing-2026-05-15 | [GitHub Blog](https://github.blog/news-insights/company-news/github-availability-report-may-2026/) | `ALLOW` | `THROTTLE` | `0.615` | `0.47` | Should automated failover complete before validating service discovery state and downstream orchestration dependencies? |\n| public-github-auth-partial-deploy-rollback-2026-05-28 | [GitHub Status](https://www.githubstatus.com/history?page=1) | `ALLOW` | `THROTTLE` | `0.583` | `0.662` | Should a partially deployed authentication-service change continue when dependent services show elevated errors? |\n| public-keepthescore-production-db-delete | [postmortems.app](https://postmortems.app/postmortem/b4b5957d-2c5f-4db4-b866-8d82da25bd93) | `ALLOW` | `DENY` | `0.983` | `0.188` | Should an automated or human-assisted database deletion proceed when backup granularity makes recent data unrecoverable? |\n| public-cloudflare-dnssec-de-outage-2026-05-05 | [Cloudflare via postmortem.io index](https://postmortem.io/) | `ALLOW` | `ESCALATE` | `0.712` | `0.402` | Should DNSSEC-related changes proceed automatically when external resolution instability is detected? |\n| public-mongodb-atlas-admin-api-degradation-2026-03-25 | [MongoDB Atlas via postmortem.io index](https://postmortem.io/) | `ALLOW` | `THROTTLE` | `0.456` | `0.664` | Should control-plane automation continue at normal rate while admin APIs return intermittent 503 errors? |\n\n## Boundary\n\n- does not prove SMERC would have prevented the public incident\n- does not use private telemetry from the source organization\n- does not calibrate thresholds from ground-truth customer labels\n- does not replace a design-partner pilot\n",
+  "records": [
+    {
+      "action": {
+        "action_id": "PUBLIC_GITHUB_RUNNER_SCALE_UP_UNDER_RATE_LIMIT",
+        "action_type": "capacity_scale_up",
+        "actor": "capacity_automation",
+        "anomaly_pressure": 0.72,
+        "authorization_confidence": 0.76,
+        "base_action_risk": 0.62,
+        "cancel_reliability": 0.66,
+        "containment_strength": 0.52,
+        "context": {
+          "analyst_assigned_signals": true,
+          "domain_profile": "github_actions",
+          "source_type": "public_incident_report"
+        },
+        "description": "Automation continues hosted-runner scale-up while allocation failures and regional rate limits are rising.",
+        "evidence_validity": 0.74,
+        "external_side_effect": true,
+        "impact_scope": 0.68,
+        "reversibility": 0.62,
+        "rollback_latency": 0.46,
+        "sensitive_data": false,
+        "tool": "github_actions.runner_allocator"
+      },
+      "category": "github_actions",
+      "confidence_score": 0.646,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "irreversible_exposure_score": 0.52,
+      "operational_stress_score": 0.543,
+      "plain_english_summary": "Action 'PUBLIC_GITHUB_RUNNER_SCALE_UP_UNDER_RATE_LIMIT' received THROTTLE. Irreversible exposure is 0.520, reversible capacity is 0.599, and authorization score is 0.584. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ANOMALY_PRESSURE_HIGH",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_question": "Should an automated runner scale-up or retry action continue at full speed while regional allocation failures are rising?",
+      "reversible_capacity_score": 0.599,
+      "risk_adjusted_authorization_score": 0.584,
+      "scenario_id": "public-github-actions-runner-degradation-2026-05-05",
+      "smerc_enforcement_state": "constrain",
+      "smerc_posture": "THROTTLE",
+      "source": {
+        "incident_date": "2026-05-05",
+        "publisher": "GitHub Blog",
+        "source_facts": [
+          "GitHub Actions hosted runners in East US were degraded.",
+          "A scale-up operation hit an internal rate limit.",
+          "Some jobs failed or were delayed and queued work recovered after load was reduced."
+        ],
+        "title": "GitHub availability report: May 2026",
+        "url": "https://github.blog/news-insights/company-news/github-availability-report-may-2026/"
+      },
+      "source_to_signal_boundary": "Source facts identify a public incident pattern; SMERC numeric inputs are analyst-assigned replay assumptions and are not reconstructed telemetry from the source organization.",
+      "traditional_policy_outcome": "ALLOW",
+      "traditional_policy_rationale": "The internal automation is authorized to scale hosted runner capacity."
+    },
+    {
+      "action": {
+        "action_id": "PUBLIC_GITHUB_FAILOVER_WITH_UNVERIFIED_ROUTING",
+        "action_type": "failover",
+        "actor": "infrastructure_automation",
+        "anomaly_pressure": 0.68,
+        "authorization_confidence": 0.62,
+        "base_action_risk": 0.7,
+        "cancel_reliability": 0.54,
+        "containment_strength": 0.42,
+        "context": {
+          "analyst_assigned_signals": true,
+          "domain_profile": "github_actions",
+          "source_type": "public_incident_report"
+        },
+        "description": "Automation completes failover while service discovery propagation is not yet verified.",
+        "evidence_validity": 0.52,
+        "external_side_effect": true,
+        "impact_scope": 0.78,
+        "reversibility": 0.5,
+        "rollback_latency": 0.6,
+        "sensitive_data": false,
+        "tool": "service_discovery.failover"
+      },
+      "category": "github_actions",
+      "confidence_score": 0.51,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "irreversible_exposure_score": 0.615,
+      "operational_stress_score": 0.641,
+      "plain_english_summary": "Action 'PUBLIC_GITHUB_FAILOVER_WITH_UNVERIFIED_ROUTING' received THROTTLE. Irreversible exposure is 0.615, reversible capacity is 0.470, and authorization score is 0.461. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "CONTAINMENT_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_question": "Should automated failover complete before validating service discovery state and downstream orchestration dependencies?",
+      "reversible_capacity_score": 0.47,
+      "risk_adjusted_authorization_score": 0.461,
+      "scenario_id": "public-github-actions-failover-routing-2026-05-15",
+      "smerc_enforcement_state": "constrain",
+      "smerc_posture": "THROTTLE",
+      "source": {
+        "incident_date": "2026-05-15",
+        "publisher": "GitHub Blog",
+        "source_facts": [
+          "A planned failover caused traffic to route incorrectly.",
+          "GitHub Actions runs failed or experienced delayed starts.",
+          "Manual correction restored service discovery routing."
+        ],
+        "title": "GitHub availability report: May 2026",
+        "url": "https://github.blog/news-insights/company-news/github-availability-report-may-2026/"
+      },
+      "source_to_signal_boundary": "Source facts identify a public incident pattern; SMERC numeric inputs are analyst-assigned replay assumptions and are not reconstructed telemetry from the source organization.",
+      "traditional_policy_outcome": "ALLOW",
+      "traditional_policy_rationale": "The failover process is planned and operated by authorized infrastructure automation."
+    },
+    {
+      "action": {
+        "action_id": "PUBLIC_GITHUB_AUTH_PARTIAL_DEPLOY",
+        "action_type": "auth_service_deploy",
+        "actor": "deployment_automation",
+        "anomaly_pressure": 0.7,
+        "authorization_confidence": 0.74,
+        "base_action_risk": 0.72,
+        "cancel_reliability": 0.72,
+        "containment_strength": 0.58,
+        "context": {
+          "analyst_assigned_signals": true,
+          "domain_profile": "github_actions",
+          "source_type": "public_status_history"
+        },
+        "description": "Deployment automation continues an authentication service rollout after dependent services show elevated errors.",
+        "evidence_validity": 0.7,
+        "external_side_effect": true,
+        "impact_scope": 0.74,
+        "reversibility": 0.66,
+        "rollback_latency": 0.3,
+        "sensitive_data": true,
+        "tool": "deployment.rollout"
+      },
+      "category": "software_deployment",
+      "confidence_score": 0.632,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "irreversible_exposure_score": 0.583,
+      "operational_stress_score": 0.559,
+      "plain_english_summary": "Action 'PUBLIC_GITHUB_AUTH_PARTIAL_DEPLOY' received THROTTLE. Irreversible exposure is 0.583, reversible capacity is 0.662, and authorization score is 0.592. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_question": "Should a partially deployed authentication-service change continue when dependent services show elevated errors?",
+      "reversible_capacity_score": 0.662,
+      "risk_adjusted_authorization_score": 0.592,
+      "scenario_id": "public-github-auth-partial-deploy-rollback-2026-05-28",
+      "smerc_enforcement_state": "constrain",
+      "smerc_posture": "THROTTLE",
+      "source": {
+        "incident_date": "2026-05-28",
+        "publisher": "GitHub Status",
+        "source_facts": [
+          "A change was partially deployed to an authentication service.",
+          "Dependent services including web, REST API, Git operations, and GitHub Actions experienced errors.",
+          "The incident was mitigated by rolling back the change."
+        ],
+        "title": "GitHub Status Incident History",
+        "url": "https://www.githubstatus.com/history?page=1"
+      },
+      "source_to_signal_boundary": "Source facts identify a public incident pattern; SMERC numeric inputs are analyst-assigned replay assumptions and are not reconstructed telemetry from the source organization.",
+      "traditional_policy_outcome": "ALLOW",
+      "traditional_policy_rationale": "The deployment path is authorized and rollback exists."
+    },
+    {
+      "action": {
+        "action_id": "PUBLIC_KEEPTHESCORE_DELETE_PRODUCTION_DATABASE",
+        "action_type": "production_database_delete",
+        "actor": "database_admin",
+        "anomaly_pressure": 0.64,
+        "authorization_confidence": 0.52,
+        "base_action_risk": 0.94,
+        "cancel_reliability": 0.3,
+        "containment_strength": 0.2,
+        "context": {
+          "analyst_assigned_signals": true,
+          "domain_profile": "cloud_admin",
+          "source_type": "public_postmortem"
+        },
+        "description": "Maintenance operation deletes a production database with only daily backup recovery.",
+        "evidence_validity": 0.46,
+        "external_side_effect": true,
+        "impact_scope": 0.92,
+        "reversibility": 0.08,
+        "rollback_latency": 0.86,
+        "sensitive_data": true,
+        "tool": "database.drop"
+      },
+      "category": "database_operations",
+      "confidence_score": 0.442,
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "irreversible_exposure_score": 0.983,
+      "operational_stress_score": 0.787,
+      "plain_english_summary": "Action 'PUBLIC_KEEPTHESCORE_DELETE_PRODUCTION_DATABASE' received DENY. Irreversible exposure is 0.983, reversible capacity is 0.188, and authorization score is 0.221. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "EVIDENCE_VALIDITY_LOW",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_question": "Should an automated or human-assisted database deletion proceed when backup granularity makes recent data unrecoverable?",
+      "reversible_capacity_score": 0.188,
+      "risk_adjusted_authorization_score": 0.221,
+      "scenario_id": "public-keepthescore-production-db-delete",
+      "smerc_enforcement_state": "block",
+      "smerc_posture": "DENY",
+      "source": {
+        "incident_date": "unknown",
+        "publisher": "postmortems.app",
+        "source_facts": [
+          "Engineers accidentally deleted the production database.",
+          "Backups were available once per day.",
+          "The service returned after about 30 minutes, but seven hours of scoreboard data was permanently lost."
+        ],
+        "title": "Keepthescore postmortem",
+        "url": "https://postmortems.app/postmortem/b4b5957d-2c5f-4db4-b866-8d82da25bd93"
+      },
+      "source_to_signal_boundary": "Source facts identify a public incident pattern; SMERC numeric inputs are analyst-assigned replay assumptions and are not reconstructed telemetry from the source organization.",
+      "traditional_policy_outcome": "ALLOW",
+      "traditional_policy_rationale": "The actor or tool has administrative database permission."
+    },
+    {
+      "action": {
+        "action_id": "PUBLIC_DNSSEC_CHANGE_UNDER_RESOLUTION_INSTABILITY",
+        "action_type": "dns_security_change",
+        "actor": "dns_automation",
+        "anomaly_pressure": 0.78,
+        "authorization_confidence": 0.64,
+        "base_action_risk": 0.74,
+        "cancel_reliability": 0.5,
+        "containment_strength": 0.36,
+        "context": {
+          "analyst_assigned_signals": true,
+          "domain_profile": "cloud_admin",
+          "source_type": "public_incident_index"
+        },
+        "description": "DNS automation applies DNSSEC-related configuration while resolution instability is present.",
+        "evidence_validity": 0.58,
+        "external_side_effect": true,
+        "impact_scope": 0.88,
+        "reversibility": 0.44,
+        "rollback_latency": 0.72,
+        "sensitive_data": false,
+        "tool": "dnssec.configure"
+      },
+      "category": "dns_operations",
+      "confidence_score": 0.518,
+      "controls": [
+        "route_to_accountable_reviewer",
+        "require_explicit_approval",
+        "preserve_replay",
+        "document_override_if_approved"
+      ],
+      "irreversible_exposure_score": 0.712,
+      "operational_stress_score": 0.706,
+      "plain_english_summary": "Action 'PUBLIC_DNSSEC_CHANGE_UNDER_RESOLUTION_INSTABILITY' received ESCALATE. Irreversible exposure is 0.712, reversible capacity is 0.402, and authorization score is 0.408. Controls: route_to_accountable_reviewer, require_explicit_approval, preserve_replay, document_override_if_approved.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CONTAINMENT_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_question": "Should DNSSEC-related changes proceed automatically when external resolution instability is detected?",
+      "reversible_capacity_score": 0.402,
+      "risk_adjusted_authorization_score": 0.408,
+      "scenario_id": "public-cloudflare-dnssec-de-outage-2026-05-05",
+      "smerc_enforcement_state": "review",
+      "smerc_posture": "ESCALATE",
+      "source": {
+        "incident_date": "2026-05-05",
+        "publisher": "Cloudflare via postmortem.io index",
+        "source_facts": [
+          "Public postmortem index lists a DNS/DNSSEC incident involving the .de TLD.",
+          "The incident pattern is DNSSEC-related outage response.",
+          "DNS changes can have broad external resolution impact and rollback propagation delays."
+        ],
+        "title": "When DNSSEC goes wrong: how we responded to the .de TLD outage",
+        "url": "https://postmortem.io/"
+      },
+      "source_to_signal_boundary": "Source facts identify a public incident pattern; SMERC numeric inputs are analyst-assigned replay assumptions and are not reconstructed telemetry from the source organization.",
+      "traditional_policy_outcome": "ALLOW",
+      "traditional_policy_rationale": "DNS operators have authority to change zone/security configuration."
+    },
+    {
+      "action": {
+        "action_id": "PUBLIC_ATLAS_ADMIN_API_RETRY_DURING_503S",
+        "action_type": "control_plane_retry",
+        "actor": "cloud_ops_agent",
+        "anomaly_pressure": 0.66,
+        "authorization_confidence": 0.76,
+        "base_action_risk": 0.56,
+        "cancel_reliability": 0.76,
+        "containment_strength": 0.62,
+        "context": {
+          "analyst_assigned_signals": true,
+          "domain_profile": "cloud_admin",
+          "source_type": "public_incident_index"
+        },
+        "description": "Cloud automation retries control-plane operations while admin APIs are intermittently returning 503 errors.",
+        "evidence_validity": 0.72,
+        "external_side_effect": true,
+        "impact_scope": 0.52,
+        "reversibility": 0.7,
+        "rollback_latency": 0.34,
+        "sensitive_data": false,
+        "tool": "atlas.admin_api"
+      },
+      "category": "cloud_administration",
+      "confidence_score": 0.657,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "irreversible_exposure_score": 0.456,
+      "operational_stress_score": 0.481,
+      "plain_english_summary": "Action 'PUBLIC_ATLAS_ADMIN_API_RETRY_DURING_503S' received THROTTLE. Irreversible exposure is 0.456, reversible capacity is 0.664, and authorization score is 0.632. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+      "reason_codes": [
+        "ANOMALY_PRESSURE_HIGH",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_question": "Should control-plane automation continue at normal rate while admin APIs return intermittent 503 errors?",
+      "reversible_capacity_score": 0.664,
+      "risk_adjusted_authorization_score": 0.632,
+      "scenario_id": "public-mongodb-atlas-admin-api-degradation-2026-03-25",
+      "smerc_enforcement_state": "constrain",
+      "smerc_posture": "THROTTLE",
+      "source": {
+        "incident_date": "2026-03-25",
+        "publisher": "MongoDB Atlas via postmortem.io index",
+        "source_facts": [
+          "Public postmortem index lists intermittent 503 errors on Atlas Admin API and automation tooling.",
+          "Admin API degradation can affect automation and operational control paths.",
+          "Retrying automation into degraded control planes can increase operational stress."
+        ],
+        "title": "Intermittent 503 Errors on Atlas Admin API and Automation Tooling",
+        "url": "https://postmortem.io/"
+      },
+      "source_to_signal_boundary": "Source facts identify a public incident pattern; SMERC numeric inputs are analyst-assigned replay assumptions and are not reconstructed telemetry from the source organization.",
+      "traditional_policy_outcome": "ALLOW",
+      "traditional_policy_rationale": "The automation is authorized and retry behavior is normally permitted."
+    }
+  ],
+  "summary": {
+    "average_irreversible_exposure_score": 0.645,
+    "average_reversible_capacity_score": 0.497,
+    "decision_difference_count": 6,
+    "decision_difference_rate": 1.0,
+    "evidence_limit": "Public incident facts with analyst-assigned SMERC replay inputs; not customer telemetry, not reconstructed source-system state, and not proof of prevention.",
+    "evidence_type": "real_public_incident_replay",
+    "generated_at": "2026-07-18T01:41:59+00:00",
+    "highest_irreversible_exposure_categories": [
+      {
+        "average_irreversible_exposure": 0.983,
+        "category": "database_operations",
+        "scenario_count": 1
+      },
+      {
+        "average_irreversible_exposure": 0.712,
+        "category": "dns_operations",
+        "scenario_count": 1
+      },
+      {
+        "average_irreversible_exposure": 0.583,
+        "category": "software_deployment",
+        "scenario_count": 1
+      },
+      {
+        "average_irreversible_exposure": 0.568,
+        "category": "github_actions",
+        "scenario_count": 2
+      },
+      {
+        "average_irreversible_exposure": 0.456,
+        "category": "cloud_administration",
+        "scenario_count": 1
+      }
+    ],
+    "smerc_posture_counts": {
+      "ALLOW": 0,
+      "DENY": 1,
+      "ESCALATE": 1,
+      "FREEZE": 0,
+      "THROTTLE": 4
+    },
+    "source_count": 4,
+    "total_scenarios": 6
+  },
+  "version": "smerc.real-public-incident-replay.v1"
+}
