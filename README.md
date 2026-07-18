@@ -391,6 +391,20 @@ python -m reference_engine.decision_lifecycle_ledger \
 
 DLL is intentionally not an automatic learning system. It can recommend policy or calibration changes, but each learning recommendation remains `requires_review` until an accountable reviewer activates a policy through normal governance. See `docs/Decision_Lifecycle_Ledger.md`.
 
+## DLL Intelligence
+
+`smerc.dll-intelligence.v1` analyzes verified Decision Lifecycle Ledger records across a pilot. It surfaces near misses, harmful or helpful overrides, recurring missing evidence, rollback performance, recovery failures, governance drift signals, and review-gated policy recommendations.
+
+```bash
+python -m reference_engine.dll_intelligence \
+  --example-bundle-output examples/decision_lifecycle_ledger_portfolio.json \
+  --json-output reports/dll_intelligence_report.json \
+  --markdown-output reports/DLL_Intelligence_Report.md \
+  --pretty
+```
+
+DLL Intelligence is the governance memory layer: SMERC decides, SPARTa routes, DLL records, and DLL Intelligence asks what the organization is learning across decisions. It does not silently retrain models or activate policy. See `docs/DLL_Intelligence.md` and `reports/DLL_Intelligence_Report.md`.
+
 ## Verifiable Control Evidence
 
 Configured execution adapters first authenticate and reserve a permit, then replace caller-supplied control names with short-lived `smerc.control-evidence.v1` receipts. Each receipt is signed by a key scoped to one tenant and executor audience and binds the adapter, permit, action hash, applied controls, native mechanisms, evidence references, and observation times.

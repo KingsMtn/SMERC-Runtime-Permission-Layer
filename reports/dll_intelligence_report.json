@@ -1,0 +1,500 @@
+{
+  "decision_rows": [
+    {
+      "confidence_score": 0.91,
+      "controls_sufficient": true,
+      "cost_incurred": 0.0,
+      "decision_id": "dll_pilot_001_safe_read_only_report",
+      "environment": "staging",
+      "execution_status": "succeeded",
+      "final_posture": "ALLOW",
+      "head_record_hash": "95f013b5755e347edd682b1f900197e0b6bf0d5740107e3ce36b8486d73ab906",
+      "initial_posture": "ALLOW",
+      "interaction": "accepted",
+      "judged_correct": true,
+      "learning_recommendations": {
+        "activation_status": "requires_review",
+        "confidence_calibration_changes": [
+          "Collect more customer-context outcomes before calibration."
+        ],
+        "recommended_policy_updates": [
+          "Review posture threshold for read_only_reporting."
+        ],
+        "suggested_rule_modifications": [
+          "Map recurring controls for read_only_reporting actions."
+        ]
+      },
+      "missing_evidence": [],
+      "near_miss": false,
+      "override_harmful": false,
+      "override_helpful": false,
+      "reason_codes": [
+        "LOW_IMPACT",
+        "RECOVERY_PATH_STRONG"
+      ],
+      "recommended_safeguards": [
+        "record_decision"
+      ],
+      "recovery_failure": false,
+      "requested_operation": "Generate read-only deployment status report.",
+      "risk_profile": "read_only_reporting",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "example-design-partner",
+      "time_to_recover_minutes": 0.0,
+      "unexpected_consequences": false
+    },
+    {
+      "confidence_score": 0.74,
+      "controls_sufficient": true,
+      "cost_incurred": 0.0,
+      "decision_id": "dll_pilot_002_canary_deploy",
+      "environment": "production",
+      "execution_status": "succeeded",
+      "final_posture": "THROTTLE",
+      "head_record_hash": "b699500202df959c12848b99e1b8be8f89a23b88864d198cd8f679e270c2a46a",
+      "initial_posture": "THROTTLE",
+      "interaction": "accepted",
+      "judged_correct": true,
+      "learning_recommendations": {
+        "activation_status": "requires_review",
+        "confidence_calibration_changes": [
+          "Collect more customer-context outcomes before calibration."
+        ],
+        "recommended_policy_updates": [
+          "Review posture threshold for github_actions_deployment."
+        ],
+        "suggested_rule_modifications": [
+          "Map recurring controls for github_actions_deployment actions."
+        ]
+      },
+      "missing_evidence": [
+        "rollback_drill"
+      ],
+      "near_miss": true,
+      "override_harmful": false,
+      "override_helpful": false,
+      "reason_codes": [
+        "RECOVERY_PATH_PARTIAL",
+        "IMPACT_SCOPE_ELEVATED"
+      ],
+      "recommended_safeguards": [
+        "canary_only",
+        "retain_rollback_plan"
+      ],
+      "recovery_failure": false,
+      "requested_operation": "Deploy generated API change to canary.",
+      "risk_profile": "github_actions_deployment",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "example-design-partner",
+      "time_to_recover_minutes": 0.0,
+      "unexpected_consequences": false
+    },
+    {
+      "confidence_score": 0.38,
+      "controls_sufficient": true,
+      "cost_incurred": 0.0,
+      "decision_id": "dll_pilot_003_delete_customer_table",
+      "environment": "production",
+      "execution_status": "blocked",
+      "final_posture": "DENY",
+      "head_record_hash": "0f47d22bc04c2944608bbebdfd9d3f332d8c97fd84d5d1f672423216975f0963",
+      "initial_posture": "DENY",
+      "interaction": "accepted",
+      "judged_correct": true,
+      "learning_recommendations": {
+        "activation_status": "requires_review",
+        "confidence_calibration_changes": [
+          "Collect more customer-context outcomes before calibration."
+        ],
+        "recommended_policy_updates": [
+          "Review posture threshold for data_destruction."
+        ],
+        "suggested_rule_modifications": [
+          "Map recurring controls for data_destruction actions."
+        ]
+      },
+      "missing_evidence": [
+        "human_approval",
+        "backup_verification"
+      ],
+      "near_miss": true,
+      "override_harmful": false,
+      "override_helpful": false,
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "EVIDENCE_INCOMPLETE"
+      ],
+      "recommended_safeguards": [
+        "block_execution",
+        "require_data_owner_review"
+      ],
+      "recovery_failure": false,
+      "requested_operation": "Delete a customer table after ambiguous cleanup request.",
+      "risk_profile": "data_destruction",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "example-design-partner",
+      "time_to_recover_minutes": 0.0,
+      "unexpected_consequences": false
+    },
+    {
+      "confidence_score": 0.57,
+      "controls_sufficient": false,
+      "cost_incurred": 1200.0,
+      "decision_id": "dll_pilot_004_override_refund",
+      "environment": "production",
+      "execution_status": "succeeded",
+      "final_posture": "THROTTLE",
+      "head_record_hash": "c9c70dfffea1924deb9fdc6c71f1f13df1efe58903b149fa00ccb109687ab127",
+      "initial_posture": "ESCALATE",
+      "interaction": "overrode",
+      "judged_correct": false,
+      "learning_recommendations": {
+        "activation_status": "requires_review",
+        "confidence_calibration_changes": [
+          "Collect more customer-context outcomes before calibration."
+        ],
+        "recommended_policy_updates": [
+          "Review posture threshold for finance_operations."
+        ],
+        "suggested_rule_modifications": [
+          "Map recurring controls for finance_operations actions."
+        ]
+      },
+      "missing_evidence": [
+        "dual_approval",
+        "customer_entitlement_proof"
+      ],
+      "near_miss": false,
+      "override_harmful": true,
+      "override_helpful": false,
+      "reason_codes": [
+        "FINANCIAL_IMPACT_HIGH",
+        "EVIDENCE_INCOMPLETE"
+      ],
+      "recommended_safeguards": [
+        "dual_approval",
+        "transaction_limit"
+      ],
+      "recovery_failure": true,
+      "requested_operation": "Issue high-value customer refund.",
+      "risk_profile": "finance_operations",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "example-design-partner",
+      "time_to_recover_minutes": 240.0,
+      "unexpected_consequences": true
+    },
+    {
+      "confidence_score": 0.66,
+      "controls_sufficient": true,
+      "cost_incurred": 0.0,
+      "decision_id": "dll_pilot_005_failed_deploy_rollback",
+      "environment": "production",
+      "execution_status": "failed",
+      "final_posture": "THROTTLE",
+      "head_record_hash": "34b3f9b8592dab82712ffda675c3aa4d607a8ac0922576b0741a8eb0f643f0e7",
+      "initial_posture": "THROTTLE",
+      "interaction": "accepted",
+      "judged_correct": true,
+      "learning_recommendations": {
+        "activation_status": "requires_review",
+        "confidence_calibration_changes": [
+          "Collect more customer-context outcomes before calibration."
+        ],
+        "recommended_policy_updates": [
+          "Review posture threshold for cloud_administration."
+        ],
+        "suggested_rule_modifications": [
+          "Map recurring controls for cloud_administration actions."
+        ]
+      },
+      "missing_evidence": [
+        "rollback_drill"
+      ],
+      "near_miss": true,
+      "override_harmful": false,
+      "override_helpful": false,
+      "reason_codes": [
+        "RECOVERY_PATH_PARTIAL",
+        "ANOMALY_PRESSURE_ELEVATED"
+      ],
+      "recommended_safeguards": [
+        "canary_only",
+        "automatic_rollback"
+      ],
+      "recovery_failure": false,
+      "requested_operation": "Apply infrastructure autoscaling change.",
+      "risk_profile": "cloud_administration",
+      "rollback_performed": true,
+      "rollback_success": true,
+      "tenant_id": "example-design-partner",
+      "time_to_recover_minutes": 0.0,
+      "unexpected_consequences": false
+    },
+    {
+      "confidence_score": 0.49,
+      "controls_sufficient": true,
+      "cost_incurred": 0.0,
+      "decision_id": "dll_pilot_006_security_key_rotation",
+      "environment": "production",
+      "execution_status": "not_executed",
+      "final_posture": "FREEZE",
+      "head_record_hash": "2455238c6d1cef982bba3ce80c81f7cf29a0a9251d27de5d1fd7b245f2cd49cf",
+      "initial_posture": "FREEZE",
+      "interaction": "accepted",
+      "judged_correct": true,
+      "learning_recommendations": {
+        "activation_status": "requires_review",
+        "confidence_calibration_changes": [
+          "Collect more customer-context outcomes before calibration."
+        ],
+        "recommended_policy_updates": [
+          "Review posture threshold for security_operations."
+        ],
+        "suggested_rule_modifications": [
+          "Map recurring controls for security_operations actions."
+        ]
+      },
+      "missing_evidence": [
+        "owner_confirmation",
+        "rollback_drill"
+      ],
+      "near_miss": true,
+      "override_harmful": false,
+      "override_helpful": false,
+      "reason_codes": [
+        "AUTHORITY_CHANGE_HIGH",
+        "EVIDENCE_INCOMPLETE"
+      ],
+      "recommended_safeguards": [
+        "pause_automation",
+        "require_owner_confirmation"
+      ],
+      "recovery_failure": false,
+      "requested_operation": "Rotate production signing key without owner confirmation.",
+      "risk_profile": "security_operations",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "example-design-partner",
+      "time_to_recover_minutes": 0.0,
+      "unexpected_consequences": false
+    }
+  ],
+  "evidence_boundary": [
+    "DLL Intelligence summarizes supplied lifecycle records; it does not prove incident reduction by itself.",
+    "Synthetic or analyst-assigned ledgers must be labeled before external use.",
+    "Policy and calibration recommendations require human review before activation."
+  ],
+  "generated_at": "2026-07-18T03:46:17+00:00",
+  "governance_drift_signals": [
+    "unexpected_consequences_above_10_percent_of_outcome_reviewed_actions"
+  ],
+  "near_miss_decisions": [
+    {
+      "decision_id": "dll_pilot_002_canary_deploy",
+      "final_posture": "THROTTLE",
+      "operation": "Deploy generated API change to canary.",
+      "reason_codes": [
+        "RECOVERY_PATH_PARTIAL",
+        "IMPACT_SCOPE_ELEVATED"
+      ]
+    },
+    {
+      "decision_id": "dll_pilot_003_delete_customer_table",
+      "final_posture": "DENY",
+      "operation": "Delete a customer table after ambiguous cleanup request.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "EVIDENCE_INCOMPLETE"
+      ]
+    },
+    {
+      "decision_id": "dll_pilot_005_failed_deploy_rollback",
+      "final_posture": "THROTTLE",
+      "operation": "Apply infrastructure autoscaling change.",
+      "reason_codes": [
+        "RECOVERY_PATH_PARTIAL",
+        "ANOMALY_PRESSURE_ELEVATED"
+      ]
+    },
+    {
+      "decision_id": "dll_pilot_006_security_key_rotation",
+      "final_posture": "FREEZE",
+      "operation": "Rotate production signing key without owner confirmation.",
+      "reason_codes": [
+        "AUTHORITY_CHANGE_HIGH",
+        "EVIDENCE_INCOMPLETE"
+      ]
+    }
+  ],
+  "policy_review_queue": [
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Review posture threshold for read_only_reporting.",
+      "recommendation_type": "policy_update",
+      "source_decision_id": "dll_pilot_001_safe_read_only_report"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Map recurring controls for read_only_reporting actions.",
+      "recommendation_type": "rule_modification",
+      "source_decision_id": "dll_pilot_001_safe_read_only_report"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Review posture threshold for github_actions_deployment.",
+      "recommendation_type": "policy_update",
+      "source_decision_id": "dll_pilot_002_canary_deploy"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Map recurring controls for github_actions_deployment actions.",
+      "recommendation_type": "rule_modification",
+      "source_decision_id": "dll_pilot_002_canary_deploy"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Review posture threshold for data_destruction.",
+      "recommendation_type": "policy_update",
+      "source_decision_id": "dll_pilot_003_delete_customer_table"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Map recurring controls for data_destruction actions.",
+      "recommendation_type": "rule_modification",
+      "source_decision_id": "dll_pilot_003_delete_customer_table"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Review posture threshold for finance_operations.",
+      "recommendation_type": "policy_update",
+      "source_decision_id": "dll_pilot_004_override_refund"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Map recurring controls for finance_operations actions.",
+      "recommendation_type": "rule_modification",
+      "source_decision_id": "dll_pilot_004_override_refund"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Review posture threshold for cloud_administration.",
+      "recommendation_type": "policy_update",
+      "source_decision_id": "dll_pilot_005_failed_deploy_rollback"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Map recurring controls for cloud_administration actions.",
+      "recommendation_type": "rule_modification",
+      "source_decision_id": "dll_pilot_005_failed_deploy_rollback"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Review posture threshold for security_operations.",
+      "recommendation_type": "policy_update",
+      "source_decision_id": "dll_pilot_006_security_key_rotation"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Map recurring controls for security_operations actions.",
+      "recommendation_type": "rule_modification",
+      "source_decision_id": "dll_pilot_006_security_key_rotation"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Require or explain missing evidence item: rollback_drill",
+      "recommendation_type": "recurring_missing_evidence",
+      "supporting_count": 3
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Review policy threshold or control mapping for reason code: EVIDENCE_INCOMPLETE",
+      "recommendation_type": "recurring_reason_code",
+      "supporting_count": 3
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Review policy threshold or control mapping for reason code: RECOVERY_PATH_PARTIAL",
+      "recommendation_type": "recurring_reason_code",
+      "supporting_count": 2
+    }
+  ],
+  "recommended_next_action": "Collect at least 30 customer-context DLL records before presenting rates as pilot evidence.",
+  "recovery_failure_decisions": [
+    {
+      "decision_id": "dll_pilot_004_override_refund",
+      "operation": "Issue high-value customer refund.",
+      "rollback_success": null,
+      "time_to_recover_minutes": 240.0
+    }
+  ],
+  "summary": {
+    "controls_sufficient_count": 5,
+    "controls_sufficient_rate": 0.833,
+    "executed_count": 6,
+    "final_posture_counts": {
+      "ALLOW": 1,
+      "DENY": 1,
+      "FREEZE": 1,
+      "THROTTLE": 3
+    },
+    "human_reviewed_count": 6,
+    "initial_posture_counts": {
+      "ALLOW": 1,
+      "DENY": 1,
+      "ESCALATE": 1,
+      "FREEZE": 1,
+      "THROTTLE": 2
+    },
+    "judged_correct_count": 5,
+    "judged_correct_rate": 0.833,
+    "ledger_count": 6,
+    "near_miss_count": 4,
+    "outcome_reviewed_count": 6,
+    "override_count": 1,
+    "override_harmful_count": 1,
+    "override_helpful_count": 0,
+    "override_rate": 0.167,
+    "recovery_failure_count": 1,
+    "rollback_performed_count": 1,
+    "rollback_success_count": 1,
+    "rollback_success_rate": 1.0,
+    "unexpected_consequence_count": 1,
+    "unexpected_consequence_rate": 0.167
+  },
+  "top_missing_evidence": {
+    "backup_verification": 1,
+    "customer_entitlement_proof": 1,
+    "dual_approval": 1,
+    "human_approval": 1,
+    "owner_confirmation": 1,
+    "rollback_drill": 3
+  },
+  "top_reason_codes": {
+    "ANOMALY_PRESSURE_ELEVATED": 1,
+    "AUTHORITY_CHANGE_HIGH": 1,
+    "EVIDENCE_INCOMPLETE": 3,
+    "FINANCIAL_IMPACT_HIGH": 1,
+    "IMPACT_SCOPE_ELEVATED": 1,
+    "IRREVERSIBLE_EXPOSURE_HIGH": 1,
+    "LOW_IMPACT": 1,
+    "RECOVERY_PATH_PARTIAL": 2,
+    "RECOVERY_PATH_STRONG": 1
+  },
+  "top_safeguards": {
+    "automatic_rollback": 1,
+    "block_execution": 1,
+    "canary_only": 2,
+    "dual_approval": 1,
+    "pause_automation": 1,
+    "record_decision": 1,
+    "require_data_owner_review": 1,
+    "require_owner_confirmation": 1,
+    "retain_rollback_plan": 1,
+    "transaction_limit": 1
+  },
+  "version": "smerc.dll-intelligence.v1"
+}

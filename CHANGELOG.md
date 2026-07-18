@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added DLL Intelligence for multi-ledger governance memory: near-miss detection, override effectiveness, rollback performance, recurring evidence gaps, drift signals, review-gated policy queue, schema, example portfolio, reports, documentation, and tests.
 - Added a Model and Agent Fitness Layer that scores candidate executors by task fit, data boundary, tool authority, recoverability, reliability history, cost, and latency before selecting an execution posture.
 - Added model and agent routing examples, documentation, CLI support, and tests.
 - Added an AI-assisted build and red-team strategy that assigns roles to coding agents, second-opinion reviewers, GitHub-native agents, long-running agents, and human experts without treating AI output as validation.

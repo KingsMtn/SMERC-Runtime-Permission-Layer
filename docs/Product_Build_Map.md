@@ -89,7 +89,28 @@ Purpose:
 
 SQLite is intentionally scoped to a single-instance pilot. It is not presented as the final enterprise storage architecture.
 
-### 5. Pilot Review Console
+### 5. Decision Lifecycle Ledger And Intelligence
+
+Files:
+
+- `reference_engine/decision_lifecycle_ledger.py`
+- `reference_engine/dll_intelligence.py`
+
+Purpose:
+
+- record the full governed life of one decision as a hash-chained lifecycle
+- preserve request, evidence, evaluation, human interaction, execution, outcome, and learning recommendation records
+- detect record tampering through sequence and hash verification
+- summarize many verified ledgers into governance intelligence
+- surface near misses, harmful or helpful overrides, rollback performance, recurring missing evidence, recovery failures, and drift signals
+- create a policy review queue without automatically activating policy changes
+
+Product boundary:
+
+- DLL is pilot-grade lifecycle evidence, not regulatory retention or immutable storage by itself.
+- DLL Intelligence is governance memory, not automatic model training or proof of incident reduction without customer-context ledgers.
+
+### 6. Pilot Review Console
 
 Folder: `pilot_console/`
 
@@ -103,7 +124,7 @@ Purpose:
 
 The console is a pilot operator surface. It does not provide production identity, RBAC, or enforcement controls.
 
-### 6. GitHub Actions Gate
+### 7. GitHub Actions Gate
 
 Folder: `integrations/github_actions/`
 
@@ -117,7 +138,7 @@ Purpose:
 - preserve idempotency across remote retries
 - fail closed on remote-service unavailability in enforce mode
 
-### 7. Evidence Generators
+### 8. Evidence Generators
 
 Files:
 
@@ -132,7 +153,7 @@ Purpose:
 - export denominator-aware pilot review metrics
 - show what a design partner would receive after a shadow-mode pilot
 
-### 8. Evidence And Unknowns Program
+### 9. Evidence And Unknowns Program
 
 File: `reference_engine/evidence_program.py`
 
@@ -146,7 +167,7 @@ Purpose:
 
 The program does not certify safety. It prevents unresolved assumptions from being hidden by implementation progress.
 
-### 9. Policy Calibration And Evidence Provenance
+### 10. Policy Calibration And Evidence Provenance
 
 Files:
 
@@ -163,7 +184,7 @@ Purpose:
 
 Hash-chain provenance detects mutation but does not establish source truth. HMAC mode provides shared-key authenticity, not public nonrepudiation.
 
-### 10. Deployment Profile
+### 11. Deployment Profile
 
 Files:
 
@@ -177,7 +198,7 @@ Purpose:
 - let a platform reviewer deploy the API with Docker or Render
 - define health, secrets, bounded requests, and a persistent pilot audit volume
 
-### 11. Action-Bound Authorization Permits
+### 12. Action-Bound Authorization Permits
 
 Files:
 
@@ -194,7 +215,7 @@ Purpose:
 
 The pilot uses tenant HMAC keys and SQLite replay state. This proves the execution contract, not production key management, workload identity, distributed replay prevention, independent verification of native control operation, or nonrepudiation.
 
-### 12. Scoped Workload Identity
+### 13. Scoped Workload Identity
 
 Files:
 
@@ -212,7 +233,7 @@ Purpose:
 
 This begins with static bearer-secret pilot principals and can derive expiring, scope-narrowed sessions. GitHub Actions can additionally use provider-specific OIDC trust. General enterprise federation, managed rotation/revocation, and external immutable audit storage remain outside the reference build.
 
-### 13. Signed Control Evidence
+### 14. Signed Control Evidence
 
 Files:
 
@@ -230,7 +251,7 @@ Purpose:
 
 HMAC authenticates the configured pilot adapter key but does not independently prove that the adapter or referenced native mechanism is truthful. Production needs managed workload identity, protected signing, native evidence verification, and external audit.
 
-### 14. Short-Lived Workload Sessions
+### 15. Short-Lived Workload Sessions
 
 Files:
 
@@ -250,7 +271,7 @@ Purpose:
 
 Static exchange reduces repeated secret exposure but does not prove the external workload. V2 can additionally carry context supplied by a verified federation boundary.
 
-### 15. GitHub Actions OIDC Trust
+### 16. GitHub Actions OIDC Trust
 
 Files:
 
@@ -269,7 +290,7 @@ Purpose:
 
 This proves a bounded GitHub workload identity claim, not the safety of its workflow, runner, actor, or proposed action. SQLite replay state and process-local JWKS caching remain single-instance pilot controls.
 
-### 16. GitHub Deployment Execution Adapter
+### 17. GitHub Deployment Execution Adapter
 
 Files:
 
