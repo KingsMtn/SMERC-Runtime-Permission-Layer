@@ -867,20 +867,7 @@ def main() -> int:
             "outcome": "VALIDATED",
             "action_hash": action_hash(action),
             "plan_hash": _canonical_digest(plan.source),
-            "sparta": (
-                {
-                    "version": SPARTA_EXECUTION_EVIDENCE_VERSION,
-                    "route_id": sparta_route_report.get("route_id"),
-                    "route_report_digest": _route_report_digest(sparta_route_report),
-                    "binding": {
-                        "valid": None,
-                        "checks": {},
-                        "note": "Validate mode records the supplied SPARTa route digest; enforce mode verifies permit binding before execution.",
-                    },
-                }
-                if sparta_route_report is not None
-                else None
-            ),
+            "sparta": None,
             "required_external_inputs": [
                 "permit_token_file", "SMERC_EXECUTOR_TOKEN", "SMERC_CONTROL_EVIDENCE_KEY"
             ],

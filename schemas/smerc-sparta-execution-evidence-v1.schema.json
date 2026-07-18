@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-sparta-execution-evidence-v1.schema.json",
+  "title": "SMERC SPARTa Execution Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "route_id",
+    "route_report_digest",
+    "decision_replay_id",
+    "source_posture",
+    "route_state",
+    "binding",
+    "adapter_boundary"
+  ],
+  "properties": {
+    "version": {"const": "smerc.sparta-execution-evidence.v1"},
+    "route_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,191}$"},
+    "route_report_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "decision_replay_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,191}$"},
+    "source_posture": {"enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"]},
+    "route_state": {
+      "enum": [
+        "EXECUTE",
+        "CONSTRAINED_EXECUTE",
+        "PAUSE",
+        "BLOCK",
+        "REVIEW_REQUIRED",
+        "BLOCKED_ESCALATION_UNAVAILABLE"
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid", "checks", "missing_required_controls"],
+      "properties": {
+        "valid": {"const": true},
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "replay_id_matches",
+            "posture_matches",
+            "route_is_executable",
+            "required_controls_declared_by_route"
+          ],
+          "properties": {
+            "replay_id_matches": {"const": true},
+            "posture_matches": {"const": true},
+            "route_is_executable": {"const": true},
+            "required_controls_declared_by_route": {"const": true}
+          }
+        },
+        "missing_required_controls": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"}
+        }
+      }
+    },
+    "adapter_boundary": {"type": "string", "minLength": 1, "maxLength": 512}
+  }
+}

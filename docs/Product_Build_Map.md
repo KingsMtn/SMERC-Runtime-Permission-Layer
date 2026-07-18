@@ -278,12 +278,14 @@ Files:
 - `integrations/github_deployment/action.yml`
 - `schemas/smerc-execution-plan-v1.schema.json`
 - `schemas/smerc-execution-report-v1.schema.json`
+- `schemas/smerc-sparta-execution-evidence-v1.schema.json`
 
 Purpose:
 
 - require an action-bound permit before a declared side effect
 - map every permit-required control to a successful native command or internal cancellation mechanism
 - authenticate and reserve the permit before controls, then sign control evidence and atomically consume the reservation before execution
+- verify supplied SPARTa route-to-permit binding before command execution
 - execute argument arrays without shell interpretation
 - terminate timed-out or cancelled processes and attempt declared rollback
 - produce a hash- and status-based report without raw output, secrets, or tokens
