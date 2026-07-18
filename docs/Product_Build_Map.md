@@ -308,6 +308,7 @@ This creates an executable pilot lifecycle, not a sandbox or production-certifie
 - Configured adapters must provide signed, fresh control evidence bound to the exact action and permit.
 - Configured principals can use expiring, scope-narrowed sessions without expanding authority.
 - The GitHub deployment adapter can order native controls, one-time permit consumption, bounded execution, cancellation, rollback attempt, and non-secret reporting in one tested path.
+- The fake AcmeCloud production-like test can exercise safe, constrained, blocked, review-required, and rollback paths with valid Decision Lifecycle Ledger chains.
 
 ## What This Build Does Not Prove
 

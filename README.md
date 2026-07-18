@@ -99,6 +99,7 @@ Start here before reading the code:
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
 - `docs/Governance_Report_Generator.md` explains how to assemble decision, route, control mapping, and DLL artifacts into one replayable review report.
 - `docs/Decision_Lifecycle_Ledger.md` explains how SMERC records the full governed life of a decision.
+- `docs/Fake_Customer_Production_Like_Test.md` explains the AcmeCloud simulated customer environment that exercises safe, constrained, blocked, review-required, and rollback paths.
 - `docs/SMERC_F_Profile_Packet.md` explains the SMERC-F financial-action profile packet and its commercial limits.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
 - `docs/Community_Submission_Kit.md` gives careful, non-exaggerated public post drafts for Microsoft Tech Community, GitHub Community, LinkedIn, Hacker News, and Product Hunt.
