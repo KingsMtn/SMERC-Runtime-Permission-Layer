@@ -43,6 +43,7 @@ The current build includes:
 - SQLite pilot audit store with idempotent decision replay
 - immutable pilot review records and denominator-aware metrics
 - dependency-free pilot review console
+- GitHub PR Guardian that renders PR comments and hash-bound certificates for AI-assisted changes
 - GitHub Actions gate
 - generic Agent Handshake integration runner
 - local and authenticated remote GitHub Action evaluation
@@ -78,6 +79,7 @@ Start here before reading the code:
 - `docs/Public_Review_Snapshot.md` gives a compact current-status snapshot for reviewers who need the fastest honest orientation.
 - `docs/Release_Notes_v0_14_Public_Review.md` gives a compact release-style summary for public review, validation, and pilot discussion.
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
+- `docs/GitHub_PR_Guardian.md` explains the developer-facing PR review surface for AI-assisted code and deployment changes.
 - `docs/Maturity_Model.md` defines the evidence-based maturity scale used for SMERC claims.
 - `docs/CISO_30_Minute_Review_Package.md` gives CISOs a timed review path for deciding whether a shadow-mode pilot is justified.
 - `docs/Thirty_Minute_Workflow_Proof.md` gives reviewers the shortest concrete path for testing one workflow and comparing SMERC with simple allow/deny review.
@@ -583,6 +585,18 @@ python integrations/github_actions/run_smerc_gate.py \
 ```
 
 The GitHub Action can also call the authenticated `/v1/evaluate` endpoint. Remote mode supports an exact GitHub OIDC trust policy or the static `SMERC_API_KEY` compatibility path, requires HTTPS outside loopback tests, reuses an idempotency key across evaluation retries, and fails closed in enforce mode. See `integrations/github_actions/README.md`.
+
+Render a SMERC PR Guardian comment and certificate:
+
+```bash
+python integrations/github_pr_guardian/pr_guardian.py \
+  --decision-report smerc-decision.json \
+  --action-file integrations/github_actions/sample_action_request.json \
+  --comment-output smerc-pr-comment.md \
+  --certificate-output smerc-pr-certificate.json
+```
+
+PR Guardian is the visible pull-request review surface for AI-assisted changes. It turns a SMERC decision into posture, risk, confidence, replay ID, reason codes, controls, and a hash-bound certificate digest that can be posted as a PR comment. See `docs/GitHub_PR_Guardian.md`, `integrations/github_pr_guardian/README.md`, and `examples/github_pr_guardian/pr_guardian_workflow.yml`.
 
 Generate a synthetic GitHub Actions shadow-mode pilot report:
 

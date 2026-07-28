@@ -138,7 +138,21 @@ Purpose:
 - preserve idempotency across remote retries
 - fail closed on remote-service unavailability in enforce mode
 
-### 8. Evidence Generators
+### 8. GitHub PR Guardian
+
+Folder: `integrations/github_pr_guardian/`
+
+Purpose:
+
+- render a pull-request comment from a SMERC runtime decision
+- create a hash-bound `smerc.github-pr-guardian-certificate.v1` artifact
+- expose posture, risk, confidence, replay ID, reason codes, and controls in the PR review surface
+- support AI-assisted code, deployment, secret, permission, and infrastructure review workflows
+- preserve a pilot boundary that does not replace branch protection, code review, security review, or deployment approvals
+
+This is the most concrete developer-facing wedge: SMERC becomes visible where AI-assisted changes are reviewed.
+
+### 9. Evidence Generators
 
 Files:
 
@@ -153,7 +167,7 @@ Purpose:
 - export denominator-aware pilot review metrics
 - show what a design partner would receive after a shadow-mode pilot
 
-### 9. Evidence And Unknowns Program
+### 10. Evidence And Unknowns Program
 
 File: `reference_engine/evidence_program.py`
 
@@ -167,7 +181,7 @@ Purpose:
 
 The program does not certify safety. It prevents unresolved assumptions from being hidden by implementation progress.
 
-### 10. Policy Calibration And Evidence Provenance
+### 11. Policy Calibration And Evidence Provenance
 
 Files:
 
@@ -184,7 +198,7 @@ Purpose:
 
 Hash-chain provenance detects mutation but does not establish source truth. HMAC mode provides shared-key authenticity, not public nonrepudiation.
 
-### 11. Deployment Profile
+### 12. Deployment Profile
 
 Files:
 
@@ -198,7 +212,7 @@ Purpose:
 - let a platform reviewer deploy the API with Docker or Render
 - define health, secrets, bounded requests, and a persistent pilot audit volume
 
-### 12. Action-Bound Authorization Permits
+### 13. Action-Bound Authorization Permits
 
 Files:
 
@@ -215,7 +229,7 @@ Purpose:
 
 The pilot uses tenant HMAC keys and SQLite replay state. This proves the execution contract, not production key management, workload identity, distributed replay prevention, independent verification of native control operation, or nonrepudiation.
 
-### 13. Scoped Workload Identity
+### 14. Scoped Workload Identity
 
 Files:
 
@@ -233,7 +247,7 @@ Purpose:
 
 This begins with static bearer-secret pilot principals and can derive expiring, scope-narrowed sessions. GitHub Actions can additionally use provider-specific OIDC trust. General enterprise federation, managed rotation/revocation, and external immutable audit storage remain outside the reference build.
 
-### 14. Signed Control Evidence
+### 15. Signed Control Evidence
 
 Files:
 
@@ -251,7 +265,7 @@ Purpose:
 
 HMAC authenticates the configured pilot adapter key but does not independently prove that the adapter or referenced native mechanism is truthful. Production needs managed workload identity, protected signing, native evidence verification, and external audit.
 
-### 15. Short-Lived Workload Sessions
+### 16. Short-Lived Workload Sessions
 
 Files:
 
@@ -271,7 +285,7 @@ Purpose:
 
 Static exchange reduces repeated secret exposure but does not prove the external workload. V2 can additionally carry context supplied by a verified federation boundary.
 
-### 16. GitHub Actions OIDC Trust
+### 17. GitHub Actions OIDC Trust
 
 Files:
 
@@ -290,7 +304,7 @@ Purpose:
 
 This proves a bounded GitHub workload identity claim, not the safety of its workflow, runner, actor, or proposed action. SQLite replay state and process-local JWKS caching remain single-instance pilot controls.
 
-### 17. GitHub Deployment Execution Adapter
+### 18. GitHub Deployment Execution Adapter
 
 Files:
 

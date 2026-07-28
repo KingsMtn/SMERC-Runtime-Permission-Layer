@@ -1,0 +1,124 @@
+name: SMERC PR Guardian
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  smerc-pr-guardian:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build proposed action request
+        shell: bash
+        run: |
+          mkdir -p .smerc
+          cat > .smerc/pr-action-request.json <<'JSON'
+          {
+            "action_id": "AI_ASSISTED_PULL_REQUEST_REVIEW",
+            "description": "AI-assisted pull request proposes code, deployment, or infrastructure changes that should be evaluated before merge.",
+            "tool": "github.pull_request",
+            "actor": "coding_agent",
+            "confidence": 0.62,
+            "harm": 0.72,
+            "consent": 0.68,
+            "reversibility": 0.48,
+            "external_effect": true,
+            "sensitive_data": false,
+            "context": {
+              "workflow": "pull_request",
+              "pilot": "smerc_pr_guardian",
+              "review_boundary": "metadata_only"
+            }
+          }
+          JSON
+
+      - name: Evaluate PR action with SMERC
+        id: smerc
+        uses: ./integrations/github_actions
+        with:
+          action-file: .smerc/pr-action-request.json
+          source: local
+          mode: observe
+          output-file: .smerc/smerc-decision.json
+
+      - name: Render SMERC PR Guardian comment
+        id: guardian
+        shell: bash
+        run: |
+          python integrations/github_pr_guardian/pr_guardian.py \
+            --decision-report .smerc/smerc-decision.json \
+            --action-file .smerc/pr-action-request.json \
+            --comment-output .smerc/smerc-pr-comment.md \
+            --certificate-output .smerc/smerc-pr-certificate.json
+
+      - name: Upload SMERC PR Guardian artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: smerc-pr-guardian
+          path: |
+            .smerc/smerc-decision.json
+            .smerc/smerc-pr-comment.md
+            .smerc/smerc-pr-certificate.json
+          retention-days: 14
+
+      - name: Post or update SMERC PR comment
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          from pathlib import Path
+
+          marker = "<!-- smerc-pr-guardian:v1 -->"
+          repo = os.environ["REPOSITORY"]
+          pr_number = os.environ["PR_NUMBER"]
+          body = Path(".smerc/smerc-pr-comment.md").read_text(encoding="utf-8")
+          comments_raw = subprocess.check_output(
+              [
+                  "gh",
+                  "api",
+                  f"repos/{repo}/issues/{pr_number}/comments",
+                  "--paginate",
+              ],
+              text=True,
+          )
+          comments = json.loads(comments_raw)
+          existing = next(
+              (comment for comment in comments if marker in comment.get("body", "")),
+              None,
+          )
+          if existing:
+              subprocess.check_call(
+                  [
+                      "gh",
+                      "api",
+                      f"repos/{repo}/issues/comments/{existing['id']}",
+                      "-X",
+                      "PATCH",
+                      "-f",
+                      f"body={body}",
+                  ]
+              )
+          else:
+              subprocess.check_call(
+                  [
+                      "gh",
+                      "api",
+                      f"repos/{repo}/issues/{pr_number}/comments",
+                      "-f",
+                      f"body={body}",
+                  ]
+              )
+          PY
