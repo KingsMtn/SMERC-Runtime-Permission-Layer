@@ -1,0 +1,45 @@
+{
+  "applied_controls": [
+    "route_to_accountable_reviewer",
+    "require_explicit_approval",
+    "preserve_replay"
+  ],
+  "blocked_controls": [
+    "execute"
+  ],
+  "decision_digest": "66f314709d9c000a3f2c13eaa7ea3b8b3f50eba127a2d638787678b56b8703a5",
+  "decision_replay_id": "replay_AI_AUTH_MIDDLEWARE_PR_1785203296935",
+  "effective_scope_units": 0,
+  "executable": false,
+  "plain_english_summary": "SPARTa routed the action to accountable human review because SMERC required escalation.",
+  "plan_id": "github-pr-guardian-auth-change",
+  "reason_codes": [
+    "SPARTA_ESCALATE_TO_ACCOUNTABLE_REVIEWER"
+  ],
+  "recommended_next_action": "Assign a reviewer, document the decision, and issue a new request if approval changes the posture.",
+  "route_id": "sparta_github-pr-guardian-auth-change_55a2f3603e81",
+  "route_state": "REVIEW_REQUIRED",
+  "routed_at": "2026-07-28T01:48:16+00:00",
+  "source_posture": "ESCALATE",
+  "tool_plan": {
+    "action": "evaluate_and_comment_on_pr",
+    "max_scope_units": 100,
+    "metadata": {
+      "environment": "production-adjacent",
+      "review_surface": "pull_request_comment",
+      "workflow": "smerc-pr-guardian.yml"
+    },
+    "plan_id": "github-pr-guardian-auth-change",
+    "requested_capability": "pull_request_governance",
+    "requested_scope_units": 80,
+    "side_effect_level": "external",
+    "supports_checkpoint": true,
+    "supports_dry_run": true,
+    "supports_human_approval": true,
+    "supports_rollback": true,
+    "supports_scope_limit": true,
+    "tool": "github_actions",
+    "version": "smerc.sparta-plan.v1"
+  },
+  "version": "smerc.sparta-route.v1"
+}

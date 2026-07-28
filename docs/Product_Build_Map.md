@@ -152,7 +152,22 @@ Purpose:
 
 This is the most concrete developer-facing wedge: SMERC becomes visible where AI-assisted changes are reviewed.
 
-### 9. Evidence Generators
+### 9. End-To-End PR Guardian Demo
+
+File: `reference_engine/end_to_end_pr_guardian_demo.py`
+
+Purpose:
+
+- connect an AI-assisted pull request request into a SMERC runtime decision
+- render the PR Guardian comment and certificate
+- route the posture through SPARTa
+- preserve the lifecycle in a Decision Lifecycle Ledger
+- summarize the verified lifecycle through DLL Intelligence
+- produce CISO-readable and machine-readable review artifacts
+
+This proves the current modules can operate as one synthetic governance loop. It does not prove live customer incident reduction or production readiness.
+
+### 10. Evidence Generators
 
 Files:
 
@@ -167,7 +182,7 @@ Purpose:
 - export denominator-aware pilot review metrics
 - show what a design partner would receive after a shadow-mode pilot
 
-### 10. Evidence And Unknowns Program
+### 11. Evidence And Unknowns Program
 
 File: `reference_engine/evidence_program.py`
 
@@ -181,7 +196,7 @@ Purpose:
 
 The program does not certify safety. It prevents unresolved assumptions from being hidden by implementation progress.
 
-### 11. Policy Calibration And Evidence Provenance
+### 12. Policy Calibration And Evidence Provenance
 
 Files:
 

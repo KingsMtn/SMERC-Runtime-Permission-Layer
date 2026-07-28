@@ -68,6 +68,16 @@ See:
 
 - `examples/github_pr_guardian/pr_guardian_workflow.yml`
 
+## End-To-End Demo
+
+To see PR Guardian in the full SMERC loop, run:
+
+```bash
+python -m reference_engine.end_to_end_pr_guardian_demo --pretty
+```
+
+That creates `reports/End_To_End_PR_Guardian_Demo.md` plus JSON artifacts for the runtime decision, PR certificate, SPARTa route, Decision Lifecycle Ledger, and DLL Intelligence summary.
+
 That example evaluates a PR action, renders the comment and certificate, uploads artifacts, and posts or updates a sticky PR comment using `GITHUB_TOKEN`.
 
 ## First Pilot Use

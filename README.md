@@ -29,6 +29,7 @@ The current build includes:
 - control mapping library that maps SMERC/SPARTa controls to declared native tool mechanisms and evidence requirements
 - replayable governance report generator that assembles decision, route, control mapping, and lifecycle evidence into one review package
 - Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
+- end-to-end PR Guardian demo connecting SMERC decision, PR comment/certificate, SPARTa route, Decision Lifecycle Ledger, and DLL Intelligence
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
 - GitHub Actions OIDC verification with repository-, workflow-, ref-, environment-, and run-bound attribution
@@ -80,6 +81,7 @@ Start here before reading the code:
 - `docs/Release_Notes_v0_14_Public_Review.md` gives a compact release-style summary for public review, validation, and pilot discussion.
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
 - `docs/GitHub_PR_Guardian.md` explains the developer-facing PR review surface for AI-assisted code and deployment changes.
+- `docs/End_To_End_PR_Guardian_Demo.md` shows the current modules working as one synthetic review loop from AI-assisted pull request to DLL Intelligence.
 - `docs/Maturity_Model.md` defines the evidence-based maturity scale used for SMERC claims.
 - `docs/CISO_30_Minute_Review_Package.md` gives CISOs a timed review path for deciding whether a shadow-mode pilot is justified.
 - `docs/Thirty_Minute_Workflow_Proof.md` gives reviewers the shortest concrete path for testing one workflow and comparing SMERC with simple allow/deny review.
@@ -133,6 +135,7 @@ Start here before reading the code:
 - `docs/Decision_Certificate.md` describes digest-bound pilot certificates that summarize verified DLL records for replayable review.
 - `reports/Decision_Certificate_Example.md` shows an example signed pilot certificate generated from a verified Decision Lifecycle Ledger.
 - `reports/Decision_Lifecycle_Ledger_Example.md` shows a full pilot-grade lifecycle record from request through learning recommendation.
+- `reports/End_To_End_PR_Guardian_Demo.md` shows the integrated PR Guardian proof path: runtime decision, PR artifact, SPARTa route, DLL record, and DLL Intelligence summary.
 - `reports/SMERC_F_Profile_Packet.md` shows a financial-action profile packet across conservative, balanced, and permissive policies.
 - `reports/Public_Discovery_Audit.md` shows the latest local audit of the public site's discovery metadata and AI-readable files.
 - `reports/Commercial_Readiness_Language_Audit.md` shows the latest audit of public-facing repository language for positioning clarity, evidence boundaries, and unsupported claim risk.
@@ -407,6 +410,22 @@ python -m reference_engine.dll_intelligence \
 
 DLL Intelligence is the governance memory layer: SMERC decides, SPARTa routes, DLL records, and DLL Intelligence asks what the organization is learning across decisions. It does not silently retrain models or activate policy. See `docs/DLL_Intelligence.md` and `reports/DLL_Intelligence_Report.md`.
 
+## End-To-End PR Guardian Demo
+
+`smerc.end-to-end-pr-guardian-demo.v1` connects the current runtime pieces into one pilot-grade proof loop for an AI-assisted pull request:
+
+```text
+AI-assisted PR request -> SMERC decision -> PR Guardian comment/certificate -> SPARTa route -> Decision Lifecycle Ledger -> DLL Intelligence
+```
+
+```bash
+python -m reference_engine.end_to_end_pr_guardian_demo --pretty
+```
+
+The command writes a CISO-readable report and machine-readable artifacts under `reports/`. See `docs/End_To_End_PR_Guardian_Demo.md` and `reports/End_To_End_PR_Guardian_Demo.md`.
+
+This is synthetic integration proof, not customer production evidence.
+
 ## Verifiable Control Evidence
 
 Configured execution adapters first authenticate and reserve a permit, then replace caller-supplied control names with short-lived `smerc.control-evidence.v1` receipts. Each receipt is signed by a key scoped to one tenant and executor audience and binds the adapter, permit, action hash, applied controls, native mechanisms, evidence references, and observation times.
@@ -443,6 +462,7 @@ python -m reference_engine.sparta_conformance examples/sparta/adapter_registry.j
 python -m reference_engine.control_mapping examples/control_mapping/github_actions_controls.json --posture THROTTLE --tool github_actions --capability deploy_production --controls limit_scope preview_before_execution require_rollback_plan preserve_replay --pretty
 python -m reference_engine.governance_report examples/governance_report/github_actions_governance_bundle.json --pretty
 python -m reference_engine.decision_lifecycle_ledger --example --pretty
+python -m reference_engine.end_to_end_pr_guardian_demo --pretty
 python -m reference_engine.smerc_f_profile_packet examples/financial_action_requests.json --policies conservative balanced permissive --pretty
 python -m reference_engine.runtime_benchmark_suite examples/proxy_incident_replay_scenarios.json --pretty
 python -m reference_engine.benchmark_ledger_builder reports/runtime_governance_benchmark.json --pretty
