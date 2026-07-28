@@ -22,6 +22,7 @@ The current build includes:
 - signed, action-bound, single-use authorization permits
 - signed, action-bound control-evidence receipts for configured execution adapters
 - SPARTa posture-aware router that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes
+- machine-readable SPARTa vocabulary for lifecycle verbs, route states, control verbs, evidence events, and fail-closed adapter interpretation
 - SPARTa adapter registry and authenticated API route endpoint for stored SMERC decisions
 - optional HMAC-signed SPARTa route reports for pilot-grade tamper detection
 - static SPARTa adapter conformance report that checks declared adapter capabilities across ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE route behavior
@@ -99,6 +100,7 @@ Start here before reading the code:
 - `docs/Scoring_Invariants_And_Calibration.md` explains the declared scoring invariants, what passes today, and what still requires design-partner calibration.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
 - `docs/SPARTa_v2_Execution_Adapter_Framework.md` explains how SPARTa can mature into the execution-adapter layer for GitHub Actions, ticketing, review, cloud, and financial workflows.
+- `specification/SMERC_SPARTa_Vocabulary_v1.md` defines the machine-readable `smerc.sparta-vocabulary.v1` terms that agents and adapters should use instead of inventing route meanings.
 - `docs/SPARTa_Adapter_Conformance.md` explains how the static adapter conformance harness checks declared SPARTa capabilities before pilot use.
 - `docs/GitHub_Deployment_Adapter_Operations.md` explains how a supplied SPARTa route artifact can be bound to a one-time permit before GitHub deployment execution.
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
@@ -330,6 +332,8 @@ python -m reference_engine.sparta_router \
 ```
 
 SPARTa v1 is intentionally conservative. If SMERC returns `THROTTLE` but the tool plan cannot apply scope limits, dry runs, checkpoints, or rollback as required, the router marks the plan non-executable and routes it to review. See `specification/SMERC_SPARTa_Router_v1.md`.
+
+Adapters, coding agents, and review tools should also use `smerc.sparta-vocabulary.v1` for machine interpretation. It defines lifecycle verbs, route states, control verbs, evidence events, and failure reasons. Unknown vocabulary fails closed. See `specification/SMERC_SPARTa_Vocabulary_v1.md` and `examples/sparta/sparta_vocabulary.json`.
 
 Route reports can optionally be signed with `smerc.sparta-route-signature.v1` HMAC metadata for pilot-grade tamper detection. This does not replace managed production key infrastructure or prove downstream enforcement. See `reports/signed_sparta_route_example.json`.
 

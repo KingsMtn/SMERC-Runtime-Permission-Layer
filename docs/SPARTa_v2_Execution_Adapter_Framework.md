@@ -14,6 +14,22 @@ agent proposes action -> SMERC scores posture -> SPARTa routes tool behavior -> 
 
 SPARTa v1 proves the core routing idea. SPARTa v2 should make the adapter layer explicit enough for real integrations.
 
+## Machine Vocabulary
+
+SPARTa now has a bounded machine vocabulary: `smerc.sparta-vocabulary.v1`.
+
+The vocabulary gives AI agents, coding assistants, workflow adapters, and review tools a shared set of terms for:
+
+- lifecycle verbs such as `DECLARE`, `PLAN`, `ROUTE`, `PREPARE`, `EXECUTE`, `CONSTRAIN`, `HOLD`, `BLOCK`, `ESCALATE`, `COLLECT_EVIDENCE`, and `APPEND_LEDGER`
+- route states such as `EXECUTE`, `CONSTRAINED_EXECUTE`, `PAUSE`, `BLOCK`, `REVIEW_REQUIRED`, and `BLOCKED_ESCALATION_UNAVAILABLE`
+- control verbs such as `LIMIT_SCOPE`, `PREVIEW_BEFORE_EXECUTION`, `REQUIRE_HUMAN_APPROVAL`, `PRESERVE_REPLAY`, and `REQUIRE_FRESH_EVIDENCE`
+- evidence events such as `ROUTE_ISSUED`, `CONTROL_APPLIED`, `EXECUTION_BLOCKED`, `REVIEW_COMPLETED`, and `LEDGER_APPENDED`
+- fail-closed reasons such as `CONTROL_UNSUPPORTED`, `ROUTE_DIGEST_MISMATCH`, `PERMIT_EXPIRED`, and `REVIEW_PATH_UNAVAILABLE`
+
+The strict schema is `schemas/smerc-sparta-vocabulary-v1.schema.json`; the example is `examples/sparta/sparta_vocabulary.json`; the full specification is `specification/SMERC_SPARTa_Vocabulary_v1.md`.
+
+Unknown vocabulary is not permission. Adapters should treat unknown route states, control verbs, evidence events, and failure reasons as fail-closed conditions.
+
 ## Current v1 Capability
 
 SPARTa v1 already includes:
