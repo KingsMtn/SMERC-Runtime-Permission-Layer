@@ -17,6 +17,7 @@ The first integration is a GitHub Actions gate for AI-assisted code, deployment,
 The current build includes:
 
 - versioned SMERC Action Language and Decision Language contracts
+- machine-readable runtime contract index showing how SMERC, SPARTa, permits, control evidence, DLL, and DLL Intelligence fit together
 - evidence and unknowns registry with deployment-limiting falsification rules
 - tenant-scoped policy calibration and evidence provenance admission
 - signed, action-bound, single-use authorization permits
@@ -78,12 +79,14 @@ The current project is ready for technical review and shadow-mode pilot discussi
 Start here before reading the code:
 
 - `docs/External_Review_Start_Here.md` gives external reviewers the shortest safe path through the repository.
+- `docs/Runtime_Contract_Index.md` explains the machine-readable `smerc.runtime-contract-index.v1` assembly map for SMERC's contracts and handoffs.
 - `docs/Public_Review_Snapshot.md` gives a compact current-status snapshot for reviewers who need the fastest honest orientation.
 - `docs/Release_Notes_v0_14_Public_Review.md` gives a compact release-style summary for public review, validation, and pilot discussion.
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
 - `docs/GitHub_PR_Guardian.md` explains the developer-facing PR review surface for AI-assisted code and deployment changes.
 - `docs/End_To_End_PR_Guardian_Demo.md` shows the current modules working as one synthetic review loop from AI-assisted pull request to DLL Intelligence.
 - `docs/Competitive_Gaps_And_Build_Priorities.md` states what adjacent products do better today and what SMERC should build next.
+- `examples/runtime_contract_index.json` gives agents, adapters, SDKs, and reviewers the canonical contract handoff map.
 - `docs/Maturity_Model.md` defines the evidence-based maturity scale used for SMERC claims.
 - `docs/CISO_30_Minute_Review_Package.md` gives CISOs a timed review path for deciding whether a shadow-mode pilot is justified.
 - `docs/Thirty_Minute_Workflow_Proof.md` gives reviewers the shortest concrete path for testing one workflow and comparing SMERC with simple allow/deny review.

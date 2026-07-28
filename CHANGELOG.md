@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added `smerc.runtime-contract-index.v1`, a machine-readable assembly map for SMERC runtime contracts, handoffs, boundaries, schema, example, documentation, and tests.
 - Added `smerc.sparta-vocabulary.v1`, a machine-readable SPARTa vocabulary for lifecycle verbs, route states, control verbs, evidence events, failure reasons, adapter interpretation, schema, example, documentation, and tests.
 - Added local performance and latency reporting to the end-to-end PR Guardian proof loop, plus a competitive gaps and build-priorities note covering where OPA, AI gateways, access-control systems, approval workflows, and GRC platforms are stronger today.
 - Added an end-to-end PR Guardian demo that connects an AI-assisted pull request request to a SMERC runtime decision, PR comment/certificate, SPARTa route, Decision Lifecycle Ledger, DLL Intelligence summary, generated reports, documentation, and tests.

@@ -1,0 +1,188 @@
+{
+  "version": "smerc.runtime-contract-index.v1",
+  "purpose": "Canonical machine-readable assembly map for the SMERC runtime governance contracts.",
+  "canonical_loop": [
+    "discover_smerc",
+    "declare_action",
+    "evaluate_runtime_posture",
+    "select_or_verify_executor",
+    "route_with_sparta",
+    "issue_or_verify_permit_when_enforcing",
+    "apply_controls_and_collect_evidence",
+    "record_decision_lifecycle",
+    "analyze_verified_ledgers",
+    "queue_reviewed_policy_recommendations"
+  ],
+  "contracts": [
+    {
+      "layer": "discovery",
+      "contract": "smerc.beacon.v1",
+      "owner": "SMERC",
+      "role": "Expose canonical public surfaces, review paths, governance boundaries, and non-claims.",
+      "primary_artifacts": ["examples/smerc_beacon.json"],
+      "hands_off_to": ["smerc.agent_handshake.v1", "smerc.action.v1"],
+      "claim_boundary": "Discovery is not authentication or production validation."
+    },
+    {
+      "layer": "action_request",
+      "contract": "smerc.action.v1",
+      "owner": "SMERC",
+      "role": "Describe proposed action, authority, risk signals, recoverability, side effects, and replay context.",
+      "primary_artifacts": ["schemas/smerc-action-language-v1.schema.json", "specification/SMERC_Action_Language_v1.md"],
+      "hands_off_to": ["smerc.decision.v1"],
+      "claim_boundary": "Action metadata quality depends on caller honesty and integration context."
+    },
+    {
+      "layer": "runtime_decision",
+      "contract": "smerc.decision.v1",
+      "owner": "SMERC",
+      "role": "Produce posture, scores, reason codes, controls, transition guidance, and replay record.",
+      "primary_artifacts": ["schemas/smerc-decision-language-v1.schema.json", "reference_engine/action_language.py"],
+      "hands_off_to": ["smerc.sparta-route.v1", "smerc.decision-lifecycle-ledger.v1"],
+      "claim_boundary": "A decision is a governance recommendation unless bound to enforcement and evidence collection."
+    },
+    {
+      "layer": "policy",
+      "contract": "smerc.policy.v1",
+      "owner": "policy",
+      "role": "Define tenant thresholds, policy mode, evidence ceiling, and posture behavior.",
+      "primary_artifacts": ["schemas/smerc-runtime-policy-v1.schema.json", "reference_engine/policy.py"],
+      "hands_off_to": ["smerc.decision.v1"],
+      "claim_boundary": "Policy quality requires customer calibration and review."
+    },
+    {
+      "layer": "policy_authoring",
+      "contract": "smerc.spl.v0",
+      "owner": "policy",
+      "role": "Compile pilot-friendly policy authoring into strict runtime policy.",
+      "primary_artifacts": ["specification/SMERC_SPL_v0.md", "examples/policies/github_actions_shadow_spl.json"],
+      "hands_off_to": ["smerc.policy.v1"],
+      "claim_boundary": "SPL v0 is a starter profile, not OPA parity or full formal verification."
+    },
+    {
+      "layer": "agent_handshake",
+      "contract": "smerc.agent_handshake.v1",
+      "owner": "SMERC",
+      "role": "Connect beacon discovery, agent declaration, executor fitness, action posture, controls, and replay.",
+      "primary_artifacts": ["examples/agent_handshake_request.json", "reference_engine/agent_handshake.py"],
+      "hands_off_to": ["smerc.decision.v1", "smerc.sparta-route.v1"],
+      "claim_boundary": "Handshake does not authenticate remote agents by itself."
+    },
+    {
+      "layer": "sparta_route",
+      "contract": "smerc.sparta-route.v1",
+      "owner": "SPARTa",
+      "role": "Convert posture and tool plan into execution, constrained execution, pause, block, or review route.",
+      "primary_artifacts": ["specification/SMERC_SPARTa_Router_v1.md", "reference_engine/sparta_router.py"],
+      "hands_off_to": ["smerc.permit.v1", "smerc.control-evidence.v1", "smerc.decision-lifecycle-ledger.v1"],
+      "claim_boundary": "SPARTa routes behavior; it is not a sandbox or proof of downstream enforcement."
+    },
+    {
+      "layer": "sparta_vocabulary",
+      "contract": "smerc.sparta-vocabulary.v1",
+      "owner": "SPARTa",
+      "role": "Provide machine terms for lifecycle verbs, route states, control verbs, evidence events, and failure reasons.",
+      "primary_artifacts": ["specification/SMERC_SPARTa_Vocabulary_v1.md", "examples/sparta/sparta_vocabulary.json"],
+      "hands_off_to": ["smerc.sparta-route.v1", "smerc.control-evidence.v1"],
+      "claim_boundary": "Vocabulary improves interpretation; unknown terms fail closed."
+    },
+    {
+      "layer": "permit",
+      "contract": "smerc.permit.v1",
+      "owner": "SMERC",
+      "role": "Grant short-lived, action-bound execution authority for eligible enforcement decisions.",
+      "primary_artifacts": ["schemas/smerc-action-bound-permit-v1.schema.json", "specification/SMERC_Action_Bound_Permit_v1.md"],
+      "hands_off_to": ["smerc.control-evidence.v1", "smerc.execution-report.v1"],
+      "claim_boundary": "Pilot permit storage is not distributed replay prevention or production key management."
+    },
+    {
+      "layer": "control_evidence",
+      "contract": "smerc.control-evidence.v1",
+      "owner": "integration",
+      "role": "Record signed evidence that configured controls were applied or attempted.",
+      "primary_artifacts": ["schemas/smerc-control-evidence-v1.schema.json", "specification/SMERC_Control_Evidence_v1.md"],
+      "hands_off_to": ["smerc.execution-report.v1", "smerc.decision-lifecycle-ledger.v1"],
+      "claim_boundary": "Signed receipts authenticate configured adapter evidence; they do not prove a compromised adapter told the truth."
+    },
+    {
+      "layer": "execution",
+      "contract": "smerc.execution-report.v1",
+      "owner": "integration",
+      "role": "Describe execution result, cancellation, rollback, output hash, and SPARTa binding.",
+      "primary_artifacts": ["schemas/smerc-execution-report-v1.schema.json", "specification/SMERC_Execution_Plan_v1.md"],
+      "hands_off_to": ["smerc.decision-lifecycle-ledger.v1"],
+      "claim_boundary": "Execution report records adapter results; it is not independent proof of external system truth."
+    },
+    {
+      "layer": "decision_certificate",
+      "contract": "smerc.decision-certificate.v1",
+      "owner": "DLL",
+      "role": "Produce a portable digest-bound summary of a verified lifecycle decision.",
+      "primary_artifacts": ["schemas/smerc-decision-certificate-v1.schema.json", "docs/Decision_Certificate.md"],
+      "hands_off_to": ["external_review"],
+      "claim_boundary": "Certificate summarizes verified supplied records; it is not legal certification."
+    },
+    {
+      "layer": "decision_lifecycle_ledger",
+      "contract": "smerc.decision-lifecycle-ledger.v1",
+      "owner": "DLL",
+      "role": "Preserve request, evidence, evaluation, human interaction, execution, outcome, and learning records.",
+      "primary_artifacts": ["schemas/smerc-decision-lifecycle-ledger-v1.schema.json", "docs/Decision_Lifecycle_Ledger.md"],
+      "hands_off_to": ["smerc.dll-intelligence.v1", "smerc.decision-certificate.v1"],
+      "claim_boundary": "DLL is pilot-grade lifecycle evidence, not SIEM, GRC, legal hold, or regulatory retention."
+    },
+    {
+      "layer": "dll_intelligence",
+      "contract": "smerc.dll-intelligence.v1",
+      "owner": "DLL",
+      "role": "Analyze verified ledgers for near misses, overrides, recovery performance, evidence gaps, drift, and review-gated policy recommendations.",
+      "primary_artifacts": ["schemas/smerc-dll-intelligence-v1.schema.json", "docs/DLL_Intelligence.md"],
+      "hands_off_to": ["reviewed_policy_update"],
+      "claim_boundary": "DLL Intelligence does not silently retrain models or activate policy."
+    }
+  ],
+  "handoff_rules": [
+    {
+      "from": "smerc.action.v1",
+      "to": "smerc.decision.v1",
+      "required_artifact": "action_hash_or_replayable_action_payload",
+      "rule": "Runtime decisions must preserve enough action context to replay the decision."
+    },
+    {
+      "from": "smerc.decision.v1",
+      "to": "smerc.sparta-route.v1",
+      "required_artifact": "posture_and_replay_id",
+      "rule": "SPARTa cannot route a caller-invented posture; it routes a stored or supplied SMERC decision."
+    },
+    {
+      "from": "smerc.sparta-route.v1",
+      "to": "smerc.control-evidence.v1",
+      "required_artifact": "route_report_digest",
+      "rule": "Control evidence must bind to the route it claims to satisfy."
+    },
+    {
+      "from": "smerc.execution-report.v1",
+      "to": "smerc.decision-lifecycle-ledger.v1",
+      "required_artifact": "execution_status_and_non_secret_evidence",
+      "rule": "Execution evidence must be recorded without raw secrets or unsupported claims."
+    },
+    {
+      "from": "smerc.decision-lifecycle-ledger.v1",
+      "to": "smerc.dll-intelligence.v1",
+      "required_artifact": "verified_hash_chain",
+      "rule": "DLL Intelligence analyzes only verified ledgers and keeps policy changes review-gated."
+    }
+  ],
+  "interpretation_rules": [
+    "Unknown contract versions do not imply compatibility.",
+    "Missing handoff artifacts make the runtime loop incomplete.",
+    "A restrictive posture cannot be relaxed by a downstream adapter.",
+    "DLL Intelligence may recommend policy changes, but it may not silently activate them.",
+    "Pilot evidence must remain labeled as pilot evidence until customer-context records justify stronger claims."
+  ],
+  "boundary": [
+    "Runtime contract index is an assembly map, not production certification.",
+    "It does not prove customer demand, compliance readiness, or downstream tool truthfulness.",
+    "It is intended to help agents, adapters, reviewers, and SDKs interpret SMERC consistently."
+  ]
+}
