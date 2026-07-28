@@ -37,6 +37,22 @@ The key test is not whether SMERC blocks more. The key test is whether SMERC cre
 
 ## 30-Minute Path
 
+### Optional Fast Start
+
+Run the one-command reviewer proof first:
+
+```bash
+python -m reference_engine.reviewer_quickstart --pretty
+```
+
+Then open:
+
+```text
+reports/reviewer_quickstart/Reviewer_Quickstart_Report.md
+```
+
+This generates the PR Guardian proof, SPARTa route, DLL record, CISO seed evidence, and runtime benchmark comparison in one place.
+
 ### Minutes 0-5: Choose One Action
 
 Pick one candidate action from `examples/ciso_review_seed_actions.json`.

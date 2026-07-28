@@ -70,23 +70,24 @@ Those are validation and productization requirements, not claims in this reposit
 
 ## Recommended 15-Minute Review
 
-1. Read `docs/Public_Review_Snapshot.md`.
-2. Read `docs/Plain_English_Product_Overview.md`.
-3. Read `docs/CISO_Quick_Review.md`.
-4. Inspect `reference_engine/recoverability_engine.py`.
-5. Inspect `api_server.py`.
-6. Read `docs/CISO_GitHub_Inspection_Guide.md`.
+1. Run `python -m reference_engine.reviewer_quickstart --pretty`.
+2. Open `reports/reviewer_quickstart/Reviewer_Quickstart_Report.md`.
+3. Read `docs/Public_Review_Snapshot.md`.
+4. Read `docs/Plain_English_Product_Overview.md`.
+5. Read `docs/CISO_Quick_Review.md`.
+6. Inspect `reference_engine/recoverability_engine.py`.
 7. Review the latest GitHub Actions test status.
 
 ## Recommended 30-Minute Technical Review
 
 1. Follow `docs/CISO_30_Minute_Review_Package.md`.
-2. Run `docs/CISO_Evidence_Walkthrough.md`.
-3. Run `python -m unittest discover -s tests`.
-4. Run one recoverability example from `examples/recoverability_single_action.json`.
-5. Inspect the GitHub Actions integration in `integrations/github_actions/`.
-6. Inspect the deployment adapter in `integrations/github_deployment/`.
-7. Inspect the pilot console in `pilot_console/`.
+2. Run `docs/Reviewer_Quickstart.md`.
+3. Run `docs/CISO_Evidence_Walkthrough.md`.
+4. Run `python -m unittest discover -s tests`.
+5. Run one recoverability example from `examples/recoverability_single_action.json`.
+6. Inspect the GitHub Actions integration in `integrations/github_actions/`.
+7. Inspect the deployment adapter in `integrations/github_deployment/`.
+8. Inspect the pilot console in `pilot_console/`.
 
 ## Pilot Path
 

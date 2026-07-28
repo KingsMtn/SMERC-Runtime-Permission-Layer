@@ -1,0 +1,54 @@
+{
+  "artifacts": {
+    "audit_database": "./smerc_reviewer_quickstart.sqlite3",
+    "ciso_seed_json": "reports/reviewer_quickstart/ciso_evidence_walkthrough_seed.json",
+    "ciso_seed_report": "reports/reviewer_quickstart/CISO_Evidence_Walkthrough_Seed_Report.md",
+    "decision_lifecycle_ledger": "reports/reviewer_quickstart/end_to_end_pr_guardian_dll.json",
+    "dll_intelligence": "reports/reviewer_quickstart/end_to_end_pr_guardian_dll_intelligence.json",
+    "pr_guardian_certificate": "reports/reviewer_quickstart/end_to_end_pr_guardian_certificate.json",
+    "pr_guardian_comment": "reports/reviewer_quickstart/end_to_end_pr_guardian_comment.md",
+    "pr_guardian_demo": "reports/reviewer_quickstart/End_To_End_PR_Guardian_Demo.md",
+    "pr_guardian_json": "reports/reviewer_quickstart/end_to_end_pr_guardian_demo.json",
+    "runtime_benchmark": "reports/reviewer_quickstart/Runtime_Governance_Benchmark.md",
+    "runtime_benchmark_json": "reports/reviewer_quickstart/runtime_governance_benchmark.json",
+    "sparta_route": "reports/reviewer_quickstart/end_to_end_pr_guardian_sparta_route.json",
+    "summary_json": "reports/reviewer_quickstart/reviewer_quickstart.json",
+    "summary_markdown": "reports/reviewer_quickstart/Reviewer_Quickstart_Report.md"
+  },
+  "generated_at": "2026-07-28T02:25:21+00:00",
+  "not_a_claim": [
+    "not production certification",
+    "not compliance attestation",
+    "not customer validation",
+    "not proof of incident reduction"
+  ],
+  "one_command": "python -m reference_engine.reviewer_quickstart --pretty",
+  "pilot_gate": [
+    "Proceed only if a reviewer can name one side-effecting workflow.",
+    "Proceed only if reviewer labels can be collected.",
+    "Proceed only if the organization accepts observe mode before enforcement.",
+    "Do not proceed if current controls already cover recoverability scoring and replay well enough."
+  ],
+  "proof_highlights": {
+    "benchmark_decision_difference_rate": 0.786,
+    "benchmark_evidence_limit": "Deterministic scenario expansion from seed proxy scenarios; not production validation or customer incident evidence.",
+    "benchmark_total_scenarios": 84,
+    "dll_record_count": 7,
+    "dll_verification_valid": true,
+    "pr_guardian_posture": "ESCALATE",
+    "pr_guardian_replay_id": "replay_AI_AUTH_MIDDLEWARE_PR_1785205521491",
+    "seeded_ciso_decisions": 5,
+    "sparta_executable": false,
+    "sparta_route_state": "REVIEW_REQUIRED",
+    "stored_ciso_ledgers": 5
+  },
+  "review_question": "Is SMERC credible enough to test in a bounded shadow-mode pilot?",
+  "reviewer_path": [
+    "Read the summary report.",
+    "Open the PR Guardian demo and confirm the action, posture, route, DLL, and DLL Intelligence are linked.",
+    "Open the CISO seed report and confirm the review queue has replayable seeded decisions.",
+    "Open the runtime benchmark and inspect where SMERC differs from simple allow/deny.",
+    "Decide whether one real GitHub Actions workflow is worth testing in observe mode."
+  ],
+  "version": "smerc.reviewer-quickstart.v1"
+}
