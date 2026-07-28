@@ -93,6 +93,8 @@ Start here before reading the code:
 - `docs/CISO_Evidence_Walkthrough.md` gives reviewers a local end-to-end flow from seeded decisions to pilot console evidence packages.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
+- `docs/Accelerator_Readiness_Track.md` defines when SMERC should move from technical review to accelerator applications or investor-facing submissions.
+- `docs/MACH37_Application_Readiness.md` gives a cybersecurity-accelerator readiness frame for a future MACH37-style application.
 - `docs/YC_Next_Cycle_Readiness_Plan.md` defines the evidence-first plan for making a later YC application stronger after missing the Fall 2026 on-time deadline.
 - `docs/YC_Application_Evidence_Draft.md` gives YC-style language with explicit evidence slots that should not be filled until real customer or reviewer proof exists.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.

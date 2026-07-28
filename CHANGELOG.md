@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added accelerator-readiness and MACH37-readiness materials that keep SMERC focused on cyber review, GitHub Actions pilot proof, external-review signals, and evidence boundaries before future applications.
 - Added YC next-cycle readiness materials that convert the missed Fall 2026 on-time deadline into an evidence-first application plan and bounded future application draft.
 - Added `smerc.runtime-contract-index.v1`, a machine-readable assembly map for SMERC runtime contracts, handoffs, boundaries, schema, example, documentation, and tests.
 - Added `smerc.sparta-vocabulary.v1`, a machine-readable SPARTa vocabulary for lifecycle verbs, route states, control verbs, evidence events, failure reasons, adapter interpretation, schema, example, documentation, and tests.
