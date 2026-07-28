@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added metadata-only customer action intake for scoring prospect workflow examples before a shadow-mode pilot, including sample data, CLI, documentation, and tests.
 - Added a one-command reviewer quickstart that generates PR Guardian, SPARTa, DLL, CISO seed, and benchmark artifacts into a single local proof package.
 - Added accelerator-readiness and MACH37-readiness materials that keep SMERC focused on cyber review, GitHub Actions pilot proof, external-review signals, and evidence boundaries before future applications.
 - Added YC next-cycle readiness materials that convert the missed Fall 2026 on-time deadline into an evidence-first application plan and bounded future application draft.

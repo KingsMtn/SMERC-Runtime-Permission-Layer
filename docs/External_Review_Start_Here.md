@@ -102,6 +102,7 @@ Useful pilot files:
 - `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`
 - `docs/Pilot_Evaluation_Checklist.md`
 - `docs/Pilot_Review_Metrics.md`
+- `docs/Customer_Action_Intake.md`
 - `pilot_console/README.md`
 - `docs/API_Deployment_Guide.md`
 

@@ -49,3 +49,13 @@ A reviewer should be able to answer:
 This quickstart proves local coherence. It does not prove production safety, customer demand, compliance readiness, or incident reduction.
 
 Move from quickstart to pilot only when a real reviewer can name one side-effecting workflow, one review owner, and one measurable success criterion.
+
+## Next Step: Customer Action Intake
+
+If the reviewer understands the quickstart and wants to test fit, use:
+
+```bash
+python -m reference_engine.customer_action_intake examples/customer_action_intake_sample.json --pretty
+```
+
+Then replace the sample file with metadata-only examples from the prospect. Use `docs/Customer_Action_Intake.md` for the data boundary and review process.
