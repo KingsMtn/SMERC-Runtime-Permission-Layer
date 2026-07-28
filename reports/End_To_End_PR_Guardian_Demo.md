@@ -20,13 +20,13 @@ AI-assisted PR request -> SMERC decision -> PR Guardian comment/certificate -> S
 - Posture: `ESCALATE`
 - Risk score: `0.656`
 - Confidence score: `0.535`
-- Replay ID: `replay_AI_AUTH_MIDDLEWARE_PR_1785203296935`
+- Replay ID: `replay_AI_AUTH_MIDDLEWARE_PR_1785203868401`
 - Reason codes: `['EXTERNAL_SIDE_EFFECT', 'SENSITIVE_DATA_ACCESS', 'HIGH_HARM_POTENTIAL']`
 - Controls: `['route_to_human_review', 'preserve_replay', 'require_explicit_approval']`
 
 ## 3. PR Guardian Visible Review Artifact
 
-- Certificate digest: `fdbe0686f71d3c1eeb566cbc3ad8ef60331673dd02501f1d4b595d14cf8b212b`
+- Certificate digest: `08f1df72fe2185e7100e30d9c92563cb5c0223d5a48f92d14a9bf3f2b04148c1`
 - Comment posture: `ESCALATE`
 
 ```markdown
@@ -36,7 +36,7 @@ AI-assisted PR request -> SMERC decision -> PR Guardian comment/certificate -> S
 **Posture:** `ESCALATE`  
 **Risk score:** `0.656`  
 **Confidence score:** `0.535`  
-**Replay ID:** `replay_AI_AUTH_MIDDLEWARE_PR_1785203296935`
+**Replay ID:** `replay_AI_AUTH_MIDDLEWARE_PR_1785203868401`
 
 **Action:** AI coding agent proposes changing authentication middleware and deployment configuration in a pull request.
 **Pull request:** `#101`
@@ -59,7 +59,7 @@ Route to accountable human review before execution.
 
 ### Decision Certificate
 
-- Certificate digest: `fdbe0686f71d3c1eeb566cbc3ad8ef60331673dd02501f1d4b595d14cf8b212b`
+- Certificate digest: `08f1df72fe2185e7100e30d9c92563cb5c0223d5a48f92d14a9bf3f2b04148c1`
 - Integration status: `evaluated`
 - Mode: `observe`
 
@@ -72,13 +72,13 @@ Route to accountable human review before execution.
 - Executable: `False`
 - Effective scope units: `0`
 - Applied controls: `['route_to_accountable_reviewer', 'require_explicit_approval', 'preserve_replay']`
-- Route report digest: `3c175377239549a1da65fe794a971ddea7603bb933bbb5967ac4614847477254`
+- Route report digest: `854fc1209ecdb682f6dbb3723f104d8e668d8b419fdb2902037599b6392e7241`
 
 ## 5. Decision Lifecycle Ledger
 
-- Ledger ID: `dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203296935`
+- Ledger ID: `dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401`
 - Record count: `7`
-- Head hash: `d60b8eac9356fe7081938310942962d750cd934172e14f97d3f713271df62b3b`
+- Head hash: `77367fd79cf524896e92f049f6450a65b1595c175f0e05c75a6196cf8e6da587`
 - Verification valid: `True`
 - Event counts: `{'EVALUATION': 1, 'EVIDENCE': 1, 'EXECUTION': 1, 'HUMAN_INTERACTION': 1, 'LEARNING_RECOMMENDATION': 1, 'OUTCOME': 1, 'REQUEST': 1}`
 
@@ -89,6 +89,18 @@ Route to accountable human review before execution.
 - Recovery failure count: `0`
 - Policy review queue items: `2`
 - Recommended next action: Collect at least 30 customer-context DLL records before presenting rates as pilot evidence.
+
+## 7. Performance And Latency
+
+- Measurement type: `single_local_process_run`
+- Decision evaluation: `0.095 ms`
+- PR certificate: `0.512 ms`
+- PR comment render: `0.026 ms`
+- SPARTa route: `0.407 ms`
+- DLL build: `0.28 ms`
+- DLL Intelligence: `1.715 ms`
+- Total local proof-loop generation: `3.184 ms`
+- CISO interpretation: Use latency as operational overhead evidence, not as the core value claim. A pilot should measure median and p95 decision latency, total workflow time added, reviewer agreement, approval delay, false constraints, and false releases.
 
 ## Integrated Flow
 

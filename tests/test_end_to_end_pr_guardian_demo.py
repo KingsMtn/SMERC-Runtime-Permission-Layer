@@ -19,6 +19,7 @@ class EndToEndPRGuardianDemoTests(unittest.TestCase):
         route = bundle["sparta_route"]["route_report"]
         ledger = bundle["decision_lifecycle_ledger"]
         intelligence = bundle["dll_intelligence"]
+        latency = bundle["performance_latency"]
 
         self.assertEqual(bundle["version"], "smerc.end-to-end-pr-guardian-demo.v1")
         self.assertIn(decision["posture"], {"ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"})
@@ -32,6 +33,11 @@ class EndToEndPRGuardianDemoTests(unittest.TestCase):
         self.assertEqual(ledger["record_count"], 7)
         self.assertEqual(intelligence["summary"]["ledger_count"], 1)
         self.assertIn("AI-assisted PR request", "\n".join(bundle["integrated_flow"]))
+        self.assertEqual(latency["version"], "smerc.demo-latency.v1")
+        self.assertGreaterEqual(latency["decision_evaluation_ms"], 0)
+        self.assertGreaterEqual(latency["total_generation_ms"], latency["decision_evaluation_ms"])
+        self.assertIn("operational overhead", latency["ciso_interpretation"])
+        self.assertIn("not production performance evidence", " ".join(latency["boundary"]))
 
     def test_markdown_names_all_runtime_layers(self):
         markdown = render_markdown(build_end_to_end_demo())
@@ -41,6 +47,8 @@ class EndToEndPRGuardianDemoTests(unittest.TestCase):
         self.assertIn("SPARTa Route", markdown)
         self.assertIn("Decision Lifecycle Ledger", markdown)
         self.assertIn("DLL Intelligence", markdown)
+        self.assertIn("Performance And Latency", markdown)
+        self.assertIn("operational overhead", markdown)
         self.assertIn("Synthetic end-to-end demo", markdown)
 
     def test_cli_writes_all_demo_artifacts(self):

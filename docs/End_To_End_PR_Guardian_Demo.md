@@ -46,6 +46,19 @@ The default scenario is an AI coding agent proposing changes to authentication m
 
 SMERC evaluates the action, PR Guardian renders the visible review artifact, SPARTa routes the decision into accountable review behavior, the Decision Lifecycle Ledger records the lifecycle, and DLL Intelligence produces a governance learning summary.
 
+## Performance And Latency
+
+The generated report includes a `performance_latency` section. It measures local proof-loop overhead for:
+
+- SMERC decision evaluation
+- PR certificate creation
+- PR comment rendering
+- SPARTa routing
+- Decision Lifecycle Ledger creation
+- DLL Intelligence analysis
+
+This should be described as operational overhead, not as a speed claim. A real pilot should measure median, p95, and max latency, total workflow time added, reviewer agreement, approval delay, false constraints, and false releases.
+
 ## Boundary
 
 This is a synthetic end-to-end demo. It does not prove customer demand, incident reduction, production safety, or compliance readiness.

@@ -82,6 +82,7 @@ Start here before reading the code:
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
 - `docs/GitHub_PR_Guardian.md` explains the developer-facing PR review surface for AI-assisted code and deployment changes.
 - `docs/End_To_End_PR_Guardian_Demo.md` shows the current modules working as one synthetic review loop from AI-assisted pull request to DLL Intelligence.
+- `docs/Competitive_Gaps_And_Build_Priorities.md` states what adjacent products do better today and what SMERC should build next.
 - `docs/Maturity_Model.md` defines the evidence-based maturity scale used for SMERC claims.
 - `docs/CISO_30_Minute_Review_Package.md` gives CISOs a timed review path for deciding whether a shadow-mode pilot is justified.
 - `docs/Thirty_Minute_Workflow_Proof.md` gives reviewers the shortest concrete path for testing one workflow and comparing SMERC with simple allow/deny review.
@@ -423,6 +424,8 @@ python -m reference_engine.end_to_end_pr_guardian_demo --pretty
 ```
 
 The command writes a CISO-readable report and machine-readable artifacts under `reports/`. See `docs/End_To_End_PR_Guardian_Demo.md` and `reports/End_To_End_PR_Guardian_Demo.md`.
+
+The report includes local proof-loop latency measurements for decision evaluation, PR artifact rendering, SPARTa routing, DLL creation, and DLL Intelligence analysis. Treat these as operational-overhead checks, not as production performance evidence.
 
 This is synthetic integration proof, not customer production evidence.
 

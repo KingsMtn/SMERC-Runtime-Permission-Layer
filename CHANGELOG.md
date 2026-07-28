@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added local performance and latency reporting to the end-to-end PR Guardian proof loop, plus a competitive gaps and build-priorities note covering where OPA, AI gateways, access-control systems, approval workflows, and GRC platforms are stronger today.
 - Added an end-to-end PR Guardian demo that connects an AI-assisted pull request request to a SMERC runtime decision, PR comment/certificate, SPARTa route, Decision Lifecycle Ledger, DLL Intelligence summary, generated reports, documentation, and tests.
 - Added GitHub PR Guardian for AI-assisted pull requests, including PR comment rendering, hash-bound certificate artifacts, a workflow example, documentation, generated reports, and tests.
 - Added DLL Intelligence for multi-ledger governance memory: near-miss detection, override effectiveness, rollback performance, recurring evidence gaps, drift signals, review-gated policy queue, schema, example portfolio, reports, documentation, and tests.

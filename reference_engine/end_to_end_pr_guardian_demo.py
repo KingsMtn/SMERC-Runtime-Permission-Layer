@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Mapping
+from typing import Any, Callable, Dict, Mapping, TypeVar
 
 from integrations.github_pr_guardian.pr_guardian import build_certificate, render_pr_comment
 from reference_engine.agent_permission_layer import RuntimePermissionEngine
@@ -14,6 +15,7 @@ from reference_engine.sparta_router import SPARTA_PLAN_VERSION, route_decision, 
 
 
 DEMO_VERSION = "smerc.end-to-end-pr-guardian-demo.v1"
+T = TypeVar("T")
 
 
 DEFAULT_ACTION = {
@@ -91,6 +93,13 @@ def _build_decision_report(action: Mapping[str, Any]) -> Dict[str, Any]:
         },
         "decision": decision,
     }
+
+
+def _measure_ms(callback: Callable[[], T]) -> tuple[T, float]:
+    started = time.perf_counter()
+    result = callback()
+    elapsed_ms = (time.perf_counter() - started) * 1000
+    return result, round(elapsed_ms, 3)
 
 
 def _ledger_for_demo(
@@ -226,37 +235,45 @@ def build_end_to_end_demo(
     action: Mapping[str, Any] | None = None,
     tool_plan: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
+    total_started = time.perf_counter()
     action_payload = dict(action or DEFAULT_ACTION)
     plan_payload = dict(tool_plan or DEFAULT_TOOL_PLAN)
-    decision_report = _build_decision_report(action_payload)
+    decision_report, decision_latency_ms = _measure_ms(lambda: _build_decision_report(action_payload))
     decision = decision_report["decision"]
-    pr_certificate = build_certificate(
-        decision_report,
-        action_request=action_payload,
-        event_metadata={
-            "repository": "KingsMtn/SMERC-Runtime-Permission-Layer",
-            "workflow": "SMERC PR Guardian",
-            "event_name": "pull_request",
-            "pull_request": {
-                "number": 101,
-                "title": "AI-assisted authentication middleware change",
-                "user": "coding-agent",
-                "base_ref": "main",
-                "head_sha": "demo-head-sha",
+    pr_certificate, certificate_latency_ms = _measure_ms(
+        lambda: build_certificate(
+            decision_report,
+            action_request=action_payload,
+            event_metadata={
+                "repository": "KingsMtn/SMERC-Runtime-Permission-Layer",
+                "workflow": "SMERC PR Guardian",
+                "event_name": "pull_request",
+                "pull_request": {
+                    "number": 101,
+                    "title": "AI-assisted authentication middleware change",
+                    "user": "coding-agent",
+                    "base_ref": "main",
+                    "head_sha": "demo-head-sha",
+                },
             },
-        },
-        issued_at="2026-07-28T12:00:05+00:00",
+            issued_at="2026-07-28T12:00:05+00:00",
+        )
     )
-    pr_comment = render_pr_comment(pr_certificate)
-    route_report = route_decision(_decision_for_sparta(decision), plan_payload)
-    ledger = _ledger_for_demo(
-        action=action_payload,
-        decision=decision,
-        route_report=route_report,
-        certificate=pr_certificate,
+    pr_comment, comment_latency_ms = _measure_ms(lambda: render_pr_comment(pr_certificate))
+    route_report, sparta_route_latency_ms = _measure_ms(
+        lambda: route_decision(_decision_for_sparta(decision), plan_payload)
     )
-    ledger_data = ledger.to_dict()
-    dll_intelligence = analyze_ledgers([ledger_data])
+    ledger, ledger_build_latency_ms = _measure_ms(
+        lambda: _ledger_for_demo(
+            action=action_payload,
+            decision=decision,
+            route_report=route_report,
+            certificate=pr_certificate,
+        )
+    )
+    ledger_data, ledger_serialization_latency_ms = _measure_ms(lambda: ledger.to_dict())
+    dll_intelligence, dll_intelligence_latency_ms = _measure_ms(lambda: analyze_ledgers([ledger_data]))
+    total_generation_ms = round((time.perf_counter() - total_started) * 1000, 3)
     return {
         "version": DEMO_VERSION,
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -272,6 +289,29 @@ def build_end_to_end_demo(
         },
         "decision_lifecycle_ledger": ledger_data,
         "dll_intelligence": dll_intelligence,
+        "performance_latency": {
+            "version": "smerc.demo-latency.v1",
+            "measurement_type": "single_local_process_run",
+            "unit": "milliseconds",
+            "decision_evaluation_ms": decision_latency_ms,
+            "pr_certificate_ms": certificate_latency_ms,
+            "pr_comment_render_ms": comment_latency_ms,
+            "sparta_route_ms": sparta_route_latency_ms,
+            "dll_build_ms": ledger_build_latency_ms,
+            "dll_serialization_ms": ledger_serialization_latency_ms,
+            "dll_intelligence_ms": dll_intelligence_latency_ms,
+            "total_generation_ms": total_generation_ms,
+            "ciso_interpretation": (
+                "Use latency as operational overhead evidence, not as the core value claim. "
+                "A pilot should measure median and p95 decision latency, total workflow time added, "
+                "reviewer agreement, approval delay, false constraints, and false releases."
+            ),
+            "boundary": [
+                "Single local run; not production performance evidence.",
+                "Does not include network latency, GitHub runner queue time, remote API latency, storage latency, or human review time.",
+                "Customer pilots should report median, p95, max latency, workflow overhead, and reviewer impact with explicit sample sizes.",
+            ],
+        },
         "integrated_flow": [
             "AI-assisted PR request declared",
             "SMERC runtime engine evaluated recoverability posture",
@@ -353,6 +393,18 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
         f"- Recovery failure count: `{intelligence['summary']['recovery_failure_count']}`",
         f"- Policy review queue items: `{len(intelligence['policy_review_queue'])}`",
         f"- Recommended next action: {intelligence['recommended_next_action']}",
+        "",
+        "## 7. Performance And Latency",
+        "",
+        f"- Measurement type: `{bundle['performance_latency']['measurement_type']}`",
+        f"- Decision evaluation: `{bundle['performance_latency']['decision_evaluation_ms']} ms`",
+        f"- PR certificate: `{bundle['performance_latency']['pr_certificate_ms']} ms`",
+        f"- PR comment render: `{bundle['performance_latency']['pr_comment_render_ms']} ms`",
+        f"- SPARTa route: `{bundle['performance_latency']['sparta_route_ms']} ms`",
+        f"- DLL build: `{bundle['performance_latency']['dll_build_ms']} ms`",
+        f"- DLL Intelligence: `{bundle['performance_latency']['dll_intelligence_ms']} ms`",
+        f"- Total local proof-loop generation: `{bundle['performance_latency']['total_generation_ms']} ms`",
+        f"- CISO interpretation: {bundle['performance_latency']['ciso_interpretation']}",
         "",
         "## Integrated Flow",
         "",
