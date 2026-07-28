@@ -63,6 +63,8 @@ Out of scope unless separately approved:
 
 ## Required Inputs Before Start
 
+Complete `pilot_package/Pilot_Handoff_Checklist.md` before kickoff. It is the go/no-go gate between review interest and observe-mode setup.
+
 The customer should provide:
 
 - target workflow name and business owner

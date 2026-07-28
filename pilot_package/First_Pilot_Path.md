@@ -76,6 +76,8 @@ Proceed only if:
 - a security or platform owner is accountable
 - success metrics can be measured
 
+Then complete `pilot_package/Pilot_Handoff_Checklist.md`. This is the final gate before observe-mode setup. It confirms the workflow family, accountable owners, reviewer labels, metadata-only boundary, stop conditions, and success metrics.
+
 Do not sell a paid pilot when there is no reviewer capacity, no safe data boundary, no accountable owner, or no measurable success path.
 
 ## Week One: Observe

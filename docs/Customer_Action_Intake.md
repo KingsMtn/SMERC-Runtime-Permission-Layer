@@ -63,3 +63,7 @@ Move to a pilot only when:
 - observe mode can run without changing production behavior
 
 Do not move to enforcement based on intake scoring alone.
+
+## Handoff
+
+If the intake suggests `moderate` or `strong` pilot fit, complete `pilot_package/Pilot_Handoff_Checklist.md` before connecting any customer workflow.
