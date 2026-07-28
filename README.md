@@ -93,6 +93,8 @@ Start here before reading the code:
 - `docs/CISO_Evidence_Walkthrough.md` gives reviewers a local end-to-end flow from seeded decisions to pilot console evidence packages.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
+- `docs/YC_Next_Cycle_Readiness_Plan.md` defines the evidence-first plan for making a later YC application stronger after missing the Fall 2026 on-time deadline.
+- `docs/YC_Application_Evidence_Draft.md` gives YC-style language with explicit evidence slots that should not be filled until real customer or reviewer proof exists.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
 - `schemas/smerc-runtime-api-openapi-v1.json` gives integration partners a reviewable OpenAPI 3.1 contract for the pilot API.
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
