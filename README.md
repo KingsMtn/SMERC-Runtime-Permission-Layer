@@ -140,6 +140,7 @@ Start here before reading the code:
 - `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md` and `examples/github_actions_pilot_manifest.json` give a concrete first-workflow launch path for a GitHub Actions shadow-mode pilot.
 - `pilot_package/First_Pilot_Path.md` gives the shortest path from interested prospect to 30-day shadow-mode evidence.
 - `pilot_package/Customer_Metadata_Substitution_Guide.md` explains how a prospect replaces public samples with metadata-only customer inputs safely.
+- `docs/Customer_Metadata_Validation.md` checks whether prospect-specific inputs are ready before generating a customer pilot package.
 - `pilot_package/Pilot_Handoff_Checklist.md` defines the required customer, reviewer, data-boundary, stop-condition, and success-metric gate before observe mode starts.
 - `docs/Pilot_Evidence_Summary.md` generates the executive go/no-go wrapper from prospect route, customer action intake, handoff status, and reviewer metrics.
 - `pilot_package/Pricing_And_Pilot_Evidence_Position.md` explains early pilot pricing and why the Decision Lifecycle Ledger should be positioned as evidence support, not a standalone compliance guarantee.

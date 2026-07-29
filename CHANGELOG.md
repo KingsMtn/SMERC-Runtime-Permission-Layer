@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added customer metadata validation to block unreplaced samples, unconfirmed substitution checklists, sample metrics, review-only prospects, and incomplete action intake before customer pilot package generation.
 - Added customer metadata substitution guidance and checklist for safely replacing public samples with prospect-specific inputs before generating a core pilot package.
 - Added a one-command core pilot package builder that outputs routing, action intake, handoff, and evidence summary artifacts into a review folder.
 - Added pilot evidence summary generation that combines prospect routing, customer action intake, handoff status, and reviewer metrics into a go/no-go package.

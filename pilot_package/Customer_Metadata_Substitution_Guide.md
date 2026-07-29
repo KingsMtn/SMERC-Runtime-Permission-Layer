@@ -99,6 +99,19 @@ Do not use sample metrics in external claims. Replace them with customer-observe
 
 ## Step 5: Generate The Package
 
+Validate the substituted inputs first:
+
+```bash
+python -m reference_engine.customer_metadata_validator \
+  --checklist customer_working/customer_metadata_substitution_checklist.json \
+  --prospect-route customer_working/prospect_route.json \
+  --customer-intake customer_working/customer_action_intake.json \
+  --pilot-handoff customer_working/pilot_handoff.json \
+  --pretty
+```
+
+Proceed only if validation returns `ready_for_customer_package: true`.
+
 Run with prospect-specific files:
 
 ```bash

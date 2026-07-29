@@ -13,7 +13,7 @@ It runs the core review sequence in one command:
 
 ## Run
 
-Before using prospect-specific inputs, read `pilot_package/Customer_Metadata_Substitution_Guide.md`.
+Before using prospect-specific inputs, read `pilot_package/Customer_Metadata_Substitution_Guide.md` and run `docs/Customer_Metadata_Validation.md`.
 
 ```bash
 python -m reference_engine.core_pilot_package --pretty
@@ -40,6 +40,8 @@ reports/core_pilot_package/README.md
 ```
 
 For a real prospect, copy the sample JSON files into a customer working folder, replace only metadata-safe fields, and run the command with `--prospect-route`, `--customer-intake`, and `--pilot-handoff`.
+
+Do not generate a customer-specific package until metadata validation returns `ready_for_customer_package: true`.
 
 ## Boundary
 
