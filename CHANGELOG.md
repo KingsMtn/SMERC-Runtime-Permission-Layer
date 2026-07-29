@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added prospect routing to classify interested organizations into the core GitHub Actions pilot, SMERC-F financial shadow-mode pilot, or review-only path.
 - Added SMERC-F stablecoin/blockchain pilot-fit guidance and a bounded financial shadow-mode pilot path while keeping GitHub Actions as the primary pilot wedge.
 - Added an AML-inspired SMERC-F financial governance spur with scenarios, benchmark CLI, generated report, documentation, and tests comparing AML-style alerting with recoverability-aware action posture.
 - Added a pilot handoff checklist and example to gate the transition from reviewer quickstart and customer action intake into observe-mode setup.

@@ -175,12 +175,13 @@ This means the action may not look suspicious under an AML-style baseline, but S
 
 ## Recommended Sequence
 
-1. Keep the GitHub Actions pilot as the primary product wedge.
-2. Use the AML-inspired SMERC-F benchmark as a financial-domain proof.
-3. Talk to financial/stablecoin prospects only with a narrow shadow-mode offer.
-4. Ask for metadata-only action examples.
-5. Compare SMERC-F posture against reviewer labels.
-6. Build a financial pilot package only after one real financial reviewer confirms the use case is worth testing.
+1. Run `docs/Prospect_Routing.md`.
+2. Keep the GitHub Actions pilot as the primary product wedge unless the prospect clearly routes to SMERC-F.
+3. Use the AML-inspired SMERC-F benchmark as a financial-domain proof.
+4. Talk to financial/stablecoin prospects only with a narrow shadow-mode offer.
+5. Ask for metadata-only action examples.
+6. Compare SMERC-F posture against reviewer labels.
+7. Build a financial pilot package only after one real financial reviewer confirms the use case is worth testing.
 
 ## Bottom Line
 

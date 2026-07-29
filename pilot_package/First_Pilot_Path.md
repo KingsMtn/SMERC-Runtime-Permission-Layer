@@ -14,6 +14,8 @@ This pilot path is intentionally narrow. It is not a production rollout, complia
 
 ## Recommended Starting Point
 
+Before choosing a pilot path, run `docs/Prospect_Routing.md`. It screens whether the prospect belongs in the core GitHub Actions path, the SMERC-F financial path, or review-only.
+
 Start with one GitHub Actions workflow in `observe` mode.
 
 Good first workflows:
