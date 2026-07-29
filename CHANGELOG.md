@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an AML-inspired SMERC-F financial governance spur with scenarios, benchmark CLI, generated report, documentation, and tests comparing AML-style alerting with recoverability-aware action posture.
 - Added a pilot handoff checklist and example to gate the transition from reviewer quickstart and customer action intake into observe-mode setup.
 - Added metadata-only customer action intake for scoring prospect workflow examples before a shadow-mode pilot, including sample data, CLI, documentation, and tests.
 - Added a one-command reviewer quickstart that generates PR Guardian, SPARTa, DLL, CISO seed, and benchmark artifacts into a single local proof package.

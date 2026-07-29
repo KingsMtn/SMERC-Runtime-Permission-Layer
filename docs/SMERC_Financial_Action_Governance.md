@@ -10,6 +10,8 @@ The profile exists to demonstrate how SMERC's action-boundary model can be adapt
 
 > SMERC-F is pre-execution permission infrastructure for proposed autonomous-capital actions.
 
+SMERC-F is best framed as an AML-inspired governance profile: it borrows AML-style risk scoring, review queues, reason codes, audit evidence, threshold calibration, and override discipline, but applies them to pre-execution financial-action recoverability. It does not provide AML compliance, sanctions screening, SAR filing, KYC, custody, settlement, or payment execution.
+
 It evaluates whether an automated financial action should:
 
 - `ALLOW`: proceed with monitoring and a retained reversal path
@@ -83,6 +85,16 @@ python -m reference_engine.smerc_f_profile_packet \
 ```
 
 See `docs/SMERC_F_Profile_Packet.md` and `reports/SMERC_F_Profile_Packet.md`.
+
+For an AML-inspired benchmark:
+
+```bash
+python -m reference_engine.aml_inspired_benchmark \
+  examples/aml_inspired_financial_governance_scenarios.json \
+  --pretty
+```
+
+See `docs/SMERC_F_AML_Inspired_Spur.md` and `reports/AML_Inspired_Financial_Governance_Benchmark.md`.
 
 ## Intended Validation
 

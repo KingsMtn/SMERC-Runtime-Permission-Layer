@@ -118,6 +118,7 @@ Start here before reading the code:
 - `docs/Fake_Customer_Production_Like_Test.md` explains the AcmeCloud simulated customer environment that exercises safe, constrained, blocked, review-required, and rollback paths.
 - `docs/Real_Public_Incident_Replay.md` explains how public incident reports are replayed through SMERC with analyst-assigned signal boundaries.
 - `docs/SMERC_F_Profile_Packet.md` explains the SMERC-F financial-action profile packet and its commercial limits.
+- `docs/SMERC_F_AML_Inspired_Spur.md` explains SMERC-F as an AML-inspired financial-action governance profile without claiming AML compliance or replacing financial-crime systems.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
 - `docs/Community_Submission_Kit.md` gives careful, non-exaggerated public post drafts for Microsoft Tech Community, GitHub Community, LinkedIn, Hacker News, and Product Hunt.
 - `docs/Public_Indexing_Assets.md` records the public status page, sitemap, robots file, `llms.txt`, and `humans.txt`.
