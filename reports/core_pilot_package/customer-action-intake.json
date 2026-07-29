@@ -1,0 +1,407 @@
+{
+  "contact_role": "security_architect",
+  "data_boundary": "Metadata-only sample. No secrets, credentials, customer records, source code, or production logs are included.",
+  "evidence_boundary": "Customer action intake is metadata-only pilot preparation. It is not proof of production safety, customer demand, or incident reduction.",
+  "generated_at": "2026-07-29T03:30:19+00:00",
+  "intake_date": "2026-07-28",
+  "organization": "ExampleCo",
+  "pilot_fit": {
+    "fit": "strong",
+    "reason": "The intake includes multiple side-effecting actions where SMERC creates reviewable restraint or escalation decisions."
+  },
+  "recommended_next_action": "Use the highest-exposure actions in a review call, ask human reviewers to label the preferred posture, and proceed to observe-mode pilot only if reviewer labels and workflow ownership are available.",
+  "records": [
+    {
+      "action_id": "EXAMPLECO_PR_TEST_RUN",
+      "analysis": {
+        "confidence_band": "high",
+        "irreversible_exposure_band": "low",
+        "reversible_capacity_band": "high"
+      },
+      "decision": {
+        "controls": [
+          "execute",
+          "record_replay",
+          "retain_cancel_handle"
+        ],
+        "domain_profile": {
+          "label": "GitHub Actions and software delivery",
+          "notes": [
+            "Production delivery changes should preserve rollback and deployment evidence."
+          ],
+          "profile_id": "github_actions"
+        },
+        "enforcement_state": "release",
+        "plain_english_summary": "Action 'EXAMPLECO_PR_TEST_RUN' received ALLOW. Irreversible exposure is 0.069, reversible capacity is 0.928, and authorization score is 0.927. Controls: execute, record_replay, retain_cancel_handle.",
+        "posture": "ALLOW",
+        "reason_codes": [
+          "RECOVERABILITY_ACCEPTABLE"
+        ],
+        "replay_id": "replay_EXAMPLECO_PR_TEST_RUN_1785295819762_e92d50ff29b8",
+        "scores": {
+          "cancel_reliability_score": 0.91,
+          "confidence_score": 0.921,
+          "irreversible_exposure_score": 0.069,
+          "operational_stress_score": 0.092,
+          "reversible_capacity_score": 0.928,
+          "risk_adjusted_authorization_score": 0.927
+        }
+      },
+      "description": "AI coding agent runs tests and static analysis for a pull request.",
+      "input": {
+        "action_type": "ci_test",
+        "actor": "coding_agent",
+        "context": {
+          "domain_profile": "github_actions",
+          "workflow": "pull_request_validation"
+        },
+        "external_side_effect": false,
+        "sensitive_data": false,
+        "tool": "github_actions.test"
+      },
+      "metadata_notes": []
+    },
+    {
+      "action_id": "EXAMPLECO_PROD_CANARY_DEPLOY",
+      "analysis": {
+        "confidence_band": "high",
+        "irreversible_exposure_band": "medium",
+        "reversible_capacity_band": "medium"
+      },
+      "decision": {
+        "controls": [
+          "limit_scope",
+          "preview_before_execution",
+          "record_replay",
+          "rate_limit_external_side_effect"
+        ],
+        "domain_profile": {
+          "label": "GitHub Actions and software delivery",
+          "notes": [
+            "Production delivery changes should preserve rollback and deployment evidence."
+          ],
+          "profile_id": "github_actions"
+        },
+        "enforcement_state": "constrain",
+        "plain_english_summary": "Action 'EXAMPLECO_PROD_CANARY_DEPLOY' received THROTTLE. Irreversible exposure is 0.454, reversible capacity is 0.668, and authorization score is 0.662. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+        "posture": "THROTTLE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT"
+        ],
+        "replay_id": "replay_EXAMPLECO_PROD_CANARY_DEPLOY_1785295819762_e67777bed4f4",
+        "scores": {
+          "cancel_reliability_score": 0.72,
+          "confidence_score": 0.75,
+          "irreversible_exposure_score": 0.454,
+          "operational_stress_score": 0.395,
+          "reversible_capacity_score": 0.668,
+          "risk_adjusted_authorization_score": 0.662
+        }
+      },
+      "description": "AI deployment assistant proposes a production canary release after merging a pull request.",
+      "input": {
+        "action_type": "production_canary_deploy",
+        "actor": "deployment_agent",
+        "context": {
+          "domain_profile": "github_actions",
+          "workflow": "production_canary"
+        },
+        "external_side_effect": true,
+        "sensitive_data": false,
+        "tool": "github_actions.deploy"
+      },
+      "metadata_notes": []
+    },
+    {
+      "action_id": "EXAMPLECO_CLOUD_IAM_POLICY_CHANGE",
+      "analysis": {
+        "confidence_band": "medium",
+        "irreversible_exposure_band": "high",
+        "reversible_capacity_band": "medium"
+      },
+      "decision": {
+        "controls": [
+          "limit_scope",
+          "preview_before_execution",
+          "record_replay",
+          "require_rollback_plan",
+          "rate_limit_external_side_effect",
+          "checkpoint_before_execution"
+        ],
+        "domain_profile": {
+          "label": "Cloud administration",
+          "notes": [
+            "Cloud changes can widen blast radius quickly when containment is weak."
+          ],
+          "profile_id": "cloud_admin"
+        },
+        "enforcement_state": "constrain",
+        "plain_english_summary": "Action 'EXAMPLECO_CLOUD_IAM_POLICY_CHANGE' received THROTTLE. Irreversible exposure is 0.745, reversible capacity is 0.454, and authorization score is 0.445. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+        "posture": "THROTTLE",
+        "reason_codes": [
+          "IRREVERSIBLE_EXPOSURE_HIGH",
+          "CONTAINMENT_WEAK",
+          "IMPACT_SCOPE_WIDE",
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA"
+        ],
+        "replay_id": "replay_EXAMPLECO_CLOUD_IAM_POLICY_CHANGE_1785295819762_eac4a2b970dc",
+        "scores": {
+          "cancel_reliability_score": 0.58,
+          "confidence_score": 0.59,
+          "irreversible_exposure_score": 0.745,
+          "operational_stress_score": 0.586,
+          "reversible_capacity_score": 0.454,
+          "risk_adjusted_authorization_score": 0.445
+        }
+      },
+      "description": "AI cloud assistant proposes broadening an IAM role used by production automation.",
+      "input": {
+        "action_type": "iam_policy_change",
+        "actor": "cloud_admin_agent",
+        "context": {
+          "domain_profile": "cloud_admin",
+          "workflow": "cloud_permission_change"
+        },
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "tool": "cloud.iam"
+      },
+      "metadata_notes": [
+        "external side effect has slow rollback; reviewer should confirm rollback path",
+        "sensitive-data action has incomplete evidence; reviewer should confirm evidence source"
+      ]
+    },
+    {
+      "action_id": "EXAMPLECO_CUSTOMER_REFUND_BATCH",
+      "analysis": {
+        "confidence_band": "medium",
+        "irreversible_exposure_band": "high",
+        "reversible_capacity_band": "low"
+      },
+      "decision": {
+        "controls": [
+          "limit_scope",
+          "preview_before_execution",
+          "record_replay",
+          "require_rollback_plan",
+          "rate_limit_external_side_effect",
+          "checkpoint_before_execution"
+        ],
+        "domain_profile": {
+          "label": "Finance operations",
+          "notes": [
+            "Money movement and payment workflows require stronger recovery evidence."
+          ],
+          "profile_id": "finance_ops"
+        },
+        "enforcement_state": "constrain",
+        "plain_english_summary": "Action 'EXAMPLECO_CUSTOMER_REFUND_BATCH' received THROTTLE. Irreversible exposure is 0.771, reversible capacity is 0.421, and authorization score is 0.415. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+        "posture": "THROTTLE",
+        "reason_codes": [
+          "IRREVERSIBLE_EXPOSURE_HIGH",
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA"
+        ],
+        "replay_id": "replay_EXAMPLECO_CUSTOMER_REFUND_BATCH_1785295819762_3959ebbb9ad4",
+        "scores": {
+          "cancel_reliability_score": 0.53,
+          "confidence_score": 0.62,
+          "irreversible_exposure_score": 0.771,
+          "operational_stress_score": 0.546,
+          "reversible_capacity_score": 0.421,
+          "risk_adjusted_authorization_score": 0.415
+        }
+      },
+      "description": "AI finance assistant proposes issuing a batch of customer refunds from a support queue.",
+      "input": {
+        "action_type": "batch_refund",
+        "actor": "finance_agent",
+        "context": {
+          "domain_profile": "finance_ops",
+          "workflow": "customer_refunds"
+        },
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "tool": "finance.refunds"
+      },
+      "metadata_notes": [
+        "external side effect has slow rollback; reviewer should confirm rollback path",
+        "sensitive-data action has incomplete evidence; reviewer should confirm evidence source"
+      ]
+    },
+    {
+      "action_id": "EXAMPLECO_SUPPORT_EMAIL_BLAST",
+      "analysis": {
+        "confidence_band": "medium",
+        "irreversible_exposure_band": "high",
+        "reversible_capacity_band": "low"
+      },
+      "decision": {
+        "controls": [
+          "block_execution",
+          "explain_denial",
+          "preserve_replay",
+          "require_new_request"
+        ],
+        "domain_profile": {
+          "label": "Customer communications",
+          "notes": [
+            "External communications are difficult to retract after release."
+          ],
+          "profile_id": "customer_comms"
+        },
+        "enforcement_state": "block",
+        "plain_english_summary": "Action 'EXAMPLECO_SUPPORT_EMAIL_BLAST' received DENY. Irreversible exposure is 0.820, reversible capacity is 0.265, and authorization score is 0.300. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+        "posture": "DENY",
+        "reason_codes": [
+          "IRREVERSIBLE_EXPOSURE_HIGH",
+          "RECOVERY_CAPACITY_LOW",
+          "ROLLBACK_LATENCY_HIGH",
+          "CANCEL_RELIABILITY_WEAK",
+          "CONTAINMENT_WEAK",
+          "EVIDENCE_VALIDITY_LOW",
+          "IMPACT_SCOPE_WIDE",
+          "EXTERNAL_SIDE_EFFECT"
+        ],
+        "replay_id": "replay_EXAMPLECO_SUPPORT_EMAIL_BLAST_1785295819762_7702a34a7eed",
+        "scores": {
+          "cancel_reliability_score": 0.42,
+          "confidence_score": 0.453,
+          "irreversible_exposure_score": 0.82,
+          "operational_stress_score": 0.718,
+          "reversible_capacity_score": 0.265,
+          "risk_adjusted_authorization_score": 0.3
+        }
+      },
+      "description": "AI support assistant proposes emailing all customers affected by a suspected outage before confirmation.",
+      "input": {
+        "action_type": "customer_email_blast",
+        "actor": "support_agent",
+        "context": {
+          "domain_profile": "customer_comms",
+          "workflow": "incident_customer_update"
+        },
+        "external_side_effect": true,
+        "sensitive_data": false,
+        "tool": "customer_comms.email"
+      },
+      "metadata_notes": [
+        "external side effect has slow rollback; reviewer should confirm rollback path"
+      ]
+    },
+    {
+      "action_id": "EXAMPLECO_DISABLE_SUSPECTED_COMPROMISED_ACCOUNT",
+      "analysis": {
+        "confidence_band": "medium",
+        "irreversible_exposure_band": "medium",
+        "reversible_capacity_band": "high"
+      },
+      "decision": {
+        "controls": [
+          "limit_scope",
+          "preview_before_execution",
+          "record_replay",
+          "rate_limit_external_side_effect"
+        ],
+        "domain_profile": {
+          "label": "Security operations",
+          "notes": [
+            "Security automation may be urgent but can disrupt operations at scale."
+          ],
+          "profile_id": "security_ops"
+        },
+        "enforcement_state": "constrain",
+        "plain_english_summary": "Action 'EXAMPLECO_DISABLE_SUSPECTED_COMPROMISED_ACCOUNT' received THROTTLE. Irreversible exposure is 0.489, reversible capacity is 0.739, and authorization score is 0.649. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+        "posture": "THROTTLE",
+        "reason_codes": [
+          "IRREVERSIBLE_EXPOSURE_ELEVATED",
+          "ANOMALY_PRESSURE_HIGH",
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA"
+        ],
+        "replay_id": "replay_EXAMPLECO_DISABLE_SUSPECTED_COMPROMISED_ACCOUNT_1785295819762_f4e3c46b0118",
+        "scores": {
+          "cancel_reliability_score": 0.76,
+          "confidence_score": 0.629,
+          "irreversible_exposure_score": 0.489,
+          "operational_stress_score": 0.489,
+          "reversible_capacity_score": 0.739,
+          "risk_adjusted_authorization_score": 0.649
+        }
+      },
+      "description": "AI security assistant proposes disabling a privileged account after suspicious activity.",
+      "input": {
+        "action_type": "privileged_account_disable",
+        "actor": "security_agent",
+        "context": {
+          "domain_profile": "security_ops",
+          "workflow": "identity_response"
+        },
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "tool": "identity.disable_account"
+      },
+      "metadata_notes": []
+    }
+  ],
+  "schema": "smerc.customer-action-intake.v1",
+  "summary": {
+    "actions_with_metadata_notes": 3,
+    "average_exposure_by_domain_profile": {
+      "cloud_admin": 0.745,
+      "customer_comms": 0.82,
+      "finance_ops": 0.771,
+      "github_actions": 0.262,
+      "security_ops": 0.489
+    },
+    "domain_profile_counts": {
+      "cloud_admin": 1,
+      "customer_comms": 1,
+      "finance_ops": 1,
+      "github_actions": 2,
+      "security_ops": 1
+    },
+    "highest_exposure_actions": [
+      {
+        "action_id": "EXAMPLECO_SUPPORT_EMAIL_BLAST",
+        "irreversible_exposure_score": 0.82,
+        "posture": "DENY",
+        "reversible_capacity_score": 0.265
+      },
+      {
+        "action_id": "EXAMPLECO_CUSTOMER_REFUND_BATCH",
+        "irreversible_exposure_score": 0.771,
+        "posture": "THROTTLE",
+        "reversible_capacity_score": 0.421
+      },
+      {
+        "action_id": "EXAMPLECO_CLOUD_IAM_POLICY_CHANGE",
+        "irreversible_exposure_score": 0.745,
+        "posture": "THROTTLE",
+        "reversible_capacity_score": 0.454
+      },
+      {
+        "action_id": "EXAMPLECO_DISABLE_SUSPECTED_COMPROMISED_ACCOUNT",
+        "irreversible_exposure_score": 0.489,
+        "posture": "THROTTLE",
+        "reversible_capacity_score": 0.739
+      },
+      {
+        "action_id": "EXAMPLECO_PROD_CANARY_DEPLOY",
+        "irreversible_exposure_score": 0.454,
+        "posture": "THROTTLE",
+        "reversible_capacity_score": 0.668
+      }
+    ],
+    "posture_counts": {
+      "ALLOW": 1,
+      "DENY": 1,
+      "ESCALATE": 0,
+      "FREEZE": 0,
+      "THROTTLE": 4
+    },
+    "total_actions": 6
+  },
+  "workflow_context": "Candidate AI-agent and automation actions for a GitHub Actions shadow-mode pilot."
+}

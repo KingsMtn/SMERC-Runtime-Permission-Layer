@@ -1,0 +1,73 @@
+{
+  "customer_provides": [
+    "selected repository or workflow family",
+    "workflow owner",
+    "security owner",
+    "reviewer list",
+    "sample metadata-only actions",
+    "current approval path",
+    "artifact retention expectations",
+    "stop conditions"
+  ],
+  "evidence_boundary": "Handoff checklist only. It does not prove customer demand, production safety, compliance readiness, or incident reduction.",
+  "go_no_go_options": [
+    "stop",
+    "narrow",
+    "continue_observe",
+    "move_to_recommend"
+  ],
+  "handoff_status": "ready_for_week_zero_review",
+  "pilot_name": "github-actions-shadow-mode-platform-team",
+  "required_items": [
+    {
+      "evidence": "production-deployment workflow in one selected pilot repository",
+      "item": "workflow_family_named",
+      "status": "yes"
+    },
+    {
+      "evidence": "security architect or CISO delegate",
+      "item": "security_owner_named",
+      "status": "yes"
+    },
+    {
+      "evidence": "platform engineering or DevSecOps workflow owner",
+      "item": "platform_owner_named",
+      "status": "yes"
+    },
+    {
+      "evidence": "SMERC scores actions and emits artifacts without blocking workflow execution",
+      "item": "observe_mode_only",
+      "status": "yes"
+    },
+    {
+      "evidence": "no secrets, credentials, raw customer records, source bodies, private prompts, or regulated payloads",
+      "item": "metadata_only_boundary",
+      "status": "yes"
+    },
+    {
+      "evidence": "weekly sampled decision review",
+      "item": "reviewer_labels_available",
+      "status": "yes"
+    },
+    {
+      "evidence": "security owner can pause or stop the pilot",
+      "item": "stop_conditions_accepted",
+      "status": "yes"
+    },
+    {
+      "evidence": "reviewer agreement, false release, false constraint, useful constraint, latency, and override metrics",
+      "item": "success_metrics_measurable",
+      "status": "yes"
+    }
+  ],
+  "schema": "smerc.pilot-handoff-checklist.v1",
+  "smerc_provides": [
+    "action metadata template",
+    "local scoring or API scoring path",
+    "GitHub Actions observe-mode integration guidance",
+    "posture, reason code, score, and control output",
+    "replay identifiers",
+    "weekly metrics format",
+    "final pilot evidence report format"
+  ]
+}

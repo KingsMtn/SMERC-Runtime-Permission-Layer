@@ -1,0 +1,86 @@
+{
+  "action_intake_summary": {
+    "actions_with_metadata_notes": 3,
+    "highest_exposure_actions": [
+      {
+        "action_id": "EXAMPLECO_SUPPORT_EMAIL_BLAST",
+        "irreversible_exposure_score": 0.82,
+        "posture": "DENY",
+        "reversible_capacity_score": 0.265
+      },
+      {
+        "action_id": "EXAMPLECO_CUSTOMER_REFUND_BATCH",
+        "irreversible_exposure_score": 0.771,
+        "posture": "THROTTLE",
+        "reversible_capacity_score": 0.421
+      },
+      {
+        "action_id": "EXAMPLECO_CLOUD_IAM_POLICY_CHANGE",
+        "irreversible_exposure_score": 0.745,
+        "posture": "THROTTLE",
+        "reversible_capacity_score": 0.454
+      },
+      {
+        "action_id": "EXAMPLECO_DISABLE_SUSPECTED_COMPROMISED_ACCOUNT",
+        "irreversible_exposure_score": 0.489,
+        "posture": "THROTTLE",
+        "reversible_capacity_score": 0.739
+      },
+      {
+        "action_id": "EXAMPLECO_PROD_CANARY_DEPLOY",
+        "irreversible_exposure_score": 0.454,
+        "posture": "THROTTLE",
+        "reversible_capacity_score": 0.668
+      }
+    ],
+    "posture_counts": {
+      "ALLOW": 1,
+      "DENY": 1,
+      "ESCALATE": 0,
+      "FREEZE": 0,
+      "THROTTLE": 4
+    },
+    "total_actions": 6
+  },
+  "evidence_boundary": "Pilot evidence summary only. It is not production certification, compliance attestation, customer demand proof, incident-reduction proof, or approval for enforcement.",
+  "evidence_inputs": {
+    "customer_intake_schema": "smerc.customer-action-intake.v1",
+    "pilot_handoff_schema": "smerc.pilot-handoff-checklist.v1",
+    "pilot_metrics_status": "pilot_observation",
+    "prospect_route_schema": "smerc.prospect-route.v1"
+  },
+  "generated_at": "2026-07-29T03:30:19+00:00",
+  "go_no_go_options": [
+    "stop",
+    "narrow",
+    "continue_observe",
+    "move_to_recommend"
+  ],
+  "handoff_gate": {
+    "complete": true,
+    "required_count": 8,
+    "yes_count": 8
+  },
+  "organization": "Example Platform Team",
+  "pilot_decision": "move_to_recommend",
+  "pilot_fit": "strong",
+  "pilot_metrics_summary": {
+    "average_review_latency_ms": 3100,
+    "decision_count": 24,
+    "false_constraint_rate": 0.0833,
+    "false_release_rate": 0.0,
+    "interpretation_warning": "Sample pilot metrics for package generation only. Replace with customer-observed data before external claims.",
+    "override_rate": 0.1111,
+    "reviewed_decision_count": 18,
+    "reviewer_agreement_rate": 0.8333,
+    "status": "pilot_observation",
+    "useful_constraint_rate": 0.75
+  },
+  "prospect_scores": {
+    "core_github_actions_score": 7,
+    "smerc_f_financial_score": 6
+  },
+  "recommended_next_action": "Move to recommend mode only with customer owner approval; do not enforce yet.",
+  "recommended_route": "core_github_actions_shadow_mode",
+  "schema": "smerc.pilot-evidence-summary.v1"
+}

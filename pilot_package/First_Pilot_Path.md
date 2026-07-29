@@ -72,6 +72,14 @@ python -m reference_engine.first_pilot_packet \
   --markdown-output reports/First_Pilot_Packet.md
 ```
 
+For the shortest combined review folder, run:
+
+```bash
+python -m reference_engine.core_pilot_package --pretty
+```
+
+See `docs/Core_Pilot_Package.md`.
+
 Proceed only if:
 
 - the workflow has real side effects or meaningful operational risk

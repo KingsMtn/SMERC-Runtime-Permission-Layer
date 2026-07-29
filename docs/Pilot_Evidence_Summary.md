@@ -22,6 +22,8 @@ The output is a single go/no-go style package that says whether the next step sh
 
 ## Run
 
+For the shortest full core pilot package, run `docs/Core_Pilot_Package.md`.
+
 Before reviewer-labeled metrics exist:
 
 ```bash
