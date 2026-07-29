@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added pilot evidence summary generation that combines prospect routing, customer action intake, handoff status, and reviewer metrics into a go/no-go package.
 - Added prospect routing to classify interested organizations into the core GitHub Actions pilot, SMERC-F financial shadow-mode pilot, or review-only path.
 - Added SMERC-F stablecoin/blockchain pilot-fit guidance and a bounded financial shadow-mode pilot path while keeping GitHub Actions as the primary pilot wedge.
 - Added an AML-inspired SMERC-F financial governance spur with scenarios, benchmark CLI, generated report, documentation, and tests comparing AML-style alerting with recoverability-aware action posture.

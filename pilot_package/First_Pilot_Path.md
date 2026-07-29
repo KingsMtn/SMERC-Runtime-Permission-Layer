@@ -143,6 +143,19 @@ At the end of the first 30 days, choose one outcome:
 
 Do not move directly to production enforcement because a synthetic benchmark or early pilot result looks promising. Enforcement requires customer-specific calibration, rollback proof, security review, and written approval from the customer's accountable owners.
 
+Generate the pilot evidence summary before making the 30-day decision:
+
+```bash
+python -m reference_engine.pilot_evidence_summary \
+  --prospect-route reports/core_prospect_route_report.json \
+  --customer-intake reports/customer_action_intake_report.json \
+  --pilot-handoff examples/pilot_handoff_checklist.json \
+  --pilot-metrics examples/pilot_metrics_summary_sample.json \
+  --pretty
+```
+
+Use `docs/Pilot_Evidence_Summary.md` for the package boundary and interpretation.
+
 ## Success Metrics
 
 The pilot is useful if it can measure:

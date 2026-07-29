@@ -100,6 +100,8 @@ Customer receives:
 - evidence package or final pilot report
 - go/no-go recommendation
 
+Use `docs/Pilot_Evidence_Summary.md` to generate the final executive wrapper after reviewer-labeled metrics are available.
+
 ## Initial Success Definition
 
 A pilot is useful if it produces enough evidence to decide whether SMERC should be stopped, narrowed, expanded, or tested in limited enforcement.
