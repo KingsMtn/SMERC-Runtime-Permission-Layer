@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added customer metadata substitution guidance and checklist for safely replacing public samples with prospect-specific inputs before generating a core pilot package.
 - Added a one-command core pilot package builder that outputs routing, action intake, handoff, and evidence summary artifacts into a review folder.
 - Added pilot evidence summary generation that combines prospect routing, customer action intake, handoff status, and reviewer metrics into a go/no-go package.
 - Added prospect routing to classify interested organizations into the core GitHub Actions pilot, SMERC-F financial shadow-mode pilot, or review-only path.

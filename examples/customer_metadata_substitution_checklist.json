@@ -1,0 +1,49 @@
+{
+  "schema": "smerc.customer-metadata-substitution-checklist.v1",
+  "status": "template",
+  "required_confirmations": [
+    {
+      "item": "prospect_route_replaced",
+      "required": true,
+      "confirmed": false,
+      "evidence": "Replace with prospect-specific organization, buyer, owner, workflow signals, and evidence statements."
+    },
+    {
+      "item": "customer_actions_replaced",
+      "required": true,
+      "confirmed": false,
+      "evidence": "Replace sample actions with 10 to 25 metadata-only prospect action examples."
+    },
+    {
+      "item": "no_sensitive_payloads",
+      "required": true,
+      "confirmed": false,
+      "evidence": "Confirm no secrets, source code bodies, customer records, private prompts, regulated payloads, or production logs are included."
+    },
+    {
+      "item": "handoff_items_confirmed",
+      "required": true,
+      "confirmed": false,
+      "evidence": "Set handoff checklist items to yes only after customer confirmation."
+    },
+    {
+      "item": "reviewer_labels_available",
+      "required": true,
+      "confirmed": false,
+      "evidence": "Confirm human reviewers can label sampled decisions."
+    },
+    {
+      "item": "observe_mode_possible",
+      "required": true,
+      "confirmed": false,
+      "evidence": "Confirm SMERC can run without blocking workflow execution."
+    },
+    {
+      "item": "sample_metrics_removed_before_external_claims",
+      "required": true,
+      "confirmed": false,
+      "evidence": "Do not use sample metrics as customer evidence."
+    }
+  ],
+  "evidence_boundary": "Substitution checklist only. It does not prove customer demand, pilot success, production safety, or approval for enforcement."
+}

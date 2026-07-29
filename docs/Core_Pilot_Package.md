@@ -13,6 +13,8 @@ It runs the core review sequence in one command:
 
 ## Run
 
+Before using prospect-specific inputs, read `pilot_package/Customer_Metadata_Substitution_Guide.md`.
+
 ```bash
 python -m reference_engine.core_pilot_package --pretty
 ```
@@ -36,6 +38,8 @@ Start with:
 ```text
 reports/core_pilot_package/README.md
 ```
+
+For a real prospect, copy the sample JSON files into a customer working folder, replace only metadata-safe fields, and run the command with `--prospect-route`, `--customer-intake`, and `--pilot-handoff`.
 
 ## Boundary
 

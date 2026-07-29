@@ -80,6 +80,8 @@ python -m reference_engine.core_pilot_package --pretty
 
 See `docs/Core_Pilot_Package.md`.
 
+For prospect-specific input replacement, use `pilot_package/Customer_Metadata_Substitution_Guide.md` before generating the package.
+
 Proceed only if:
 
 - the workflow has real side effects or meaningful operational risk
