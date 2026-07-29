@@ -8,6 +8,8 @@ The first SMERC pilot should answer one question:
 
 > Does recoverability-aware runtime scoring give a security or platform team useful signal before AI-assisted or automated GitHub Actions workflows create side effects?
 
+SMERC-F financial, stablecoin, payment, and blockchain use cases are a domain expansion path. Use `pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md` only when the prospect has automated financial actions where recoverability matters before execution.
+
 This pilot path is intentionally narrow. It is not a production rollout, compliance certification, or proof that SMERC reduces incidents. It is a controlled evidence-gathering exercise.
 
 ## Recommended Starting Point

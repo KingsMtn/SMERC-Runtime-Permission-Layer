@@ -91,3 +91,5 @@ Use this spur for conversations with:
 - financial platform security teams
 
 Do not lead with SMERC-F before the core GitHub Actions pilot path is understandable. SMERC-F is a domain expansion proof, not the first broad product wedge.
+
+For stablecoin, blockchain, payment, treasury, and tokenized-finance fit, see `docs/SMERC_F_Stablecoin_Blockchain_Pilot_Fit.md`.

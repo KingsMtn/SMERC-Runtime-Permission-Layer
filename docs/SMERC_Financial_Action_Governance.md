@@ -96,6 +96,8 @@ python -m reference_engine.aml_inspired_benchmark \
 
 See `docs/SMERC_F_AML_Inspired_Spur.md` and `reports/AML_Inspired_Financial_Governance_Benchmark.md`.
 
+For stablecoin and blockchain financial workflow fit, see `docs/SMERC_F_Stablecoin_Blockchain_Pilot_Fit.md` and `pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md`.
+
 ## Intended Validation
 
 The profile should first be evaluated through historical replay and shadow-mode workflow simulation. The objective is not to claim prediction accuracy. It is to measure whether state transitions and controls remain coherent under changing financial stress and recoverability conditions.
