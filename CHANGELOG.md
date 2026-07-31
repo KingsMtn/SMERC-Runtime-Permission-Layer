@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added bounded credibility-partner outreach language that points reviewers to the public credibility page and GitHub repo while avoiding production-readiness claims.
 - Added a Credibility Partner Review Packet that converts the Governance Pattern Atlas into public links, a 30-minute review path, pilot-fit questions, and bounded outreach language.
 - Added a Governance Pattern Atlas that consolidates AML, change management, security response, model risk, and SRE benchmark families into one credibility-partner evidence summary.
 - Added an SRE/incident-management-inspired governance benchmark with reliability automation scenarios, CLI/report generation, documentation, and tests comparing incident playbooks with recoverability-aware runtime posture.
