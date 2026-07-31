@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Governance Pattern Atlas that consolidates AML, change management, security response, model risk, and SRE benchmark families into one credibility-partner evidence summary.
 - Added an SRE/incident-management-inspired governance benchmark with reliability automation scenarios, CLI/report generation, documentation, and tests comparing incident playbooks with recoverability-aware runtime posture.
 - Added a model-risk-inspired governance benchmark with AI-agent scenarios, CLI/report generation, documentation, and tests separating model approval status from recoverability-aware runtime action permission.
 - Added a security-response-inspired governance benchmark with SOAR-style playbook scenarios, CLI/report generation, documentation, and tests comparing automated response playbooks with recoverability-aware runtime posture.

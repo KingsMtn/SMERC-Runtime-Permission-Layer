@@ -80,6 +80,7 @@ Start here before reading the code:
 
 - `docs/External_Review_Start_Here.md` gives external reviewers the shortest safe path through the repository.
 - `docs/Reviewer_Quickstart.md` gives reviewers a one-command path that generates a local proof package linking PR Guardian, SPARTa, DLL, CISO seed evidence, and benchmark comparison.
+- `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
 - `docs/Customer_Action_Intake.md` gives prospects a metadata-only action intake path for scoring their own workflow examples before a shadow-mode pilot.
 - `docs/Prospect_Routing.md` routes interested organizations to the core GitHub Actions pilot, SMERC-F financial pilot, or review-only path.
 - `docs/Core_Pilot_Package.md` builds the core pilot review folder in one command from routing, action intake, handoff, and evidence summary inputs.
@@ -153,6 +154,7 @@ Start here before reading the code:
 - `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
 - `reports/Proxy_Incident_Replay_Benchmark.md` shows proxy incident-replay evidence comparing simple allow/deny policy with SMERC recoverability-weighted posture decisions.
 - `reports/Runtime_Governance_Benchmark.md` shows an expanded deterministic benchmark comparing SMERC postures against a simple allow/deny baseline across 84 scenarios.
+- `reports/Governance_Pattern_Atlas.md` summarizes five governance-pattern benchmarks, 40 scenarios, and the unified evidence boundary for credibility-partner review.
 - `reports/Runtime_Benchmark_DLL_Bundle.md` converts those benchmark decisions into hash-chained decision-time ledgers without fabricating live execution or outcome evidence.
 - `reports/Change_Management_Governance_Benchmark.md` compares traditional change labels with SMERC runtime postures across GitHub Actions and production-change scenarios.
 - `reports/Security_Response_Governance_Benchmark.md` compares security playbook outcomes with SMERC runtime postures across security automation scenarios.
