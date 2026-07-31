@@ -124,6 +124,7 @@ Start here before reading the code:
 - `docs/Change_Management_Inspired_Governance.md` explains how SMERC complements change-management discipline by scoring runtime recoverability before GitHub Actions and production automation execute.
 - `docs/Security_Response_Inspired_Governance.md` explains how SMERC complements SOAR and incident-response playbooks by scoring recoverability before security automation executes.
 - `docs/Model_Risk_Inspired_Governance.md` explains how SMERC complements model-risk programs by separating model approval from runtime action permission.
+- `docs/SRE_Incident_Inspired_Governance.md` explains how SMERC complements reliability automation by scoring whether incident mitigations are recoverable enough to execute.
 - `docs/SMERC_F_Stablecoin_Blockchain_Pilot_Fit.md` explains when stablecoin, blockchain, payment, treasury, or tokenized-finance teams are a strong SMERC-F fit.
 - `pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md` gives a bounded metadata-only SMERC-F pilot path for financial-action review without live fund movement.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
@@ -156,6 +157,7 @@ Start here before reading the code:
 - `reports/Change_Management_Governance_Benchmark.md` compares traditional change labels with SMERC runtime postures across GitHub Actions and production-change scenarios.
 - `reports/Security_Response_Governance_Benchmark.md` compares security playbook outcomes with SMERC runtime postures across security automation scenarios.
 - `reports/Model_Risk_Governance_Benchmark.md` compares model-governance outcomes with SMERC runtime postures across AI-agent action scenarios.
+- `reports/SRE_Incident_Governance_Benchmark.md` compares SRE incident playbook outcomes with SMERC runtime postures across reliability automation scenarios.
 - `reports/Pilot_Ledger_Intake_Result.md` shows how pilot-supplied reviewer, execution, outcome, and learning evidence can be appended to a DLL with ordering checks.
 - `reports/Pilot_Ledger_Metrics_Report.md` summarizes completed DLL evidence with explicit denominators and sample-size caveats.
 - `docs/Pilot_DLL_API.md` describes stateless API endpoints for submitting pilot DLL intake evidence and calculating DLL metrics.

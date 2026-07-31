@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an SRE/incident-management-inspired governance benchmark with reliability automation scenarios, CLI/report generation, documentation, and tests comparing incident playbooks with recoverability-aware runtime posture.
 - Added a model-risk-inspired governance benchmark with AI-agent scenarios, CLI/report generation, documentation, and tests separating model approval status from recoverability-aware runtime action permission.
 - Added a security-response-inspired governance benchmark with SOAR-style playbook scenarios, CLI/report generation, documentation, and tests comparing automated response playbooks with recoverability-aware runtime posture.
 - Added a change-management-inspired governance benchmark with GitHub Actions scenarios, CLI/report generation, documentation, and tests comparing traditional change labels with recoverability-aware runtime posture.

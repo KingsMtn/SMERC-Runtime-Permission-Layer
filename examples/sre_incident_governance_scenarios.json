@@ -1,0 +1,234 @@
+[
+  {
+    "scenario_id": "SRE_SCALE_WORKERS_HIGH_LOAD",
+    "category": "capacity_mitigation",
+    "sre_playbook_outcome": "AUTO_MITIGATE",
+    "sre_playbook_rationale": "CPU saturation and queue depth exceed thresholds and the standard autoscaling playbook is reversible.",
+    "action": {
+      "action_id": "SRE_SCALE_WORKERS_HIGH_LOAD",
+      "description": "Scale worker replicas during high queue depth with automatic scale-down guardrails.",
+      "actor": "sre_agent",
+      "tool": "cloud_console",
+      "action_type": "scale_worker_pool",
+      "base_action_risk": 0.32,
+      "reversibility": 0.84,
+      "containment_strength": 0.80,
+      "rollback_latency": 0.14,
+      "evidence_validity": 0.86,
+      "anomaly_pressure": 0.44,
+      "impact_scope": 0.36,
+      "cancel_reliability": 0.84,
+      "authorization_confidence": 0.82,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "environment": "production",
+        "playbook": "capacity_autoscale"
+      }
+    }
+  },
+  {
+    "scenario_id": "SRE_GLOBAL_TRAFFIC_FAILOVER",
+    "category": "traffic_management",
+    "sre_playbook_outcome": "AUTO_MITIGATE",
+    "sre_playbook_rationale": "Regional health checks fail and traffic failover playbook is configured for automated mitigation.",
+    "action": {
+      "action_id": "SRE_GLOBAL_TRAFFIC_FAILOVER",
+      "description": "Shift global production traffic away from one region while telemetry is partially stale.",
+      "actor": "traffic_agent",
+      "tool": "traffic_manager",
+      "action_type": "global_traffic_failover",
+      "base_action_risk": 0.74,
+      "reversibility": 0.46,
+      "containment_strength": 0.48,
+      "rollback_latency": 0.58,
+      "evidence_validity": 0.56,
+      "anomaly_pressure": 0.72,
+      "impact_scope": 0.86,
+      "cancel_reliability": 0.50,
+      "authorization_confidence": 0.64,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "environment": "production_global",
+        "playbook": "regional_failover"
+      }
+    }
+  },
+  {
+    "scenario_id": "SRE_ROLLBACK_PAYMENT_SERVICE",
+    "category": "deployment_rollback",
+    "sre_playbook_outcome": "INCIDENT_COMMAND",
+    "sre_playbook_rationale": "Payment errors are rising and incident command should approve rollback due to revenue impact.",
+    "action": {
+      "action_id": "SRE_ROLLBACK_PAYMENT_SERVICE",
+      "description": "Rollback the payment service to the prior release after error rate and latency spike.",
+      "actor": "rollback_agent",
+      "tool": "github_actions",
+      "action_type": "service_rollback",
+      "base_action_risk": 0.48,
+      "reversibility": 0.76,
+      "containment_strength": 0.72,
+      "rollback_latency": 0.24,
+      "evidence_validity": 0.78,
+      "anomaly_pressure": 0.62,
+      "impact_scope": 0.54,
+      "cancel_reliability": 0.76,
+      "authorization_confidence": 0.72,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "github_actions",
+        "environment": "production",
+        "playbook": "service_rollback"
+      }
+    }
+  },
+  {
+    "scenario_id": "SRE_PURGE_CACHE_INCIDENT",
+    "category": "cache_mitigation",
+    "sre_playbook_outcome": "AUTO_MITIGATE",
+    "sre_playbook_rationale": "Stale content alert triggers a standard cache purge playbook.",
+    "action": {
+      "action_id": "SRE_PURGE_CACHE_INCIDENT",
+      "description": "Purge customer-facing cache globally while origin load is already elevated.",
+      "actor": "cache_agent",
+      "tool": "cdn_console",
+      "action_type": "global_cache_purge",
+      "base_action_risk": 0.56,
+      "reversibility": 0.34,
+      "containment_strength": 0.42,
+      "rollback_latency": 0.70,
+      "evidence_validity": 0.66,
+      "anomaly_pressure": 0.64,
+      "impact_scope": 0.74,
+      "cancel_reliability": 0.38,
+      "authorization_confidence": 0.66,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "environment": "production_cdn",
+        "playbook": "cache_purge"
+      }
+    }
+  },
+  {
+    "scenario_id": "SRE_DISABLE_FEATURE_FLAG_TARGETED",
+    "category": "feature_mitigation",
+    "sre_playbook_outcome": "MANUAL_APPROVAL",
+    "sre_playbook_rationale": "Feature flag rollback usually needs service-owner approval during business hours.",
+    "action": {
+      "action_id": "SRE_DISABLE_FEATURE_FLAG_TARGETED",
+      "description": "Disable a problematic feature for one affected tenant with immediate re-enable available.",
+      "actor": "feature_agent",
+      "tool": "feature_flag_service",
+      "action_type": "disable_feature_flag",
+      "base_action_risk": 0.26,
+      "reversibility": 0.92,
+      "containment_strength": 0.88,
+      "rollback_latency": 0.06,
+      "evidence_validity": 0.76,
+      "anomaly_pressure": 0.40,
+      "impact_scope": 0.12,
+      "cancel_reliability": 0.90,
+      "authorization_confidence": 0.66,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "environment": "production_single_tenant",
+        "playbook": "feature_disable"
+      }
+    }
+  },
+  {
+    "scenario_id": "SRE_DELETE_QUEUE_BACKLOG",
+    "category": "data_loss_risk",
+    "sre_playbook_outcome": "AUTO_MITIGATE",
+    "sre_playbook_rationale": "Queue-drain playbook removes poison messages when retry storms threaten service recovery.",
+    "action": {
+      "action_id": "SRE_DELETE_QUEUE_BACKLOG",
+      "description": "Delete a production message backlog that may contain customer workflow events.",
+      "actor": "queue_agent",
+      "tool": "message_queue",
+      "action_type": "delete_queue_backlog",
+      "base_action_risk": 0.82,
+      "reversibility": 0.12,
+      "containment_strength": 0.34,
+      "rollback_latency": 0.88,
+      "evidence_validity": 0.52,
+      "anomaly_pressure": 0.68,
+      "impact_scope": 0.84,
+      "cancel_reliability": 0.28,
+      "authorization_confidence": 0.56,
+      "external_side_effect": true,
+      "sensitive_data": true,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "environment": "production_queue",
+        "playbook": "queue_drain"
+      }
+    }
+  },
+  {
+    "scenario_id": "SRE_HOLD_DATABASE_FAILOVER_TEST",
+    "category": "resilience_test",
+    "sre_playbook_outcome": "HOLD",
+    "sre_playbook_rationale": "Failover test is held because the scheduled game day was cancelled.",
+    "action": {
+      "action_id": "SRE_HOLD_DATABASE_FAILOVER_TEST",
+      "description": "Run a contained database failover test in staging using synthetic workload and quick rollback.",
+      "actor": "resilience_agent",
+      "tool": "database_console",
+      "action_type": "staging_failover_test",
+      "base_action_risk": 0.24,
+      "reversibility": 0.86,
+      "containment_strength": 0.86,
+      "rollback_latency": 0.12,
+      "evidence_validity": 0.72,
+      "anomaly_pressure": 0.18,
+      "impact_scope": 0.10,
+      "cancel_reliability": 0.86,
+      "authorization_confidence": 0.62,
+      "external_side_effect": false,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "environment": "staging",
+        "playbook": "resilience_test"
+      }
+    }
+  },
+  {
+    "scenario_id": "SRE_BROAD_RATE_LIMIT_CUSTOMERS",
+    "category": "traffic_shaping",
+    "sre_playbook_outcome": "INCIDENT_COMMAND",
+    "sre_playbook_rationale": "Customer-wide rate limiting requires incident-command approval due to business impact.",
+    "action": {
+      "action_id": "SRE_BROAD_RATE_LIMIT_CUSTOMERS",
+      "description": "Apply broad customer rate limits during suspected abuse while evidence is incomplete.",
+      "actor": "rate_limit_agent",
+      "tool": "api_gateway",
+      "action_type": "customer_rate_limit",
+      "base_action_risk": 0.68,
+      "reversibility": 0.48,
+      "containment_strength": 0.50,
+      "rollback_latency": 0.42,
+      "evidence_validity": 0.50,
+      "anomaly_pressure": 0.70,
+      "impact_scope": 0.82,
+      "cancel_reliability": 0.54,
+      "authorization_confidence": 0.56,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "environment": "production_api",
+        "playbook": "rate_limit"
+      }
+    }
+  }
+]
