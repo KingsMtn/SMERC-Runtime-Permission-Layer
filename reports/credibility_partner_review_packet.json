@@ -1,0 +1,213 @@
+{
+  "atlas_summary": {
+    "pattern_count": 5,
+    "patterns": [
+      {
+        "benchmark_report_path": "reports/AML_Inspired_Financial_Governance_Benchmark.md",
+        "delta_count": 2,
+        "delta_rate": 0.25,
+        "discipline": "AML-inspired financial governance",
+        "does_not_replace": "AML, sanctions screening, KYC, suspicious-activity reporting, custody, settlement, or payment execution.",
+        "scenario_count": 8,
+        "smerc_adds": "Pre-execution recoverability scoring for financial actions without claiming AML compliance.",
+        "strongest_example": {
+          "category": "digital_asset_withdrawal",
+          "delta_type": "AML_ALERT_SMERC_RESTRAINT",
+          "interpretation": "Both lenses indicate review or restraint, but for different reasons: suspiciousness versus recoverability and execution risk.",
+          "irreversible_exposure_score": 0.684,
+          "reversible_capacity_score": 0.251,
+          "scenario_id": "AML_CRYPTO_WITHDRAWAL_NEW_DEVICE",
+          "smerc_posture": "FREEZE"
+        }
+      },
+      {
+        "benchmark_report_path": "reports/Change_Management_Governance_Benchmark.md",
+        "delta_count": 7,
+        "delta_rate": 0.875,
+        "discipline": "Change-management-inspired production governance",
+        "does_not_replace": "ITIL, ServiceNow, Jira, CABs, production approval, compliance attestation, or change-management software.",
+        "scenario_count": 8,
+        "smerc_adds": "Runtime recoverability scoring after ticket approval but before automation executes.",
+        "strongest_example": {
+          "category": "database_change",
+          "delta_type": "CHANGE_APPROVED_SMERC_RESTRAINT",
+          "interpretation": "Traditional change review approves or emergency-approves the change, but SMERC restrains runtime execution because current recoverability, containment, rollback, evidence, or scope is weak.",
+          "irreversible_exposure_score": 0.813,
+          "reversible_capacity_score": 0.343,
+          "scenario_id": "CM_DATABASE_MIGRATION_WEAK_ROLLBACK",
+          "smerc_posture": "DENY"
+        }
+      },
+      {
+        "benchmark_report_path": "reports/Security_Response_Governance_Benchmark.md",
+        "delta_count": 4,
+        "delta_rate": 0.5,
+        "discipline": "Security-response-inspired automation governance",
+        "does_not_replace": "SOAR, SIEM, EDR, threat intelligence, malware classification, or incident-response services.",
+        "scenario_count": 8,
+        "smerc_adds": "Recoverability checkpoint before security automation isolates, disables, deletes, notifies, or alters controls.",
+        "strongest_example": {
+          "category": "external_communications",
+          "delta_type": "BOTH_RESTRAIN",
+          "interpretation": "Both lenses require restraint, but SMERC records recoverability scores, reason codes, and controls.",
+          "irreversible_exposure_score": 0.932,
+          "reversible_capacity_score": 0.179,
+          "scenario_id": "SR_SEND_CUSTOMER_BREACH_NOTICE",
+          "smerc_posture": "DENY"
+        }
+      },
+      {
+        "benchmark_report_path": "reports/Model_Risk_Governance_Benchmark.md",
+        "delta_count": 6,
+        "delta_rate": 0.75,
+        "discipline": "Model-risk-inspired AI governance",
+        "does_not_replace": "Model validation, model approval, SR 11-7 programs, model monitoring, bias testing, or AI governance systems of record.",
+        "scenario_count": 8,
+        "smerc_adds": "Execution-time permission boundary between approved models, agents, tools, data, and real-world actions.",
+        "strongest_example": {
+          "category": "customer_communications",
+          "delta_type": "BOTH_RESTRAIN",
+          "interpretation": "Both lenses require restraint, but SMERC preserves runtime recoverability evidence and controls.",
+          "irreversible_exposure_score": 0.966,
+          "reversible_capacity_score": 0.17,
+          "scenario_id": "MR_PROHIBITED_MODEL_EMAIL_SEND",
+          "smerc_posture": "DENY"
+        }
+      },
+      {
+        "benchmark_report_path": "reports/SRE_Incident_Governance_Benchmark.md",
+        "delta_count": 5,
+        "delta_rate": 0.625,
+        "discipline": "SRE/incident-management-inspired reliability governance",
+        "does_not_replace": "Observability, incident management, SLO tooling, pager routing, incident command, or post-incident review.",
+        "scenario_count": 8,
+        "smerc_adds": "Runtime recoverability checkpoint before reliability automation changes production state.",
+        "strongest_example": {
+          "category": "data_loss_risk",
+          "delta_type": "SRE_AUTO_SMERC_RESTRAINT",
+          "interpretation": "The SRE playbook would auto-mitigate, but SMERC restrains the action because rollback, containment, evidence, impact scope, or recovery capacity is not strong enough.",
+          "irreversible_exposure_score": 0.923,
+          "reversible_capacity_score": 0.231,
+          "scenario_id": "SRE_DELETE_QUEUE_BACKLOG",
+          "smerc_posture": "DENY"
+        }
+      }
+    ],
+    "total_delta_count": 24,
+    "total_scenarios": 40,
+    "version": "smerc.governance-pattern-atlas.v1",
+    "weighted_delta_rate": 0.6
+  },
+  "desired_partner_response": [
+    "The scenarios resemble a real workflow we care about.",
+    "The deltas are useful enough to test rather than only interesting on paper.",
+    "We can provide metadata-only examples for shadow-mode scoring.",
+    "A named reviewer can compare SMERC output against human judgment.",
+    "A 30-day or 90-day bounded pilot is worth discussing."
+  ],
+  "generated_at": "2026-07-31T03:02:58+00:00",
+  "not_claiming": [
+    "SMERC is not production-certified.",
+    "SMERC is not customer-validated yet.",
+    "SMERC is not a replacement for OPA, IAM, GRC, SIEM, SOAR, EDR, ServiceNow, Jira, AML, or model-risk systems.",
+    "SMERC is not claiming incident reduction, compliance attestation, or product-market fit.",
+    "SMERC should begin in shadow mode before any enforcement pilot."
+  ],
+  "pilot_fit_questions": [
+    {
+      "question": "Do AI agents or automation create deployment, infrastructure, security, data, finance, or customer-communication side effects?",
+      "strong_fit_signal": "Yes, and those actions are increasing.",
+      "weak_fit_signal": "No meaningful automated side effects exist yet."
+    },
+    {
+      "question": "Can the first pilot run in shadow mode without blocking production?",
+      "strong_fit_signal": "Yes, scoring can observe and compare against reviewer judgment.",
+      "weak_fit_signal": "No, the organization requires immediate enforcement or no access at all."
+    },
+    {
+      "question": "Can the prospect provide metadata-only examples without secrets or customer data?",
+      "strong_fit_signal": "Yes, action descriptions and risk metadata can be shared safely.",
+      "weak_fit_signal": "No, even sanitized workflow metadata cannot be shared."
+    },
+    {
+      "question": "Is there an accountable security, platform, or AI-governance reviewer?",
+      "strong_fit_signal": "Yes, a named reviewer can label agreement, false release, false restraint, and useful restraint.",
+      "weak_fit_signal": "No owner exists for review labels or go/no-go decisions."
+    },
+    {
+      "question": "Would recoverability scoring be judged separately from existing allow/deny policy?",
+      "strong_fit_signal": "Yes, the team wants to test whether recovery capacity changes decisions.",
+      "weak_fit_signal": "No, the team only wants identity/access policy or generic AI guardrails."
+    }
+  ],
+  "positioning": {
+    "credibility_partner_ask": "Review the evidence package, challenge the scenarios, and decide whether a metadata-only shadow-mode pilot is worth testing.",
+    "one_sentence": "SMERC is runtime permission infrastructure that scores whether automated actions are recoverable enough to execute before they create real side effects.",
+    "primary_wedge": "GitHub Actions and AI-assisted software delivery shadow-mode pilot"
+  },
+  "public_links": {
+    "ciso_review_page": "https://admirable-sorbet-9986d5.netlify.app/ciso.html",
+    "github_actions_pilot_page": "https://admirable-sorbet-9986d5.netlify.app/github-action.html",
+    "github_repository": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer",
+    "public_demo_home": "https://admirable-sorbet-9986d5.netlify.app/"
+  },
+  "review_path": [
+    {
+      "evidence": [
+        "docs/Plain_English_Product_Overview.md",
+        "docs/Governance_Pattern_Atlas.md"
+      ],
+      "minutes": "0-5",
+      "step": "Read the claim and limits."
+    },
+    {
+      "evidence": [
+        "reports/Governance_Pattern_Atlas.md"
+      ],
+      "minutes": "5-10",
+      "step": "Inspect the consolidated benchmark evidence."
+    },
+    {
+      "evidence": [
+        "reference_engine/recoverability_engine.py",
+        "specification/SMERC_Action_Language_v1.md"
+      ],
+      "minutes": "10-15",
+      "step": "Inspect the recoverability scoring engine and action boundary."
+    },
+    {
+      "evidence": [
+        "pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md",
+        "docs/SPARTa_Router_Operations.md"
+      ],
+      "minutes": "15-20",
+      "step": "Inspect GitHub Actions pilot path and execution controls."
+    },
+    {
+      "evidence": [
+        "docs/Decision_Lifecycle_Ledger.md",
+        "docs/Governance_Report_Generator.md"
+      ],
+      "minutes": "20-25",
+      "step": "Inspect replay and audit evidence."
+    },
+    {
+      "evidence": [
+        "pilot_package/Pilot_Evaluation_Checklist.md",
+        "pilot_package/Pilot_Handoff_Checklist.md"
+      ],
+      "minutes": "25-30",
+      "step": "Answer pilot-fit questions and decide whether a credibility review should continue."
+    }
+  ],
+  "review_questions": [
+    "Do the GitHub Actions and automation scenarios resemble actions your team sees or expects to see?",
+    "Where would SMERC create useful restraint versus unnecessary noise?",
+    "Which inputs would need customer-specific calibration before you would trust the scores?",
+    "Which workflow should be tested first in shadow mode?",
+    "What existing controls already solve this problem for you?",
+    "Would replayable decision evidence help security, platform, audit, or incident review?",
+    "What result would make you willing to continue from review into a bounded pilot?"
+  ],
+  "version": "smerc.credibility-partner-review-packet.v1"
+}
