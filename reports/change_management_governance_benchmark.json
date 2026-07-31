@@ -1,0 +1,252 @@
+{
+  "delta_counts": {
+    "BOTH_APPROVE": 1,
+    "CHANGE_APPROVED_SMERC_RESTRAINT": 6,
+    "CHANGE_REJECTED_SMERC_NON_DENY": 1
+  },
+  "evidence_boundary": "Change-management-inspired benchmark only. It is not ITIL certification, change-management software, ServiceNow/Jira replacement, CAB replacement, production approval, compliance attestation, customer validation, production certification, or incident-reduction proof.",
+  "generated_at": "2026-07-31T02:28:42+00:00",
+  "records": [
+    {
+      "category": "standard_change",
+      "confidence_score": 0.894,
+      "controls": [
+        "execute",
+        "record_replay",
+        "retain_cancel_handle"
+      ],
+      "delta_type": "BOTH_APPROVE",
+      "enforcement_state": "release",
+      "interpretation": "Both traditional change review and SMERC allow the action under the reference scenario.",
+      "irreversible_exposure_score": 0.146,
+      "plain_english_summary": "Action 'CM_STANDARD_DEPENDENCY_PATCH' received ALLOW. Irreversible exposure is 0.146, reversible capacity is 0.858, and authorization score is 0.867. Controls: execute, record_replay, retain_cancel_handle.",
+      "reason_codes": [
+        "RECOVERABILITY_ACCEPTABLE"
+      ],
+      "replay_id": "replay_CM_STANDARD_DEPENDENCY_PATCH_1785464922920_1fe3795367f4",
+      "reversible_capacity_score": 0.858,
+      "risk_adjusted_authorization_score": 0.867,
+      "scenario_id": "CM_STANDARD_DEPENDENCY_PATCH",
+      "smerc_posture": "ALLOW",
+      "traditional_change_outcome": "APPROVE",
+      "traditional_change_rationale": "Routine dependency patch with automated tests, small blast radius, and documented rollback."
+    },
+    {
+      "category": "normal_change",
+      "confidence_score": 0.782,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "CHANGE_APPROVED_SMERC_RESTRAINT",
+      "enforcement_state": "constrain",
+      "interpretation": "Traditional change review approves or emergency-approves the change, but SMERC restrains runtime execution because current recoverability, containment, rollback, evidence, or scope is weak.",
+      "irreversible_exposure_score": 0.385,
+      "plain_english_summary": "Action 'CM_PRODUCTION_CANARY_DEPLOY' received THROTTLE. Irreversible exposure is 0.385, reversible capacity is 0.720, and authorization score is 0.712. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_CM_PRODUCTION_CANARY_DEPLOY_1785464922920_ce0b69eb6549",
+      "reversible_capacity_score": 0.72,
+      "risk_adjusted_authorization_score": 0.712,
+      "scenario_id": "CM_PRODUCTION_CANARY_DEPLOY",
+      "smerc_posture": "THROTTLE",
+      "traditional_change_outcome": "APPROVE_WITH_CAB",
+      "traditional_change_rationale": "CAB approved a canary deployment during the normal change window with service-owner signoff."
+    },
+    {
+      "category": "emergency_change",
+      "confidence_score": 0.624,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "delta_type": "CHANGE_APPROVED_SMERC_RESTRAINT",
+      "enforcement_state": "constrain",
+      "interpretation": "Traditional change review approves or emergency-approves the change, but SMERC restrains runtime execution because current recoverability, containment, rollback, evidence, or scope is weak.",
+      "irreversible_exposure_score": 0.626,
+      "plain_english_summary": "Action 'CM_EMERGENCY_SECURITY_PATCH_WIDE_SCOPE' received THROTTLE. Irreversible exposure is 0.626, reversible capacity is 0.480, and authorization score is 0.497. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "CONTAINMENT_WEAK",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_CM_EMERGENCY_SECURITY_PATCH_WIDE_SCOPE_1785464922920_bd8cd9a3922b",
+      "reversible_capacity_score": 0.48,
+      "risk_adjusted_authorization_score": 0.497,
+      "scenario_id": "CM_EMERGENCY_SECURITY_PATCH_WIDE_SCOPE",
+      "smerc_posture": "THROTTLE",
+      "traditional_change_outcome": "EMERGENCY_APPROVE",
+      "traditional_change_rationale": "Emergency approval granted because the vulnerable package is exposed on a critical service."
+    },
+    {
+      "category": "identity_change",
+      "confidence_score": 0.545,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "delta_type": "CHANGE_APPROVED_SMERC_RESTRAINT",
+      "enforcement_state": "constrain",
+      "interpretation": "Traditional change review approves or emergency-approves the change, but SMERC restrains runtime execution because current recoverability, containment, rollback, evidence, or scope is weak.",
+      "irreversible_exposure_score": 0.768,
+      "plain_english_summary": "Action 'CM_BROAD_IAM_PERMISSION_CHANGE' received THROTTLE. Irreversible exposure is 0.768, reversible capacity is 0.404, and authorization score is 0.403. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "CONTAINMENT_WEAK",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_CM_BROAD_IAM_PERMISSION_CHANGE_1785464922921_44734137f664",
+      "reversible_capacity_score": 0.404,
+      "risk_adjusted_authorization_score": 0.403,
+      "scenario_id": "CM_BROAD_IAM_PERMISSION_CHANGE",
+      "smerc_posture": "THROTTLE",
+      "traditional_change_outcome": "APPROVE_WITH_CAB",
+      "traditional_change_rationale": "Change ticket includes manager approval and CAB approval for a broad IAM policy update."
+    },
+    {
+      "category": "database_change",
+      "confidence_score": 0.565,
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "delta_type": "CHANGE_APPROVED_SMERC_RESTRAINT",
+      "enforcement_state": "block",
+      "interpretation": "Traditional change review approves or emergency-approves the change, but SMERC restrains runtime execution because current recoverability, containment, rollback, evidence, or scope is weak.",
+      "irreversible_exposure_score": 0.813,
+      "plain_english_summary": "Action 'CM_DATABASE_MIGRATION_WEAK_ROLLBACK' received DENY. Irreversible exposure is 0.813, reversible capacity is 0.343, and authorization score is 0.370. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_CM_DATABASE_MIGRATION_WEAK_ROLLBACK_1785464922921_7ba7ab2e8d4a",
+      "reversible_capacity_score": 0.343,
+      "risk_adjusted_authorization_score": 0.37,
+      "scenario_id": "CM_DATABASE_MIGRATION_WEAK_ROLLBACK",
+      "smerc_posture": "DENY",
+      "traditional_change_outcome": "APPROVE_WITH_CAB",
+      "traditional_change_rationale": "CAB approved after schema review and change-window scheduling, but rollback rehearsal is incomplete."
+    },
+    {
+      "category": "feature_flag_change",
+      "confidence_score": 0.753,
+      "controls": [
+        "execute",
+        "record_replay",
+        "retain_cancel_handle"
+      ],
+      "delta_type": "CHANGE_REJECTED_SMERC_NON_DENY",
+      "enforcement_state": "release",
+      "interpretation": "Traditional change review rejects the change, while SMERC identifies a bounded runtime path such as constraint, escalation, or narrow release under the reference engine.",
+      "irreversible_exposure_score": 0.123,
+      "plain_english_summary": "Action 'CM_FEATURE_FLAG_SAFE_RECOVERY' received ALLOW. Irreversible exposure is 0.123, reversible capacity is 0.891, and authorization score is 0.846. Controls: execute, record_replay, retain_cancel_handle.",
+      "reason_codes": [
+        "RECOVERABILITY_ACCEPTABLE"
+      ],
+      "replay_id": "replay_CM_FEATURE_FLAG_SAFE_RECOVERY_1785464922921_f0e48eaeda78",
+      "reversible_capacity_score": 0.891,
+      "risk_adjusted_authorization_score": 0.846,
+      "scenario_id": "CM_FEATURE_FLAG_SAFE_RECOVERY",
+      "smerc_posture": "ALLOW",
+      "traditional_change_outcome": "REJECT",
+      "traditional_change_rationale": "Rejected because the release window is closed and the change ticket lacks full CAB approval."
+    },
+    {
+      "category": "evidence_change",
+      "confidence_score": 0.462,
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "delta_type": "CHANGE_APPROVED_SMERC_RESTRAINT",
+      "enforcement_state": "block",
+      "interpretation": "Traditional change review approves or emergency-approves the change, but SMERC restrains runtime execution because current recoverability, containment, rollback, evidence, or scope is weak.",
+      "irreversible_exposure_score": 0.808,
+      "plain_english_summary": "Action 'CM_LOG_RETENTION_DELETION' received DENY. Irreversible exposure is 0.808, reversible capacity is 0.267, and authorization score is 0.307. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "EVIDENCE_VALIDITY_LOW",
+        "ANOMALY_PRESSURE_HIGH",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_CM_LOG_RETENTION_DELETION_1785464922921_ed61f53c4cb1",
+      "reversible_capacity_score": 0.267,
+      "risk_adjusted_authorization_score": 0.307,
+      "scenario_id": "CM_LOG_RETENTION_DELETION",
+      "smerc_posture": "DENY",
+      "traditional_change_outcome": "APPROVE",
+      "traditional_change_rationale": "Approved as a storage-cost reduction because the request matches a recurring cleanup task."
+    },
+    {
+      "category": "infrastructure_change",
+      "confidence_score": 0.781,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "CHANGE_APPROVED_SMERC_RESTRAINT",
+      "enforcement_state": "constrain",
+      "interpretation": "Traditional change review approves or emergency-approves the change, but SMERC restrains runtime execution because current recoverability, containment, rollback, evidence, or scope is weak.",
+      "irreversible_exposure_score": 0.316,
+      "plain_english_summary": "Action 'CM_INFRA_SCALE_UP_RECOVERABLE' received THROTTLE. Irreversible exposure is 0.316, reversible capacity is 0.810, and authorization score is 0.770. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_CM_INFRA_SCALE_UP_RECOVERABLE_1785464922921_a2d2af901ef5",
+      "reversible_capacity_score": 0.81,
+      "risk_adjusted_authorization_score": 0.77,
+      "scenario_id": "CM_INFRA_SCALE_UP_RECOVERABLE",
+      "smerc_posture": "THROTTLE",
+      "traditional_change_outcome": "APPROVE",
+      "traditional_change_rationale": "Approved because the scaling policy is documented and triggered by capacity pressure."
+    }
+  ],
+  "recoverability_delta_count": 7,
+  "recoverability_delta_rate": 0.875,
+  "scenario_count": 8,
+  "smerc_posture_counts": {
+    "ALLOW": 2,
+    "DENY": 2,
+    "ESCALATE": 0,
+    "FREEZE": 0,
+    "THROTTLE": 4
+  },
+  "traditional_change_counts": {
+    "APPROVE": 3,
+    "APPROVE_WITH_CAB": 3,
+    "EMERGENCY_APPROVE": 1,
+    "REJECT": 1
+  },
+  "version": "smerc.change-management-governance-benchmark.v1"
+}
