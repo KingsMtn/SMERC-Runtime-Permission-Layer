@@ -79,6 +79,10 @@ from reference_engine.recoverability_engine import (
     RuntimePosture,
     load_domain_profile_dir,
 )
+from reference_engine.runtime_health_metrics import (
+    RUNTIME_HEALTH_VERSION,
+    build_runtime_health_metrics,
+)
 from reference_engine.sparta_registry import (
     SPARTA_ADAPTER_REGISTRY_VERSION,
     SPARTaAdapterRegistry,
@@ -272,7 +276,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 return
 
             stored_dll_decision_id = self._stored_dll_decision_id(path)
-            if path == "/v1/pilot/metrics":
+            if path in {"/v1/pilot/metrics", "/v1/runtime/health-metrics"}:
                 required_scope = "metrics.read"
             elif path == "/v1/pilot/dll/ledgers" or stored_dll_decision_id is not None:
                 required_scope = "metrics.read"
@@ -288,6 +292,18 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 metrics = self.server.audit_store.pilot_metrics(tenant_id)
                 metrics["request_id"] = request_id
                 self._write_json(metrics, request_id=request_id)
+                return
+            if path == "/v1/runtime/health-metrics":
+                limit = self._parse_limit(query)
+                slo = self._parse_latency_slo(query)
+                report = build_runtime_health_metrics(
+                    decision_artifacts={"records": self.server.audit_store.list(tenant_id, limit=limit)},
+                    observations=None,
+                    tenant_id=tenant_id,
+                    latency_slo_ms=slo,
+                )
+                report["request_id"] = request_id
+                self._write_json(report, request_id=request_id)
                 return
             if path == "/v1/review-queue":
                 limit = self._parse_limit(query)
@@ -1794,6 +1810,21 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             )
         return status
 
+    @staticmethod
+    def _parse_latency_slo(query: Dict[str, list[str]]) -> int:
+        raw = query.get("latency_slo_ms", ["250"])[0]
+        try:
+            value = int(raw)
+        except ValueError as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_latency_slo", "latency_slo_ms must be an integer.") from exc
+        if value < 1 or value > 60_000:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_latency_slo",
+                "latency_slo_ms must be between 1 and 60000.",
+            )
+        return value
+
     def _write_error(self, error: APIError, request_id: Optional[str] = None) -> None:
         request_id = request_id or self._request_id()
         self._write_json(
@@ -1871,6 +1902,7 @@ def schema() -> Dict[str, Any]:
             "decision_certificate": CERTIFICATE_VERSION,
             "pilot_ledger_metrics": PILOT_LEDGER_METRICS_VERSION,
             "pilot_evidence_package": PILOT_EVIDENCE_PACKAGE_VERSION,
+            "runtime_health_metrics": RUNTIME_HEALTH_VERSION,
             "sparta_plan": SPARTA_PLAN_VERSION,
             "sparta_route": SPARTA_ROUTE_VERSION,
             "sparta_adapter_registry": SPARTA_ADAPTER_REGISTRY_VERSION,
@@ -1941,6 +1973,7 @@ def schema() -> Dict[str, Any]:
             "POST /v1/decisions/{replay_id}/reviews": "record an immutable pilot review",
             "GET /v1/decisions/{replay_id}/reviews": "list tenant-scoped pilot reviews",
             "GET /v1/pilot/metrics": "calculate review agreement and outcome metrics",
+            "GET /v1/runtime/health-metrics": "calculate tenant-scoped runtime health from stored decisions and observation availability",
             "GET /v1/review-queue": "list tenant-scoped pending or reviewed decisions",
             "GET /v1/security-events": "list tenant-scoped authenticated security events",
         },

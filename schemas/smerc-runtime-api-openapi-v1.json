@@ -364,6 +364,40 @@
         }
       }
     },
+    "/v1/runtime/health-metrics": {
+      "get": {
+        "tags": ["Operations"],
+        "summary": "Calculate runtime health metrics",
+        "description": "Requires metrics.read scope. Summarizes tenant-scoped decision volume, posture distribution, unavailable behavior, and latency availability without making production SLA claims.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50
+            }
+          },
+          {
+            "name": "latency_slo_ms",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 60000,
+              "default": 250
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Runtime health metrics"
+          }
+        }
+      }
+    },
     "/v1/security-events": {
       "get": {
         "tags": ["Security Events"],

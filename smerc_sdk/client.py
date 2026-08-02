@@ -116,6 +116,18 @@ class SMERCClient:
     def pilot_metrics(self) -> JsonObject:
         return self._request("GET", "/v1/pilot/metrics")
 
+    def runtime_health_metrics(
+        self,
+        *,
+        limit: Optional[int] = None,
+        latency_slo_ms: Optional[int] = None,
+    ) -> JsonObject:
+        return self._request(
+            "GET",
+            "/v1/runtime/health-metrics",
+            query=_query(limit=limit, latency_slo_ms=latency_slo_ms),
+        )
+
     def review_queue(
         self,
         *,

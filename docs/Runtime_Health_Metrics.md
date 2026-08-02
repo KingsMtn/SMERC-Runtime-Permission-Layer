@@ -25,6 +25,15 @@ reports/runtime_health_metrics.json
 reports/Runtime_Health_Metrics.md
 ```
 
+## API
+
+```bash
+curl -H "Authorization: Bearer $SMERC_API_KEY" \
+  "http://127.0.0.1:8000/v1/runtime/health-metrics?limit=50&latency_slo_ms=250"
+```
+
+The API endpoint is tenant-scoped and requires `metrics.read`. The first API version summarizes stored decisions and reports latency as unknown unless runtime observations are available through a supplied report or future telemetry store.
+
 ## Why This Matters
 
 CISOs and platform teams will not only ask whether SMERC makes useful decisions. They will ask whether it can be observed while running:
