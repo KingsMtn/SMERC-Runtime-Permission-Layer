@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added runtime health metrics reporting for decision volume, posture distribution, p50/p95/p99 latency, unavailable evaluations, fail-closed behavior, and evidence-labeled observation boundaries.
 - Added signed policy bundle manifests that bind SPL, runtime policy identity, artifact hashes, approval metadata, activation requirements, and verification results for pilot operator review without claiming OPA bundle parity.
 - Added pilot operator status reporting and OPA-style decision log export so existing policy, audit, and platform teams can inspect active policy/profile versions, readiness, decision distribution, unavailable evaluations, reason codes, controls, and replay IDs without claiming OPA parity.
 - Added a GitHub Actions customer pilot intake packet and validator for determining whether a prospect has a safe metadata boundary, owners, review process, success metrics, and 10 to 25 sample actions before week-zero qualification.

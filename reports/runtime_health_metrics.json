@@ -1,0 +1,61 @@
+{
+  "decision_volume": {
+    "decision_count": 10,
+    "observed_evaluation_count": 10,
+    "posture_counts": {
+      "ALLOW": 2,
+      "DENY": 0,
+      "ESCALATE": 4,
+      "FREEZE": 1,
+      "THROTTLE": 3,
+      "UNAVAILABLE": 0
+    }
+  },
+  "evidence_boundary": "Runtime health metrics summarize supplied decision artifacts and observation records. Reference/local observations do not prove customer production latency, availability, incident reduction, or SLA compliance.",
+  "generated_at": "2026-08-02T03:25:14+00:00",
+  "health_status": "healthy",
+  "latency": {
+    "average_ms": 31.6,
+    "maximum_ms": 46.0,
+    "minimum_ms": 16.0,
+    "p50_ms": 33.0,
+    "p95_ms": 44.2,
+    "p99_ms": 45.64,
+    "sample_count": 10,
+    "slo_met": true,
+    "slo_ms": 250
+  },
+  "operational_checks": [
+    {
+      "detail": "Runtime health requires evaluation observations; without them, latency and availability are unknown.",
+      "name": "observations_present",
+      "status": "ready"
+    },
+    {
+      "detail": "p95 evaluation latency should remain at or below 250 ms for the selected workflow.",
+      "name": "latency_p95",
+      "status": "ready"
+    },
+    {
+      "detail": "Unavailable rate warning threshold is 0.01; blocker threshold is 0.05.",
+      "name": "unavailable_rate",
+      "status": "ready"
+    },
+    {
+      "detail": "Observation source must be labeled before using the report externally.",
+      "name": "evidence_status_labeled",
+      "status": "ready"
+    }
+  ],
+  "resilience": {
+    "fail_closed_count": 0,
+    "fail_closed_rate": 0.0,
+    "integration_status_counts": {
+      "ok": 10
+    },
+    "unavailable_count": 0,
+    "unavailable_rate": 0.0
+  },
+  "schema": "smerc.runtime-health-metrics.v1",
+  "tenant_id": "pilot-review"
+}
