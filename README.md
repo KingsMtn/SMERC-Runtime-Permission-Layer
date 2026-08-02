@@ -90,6 +90,7 @@ Start here before reading the code:
 - `docs/Public_Review_Snapshot.md` gives a compact current-status snapshot for reviewers who need the fastest honest orientation.
 - `docs/Release_Notes_v0_14_Public_Review.md` gives a compact release-style summary for public review, validation, and pilot discussion.
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
+- `docs/CISO_5_Minute_Proof_Package.md` gives security executives the fastest proof path from claim to pilot ask without production-readiness claims.
 - `docs/GitHub_PR_Guardian.md` explains the developer-facing PR review surface for AI-assisted code and deployment changes.
 - `docs/End_To_End_PR_Guardian_Demo.md` shows the current modules working as one synthetic review loop from AI-assisted pull request to DLL Intelligence.
 - `docs/Competitive_Gaps_And_Build_Priorities.md` states what adjacent products do better today and what SMERC should build next.
