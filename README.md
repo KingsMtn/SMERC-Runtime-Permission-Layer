@@ -148,6 +148,7 @@ Start here before reading the code:
 - `pilot_package/Human_AI_Pilot_Operating_Model.md` defines the split between AI-generated actions, SMERC scoring, and human-owned review, labels, and go/no-go decisions.
 - `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md` and `examples/github_actions_pilot_manifest.json` give a concrete first-workflow launch path for a GitHub Actions shadow-mode pilot.
 - `reference_engine.github_actions_pilot_readiness` generates a readiness report that checks whether the pilot manifest and repository evidence are ready for week-zero qualification and observe-mode setup.
+- `pilot_package/GitHub_Actions_Customer_Pilot_Intake.md` gives interested prospects a metadata-only intake packet for determining whether one GitHub Actions workflow is ready for review-call and week-zero pilot qualification.
 - `pilot_package/First_Pilot_Path.md` gives the shortest path from interested prospect to 30-day shadow-mode evidence.
 - `pilot_package/Customer_Metadata_Substitution_Guide.md` explains how a prospect replaces public samples with metadata-only customer inputs safely.
 - `docs/Customer_Metadata_Validation.md` checks whether prospect-specific inputs are ready before generating a customer pilot package.

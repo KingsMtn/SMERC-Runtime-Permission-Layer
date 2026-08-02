@@ -1,0 +1,83 @@
+{
+  "schema": "smerc.github-actions-customer-pilot-intake.v1",
+  "organization": "Prospect Platform Team",
+  "submitted_by_role": "security_architect",
+  "intake_date": "2026-08-02",
+  "pilot_goal": "Evaluate whether SMERC recoverability-aware runtime permissioning adds useful signal in observe mode for one GitHub Actions workflow.",
+  "workflow": {
+    "repository_scope": "one selected pilot repository",
+    "workflow_name": "production-deployment",
+    "workflow_triggers": ["pull_request", "workflow_dispatch"],
+    "existing_controls": [
+      "branch protection",
+      "required review",
+      "environment approval",
+      "rollback runbook"
+    ],
+    "side_effects": [
+      "production deployment",
+      "configuration change",
+      "customer-visible release"
+    ]
+  },
+  "data_boundary": {
+    "metadata_only_confirmed": true,
+    "excluded_data_confirmed": true,
+    "approved_metadata": [
+      "workflow name",
+      "repository identifier",
+      "action category",
+      "environment name",
+      "impact scope",
+      "recoverability estimates",
+      "rollback latency estimate",
+      "containment estimate",
+      "reviewer labels"
+    ],
+    "excluded_data": [
+      "production secrets",
+      "credentials",
+      "raw source code",
+      "customer records",
+      "private prompts",
+      "regulated payloads",
+      "full incident logs"
+    ],
+    "retention_days": 30
+  },
+  "owners": {
+    "security_owner_confirmed": true,
+    "platform_owner_confirmed": true,
+    "reviewer_group_confirmed": true,
+    "business_sponsor_confirmed": false
+  },
+  "pilot_controls": {
+    "mode": "observe",
+    "existing_approvals_remain_authoritative": true,
+    "enforcement_requested": false,
+    "stop_conditions_confirmed": true,
+    "weekly_review_confirmed": true,
+    "day_30_go_no_go_confirmed": true
+  },
+  "success_metrics": {
+    "reviewer_agreement_rate": true,
+    "false_release_candidates": true,
+    "false_constraint_candidates": true,
+    "useful_constraint_rate": true,
+    "override_rate": true,
+    "unavailable_evaluation_count": true,
+    "latency_observations": true
+  },
+  "sample_actions": [
+    "AI deployment assistant proposes production canary release.",
+    "Automation proposes database migration with rollback plan.",
+    "AI code agent proposes permission change in deployment workflow.",
+    "Cloud assistant proposes increasing production autoscaling limits.",
+    "AI release assistant proposes customer-facing feature flag rollout.",
+    "Automation proposes rotating a service credential.",
+    "AI security assistant proposes disabling a suspicious automation token.",
+    "Deployment workflow proposes rollback after elevated error rate.",
+    "AI infrastructure agent proposes broadening an IAM role.",
+    "Workflow proposes publishing release notes to customers."
+  ]
+}
