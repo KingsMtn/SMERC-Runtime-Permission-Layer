@@ -98,6 +98,7 @@ Start here before reading the code:
 - `docs/CISO_30_Minute_Review_Package.md` gives CISOs a timed review path for deciding whether a shadow-mode pilot is justified.
 - `docs/Thirty_Minute_Workflow_Proof.md` gives reviewers the shortest concrete path for testing one workflow and comparing SMERC with simple allow/deny review.
 - `docs/CISO_Evidence_Walkthrough.md` gives reviewers a local end-to-end flow from seeded decisions to pilot console evidence packages.
+- `docs/GitHub_Actions_Pilot_Operator_Quickstart.md` gives customer operators the shortest install-and-measure path for one observe-mode GitHub Actions workflow.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Accelerator_Readiness_Track.md` defines when SMERC should move from technical review to accelerator applications or investor-facing submissions.
@@ -145,6 +146,7 @@ Start here before reading the code:
 - `pilot_package/Design_Partner_Qualification_Checklist.md` helps screen whether a prospect is weak, exploratory, moderate, or strong fit before offering a pilot.
 - `pilot_package/Human_AI_Pilot_Operating_Model.md` defines the split between AI-generated actions, SMERC scoring, and human-owned review, labels, and go/no-go decisions.
 - `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md` and `examples/github_actions_pilot_manifest.json` give a concrete first-workflow launch path for a GitHub Actions shadow-mode pilot.
+- `reference_engine.github_actions_pilot_readiness` generates a readiness report that checks whether the pilot manifest and repository evidence are ready for week-zero qualification and observe-mode setup.
 - `pilot_package/First_Pilot_Path.md` gives the shortest path from interested prospect to 30-day shadow-mode evidence.
 - `pilot_package/Customer_Metadata_Substitution_Guide.md` explains how a prospect replaces public samples with metadata-only customer inputs safely.
 - `docs/Customer_Metadata_Validation.md` checks whether prospect-specific inputs are ready before generating a customer pilot package.

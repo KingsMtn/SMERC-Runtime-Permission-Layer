@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a GitHub Actions pilot operator quickstart and readiness generator that check whether the first observe-mode workflow has repository evidence, metadata boundaries, metrics, stop conditions, and day-30 go/no-go criteria before customer setup.
 - Added bounded credibility-partner outreach language that points reviewers to the public credibility page and GitHub repo while avoiding production-readiness claims.
 - Added a Credibility Partner Review Packet that converts the Governance Pattern Atlas into public links, a 30-minute review path, pilot-fit questions, and bounded outreach language.
 - Added a Governance Pattern Atlas that consolidates AML, change management, security response, model risk, and SRE benchmark families into one credibility-partner evidence summary.
