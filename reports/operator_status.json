@@ -1,5 +1,5 @@
 {
-  "active_policy_version": "smerc.policy.reference",
+  "active_policy_version": "github-actions-shadow-mode@2026.07.07",
   "active_profile_version": "github_actions_strict",
   "decision_activity": {
     "decision_count": 10,
@@ -99,11 +99,16 @@
     "unavailable_rate": 0.0
   },
   "evidence_boundary": "Operator status summarizes pilot artifacts and readiness reports. It does not prove production availability, incident reduction, compliance, or customer validation.",
-  "generated_at": "2026-08-02T03:09:27+00:00",
+  "generated_at": "2026-08-02T03:19:05+00:00",
   "operational_checks": [
     {
       "detail": "Active policy version is included in the operator report.",
       "name": "policy_version_declared",
+      "status": "ready"
+    },
+    {
+      "detail": "Signed policy bundle verifies and is available for operator review.",
+      "name": "policy_bundle_verified",
       "status": "ready"
     },
     {
@@ -128,6 +133,19 @@
     }
   ],
   "operator_status": "ready_for_review",
+  "policy_bundle": {
+    "bundle_digest": "158e581c4ffe0fdcf3221d3a10943c7cfb5078e4b0207343652a41d8f99fbed0",
+    "bundle_id": "github-actions-shadow-mode-2026-07-07",
+    "errors": [],
+    "evidence_ceiling": "OBSERVE",
+    "mode": "OBSERVE",
+    "policy_id": "github-actions-shadow-mode",
+    "policy_revision": "2026.07.07",
+    "present": true,
+    "signature_checked": true,
+    "valid": true,
+    "warnings": []
+  },
   "readiness": {
     "customer_blockers": [],
     "customer_ready_for_review_call": true,

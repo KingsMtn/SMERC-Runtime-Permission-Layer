@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional
 
+from reference_engine.policy_bundle import verify_policy_bundle
+
 
 STATUS_VERSION = "smerc.operator-status.v1"
 OPA_EXPORT_VERSION = "smerc.opa-decision-log-export.v1"
@@ -25,6 +27,8 @@ def build_operator_status(
     pilot_readiness: Mapping[str, Any],
     customer_intake: Mapping[str, Any],
     decision_artifacts: Optional[Mapping[str, Any]] = None,
+    policy_bundle: Optional[Mapping[str, Any]] = None,
+    policy_bundle_signing_key: Optional[str] = None,
     tenant_id: str = "pilot-review",
     active_policy_version: str = "smerc.policy.reference",
     active_profile_version: str = "github_actions_strict",
@@ -44,6 +48,9 @@ def build_operator_status(
         status = "blocked"
     if unavailable_count:
         status = "degraded"
+    bundle_summary = _policy_bundle_summary(policy_bundle, policy_bundle_signing_key)
+    if bundle_summary["present"] and not bundle_summary["valid"]:
+        status = "blocked"
 
     return {
         "schema": STATUS_VERSION,
@@ -52,6 +59,7 @@ def build_operator_status(
         "operator_status": status,
         "active_policy_version": active_policy_version,
         "active_profile_version": active_profile_version,
+        "policy_bundle": bundle_summary,
         "readiness": {
             "pilot_ready_for_week_zero": bool(pilot_readiness.get("ready_for_week_zero")),
             "pilot_ready_for_customer_observe": bool(pilot_readiness.get("ready_for_customer_observe")),
@@ -75,6 +83,11 @@ def build_operator_status(
                 "name": "policy_version_declared",
                 "status": "ready" if active_policy_version else "blocker",
                 "detail": "Active policy version is included in the operator report.",
+            },
+            {
+                "name": "policy_bundle_verified",
+                "status": _bundle_check_status(bundle_summary),
+                "detail": _bundle_check_detail(bundle_summary),
             },
             {
                 "name": "profile_version_declared",
@@ -178,6 +191,15 @@ def markdown_status(report: Mapping[str, Any]) -> str:
         f"- Operator status: `{report['operator_status']}`",
         f"- Active policy version: `{report['active_policy_version']}`",
         f"- Active profile version: `{report['active_profile_version']}`",
+        "",
+        "## Policy Bundle",
+        "",
+        f"- Present: `{str(report['policy_bundle']['present']).lower()}`",
+        f"- Valid: `{str(report['policy_bundle']['valid']).lower()}`",
+        f"- Bundle ID: `{report['policy_bundle'].get('bundle_id')}`",
+        f"- Bundle digest: `{report['policy_bundle'].get('bundle_digest')}`",
+        f"- Signature checked: `{str(report['policy_bundle'].get('signature_checked')).lower()}`",
+        f"- Errors: `{report['policy_bundle'].get('errors')}`",
         "",
         "## Readiness",
         "",
@@ -301,6 +323,55 @@ def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
+def _policy_bundle_summary(
+    policy_bundle: Optional[Mapping[str, Any]],
+    signing_key: Optional[str],
+) -> Dict[str, Any]:
+    if policy_bundle is None:
+        return {
+            "present": False,
+            "valid": False,
+            "bundle_id": None,
+            "bundle_digest": None,
+            "policy_id": None,
+            "policy_revision": None,
+            "mode": None,
+            "evidence_ceiling": None,
+            "signature_checked": False,
+            "errors": [],
+            "warnings": ["no policy bundle supplied"],
+        }
+    verification = verify_policy_bundle(policy_bundle, signing_key=signing_key)
+    policy = policy_bundle.get("policy", {}) if isinstance(policy_bundle.get("policy"), dict) else {}
+    return {
+        "present": True,
+        "valid": bool(verification.get("valid")),
+        "bundle_id": policy_bundle.get("bundle_id"),
+        "bundle_digest": policy_bundle.get("bundle_digest"),
+        "policy_id": policy.get("policy_id"),
+        "policy_revision": policy.get("policy_revision"),
+        "mode": policy.get("mode"),
+        "evidence_ceiling": policy.get("evidence_ceiling"),
+        "signature_checked": bool(verification.get("signature_checked")),
+        "errors": list(verification.get("errors", [])),
+        "warnings": list(verification.get("warnings", [])),
+    }
+
+
+def _bundle_check_status(summary: Mapping[str, Any]) -> str:
+    if not summary.get("present"):
+        return "warning"
+    return "ready" if summary.get("valid") else "blocker"
+
+
+def _bundle_check_detail(summary: Mapping[str, Any]) -> str:
+    if not summary.get("present"):
+        return "No policy bundle supplied; operator can inspect active policy version but not a signed bundle."
+    if summary.get("valid"):
+        return "Signed policy bundle verifies and is available for operator review."
+    return "Policy bundle is present but does not verify; activation should be blocked."
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate SMERC operator status and OPA-style decision logs.")
     parser.add_argument("--pilot-readiness", default="reports/github_actions_pilot_readiness.json")
@@ -309,6 +380,8 @@ def main() -> int:
     parser.add_argument("--tenant", default="pilot-review")
     parser.add_argument("--policy-version", default="smerc.policy.reference")
     parser.add_argument("--profile-version", default="github_actions_strict")
+    parser.add_argument("--policy-bundle", default="reports/policy_bundle_manifest.json")
+    parser.add_argument("--policy-bundle-signing-key")
     parser.add_argument("--status-json-output", default="reports/operator_status.json")
     parser.add_argument("--status-markdown-output", default="reports/Operator_Status_Report.md")
     parser.add_argument("--opa-json-output", default="reports/opa_decision_log_export.json")
@@ -317,10 +390,13 @@ def main() -> int:
     args = parser.parse_args()
 
     decisions = load_json(args.decision_artifacts)
+    bundle = load_json(args.policy_bundle) if args.policy_bundle and Path(args.policy_bundle).exists() else None
     status = build_operator_status(
         pilot_readiness=load_json(args.pilot_readiness),
         customer_intake=load_json(args.customer_intake),
         decision_artifacts=decisions,
+        policy_bundle=bundle,
+        policy_bundle_signing_key=args.policy_bundle_signing_key,
         tenant_id=args.tenant,
         active_policy_version=args.policy_version,
         active_profile_version=args.profile_version,

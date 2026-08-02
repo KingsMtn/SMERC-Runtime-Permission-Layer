@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 READINESS = ROOT / "reports" / "github_actions_pilot_readiness.json"
 CUSTOMER_INTAKE = ROOT / "reports" / "github_actions_customer_pilot_intake_report.json"
 DECISIONS = ROOT / "reports" / "github_actions_shadow_mode_results.json"
+POLICY_BUNDLE = ROOT / "reports" / "policy_bundle_manifest.json"
 DOC = ROOT / "docs" / "Operator_Status_And_OPA_Log_Export.md"
 README = ROOT / "README.md"
 
@@ -35,10 +36,43 @@ class OperatorStatusTests(unittest.TestCase):
         self.assertEqual(report["schema"], "smerc.operator-status.v1")
         self.assertEqual(report["tenant_id"], "test-tenant")
         self.assertEqual(report["active_policy_version"], "policy-001")
+        self.assertFalse(report["policy_bundle"]["present"])
         self.assertEqual(report["decision_activity"]["decision_count"], 10)
         self.assertEqual(report["decision_activity"]["unavailable_count"], 0)
         self.assertIn(report["operator_status"], {"ready_for_review", "needs_attention"})
         self.assertIn("does not prove production", report["evidence_boundary"])
+
+    def test_operator_status_reports_verified_policy_bundle(self):
+        report = build_operator_status(
+            pilot_readiness=load_json(READINESS),
+            customer_intake=load_json(CUSTOMER_INTAKE),
+            decision_artifacts=load_json(DECISIONS),
+            policy_bundle=load_json(POLICY_BUNDLE),
+            policy_bundle_signing_key="local-policy-bundle-signing-key-012345",
+            active_policy_version="github-actions-shadow-mode@2026.07.07",
+            active_profile_version="github_actions_strict",
+        )
+        self.assertTrue(report["policy_bundle"]["present"])
+        self.assertTrue(report["policy_bundle"]["valid"])
+        self.assertTrue(report["policy_bundle"]["signature_checked"])
+        self.assertEqual(report["policy_bundle"]["bundle_id"], "github-actions-shadow-mode-2026-07-07")
+        checks = {check["name"]: check for check in report["operational_checks"]}
+        self.assertEqual(checks["policy_bundle_verified"]["status"], "ready")
+
+    def test_tampered_policy_bundle_blocks_operator_status(self):
+        bundle = load_json(POLICY_BUNDLE)
+        bundle["policy"]["mode"] = "ENFORCE"
+        report = build_operator_status(
+            pilot_readiness=load_json(READINESS),
+            customer_intake=load_json(CUSTOMER_INTAKE),
+            decision_artifacts=load_json(DECISIONS),
+            policy_bundle=bundle,
+            policy_bundle_signing_key="local-policy-bundle-signing-key-012345",
+        )
+        self.assertEqual(report["operator_status"], "blocked")
+        self.assertFalse(report["policy_bundle"]["valid"])
+        checks = {check["name"]: check for check in report["operational_checks"]}
+        self.assertEqual(checks["policy_bundle_verified"]["status"], "blocker")
 
     def test_opa_style_export_preserves_smerc_posture_and_replay(self):
         export = export_opa_decision_logs(load_json(DECISIONS), tenant_id="test-tenant", bundle_revision="policy-001")
@@ -64,6 +98,7 @@ class OperatorStatusTests(unittest.TestCase):
         status_md = markdown_status(status)
         export_md = markdown_opa_export(export)
         self.assertIn("SMERC Operator Status Report", status_md)
+        self.assertIn("Policy Bundle", status_md)
         self.assertIn("OPA-Style Decision Log Export", export_md)
         with tempfile.TemporaryDirectory() as directory:
             json_path = Path(directory) / "status.json"
@@ -77,6 +112,7 @@ class OperatorStatusTests(unittest.TestCase):
         doc = DOC.read_text(encoding="utf-8")
         readme = README.read_text(encoding="utf-8")
         self.assertIn("python -m reference_engine.operator_status --pretty", doc)
+        self.assertIn("policy bundle", doc.lower())
         self.assertIn("not OPA parity", doc)
         self.assertIn("docs/Operator_Status_And_OPA_Log_Export.md", readme)
 

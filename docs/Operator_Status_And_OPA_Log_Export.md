@@ -40,6 +40,13 @@ reports/opa_decision_log_export.json
 reports/OPA_Decision_Log_Export.md
 ```
 
+When `reports/policy_bundle_manifest.json` exists, the command includes policy bundle status in the operator report. To verify the sample signed bundle:
+
+```bash
+python -m reference_engine.operator_status --pretty \
+  --policy-bundle-signing-key local-policy-bundle-signing-key-012345
+```
+
 ## Operator Status
 
 The operator status report includes:
@@ -47,6 +54,7 @@ The operator status report includes:
 - tenant
 - active policy version
 - active profile version
+- optional signed policy bundle verification
 - pilot readiness state
 - customer intake readiness state
 - decision count
@@ -55,6 +63,8 @@ The operator status report includes:
 - top reason codes
 - top controls
 - operational checks
+
+If a policy bundle is supplied but does not verify, operator status becomes `blocked`. That prevents a pilot reviewer from treating an unverified or drifted policy bundle as safe to activate.
 
 This gives a platform team a compact answer to:
 

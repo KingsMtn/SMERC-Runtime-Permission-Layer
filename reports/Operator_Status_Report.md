@@ -1,13 +1,22 @@
 # SMERC Operator Status Report
 
-Generated: `2026-08-02T03:09:27+00:00`
+Generated: `2026-08-02T03:19:05+00:00`
 
 ## Status
 
 - Tenant: `pilot-review`
 - Operator status: `ready_for_review`
-- Active policy version: `smerc.policy.reference`
+- Active policy version: `github-actions-shadow-mode@2026.07.07`
 - Active profile version: `github_actions_strict`
+
+## Policy Bundle
+
+- Present: `true`
+- Valid: `true`
+- Bundle ID: `github-actions-shadow-mode-2026-07-07`
+- Bundle digest: `158e581c4ffe0fdcf3221d3a10943c7cfb5078e4b0207343652a41d8f99fbed0`
+- Signature checked: `true`
+- Errors: `[]`
 
 ## Readiness
 
@@ -30,6 +39,7 @@ Generated: `2026-08-02T03:09:27+00:00`
 | Check | Status | Detail |
 | --- | --- | --- |
 | `policy_version_declared` | `ready` | Active policy version is included in the operator report. |
+| `policy_bundle_verified` | `ready` | Signed policy bundle verifies and is available for operator review. |
 | `profile_version_declared` | `ready` | Active domain/profile version is included in the operator report. |
 | `pilot_readiness` | `ready` | Week-zero readiness is generated from the GitHub Actions pilot readiness report. |
 | `customer_intake` | `ready` | Customer intake must be ready for a review call before pilot setup. |
