@@ -90,6 +90,7 @@ Start here before reading the code:
 - `docs/Policy_Bundle_Manifest.md` explains signed, versioned policy bundle manifests for reviewed SPL, profile, control, approval, and activation evidence.
 - `docs/Operator_Status_And_OPA_Log_Export.md` explains the pilot operator status report, `/v1/operator/status` API, and OPA-style decision log export for existing policy/audit pipelines.
 - `docs/Runtime_Health_Metrics.md` explains runtime health, latency, unavailable-evaluation, and fail-closed metrics for pilot operations.
+- `docs/API_Smoke_Test.md` gives operators a one-command way to verify a local or hosted SMERC API path from health to evaluation to operator status.
 - `docs/Public_Review_Snapshot.md` gives a compact current-status snapshot for reviewers who need the fastest honest orientation.
 - `docs/Release_Notes_v0_14_Public_Review.md` gives a compact release-style summary for public review, validation, and pilot discussion.
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
