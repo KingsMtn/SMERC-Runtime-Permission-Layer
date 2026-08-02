@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added pilot operator status reporting and OPA-style decision log export so existing policy, audit, and platform teams can inspect active policy/profile versions, readiness, decision distribution, unavailable evaluations, reason codes, controls, and replay IDs without claiming OPA parity.
 - Added a GitHub Actions customer pilot intake packet and validator for determining whether a prospect has a safe metadata boundary, owners, review process, success metrics, and 10 to 25 sample actions before week-zero qualification.
 - Added a CISO 5-minute proof package that connects the product claim, credibility packet, GitHub Actions operator quickstart, readiness report, and 30-day observe-mode pilot ask.
 - Added a GitHub Actions pilot operator quickstart and readiness generator that check whether the first observe-mode workflow has repository evidence, metadata boundaries, metrics, stop conditions, and day-30 go/no-go criteria before customer setup.
