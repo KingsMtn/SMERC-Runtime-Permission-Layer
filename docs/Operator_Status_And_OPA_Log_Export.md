@@ -48,6 +48,15 @@ python -m reference_engine.operator_status --pretty \
   --policy-bundle-signing-key local-policy-bundle-signing-key-012345
 ```
 
+## API
+
+```bash
+curl -H "Authorization: Bearer $SMERC_API_KEY" \
+  "http://127.0.0.1:8000/v1/operator/status?limit=50&latency_slo_ms=250"
+```
+
+The API endpoint is tenant-scoped and requires `metrics.read`. It summarizes stored decision activity, API-observed runtime health, active policy identity, and readiness caveats. The API-generated report does not verify the full customer intake checklist, business sponsor, or data-boundary readiness; those remain pilot-package artifacts.
+
 ## Operator Status
 
 The operator status report includes:

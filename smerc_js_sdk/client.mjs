@@ -83,6 +83,18 @@ export class SMERCClient {
     return this.request('GET', '/v1/pilot/metrics');
   }
 
+  runtimeHealthMetrics(options = {}) {
+    return this.request('GET', '/v1/runtime/health-metrics', {
+      query: cleanQuery({ limit: options.limit, latency_slo_ms: options.latencySloMs }),
+    });
+  }
+
+  operatorStatus(options = {}) {
+    return this.request('GET', '/v1/operator/status', {
+      query: cleanQuery({ limit: options.limit, latency_slo_ms: options.latencySloMs }),
+    });
+  }
+
   reviewQueue(options = {}) {
     return this.request('GET', '/v1/review-queue', {
       query: cleanQuery({ limit: options.limit, posture: options.posture, status: options.status }),

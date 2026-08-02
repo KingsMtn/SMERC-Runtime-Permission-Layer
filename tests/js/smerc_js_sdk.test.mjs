@@ -43,12 +43,16 @@ test('client builds query parameters for decision and review queue reads', async
   });
 
   await client.listDecisions({ limit: 10, posture: 'ALLOW' });
+  await client.runtimeHealthMetrics({ limit: 10, latencySloMs: 500 });
+  await client.operatorStatus({ limit: 10, latencySloMs: 500 });
   await client.reviewQueue({ limit: 5, posture: 'THROTTLE', status: 'pending' });
   await client.securityEvents({ limit: 2 });
 
   assert.equal(urls[0], 'https://smerc.example/v1/decisions?limit=10&posture=ALLOW');
-  assert.equal(urls[1], 'https://smerc.example/v1/review-queue?limit=5&posture=THROTTLE&status=pending');
-  assert.equal(urls[2], 'https://smerc.example/v1/security-events?limit=2');
+  assert.equal(urls[1], 'https://smerc.example/v1/runtime/health-metrics?limit=10&latency_slo_ms=500');
+  assert.equal(urls[2], 'https://smerc.example/v1/operator/status?limit=10&latency_slo_ms=500');
+  assert.equal(urls[3], 'https://smerc.example/v1/review-queue?limit=5&posture=THROTTLE&status=pending');
+  assert.equal(urls[4], 'https://smerc.example/v1/security-events?limit=2');
 });
 
 test('client exposes replay, review, language, handshake, batch, permit, and token endpoints', async () => {

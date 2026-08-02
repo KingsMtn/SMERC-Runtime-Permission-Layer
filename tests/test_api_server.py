@@ -113,6 +113,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(body["language_versions"]["pilot_ledger_metrics"], "smerc.pilot-ledger-metrics.v1")
         self.assertEqual(body["language_versions"]["pilot_evidence_package"], "smerc.pilot-evidence-package.v1")
         self.assertEqual(body["language_versions"]["runtime_health_metrics"], "smerc.runtime-health-metrics.v1")
+        self.assertEqual(body["language_versions"]["operator_status"], "smerc.operator-status.v1")
         self.assertEqual(body["language_versions"]["sparta_plan"], "smerc.sparta-plan.v1")
         self.assertEqual(body["language_versions"]["sparta_route"], "smerc.sparta-route.v1")
         self.assertEqual(
@@ -124,6 +125,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/decisions/{replay_id}/reviews", body["endpoints"])
         self.assertIn("GET /v1/pilot/metrics", body["endpoints"])
         self.assertIn("GET /v1/runtime/health-metrics", body["endpoints"])
+        self.assertIn("GET /v1/operator/status", body["endpoints"])
         self.assertIn("GET /v1/review-queue", body["endpoints"])
         self.assertIn("POST /v1/permits/issue", body["endpoints"])
         self.assertIn("POST /v1/permits/prepare", body["endpoints"])
@@ -640,6 +642,29 @@ class PilotReviewAPITests(unittest.TestCase):
         status, _, body = self.request_json("/v1/runtime/health-metrics?latency_slo_ms=0", key="alpha-secret")
         self.assertEqual(status, 400)
         self.assertEqual(body["error"], "invalid_latency_slo")
+
+    def test_operator_status_api_summarizes_runtime_and_policy(self):
+        self.create_decision(0, tenant="alpha")
+        self.create_decision(1, tenant="alpha")
+
+        status, _, report = self.request_json(
+            "/v1/operator/status?limit=10&latency_slo_ms=500",
+            key="alpha-secret",
+        )
+
+        self.assertEqual(status, 200)
+        self.assertEqual(report["schema"], "smerc.operator-status.v1")
+        self.assertEqual(report["tenant_id"], "alpha")
+        self.assertIn("smerc-reference-recoverability@", report["active_policy_version"])
+        self.assertEqual(report["runtime_health"]["health_status"], "healthy")
+        self.assertGreaterEqual(report["runtime_health"]["observed_evaluation_count"], 2)
+        self.assertGreaterEqual(report["decision_activity"]["decision_count"], 2)
+        self.assertIn("request_id", report)
+
+        status, _, beta_report = self.request_json("/v1/operator/status?limit=10", key="beta-secret")
+        self.assertEqual(status, 200)
+        self.assertEqual(beta_report["tenant_id"], "beta")
+        self.assertEqual(beta_report["operator_status"], "needs_attention")
 
     def test_review_idempotency_and_reviewer_conflicts_are_explicit(self):
         decision = self.create_decision(1)

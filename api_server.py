@@ -58,6 +58,7 @@ from reference_engine.github_oidc import (
     parse_github_oidc_trust,
 )
 from reference_engine.decision_certificate import CERTIFICATE_VERSION, build_decision_certificate
+from reference_engine.operator_status import STATUS_VERSION, build_operator_status
 from reference_engine.policy import POLICY_VERSION, PolicyRegistry
 from reference_engine.pilot_ledger_intake import (
     apply_pilot_intake,
@@ -278,7 +279,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 return
 
             stored_dll_decision_id = self._stored_dll_decision_id(path)
-            if path in {"/v1/pilot/metrics", "/v1/runtime/health-metrics"}:
+            if path in {"/v1/pilot/metrics", "/v1/runtime/health-metrics", "/v1/operator/status"}:
                 required_scope = "metrics.read"
             elif path == "/v1/pilot/dll/ledgers" or stored_dll_decision_id is not None:
                 required_scope = "metrics.read"
@@ -298,14 +299,14 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             if path == "/v1/runtime/health-metrics":
                 limit = self._parse_limit(query)
                 slo = self._parse_latency_slo(query)
-                decision_artifacts = {"records": self.server.audit_store.list(tenant_id, limit=limit)}
-                observations = observations_from_decisions(decision_artifacts)
-                report = build_runtime_health_metrics(
-                    decision_artifacts=decision_artifacts,
-                    observations=observations if observations["records"] else None,
-                    tenant_id=tenant_id,
-                    latency_slo_ms=slo,
-                )
+                report = self._runtime_health_report(tenant_id, limit=limit, latency_slo_ms=slo)
+                report["request_id"] = request_id
+                self._write_json(report, request_id=request_id)
+                return
+            if path == "/v1/operator/status":
+                limit = self._parse_limit(query)
+                slo = self._parse_latency_slo(query)
+                report = self._operator_status_report(tenant_id, limit=limit, latency_slo_ms=slo)
                 report["request_id"] = request_id
                 self._write_json(report, request_id=request_id)
                 return
@@ -1662,6 +1663,45 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         decision["authenticated_principal"] = identity
         decision["replay"]["authenticated_principal"] = identity
 
+    def _runtime_health_report(self, tenant_id: str, *, limit: int, latency_slo_ms: int) -> Dict[str, Any]:
+        decision_artifacts = {"records": self.server.audit_store.list(tenant_id, limit=limit)}
+        observations = observations_from_decisions(decision_artifacts)
+        return build_runtime_health_metrics(
+            decision_artifacts=decision_artifacts,
+            observations=observations if observations["records"] else None,
+            tenant_id=tenant_id,
+            latency_slo_ms=latency_slo_ms,
+        )
+
+    def _operator_status_report(self, tenant_id: str, *, limit: int, latency_slo_ms: int) -> Dict[str, Any]:
+        decision_artifacts = {"records": self.server.audit_store.list(tenant_id, limit=limit)}
+        runtime_health = self._runtime_health_report(tenant_id, limit=limit, latency_slo_ms=latency_slo_ms)
+        decision_count = len(decision_artifacts["records"])
+        current_policy = self.server.policy_registry.for_tenant(tenant_id)
+        return build_operator_status(
+            pilot_readiness={
+                "ready_for_week_zero": decision_count > 0,
+                "ready_for_customer_observe": decision_count > 0,
+                "blockers": [] if decision_count else ["no stored decisions available for operator review"],
+                "warnings": [
+                    "API-generated operator status does not verify the full customer pilot readiness checklist."
+                ],
+            },
+            customer_intake={
+                "ready_for_review_call": True,
+                "ready_for_week_zero": False,
+                "blockers": [],
+                "warnings": [
+                    "API-generated operator status does not prove customer intake, business sponsor, or data-boundary readiness."
+                ],
+            },
+            decision_artifacts=decision_artifacts,
+            runtime_health=runtime_health,
+            tenant_id=tenant_id,
+            active_policy_version=f"{current_policy.policy_id}@{current_policy.policy_revision}",
+            active_profile_version=f"runtime-default-plus-{len(self.server.domain_profiles)}-custom-profiles",
+        )
+
     @staticmethod
     def _attach_runtime_observation(decision: Dict[str, Any], started_at: float) -> None:
         observation = {
@@ -1924,6 +1964,7 @@ def schema() -> Dict[str, Any]:
             "pilot_ledger_metrics": PILOT_LEDGER_METRICS_VERSION,
             "pilot_evidence_package": PILOT_EVIDENCE_PACKAGE_VERSION,
             "runtime_health_metrics": RUNTIME_HEALTH_VERSION,
+            "operator_status": STATUS_VERSION,
             "sparta_plan": SPARTA_PLAN_VERSION,
             "sparta_route": SPARTA_ROUTE_VERSION,
             "sparta_adapter_registry": SPARTA_ADAPTER_REGISTRY_VERSION,
@@ -1995,6 +2036,7 @@ def schema() -> Dict[str, Any]:
             "GET /v1/decisions/{replay_id}/reviews": "list tenant-scoped pilot reviews",
             "GET /v1/pilot/metrics": "calculate review agreement and outcome metrics",
             "GET /v1/runtime/health-metrics": "calculate tenant-scoped runtime health from stored decisions and observation availability",
+            "GET /v1/operator/status": "summarize tenant-scoped runtime health, policy identity, readiness caveats, and decision activity for operator review",
             "GET /v1/review-queue": "list tenant-scoped pending or reviewed decisions",
             "GET /v1/security-events": "list tenant-scoped authenticated security events",
         },

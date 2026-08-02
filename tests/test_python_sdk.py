@@ -114,6 +114,7 @@ class PythonSDKTests(unittest.TestCase):
         reviews = client.list_reviews(decision["replay_id"])
         metrics = client.pilot_metrics()
         health = client.runtime_health_metrics(limit=10, latency_slo_ms=500)
+        operator_status = client.operator_status(limit=10, latency_slo_ms=500)
 
         self.assertEqual(review["replay_id"], decision["replay_id"])
         self.assertEqual(reviews["count"], 1)
@@ -122,6 +123,8 @@ class PythonSDKTests(unittest.TestCase):
         self.assertGreaterEqual(health["decision_volume"]["decision_count"], 1)
         self.assertGreaterEqual(health["latency"]["sample_count"], 1)
         self.assertIsNotNone(health["latency"]["p95_ms"])
+        self.assertEqual(operator_status["schema"], "smerc.operator-status.v1")
+        self.assertEqual(operator_status["runtime_health"]["health_status"], "healthy")
 
     def test_security_events_are_available_to_authenticated_client(self):
         client = self.client()
