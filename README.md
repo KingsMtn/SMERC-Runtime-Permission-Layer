@@ -87,6 +87,7 @@ Start here before reading the code:
 - `docs/Prospect_Routing.md` routes interested organizations to the core GitHub Actions pilot, SMERC-F financial pilot, or review-only path.
 - `docs/Core_Pilot_Package.md` builds the core pilot review folder in one command from routing, action intake, handoff, and evidence summary inputs.
 - `docs/Runtime_Contract_Index.md` explains the machine-readable `smerc.runtime-contract-index.v1` assembly map for SMERC's contracts and handoffs.
+- `docs/Policy_Bundle_Manifest.md` explains signed, versioned policy bundle manifests for reviewed SPL, profile, control, approval, and activation evidence.
 - `docs/Operator_Status_And_OPA_Log_Export.md` explains the pilot operator status report and OPA-style decision log export for existing policy/audit pipelines.
 - `docs/Public_Review_Snapshot.md` gives a compact current-status snapshot for reviewers who need the fastest honest orientation.
 - `docs/Release_Notes_v0_14_Public_Review.md` gives a compact release-style summary for public review, validation, and pilot discussion.
