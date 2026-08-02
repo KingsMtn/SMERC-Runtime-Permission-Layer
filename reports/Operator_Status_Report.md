@@ -1,12 +1,12 @@
 # SMERC Operator Status Report
 
-Generated: `2026-08-02T03:19:05+00:00`
+Generated: `2026-08-02T03:41:53+00:00`
 
 ## Status
 
 - Tenant: `pilot-review`
 - Operator status: `ready_for_review`
-- Active policy version: `github-actions-shadow-mode@2026.07.07`
+- Active policy version: `smerc.policy.reference`
 - Active profile version: `github_actions_strict`
 
 ## Policy Bundle
@@ -17,6 +17,14 @@ Generated: `2026-08-02T03:19:05+00:00`
 - Bundle digest: `158e581c4ffe0fdcf3221d3a10943c7cfb5078e4b0207343652a41d8f99fbed0`
 - Signature checked: `true`
 - Errors: `[]`
+
+## Runtime Health
+
+- Present: `true`
+- Health status: `healthy`
+- Latency p95 ms: `44.2`
+- Latency SLO met: `True`
+- Unavailable rate: `0.0`
 
 ## Readiness
 
@@ -44,6 +52,7 @@ Generated: `2026-08-02T03:19:05+00:00`
 | `pilot_readiness` | `ready` | Week-zero readiness is generated from the GitHub Actions pilot readiness report. |
 | `customer_intake` | `ready` | Customer intake must be ready for a review call before pilot setup. |
 | `decision_artifacts` | `ready` | Decision artifacts are present for operator distribution and log export. |
+| `runtime_health` | `ready` | Runtime health is healthy with p95 latency 44.2 ms and unavailable rate 0.0. |
 
 ## Evidence Boundary
 

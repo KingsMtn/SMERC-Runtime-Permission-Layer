@@ -1,5 +1,5 @@
 {
-  "active_policy_version": "github-actions-shadow-mode@2026.07.07",
+  "active_policy_version": "smerc.policy.reference",
   "active_profile_version": "github_actions_strict",
   "decision_activity": {
     "decision_count": 10,
@@ -99,7 +99,7 @@
     "unavailable_rate": 0.0
   },
   "evidence_boundary": "Operator status summarizes pilot artifacts and readiness reports. It does not prove production availability, incident reduction, compliance, or customer validation.",
-  "generated_at": "2026-08-02T03:19:05+00:00",
+  "generated_at": "2026-08-02T03:41:53+00:00",
   "operational_checks": [
     {
       "detail": "Active policy version is included in the operator report.",
@@ -130,6 +130,11 @@
       "detail": "Decision artifacts are present for operator distribution and log export.",
       "name": "decision_artifacts",
       "status": "ready"
+    },
+    {
+      "detail": "Runtime health is healthy with p95 latency 44.2 ms and unavailable rate 0.0.",
+      "name": "runtime_health",
+      "status": "ready"
     }
   ],
   "operator_status": "ready_for_review",
@@ -157,6 +162,14 @@
     "pilot_ready_for_customer_observe": true,
     "pilot_ready_for_week_zero": true,
     "pilot_warnings": []
+  },
+  "runtime_health": {
+    "health_status": "healthy",
+    "latency_p95_ms": 44.2,
+    "latency_slo_met": true,
+    "observed_evaluation_count": 10,
+    "present": true,
+    "unavailable_rate": 0.0
   },
   "schema": "smerc.operator-status.v1",
   "tenant_id": "pilot-review"

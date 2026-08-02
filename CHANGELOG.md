@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added runtime health gating to operator status reports so latency, SLO status, unavailable rate, and observed evaluation count are visible beside policy bundle, readiness, and decision activity.
 - Added API-observed runtime latency capture on persisted decisions so `/v1/runtime/health-metrics` can calculate tenant-scoped p50/p95/p99 latency from stored evaluations instead of reporting unknown latency after live API use.
 - Added runtime health metrics reporting and a tenant-scoped `/v1/runtime/health-metrics` API surface for decision volume, posture distribution, p50/p95/p99 latency when observations exist, unavailable evaluations, fail-closed behavior, and evidence-labeled observation boundaries.
 - Added signed policy bundle manifests that bind SPL, runtime policy identity, artifact hashes, approval metadata, activation requirements, and verification results for pilot operator review without claiming OPA bundle parity.

@@ -19,6 +19,7 @@ READINESS = ROOT / "reports" / "github_actions_pilot_readiness.json"
 CUSTOMER_INTAKE = ROOT / "reports" / "github_actions_customer_pilot_intake_report.json"
 DECISIONS = ROOT / "reports" / "github_actions_shadow_mode_results.json"
 POLICY_BUNDLE = ROOT / "reports" / "policy_bundle_manifest.json"
+RUNTIME_HEALTH = ROOT / "reports" / "runtime_health_metrics.json"
 DOC = ROOT / "docs" / "Operator_Status_And_OPA_Log_Export.md"
 README = ROOT / "README.md"
 
@@ -29,6 +30,7 @@ class OperatorStatusTests(unittest.TestCase):
             pilot_readiness=load_json(READINESS),
             customer_intake=load_json(CUSTOMER_INTAKE),
             decision_artifacts=load_json(DECISIONS),
+            runtime_health=load_json(RUNTIME_HEALTH),
             tenant_id="test-tenant",
             active_policy_version="policy-001",
             active_profile_version="profile-001",
@@ -37,6 +39,8 @@ class OperatorStatusTests(unittest.TestCase):
         self.assertEqual(report["tenant_id"], "test-tenant")
         self.assertEqual(report["active_policy_version"], "policy-001")
         self.assertFalse(report["policy_bundle"]["present"])
+        self.assertTrue(report["runtime_health"]["present"])
+        self.assertEqual(report["runtime_health"]["health_status"], "healthy")
         self.assertEqual(report["decision_activity"]["decision_count"], 10)
         self.assertEqual(report["decision_activity"]["unavailable_count"], 0)
         self.assertIn(report["operator_status"], {"ready_for_review", "needs_attention"})
@@ -47,6 +51,7 @@ class OperatorStatusTests(unittest.TestCase):
             pilot_readiness=load_json(READINESS),
             customer_intake=load_json(CUSTOMER_INTAKE),
             decision_artifacts=load_json(DECISIONS),
+            runtime_health=load_json(RUNTIME_HEALTH),
             policy_bundle=load_json(POLICY_BUNDLE),
             policy_bundle_signing_key="local-policy-bundle-signing-key-012345",
             active_policy_version="github-actions-shadow-mode@2026.07.07",
@@ -58,6 +63,22 @@ class OperatorStatusTests(unittest.TestCase):
         self.assertEqual(report["policy_bundle"]["bundle_id"], "github-actions-shadow-mode-2026-07-07")
         checks = {check["name"]: check for check in report["operational_checks"]}
         self.assertEqual(checks["policy_bundle_verified"]["status"], "ready")
+        self.assertEqual(checks["runtime_health"]["status"], "ready")
+
+    def test_degraded_runtime_health_degrades_operator_status(self):
+        runtime_health = load_json(RUNTIME_HEALTH)
+        runtime_health["health_status"] = "degraded"
+        runtime_health["latency"]["p95_ms"] = 750
+        runtime_health["latency"]["slo_met"] = False
+        report = build_operator_status(
+            pilot_readiness=load_json(READINESS),
+            customer_intake=load_json(CUSTOMER_INTAKE),
+            decision_artifacts=load_json(DECISIONS),
+            runtime_health=runtime_health,
+        )
+        self.assertEqual(report["operator_status"], "degraded")
+        checks = {check["name"]: check for check in report["operational_checks"]}
+        self.assertEqual(checks["runtime_health"]["status"], "warning")
 
     def test_tampered_policy_bundle_blocks_operator_status(self):
         bundle = load_json(POLICY_BUNDLE)
@@ -99,6 +120,7 @@ class OperatorStatusTests(unittest.TestCase):
         export_md = markdown_opa_export(export)
         self.assertIn("SMERC Operator Status Report", status_md)
         self.assertIn("Policy Bundle", status_md)
+        self.assertIn("Runtime Health", status_md)
         self.assertIn("OPA-Style Decision Log Export", export_md)
         with tempfile.TemporaryDirectory() as directory:
             json_path = Path(directory) / "status.json"

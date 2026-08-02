@@ -17,6 +17,7 @@ Mature authorization systems usually provide:
 
 - active policy or bundle version
 - health or readiness status
+- runtime latency and unavailable-rate signals
 - decision counts
 - unavailable evaluation counts
 - decision logs
@@ -55,16 +56,20 @@ The operator status report includes:
 - active policy version
 - active profile version
 - optional signed policy bundle verification
+- runtime health summary
 - pilot readiness state
 - customer intake readiness state
 - decision count
 - posture distribution
 - unavailable evaluation count and rate
+- p95 evaluation latency when runtime observations exist
 - top reason codes
 - top controls
 - operational checks
 
 If a policy bundle is supplied but does not verify, operator status becomes `blocked`. That prevents a pilot reviewer from treating an unverified or drifted policy bundle as safe to activate.
+
+If a runtime health report is supplied, operator status includes health status, p95 latency, SLO status, unavailable rate, and observed evaluation count. A blocked runtime health report blocks operator status; a degraded report degrades operator status. Missing runtime health remains a warning because early imported benchmarks may not contain API observations.
 
 This gives a platform team a compact answer to:
 
@@ -105,7 +110,7 @@ Do not say:
 
 Say:
 
-> The operator status report summarizes pilot readiness, active policy/profile versions, decision distribution, and unavailable evaluations.
+> The operator status report summarizes pilot readiness, active policy/profile versions, runtime health, decision distribution, and unavailable evaluations.
 
 Do not say:
 

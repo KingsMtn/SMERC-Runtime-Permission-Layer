@@ -27,6 +27,7 @@ def build_operator_status(
     pilot_readiness: Mapping[str, Any],
     customer_intake: Mapping[str, Any],
     decision_artifacts: Optional[Mapping[str, Any]] = None,
+    runtime_health: Optional[Mapping[str, Any]] = None,
     policy_bundle: Optional[Mapping[str, Any]] = None,
     policy_bundle_signing_key: Optional[str] = None,
     tenant_id: str = "pilot-review",
@@ -51,6 +52,11 @@ def build_operator_status(
     bundle_summary = _policy_bundle_summary(policy_bundle, policy_bundle_signing_key)
     if bundle_summary["present"] and not bundle_summary["valid"]:
         status = "blocked"
+    runtime_summary = _runtime_health_summary(runtime_health)
+    if runtime_summary["health_status"] == "blocked":
+        status = "blocked"
+    elif runtime_summary["health_status"] == "degraded" and status != "blocked":
+        status = "degraded"
 
     return {
         "schema": STATUS_VERSION,
@@ -60,6 +66,7 @@ def build_operator_status(
         "active_policy_version": active_policy_version,
         "active_profile_version": active_profile_version,
         "policy_bundle": bundle_summary,
+        "runtime_health": runtime_summary,
         "readiness": {
             "pilot_ready_for_week_zero": bool(pilot_readiness.get("ready_for_week_zero")),
             "pilot_ready_for_customer_observe": bool(pilot_readiness.get("ready_for_customer_observe")),
@@ -108,6 +115,11 @@ def build_operator_status(
                 "name": "decision_artifacts",
                 "status": "ready" if decision_count else "warning",
                 "detail": "Decision artifacts are present for operator distribution and log export.",
+            },
+            {
+                "name": "runtime_health",
+                "status": _runtime_health_check_status(runtime_summary),
+                "detail": _runtime_health_check_detail(runtime_summary),
             },
         ],
         "evidence_boundary": (
@@ -200,6 +212,14 @@ def markdown_status(report: Mapping[str, Any]) -> str:
         f"- Bundle digest: `{report['policy_bundle'].get('bundle_digest')}`",
         f"- Signature checked: `{str(report['policy_bundle'].get('signature_checked')).lower()}`",
         f"- Errors: `{report['policy_bundle'].get('errors')}`",
+        "",
+        "## Runtime Health",
+        "",
+        f"- Present: `{str(report['runtime_health']['present']).lower()}`",
+        f"- Health status: `{report['runtime_health']['health_status']}`",
+        f"- Latency p95 ms: `{report['runtime_health']['latency_p95_ms']}`",
+        f"- Latency SLO met: `{report['runtime_health']['latency_slo_met']}`",
+        f"- Unavailable rate: `{report['runtime_health']['unavailable_rate']}`",
         "",
         "## Readiness",
         "",
@@ -372,11 +392,54 @@ def _bundle_check_detail(summary: Mapping[str, Any]) -> str:
     return "Policy bundle is present but does not verify; activation should be blocked."
 
 
+def _runtime_health_summary(runtime_health: Optional[Mapping[str, Any]]) -> Dict[str, Any]:
+    if runtime_health is None:
+        return {
+            "present": False,
+            "health_status": "unknown",
+            "latency_p95_ms": None,
+            "latency_slo_met": None,
+            "unavailable_rate": None,
+            "observed_evaluation_count": 0,
+        }
+    latency = runtime_health.get("latency", {}) if isinstance(runtime_health.get("latency"), Mapping) else {}
+    resilience = runtime_health.get("resilience", {}) if isinstance(runtime_health.get("resilience"), Mapping) else {}
+    volume = runtime_health.get("decision_volume", {}) if isinstance(runtime_health.get("decision_volume"), Mapping) else {}
+    return {
+        "present": True,
+        "health_status": str(runtime_health.get("health_status", "unknown")),
+        "latency_p95_ms": latency.get("p95_ms"),
+        "latency_slo_met": latency.get("slo_met"),
+        "unavailable_rate": resilience.get("unavailable_rate"),
+        "observed_evaluation_count": volume.get("observed_evaluation_count", 0),
+    }
+
+
+def _runtime_health_check_status(summary: Mapping[str, Any]) -> str:
+    if not summary.get("present"):
+        return "warning"
+    if summary.get("health_status") == "blocked":
+        return "blocker"
+    if summary.get("health_status") in {"degraded", "needs_observations", "unknown"}:
+        return "warning"
+    return "ready"
+
+
+def _runtime_health_check_detail(summary: Mapping[str, Any]) -> str:
+    if not summary.get("present"):
+        return "No runtime health report supplied; latency and availability readiness are not in operator status."
+    return (
+        f"Runtime health is {summary.get('health_status')} with p95 latency "
+        f"{summary.get('latency_p95_ms')} ms and unavailable rate {summary.get('unavailable_rate')}."
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate SMERC operator status and OPA-style decision logs.")
     parser.add_argument("--pilot-readiness", default="reports/github_actions_pilot_readiness.json")
     parser.add_argument("--customer-intake", default="reports/github_actions_customer_pilot_intake_report.json")
     parser.add_argument("--decision-artifacts", default="reports/github_actions_shadow_mode_results.json")
+    parser.add_argument("--runtime-health", default="reports/runtime_health_metrics.json")
     parser.add_argument("--tenant", default="pilot-review")
     parser.add_argument("--policy-version", default="smerc.policy.reference")
     parser.add_argument("--profile-version", default="github_actions_strict")
@@ -390,11 +453,13 @@ def main() -> int:
     args = parser.parse_args()
 
     decisions = load_json(args.decision_artifacts)
+    runtime_health = load_json(args.runtime_health) if args.runtime_health and Path(args.runtime_health).exists() else None
     bundle = load_json(args.policy_bundle) if args.policy_bundle and Path(args.policy_bundle).exists() else None
     status = build_operator_status(
         pilot_readiness=load_json(args.pilot_readiness),
         customer_intake=load_json(args.customer_intake),
         decision_artifacts=decisions,
+        runtime_health=runtime_health,
         policy_bundle=bundle,
         policy_bundle_signing_key=args.policy_bundle_signing_key,
         tenant_id=args.tenant,
