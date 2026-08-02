@@ -90,6 +90,19 @@ def build_runtime_health_metrics(
     }
 
 
+def observations_from_decisions(decision_artifacts: Mapping[str, Any]) -> Dict[str, Any]:
+    records: list[Dict[str, Any]] = []
+    for record in _decision_records(decision_artifacts):
+        observation = _runtime_observation(record)
+        if observation is not None:
+            records.append(observation)
+    return {
+        "schema": OBSERVATIONS_VERSION,
+        "evidence_status": "api_observed_runtime" if records else "",
+        "records": records,
+    }
+
+
 def render_markdown(report: Mapping[str, Any]) -> str:
     volume = report["decision_volume"]
     latency = report["latency"]
@@ -166,6 +179,19 @@ def _observation_records(payload: Mapping[str, Any]) -> list[Dict[str, Any]]:
     if not isinstance(records, list):
         raise TypeError("observations.records must be a list")
     return [_normalize_observation(item, index) for index, item in enumerate(records)]
+
+
+def _runtime_observation(record: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
+    candidates = [record.get("runtime_observation")]
+    decision = record.get("decision")
+    if isinstance(decision, Mapping):
+        candidates.append(decision.get("runtime_observation"))
+    for candidate in candidates:
+        if isinstance(candidate, Mapping):
+            item = dict(candidate)
+            item.setdefault("replay_id", str(record.get("replay_id", "")))
+            return item
+    return None
 
 
 def _normalize_observation(item: Any, index: int) -> Dict[str, Any]:

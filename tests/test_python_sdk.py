@@ -120,6 +120,8 @@ class PythonSDKTests(unittest.TestCase):
         self.assertGreaterEqual(metrics["reviewed_decision_count"], 1)
         self.assertEqual(health["schema"], "smerc.runtime-health-metrics.v1")
         self.assertGreaterEqual(health["decision_volume"]["decision_count"], 1)
+        self.assertGreaterEqual(health["latency"]["sample_count"], 1)
+        self.assertIsNotNone(health["latency"]["p95_ms"])
 
     def test_security_events_are_available_to_authenticated_client(self):
         client = self.client()

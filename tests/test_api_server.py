@@ -183,6 +183,9 @@ class APIServerTests(unittest.TestCase):
         )
         self.assertEqual(status, 200)
         self.assertEqual(retrieved["replay_id"], decision["replay_id"])
+        self.assertEqual(retrieved["runtime_observation"]["schema"], "smerc.runtime-observation.v1")
+        self.assertEqual(retrieved["runtime_observation"]["integration_status"], "ok")
+        self.assertGreaterEqual(retrieved["runtime_observation"]["evaluation_latency_ms"], 0)
 
         status, _, _ = self.request_json(f"/v1/decisions/{decision['replay_id']}", key="beta-secret")
         self.assertEqual(status, 404)
@@ -200,6 +203,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(first[0], 200)
         self.assertEqual(first[2]["language_version"], "smerc.decision.v1")
         self.assertEqual(first[2]["tenant_id"], "alpha")
+        self.assertEqual(first[2]["runtime_observation"]["schema"], "smerc.runtime-observation.v1")
         self.assertEqual(first[2]["replay_id"], second[2]["replay_id"])
         self.assertEqual(second[1]["x-smerc-idempotent-replay"], "true")
 
@@ -622,8 +626,10 @@ class PilotReviewAPITests(unittest.TestCase):
         self.assertEqual(health["schema"], "smerc.runtime-health-metrics.v1")
         self.assertEqual(health["tenant_id"], "alpha")
         self.assertGreaterEqual(health["decision_volume"]["decision_count"], 2)
-        self.assertEqual(health["health_status"], "needs_observations")
-        self.assertIsNone(health["latency"]["p95_ms"])
+        self.assertEqual(health["health_status"], "healthy")
+        self.assertGreaterEqual(health["latency"]["sample_count"], 2)
+        self.assertIsNotNone(health["latency"]["p95_ms"])
+        self.assertTrue(health["latency"]["slo_met"])
         self.assertIn("do not prove customer production latency", health["evidence_boundary"])
 
         status, _, beta_health = self.request_json("/v1/runtime/health-metrics?limit=10", key="beta-secret")

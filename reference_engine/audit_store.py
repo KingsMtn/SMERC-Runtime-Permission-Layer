@@ -275,16 +275,20 @@ class AuditStore:
 
         with self._lock:
             rows = self._connection.execute(query, parameters).fetchall()
-        return [
-            {
-                "replay_id": row["replay_id"],
-                "action_id": row["action_id"],
-                "posture": row["posture"],
-                "evaluated_at": row["evaluated_at"],
-                "scores": json.loads(row["decision_json"])["scores"],
-            }
-            for row in rows
-        ]
+        summaries: List[Dict[str, Any]] = []
+        for row in rows:
+            decision = json.loads(row["decision_json"])
+            summaries.append(
+                {
+                    "replay_id": row["replay_id"],
+                    "action_id": row["action_id"],
+                    "posture": row["posture"],
+                    "evaluated_at": row["evaluated_at"],
+                    "scores": decision["scores"],
+                    "runtime_observation": decision.get("runtime_observation"),
+                }
+            )
+        return summaries
 
     def count(self, tenant_id: str) -> int:
         with self._lock:

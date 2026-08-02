@@ -32,7 +32,9 @@ curl -H "Authorization: Bearer $SMERC_API_KEY" \
   "http://127.0.0.1:8000/v1/runtime/health-metrics?limit=50&latency_slo_ms=250"
 ```
 
-The API endpoint is tenant-scoped and requires `metrics.read`. The first API version summarizes stored decisions and reports latency as unknown unless runtime observations are available through a supplied report or future telemetry store.
+The API endpoint is tenant-scoped and requires `metrics.read`. Runtime API evaluations now persist a compact `runtime_observation` on each stored decision, including integration status and measured evaluation latency. The health endpoint derives its latency samples from those stored decision records when available.
+
+If a report is generated from imported historical decisions or benchmark artifacts that do not contain runtime observations, latency remains unknown instead of being estimated.
 
 ## Why This Matters
 
@@ -43,8 +45,8 @@ CISOs and platform teams will not only ask whether SMERC makes useful decisions.
 - Does it fail closed when enforcement depends on it?
 - Are health metrics based on customer telemetry or sample/reference observations?
 
-The reference report is intentionally bounded. It shows the reporting shape, not a production SLA.
+The reference report is intentionally bounded. It shows the reporting shape and local/API-observed prototype latency, not a production SLA.
 
 ## Evidence Boundary
 
-The checked-in sample observations are reference/local observations for demonstration. They must be replaced with customer telemetry before making claims about production latency, availability, incident reduction, or SLA compliance.
+The checked-in sample observations and API-observed local timings are reference evidence for demonstration. They must be replaced or supplemented with customer telemetry before making claims about production latency, availability, incident reduction, or SLA compliance.

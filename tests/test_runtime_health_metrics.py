@@ -6,6 +6,7 @@ from pathlib import Path
 from reference_engine.operator_status import load_json
 from reference_engine.runtime_health_metrics import (
     build_runtime_health_metrics,
+    observations_from_decisions,
     render_markdown,
     write_outputs,
 )
@@ -41,6 +42,42 @@ class RuntimeHealthMetricsTests(unittest.TestCase):
         self.assertIsNone(report["latency"]["p95_ms"])
         checks = {check["name"]: check for check in report["operational_checks"]}
         self.assertEqual(checks["observations_present"]["status"], "warning")
+
+    def test_builds_observations_from_api_decision_records(self):
+        decisions = {
+            "records": [
+                {
+                    "replay_id": "replay-api-1",
+                    "posture": "THROTTLE",
+                    "runtime_observation": {
+                        "integration_status": "ok",
+                        "evaluation_latency_ms": 12.345,
+                        "fail_behavior": "not_applicable",
+                    },
+                },
+                {
+                    "replay_id": "replay-api-2",
+                    "posture": "DENY",
+                    "runtime_observation": {
+                        "integration_status": "ok",
+                        "evaluation_latency_ms": 19.5,
+                        "fail_behavior": "not_applicable",
+                    },
+                },
+            ]
+        }
+        observations = observations_from_decisions(decisions)
+        report = build_runtime_health_metrics(
+            decision_artifacts=decisions,
+            observations=observations,
+            latency_slo_ms=250,
+        )
+
+        self.assertEqual(observations["schema"], "smerc.runtime-health-observations.v1")
+        self.assertEqual(observations["evidence_status"], "api_observed_runtime")
+        self.assertEqual(report["decision_volume"]["observed_evaluation_count"], 2)
+        self.assertEqual(report["latency"]["sample_count"], 2)
+        self.assertIsNotNone(report["latency"]["p95_ms"])
 
     def test_unavailable_and_latency_thresholds_degrade_or_block(self):
         observations = load_json(OBSERVATIONS)

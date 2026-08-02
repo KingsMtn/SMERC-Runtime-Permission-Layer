@@ -8,6 +8,7 @@ import os
 import re
 import time
 import uuid
+from datetime import datetime, timezone
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict, Iterable, Mapping, Optional
@@ -82,6 +83,7 @@ from reference_engine.recoverability_engine import (
 from reference_engine.runtime_health_metrics import (
     RUNTIME_HEALTH_VERSION,
     build_runtime_health_metrics,
+    observations_from_decisions,
 )
 from reference_engine.sparta_registry import (
     SPARTA_ADAPTER_REGISTRY_VERSION,
@@ -296,9 +298,11 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             if path == "/v1/runtime/health-metrics":
                 limit = self._parse_limit(query)
                 slo = self._parse_latency_slo(query)
+                decision_artifacts = {"records": self.server.audit_store.list(tenant_id, limit=limit)}
+                observations = observations_from_decisions(decision_artifacts)
                 report = build_runtime_health_metrics(
-                    decision_artifacts={"records": self.server.audit_store.list(tenant_id, limit=limit)},
-                    observations=None,
+                    decision_artifacts=decision_artifacts,
+                    observations=observations if observations["records"] else None,
                     tenant_id=tenant_id,
                     latency_slo_ms=slo,
                 )
@@ -1614,7 +1618,9 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     )
                 self._require_same_principal(stored["decision"], principal)
                 return stored["decision"], True
+        started_at = time.perf_counter()
         decision = evaluate_language_action(payload, self.server.engine_for(tenant_id))
+        self._attach_runtime_observation(decision, started_at)
         decision["tenant_id"] = tenant_id
         self._bind_principal(decision, principal)
         try:
@@ -1635,7 +1641,9 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         tenant_id = principal.tenant_id
         if not isinstance(payload, dict):
             raise TypeError("Each action must be a JSON object.")
+        started_at = time.perf_counter()
         decision = self.server.engine_for(tenant_id).evaluate(payload)
+        self._attach_runtime_observation(decision, started_at)
         decision["tenant_id"] = tenant_id
         self._bind_principal(decision, principal)
         try:
@@ -1653,6 +1661,19 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         identity = principal.public_identity()
         decision["authenticated_principal"] = identity
         decision["replay"]["authenticated_principal"] = identity
+
+    @staticmethod
+    def _attach_runtime_observation(decision: Dict[str, Any], started_at: float) -> None:
+        observation = {
+            "schema": "smerc.runtime-observation.v1",
+            "source": "smerc-runtime-api",
+            "integration_status": "ok",
+            "evaluation_latency_ms": round((time.perf_counter() - started_at) * 1000, 3),
+            "observed_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            "fail_behavior": "not_applicable",
+        }
+        decision["runtime_observation"] = observation
+        decision["replay"]["runtime_observation"] = observation
 
     @staticmethod
     def _require_same_principal(decision: Dict[str, Any], principal: APIPrincipal) -> None:
