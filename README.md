@@ -28,6 +28,7 @@ The current build includes:
 - optional HMAC-signed SPARTa route reports for pilot-grade tamper detection
 - static SPARTa adapter conformance report that checks declared adapter capabilities across ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE route behavior
 - GitHub deployment adapter SPARTa binding that verifies route replay, posture, executable state, and required controls before command execution
+- MCP-style tool governance adapter that maps proposed agent tool calls into SMERC recoverability posture, SPARTa route behavior, and client/proxy recommendations before execution
 - control mapping library that maps SMERC/SPARTa controls to declared native tool mechanisms and evidence requirements
 - replayable governance report generator that assembles decision, route, control mapping, and lifecycle evidence into one review package
 - Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
@@ -117,6 +118,9 @@ Start here before reading the code:
 - `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.
 - `docs/Agent_Handshake_Protocol.md` explains how an agent discovers SMERC, declares itself, proposes an action, receives a posture, and preserves a replay record.
 - `docs/MCP_Tool_Governance.md` explains how SMERC can score MCP-style tool calls before execution and map them through SPARTa without replacing MCP, OAuth, IAM, or prompt defenses.
+- `docs/MCP_Runtime_Governance_Positioning.md` explains SMERC's focused category position as recoverability-aware runtime governance for MCP-style tool calls and agent actions.
+- `docs/Microsoft_Ecosystem_Positioning.md` gives Microsoft-oriented reviewers a bounded explanation of where SMERC can complement MCP, GitHub Actions, DevOps, identity, policy, and security operations.
+- `docs/Microsoft_Tech_Community_Post_Draft.md` gives a careful public discussion draft for Microsoft ecosystem feedback without implying partnership, certification, or production readiness.
 - `docs/AI_Assisted_Build_And_Red_Team_Strategy.md` explains how outside AI tools can help with engineering critique and agent simulation without replacing human validation.
 - `docs/Scoring_Invariants_And_Calibration.md` explains the declared scoring invariants, what passes today, and what still requires design-partner calibration.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
