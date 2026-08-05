@@ -4,7 +4,7 @@
 
 ## External Technical Review Edition
 
-SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture:
+SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI-agent actions. The sharpest current product wedge is a recoverability checkpoint before automated actions execute. SMERC evaluates a proposed action before execution and returns a replayable posture:
 
 - `ALLOW`
 - `THROTTLE`
@@ -13,6 +13,8 @@ SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permis
 - `ESCALATE`
 
 The first integration is a GitHub Actions gate for AI-assisted code, deployment, and infrastructure workflows.
+
+The first security-operations proof path is Microsoft-style response replay: existing tools detect, alert, and route workflows; SMERC scores whether the proposed response action is recoverable enough to execute now.
 
 The current build includes:
 
@@ -123,6 +125,8 @@ Start here before reading the code:
 - `docs/Microsoft_Ecosystem_Positioning.md` gives Microsoft-oriented reviewers a bounded explanation of where SMERC can complement MCP, GitHub Actions, DevOps, identity, policy, and security operations.
 - `docs/Microsoft_Tech_Community_Post_Draft.md` gives a careful public discussion draft for Microsoft ecosystem feedback without implying partnership, certification, or production readiness.
 - `docs/Microsoft_Security_Replay_Adapter.md` explains how SMERC can replay Microsoft Sentinel, Defender, Azure Activity, and advanced-hunting style events against proposed automated responses without claiming Microsoft telemetry or certification.
+- `docs/Recoverability_Checkpoint_Positioning.md` explains the sharper product wedge: a recoverability checkpoint after detection, identity, and policy but before automated action execution.
+- `pilot_package/Automated_Response_Shadow_Mode_Pilot.md` gives a metadata-only pilot path for testing SMERC against automated security, cloud, or DevOps response actions.
 - `docs/AI_Assisted_Build_And_Red_Team_Strategy.md` explains how outside AI tools can help with engineering critique and agent simulation without replacing human validation.
 - `docs/Scoring_Invariants_And_Calibration.md` explains the declared scoring invariants, what passes today, and what still requires design-partner calibration.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.

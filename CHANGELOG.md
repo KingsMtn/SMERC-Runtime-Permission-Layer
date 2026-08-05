@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added recoverability-checkpoint positioning and a metadata-only automated-response shadow-mode pilot plan to sharpen SMERC around action recoverability after detection, identity, and policy but before execution.
 - Added a Microsoft-style security replay adapter, synthetic Sentinel/Defender/Azure Activity/advanced-hunting shaped events, documentation, reports, and tests for comparing existing workflow outcomes with SMERC recoverability posture before automated response execution.
 - Added Microsoft ecosystem and MCP runtime-governance positioning materials, including a bounded Microsoft Tech Community post draft that points reviewers to the working MCP tool governance adapter without claiming partnership, certification, or production readiness.
 - Added MCP tool-call governance adapter, examples, docs, generated reports, and tests that map MCP-style tool-call metadata into SMERC recoverability decisions and SPARTa route behavior before execution.
