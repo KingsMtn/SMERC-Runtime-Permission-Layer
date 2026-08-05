@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added bounded potential company value language explaining how SMERC could reduce blast radius, support safer automation, and preserve replay evidence while avoiding unproven incident-reduction or savings claims.
 - Added recoverability-checkpoint positioning and a metadata-only automated-response shadow-mode pilot plan to sharpen SMERC around action recoverability after detection, identity, and policy but before execution.
 - Added a Microsoft-style security replay adapter, synthetic Sentinel/Defender/Azure Activity/advanced-hunting shaped events, documentation, reports, and tests for comparing existing workflow outcomes with SMERC recoverability posture before automated response execution.
 - Added Microsoft ecosystem and MCP runtime-governance positioning materials, including a bounded Microsoft Tech Community post draft that points reviewers to the working MCP tool governance adapter without claiming partnership, certification, or production readiness.

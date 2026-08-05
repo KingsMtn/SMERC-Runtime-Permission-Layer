@@ -198,6 +198,14 @@ The shortest accurate explanation is:
 
 > SMERC helps companies decide whether AI-agent and automation actions are recoverable enough to execute now.
 
+## Potential Value For Companies
+
+SMERC is designed to help companies reduce the blast radius of automated actions by scoring recoverability before execution. It could help teams use more automation without relying only on blunt allow/block decisions, preserve replayable evidence for review, and identify response actions that need scope limits, rollback planning, human escalation, or pause-before-execute controls.
+
+This is a value hypothesis, not a proven outcome claim. SMERC does not yet claim live incident reduction, outage prevention, compliance certification, or customer-validated savings.
+
+Read `docs/Potential_Company_Value.md` for the bounded company-value language and evidence requirements.
+
 ## Review In 10 Minutes
 
 1. Read `docs/Plain_English_Product_Overview.md`.
