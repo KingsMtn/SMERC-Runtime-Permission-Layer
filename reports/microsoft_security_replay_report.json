@@ -1,0 +1,247 @@
+{
+  "auto_response_restrained_count": 2,
+  "average_exposure_by_source": {
+    "advanced_hunting_event": 0.657,
+    "azure_activity_log": 0.521,
+    "microsoft_defender_alert": 0.427,
+    "microsoft_sentinel_incident": 0.578
+  },
+  "dataset_schema": "smerc.microsoft-security-replay.dataset.v1",
+  "decision_difference_count": 5,
+  "decision_difference_rate": 0.833,
+  "delta_counts": {
+    "BOTH_ALLOW": 1,
+    "MICROSOFT_AUTO_SMERC_RESTRAINT": 2,
+    "MICROSOFT_REVIEW_SMERC_BOUNDED": 3
+  },
+  "event_count": 6,
+  "event_source_counts": {
+    "advanced_hunting_event": 1,
+    "azure_activity_log": 1,
+    "microsoft_defender_alert": 2,
+    "microsoft_sentinel_incident": 2
+  },
+  "evidence_boundary": "Microsoft-style replay based on public schema concepts and synthetic sample events only. This is not Microsoft telemetry, Microsoft certification, Sentinel validation, Defender validation, customer validation, threat detection, incident reduction proof, or a replacement for Microsoft security tools.",
+  "generated_at": "2026-08-05T02:14:14+00:00",
+  "microsoft_workflow_counts": {
+    "ALERT_ONLY": 0,
+    "ANALYST_REVIEW": 2,
+    "AUTO_RESPONSE": 3,
+    "DO_NOT_EXECUTE": 0,
+    "ESCALATE_INCIDENT": 1
+  },
+  "records": [
+    {
+      "category": "lateral_movement",
+      "confidence_score": 0.628,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "MICROSOFT_AUTO_SMERC_RESTRAINT",
+      "detection_source": "Defender for Endpoint style alert",
+      "enforcement_state": "constrain",
+      "event_id": "msft-style-defender-001",
+      "event_source": "microsoft_defender_alert",
+      "interpretation": "A Microsoft-style workflow would auto-respond, while SMERC restrains the action because runtime recoverability, containment, rollback latency, evidence, or impact scope warrants additional controls.",
+      "irreversible_exposure_score": 0.605,
+      "microsoft_workflow_outcome": "AUTO_RESPONSE",
+      "plain_english_summary": "Action 'MSFT_REPLAY_isolate-executive-laptop' received THROTTLE. Irreversible exposure is 0.605, reversible capacity is 0.637, and authorization score is 0.574. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect.",
+      "proposed_response": "Isolate executive laptop from the network before analyst confirmation",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ANOMALY_PRESSURE_HIGH",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_MSFT_REPLAY_isolate-executive-laptop_1785896054024_b77b5ba2d7f9",
+      "reversible_capacity_score": 0.637,
+      "risk_adjusted_authorization_score": 0.574,
+      "severity": "high",
+      "smerc_posture": "THROTTLE",
+      "title": "Suspicious remote execution on executive laptop",
+      "workflow_rationale": "Endpoint containment policy would isolate the device automatically for high-severity lateral-movement behavior."
+    },
+    {
+      "category": "identity_risk",
+      "confidence_score": 0.627,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "MICROSOFT_REVIEW_SMERC_BOUNDED",
+      "detection_source": "Sentinel analytic rule style incident",
+      "enforcement_state": "constrain",
+      "event_id": "msft-style-sentinel-002",
+      "event_source": "microsoft_sentinel_incident",
+      "interpretation": "A Microsoft-style workflow would queue or escalate the event, while SMERC identifies a bounded runtime path that may be allowed or throttled with evidence and controls.",
+      "irreversible_exposure_score": 0.512,
+      "microsoft_workflow_outcome": "ANALYST_REVIEW",
+      "plain_english_summary": "Action 'MSFT_REPLAY_revoke-privileged-sessions' received THROTTLE. Irreversible exposure is 0.512, reversible capacity is 0.679, and authorization score is 0.616. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect.",
+      "proposed_response": "Revoke active privileged sessions and require step-up authentication",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ROLLBACK_LATENCY_HIGH",
+        "ANOMALY_PRESSURE_HIGH",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_MSFT_REPLAY_revoke-privileged-sessions_1785896054024_fdd53e9d4846",
+      "reversible_capacity_score": 0.679,
+      "risk_adjusted_authorization_score": 0.616,
+      "severity": "medium",
+      "smerc_posture": "THROTTLE",
+      "title": "Impossible travel followed by privileged portal access",
+      "workflow_rationale": "Identity anomaly is meaningful, but the standard playbook sends privileged session revocation to review."
+    },
+    {
+      "category": "malware",
+      "confidence_score": 0.836,
+      "controls": [
+        "execute",
+        "record_replay",
+        "retain_cancel_handle"
+      ],
+      "delta_type": "BOTH_ALLOW",
+      "detection_source": "Defender for Office and Endpoint style alert",
+      "enforcement_state": "release",
+      "event_id": "msft-style-defender-003",
+      "event_source": "microsoft_defender_alert",
+      "interpretation": "Both the Microsoft-style workflow and SMERC allow automated execution under the sample metadata.",
+      "irreversible_exposure_score": 0.25,
+      "microsoft_workflow_outcome": "AUTO_RESPONSE",
+      "plain_english_summary": "Action 'MSFT_REPLAY_quarantine-known-phish-attachment' received ALLOW. Irreversible exposure is 0.250, reversible capacity is 0.752, and authorization score is 0.777. Controls: execute, record_replay, retain_cancel_handle.",
+      "proposed_response": "Quarantine a known malicious attachment on one workstation",
+      "reason_codes": [
+        "ROLLBACK_LATENCY_HIGH"
+      ],
+      "replay_id": "replay_MSFT_REPLAY_quarantine-known-phish-attachment_1785896054024_420509de62cf",
+      "reversible_capacity_score": 0.752,
+      "risk_adjusted_authorization_score": 0.777,
+      "severity": "low",
+      "smerc_posture": "ALLOW",
+      "title": "Known phishing attachment quarantined on one workstation",
+      "workflow_rationale": "Known indicator and single-host scope make quarantine an ordinary automated response."
+    },
+    {
+      "category": "cloud_exposure",
+      "confidence_score": 0.677,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "MICROSOFT_AUTO_SMERC_RESTRAINT",
+      "detection_source": "Azure Activity Log style event",
+      "enforcement_state": "constrain",
+      "event_id": "msft-style-activity-004",
+      "event_source": "azure_activity_log",
+      "interpretation": "A Microsoft-style workflow would auto-respond, while SMERC restrains the action because runtime recoverability, containment, rollback latency, evidence, or impact scope warrants additional controls.",
+      "irreversible_exposure_score": 0.521,
+      "microsoft_workflow_outcome": "AUTO_RESPONSE",
+      "plain_english_summary": "Action 'MSFT_REPLAY_revert-public-nsg-rule' received THROTTLE. Irreversible exposure is 0.521, reversible capacity is 0.637, and authorization score is 0.609. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect.",
+      "proposed_response": "Remove public network security group rule across affected subscriptions",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ANOMALY_PRESSURE_HIGH",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_MSFT_REPLAY_revert-public-nsg-rule_1785896054024_c2135b73cb75",
+      "reversible_capacity_score": 0.637,
+      "risk_adjusted_authorization_score": 0.609,
+      "severity": "high",
+      "smerc_posture": "THROTTLE",
+      "title": "Unexpected network security group rule opened to internet",
+      "workflow_rationale": "Cloud guardrail would revert the rule automatically because it exposes a sensitive service."
+    },
+    {
+      "category": "email_exfiltration",
+      "confidence_score": 0.593,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "delta_type": "MICROSOFT_REVIEW_SMERC_BOUNDED",
+      "detection_source": "Advanced hunting style event",
+      "enforcement_state": "constrain",
+      "event_id": "msft-style-hunting-005",
+      "event_source": "advanced_hunting_event",
+      "interpretation": "A Microsoft-style workflow would queue or escalate the event, while SMERC identifies a bounded runtime path that may be allowed or throttled with evidence and controls.",
+      "irreversible_exposure_score": 0.657,
+      "microsoft_workflow_outcome": "ANALYST_REVIEW",
+      "plain_english_summary": "Action 'MSFT_REPLAY_remove-forwarding-rules' received THROTTLE. Irreversible exposure is 0.657, reversible capacity is 0.542, and authorization score is 0.508. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "proposed_response": "Remove suspicious forwarding rules from 42 mailboxes",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_MSFT_REPLAY_remove-forwarding-rules_1785896054024_777a9119b832",
+      "reversible_capacity_score": 0.542,
+      "risk_adjusted_authorization_score": 0.508,
+      "severity": "medium",
+      "smerc_posture": "THROTTLE",
+      "title": "Mass mailbox forwarding rule creation",
+      "workflow_rationale": "Mailbox rule removal affects users and is normally queued for analyst confirmation."
+    },
+    {
+      "category": "data_exfiltration",
+      "confidence_score": 0.565,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "delta_type": "MICROSOFT_REVIEW_SMERC_BOUNDED",
+      "detection_source": "Sentinel UEBA and network analytic style incident",
+      "enforcement_state": "constrain",
+      "event_id": "msft-style-sentinel-006",
+      "event_source": "microsoft_sentinel_incident",
+      "interpretation": "A Microsoft-style workflow would queue or escalate the event, while SMERC identifies a bounded runtime path that may be allowed or throttled with evidence and controls.",
+      "irreversible_exposure_score": 0.644,
+      "microsoft_workflow_outcome": "ESCALATE_INCIDENT",
+      "plain_english_summary": "Action 'MSFT_REPLAY_block-egress-domain-enterprise-wide' received THROTTLE. Irreversible exposure is 0.644, reversible capacity is 0.585, and authorization score is 0.522. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "proposed_response": "Block egress to suspected exfiltration domain across enterprise network controls",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_MSFT_REPLAY_block-egress-domain-enterprise-wide_1785896054024_74bce5e01742",
+      "reversible_capacity_score": 0.585,
+      "risk_adjusted_authorization_score": 0.522,
+      "severity": "high",
+      "smerc_posture": "THROTTLE",
+      "title": "Suspected data exfiltration to newly registered domain",
+      "workflow_rationale": "High-severity data exfiltration triggers incident escalation before network-wide changes."
+    }
+  ],
+  "review_queue_bounded_count": 3,
+  "smerc_posture_counts": {
+    "ALLOW": 1,
+    "DENY": 0,
+    "ESCALATE": 0,
+    "FREEZE": 0,
+    "THROTTLE": 5
+  },
+  "source_boundary": "Synthetic Microsoft-style security and cloud operations events based on public Microsoft Sentinel, Defender, Azure Activity, and advanced-hunting schema concepts. No private Microsoft customer telemetry is included.",
+  "version": "smerc.microsoft-security-replay.report.v1"
+}
