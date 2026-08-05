@@ -475,7 +475,6 @@ class GitHubDeploymentAdapterTests(unittest.TestCase):
         with self.assertRaisesRegex(DeploymentAdapterError, "implemented internally"):
             ExecutionPlan.from_mapping(invalid)
 
-    @unittest.skipIf(os.name == "nt", "Codex managed Windows workspace denies file deletion; CI verifies it on Linux.")
     def test_permit_file_is_removed_immediately_after_read(self):
         path = self.workspace / "permit.token"
         path.write_text("header.payload.signature\n", encoding="utf-8")

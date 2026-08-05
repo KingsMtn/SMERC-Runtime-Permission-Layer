@@ -53,7 +53,6 @@ class PermitIssuerTests(unittest.TestCase):
         with self.assertRaises(issue_permit.PermitIssueError):
             issue_permit.endpoint("https://user:secret@smerc.example", "/v1/permits/issue")
 
-    @unittest.skipIf(os.name == "nt", "Codex managed Windows workspace denies cleanup; CI verifies on Linux.")
     def test_main_uses_separate_credentials_and_never_prints_permit(self):
         server = ThreadingHTTPServer(("127.0.0.1", 0), IssueHandler)
         server.requests = []
