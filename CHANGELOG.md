@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added MCP tool-call governance adapter, examples, docs, generated reports, and tests that map MCP-style tool-call metadata into SMERC recoverability decisions and SPARTa route behavior before execution.
 - Added a one-command API smoke test that checks health, readiness, schema discovery, evaluation, runtime health, and operator status for local or hosted pilot APIs with explicit evidence boundaries.
 - Added authenticated `/v1/operator/status` API support with SDK helpers and OpenAPI coverage so pilot operators can inspect runtime health, active policy identity, decision activity, and readiness caveats programmatically.
 - Added runtime health gating to operator status reports so latency, SLO status, unavailable rate, and observed evaluation count are visible beside policy bundle, readiness, and decision activity.

@@ -1,0 +1,41 @@
+{
+  "schema": "smerc.mcp-tool-governance.v1",
+  "mcp_request_id": "MCP_SEARCH_INTERNAL_DOCS_001",
+  "agent": {
+    "agent_id": "developer_assistant_agent",
+    "display_name": "Developer Assistant Agent",
+    "provider": "internal-agent-runtime"
+  },
+  "server": {
+    "name": "engineering_docs_mcp",
+    "transport": "stdio",
+    "trust_boundary": "internal-readonly"
+  },
+  "tool_call": {
+    "tool_name": "search_internal_docs",
+    "description": "Search internal engineering documentation for deployment rollback instructions.",
+    "operation_class": "read",
+    "requested_capability": "read_docs",
+    "domain_profile": "github_actions",
+    "external_side_effect": false,
+    "sensitive_data": false,
+    "supports_dry_run": true,
+    "supports_scope_limit": true,
+    "supports_checkpoint": true,
+    "supports_rollback": true,
+    "supports_human_approval": true,
+    "requested_scope_units": 5,
+    "max_scope_units": 100
+  },
+  "risk_signals": {
+    "base_action_risk": 0.16,
+    "reversibility": 0.92,
+    "containment_strength": 0.88,
+    "rollback_latency": 0.05,
+    "evidence_validity": 0.86,
+    "anomaly_pressure": 0.08,
+    "impact_scope": 0.12,
+    "cancel_reliability": 0.95,
+    "authorization_confidence": 0.91
+  }
+}

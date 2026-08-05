@@ -1,0 +1,41 @@
+{
+  "schema": "smerc.mcp-tool-governance.v1",
+  "mcp_request_id": "MCP_DELETE_CUSTOMER_RECORDS_001",
+  "agent": {
+    "agent_id": "support_resolution_agent",
+    "display_name": "Support Resolution Agent",
+    "provider": "internal-agent-runtime"
+  },
+  "server": {
+    "name": "customer_data_mcp",
+    "transport": "streamable-http",
+    "trust_boundary": "internal-production"
+  },
+  "tool_call": {
+    "tool_name": "delete_customer_records",
+    "description": "Delete customer records after an AI support workflow inferred duplicate accounts.",
+    "operation_class": "delete",
+    "requested_capability": "delete_records",
+    "domain_profile": "it_ops",
+    "external_side_effect": true,
+    "sensitive_data": true,
+    "supports_dry_run": true,
+    "supports_scope_limit": true,
+    "supports_checkpoint": false,
+    "supports_rollback": false,
+    "supports_human_approval": true,
+    "requested_scope_units": 2500,
+    "max_scope_units": 10000
+  },
+  "risk_signals": {
+    "base_action_risk": 0.91,
+    "reversibility": 0.12,
+    "containment_strength": 0.36,
+    "rollback_latency": 0.88,
+    "evidence_validity": 0.51,
+    "anomaly_pressure": 0.42,
+    "impact_scope": 0.84,
+    "cancel_reliability": 0.28,
+    "authorization_confidence": 0.55
+  }
+}
