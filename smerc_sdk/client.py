@@ -74,6 +74,9 @@ class SMERCClient:
             idempotency_key=idempotency_key,
         )
 
+    def agent_handshake(self, handshake: Mapping[str, Any]) -> JsonObject:
+        return self._request("POST", "/v1/agent/handshake", body=dict(handshake))
+
     def batch(self, actions: list[Mapping[str, Any]], *, idempotency_key: Optional[str] = None) -> JsonObject:
         return self._request(
             "POST",
@@ -112,6 +115,30 @@ class SMERCClient:
 
     def pilot_metrics(self) -> JsonObject:
         return self._request("GET", "/v1/pilot/metrics")
+
+    def runtime_health_metrics(
+        self,
+        *,
+        limit: Optional[int] = None,
+        latency_slo_ms: Optional[int] = None,
+    ) -> JsonObject:
+        return self._request(
+            "GET",
+            "/v1/runtime/health-metrics",
+            query=_query(limit=limit, latency_slo_ms=latency_slo_ms),
+        )
+
+    def operator_status(
+        self,
+        *,
+        limit: Optional[int] = None,
+        latency_slo_ms: Optional[int] = None,
+    ) -> JsonObject:
+        return self._request(
+            "GET",
+            "/v1/operator/status",
+            query=_query(limit=limit, latency_slo_ms=latency_slo_ms),
+        )
 
     def review_queue(
         self,

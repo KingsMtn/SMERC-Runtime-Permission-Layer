@@ -1,0 +1,44 @@
+{
+  "version": "smerc.control-evidence.v1",
+  "evidence_id": "control_evidence_0123456789abcdef0123456789abcdef",
+  "tenant_id": "design-partner",
+  "audience": "github-actions-deployer",
+  "adapter_id": "github-actions-deployer",
+  "permit_id": "permit_0123456789abcdef0123456789abcdef",
+  "action_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "controls": {
+    "checkpoint_before_execution": {
+      "outcome": "observed",
+      "evidence_ref": "github-run:1001:checkpoint",
+      "observed_at": 1783900920
+    },
+    "limit_scope": {
+      "outcome": "observed",
+      "evidence_ref": "github-run:1001:canary-scope-25",
+      "observed_at": 1783900940
+    },
+    "preserve_replay": {
+      "outcome": "observed",
+      "evidence_ref": "artifact:smerc-route-report",
+      "observed_at": 1783900950
+    },
+    "preview_before_execution": {
+      "outcome": "observed",
+      "evidence_ref": "github-run:1001:dry-run",
+      "observed_at": 1783900960
+    },
+    "record_execution_report": {
+      "outcome": "observed",
+      "evidence_ref": "artifact:smerc-execution-report",
+      "observed_at": 1783900990
+    },
+    "require_rollback_plan": {
+      "outcome": "observed",
+      "evidence_ref": "artifact:rollback-plan-payments-api",
+      "observed_at": 1783900970
+    }
+  },
+  "issued_at": 1783901000,
+  "expires_at": 1783904600,
+  "evidence_boundary": "Example adapter receipt. It demonstrates evidence shape only and is not live vendor attestation."
+}

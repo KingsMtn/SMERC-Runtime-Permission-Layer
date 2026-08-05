@@ -56,6 +56,12 @@
         "control_evidence_mode": {"enum": ["signed_adapter_receipt", "legacy_caller_assertion"]}
       }
     },
+    "sparta": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "smerc-sparta-execution-evidence-v1.schema.json"}
+      ]
+    },
     "execution": {"$ref": "#/$defs/processResult"},
     "rollback": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/processResult"}]},
     "environment_names": {

@@ -1,0 +1,477 @@
+{
+  "adapter_results": [
+    {
+      "adapter_id": "github-actions-deployer",
+      "capability_gaps": [],
+      "passed": true,
+      "posture_results": [
+        {
+          "actual_executable": true,
+          "actual_route_state": "EXECUTE",
+          "applied_controls": [
+            "execute",
+            "record_execution_report",
+            "checkpoint_before_execution"
+          ],
+          "blocked_controls": [],
+          "expected_executable": true,
+          "expected_route_state": "EXECUTE",
+          "passed": true,
+          "posture": "ALLOW",
+          "reason_codes": [
+            "SPARTA_ALLOW_DIRECT_EXECUTION"
+          ]
+        },
+        {
+          "actual_executable": true,
+          "actual_route_state": "CONSTRAINED_EXECUTE",
+          "applied_controls": [
+            "checkpoint_before_execution",
+            "limit_scope",
+            "preserve_replay",
+            "preview_before_execution",
+            "record_execution_report",
+            "require_rollback_plan"
+          ],
+          "blocked_controls": [],
+          "expected_executable": true,
+          "expected_route_state": "CONSTRAINED_EXECUTE",
+          "passed": true,
+          "posture": "THROTTLE",
+          "reason_codes": [
+            "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "PAUSE",
+          "applied_controls": [
+            "pause_execution",
+            "preserve_replay",
+            "snapshot_current_state",
+            "checkpoint_before_execution"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "PAUSE",
+          "passed": true,
+          "posture": "FREEZE",
+          "reason_codes": [
+            "SPARTA_FREEZE_PAUSES_AUTOMATION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "BLOCK",
+          "applied_controls": [
+            "block_execution",
+            "preserve_replay",
+            "explain_denial"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "BLOCK",
+          "passed": true,
+          "posture": "DENY",
+          "reason_codes": [
+            "SPARTA_DENY_BLOCKS_EXECUTION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "REVIEW_REQUIRED",
+          "applied_controls": [
+            "route_to_accountable_reviewer",
+            "require_explicit_approval",
+            "preserve_replay"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "REVIEW_REQUIRED",
+          "passed": true,
+          "posture": "ESCALATE",
+          "reason_codes": [
+            "SPARTA_ESCALATE_TO_ACCOUNTABLE_REVIEWER"
+          ]
+        }
+      ],
+      "production_boundary": "declared_adapter",
+      "representative_request": {
+        "action": "deploy_canary",
+        "adapter_id": "github-actions-deployer",
+        "metadata": {
+          "conformance_probe": true,
+          "evidence_boundary": "synthetic_adapter_conformance_probe"
+        },
+        "requested_capability": "deployment",
+        "requested_scope_units": 10,
+        "side_effect_level": "external"
+      },
+      "tool": "github_actions"
+    },
+    {
+      "adapter_id": "readonly-observer",
+      "capability_gaps": [
+        "scope_limit",
+        "checkpoint_or_rollback"
+      ],
+      "passed": true,
+      "posture_results": [
+        {
+          "actual_executable": true,
+          "actual_route_state": "EXECUTE",
+          "applied_controls": [
+            "execute",
+            "record_execution_report"
+          ],
+          "blocked_controls": [],
+          "expected_executable": true,
+          "expected_route_state": "EXECUTE",
+          "passed": true,
+          "posture": "ALLOW",
+          "reason_codes": [
+            "SPARTA_ALLOW_DIRECT_EXECUTION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "REVIEW_REQUIRED",
+          "applied_controls": [
+            "record_execution_report",
+            "preserve_replay"
+          ],
+          "blocked_controls": [
+            "scope_limit",
+            "checkpoint_or_rollback"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "REVIEW_REQUIRED",
+          "passed": true,
+          "posture": "THROTTLE",
+          "reason_codes": [
+            "SPARTA_CANNOT_CONSTRAIN_TOOL"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "PAUSE",
+          "applied_controls": [
+            "pause_execution",
+            "preserve_replay",
+            "snapshot_current_state"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "PAUSE",
+          "passed": true,
+          "posture": "FREEZE",
+          "reason_codes": [
+            "SPARTA_FREEZE_PAUSES_AUTOMATION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "BLOCK",
+          "applied_controls": [
+            "block_execution",
+            "preserve_replay",
+            "explain_denial"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "BLOCK",
+          "passed": true,
+          "posture": "DENY",
+          "reason_codes": [
+            "SPARTA_DENY_BLOCKS_EXECUTION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "REVIEW_REQUIRED",
+          "applied_controls": [
+            "route_to_accountable_reviewer",
+            "require_explicit_approval",
+            "preserve_replay"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "REVIEW_REQUIRED",
+          "passed": true,
+          "posture": "ESCALATE",
+          "reason_codes": [
+            "SPARTA_ESCALATE_TO_ACCOUNTABLE_REVIEWER"
+          ]
+        }
+      ],
+      "production_boundary": "declared_adapter",
+      "representative_request": {
+        "action": "read_audit_log",
+        "adapter_id": "readonly-observer",
+        "metadata": {
+          "conformance_probe": true,
+          "evidence_boundary": "synthetic_adapter_conformance_probe"
+        },
+        "requested_capability": "observation",
+        "requested_scope_units": 10,
+        "side_effect_level": "internal"
+      },
+      "tool": "audit_observer"
+    },
+    {
+      "adapter_id": "service-ticket-review",
+      "capability_gaps": [
+        "scope_limit",
+        "checkpoint_or_rollback"
+      ],
+      "passed": true,
+      "posture_results": [
+        {
+          "actual_executable": true,
+          "actual_route_state": "EXECUTE",
+          "applied_controls": [
+            "execute",
+            "record_execution_report"
+          ],
+          "blocked_controls": [],
+          "expected_executable": true,
+          "expected_route_state": "EXECUTE",
+          "passed": true,
+          "posture": "ALLOW",
+          "reason_codes": [
+            "SPARTA_ALLOW_DIRECT_EXECUTION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "REVIEW_REQUIRED",
+          "applied_controls": [
+            "record_execution_report",
+            "preserve_replay"
+          ],
+          "blocked_controls": [
+            "scope_limit",
+            "checkpoint_or_rollback"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "REVIEW_REQUIRED",
+          "passed": true,
+          "posture": "THROTTLE",
+          "reason_codes": [
+            "SPARTA_CANNOT_CONSTRAIN_TOOL"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "PAUSE",
+          "applied_controls": [
+            "pause_execution",
+            "preserve_replay",
+            "snapshot_current_state"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "PAUSE",
+          "passed": true,
+          "posture": "FREEZE",
+          "reason_codes": [
+            "SPARTA_FREEZE_PAUSES_AUTOMATION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "BLOCK",
+          "applied_controls": [
+            "block_execution",
+            "preserve_replay",
+            "explain_denial"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "BLOCK",
+          "passed": true,
+          "posture": "DENY",
+          "reason_codes": [
+            "SPARTA_DENY_BLOCKS_EXECUTION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "REVIEW_REQUIRED",
+          "applied_controls": [
+            "route_to_accountable_reviewer",
+            "require_explicit_approval",
+            "preserve_replay"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "REVIEW_REQUIRED",
+          "passed": true,
+          "posture": "ESCALATE",
+          "reason_codes": [
+            "SPARTA_ESCALATE_TO_ACCOUNTABLE_REVIEWER"
+          ]
+        }
+      ],
+      "production_boundary": "example_adapter_only",
+      "representative_request": {
+        "action": "create_change_review",
+        "adapter_id": "service-ticket-review",
+        "metadata": {
+          "conformance_probe": true,
+          "evidence_boundary": "synthetic_adapter_conformance_probe"
+        },
+        "requested_capability": "human_review",
+        "requested_scope_units": 10,
+        "side_effect_level": "internal"
+      },
+      "tool": "ticketing_review"
+    },
+    {
+      "adapter_id": "chat-review-bridge",
+      "capability_gaps": [
+        "scope_limit",
+        "checkpoint_or_rollback"
+      ],
+      "passed": true,
+      "posture_results": [
+        {
+          "actual_executable": true,
+          "actual_route_state": "EXECUTE",
+          "applied_controls": [
+            "execute",
+            "record_execution_report"
+          ],
+          "blocked_controls": [],
+          "expected_executable": true,
+          "expected_route_state": "EXECUTE",
+          "passed": true,
+          "posture": "ALLOW",
+          "reason_codes": [
+            "SPARTA_ALLOW_DIRECT_EXECUTION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "REVIEW_REQUIRED",
+          "applied_controls": [
+            "record_execution_report",
+            "preserve_replay"
+          ],
+          "blocked_controls": [
+            "scope_limit",
+            "checkpoint_or_rollback"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "REVIEW_REQUIRED",
+          "passed": true,
+          "posture": "THROTTLE",
+          "reason_codes": [
+            "SPARTA_CANNOT_CONSTRAIN_TOOL"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "PAUSE",
+          "applied_controls": [
+            "pause_execution",
+            "preserve_replay",
+            "snapshot_current_state"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "PAUSE",
+          "passed": true,
+          "posture": "FREEZE",
+          "reason_codes": [
+            "SPARTA_FREEZE_PAUSES_AUTOMATION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "BLOCK",
+          "applied_controls": [
+            "block_execution",
+            "preserve_replay",
+            "explain_denial"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "BLOCK",
+          "passed": true,
+          "posture": "DENY",
+          "reason_codes": [
+            "SPARTA_DENY_BLOCKS_EXECUTION"
+          ]
+        },
+        {
+          "actual_executable": false,
+          "actual_route_state": "REVIEW_REQUIRED",
+          "applied_controls": [
+            "route_to_accountable_reviewer",
+            "require_explicit_approval",
+            "preserve_replay"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "expected_executable": false,
+          "expected_route_state": "REVIEW_REQUIRED",
+          "passed": true,
+          "posture": "ESCALATE",
+          "reason_codes": [
+            "SPARTA_ESCALATE_TO_ACCOUNTABLE_REVIEWER"
+          ]
+        }
+      ],
+      "production_boundary": "example_adapter_only",
+      "representative_request": {
+        "action": "request_approval",
+        "adapter_id": "chat-review-bridge",
+        "metadata": {
+          "conformance_probe": true,
+          "evidence_boundary": "synthetic_adapter_conformance_probe"
+        },
+        "requested_capability": "human_review",
+        "requested_scope_units": 10,
+        "side_effect_level": "internal"
+      },
+      "tool": "chat_review"
+    }
+  ],
+  "evidence_boundary": "Static SPARTa adapter conformance report only. It verifies registry declarations against deterministic route behavior; it does not prove live vendor enforcement, production readiness, independent security review, or incident reduction.",
+  "failed_probes": [],
+  "recommended_next_action": "Use this registry for pilot discussion and mock review flows. Before enforcement, replace example-only adapters with live integrations or keep them explicitly marked as production_boundary=example_adapter_only: service-ticket-review, chat-review-bridge",
+  "registry_path": "examples/sparta/adapter_registry.json",
+  "summary": {
+    "adapter_count": 4,
+    "declared_adapter_count": 2,
+    "example_only_adapter_count": 2,
+    "failed_posture_probe_count": 0,
+    "passed": true,
+    "posture_probe_count": 20
+  },
+  "version": "smerc.sparta-conformance-report.v1"
+}

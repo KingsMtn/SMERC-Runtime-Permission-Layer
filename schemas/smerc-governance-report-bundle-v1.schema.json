@@ -14,6 +14,7 @@
     "route_report_path",
     "control_mapping_report_path",
     "decision_lifecycle_ledger_path",
+    "evidence_paths",
     "review_notes",
     "known_limits"
   ],
@@ -27,6 +28,22 @@
     "route_report_path": {"type": "string", "minLength": 1, "maxLength": 260},
     "control_mapping_report_path": {"type": "string", "minLength": 1, "maxLength": 260},
     "decision_lifecycle_ledger_path": {"type": "string", "minLength": 1, "maxLength": 260},
+    "evidence_paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "permit_report_path",
+        "control_evidence_report_path",
+        "execution_report_path",
+        "reviewer_outcome_path"
+      ],
+      "properties": {
+        "permit_report_path": {"type": "string", "minLength": 1, "maxLength": 260},
+        "control_evidence_report_path": {"type": "string", "minLength": 1, "maxLength": 260},
+        "execution_report_path": {"type": "string", "minLength": 1, "maxLength": 260},
+        "reviewer_outcome_path": {"type": "string", "minLength": 1, "maxLength": 260}
+      }
+    },
     "review_notes": {
       "type": "array",
       "maxItems": 64,

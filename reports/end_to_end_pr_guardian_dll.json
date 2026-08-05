@@ -1,0 +1,199 @@
+{
+  "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+  "head_record_hash": "77367fd79cf524896e92f049f6450a65b1595c175f0e05c75a6196cf8e6da587",
+  "record_count": 7,
+  "records": [
+    {
+      "actor": "coding_agent",
+      "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "event_type": "REQUEST",
+      "payload": {
+        "environment": "github_pull_request",
+        "initiated_by": "coding_agent",
+        "requested_operation": "AI coding agent proposes changing authentication middleware and deployment configuration in a pull request.",
+        "risk_profile": "ai_assisted_code_change"
+      },
+      "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "36d9f94415888396178a281eee13e8824e317e1c0df153648be81fadc01d5a8d",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-07-28T12:00:00+00:00",
+      "sequence": 1,
+      "tenant_id": "pr-guardian-demo"
+    },
+    {
+      "actor": "smerc-pr-guardian",
+      "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "event_type": "EVIDENCE",
+      "payload": {
+        "available_evidence": [
+          "pull_request_metadata",
+          "declared_action_request",
+          "existing_branch_protection",
+          "smerc_runtime_decision",
+          "sparta_route_report"
+        ],
+        "confidence_score": 0.535,
+        "external_dependencies": [
+          "github_actions",
+          "pull_request_review"
+        ],
+        "missing_evidence": [
+          "customer_reviewer_label",
+          "live_execution_outcome"
+        ],
+        "model_version": "declared-ai-agent",
+        "policy_version": "smerc.pr-guardian.demo.v1"
+      },
+      "previous_record_hash": "36d9f94415888396178a281eee13e8824e317e1c0df153648be81fadc01d5a8d",
+      "record_hash": "3c4b02329341cdcb64470fdc98f52e9b6a38f041e152ee2962ca69557b094541",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-07-28T12:00:02+00:00",
+      "sequence": 2,
+      "tenant_id": "pr-guardian-demo"
+    },
+    {
+      "actor": "smerc-engine",
+      "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "event_type": "EVALUATION",
+      "payload": {
+        "authorization_recommendation": "ESCALATE",
+        "entropy_indicators": [
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA_ACCESS",
+          "HIGH_HARM_POTENTIAL"
+        ],
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA_ACCESS",
+          "HIGH_HARM_POTENTIAL"
+        ],
+        "recommended_safeguards": [
+          "route_to_human_review",
+          "preserve_replay",
+          "require_explicit_approval"
+        ],
+        "recoverability_score": 0.39,
+        "structural_state": "AI-assisted pull request received ESCALATE before merge or deployment."
+      },
+      "previous_record_hash": "3c4b02329341cdcb64470fdc98f52e9b6a38f041e152ee2962ca69557b094541",
+      "record_hash": "fe81ed50feb6cfc8ed34eac691d31275efd7ee50e8d041a5a8dbf14b13da10b4",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-07-28T12:00:03+00:00",
+      "sequence": 3,
+      "tenant_id": "pr-guardian-demo"
+    },
+    {
+      "actor": "pilot-reviewer",
+      "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "event_type": "HUMAN_INTERACTION",
+      "payload": {
+        "final_recommendation": "ESCALATE",
+        "interaction": "accepted",
+        "original_recommendation": "ESCALATE",
+        "rationale": "Demo reviewer accepts the SMERC posture for the end-to-end pilot artifact.",
+        "reviewer_id": "pilot-reviewer"
+      },
+      "previous_record_hash": "fe81ed50feb6cfc8ed34eac691d31275efd7ee50e8d041a5a8dbf14b13da10b4",
+      "record_hash": "8b9e6f2f5f91d7fc9082a597868268bf85803e4b4f18ced2ab4f177d3e957894",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-07-28T12:03:00+00:00",
+      "sequence": 4,
+      "tenant_id": "pr-guardian-demo"
+    },
+    {
+      "actor": "sparta-router",
+      "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "event_type": "EXECUTION",
+      "payload": {
+        "duration_ms": 42000,
+        "executed_operation": "Rendered PR Guardian comment and preserved blocked route REVIEW_REQUIRED.",
+        "execution_status": "blocked",
+        "rollback_performed": false,
+        "rollback_success": null,
+        "started_at": "2026-07-28T12:05:00+00:00"
+      },
+      "previous_record_hash": "8b9e6f2f5f91d7fc9082a597868268bf85803e4b4f18ced2ab4f177d3e957894",
+      "record_hash": "b8be0331ae6092c5eeb3a01bb578d0fd46a6c0f5bfd888780a1ae0592ade86d2",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-07-28T12:06:00+00:00",
+      "sequence": 5,
+      "tenant_id": "pr-guardian-demo"
+    },
+    {
+      "actor": "demo-review-lead",
+      "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "event_type": "OUTCOME",
+      "payload": {
+        "controls_sufficient": true,
+        "cost_incurred": 0.0,
+        "customer_impact": "none; synthetic end-to-end demo",
+        "financial_impact": "none; synthetic end-to-end demo",
+        "judged_correct": true,
+        "security_impact": "none; synthetic end-to-end demo",
+        "time_to_recover_minutes": 0.0,
+        "unexpected_consequences": false
+      },
+      "previous_record_hash": "b8be0331ae6092c5eeb3a01bb578d0fd46a6c0f5bfd888780a1ae0592ade86d2",
+      "record_hash": "e1c735c97878e05447fbafc8101f3968b40207fef381f1a77cbdeacc7f87de0e",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-07-29T12:00:00+00:00",
+      "sequence": 6,
+      "tenant_id": "pr-guardian-demo"
+    },
+    {
+      "actor": "smerc-dll",
+      "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "event_type": "LEARNING_RECOMMENDATION",
+      "payload": {
+        "activation_status": "requires_review",
+        "actual_outcome": "PR comment, certificate, SPARTa route, DLL, and DLL Intelligence report were generated.",
+        "confidence_calibration_changes": [
+          "Do not calibrate from this synthetic demo; collect customer-context PR records."
+        ],
+        "expected_outcome": "PR Guardian makes the runtime decision visible before merge.",
+        "human_override_effectiveness": "no override occurred",
+        "prediction_error": "not measured in synthetic demo",
+        "recommended_policy_updates": [
+          "In a customer pilot, compare PR Guardian posture against reviewer agreement before enforcement."
+        ],
+        "suggested_rule_modifications": [
+          "Retain certificate digest 08f1df72fe2185e7100e30d9c92563cb5c0223d5a48f92d14a9bf3f2b04148c1 with workflow artifacts."
+        ]
+      },
+      "previous_record_hash": "e1c735c97878e05447fbafc8101f3968b40207fef381f1a77cbdeacc7f87de0e",
+      "record_hash": "77367fd79cf524896e92f049f6450a65b1595c175f0e05c75a6196cf8e6da587",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-07-29T12:05:00+00:00",
+      "sequence": 7,
+      "tenant_id": "pr-guardian-demo"
+    }
+  ],
+  "summary": {
+    "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+    "event_counts": {
+      "EVALUATION": 1,
+      "EVIDENCE": 1,
+      "EXECUTION": 1,
+      "HUMAN_INTERACTION": 1,
+      "LEARNING_RECOMMENDATION": 1,
+      "OUTCOME": 1,
+      "REQUEST": 1
+    },
+    "final_event_type": "LEARNING_RECOMMENDATION",
+    "judged_correct": true,
+    "override_count": 0,
+    "pending_learning_recommendations": 1,
+    "record_count": 7,
+    "rollback_performed": false,
+    "rollback_success": null,
+    "tenant_id": "pr-guardian-demo"
+  },
+  "tenant_id": "pr-guardian-demo",
+  "verification": {
+    "errors": [],
+    "head_record_hash": "77367fd79cf524896e92f049f6450a65b1595c175f0e05c75a6196cf8e6da587",
+    "record_count": 7,
+    "valid": true
+  },
+  "version": "smerc.decision-lifecycle-ledger.v1"
+}

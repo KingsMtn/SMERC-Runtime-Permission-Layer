@@ -8,6 +8,7 @@ import os
 import re
 import time
 import uuid
+from datetime import datetime, timezone
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict, Iterable, Mapping, Optional
@@ -25,6 +26,7 @@ from reference_engine.audit_store import (
     ReviewConflictError,
 )
 from reference_engine.action_language import ACTION_VERSION, DECISION_VERSION, action_hash, evaluate_language_action
+from reference_engine.agent_handshake import HANDSHAKE_VERSION, AgentHandshakeEngine
 from reference_engine.access_token import (
     ACCESS_TOKEN_VERSION,
     AccessTokenError,
@@ -56,6 +58,7 @@ from reference_engine.github_oidc import (
     parse_github_oidc_trust,
 )
 from reference_engine.decision_certificate import CERTIFICATE_VERSION, build_decision_certificate
+from reference_engine.operator_status import STATUS_VERSION, build_operator_status
 from reference_engine.policy import POLICY_VERSION, PolicyRegistry
 from reference_engine.pilot_ledger_intake import (
     apply_pilot_intake,
@@ -77,6 +80,11 @@ from reference_engine.recoverability_engine import (
     RecoverabilityEngine,
     RuntimePosture,
     load_domain_profile_dir,
+)
+from reference_engine.runtime_health_metrics import (
+    RUNTIME_HEALTH_VERSION,
+    build_runtime_health_metrics,
+    observations_from_decisions,
 )
 from reference_engine.sparta_registry import (
     SPARTA_ADAPTER_REGISTRY_VERSION,
@@ -271,7 +279,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 return
 
             stored_dll_decision_id = self._stored_dll_decision_id(path)
-            if path == "/v1/pilot/metrics":
+            if path in {"/v1/pilot/metrics", "/v1/runtime/health-metrics", "/v1/operator/status"}:
                 required_scope = "metrics.read"
             elif path == "/v1/pilot/dll/ledgers" or stored_dll_decision_id is not None:
                 required_scope = "metrics.read"
@@ -287,6 +295,20 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 metrics = self.server.audit_store.pilot_metrics(tenant_id)
                 metrics["request_id"] = request_id
                 self._write_json(metrics, request_id=request_id)
+                return
+            if path == "/v1/runtime/health-metrics":
+                limit = self._parse_limit(query)
+                slo = self._parse_latency_slo(query)
+                report = self._runtime_health_report(tenant_id, limit=limit, latency_slo_ms=slo)
+                report["request_id"] = request_id
+                self._write_json(report, request_id=request_id)
+                return
+            if path == "/v1/operator/status":
+                limit = self._parse_limit(query)
+                slo = self._parse_latency_slo(query)
+                report = self._operator_status_report(tenant_id, limit=limit, latency_slo_ms=slo)
+                report["request_id"] = request_id
+                self._write_json(report, request_id=request_id)
                 return
             if path == "/v1/review-queue":
                 limit = self._parse_limit(query)
@@ -463,6 +485,12 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 self._write_json(self._route_sparta(principal, payload), request_id=request_id)
                 return
 
+            if path == "/v1/agent/handshake":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Agent handshake expects one JSON object.")
+                self._write_json(self._evaluate_agent_handshake(principal, payload), request_id=request_id)
+                return
+
             if path == "/v1/pilot/dll/intake":
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Pilot DLL intake expects one JSON object.")
@@ -535,7 +563,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 return
 
             if path not in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch", "/v1/language/evaluate"}:
-                raise APIError(HTTPStatus.NOT_FOUND, "not_found", "Use /evaluate, /batch, or a review endpoint.")
+                raise APIError(HTTPStatus.NOT_FOUND, "not_found", "Use /evaluate, /batch, /v1/agent/handshake, or a review endpoint.")
 
             if path == "/v1/language/evaluate":
                 if not isinstance(payload, dict):
@@ -1022,6 +1050,34 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             },
         )
         return route
+
+    def _evaluate_agent_handshake(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        try:
+            result = AgentHandshakeEngine(
+                recoverability_engine=self.server.engine_for(principal.tenant_id)
+            ).evaluate(payload)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_agent_handshake_request", str(exc)) from exc
+        identity = principal.public_identity()
+        result["tenant_id"] = principal.tenant_id
+        result["authenticated_principal"] = identity
+        result["replay"]["tenant_id"] = principal.tenant_id
+        result["replay"]["authenticated_principal"] = identity
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "agent.handshake.evaluated",
+            result["replay_id"],
+            {
+                "handshake_id": result["handshake_id"],
+                "agent_id": result["agent_id"],
+                "handshake_posture": result["handshake_posture"],
+                "executor_posture": result["executor_posture"],
+                "action_posture": result["action_posture"],
+                "recommended_executor": result["recommended_executor"],
+            },
+        )
+        return result
 
     def _apply_pilot_dll_intake(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
         allowed = {"ledger", "intake", "decision_id"}
@@ -1563,7 +1619,9 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                     )
                 self._require_same_principal(stored["decision"], principal)
                 return stored["decision"], True
+        started_at = time.perf_counter()
         decision = evaluate_language_action(payload, self.server.engine_for(tenant_id))
+        self._attach_runtime_observation(decision, started_at)
         decision["tenant_id"] = tenant_id
         self._bind_principal(decision, principal)
         try:
@@ -1584,7 +1642,9 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         tenant_id = principal.tenant_id
         if not isinstance(payload, dict):
             raise TypeError("Each action must be a JSON object.")
+        started_at = time.perf_counter()
         decision = self.server.engine_for(tenant_id).evaluate(payload)
+        self._attach_runtime_observation(decision, started_at)
         decision["tenant_id"] = tenant_id
         self._bind_principal(decision, principal)
         try:
@@ -1602,6 +1662,58 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         identity = principal.public_identity()
         decision["authenticated_principal"] = identity
         decision["replay"]["authenticated_principal"] = identity
+
+    def _runtime_health_report(self, tenant_id: str, *, limit: int, latency_slo_ms: int) -> Dict[str, Any]:
+        decision_artifacts = {"records": self.server.audit_store.list(tenant_id, limit=limit)}
+        observations = observations_from_decisions(decision_artifacts)
+        return build_runtime_health_metrics(
+            decision_artifacts=decision_artifacts,
+            observations=observations if observations["records"] else None,
+            tenant_id=tenant_id,
+            latency_slo_ms=latency_slo_ms,
+        )
+
+    def _operator_status_report(self, tenant_id: str, *, limit: int, latency_slo_ms: int) -> Dict[str, Any]:
+        decision_artifacts = {"records": self.server.audit_store.list(tenant_id, limit=limit)}
+        runtime_health = self._runtime_health_report(tenant_id, limit=limit, latency_slo_ms=latency_slo_ms)
+        decision_count = len(decision_artifacts["records"])
+        current_policy = self.server.policy_registry.for_tenant(tenant_id)
+        return build_operator_status(
+            pilot_readiness={
+                "ready_for_week_zero": decision_count > 0,
+                "ready_for_customer_observe": decision_count > 0,
+                "blockers": [] if decision_count else ["no stored decisions available for operator review"],
+                "warnings": [
+                    "API-generated operator status does not verify the full customer pilot readiness checklist."
+                ],
+            },
+            customer_intake={
+                "ready_for_review_call": True,
+                "ready_for_week_zero": False,
+                "blockers": [],
+                "warnings": [
+                    "API-generated operator status does not prove customer intake, business sponsor, or data-boundary readiness."
+                ],
+            },
+            decision_artifacts=decision_artifacts,
+            runtime_health=runtime_health,
+            tenant_id=tenant_id,
+            active_policy_version=f"{current_policy.policy_id}@{current_policy.policy_revision}",
+            active_profile_version=f"runtime-default-plus-{len(self.server.domain_profiles)}-custom-profiles",
+        )
+
+    @staticmethod
+    def _attach_runtime_observation(decision: Dict[str, Any], started_at: float) -> None:
+        observation = {
+            "schema": "smerc.runtime-observation.v1",
+            "source": "smerc-runtime-api",
+            "integration_status": "ok",
+            "evaluation_latency_ms": round((time.perf_counter() - started_at) * 1000, 3),
+            "observed_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            "fail_behavior": "not_applicable",
+        }
+        decision["runtime_observation"] = observation
+        decision["replay"]["runtime_observation"] = observation
 
     @staticmethod
     def _require_same_principal(decision: Dict[str, Any], principal: APIPrincipal) -> None:
@@ -1679,6 +1791,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             return "permits.consume"
         if path == "/v1/sparta/route":
             return "routes.write"
+        if path == "/v1/agent/handshake":
+            return "actions.evaluate"
         if path == "/v1/pilot/dll/intake":
             return "reviews.write"
         if path == "/v1/pilot/dll/metrics":
@@ -1757,6 +1871,21 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             )
         return status
 
+    @staticmethod
+    def _parse_latency_slo(query: Dict[str, list[str]]) -> int:
+        raw = query.get("latency_slo_ms", ["250"])[0]
+        try:
+            value = int(raw)
+        except ValueError as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_latency_slo", "latency_slo_ms must be an integer.") from exc
+        if value < 1 or value > 60_000:
+            raise APIError(
+                HTTPStatus.BAD_REQUEST,
+                "invalid_latency_slo",
+                "latency_slo_ms must be between 1 and 60000.",
+            )
+        return value
+
     def _write_error(self, error: APIError, request_id: Optional[str] = None) -> None:
         request_id = request_id or self._request_id()
         self._write_json(
@@ -1826,6 +1955,7 @@ def schema() -> Dict[str, Any]:
         "language_versions": {
             "action": ACTION_VERSION,
             "decision": DECISION_VERSION,
+            "agent_handshake": HANDSHAKE_VERSION,
             "permit": PERMIT_VERSION,
             "control_evidence": CONTROL_EVIDENCE_VERSION,
             "access_token": ACCESS_TOKEN_VERSION,
@@ -1833,6 +1963,8 @@ def schema() -> Dict[str, Any]:
             "decision_certificate": CERTIFICATE_VERSION,
             "pilot_ledger_metrics": PILOT_LEDGER_METRICS_VERSION,
             "pilot_evidence_package": PILOT_EVIDENCE_PACKAGE_VERSION,
+            "runtime_health_metrics": RUNTIME_HEALTH_VERSION,
+            "operator_status": STATUS_VERSION,
             "sparta_plan": SPARTA_PLAN_VERSION,
             "sparta_route": SPARTA_ROUTE_VERSION,
             "sparta_adapter_registry": SPARTA_ADAPTER_REGISTRY_VERSION,
@@ -1884,6 +2016,7 @@ def schema() -> Dict[str, Any]:
             "POST /v1/auth/token": "exchange a static bootstrap credential for a short-lived narrowed token",
             "POST /v1/auth/github": "exchange one verified GitHub Actions OIDC token for a workload-bound session",
             "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",
+            "POST /v1/agent/handshake": "validate beacon discovery, executor fitness, and action posture before an agent acts",
             "POST /v1/permits/issue": "issue a short-lived action-bound permit for an enforceable decision",
             "POST /v1/permits/prepare": "authenticate an issued, unconsumed permit before native controls run",
             "POST /v1/permits/consume": "verify control evidence and atomically consume an action-bound permit",
@@ -1902,6 +2035,8 @@ def schema() -> Dict[str, Any]:
             "POST /v1/decisions/{replay_id}/reviews": "record an immutable pilot review",
             "GET /v1/decisions/{replay_id}/reviews": "list tenant-scoped pilot reviews",
             "GET /v1/pilot/metrics": "calculate review agreement and outcome metrics",
+            "GET /v1/runtime/health-metrics": "calculate tenant-scoped runtime health from stored decisions and observation availability",
+            "GET /v1/operator/status": "summarize tenant-scoped runtime health, policy identity, readiness caveats, and decision activity for operator review",
             "GET /v1/review-queue": "list tenant-scoped pending or reviewed decisions",
             "GET /v1/security-events": "list tenant-scoped authenticated security events",
         },

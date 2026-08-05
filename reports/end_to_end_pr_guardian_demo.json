@@ -1,0 +1,550 @@
+{
+  "action_request": {
+    "action_id": "AI_AUTH_MIDDLEWARE_PR",
+    "actor": "coding_agent",
+    "confidence": 0.61,
+    "consent": 0.66,
+    "context": {
+      "existing_controls": [
+        "branch_protection",
+        "code_review",
+        "environment_approval"
+      ],
+      "rollback_plan": "partial_git_revert_plus_canary",
+      "touched_area": "authentication",
+      "workflow": "pull_request"
+    },
+    "description": "AI coding agent proposes changing authentication middleware and deployment configuration in a pull request.",
+    "external_effect": true,
+    "harm": 0.84,
+    "reversibility": 0.39,
+    "sensitive_data": true,
+    "tool": "github.pull_request"
+  },
+  "boundary": [
+    "Synthetic end-to-end demo; not customer production evidence.",
+    "PR Guardian does not replace branch protection, code review, security review, deployment approvals, or human accountability.",
+    "Customer-context pilot records are required before claiming operational risk reduction."
+  ],
+  "decision_lifecycle_ledger": {
+    "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+    "head_record_hash": "77367fd79cf524896e92f049f6450a65b1595c175f0e05c75a6196cf8e6da587",
+    "record_count": 7,
+    "records": [
+      {
+        "actor": "coding_agent",
+        "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "event_type": "REQUEST",
+        "payload": {
+          "environment": "github_pull_request",
+          "initiated_by": "coding_agent",
+          "requested_operation": "AI coding agent proposes changing authentication middleware and deployment configuration in a pull request.",
+          "risk_profile": "ai_assisted_code_change"
+        },
+        "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "record_hash": "36d9f94415888396178a281eee13e8824e317e1c0df153648be81fadc01d5a8d",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-07-28T12:00:00+00:00",
+        "sequence": 1,
+        "tenant_id": "pr-guardian-demo"
+      },
+      {
+        "actor": "smerc-pr-guardian",
+        "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "event_type": "EVIDENCE",
+        "payload": {
+          "available_evidence": [
+            "pull_request_metadata",
+            "declared_action_request",
+            "existing_branch_protection",
+            "smerc_runtime_decision",
+            "sparta_route_report"
+          ],
+          "confidence_score": 0.535,
+          "external_dependencies": [
+            "github_actions",
+            "pull_request_review"
+          ],
+          "missing_evidence": [
+            "customer_reviewer_label",
+            "live_execution_outcome"
+          ],
+          "model_version": "declared-ai-agent",
+          "policy_version": "smerc.pr-guardian.demo.v1"
+        },
+        "previous_record_hash": "36d9f94415888396178a281eee13e8824e317e1c0df153648be81fadc01d5a8d",
+        "record_hash": "3c4b02329341cdcb64470fdc98f52e9b6a38f041e152ee2962ca69557b094541",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-07-28T12:00:02+00:00",
+        "sequence": 2,
+        "tenant_id": "pr-guardian-demo"
+      },
+      {
+        "actor": "smerc-engine",
+        "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "event_type": "EVALUATION",
+        "payload": {
+          "authorization_recommendation": "ESCALATE",
+          "entropy_indicators": [
+            "EXTERNAL_SIDE_EFFECT",
+            "SENSITIVE_DATA_ACCESS",
+            "HIGH_HARM_POTENTIAL"
+          ],
+          "reason_codes": [
+            "EXTERNAL_SIDE_EFFECT",
+            "SENSITIVE_DATA_ACCESS",
+            "HIGH_HARM_POTENTIAL"
+          ],
+          "recommended_safeguards": [
+            "route_to_human_review",
+            "preserve_replay",
+            "require_explicit_approval"
+          ],
+          "recoverability_score": 0.39,
+          "structural_state": "AI-assisted pull request received ESCALATE before merge or deployment."
+        },
+        "previous_record_hash": "3c4b02329341cdcb64470fdc98f52e9b6a38f041e152ee2962ca69557b094541",
+        "record_hash": "fe81ed50feb6cfc8ed34eac691d31275efd7ee50e8d041a5a8dbf14b13da10b4",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-07-28T12:00:03+00:00",
+        "sequence": 3,
+        "tenant_id": "pr-guardian-demo"
+      },
+      {
+        "actor": "pilot-reviewer",
+        "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "event_type": "HUMAN_INTERACTION",
+        "payload": {
+          "final_recommendation": "ESCALATE",
+          "interaction": "accepted",
+          "original_recommendation": "ESCALATE",
+          "rationale": "Demo reviewer accepts the SMERC posture for the end-to-end pilot artifact.",
+          "reviewer_id": "pilot-reviewer"
+        },
+        "previous_record_hash": "fe81ed50feb6cfc8ed34eac691d31275efd7ee50e8d041a5a8dbf14b13da10b4",
+        "record_hash": "8b9e6f2f5f91d7fc9082a597868268bf85803e4b4f18ced2ab4f177d3e957894",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-07-28T12:03:00+00:00",
+        "sequence": 4,
+        "tenant_id": "pr-guardian-demo"
+      },
+      {
+        "actor": "sparta-router",
+        "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "event_type": "EXECUTION",
+        "payload": {
+          "duration_ms": 42000,
+          "executed_operation": "Rendered PR Guardian comment and preserved blocked route REVIEW_REQUIRED.",
+          "execution_status": "blocked",
+          "rollback_performed": false,
+          "rollback_success": null,
+          "started_at": "2026-07-28T12:05:00+00:00"
+        },
+        "previous_record_hash": "8b9e6f2f5f91d7fc9082a597868268bf85803e4b4f18ced2ab4f177d3e957894",
+        "record_hash": "b8be0331ae6092c5eeb3a01bb578d0fd46a6c0f5bfd888780a1ae0592ade86d2",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-07-28T12:06:00+00:00",
+        "sequence": 5,
+        "tenant_id": "pr-guardian-demo"
+      },
+      {
+        "actor": "demo-review-lead",
+        "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "event_type": "OUTCOME",
+        "payload": {
+          "controls_sufficient": true,
+          "cost_incurred": 0.0,
+          "customer_impact": "none; synthetic end-to-end demo",
+          "financial_impact": "none; synthetic end-to-end demo",
+          "judged_correct": true,
+          "security_impact": "none; synthetic end-to-end demo",
+          "time_to_recover_minutes": 0.0,
+          "unexpected_consequences": false
+        },
+        "previous_record_hash": "b8be0331ae6092c5eeb3a01bb578d0fd46a6c0f5bfd888780a1ae0592ade86d2",
+        "record_hash": "e1c735c97878e05447fbafc8101f3968b40207fef381f1a77cbdeacc7f87de0e",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-07-29T12:00:00+00:00",
+        "sequence": 6,
+        "tenant_id": "pr-guardian-demo"
+      },
+      {
+        "actor": "smerc-dll",
+        "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "event_type": "LEARNING_RECOMMENDATION",
+        "payload": {
+          "activation_status": "requires_review",
+          "actual_outcome": "PR comment, certificate, SPARTa route, DLL, and DLL Intelligence report were generated.",
+          "confidence_calibration_changes": [
+            "Do not calibrate from this synthetic demo; collect customer-context PR records."
+          ],
+          "expected_outcome": "PR Guardian makes the runtime decision visible before merge.",
+          "human_override_effectiveness": "no override occurred",
+          "prediction_error": "not measured in synthetic demo",
+          "recommended_policy_updates": [
+            "In a customer pilot, compare PR Guardian posture against reviewer agreement before enforcement."
+          ],
+          "suggested_rule_modifications": [
+            "Retain certificate digest 08f1df72fe2185e7100e30d9c92563cb5c0223d5a48f92d14a9bf3f2b04148c1 with workflow artifacts."
+          ]
+        },
+        "previous_record_hash": "e1c735c97878e05447fbafc8101f3968b40207fef381f1a77cbdeacc7f87de0e",
+        "record_hash": "77367fd79cf524896e92f049f6450a65b1595c175f0e05c75a6196cf8e6da587",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-07-29T12:05:00+00:00",
+        "sequence": 7,
+        "tenant_id": "pr-guardian-demo"
+      }
+    ],
+    "summary": {
+      "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "event_counts": {
+        "EVALUATION": 1,
+        "EVIDENCE": 1,
+        "EXECUTION": 1,
+        "HUMAN_INTERACTION": 1,
+        "LEARNING_RECOMMENDATION": 1,
+        "OUTCOME": 1,
+        "REQUEST": 1
+      },
+      "final_event_type": "LEARNING_RECOMMENDATION",
+      "judged_correct": true,
+      "override_count": 0,
+      "pending_learning_recommendations": 1,
+      "record_count": 7,
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "pr-guardian-demo"
+    },
+    "tenant_id": "pr-guardian-demo",
+    "verification": {
+      "errors": [],
+      "head_record_hash": "77367fd79cf524896e92f049f6450a65b1595c175f0e05c75a6196cf8e6da587",
+      "record_count": 7,
+      "valid": true
+    },
+    "version": "smerc.decision-lifecycle-ledger.v1"
+  },
+  "decision_report": {
+    "decision": {
+      "confidence_score": 0.535,
+      "constraints": [
+        "route_to_human_review",
+        "preserve_replay",
+        "require_explicit_approval"
+      ],
+      "plain_english_summary": "Action 'AI_AUTH_MIDDLEWARE_PR' by coding_agent using github.pull_request received ESCALATE. Risk score is 0.656. Constraints: route_to_human_review, preserve_replay, require_explicit_approval.",
+      "posture": "ESCALATE",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA_ACCESS",
+        "HIGH_HARM_POTENTIAL"
+      ],
+      "replay": {
+        "action_id": "AI_AUTH_MIDDLEWARE_PR",
+        "actor": "coding_agent",
+        "confidence_score": 0.535,
+        "constraints": [
+          "route_to_human_review",
+          "preserve_replay",
+          "require_explicit_approval"
+        ],
+        "evaluated_at": "2026-07-28T01:57:48.401822+00:00",
+        "posture": "ESCALATE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA_ACCESS",
+          "HIGH_HARM_POTENTIAL"
+        ],
+        "replay_id": "replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "risk_score": 0.656,
+        "tool": "github.pull_request"
+      },
+      "replay_id": "replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "risk_score": 0.656
+    },
+    "enforcement": {
+      "active": false,
+      "fail_on": [
+        "DENY",
+        "FREEZE"
+      ],
+      "would_fail": false
+    },
+    "integration_status": "evaluated",
+    "mode": "observe",
+    "source": "local"
+  },
+  "dll_intelligence": {
+    "decision_rows": [
+      {
+        "confidence_score": 0.535,
+        "controls_sufficient": true,
+        "cost_incurred": 0.0,
+        "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "environment": "github_pull_request",
+        "execution_status": "blocked",
+        "final_posture": "ESCALATE",
+        "head_record_hash": "77367fd79cf524896e92f049f6450a65b1595c175f0e05c75a6196cf8e6da587",
+        "initial_posture": "ESCALATE",
+        "interaction": "accepted",
+        "judged_correct": true,
+        "learning_recommendations": {
+          "activation_status": "requires_review",
+          "confidence_calibration_changes": [
+            "Do not calibrate from this synthetic demo; collect customer-context PR records."
+          ],
+          "recommended_policy_updates": [
+            "In a customer pilot, compare PR Guardian posture against reviewer agreement before enforcement."
+          ],
+          "suggested_rule_modifications": [
+            "Retain certificate digest 08f1df72fe2185e7100e30d9c92563cb5c0223d5a48f92d14a9bf3f2b04148c1 with workflow artifacts."
+          ]
+        },
+        "missing_evidence": [
+          "customer_reviewer_label",
+          "live_execution_outcome"
+        ],
+        "near_miss": true,
+        "override_harmful": false,
+        "override_helpful": false,
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA_ACCESS",
+          "HIGH_HARM_POTENTIAL"
+        ],
+        "recommended_safeguards": [
+          "route_to_human_review",
+          "preserve_replay",
+          "require_explicit_approval"
+        ],
+        "recovery_failure": false,
+        "requested_operation": "AI coding agent proposes changing authentication middleware and deployment configuration in a pull request.",
+        "risk_profile": "ai_assisted_code_change",
+        "rollback_performed": false,
+        "rollback_success": null,
+        "tenant_id": "pr-guardian-demo",
+        "time_to_recover_minutes": 0.0,
+        "unexpected_consequences": false
+      }
+    ],
+    "evidence_boundary": [
+      "DLL Intelligence summarizes supplied lifecycle records; it does not prove incident reduction by itself.",
+      "Synthetic or analyst-assigned ledgers must be labeled before external use.",
+      "Policy and calibration recommendations require human review before activation."
+    ],
+    "generated_at": "2026-07-28T01:57:48+00:00",
+    "governance_drift_signals": [
+      "multiple_missing_evidence_items_per_decision_on_average"
+    ],
+    "near_miss_decisions": [
+      {
+        "decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+        "final_posture": "ESCALATE",
+        "operation": "AI coding agent proposes changing authentication middleware and deployment configuration in a pull request.",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA_ACCESS",
+          "HIGH_HARM_POTENTIAL"
+        ]
+      }
+    ],
+    "policy_review_queue": [
+      {
+        "activation_status": "requires_review",
+        "recommendation": "In a customer pilot, compare PR Guardian posture against reviewer agreement before enforcement.",
+        "recommendation_type": "policy_update",
+        "source_decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401"
+      },
+      {
+        "activation_status": "requires_review",
+        "recommendation": "Retain certificate digest 08f1df72fe2185e7100e30d9c92563cb5c0223d5a48f92d14a9bf3f2b04148c1 with workflow artifacts.",
+        "recommendation_type": "rule_modification",
+        "source_decision_id": "dll_replay_AI_AUTH_MIDDLEWARE_PR_1785203868401"
+      }
+    ],
+    "recommended_next_action": "Collect at least 30 customer-context DLL records before presenting rates as pilot evidence.",
+    "recovery_failure_decisions": [],
+    "summary": {
+      "controls_sufficient_count": 1,
+      "controls_sufficient_rate": 1.0,
+      "executed_count": 1,
+      "final_posture_counts": {
+        "ESCALATE": 1
+      },
+      "human_reviewed_count": 1,
+      "initial_posture_counts": {
+        "ESCALATE": 1
+      },
+      "judged_correct_count": 1,
+      "judged_correct_rate": 1.0,
+      "ledger_count": 1,
+      "near_miss_count": 1,
+      "outcome_reviewed_count": 1,
+      "override_count": 0,
+      "override_harmful_count": 0,
+      "override_helpful_count": 0,
+      "override_rate": 0.0,
+      "recovery_failure_count": 0,
+      "rollback_performed_count": 0,
+      "rollback_success_count": 0,
+      "rollback_success_rate": null,
+      "unexpected_consequence_count": 0,
+      "unexpected_consequence_rate": 0.0
+    },
+    "top_missing_evidence": {
+      "customer_reviewer_label": 1,
+      "live_execution_outcome": 1
+    },
+    "top_reason_codes": {
+      "EXTERNAL_SIDE_EFFECT": 1,
+      "HIGH_HARM_POTENTIAL": 1,
+      "SENSITIVE_DATA_ACCESS": 1
+    },
+    "top_safeguards": {
+      "preserve_replay": 1,
+      "require_explicit_approval": 1,
+      "route_to_human_review": 1
+    },
+    "version": "smerc.dll-intelligence.v1"
+  },
+  "generated_at": "2026-07-28T01:57:48+00:00",
+  "integrated_flow": [
+    "AI-assisted PR request declared",
+    "SMERC runtime engine evaluated recoverability posture",
+    "PR Guardian rendered pull-request comment and certificate",
+    "SPARTa routed posture into executable, constrained, paused, blocked, or review-required behavior",
+    "Decision Lifecycle Ledger recorded request, evidence, evaluation, review, execution, outcome, and learning",
+    "DLL Intelligence summarized the verified lifecycle record"
+  ],
+  "performance_latency": {
+    "boundary": [
+      "Single local run; not production performance evidence.",
+      "Does not include network latency, GitHub runner queue time, remote API latency, storage latency, or human review time.",
+      "Customer pilots should report median, p95, max latency, workflow overhead, and reviewer impact with explicit sample sizes."
+    ],
+    "ciso_interpretation": "Use latency as operational overhead evidence, not as the core value claim. A pilot should measure median and p95 decision latency, total workflow time added, reviewer agreement, approval delay, false constraints, and false releases.",
+    "decision_evaluation_ms": 0.095,
+    "dll_build_ms": 0.28,
+    "dll_intelligence_ms": 1.715,
+    "dll_serialization_ms": 0.122,
+    "measurement_type": "single_local_process_run",
+    "pr_certificate_ms": 0.512,
+    "pr_comment_render_ms": 0.026,
+    "sparta_route_ms": 0.407,
+    "total_generation_ms": 3.184,
+    "unit": "milliseconds",
+    "version": "smerc.demo-latency.v1"
+  },
+  "pr_guardian": {
+    "certificate": {
+      "action": {
+        "action_id": "AI_AUTH_MIDDLEWARE_PR",
+        "actor": "coding_agent",
+        "description": "AI coding agent proposes changing authentication middleware and deployment configuration in a pull request.",
+        "tool": "github.pull_request"
+      },
+      "boundary": [
+        "Pilot-grade PR evidence for review, not production certification.",
+        "Does not replace branch protection, code review, security review, or deployment approvals.",
+        "Customer-context pilots are required before claiming operational risk reduction."
+      ],
+      "certificate_digest": "08f1df72fe2185e7100e30d9c92563cb5c0223d5a48f92d14a9bf3f2b04148c1",
+      "confidence_score": 0.535,
+      "controls": [
+        "route_to_human_review",
+        "preserve_replay",
+        "require_explicit_approval"
+      ],
+      "enforcement": {
+        "active": false,
+        "fail_on": [
+          "DENY",
+          "FREEZE"
+        ],
+        "would_fail": false
+      },
+      "github": {
+        "event_name": "pull_request",
+        "pull_request": {
+          "base_ref": "main",
+          "head_sha": "demo-head-sha",
+          "number": 101,
+          "title": "AI-assisted authentication middleware change",
+          "user": "coding-agent"
+        },
+        "repository": "KingsMtn/SMERC-Runtime-Permission-Layer",
+        "workflow": "SMERC PR Guardian"
+      },
+      "integration_status": "evaluated",
+      "issued_at": "2026-07-28T12:00:05+00:00",
+      "mode": "observe",
+      "posture": "ESCALATE",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA_ACCESS",
+        "HIGH_HARM_POTENTIAL"
+      ],
+      "replay_id": "replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "risk_score": 0.656,
+      "source": "local",
+      "summary": "Action 'AI_AUTH_MIDDLEWARE_PR' by coding_agent using github.pull_request received ESCALATE. Risk score is 0.656. Constraints: route_to_human_review, preserve_replay, require_explicit_approval.",
+      "verification": {
+        "certificate_digest": "08f1df72fe2185e7100e30d9c92563cb5c0223d5a48f92d14a9bf3f2b04148c1",
+        "errors": [],
+        "valid": true
+      },
+      "version": "smerc.github-pr-guardian-certificate.v1"
+    },
+    "comment_markdown": "<!-- smerc-pr-guardian:v1 -->\n## SMERC PR Guardian\n\n**Posture:** `ESCALATE`  \n**Risk score:** `0.656`  \n**Confidence score:** `0.535`  \n**Replay ID:** `replay_AI_AUTH_MIDDLEWARE_PR_1785203868401`\n\n**Action:** AI coding agent proposes changing authentication middleware and deployment configuration in a pull request.\n**Pull request:** `#101`\n\n### Recommendation\n\nRoute to accountable human review before execution.\n\n### Required Controls\n\n- `route_to_human_review`\n- `preserve_replay`\n- `require_explicit_approval`\n\n### Reason Codes\n\n- `EXTERNAL_SIDE_EFFECT`\n- `SENSITIVE_DATA_ACCESS`\n- `HIGH_HARM_POTENTIAL`\n\n### Decision Certificate\n\n- Certificate digest: `08f1df72fe2185e7100e30d9c92563cb5c0223d5a48f92d14a9bf3f2b04148c1`\n- Integration status: `evaluated`\n- Mode: `observe`\n\n<sub>SMERC PR Guardian is pilot-grade evidence for review. It does not replace branch protection, code review, security review, deployment approvals, or human accountability.</sub>\n"
+  },
+  "sparta_route": {
+    "route_report": {
+      "applied_controls": [
+        "route_to_accountable_reviewer",
+        "require_explicit_approval",
+        "preserve_replay"
+      ],
+      "blocked_controls": [
+        "execute"
+      ],
+      "decision_digest": "ac7e66f08ff3855e4384e5a488671d88ac4a52d80b76bbb374eb5e515190e9f6",
+      "decision_replay_id": "replay_AI_AUTH_MIDDLEWARE_PR_1785203868401",
+      "effective_scope_units": 0,
+      "executable": false,
+      "plain_english_summary": "SPARTa routed the action to accountable human review because SMERC required escalation.",
+      "plan_id": "github-pr-guardian-auth-change",
+      "reason_codes": [
+        "SPARTA_ESCALATE_TO_ACCOUNTABLE_REVIEWER"
+      ],
+      "recommended_next_action": "Assign a reviewer, document the decision, and issue a new request if approval changes the posture.",
+      "route_id": "sparta_github-pr-guardian-auth-change_ea936450e1df",
+      "route_state": "REVIEW_REQUIRED",
+      "routed_at": "2026-07-28T01:57:48+00:00",
+      "source_posture": "ESCALATE",
+      "tool_plan": {
+        "action": "evaluate_and_comment_on_pr",
+        "max_scope_units": 100,
+        "metadata": {
+          "environment": "production-adjacent",
+          "review_surface": "pull_request_comment",
+          "workflow": "smerc-pr-guardian.yml"
+        },
+        "plan_id": "github-pr-guardian-auth-change",
+        "requested_capability": "pull_request_governance",
+        "requested_scope_units": 80,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": true,
+        "supports_scope_limit": true,
+        "tool": "github_actions",
+        "version": "smerc.sparta-plan.v1"
+      },
+      "version": "smerc.sparta-route.v1"
+    },
+    "route_report_digest": "854fc1209ecdb682f6dbb3723f104d8e668d8b419fdb2902037599b6392e7241"
+  },
+  "version": "smerc.end-to-end-pr-guardian-demo.v1"
+}

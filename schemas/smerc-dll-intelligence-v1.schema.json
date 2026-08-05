@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-dll-intelligence-v1.schema.json",
+  "title": "SMERC DLL Intelligence Report v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "version",
+    "generated_at",
+    "summary",
+    "top_reason_codes",
+    "top_missing_evidence",
+    "top_safeguards",
+    "near_miss_decisions",
+    "recovery_failure_decisions",
+    "policy_review_queue",
+    "governance_drift_signals",
+    "decision_rows",
+    "evidence_boundary",
+    "recommended_next_action"
+  ],
+  "properties": {
+    "version": {"const": "smerc.dll-intelligence.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "summary": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "ledger_count",
+        "human_reviewed_count",
+        "override_count",
+        "near_miss_count",
+        "recovery_failure_count",
+        "initial_posture_counts",
+        "final_posture_counts"
+      ],
+      "properties": {
+        "ledger_count": {"type": "integer", "minimum": 1},
+        "human_reviewed_count": {"type": "integer", "minimum": 0},
+        "override_count": {"type": "integer", "minimum": 0},
+        "near_miss_count": {"type": "integer", "minimum": 0},
+        "recovery_failure_count": {"type": "integer", "minimum": 0},
+        "initial_posture_counts": {"type": "object"},
+        "final_posture_counts": {"type": "object"}
+      }
+    },
+    "top_reason_codes": {"type": "object"},
+    "top_missing_evidence": {"type": "object"},
+    "top_safeguards": {"type": "object"},
+    "near_miss_decisions": {"type": "array", "items": {"type": "object"}},
+    "recovery_failure_decisions": {"type": "array", "items": {"type": "object"}},
+    "policy_review_queue": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["recommendation_type", "recommendation", "activation_status"],
+        "properties": {
+          "recommendation_type": {"type": "string"},
+          "recommendation": {"type": "string"},
+          "activation_status": {"const": "requires_review"}
+        }
+      }
+    },
+    "governance_drift_signals": {"type": "array", "items": {"type": "string"}},
+    "decision_rows": {"type": "array", "items": {"type": "object"}},
+    "evidence_boundary": {"type": "array", "items": {"type": "string"}},
+    "recommended_next_action": {"type": "string", "minLength": 1}
+  }
+}

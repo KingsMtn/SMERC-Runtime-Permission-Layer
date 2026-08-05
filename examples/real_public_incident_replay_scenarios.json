@@ -1,0 +1,248 @@
+[
+  {
+    "scenario_id": "public-github-actions-runner-degradation-2026-05-05",
+    "source": {
+      "title": "GitHub availability report: May 2026",
+      "publisher": "GitHub Blog",
+      "url": "https://github.blog/news-insights/company-news/github-availability-report-may-2026/",
+      "incident_date": "2026-05-05",
+      "source_facts": [
+        "GitHub Actions hosted runners in East US were degraded.",
+        "A scale-up operation hit an internal rate limit.",
+        "Some jobs failed or were delayed and queued work recovered after load was reduced."
+      ]
+    },
+    "category": "github_actions",
+    "replay_question": "Should an automated runner scale-up or retry action continue at full speed while regional allocation failures are rising?",
+    "traditional_policy_outcome": "ALLOW",
+    "traditional_policy_rationale": "The internal automation is authorized to scale hosted runner capacity.",
+    "action": {
+      "action_id": "PUBLIC_GITHUB_RUNNER_SCALE_UP_UNDER_RATE_LIMIT",
+      "description": "Automation continues hosted-runner scale-up while allocation failures and regional rate limits are rising.",
+      "actor": "capacity_automation",
+      "tool": "github_actions.runner_allocator",
+      "action_type": "capacity_scale_up",
+      "base_action_risk": 0.62,
+      "reversibility": 0.62,
+      "containment_strength": 0.52,
+      "rollback_latency": 0.46,
+      "evidence_validity": 0.74,
+      "anomaly_pressure": 0.72,
+      "impact_scope": 0.68,
+      "cancel_reliability": 0.66,
+      "authorization_confidence": 0.76,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "github_actions",
+        "source_type": "public_incident_report",
+        "analyst_assigned_signals": true
+      }
+    }
+  },
+  {
+    "scenario_id": "public-github-actions-failover-routing-2026-05-15",
+    "source": {
+      "title": "GitHub availability report: May 2026",
+      "publisher": "GitHub Blog",
+      "url": "https://github.blog/news-insights/company-news/github-availability-report-may-2026/",
+      "incident_date": "2026-05-15",
+      "source_facts": [
+        "A planned failover caused traffic to route incorrectly.",
+        "GitHub Actions runs failed or experienced delayed starts.",
+        "Manual correction restored service discovery routing."
+      ]
+    },
+    "category": "github_actions",
+    "replay_question": "Should automated failover complete before validating service discovery state and downstream orchestration dependencies?",
+    "traditional_policy_outcome": "ALLOW",
+    "traditional_policy_rationale": "The failover process is planned and operated by authorized infrastructure automation.",
+    "action": {
+      "action_id": "PUBLIC_GITHUB_FAILOVER_WITH_UNVERIFIED_ROUTING",
+      "description": "Automation completes failover while service discovery propagation is not yet verified.",
+      "actor": "infrastructure_automation",
+      "tool": "service_discovery.failover",
+      "action_type": "failover",
+      "base_action_risk": 0.70,
+      "reversibility": 0.50,
+      "containment_strength": 0.42,
+      "rollback_latency": 0.60,
+      "evidence_validity": 0.52,
+      "anomaly_pressure": 0.68,
+      "impact_scope": 0.78,
+      "cancel_reliability": 0.54,
+      "authorization_confidence": 0.62,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "github_actions",
+        "source_type": "public_incident_report",
+        "analyst_assigned_signals": true
+      }
+    }
+  },
+  {
+    "scenario_id": "public-github-auth-partial-deploy-rollback-2026-05-28",
+    "source": {
+      "title": "GitHub Status Incident History",
+      "publisher": "GitHub Status",
+      "url": "https://www.githubstatus.com/history?page=1",
+      "incident_date": "2026-05-28",
+      "source_facts": [
+        "A change was partially deployed to an authentication service.",
+        "Dependent services including web, REST API, Git operations, and GitHub Actions experienced errors.",
+        "The incident was mitigated by rolling back the change."
+      ]
+    },
+    "category": "software_deployment",
+    "replay_question": "Should a partially deployed authentication-service change continue when dependent services show elevated errors?",
+    "traditional_policy_outcome": "ALLOW",
+    "traditional_policy_rationale": "The deployment path is authorized and rollback exists.",
+    "action": {
+      "action_id": "PUBLIC_GITHUB_AUTH_PARTIAL_DEPLOY",
+      "description": "Deployment automation continues an authentication service rollout after dependent services show elevated errors.",
+      "actor": "deployment_automation",
+      "tool": "deployment.rollout",
+      "action_type": "auth_service_deploy",
+      "base_action_risk": 0.72,
+      "reversibility": 0.66,
+      "containment_strength": 0.58,
+      "rollback_latency": 0.30,
+      "evidence_validity": 0.70,
+      "anomaly_pressure": 0.70,
+      "impact_scope": 0.74,
+      "cancel_reliability": 0.72,
+      "authorization_confidence": 0.74,
+      "external_side_effect": true,
+      "sensitive_data": true,
+      "context": {
+        "domain_profile": "github_actions",
+        "source_type": "public_status_history",
+        "analyst_assigned_signals": true
+      }
+    }
+  },
+  {
+    "scenario_id": "public-keepthescore-production-db-delete",
+    "source": {
+      "title": "Keepthescore postmortem",
+      "publisher": "postmortems.app",
+      "url": "https://postmortems.app/postmortem/b4b5957d-2c5f-4db4-b866-8d82da25bd93",
+      "incident_date": "unknown",
+      "source_facts": [
+        "Engineers accidentally deleted the production database.",
+        "Backups were available once per day.",
+        "The service returned after about 30 minutes, but seven hours of scoreboard data was permanently lost."
+      ]
+    },
+    "category": "database_operations",
+    "replay_question": "Should an automated or human-assisted database deletion proceed when backup granularity makes recent data unrecoverable?",
+    "traditional_policy_outcome": "ALLOW",
+    "traditional_policy_rationale": "The actor or tool has administrative database permission.",
+    "action": {
+      "action_id": "PUBLIC_KEEPTHESCORE_DELETE_PRODUCTION_DATABASE",
+      "description": "Maintenance operation deletes a production database with only daily backup recovery.",
+      "actor": "database_admin",
+      "tool": "database.drop",
+      "action_type": "production_database_delete",
+      "base_action_risk": 0.94,
+      "reversibility": 0.08,
+      "containment_strength": 0.20,
+      "rollback_latency": 0.86,
+      "evidence_validity": 0.46,
+      "anomaly_pressure": 0.64,
+      "impact_scope": 0.92,
+      "cancel_reliability": 0.30,
+      "authorization_confidence": 0.52,
+      "external_side_effect": true,
+      "sensitive_data": true,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "source_type": "public_postmortem",
+        "analyst_assigned_signals": true
+      }
+    }
+  },
+  {
+    "scenario_id": "public-cloudflare-dnssec-de-outage-2026-05-05",
+    "source": {
+      "title": "When DNSSEC goes wrong: how we responded to the .de TLD outage",
+      "publisher": "Cloudflare via postmortem.io index",
+      "url": "https://postmortem.io/",
+      "incident_date": "2026-05-05",
+      "source_facts": [
+        "Public postmortem index lists a DNS/DNSSEC incident involving the .de TLD.",
+        "The incident pattern is DNSSEC-related outage response.",
+        "DNS changes can have broad external resolution impact and rollback propagation delays."
+      ]
+    },
+    "category": "dns_operations",
+    "replay_question": "Should DNSSEC-related changes proceed automatically when external resolution instability is detected?",
+    "traditional_policy_outcome": "ALLOW",
+    "traditional_policy_rationale": "DNS operators have authority to change zone/security configuration.",
+    "action": {
+      "action_id": "PUBLIC_DNSSEC_CHANGE_UNDER_RESOLUTION_INSTABILITY",
+      "description": "DNS automation applies DNSSEC-related configuration while resolution instability is present.",
+      "actor": "dns_automation",
+      "tool": "dnssec.configure",
+      "action_type": "dns_security_change",
+      "base_action_risk": 0.74,
+      "reversibility": 0.44,
+      "containment_strength": 0.36,
+      "rollback_latency": 0.72,
+      "evidence_validity": 0.58,
+      "anomaly_pressure": 0.78,
+      "impact_scope": 0.88,
+      "cancel_reliability": 0.50,
+      "authorization_confidence": 0.64,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "source_type": "public_incident_index",
+        "analyst_assigned_signals": true
+      }
+    }
+  },
+  {
+    "scenario_id": "public-mongodb-atlas-admin-api-degradation-2026-03-25",
+    "source": {
+      "title": "Intermittent 503 Errors on Atlas Admin API and Automation Tooling",
+      "publisher": "MongoDB Atlas via postmortem.io index",
+      "url": "https://postmortem.io/",
+      "incident_date": "2026-03-25",
+      "source_facts": [
+        "Public postmortem index lists intermittent 503 errors on Atlas Admin API and automation tooling.",
+        "Admin API degradation can affect automation and operational control paths.",
+        "Retrying automation into degraded control planes can increase operational stress."
+      ]
+    },
+    "category": "cloud_administration",
+    "replay_question": "Should control-plane automation continue at normal rate while admin APIs return intermittent 503 errors?",
+    "traditional_policy_outcome": "ALLOW",
+    "traditional_policy_rationale": "The automation is authorized and retry behavior is normally permitted.",
+    "action": {
+      "action_id": "PUBLIC_ATLAS_ADMIN_API_RETRY_DURING_503S",
+      "description": "Cloud automation retries control-plane operations while admin APIs are intermittently returning 503 errors.",
+      "actor": "cloud_ops_agent",
+      "tool": "atlas.admin_api",
+      "action_type": "control_plane_retry",
+      "base_action_risk": 0.56,
+      "reversibility": 0.70,
+      "containment_strength": 0.62,
+      "rollback_latency": 0.34,
+      "evidence_validity": 0.72,
+      "anomaly_pressure": 0.66,
+      "impact_scope": 0.52,
+      "cancel_reliability": 0.76,
+      "authorization_confidence": 0.76,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "source_type": "public_incident_index",
+        "analyst_assigned_signals": true
+      }
+    }
+  }
+]

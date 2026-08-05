@@ -50,6 +50,10 @@ export class SMERCClient {
     });
   }
 
+  agentHandshake(handshake) {
+    return this.request('POST', '/v1/agent/handshake', { body: handshake });
+  }
+
   batch(actions, options = {}) {
     return this.request('POST', '/v1/batch', { body: actions, idempotencyKey: options.idempotencyKey });
   }
@@ -77,6 +81,18 @@ export class SMERCClient {
 
   pilotMetrics() {
     return this.request('GET', '/v1/pilot/metrics');
+  }
+
+  runtimeHealthMetrics(options = {}) {
+    return this.request('GET', '/v1/runtime/health-metrics', {
+      query: cleanQuery({ limit: options.limit, latency_slo_ms: options.latencySloMs }),
+    });
+  }
+
+  operatorStatus(options = {}) {
+    return this.request('GET', '/v1/operator/status', {
+      query: cleanQuery({ limit: options.limit, latency_slo_ms: options.latencySloMs }),
+    });
   }
 
   reviewQueue(options = {}) {

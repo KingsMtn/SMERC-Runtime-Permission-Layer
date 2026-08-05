@@ -24,6 +24,7 @@ POLICY_EXAMPLE = json.loads(
 DOMAIN_PROFILE_DIR = ROOT / "examples" / "domain_profiles"
 SPARTA_REGISTRY = load_sparta_adapter_registry(ROOT / "examples" / "sparta" / "adapter_registry.json")
 SPARTA_PLAN = json.loads((ROOT / "examples" / "sparta" / "github_actions_deploy_plan.json").read_text(encoding="utf-8"))
+AGENT_HANDSHAKE_EXAMPLE = json.loads((ROOT / "examples" / "agent_handshake_request.json").read_text(encoding="utf-8"))
 PILOT_DLL_BUNDLE = json.loads((ROOT / "reports" / "runtime_benchmark_dll_bundle.json").read_text(encoding="utf-8"))
 PILOT_DLL_INTAKE = json.loads((ROOT / "examples" / "pilot_ledger_intake_example.json").read_text(encoding="utf-8"))
 
@@ -36,7 +37,7 @@ class APIServerTests(unittest.TestCase):
             0,
             audit_db=":memory:",
             api_keys={"alpha": "alpha-secret", "beta": "beta-secret"},
-            max_body_bytes=4096,
+            max_body_bytes=8192,
             max_batch_size=2,
             cors_origins=["https://console.example"],
             sparta_adapter_registry=SPARTA_REGISTRY,
@@ -56,6 +57,7 @@ class APIServerTests(unittest.TestCase):
 
     def request_json(self, path, *, method="GET", payload=None, key=None, headers=None):
         request_headers = dict(headers or {})
+        request_headers.setdefault("connection", "close")
         if key:
             request_headers["authorization"] = f"Bearer {key}"
         data = None
@@ -63,13 +65,18 @@ class APIServerTests(unittest.TestCase):
             data = json.dumps(payload).encode("utf-8")
             request_headers.setdefault("content-type", "application/json")
         request = Request(self.url(path), data=data, headers=request_headers, method=method)
-        try:
-            with urlopen(request, timeout=5) as response:
-                response_headers = {name.lower(): value for name, value in response.headers.items()}
-                return response.status, response_headers, json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            response_headers = {name.lower(): value for name, value in exc.headers.items()}
-            return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+        for attempt in range(2):
+            try:
+                with urlopen(request, timeout=5) as response:
+                    response_headers = {name.lower(): value for name, value in response.headers.items()}
+                    return response.status, response_headers, json.loads(response.read().decode("utf-8"))
+            except HTTPError as exc:
+                response_headers = {name.lower(): value for name, value in exc.headers.items()}
+                return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+            except ConnectionAbortedError:
+                if attempt:
+                    raise
+        raise AssertionError("unreachable request retry state")
 
     def test_health_and_ready_do_not_require_authentication(self):
         health = self.request_json("/health")
@@ -83,7 +90,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(health[2]["control_evidence_adapter_count"], 0)
         self.assertFalse(health[2]["short_lived_access_enabled"])
         self.assertFalse(health[2]["github_oidc_enabled"])
-        self.assertEqual(health[2]["sparta_adapter_count"], 2)
+        self.assertEqual(health[2]["sparta_adapter_count"], 4)
         self.assertEqual(ready[2]["status"], "ready")
 
     def test_schema_lists_versioned_endpoints_and_postures(self):
@@ -94,6 +101,7 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("POST /v1/evaluate", body["endpoints"])
         self.assertIn("POST /v1/language/evaluate", body["endpoints"])
         self.assertEqual(body["language_versions"]["action"], "smerc.action.v1")
+        self.assertEqual(body["language_versions"]["agent_handshake"], "smerc.agent_handshake.v1")
         self.assertEqual(body["language_versions"]["permit"], "smerc.permit.v1")
         self.assertEqual(
             body["language_versions"]["control_evidence"],
@@ -104,6 +112,8 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(body["language_versions"]["decision_certificate"], "smerc.decision-certificate.v1")
         self.assertEqual(body["language_versions"]["pilot_ledger_metrics"], "smerc.pilot-ledger-metrics.v1")
         self.assertEqual(body["language_versions"]["pilot_evidence_package"], "smerc.pilot-evidence-package.v1")
+        self.assertEqual(body["language_versions"]["runtime_health_metrics"], "smerc.runtime-health-metrics.v1")
+        self.assertEqual(body["language_versions"]["operator_status"], "smerc.operator-status.v1")
         self.assertEqual(body["language_versions"]["sparta_plan"], "smerc.sparta-plan.v1")
         self.assertEqual(body["language_versions"]["sparta_route"], "smerc.sparta-route.v1")
         self.assertEqual(
@@ -114,12 +124,15 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(body["domain_profile_version"], "smerc.domain_profile.v1")
         self.assertIn("POST /v1/decisions/{replay_id}/reviews", body["endpoints"])
         self.assertIn("GET /v1/pilot/metrics", body["endpoints"])
+        self.assertIn("GET /v1/runtime/health-metrics", body["endpoints"])
+        self.assertIn("GET /v1/operator/status", body["endpoints"])
         self.assertIn("GET /v1/review-queue", body["endpoints"])
         self.assertIn("POST /v1/permits/issue", body["endpoints"])
         self.assertIn("POST /v1/permits/prepare", body["endpoints"])
         self.assertIn("POST /v1/permits/consume", body["endpoints"])
         self.assertIn("POST /v1/auth/token", body["endpoints"])
         self.assertIn("POST /v1/auth/github", body["endpoints"])
+        self.assertIn("POST /v1/agent/handshake", body["endpoints"])
         self.assertIn("POST /v1/sparta/route", body["endpoints"])
         self.assertIn("POST /v1/pilot/dll/intake", body["endpoints"])
         self.assertIn("POST /v1/pilot/dll/metrics", body["endpoints"])
@@ -172,6 +185,9 @@ class APIServerTests(unittest.TestCase):
         )
         self.assertEqual(status, 200)
         self.assertEqual(retrieved["replay_id"], decision["replay_id"])
+        self.assertEqual(retrieved["runtime_observation"]["schema"], "smerc.runtime-observation.v1")
+        self.assertEqual(retrieved["runtime_observation"]["integration_status"], "ok")
+        self.assertGreaterEqual(retrieved["runtime_observation"]["evaluation_latency_ms"], 0)
 
         status, _, _ = self.request_json(f"/v1/decisions/{decision['replay_id']}", key="beta-secret")
         self.assertEqual(status, 404)
@@ -189,6 +205,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(first[0], 200)
         self.assertEqual(first[2]["language_version"], "smerc.decision.v1")
         self.assertEqual(first[2]["tenant_id"], "alpha")
+        self.assertEqual(first[2]["runtime_observation"]["schema"], "smerc.runtime-observation.v1")
         self.assertEqual(first[2]["replay_id"], second[2]["replay_id"])
         self.assertEqual(second[1]["x-smerc-idempotent-replay"], "true")
 
@@ -200,6 +217,51 @@ class APIServerTests(unittest.TestCase):
         )
         self.assertEqual(status, 400)
         self.assertEqual(body["error"], "bad_request")
+
+    def test_agent_handshake_endpoint_requires_bearer_authentication(self):
+        status, _, body = self.request_json("/v1/agent/handshake", method="POST", payload=AGENT_HANDSHAKE_EXAMPLE)
+        self.assertEqual(status, 401)
+        self.assertEqual(body["error"], "authentication_required")
+
+    def test_agent_handshake_endpoint_evaluates_and_records_security_event(self):
+        status, _, body = self.request_json(
+            "/v1/agent/handshake",
+            method="POST",
+            payload=AGENT_HANDSHAKE_EXAMPLE,
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(body["schema_version"], "smerc.agent_handshake.v1")
+        self.assertEqual(body["tenant_id"], "alpha")
+        self.assertEqual(body["authenticated_principal"]["principal_id"], "legacy-alpha")
+        self.assertTrue(body["beacon_valid"])
+        self.assertEqual(body["handshake_posture"], "THROTTLE")
+        self.assertEqual(body["recommended_executor"], "github_deployment_agent")
+        self.assertEqual(body["replay"]["tenant_id"], "alpha")
+        self.assertIn("fitness_replay_id", body["replay"])
+        self.assertIn("action_replay_id", body["replay"])
+
+        events_status, _, events = self.request_json("/v1/security-events?limit=5", key="alpha-secret")
+        self.assertEqual(events_status, 200)
+        self.assertTrue(
+            any(
+                event["event_type"] == "agent.handshake.evaluated"
+                and event["resource_id"] == body["replay_id"]
+                for event in events["events"]
+            )
+        )
+
+    def test_agent_handshake_endpoint_rejects_invalid_contract(self):
+        payload = dict(AGENT_HANDSHAKE_EXAMPLE)
+        payload["schema_version"] = "wrong.version"
+        status, _, body = self.request_json(
+            "/v1/agent/handshake",
+            method="POST",
+            payload=payload,
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_agent_handshake_request")
 
     def test_sparta_route_endpoint_routes_stored_decision_with_direct_plan(self):
         status, _, decision = self.request_json(
@@ -336,7 +398,7 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(body["error"], "unsupported_media_type")
 
         oversized = dict(EXAMPLES[0])
-        oversized["context"] = {"note": "x" * 5000}
+        oversized["context"] = {"note": "x" * 10000}
         status, _, body = self.request_json(
             "/v1/evaluate", method="POST", payload=oversized, key="alpha-secret"
         )
@@ -451,6 +513,7 @@ class PilotReviewAPITests(unittest.TestCase):
 
     def request_json(self, path, *, method="GET", payload=None, key=None, headers=None):
         request_headers = dict(headers or {})
+        request_headers.setdefault("connection", "close")
         if key:
             request_headers["authorization"] = f"Bearer {key}"
         data = None
@@ -458,13 +521,18 @@ class PilotReviewAPITests(unittest.TestCase):
             data = json.dumps(payload).encode("utf-8")
             request_headers.setdefault("content-type", "application/json")
         request = Request(self.url(path), data=data, headers=request_headers, method=method)
-        try:
-            with urlopen(request, timeout=5) as response:
-                response_headers = {name.lower(): value for name, value in response.headers.items()}
-                return response.status, response_headers, json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            response_headers = {name.lower(): value for name, value in exc.headers.items()}
-            return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+        for attempt in range(2):
+            try:
+                with urlopen(request, timeout=5) as response:
+                    response_headers = {name.lower(): value for name, value in response.headers.items()}
+                    return response.status, response_headers, json.loads(response.read().decode("utf-8"))
+            except HTTPError as exc:
+                response_headers = {name.lower(): value for name, value in exc.headers.items()}
+                return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+            except ConnectionAbortedError:
+                if attempt:
+                    raise
+        raise AssertionError("unreachable request retry state")
 
     def create_decision(self, example_index=0, tenant="alpha"):
         key = f"{tenant}-secret"
@@ -546,6 +614,57 @@ class PilotReviewAPITests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(beta_metrics["review_count"], 0)
         self.assertIsNone(beta_metrics["metrics"]["reviewer_agreement_rate"])
+
+    def test_runtime_health_metrics_are_tenant_scoped_and_bounded(self):
+        self.create_decision(0, tenant="alpha")
+        self.create_decision(1, tenant="alpha")
+        self.create_decision(2, tenant="beta")
+
+        status, _, health = self.request_json(
+            "/v1/runtime/health-metrics?limit=10&latency_slo_ms=500",
+            key="alpha-secret",
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(health["schema"], "smerc.runtime-health-metrics.v1")
+        self.assertEqual(health["tenant_id"], "alpha")
+        self.assertGreaterEqual(health["decision_volume"]["decision_count"], 2)
+        self.assertEqual(health["health_status"], "healthy")
+        self.assertGreaterEqual(health["latency"]["sample_count"], 2)
+        self.assertIsNotNone(health["latency"]["p95_ms"])
+        self.assertTrue(health["latency"]["slo_met"])
+        self.assertIn("do not prove customer production latency", health["evidence_boundary"])
+
+        status, _, beta_health = self.request_json("/v1/runtime/health-metrics?limit=10", key="beta-secret")
+        self.assertEqual(status, 200)
+        self.assertEqual(beta_health["tenant_id"], "beta")
+        self.assertGreaterEqual(beta_health["decision_volume"]["decision_count"], 1)
+
+        status, _, body = self.request_json("/v1/runtime/health-metrics?latency_slo_ms=0", key="alpha-secret")
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_latency_slo")
+
+    def test_operator_status_api_summarizes_runtime_and_policy(self):
+        self.create_decision(0, tenant="alpha")
+        self.create_decision(1, tenant="alpha")
+
+        status, _, report = self.request_json(
+            "/v1/operator/status?limit=10&latency_slo_ms=500",
+            key="alpha-secret",
+        )
+
+        self.assertEqual(status, 200)
+        self.assertEqual(report["schema"], "smerc.operator-status.v1")
+        self.assertEqual(report["tenant_id"], "alpha")
+        self.assertIn("smerc-reference-recoverability@", report["active_policy_version"])
+        self.assertEqual(report["runtime_health"]["health_status"], "healthy")
+        self.assertGreaterEqual(report["runtime_health"]["observed_evaluation_count"], 2)
+        self.assertGreaterEqual(report["decision_activity"]["decision_count"], 2)
+        self.assertIn("request_id", report)
+
+        status, _, beta_report = self.request_json("/v1/operator/status?limit=10", key="beta-secret")
+        self.assertEqual(status, 200)
+        self.assertEqual(beta_report["tenant_id"], "beta")
+        self.assertEqual(beta_report["operator_status"], "needs_attention")
 
     def test_review_idempotency_and_reviewer_conflicts_are_explicit(self):
         decision = self.create_decision(1)
@@ -687,6 +806,7 @@ class PilotDLLAPITests(unittest.TestCase):
 
     def request_json(self, path, *, method="GET", payload=None, key=None, headers=None):
         request_headers = dict(headers or {})
+        request_headers.setdefault("connection", "close")
         if key:
             request_headers["authorization"] = f"Bearer {key}"
         data = None
@@ -694,13 +814,18 @@ class PilotDLLAPITests(unittest.TestCase):
             data = json.dumps(payload).encode("utf-8")
             request_headers.setdefault("content-type", "application/json")
         request = Request(self.url(path), data=data, headers=request_headers, method=method)
-        try:
-            with urlopen(request, timeout=5) as response:
-                response_headers = {name.lower(): value for name, value in response.headers.items()}
-                return response.status, response_headers, json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            response_headers = {name.lower(): value for name, value in exc.headers.items()}
-            return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+        for attempt in range(2):
+            try:
+                with urlopen(request, timeout=5) as response:
+                    response_headers = {name.lower(): value for name, value in response.headers.items()}
+                    return response.status, response_headers, json.loads(response.read().decode("utf-8"))
+            except HTTPError as exc:
+                response_headers = {name.lower(): value for name, value in exc.headers.items()}
+                return exc.code, response_headers, json.loads(exc.read().decode("utf-8"))
+            except ConnectionAbortedError:
+                if attempt:
+                    raise
+        raise AssertionError("unreachable request retry state")
 
     def intake_payload(self):
         return {

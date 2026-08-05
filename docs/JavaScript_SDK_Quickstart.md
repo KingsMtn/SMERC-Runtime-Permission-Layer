@@ -2,7 +2,7 @@
 
 The `smerc_js_sdk` package is a dependency-free ESM client for the SMERC Runtime Permission API. It is intended for Node services, agent runners, GitHub tooling, internal developer platforms, and browser-based pilot utilities that need to call SMERC without a generated client or npm dependency.
 
-The SDK does not make local authorization decisions. It calls the authenticated SMERC API, which persists replayable decisions and audit records.
+The SDK does not make local authorization decisions. It calls the authenticated SMERC API, which persists replayable decisions, agent handshakes, and audit records.
 
 ## Start A Local API
 
@@ -52,6 +52,25 @@ const client = new SMERCClient('http://127.0.0.1:8788', {
 const payload = JSON.parse(await readFile('examples/action_language/production_database_change.json', 'utf8'));
 
 const decision = await client.evaluateLanguageAction(payload, { idempotencyKey: 'db-change-2041' });
+```
+
+## Agent Handshake
+
+Use this path when an agent or automation runner needs to discover SMERC, declare itself, propose a task and action, and receive a replayable posture before execution.
+
+```js
+import { readFile } from 'node:fs/promises';
+import { SMERCClient } from './smerc_js_sdk/index.mjs';
+
+const client = new SMERCClient('http://127.0.0.1:8788', {
+  token: 'development-console-secret-2026-rotate',
+});
+const handshakeRequest = JSON.parse(await readFile('examples/agent_handshake_request.json', 'utf8'));
+
+const handshake = await client.agentHandshake(handshakeRequest);
+console.log(handshake.handshake_posture);
+console.log(handshake.recommended_executor);
+console.log(handshake.replay.fitness_replay_id);
 ```
 
 ## Reviews

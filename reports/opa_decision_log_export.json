@@ -1,0 +1,521 @@
+{
+  "entries": [
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_MODIFY_AUTH_MIDDLEWARE_1782439491327",
+      "input": {
+        "action_id": "AI_MODIFY_AUTH_MIDDLEWARE",
+        "actor": "coding_agent",
+        "context": {
+          "existing_controls": [
+            "branch_protection",
+            "code_review"
+          ],
+          "rollback_plan": "partial",
+          "touched_area": "authentication",
+          "workflow": "pull_request"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github.pull_request"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": false,
+        "confidence_score": 0.525,
+        "controls": [
+          "route_to_human_review",
+          "preserve_replay",
+          "require_explicit_approval"
+        ],
+        "posture": "ESCALATE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA_ACCESS",
+          "HIGH_HARM_POTENTIAL"
+        ],
+        "replay_id": "replay_AI_MODIFY_AUTH_MIDDLEWARE_1782439491327",
+        "risk_score": 0.669
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    },
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_DEPLOY_CONFIG_CHANGE_1782439491327",
+      "input": {
+        "action_id": "AI_DEPLOY_CONFIG_CHANGE",
+        "actor": "deployment_agent",
+        "context": {
+          "existing_controls": [
+            "environment_approval"
+          ],
+          "rollback_plan": "documented",
+          "touched_area": "production_config",
+          "workflow": "deployment"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github_actions.deploy"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": false,
+        "confidence_score": 0.615,
+        "controls": [
+          "limit_scope",
+          "preview_before_execution",
+          "log_replay",
+          "rate_limit_external_effect"
+        ],
+        "posture": "THROTTLE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "MODERATE_HARM_POTENTIAL"
+        ],
+        "replay_id": "replay_AI_DEPLOY_CONFIG_CHANGE_1782439491327",
+        "risk_score": 0.51
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    },
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_DELETE_CI_LOGS_1782439491327",
+      "input": {
+        "action_id": "AI_DELETE_CI_LOGS",
+        "actor": "maintenance_agent",
+        "context": {
+          "existing_controls": [
+            "scheduled_workflow"
+          ],
+          "rollback_plan": "none",
+          "touched_area": "audit_logs",
+          "workflow": "scheduled_cleanup"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github_actions.cleanup"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": false,
+        "confidence_score": 0.409,
+        "controls": [
+          "pause_execution",
+          "collect_more_context",
+          "preserve_replay"
+        ],
+        "posture": "FREEZE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "MODERATE_HARM_POTENTIAL",
+          "CONSENT_OR_AUTHORIZATION_WEAK",
+          "LOW_REVERSIBILITY",
+          "CONFIDENCE_SCORE_LOW"
+        ],
+        "replay_id": "replay_AI_DELETE_CI_LOGS_1782439491327",
+        "risk_score": 0.659
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    },
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_RUN_DATABASE_MIGRATION_1782439491327",
+      "input": {
+        "action_id": "AI_RUN_DATABASE_MIGRATION",
+        "actor": "release_agent",
+        "context": {
+          "existing_controls": [
+            "review_required",
+            "environment_approval"
+          ],
+          "rollback_plan": "manual_restore",
+          "touched_area": "database_schema",
+          "workflow": "release"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github_actions.database_migration"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": false,
+        "confidence_score": 0.483,
+        "controls": [
+          "route_to_human_review",
+          "preserve_replay",
+          "require_explicit_approval"
+        ],
+        "posture": "ESCALATE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA_ACCESS",
+          "HIGH_HARM_POTENTIAL",
+          "LOW_REVERSIBILITY",
+          "RISK_SCORE_HIGH"
+        ],
+        "replay_id": "replay_AI_RUN_DATABASE_MIGRATION_1782439491327",
+        "risk_score": 0.704
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    },
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_UPDATE_README_1782439491327",
+      "input": {
+        "action_id": "AI_UPDATE_README",
+        "actor": "coding_agent",
+        "context": {
+          "existing_controls": [
+            "branch_protection"
+          ],
+          "rollback_plan": "git_revert",
+          "touched_area": "documentation",
+          "workflow": "pull_request"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github.pull_request"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": true,
+        "confidence_score": 0.906,
+        "controls": [
+          "execute",
+          "log_replay"
+        ],
+        "posture": "ALLOW",
+        "reason_codes": [
+          "LOW_RISK_REPLAYABLE_ACTION"
+        ],
+        "replay_id": "replay_AI_UPDATE_README_1782439491327",
+        "risk_score": 0.088
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    },
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_ROTATE_PRODUCTION_SECRET_1782439491327",
+      "input": {
+        "action_id": "AI_ROTATE_PRODUCTION_SECRET",
+        "actor": "ops_agent",
+        "context": {
+          "existing_controls": [
+            "environment_approval",
+            "secrets_manager"
+          ],
+          "rollback_plan": "manual_previous_secret_restore",
+          "touched_area": "production_secrets",
+          "workflow": "secret_rotation"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github_actions.secret_rotation"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": false,
+        "confidence_score": 0.559,
+        "controls": [
+          "route_to_human_review",
+          "preserve_replay",
+          "require_explicit_approval"
+        ],
+        "posture": "ESCALATE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA_ACCESS",
+          "HIGH_HARM_POTENTIAL"
+        ],
+        "replay_id": "replay_AI_ROTATE_PRODUCTION_SECRET_1782439491327",
+        "risk_score": 0.633
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    },
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_DISABLE_SECURITY_CHECK_1782439491327",
+      "input": {
+        "action_id": "AI_DISABLE_SECURITY_CHECK",
+        "actor": "release_agent",
+        "context": {
+          "existing_controls": [
+            "branch_protection"
+          ],
+          "rollback_plan": "git_revert",
+          "touched_area": "security_controls",
+          "workflow": "deployment"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github_actions.workflow_edit"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": false,
+        "confidence_score": 0.429,
+        "controls": [
+          "limit_scope",
+          "preview_before_execution",
+          "log_replay",
+          "rate_limit_external_effect",
+          "require_recovery_path"
+        ],
+        "posture": "THROTTLE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "MODERATE_HARM_POTENTIAL",
+          "LOW_MODEL_CONFIDENCE",
+          "CONSENT_OR_AUTHORIZATION_WEAK",
+          "CONFIDENCE_SCORE_LOW"
+        ],
+        "replay_id": "replay_AI_DISABLE_SECURITY_CHECK_1782439491327",
+        "risk_score": 0.64
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    },
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_MODIFY_TERRAFORM_STATE_1782439491327",
+      "input": {
+        "action_id": "AI_MODIFY_TERRAFORM_STATE",
+        "actor": "infrastructure_agent",
+        "context": {
+          "existing_controls": [
+            "terraform_plan",
+            "environment_approval"
+          ],
+          "rollback_plan": "manual",
+          "touched_area": "production_networking",
+          "workflow": "infrastructure_change"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github_actions.terraform_apply"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": false,
+        "confidence_score": 0.478,
+        "controls": [
+          "limit_scope",
+          "preview_before_execution",
+          "log_replay",
+          "rate_limit_external_effect",
+          "require_recovery_path"
+        ],
+        "posture": "THROTTLE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "HIGH_HARM_POTENTIAL",
+          "LOW_REVERSIBILITY"
+        ],
+        "replay_id": "replay_AI_MODIFY_TERRAFORM_STATE_1782439491327",
+        "risk_score": 0.665
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    },
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_EXPORT_USER_DATA_FOR_DEBUG_1782439491327",
+      "input": {
+        "action_id": "AI_EXPORT_USER_DATA_FOR_DEBUG",
+        "actor": "support_agent",
+        "context": {
+          "existing_controls": [
+            "audit_log"
+          ],
+          "rollback_plan": "not_reversible_after_export",
+          "touched_area": "customer_data",
+          "workflow": "support_debug"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github_actions.support_export"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": false,
+        "confidence_score": 0.438,
+        "controls": [
+          "route_to_human_review",
+          "preserve_replay",
+          "require_explicit_approval"
+        ],
+        "posture": "ESCALATE",
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA_ACCESS",
+          "HIGH_HARM_POTENTIAL",
+          "CONSENT_OR_AUTHORIZATION_WEAK",
+          "LOW_REVERSIBILITY",
+          "RISK_SCORE_HIGH",
+          "CONFIDENCE_SCORE_LOW"
+        ],
+        "replay_id": "replay_AI_EXPORT_USER_DATA_FOR_DEBUG_1782439491327",
+        "risk_score": 0.726
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    },
+    {
+      "bundles": {
+        "smerc": {
+          "revision": "smerc.policy.reference"
+        }
+      },
+      "decision_id": "replay_AI_RUN_TEST_SUITE_1782439491327",
+      "input": {
+        "action_id": "AI_RUN_TEST_SUITE",
+        "actor": "coding_agent",
+        "context": {
+          "existing_controls": [
+            "ci"
+          ],
+          "rollback_plan": "not_needed",
+          "touched_area": "test_execution",
+          "workflow": "continuous_integration"
+        },
+        "tenant_id": "pilot-review",
+        "tool": "github_actions.test"
+      },
+      "labels": {
+        "compatibility": "opa_decision_log_adjacent",
+        "export_schema": "smerc.opa-decision-log-export.v1",
+        "system": "smerc"
+      },
+      "path": [
+        "smerc",
+        "runtime",
+        "posture"
+      ],
+      "result": {
+        "allow": true,
+        "confidence_score": 0.886,
+        "controls": [
+          "execute",
+          "log_replay"
+        ],
+        "posture": "ALLOW",
+        "reason_codes": [
+          "LOW_RISK_REPLAYABLE_ACTION"
+        ],
+        "replay_id": "replay_AI_RUN_TEST_SUITE_1782439491327",
+        "risk_score": 0.118
+      },
+      "timestamp": "2026-06-26T02:04:51.327379+00:00"
+    }
+  ],
+  "entry_count": 10,
+  "evidence_boundary": "OPA-style export only. This is a compatibility shape for log pipelines; it is not OPA parity, Rego evaluation, or proof of production enforcement.",
+  "generated_at": "2026-08-02T03:41:53+00:00",
+  "schema": "smerc.opa-decision-log-export.v1",
+  "tenant_id": "pilot-review"
+}

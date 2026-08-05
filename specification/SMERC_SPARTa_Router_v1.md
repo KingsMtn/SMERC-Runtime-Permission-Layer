@@ -15,6 +15,8 @@ SPARTa does not decide whether an action is acceptable. SMERC already makes that
 
 This separates authorization from execution routing. A posture is not useful unless the next system knows what to do with it.
 
+The companion machine vocabulary is `smerc.sparta-vocabulary.v1`, defined in `specification/SMERC_SPARTa_Vocabulary_v1.md` with schema `schemas/smerc-sparta-vocabulary-v1.schema.json` and example `examples/sparta/sparta_vocabulary.json`. Adapters and agents should use that vocabulary for lifecycle verbs, route states, control verbs, evidence events, and failure reasons. Unknown vocabulary fails closed.
+
 ## Input: Tool Plan
 
 A `smerc.sparta-plan.v1` plan declares what a tool can actually enforce.

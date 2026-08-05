@@ -1,0 +1,260 @@
+{
+  "delta_counts": {
+    "BOTH_RESTRAIN": 3,
+    "SRE_AUTO_SMERC_RESTRAINT": 4,
+    "SRE_HOLD_SMERC_BOUNDED_PATH": 1
+  },
+  "evidence_boundary": "SRE/incident-management-inspired benchmark only. It is not an observability platform, incident-management system, SLO calculator, pager routing service, production approval, customer validation, production certification, or incident-reduction proof.",
+  "generated_at": "2026-07-31T02:44:17+00:00",
+  "records": [
+    {
+      "category": "capacity_mitigation",
+      "confidence_score": 0.788,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "SRE_AUTO_SMERC_RESTRAINT",
+      "enforcement_state": "constrain",
+      "interpretation": "The SRE playbook would auto-mitigate, but SMERC restrains the action because rollback, containment, evidence, impact scope, or recovery capacity is not strong enough.",
+      "irreversible_exposure_score": 0.291,
+      "operational_stress_score": 0.298,
+      "plain_english_summary": "Action 'SRE_SCALE_WORKERS_HIGH_LOAD' received THROTTLE. Irreversible exposure is 0.291, reversible capacity is 0.811, and authorization score is 0.779. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_SRE_SCALE_WORKERS_HIGH_LOAD_1785465857507_f3ee9c063019",
+      "reversible_capacity_score": 0.811,
+      "risk_adjusted_authorization_score": 0.779,
+      "scenario_id": "SRE_SCALE_WORKERS_HIGH_LOAD",
+      "smerc_posture": "THROTTLE",
+      "sre_playbook_outcome": "AUTO_MITIGATE",
+      "sre_playbook_rationale": "CPU saturation and queue depth exceed thresholds and the standard autoscaling playbook is reversible."
+    },
+    {
+      "category": "traffic_management",
+      "confidence_score": 0.53,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "delta_type": "SRE_AUTO_SMERC_RESTRAINT",
+      "enforcement_state": "constrain",
+      "interpretation": "The SRE playbook would auto-mitigate, but SMERC restrains the action because rollback, containment, evidence, impact scope, or recovery capacity is not strong enough.",
+      "irreversible_exposure_score": 0.661,
+      "operational_stress_score": 0.678,
+      "plain_english_summary": "Action 'SRE_GLOBAL_TRAFFIC_FAILOVER' received THROTTLE. Irreversible exposure is 0.661, reversible capacity is 0.459, and authorization score is 0.451. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_SRE_GLOBAL_TRAFFIC_FAILOVER_1785465857507_e68bf060c504",
+      "reversible_capacity_score": 0.459,
+      "risk_adjusted_authorization_score": 0.451,
+      "scenario_id": "SRE_GLOBAL_TRAFFIC_FAILOVER",
+      "smerc_posture": "THROTTLE",
+      "sre_playbook_outcome": "AUTO_MITIGATE",
+      "sre_playbook_rationale": "Regional health checks fail and traffic failover playbook is configured for automated mitigation."
+    },
+    {
+      "category": "deployment_rollback",
+      "confidence_score": 0.683,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "BOTH_RESTRAIN",
+      "enforcement_state": "constrain",
+      "interpretation": "Both lenses require restraint, but SMERC records recoverability scores, reason codes, and controls.",
+      "irreversible_exposure_score": 0.377,
+      "operational_stress_score": 0.437,
+      "plain_english_summary": "Action 'SRE_ROLLBACK_PAYMENT_SERVICE' received THROTTLE. Irreversible exposure is 0.377, reversible capacity is 0.752, and authorization score is 0.699. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_SRE_ROLLBACK_PAYMENT_SERVICE_1785465857507_b42798b75be7",
+      "reversible_capacity_score": 0.752,
+      "risk_adjusted_authorization_score": 0.699,
+      "scenario_id": "SRE_ROLLBACK_PAYMENT_SERVICE",
+      "smerc_posture": "THROTTLE",
+      "sre_playbook_outcome": "INCIDENT_COMMAND",
+      "sre_playbook_rationale": "Payment errors are rising and incident command should approve rollback due to revenue impact."
+    },
+    {
+      "category": "cache_mitigation",
+      "confidence_score": 0.587,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "delta_type": "SRE_AUTO_SMERC_RESTRAINT",
+      "enforcement_state": "constrain",
+      "interpretation": "The SRE playbook would auto-mitigate, but SMERC restrains the action because rollback, containment, evidence, impact scope, or recovery capacity is not strong enough.",
+      "irreversible_exposure_score": 0.672,
+      "operational_stress_score": 0.603,
+      "plain_english_summary": "Action 'SRE_PURGE_CACHE_INCIDENT' received THROTTLE. Irreversible exposure is 0.672, reversible capacity is 0.378, and authorization score is 0.428. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_SRE_PURGE_CACHE_INCIDENT_1785465857507_4e5f236f0df8",
+      "reversible_capacity_score": 0.378,
+      "risk_adjusted_authorization_score": 0.428,
+      "scenario_id": "SRE_PURGE_CACHE_INCIDENT",
+      "smerc_posture": "THROTTLE",
+      "sre_playbook_outcome": "AUTO_MITIGATE",
+      "sre_playbook_rationale": "Stale content alert triggers a standard cache purge playbook."
+    },
+    {
+      "category": "feature_mitigation",
+      "confidence_score": 0.707,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "BOTH_RESTRAIN",
+      "enforcement_state": "constrain",
+      "interpretation": "Both lenses require restraint, but SMERC records recoverability scores, reason codes, and controls.",
+      "irreversible_exposure_score": 0.201,
+      "operational_stress_score": 0.254,
+      "plain_english_summary": "Action 'SRE_DISABLE_FEATURE_FLAG_TARGETED' received THROTTLE. Irreversible exposure is 0.201, reversible capacity is 0.868, and authorization score is 0.802. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_SRE_DISABLE_FEATURE_FLAG_TARGETED_1785465857507_b0acc37d4991",
+      "reversible_capacity_score": 0.868,
+      "risk_adjusted_authorization_score": 0.802,
+      "scenario_id": "SRE_DISABLE_FEATURE_FLAG_TARGETED",
+      "smerc_posture": "THROTTLE",
+      "sre_playbook_outcome": "MANUAL_APPROVAL",
+      "sre_playbook_rationale": "Feature flag rollback usually needs service-owner approval during business hours."
+    },
+    {
+      "category": "data_loss_risk",
+      "confidence_score": 0.483,
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "delta_type": "SRE_AUTO_SMERC_RESTRAINT",
+      "enforcement_state": "block",
+      "interpretation": "The SRE playbook would auto-mitigate, but SMERC restrains the action because rollback, containment, evidence, impact scope, or recovery capacity is not strong enough.",
+      "irreversible_exposure_score": 0.923,
+      "operational_stress_score": 0.745,
+      "plain_english_summary": "Action 'SRE_DELETE_QUEUE_BACKLOG' received DENY. Irreversible exposure is 0.923, reversible capacity is 0.231, and authorization score is 0.268. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_SRE_DELETE_QUEUE_BACKLOG_1785465857507_50fe1b53d432",
+      "reversible_capacity_score": 0.231,
+      "risk_adjusted_authorization_score": 0.268,
+      "scenario_id": "SRE_DELETE_QUEUE_BACKLOG",
+      "smerc_posture": "DENY",
+      "sre_playbook_outcome": "AUTO_MITIGATE",
+      "sre_playbook_rationale": "Queue-drain playbook removes poison messages when retry storms threaten service recovery."
+    },
+    {
+      "category": "resilience_test",
+      "confidence_score": 0.715,
+      "controls": [
+        "execute",
+        "record_replay",
+        "retain_cancel_handle"
+      ],
+      "delta_type": "SRE_HOLD_SMERC_BOUNDED_PATH",
+      "enforcement_state": "release",
+      "interpretation": "The SRE playbook holds execution, while SMERC identifies a bounded path such as constrained mitigation or escalation with replay evidence.",
+      "irreversible_exposure_score": 0.138,
+      "operational_stress_score": 0.22,
+      "plain_english_summary": "Action 'SRE_HOLD_DATABASE_FAILOVER_TEST' received ALLOW. Irreversible exposure is 0.138, reversible capacity is 0.824, and authorization score is 0.801. Controls: execute, record_replay, retain_cancel_handle.",
+      "reason_codes": [
+        "RECOVERABILITY_ACCEPTABLE"
+      ],
+      "replay_id": "replay_SRE_HOLD_DATABASE_FAILOVER_TEST_1785465857507_4fc9cdc681b3",
+      "reversible_capacity_score": 0.824,
+      "risk_adjusted_authorization_score": 0.801,
+      "scenario_id": "SRE_HOLD_DATABASE_FAILOVER_TEST",
+      "smerc_posture": "ALLOW",
+      "sre_playbook_outcome": "HOLD",
+      "sre_playbook_rationale": "Failover test is held because the scheduled game day was cancelled."
+    },
+    {
+      "category": "traffic_shaping",
+      "confidence_score": 0.484,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "delta_type": "BOTH_RESTRAIN",
+      "enforcement_state": "constrain",
+      "interpretation": "Both lenses require restraint, but SMERC records recoverability scores, reason codes, and controls.",
+      "irreversible_exposure_score": 0.607,
+      "operational_stress_score": 0.653,
+      "plain_english_summary": "Action 'SRE_BROAD_RATE_LIMIT_CUSTOMERS' received THROTTLE. Irreversible exposure is 0.607, reversible capacity is 0.500, and authorization score is 0.469. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_SRE_BROAD_RATE_LIMIT_CUSTOMERS_1785465857507_0008bdceb559",
+      "reversible_capacity_score": 0.5,
+      "risk_adjusted_authorization_score": 0.469,
+      "scenario_id": "SRE_BROAD_RATE_LIMIT_CUSTOMERS",
+      "smerc_posture": "THROTTLE",
+      "sre_playbook_outcome": "INCIDENT_COMMAND",
+      "sre_playbook_rationale": "Customer-wide rate limiting requires incident-command approval due to business impact."
+    }
+  ],
+  "recoverability_delta_count": 5,
+  "recoverability_delta_rate": 0.625,
+  "scenario_count": 8,
+  "smerc_posture_counts": {
+    "ALLOW": 1,
+    "DENY": 1,
+    "ESCALATE": 0,
+    "FREEZE": 0,
+    "THROTTLE": 6
+  },
+  "sre_playbook_counts": {
+    "AUTO_MITIGATE": 4,
+    "HOLD": 1,
+    "INCIDENT_COMMAND": 2,
+    "MANUAL_APPROVAL": 1
+  },
+  "version": "smerc.sre-incident-governance-benchmark.v1"
+}

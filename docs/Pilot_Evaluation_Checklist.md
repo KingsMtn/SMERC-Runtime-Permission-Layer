@@ -89,6 +89,7 @@ Primary files:
 - `examples/github_deployment/execution_plan.json`
 - `schemas/smerc-execution-plan-v1.schema.json`
 - `schemas/smerc-execution-report-v1.schema.json`
+- `schemas/smerc-sparta-execution-evidence-v1.schema.json`
 
 ## Shadow-Mode Success Metrics
 

@@ -73,7 +73,9 @@ DLL turns SMERC from a single decision point into runtime governance infrastruct
 SMERC decides posture
 SPARTa routes posture into enforceable controls
 DLL records request, evidence, decision, route, execution, outcome, and learning
+DLL Intelligence summarizes near misses, overrides, rollback performance, drift, and review-gated policy recommendations
 ```
 
 The first DLL implementation is deliberately local and deterministic. Production deployment would require durable storage, retention policy, access controls, privacy review, key management, export controls, and customer-specific compliance review.
 
+See also `docs/DLL_Intelligence.md` for the multi-ledger analysis layer.

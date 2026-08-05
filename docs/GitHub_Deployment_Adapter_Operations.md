@@ -25,11 +25,38 @@ The job uses three separate SMERC authorities:
 1. Replace the simulation commands in `examples/github_deployment/execution_plan.json` with reviewed argument arrays and rollback procedures.
 2. Ensure each control that a policy may require has a native implementation in `controls`.
 3. Validate the plan in CI with `mode: validate`.
-4. Confirm the production environment approval and branch rules.
-5. Confirm permit TTL is long enough for controls but short enough to limit replay opportunity.
-6. Run initial trials against a non-production target.
-7. Compare command outcome, rollback result, reviewer verdict, and external system state.
-8. Advance from observe to recommend to limited enforcement only under the admitted evidence ceiling.
+4. When available, pass the SPARTa route artifact with `--sparta-route-file`.
+5. Confirm the production environment approval and branch rules.
+6. Confirm permit TTL is long enough for controls but short enough to limit replay opportunity.
+7. Run initial trials against a non-production target.
+8. Compare command outcome, rollback result, reviewer verdict, and external system state.
+9. Advance from observe to recommend to limited enforcement only under the admitted evidence ceiling.
+
+## SPARTa Route Binding
+
+The adapter can bind an execution report to a SPARTa route report before command execution.
+
+When `--sparta-route-file` is supplied in enforce mode, the adapter verifies:
+
+- the route report uses the `smerc.sparta-route.v1` contract
+- the route replay ID matches the one-time permit replay ID
+- the route source posture matches the permit posture
+- the route is executable
+- every non-internal permit-required control is declared by the SPARTa route
+
+If any check fails, the adapter returns `sparta_binding_mismatch` and stops before control execution, permit consumption, or deployment command execution.
+
+Successful execution reports include a `sparta` section with:
+
+- `smerc.sparta-execution-evidence.v1`
+- route ID
+- route report digest
+- replay ID
+- posture
+- route state
+- binding checks
+
+This makes the GitHub pilot path easier to review as one chain: SMERC decision, SPARTa route, one-time permit, native control evidence, execution report, rollback result, and later Decision Lifecycle Ledger evidence.
 
 ## Failure Behavior
 
@@ -51,6 +78,7 @@ Do not treat rollback `succeeded` as proof of restored business state. Verify re
 - authorization-to-start latency
 - cancellation latency and descendant-process behavior
 - rollback attempt, command success, and independently verified restoration rates
+- SPARTa route binding failures and missing required controls
 - false release, false constraint, override, and reviewer agreement rates
 - discrepancies between adapter reports and target-platform audit logs
 
@@ -63,3 +91,4 @@ Do not treat rollback `succeeded` as proof of restored business state. Verify re
 - The adapter does not restrict process network or filesystem access.
 - Windows terminates the directly managed process; descendant termination requires further hardening.
 - GitHub environment protections are repository settings and cannot be guaranteed by this workflow file alone.
+- SPARTa route binding verifies consistency of supplied artifacts; it does not prove that the supplied route was independently approved unless the route signature, key custody, and reviewer workflow are separately controlled.

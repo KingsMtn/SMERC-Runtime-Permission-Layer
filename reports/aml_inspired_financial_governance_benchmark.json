@@ -1,0 +1,224 @@
+{
+  "aml_baseline_counts": {
+    "ALERT": 4,
+    "CLEAR": 4
+  },
+  "delta_counts": {
+    "AML_ALERT_SMERC_RESTRAINT": 4,
+    "AML_CLEAR_SMERC_ALLOW": 2,
+    "AML_CLEAR_SMERC_RESTRAINT": 2
+  },
+  "evidence_boundary": "AML-inspired benchmark only. It is not AML software, sanctions screening, suspicious-activity reporting, regulatory compliance, customer validation, production certification, or incident-reduction proof.",
+  "generated_at": "2026-07-29T03:09:19+00:00",
+  "policy": "balanced",
+  "records": [
+    {
+      "aml_baseline_outcome": "CLEAR",
+      "aml_baseline_rationale": "Known vendor, expected amount range, normal velocity, and no material anomaly indicators.",
+      "category": "vendor_payment",
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "768eef5a4c83f24e7a34cec89066c36ae32335132c74fa0345ceff29e0071bb0",
+      "delta_type": "AML_CLEAR_SMERC_ALLOW",
+      "drivers": [
+        "LOW_STRESS_REPLAYABLE_ACTION"
+      ],
+      "interpretation": "Both lenses allow the action under the reference scenario.",
+      "irreversible_exposure": 0.188,
+      "reversible_capacity": 0.795,
+      "scenario_id": "AML_ROUTINE_VENDOR_PAYMENT",
+      "smerc_f_confidence": 0.906,
+      "smerc_f_state": "ALLOW"
+    },
+    {
+      "aml_baseline_outcome": "CLEAR",
+      "aml_baseline_rationale": "Customer and destination are known and the amount is inside ordinary approval limits.",
+      "category": "wire_transfer",
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "a14b8435c3b664a64f06f66f8a3295ca92e6a8470e8da7b07e2892bb04137305",
+      "delta_type": "AML_CLEAR_SMERC_ALLOW",
+      "drivers": [
+        "LOW_REVERSIBILITY"
+      ],
+      "interpretation": "Both lenses allow the action under the reference scenario.",
+      "irreversible_exposure": 0.425,
+      "reversible_capacity": 0.526,
+      "scenario_id": "AML_APPROVED_WIRE_WEAK_REVERSAL",
+      "smerc_f_confidence": 0.826,
+      "smerc_f_state": "ALLOW"
+    },
+    {
+      "aml_baseline_outcome": "ALERT",
+      "aml_baseline_rationale": "Refund volume and velocity exceed normal queue behavior and require analyst review.",
+      "category": "refunds",
+      "controls": [
+        "reduce_transaction_size",
+        "lower_velocity",
+        "require_dual_approval",
+        "log_replay"
+      ],
+      "decision_hash": "1aea2082828074ba1f9da8409bbe7e76c4c49f4b902005f373925704e64a22e9",
+      "delta_type": "AML_ALERT_SMERC_RESTRAINT",
+      "drivers": [
+        "AGENT_VELOCITY",
+        "SETTLEMENT_ANOMALY",
+        "LOW_REVERSIBILITY"
+      ],
+      "interpretation": "Both lenses indicate review or restraint, but for different reasons: suspiciousness versus recoverability and execution risk.",
+      "irreversible_exposure": 0.46,
+      "reversible_capacity": 0.495,
+      "scenario_id": "AML_REFUND_BATCH_SPIKE",
+      "smerc_f_confidence": 0.626,
+      "smerc_f_state": "THROTTLE"
+    },
+    {
+      "aml_baseline_outcome": "ALERT",
+      "aml_baseline_rationale": "Withdrawal request combines new device behavior, high velocity, and new destination risk.",
+      "category": "digital_asset_withdrawal",
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "decision_hash": "6e52b64455b46c21bfbabf5ce2a33347063f1d947c98320245afb10404b6c88e",
+      "delta_type": "AML_ALERT_SMERC_RESTRAINT",
+      "drivers": [
+        "AGENT_VELOCITY",
+        "SETTLEMENT_ANOMALY",
+        "COUNTERPARTY_CONCENTRATION",
+        "MODEL_DISAGREEMENT",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "EVIDENCE_VALIDITY_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "interpretation": "Both lenses indicate review or restraint, but for different reasons: suspiciousness versus recoverability and execution risk.",
+      "irreversible_exposure": 0.684,
+      "reversible_capacity": 0.251,
+      "scenario_id": "AML_CRYPTO_WITHDRAWAL_NEW_DEVICE",
+      "smerc_f_confidence": 0.455,
+      "smerc_f_state": "FREEZE"
+    },
+    {
+      "aml_baseline_outcome": "ALERT",
+      "aml_baseline_rationale": "Transaction limit change after unusual behavior should be reviewed before future payment activity.",
+      "category": "account_limit_change",
+      "controls": [
+        "reduce_transaction_size",
+        "lower_velocity",
+        "require_dual_approval",
+        "log_replay"
+      ],
+      "decision_hash": "7352e500132e2b93e7a527c475cb6bfc425671c32913d9ab76fe7c60f20dd83d",
+      "delta_type": "AML_ALERT_SMERC_RESTRAINT",
+      "drivers": [
+        "AGENT_VELOCITY"
+      ],
+      "interpretation": "Both lenses indicate review or restraint, but for different reasons: suspiciousness versus recoverability and execution risk.",
+      "irreversible_exposure": 0.237,
+      "reversible_capacity": 0.793,
+      "scenario_id": "AML_ALERT_BUT_RECOVERABLE_LIMIT_CHANGE",
+      "smerc_f_confidence": 0.72,
+      "smerc_f_state": "THROTTLE"
+    },
+    {
+      "aml_baseline_outcome": "CLEAR",
+      "aml_baseline_rationale": "Internal treasury reallocation is between approved accounts and does not indicate suspicious customer behavior.",
+      "category": "treasury_rebalance",
+      "controls": [
+        "reduce_transaction_size",
+        "lower_velocity",
+        "require_dual_approval",
+        "log_replay"
+      ],
+      "decision_hash": "31ae6db62af87b0b2952fc02ded23a8e655bb582e0cd41891eba03bc3af12266",
+      "delta_type": "AML_CLEAR_SMERC_RESTRAINT",
+      "drivers": [
+        "MARKET_INSTABILITY",
+        "LIQUIDITY_CONCENTRATION",
+        "AGENT_VELOCITY",
+        "COLLATERAL_STRESS",
+        "COUNTERPARTY_CONCENTRATION",
+        "LOW_REVERSIBILITY"
+      ],
+      "interpretation": "AML-style suspiciousness is clear, but SMERC-F restrains the action because recoverability or financial-operational exposure is weak.",
+      "irreversible_exposure": 0.59,
+      "reversible_capacity": 0.562,
+      "scenario_id": "AML_TREASURY_REBALANCE_MARKET_STRESS",
+      "smerc_f_confidence": 0.642,
+      "smerc_f_state": "THROTTLE"
+    },
+    {
+      "aml_baseline_outcome": "ALERT",
+      "aml_baseline_rationale": "Releasing a previously frozen payment requires analyst review and documented rationale.",
+      "category": "frozen_payment",
+      "controls": [
+        "route_to_accountable_reviewer",
+        "require_explicit_approval",
+        "preserve_replay"
+      ],
+      "decision_hash": "83c54a3bb5b97ef0b2d4979520fae6bc95416aa59e6e1b65150c18239b38dae9",
+      "delta_type": "AML_ALERT_SMERC_RESTRAINT",
+      "drivers": [
+        "SETTLEMENT_ANOMALY",
+        "COUNTERPARTY_CONCENTRATION",
+        "AGENT_VELOCITY",
+        "MODEL_DISAGREEMENT",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "EVIDENCE_VALIDITY_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "interpretation": "Both lenses indicate review or restraint, but for different reasons: suspiciousness versus recoverability and execution risk.",
+      "irreversible_exposure": 0.585,
+      "reversible_capacity": 0.354,
+      "scenario_id": "AML_RELEASE_FROZEN_PAYMENT_OVERRIDE",
+      "smerc_f_confidence": 0.502,
+      "smerc_f_state": "ESCALATE"
+    },
+    {
+      "aml_baseline_outcome": "CLEAR",
+      "aml_baseline_rationale": "Institutional redemption request is from a known customer and passes ordinary identity and sanctions checks.",
+      "category": "stablecoin_redemption",
+      "controls": [
+        "reduce_transaction_size",
+        "lower_velocity",
+        "require_dual_approval",
+        "log_replay"
+      ],
+      "decision_hash": "6a3cefd7162211ca9c93a3dbf04adb196d1e7d59d24ce87e7c0a078b594662db",
+      "delta_type": "AML_CLEAR_SMERC_RESTRAINT",
+      "drivers": [
+        "STABLECOIN_IMBALANCE",
+        "LIQUIDITY_CONCENTRATION",
+        "MARKET_INSTABILITY",
+        "AGENT_VELOCITY",
+        "COUNTERPARTY_CONCENTRATION",
+        "LOW_REVERSIBILITY"
+      ],
+      "interpretation": "AML-style suspiciousness is clear, but SMERC-F restrains the action because recoverability or financial-operational exposure is weak.",
+      "irreversible_exposure": 0.668,
+      "reversible_capacity": 0.47,
+      "scenario_id": "AML_STABLECOIN_REDEMPTION_IMBALANCE",
+      "smerc_f_confidence": 0.641,
+      "smerc_f_state": "THROTTLE"
+    }
+  ],
+  "recoverability_delta_count": 2,
+  "recoverability_delta_rate": 0.25,
+  "scenario_count": 8,
+  "smerc_f_state_counts": {
+    "ALLOW": 2,
+    "DENY": 0,
+    "ESCALATE": 1,
+    "FREEZE": 1,
+    "THROTTLE": 4
+  },
+  "version": "smerc.aml-inspired-financial-governance-benchmark.v1"
+}

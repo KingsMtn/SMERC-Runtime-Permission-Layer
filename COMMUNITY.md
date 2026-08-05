@@ -94,8 +94,8 @@ Good feedback is specific and testable:
 SMERC does not claim:
 
 - to replace LLMs, AI agents, IAM, OPA, SIEM, EDR, or approval systems
-- to be production-certified
-- to prove incident reduction without live pilots
+- not to be represented as production-certified
+- not to claim proven incident reduction without live pilots
 - to be calibrated for every enterprise
 - to solve prompt injection, model safety, or identity governance by itself
 

@@ -1,0 +1,59 @@
+{
+  "action": {
+    "action_id": "AI_DEPLOY_PRODUCTION_CHANGE",
+    "actor": "coding_agent",
+    "description": "AI coding agent proposes deploying a generated infrastructure change to production.",
+    "tool": "github_actions.deploy"
+  },
+  "boundary": [
+    "Pilot-grade PR evidence for review, not production certification.",
+    "Does not replace branch protection, code review, security review, or deployment approvals.",
+    "Customer-context pilots are required before claiming operational risk reduction."
+  ],
+  "certificate_digest": "a4d4d112738e58ab0b19c3f15369253ca6b02f01b3a47d425e2de61e040fb242",
+  "confidence_score": 0.527,
+  "controls": [
+    "limit_scope",
+    "preview_before_execution",
+    "log_replay",
+    "rate_limit_external_effect",
+    "require_recovery_path"
+  ],
+  "enforcement": {
+    "active": false,
+    "fail_on": [
+      "DENY",
+      "FREEZE"
+    ],
+    "would_fail": false
+  },
+  "github": {
+    "actor": null,
+    "event_name": null,
+    "job": null,
+    "ref": null,
+    "repository": null,
+    "run_attempt": null,
+    "run_id": null,
+    "sha": null,
+    "workflow": null
+  },
+  "integration_status": "evaluated",
+  "issued_at": "2026-07-28T01:33:16+00:00",
+  "mode": "observe",
+  "posture": "THROTTLE",
+  "reason_codes": [
+    "EXTERNAL_SIDE_EFFECT",
+    "MODERATE_HARM_POTENTIAL"
+  ],
+  "replay_id": "replay_AI_DEPLOY_PRODUCTION_CHANGE_1785202285892",
+  "risk_score": 0.581,
+  "source": "local",
+  "summary": "Action 'AI_DEPLOY_PRODUCTION_CHANGE' by coding_agent using github_actions.deploy received THROTTLE. Risk score is 0.581. Constraints: limit_scope, preview_before_execution, log_replay, rate_limit_external_effect, require_recovery_path.",
+  "verification": {
+    "certificate_digest": "a4d4d112738e58ab0b19c3f15369253ca6b02f01b3a47d425e2de61e040fb242",
+    "errors": [],
+    "valid": true
+  },
+  "version": "smerc.github-pr-guardian-certificate.v1"
+}

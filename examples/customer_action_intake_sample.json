@@ -1,0 +1,142 @@
+{
+  "schema": "smerc.customer-action-intake.v1",
+  "organization": "ExampleCo",
+  "contact_role": "security_architect",
+  "intake_date": "2026-07-28",
+  "data_boundary": "Metadata-only sample. No secrets, credentials, customer records, source code, or production logs are included.",
+  "workflow_context": "Candidate AI-agent and automation actions for a GitHub Actions shadow-mode pilot.",
+  "actions": [
+    {
+      "action_id": "EXAMPLECO_PR_TEST_RUN",
+      "description": "AI coding agent runs tests and static analysis for a pull request.",
+      "actor": "coding_agent",
+      "tool": "github_actions.test",
+      "action_type": "ci_test",
+      "base_action_risk": 0.11,
+      "reversibility": 0.95,
+      "containment_strength": 0.89,
+      "rollback_latency": 0.04,
+      "evidence_validity": 0.92,
+      "anomaly_pressure": 0.08,
+      "impact_scope": 0.12,
+      "cancel_reliability": 0.91,
+      "authorization_confidence": 0.93,
+      "external_side_effect": false,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "github_actions",
+        "workflow": "pull_request_validation"
+      }
+    },
+    {
+      "action_id": "EXAMPLECO_PROD_CANARY_DEPLOY",
+      "description": "AI deployment assistant proposes a production canary release after merging a pull request.",
+      "actor": "deployment_agent",
+      "tool": "github_actions.deploy",
+      "action_type": "production_canary_deploy",
+      "base_action_risk": 0.58,
+      "reversibility": 0.62,
+      "containment_strength": 0.68,
+      "rollback_latency": 0.36,
+      "evidence_validity": 0.76,
+      "anomaly_pressure": 0.28,
+      "impact_scope": 0.52,
+      "cancel_reliability": 0.72,
+      "authorization_confidence": 0.77,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "github_actions",
+        "workflow": "production_canary"
+      }
+    },
+    {
+      "action_id": "EXAMPLECO_CLOUD_IAM_POLICY_CHANGE",
+      "description": "AI cloud assistant proposes broadening an IAM role used by production automation.",
+      "actor": "cloud_admin_agent",
+      "tool": "cloud.iam",
+      "action_type": "iam_policy_change",
+      "base_action_risk": 0.72,
+      "reversibility": 0.41,
+      "containment_strength": 0.44,
+      "rollback_latency": 0.57,
+      "evidence_validity": 0.61,
+      "anomaly_pressure": 0.48,
+      "impact_scope": 0.74,
+      "cancel_reliability": 0.58,
+      "authorization_confidence": 0.64,
+      "external_side_effect": true,
+      "sensitive_data": true,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "workflow": "cloud_permission_change"
+      }
+    },
+    {
+      "action_id": "EXAMPLECO_CUSTOMER_REFUND_BATCH",
+      "description": "AI finance assistant proposes issuing a batch of customer refunds from a support queue.",
+      "actor": "finance_agent",
+      "tool": "finance.refunds",
+      "action_type": "batch_refund",
+      "base_action_risk": 0.67,
+      "reversibility": 0.39,
+      "containment_strength": 0.48,
+      "rollback_latency": 0.64,
+      "evidence_validity": 0.68,
+      "anomaly_pressure": 0.42,
+      "impact_scope": 0.61,
+      "cancel_reliability": 0.53,
+      "authorization_confidence": 0.66,
+      "external_side_effect": true,
+      "sensitive_data": true,
+      "context": {
+        "domain_profile": "finance_ops",
+        "workflow": "customer_refunds"
+      }
+    },
+    {
+      "action_id": "EXAMPLECO_SUPPORT_EMAIL_BLAST",
+      "description": "AI support assistant proposes emailing all customers affected by a suspected outage before confirmation.",
+      "actor": "support_agent",
+      "tool": "customer_comms.email",
+      "action_type": "customer_email_blast",
+      "base_action_risk": 0.70,
+      "reversibility": 0.18,
+      "containment_strength": 0.36,
+      "rollback_latency": 0.86,
+      "evidence_validity": 0.46,
+      "anomaly_pressure": 0.63,
+      "impact_scope": 0.83,
+      "cancel_reliability": 0.42,
+      "authorization_confidence": 0.51,
+      "external_side_effect": true,
+      "sensitive_data": false,
+      "context": {
+        "domain_profile": "customer_comms",
+        "workflow": "incident_customer_update"
+      }
+    },
+    {
+      "action_id": "EXAMPLECO_DISABLE_SUSPECTED_COMPROMISED_ACCOUNT",
+      "description": "AI security assistant proposes disabling a privileged account after suspicious activity.",
+      "actor": "security_agent",
+      "tool": "identity.disable_account",
+      "action_type": "privileged_account_disable",
+      "base_action_risk": 0.56,
+      "reversibility": 0.71,
+      "containment_strength": 0.73,
+      "rollback_latency": 0.22,
+      "evidence_validity": 0.74,
+      "anomaly_pressure": 0.69,
+      "impact_scope": 0.49,
+      "cancel_reliability": 0.76,
+      "authorization_confidence": 0.72,
+      "external_side_effect": true,
+      "sensitive_data": true,
+      "context": {
+        "domain_profile": "security_ops",
+        "workflow": "identity_response"
+      }
+    }
+  ]
+}

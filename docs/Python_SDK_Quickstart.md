@@ -2,7 +2,7 @@
 
 The `smerc_sdk` package is a dependency-free Python client for the SMERC Runtime Permission API. It is intended for pilots, tests, and lightweight service integration where teams want to call SMERC without hand-writing HTTP requests.
 
-The SDK does not replace the policy engine. It wraps the authenticated API that persists replayable decisions, reviews, pilot metrics, review queues, and security events.
+The SDK does not replace the policy engine. It wraps the authenticated API that persists replayable decisions, agent handshakes, reviews, pilot metrics, review queues, and security events.
 
 ## Start A Local API
 
@@ -56,6 +56,25 @@ client = SMERCClient("http://127.0.0.1:8788", token="development-console-secret-
 payload = json.loads(Path("examples/action_language/production_database_change.json").read_text())
 
 decision = client.evaluate_language_action(payload, idempotency_key="db-change-2041")
+```
+
+## Agent Handshake
+
+Use this path when an agent or automation runner needs to discover SMERC, declare itself, propose a task and action, and receive a replayable posture before execution.
+
+```python
+import json
+from pathlib import Path
+
+from smerc_sdk import SMERCClient
+
+client = SMERCClient("http://127.0.0.1:8788", token="development-console-secret-2026-rotate")
+handshake_request = json.loads(Path("examples/agent_handshake_request.json").read_text())
+
+handshake = client.agent_handshake(handshake_request)
+print(handshake["handshake_posture"])
+print(handshake["recommended_executor"])
+print(handshake["replay"]["fitness_replay_id"])
 ```
 
 ## Reviews

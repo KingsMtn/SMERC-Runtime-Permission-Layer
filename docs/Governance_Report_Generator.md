@@ -8,6 +8,7 @@ It does not create new evidence. It assembles and cross-checks:
 - a signed or unsigned SPARTa route report
 - a control mapping report
 - a Decision Lifecycle Ledger record
+- full-chain evidence named in the bundle: action-bound permit, control-evidence receipt, execution report, and reviewer outcome
 
 The purpose is to help CISOs, security architects, platform engineers, and pilot reviewers inspect whether a governed action is coherent from request through route, controls, and lifecycle record.
 
@@ -21,7 +22,8 @@ This generator shows the system flow:
 2. SPARTa converts the posture into a route.
 3. Control mapping explains native mechanisms and evidence requirements.
 4. DLL records the governed lifecycle.
-5. The report cross-checks whether those artifacts agree.
+5. Permit, control evidence, execution, and reviewer artifacts show whether the controlled route was actually followed.
+6. The report cross-checks whether those artifacts agree.
 
 ## Example
 
@@ -36,6 +38,7 @@ The generated report includes:
 - posture and route state
 - control mapping status
 - DLL validity
+- permit ID, execution outcome, and reviewer verdict when provided
 - cross-check results
 - known limits
 - recommended next action
@@ -49,6 +52,11 @@ The current generator checks:
 - route controls are mapped or documented as route-level controls
 - control mapping has no missing required controls
 - DLL hash chain is valid
+- permit replay ID matches the SMERC decision
+- permit-required controls are included in the SPARTa route
+- control evidence satisfies the permit-required controls
+- execution consumed the same permit
+- reviewer outcome references the same decision replay ID
 
 Failed cross-checks block the report from being used as pilot approval evidence.
 

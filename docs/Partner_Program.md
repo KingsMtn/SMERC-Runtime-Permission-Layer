@@ -74,6 +74,14 @@ Useful review areas:
 
 ## Pilot Entry Criteria
 
+Before offering a pilot, run the prospect routing screen:
+
+```bash
+python -m reference_engine.prospect_router examples/prospect_route_sample.json --pretty
+```
+
+Use the result to route the prospect to the core GitHub Actions pilot, the SMERC-F financial shadow-mode pilot, or review-only materials.
+
 A good partner has at least one workflow where:
 
 - automated actions can create real side effects
@@ -98,10 +106,10 @@ A pilot is useful if it can answer:
 
 Partners should not expect:
 
-- production certification
+- not production certification
 - compliance attestation
 - managed SaaS operations
-- guaranteed incident reduction
+- no guaranteed incident reduction
 - calibrated thresholds for their environment without pilot data
 - replacement of existing IAM, policy, EDR, SIEM, code review, or approval tools
 

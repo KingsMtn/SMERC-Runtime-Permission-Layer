@@ -1,0 +1,184 @@
+{
+  "audit_db": "./smerc_reviewer_quickstart.sqlite3",
+  "evidence_boundary": "This walkthrough seeds synthetic but realistic review data. It proves the local product flow, not customer validation, production safety, or incident reduction.",
+  "generated_at": "2026-07-28T02:25:21+00:00",
+  "next_steps": [
+    "Start the authenticated API against the same audit database.",
+    "Open the pilot console and connect with a principal that has decisions.read, reviews.read, reviews.write, metrics.read, and audit.read.",
+    "Review the seeded decisions in the queue.",
+    "Generate a stored DLL evidence package using one of the listed dll_decision_id values."
+  ],
+  "pilot_metrics": {
+    "decision_count": 5,
+    "denominators": {
+      "all_decisions": 5,
+      "all_reviews": 0,
+      "allow_reviews": 0,
+      "constrained_reviews": 0,
+      "determinate_reviews": 0
+    },
+    "metrics": {
+      "average_review_latency_ms": null,
+      "decision_review_coverage": 0.0,
+      "false_constraint_rate": null,
+      "false_release_rate": null,
+      "override_rate": null,
+      "reviewer_agreement_rate": null,
+      "useful_constraint_rate": null
+    },
+    "review_count": 0,
+    "reviewed_decision_count": 0,
+    "tenant_id": "pilot-team"
+  },
+  "principal_id": "ciso-review-seed",
+  "seeded_decision_count": 5,
+  "seeded_decisions": [
+    {
+      "action_id": "CISO_REVIEW_RUN_TESTS",
+      "controls": [
+        "execute",
+        "record_replay",
+        "retain_cancel_handle"
+      ],
+      "dll_decision_id": "dll:ciso-review:ciso_review_run_tests",
+      "dll_head_record_hash": "9b1d0744b2f8b58f1ffdda9f1da520bd82893914ed521fbf38b484c8dba6a3dc",
+      "posture": "ALLOW",
+      "reason_codes": [
+        "RECOVERABILITY_ACCEPTABLE"
+      ],
+      "replay_id": "replay_CISO_REVIEW_RUN_TESTS_1785205521523_9370188fdf9e",
+      "scores": {
+        "cancel_reliability_score": 0.92,
+        "confidence_score": 0.93,
+        "irreversible_exposure_score": 0.064,
+        "operational_stress_score": 0.087,
+        "reversible_capacity_score": 0.937,
+        "risk_adjusted_authorization_score": 0.935
+      },
+      "summary": "Action 'CISO_REVIEW_RUN_TESTS' received ALLOW. Irreversible exposure is 0.064, reversible capacity is 0.937, and authorization score is 0.935. Controls: execute, record_replay, retain_cancel_handle."
+    },
+    {
+      "action_id": "CISO_REVIEW_DEPLOY_CANARY",
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "dll_decision_id": "dll:ciso-review:ciso_review_deploy_canary",
+      "dll_head_record_hash": "db6031a670f75f641da5a2905185b9e9a21d85c772de61d5a4bc9365b7954bda",
+      "posture": "THROTTLE",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_CISO_REVIEW_DEPLOY_CANARY_1785205521523_3cfef05cdd52",
+      "scores": {
+        "cancel_reliability_score": 0.76,
+        "confidence_score": 0.765,
+        "irreversible_exposure_score": 0.413,
+        "operational_stress_score": 0.354,
+        "reversible_capacity_score": 0.705,
+        "risk_adjusted_authorization_score": 0.694
+      },
+      "summary": "Action 'CISO_REVIEW_DEPLOY_CANARY' received THROTTLE. Irreversible exposure is 0.413, reversible capacity is 0.705, and authorization score is 0.694. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect."
+    },
+    {
+      "action_id": "CISO_REVIEW_ROTATE_SECRET",
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "dll_decision_id": "dll:ciso-review:ciso_review_rotate_secret",
+      "dll_head_record_hash": "34a47c05626240ded60dea28279b05a5ddda3a11006d810a5443da48772cc50c",
+      "posture": "THROTTLE",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_CISO_REVIEW_ROTATE_SECRET_1785205521539_82839170422d",
+      "scores": {
+        "cancel_reliability_score": 0.64,
+        "confidence_score": 0.66,
+        "irreversible_exposure_score": 0.675,
+        "operational_stress_score": 0.54,
+        "reversible_capacity_score": 0.556,
+        "risk_adjusted_authorization_score": 0.529
+      },
+      "summary": "Action 'CISO_REVIEW_ROTATE_SECRET' received THROTTLE. Irreversible exposure is 0.675, reversible capacity is 0.556, and authorization score is 0.529. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution."
+    },
+    {
+      "action_id": "CISO_REVIEW_DELETE_AUDIT_LOGS",
+      "controls": [
+        "route_to_accountable_reviewer",
+        "require_explicit_approval",
+        "preserve_replay",
+        "document_override_if_approved"
+      ],
+      "dll_decision_id": "dll:ciso-review:ciso_review_delete_audit_logs",
+      "dll_head_record_hash": "513853e8f3d1742d5d83eb4254daac9ee743e0cd9be6a1108d3196c7ac17eec5",
+      "posture": "ESCALATE",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CONTAINMENT_WEAK",
+        "EVIDENCE_VALIDITY_LOW",
+        "AUTHORIZATION_CONFIDENCE_LOW",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_CISO_REVIEW_DELETE_AUDIT_LOGS_1785205521539_8e19a005daa7",
+      "scores": {
+        "cancel_reliability_score": 0.48,
+        "confidence_score": 0.414,
+        "irreversible_exposure_score": 0.777,
+        "operational_stress_score": 0.71,
+        "reversible_capacity_score": 0.272,
+        "risk_adjusted_authorization_score": 0.302
+      },
+      "summary": "Action 'CISO_REVIEW_DELETE_AUDIT_LOGS' received ESCALATE. Irreversible exposure is 0.777, reversible capacity is 0.272, and authorization score is 0.302. Controls: route_to_accountable_reviewer, require_explicit_approval, preserve_replay, document_override_if_approved."
+    },
+    {
+      "action_id": "CISO_REVIEW_EXPORT_CUSTOMER_DATA",
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "dll_decision_id": "dll:ciso-review:ciso_review_export_customer_data",
+      "dll_head_record_hash": "b1bd18db3669f92d1162e1aa1554bd3cf87a6d23cb6acb4bea303f9c74ebf121",
+      "posture": "DENY",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "AUTHORIZATION_CONFIDENCE_LOW",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_CISO_REVIEW_EXPORT_CUSTOMER_DATA_1785205521544_e14ec322cd0d",
+      "scores": {
+        "cancel_reliability_score": 0.38,
+        "confidence_score": 0.427,
+        "irreversible_exposure_score": 0.984,
+        "operational_stress_score": 0.782,
+        "reversible_capacity_score": 0.214,
+        "risk_adjusted_authorization_score": 0.229
+      },
+      "summary": "Action 'CISO_REVIEW_EXPORT_CUSTOMER_DATA' received DENY. Irreversible exposure is 0.984, reversible capacity is 0.214, and authorization score is 0.229. Controls: block_execution, explain_denial, preserve_replay, require_new_request."
+    }
+  ],
+  "stored_ledger_count": 5,
+  "tenant_id": "pilot-team",
+  "version": "smerc.ciso-review-seed.v1"
+}

@@ -4,7 +4,7 @@
 
 ## External Technical Review Edition
 
-SMERC is runtime permission infrastructure for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture:
+SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture:
 
 - `ALLOW`
 - `THROTTLE`
@@ -17,25 +17,39 @@ The first integration is a GitHub Actions gate for AI-assisted code, deployment,
 The current build includes:
 
 - versioned SMERC Action Language and Decision Language contracts
+- machine-readable runtime contract index showing how SMERC, SPARTa, permits, control evidence, DLL, and DLL Intelligence fit together
 - evidence and unknowns registry with deployment-limiting falsification rules
 - tenant-scoped policy calibration and evidence provenance admission
 - signed, action-bound, single-use authorization permits
 - signed, action-bound control-evidence receipts for configured execution adapters
 - SPARTa posture-aware router that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes
+- machine-readable SPARTa vocabulary for lifecycle verbs, route states, control verbs, evidence events, and fail-closed adapter interpretation
 - SPARTa adapter registry and authenticated API route endpoint for stored SMERC decisions
 - optional HMAC-signed SPARTa route reports for pilot-grade tamper detection
+- static SPARTa adapter conformance report that checks declared adapter capabilities across ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE route behavior
+- GitHub deployment adapter SPARTa binding that verifies route replay, posture, executable state, and required controls before command execution
+- MCP-style tool governance adapter that maps proposed agent tool calls into SMERC recoverability posture, SPARTa route behavior, and client/proxy recommendations before execution
 - control mapping library that maps SMERC/SPARTa controls to declared native tool mechanisms and evidence requirements
 - replayable governance report generator that assembles decision, route, control mapping, and lifecycle evidence into one review package
 - Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
+- end-to-end PR Guardian demo connecting SMERC decision, PR comment/certificate, SPARTa route, Decision Lifecycle Ledger, and DLL Intelligence
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
 - GitHub Actions OIDC verification with repository-, workflow-, ref-, environment-, and run-bound attribution
 - recoverability-aware scoring engine
+- model and agent fitness routing for selecting qualified executors
+- machine-readable SMERC Beacon manifest for AI/tool discovery
+- Agent Handshake Protocol connecting beacon discovery to executor routing and action posture evaluation
+- scoring-invariant verification for recoverability and executor fitness math
+- commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service
+- OpenAPI 3.1 pilot API contract
 - SQLite pilot audit store with idempotent decision replay
 - immutable pilot review records and denominator-aware metrics
 - dependency-free pilot review console
+- GitHub PR Guardian that renders PR comments and hash-bound certificates for AI-assisted changes
 - GitHub Actions gate
+- generic Agent Handshake integration runner
 - local and authenticated remote GitHub Action evaluation
 - permit-consuming GitHub deployment adapter with native controls, cancellation, rollback, and non-secret execution reports
 - dependency-free Python SDK for API pilots and integration tests
@@ -66,39 +80,112 @@ The current project is ready for technical review and shadow-mode pilot discussi
 Start here before reading the code:
 
 - `docs/External_Review_Start_Here.md` gives external reviewers the shortest safe path through the repository.
+- `docs/Reviewer_Quickstart.md` gives reviewers a one-command path that generates a local proof package linking PR Guardian, SPARTa, DLL, CISO seed evidence, and benchmark comparison.
+- `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
+- `docs/Credibility_Partner_Review_Packet.md` gives external reviewers a 30-minute packet for deciding whether metadata-only shadow-mode testing is worth discussing.
+- `docs/Credibility_Partner_Outreach.md` gives a short, bounded outreach message for asking credibility partners to review SMERC without overclaiming readiness.
+- `docs/Customer_Action_Intake.md` gives prospects a metadata-only action intake path for scoring their own workflow examples before a shadow-mode pilot.
+- `docs/Prospect_Routing.md` routes interested organizations to the core GitHub Actions pilot, SMERC-F financial pilot, or review-only path.
+- `docs/Core_Pilot_Package.md` builds the core pilot review folder in one command from routing, action intake, handoff, and evidence summary inputs.
+- `docs/Runtime_Contract_Index.md` explains the machine-readable `smerc.runtime-contract-index.v1` assembly map for SMERC's contracts and handoffs.
+- `docs/Policy_Bundle_Manifest.md` explains signed, versioned policy bundle manifests for reviewed SPL, profile, control, approval, and activation evidence.
+- `docs/Operator_Status_And_OPA_Log_Export.md` explains the pilot operator status report, `/v1/operator/status` API, and OPA-style decision log export for existing policy/audit pipelines.
+- `docs/Runtime_Health_Metrics.md` explains runtime health, latency, unavailable-evaluation, and fail-closed metrics for pilot operations.
+- `docs/API_Smoke_Test.md` gives operators a one-command way to verify a local or hosted SMERC API path from health to evaluation to operator status.
+- `docs/Public_Review_Snapshot.md` gives a compact current-status snapshot for reviewers who need the fastest honest orientation.
+- `docs/Release_Notes_v0_14_Public_Review.md` gives a compact release-style summary for public review, validation, and pilot discussion.
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
+- `docs/CISO_5_Minute_Proof_Package.md` gives security executives the fastest proof path from claim to pilot ask without production-readiness claims.
+- `docs/GitHub_PR_Guardian.md` explains the developer-facing PR review surface for AI-assisted code and deployment changes.
+- `docs/End_To_End_PR_Guardian_Demo.md` shows the current modules working as one synthetic review loop from AI-assisted pull request to DLL Intelligence.
+- `docs/Competitive_Gaps_And_Build_Priorities.md` states what adjacent products do better today and what SMERC should build next.
+- `examples/runtime_contract_index.json` gives agents, adapters, SDKs, and reviewers the canonical contract handoff map.
 - `docs/Maturity_Model.md` defines the evidence-based maturity scale used for SMERC claims.
 - `docs/CISO_30_Minute_Review_Package.md` gives CISOs a timed review path for deciding whether a shadow-mode pilot is justified.
+- `docs/Thirty_Minute_Workflow_Proof.md` gives reviewers the shortest concrete path for testing one workflow and comparing SMERC with simple allow/deny review.
 - `docs/CISO_Evidence_Walkthrough.md` gives reviewers a local end-to-end flow from seeded decisions to pilot console evidence packages.
+- `docs/GitHub_Actions_Pilot_Operator_Quickstart.md` gives customer operators the shortest install-and-measure path for one observe-mode GitHub Actions workflow.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
+- `docs/Accelerator_Readiness_Track.md` defines when SMERC should move from technical review to accelerator applications or investor-facing submissions.
+- `docs/MACH37_Application_Readiness.md` gives a cybersecurity-accelerator readiness frame for a future MACH37-style application.
+- `docs/YC_Next_Cycle_Readiness_Plan.md` defines the evidence-first plan for making a later YC application stronger after missing the Fall 2026 on-time deadline.
+- `docs/YC_Application_Evidence_Draft.md` gives YC-style language with explicit evidence slots that should not be filled until real customer or reviewer proof exists.
 - `docs/Developer_Quickstart.md` gives technical reviewers a short run-and-inspect path.
+- `schemas/smerc-runtime-api-openapi-v1.json` gives integration partners a reviewable OpenAPI 3.1 contract for the pilot API.
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
+- `docs/Model_Agent_Fitness_Layer.md` explains how SMERC selects the qualified model, agent, or automation executor for a specific task.
+- `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.
+- `docs/Agent_Handshake_Protocol.md` explains how an agent discovers SMERC, declares itself, proposes an action, receives a posture, and preserves a replay record.
+- `docs/MCP_Tool_Governance.md` explains how SMERC can score MCP-style tool calls before execution and map them through SPARTa without replacing MCP, OAuth, IAM, or prompt defenses.
+- `docs/MCP_Runtime_Governance_Positioning.md` explains SMERC's focused category position as recoverability-aware runtime governance for MCP-style tool calls and agent actions.
+- `docs/Microsoft_Ecosystem_Positioning.md` gives Microsoft-oriented reviewers a bounded explanation of where SMERC can complement MCP, GitHub Actions, DevOps, identity, policy, and security operations.
+- `docs/Microsoft_Tech_Community_Post_Draft.md` gives a careful public discussion draft for Microsoft ecosystem feedback without implying partnership, certification, or production readiness.
+- `docs/AI_Assisted_Build_And_Red_Team_Strategy.md` explains how outside AI tools can help with engineering critique and agent simulation without replacing human validation.
+- `docs/Scoring_Invariants_And_Calibration.md` explains the declared scoring invariants, what passes today, and what still requires design-partner calibration.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
+- `docs/SPARTa_v2_Execution_Adapter_Framework.md` explains how SPARTa can mature into the execution-adapter layer for GitHub Actions, ticketing, review, cloud, and financial workflows.
+- `specification/SMERC_SPARTa_Vocabulary_v1.md` defines the machine-readable `smerc.sparta-vocabulary.v1` terms that agents and adapters should use instead of inventing route meanings.
+- `docs/SPARTa_Adapter_Conformance.md` explains how the static adapter conformance harness checks declared SPARTa capabilities before pilot use.
+- `docs/GitHub_Deployment_Adapter_Operations.md` explains how a supplied SPARTa route artifact can be bound to a one-time permit before GitHub deployment execution.
 - `docs/Control_Mapping_Library.md` explains how abstract SMERC controls map to native mechanisms and evidence requirements for a tool path.
 - `docs/Governance_Report_Generator.md` explains how to assemble decision, route, control mapping, and DLL artifacts into one replayable review report.
 - `docs/Decision_Lifecycle_Ledger.md` explains how SMERC records the full governed life of a decision.
+- `docs/Fake_Customer_Production_Like_Test.md` explains the AcmeCloud simulated customer environment that exercises safe, constrained, blocked, review-required, and rollback paths.
+- `docs/Real_Public_Incident_Replay.md` explains how public incident reports are replayed through SMERC with analyst-assigned signal boundaries.
 - `docs/SMERC_F_Profile_Packet.md` explains the SMERC-F financial-action profile packet and its commercial limits.
+- `docs/SMERC_F_AML_Inspired_Spur.md` explains SMERC-F as an AML-inspired financial-action governance profile without claiming AML compliance or replacing financial-crime systems.
+- `docs/Change_Management_Inspired_Governance.md` explains how SMERC complements change-management discipline by scoring runtime recoverability before GitHub Actions and production automation execute.
+- `docs/Security_Response_Inspired_Governance.md` explains how SMERC complements SOAR and incident-response playbooks by scoring recoverability before security automation executes.
+- `docs/Model_Risk_Inspired_Governance.md` explains how SMERC complements model-risk programs by separating model approval from runtime action permission.
+- `docs/SRE_Incident_Inspired_Governance.md` explains how SMERC complements reliability automation by scoring whether incident mitigations are recoverable enough to execute.
+- `docs/SMERC_F_Stablecoin_Blockchain_Pilot_Fit.md` explains when stablecoin, blockchain, payment, treasury, or tokenized-finance teams are a strong SMERC-F fit.
+- `pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md` gives a bounded metadata-only SMERC-F pilot path for financial-action review without live fund movement.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
 - `docs/Community_Submission_Kit.md` gives careful, non-exaggerated public post drafts for Microsoft Tech Community, GitHub Community, LinkedIn, Hacker News, and Product Hunt.
 - `docs/Public_Indexing_Assets.md` records the public status page, sitemap, robots file, `llms.txt`, and `humans.txt`.
+- `docs/Findability_And_AI_Discovery.md` records the search and AI-discovery language needed for humans and tools to find SMERC accurately.
+- `docs/Naming_And_Search_Style_Guide.md` defines the brand/category/search wording pattern for public pages and repository materials.
 - `examples/domain_profiles/github_actions_strict.json` shows how a design partner can load a strict custom calibration profile without editing engine code.
 - `docs/Python_SDK_Quickstart.md` shows how to call the SMERC API from Python without third-party dependencies.
 - `docs/JavaScript_SDK_Quickstart.md` shows how to call the SMERC API from Node or browser-compatible JavaScript.
+- `integrations/agent_handshake/README.md` shows how an agent runner should call the handshake API and map postures into safe execution states.
+- `integrations/human_review/README.md` shows how SPARTa can package a review-required route into signed human-review request and response evidence before a live Slack, Teams, Jira, or ServiceNow adapter exists.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
+- `pilot_package/Pilot_Kickoff_Packet.md` and the adjacent pilot operating templates define how a customer pilot starts, runs, reviews, and reaches go/no-go decisions.
+- `pilot_package/Design_Partner_Qualification_Checklist.md` helps screen whether a prospect is weak, exploratory, moderate, or strong fit before offering a pilot.
+- `pilot_package/Human_AI_Pilot_Operating_Model.md` defines the split between AI-generated actions, SMERC scoring, and human-owned review, labels, and go/no-go decisions.
+- `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md` and `examples/github_actions_pilot_manifest.json` give a concrete first-workflow launch path for a GitHub Actions shadow-mode pilot.
+- `reference_engine.github_actions_pilot_readiness` generates a readiness report that checks whether the pilot manifest and repository evidence are ready for week-zero qualification and observe-mode setup.
+- `pilot_package/GitHub_Actions_Customer_Pilot_Intake.md` gives interested prospects a metadata-only intake packet for determining whether one GitHub Actions workflow is ready for review-call and week-zero pilot qualification.
+- `pilot_package/First_Pilot_Path.md` gives the shortest path from interested prospect to 30-day shadow-mode evidence.
+- `pilot_package/Customer_Metadata_Substitution_Guide.md` explains how a prospect replaces public samples with metadata-only customer inputs safely.
+- `docs/Customer_Metadata_Validation.md` checks whether prospect-specific inputs are ready before generating a customer pilot package.
+- `pilot_package/Pilot_Handoff_Checklist.md` defines the required customer, reviewer, data-boundary, stop-condition, and success-metric gate before observe mode starts.
+- `docs/Pilot_Evidence_Summary.md` generates the executive go/no-go wrapper from prospect route, customer action intake, handoff status, and reviewer metrics.
+- `pilot_package/Pricing_And_Pilot_Evidence_Position.md` explains early pilot pricing and why the Decision Lifecycle Ledger should be positioned as evidence support, not a standalone compliance guarantee.
 - `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md` gives a bounded design-partner pilot path and stop conditions.
 - `reports/Pilot_Level_5_Readiness_Assessment.md` shows the generated readiness assessment and unresolved gaps.
 - `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
 - `reports/Proxy_Incident_Replay_Benchmark.md` shows proxy incident-replay evidence comparing simple allow/deny policy with SMERC recoverability-weighted posture decisions.
 - `reports/Runtime_Governance_Benchmark.md` shows an expanded deterministic benchmark comparing SMERC postures against a simple allow/deny baseline across 84 scenarios.
+- `reports/Governance_Pattern_Atlas.md` summarizes five governance-pattern benchmarks, 40 scenarios, and the unified evidence boundary for credibility-partner review.
+- `reports/Credibility_Partner_Review_Packet.md` packages the public links, atlas summary, review questions, pilot-fit questions, and evidence boundaries for external credibility review.
 - `reports/Runtime_Benchmark_DLL_Bundle.md` converts those benchmark decisions into hash-chained decision-time ledgers without fabricating live execution or outcome evidence.
+- `reports/Change_Management_Governance_Benchmark.md` compares traditional change labels with SMERC runtime postures across GitHub Actions and production-change scenarios.
+- `reports/Security_Response_Governance_Benchmark.md` compares security playbook outcomes with SMERC runtime postures across security automation scenarios.
+- `reports/Model_Risk_Governance_Benchmark.md` compares model-governance outcomes with SMERC runtime postures across AI-agent action scenarios.
+- `reports/SRE_Incident_Governance_Benchmark.md` compares SRE incident playbook outcomes with SMERC runtime postures across reliability automation scenarios.
 - `reports/Pilot_Ledger_Intake_Result.md` shows how pilot-supplied reviewer, execution, outcome, and learning evidence can be appended to a DLL with ordering checks.
 - `reports/Pilot_Ledger_Metrics_Report.md` summarizes completed DLL evidence with explicit denominators and sample-size caveats.
 - `docs/Pilot_DLL_API.md` describes stateless API endpoints for submitting pilot DLL intake evidence and calculating DLL metrics.
 - `docs/Decision_Certificate.md` describes digest-bound pilot certificates that summarize verified DLL records for replayable review.
 - `reports/Decision_Certificate_Example.md` shows an example signed pilot certificate generated from a verified Decision Lifecycle Ledger.
 - `reports/Decision_Lifecycle_Ledger_Example.md` shows a full pilot-grade lifecycle record from request through learning recommendation.
+- `reports/End_To_End_PR_Guardian_Demo.md` shows the integrated PR Guardian proof path: runtime decision, PR artifact, SPARTa route, DLL record, and DLL Intelligence summary.
 - `reports/SMERC_F_Profile_Packet.md` shows a financial-action profile packet across conservative, balanced, and permissive policies.
+- `reports/Public_Discovery_Audit.md` shows the latest local audit of the public site's discovery metadata and AI-readable files.
+- `reports/Commercial_Readiness_Language_Audit.md` shows the latest audit of public-facing repository language for positioning clarity, evidence boundaries, and unsupported claim risk.
 - `COMMUNITY.md`, `CONTRIBUTING.md`, `docs/Partner_Program.md`, and `docs/Community_Outreach_Kit.md` describe how design partners, integration partners, researchers, and open-source contributors can engage.
 
 The shortest accurate explanation is:
@@ -109,41 +196,54 @@ The shortest accurate explanation is:
 
 1. Read `docs/Plain_English_Product_Overview.md`.
 2. Read `docs/CISO_30_Minute_Review_Package.md`.
-3. Run `docs/CISO_Evidence_Walkthrough.md`.
-4. Read `docs/CISO_GitHub_Inspection_Guide.md`.
-5. Read `docs/Developer_Quickstart.md`.
-6. Read `docs/Pilot_Evaluation_Checklist.md`.
-7. Read `docs/Maturity_Model.md`.
-8. Read `reports/Pilot_Level_5_Readiness_Assessment.md`.
-9. Read `docs/CISO_Quick_Review.md`.
-10. Read `docs/Security_Model.md`.
-11. Inspect `reference_engine/recoverability_engine.py`.
-12. Read `docs/Engine_Profile_And_Trace.md`.
-13. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
-14. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
-15. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-16. Review `integrations/github_actions/README.md`.
-17. Read `docs/Pilot_Review_Metrics.md`.
-18. Inspect `pilot_console/README.md`.
-19. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
-20. Read `docs/Scoped_Workload_Identity.md`.
-21. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
-22. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
-23. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
-24. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
-25. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
-26. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
-27. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
-28. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
-29. Read `docs/Python_SDK_Quickstart.md`.
-30. Read `docs/JavaScript_SDK_Quickstart.md`.
-31. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
-32. Review `reports/Control_Mapping_Library_Example.md`.
-33. Review `reports/Governance_Report_Example.md`.
-34. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
-35. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
-36. Run the Python and console tests.
-37. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+3. Read `docs/Thirty_Minute_Workflow_Proof.md`.
+4. Run `docs/CISO_Evidence_Walkthrough.md`.
+5. Read `docs/CISO_GitHub_Inspection_Guide.md`.
+6. Read `docs/Developer_Quickstart.md`.
+7. Read `docs/Pilot_Evaluation_Checklist.md`.
+8. Read `docs/Maturity_Model.md`.
+9. Read `reports/Pilot_Level_5_Readiness_Assessment.md`.
+10. Read `docs/CISO_Quick_Review.md`.
+11. Read `docs/Security_Model.md`.
+12. Inspect `reference_engine/recoverability_engine.py`.
+13. Read `docs/Engine_Profile_And_Trace.md`.
+14. Inspect `reference_engine/model_fitness.py` and read `docs/Model_Agent_Fitness_Layer.md`.
+15. Inspect `reference_engine/beacon.py` and read `docs/SMERC_Beacon.md`.
+16. Inspect `reference_engine/agent_handshake.py` and read `docs/Agent_Handshake_Protocol.md`.
+17. Read `docs/AI_Assisted_Build_And_Red_Team_Strategy.md`.
+18. Inspect `reference_engine/scoring_invariants.py` and read `docs/Scoring_Invariants_And_Calibration.md`.
+19. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
+20. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
+21. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+22. Review `integrations/agent_handshake/README.md`.
+23. Review `integrations/github_actions/README.md`.
+24. Read `docs/Pilot_Review_Metrics.md`.
+25. Inspect `pilot_console/README.md`.
+26. Inspect `reference_engine/authorization_permit.py` and `specification/SMERC_Action_Bound_Permit_v1.md`.
+27. Read `docs/Scoped_Workload_Identity.md`.
+28. Inspect `reference_engine/control_evidence.py` and `specification/SMERC_Control_Evidence_v1.md`.
+29. Read `docs/Short_Lived_Access_Operations.md` and `specification/SMERC_Access_Token_v2.md`.
+30. Read `docs/GitHub_OIDC_Operations.md` and `specification/SMERC_GitHub_OIDC_Trust_v1.md`.
+31. Inspect `integrations/github_deployment/` and read `docs/GitHub_Deployment_Adapter_Operations.md`.
+32. Inspect `reference_engine/sparta_router.py` and read `docs/SPARTa_Router_Operations.md`.
+33. Read `docs/SPARTa_v2_Execution_Adapter_Framework.md`.
+34. Inspect `integrations/human_review/README.md`.
+35. Inspect `reference_engine/control_mapping.py` and read `docs/Control_Mapping_Library.md`.
+36. Inspect `reference_engine/governance_report.py` and read `docs/Governance_Report_Generator.md`.
+37. Inspect `reference_engine/decision_lifecycle_ledger.py` and read `docs/Decision_Lifecycle_Ledger.md`.
+38. Read `docs/Python_SDK_Quickstart.md`.
+39. Read `docs/JavaScript_SDK_Quickstart.md`.
+40. Review `reports/Proxy_Incident_Replay_Benchmark.md`.
+41. Review `reports/Scoring_Invariants_Report.md`.
+42. Review `reports/Control_Mapping_Library_Example.md`.
+43. Review `reports/Governance_Report_Example.md`.
+44. Review `reports/Decision_Lifecycle_Ledger_Example.md`.
+45. Review `reports/Commercial_Readiness_Language_Audit.md`.
+45. Read `COMMUNITY.md` and `docs/Partner_Program.md` if you are evaluating partnership or pilot fit.
+46. Run the Python and console tests.
+47. Review `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md`.
+48. Review `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md`.
+49. Review `pilot_package/Human_AI_Pilot_Operating_Model.md`.
 
 ## What SMERC Evaluates
 
@@ -177,6 +277,53 @@ It outputs:
 - a control mapping report showing whether required controls map to native tool mechanisms and evidence requirements
 - a governance report that cross-checks decision, route, control mapping, and lifecycle artifacts
 - an optional Decision Lifecycle Ledger record for request, evidence, evaluation, review, execution, outcome, and learning recommendation
+
+## Model and Agent Fitness
+
+`reference_engine/model_fitness.py` evaluates which model, agent, or automation executor is qualified for a proposed task. It is not a generic model leaderboard. It scores executor fit against required capabilities, data sensitivity, tool authority, recoverability, reliability history, cost, latency, impact scope, and anomaly pressure.
+
+The output includes a recommended executor, allowed and blocked executors, execution posture, candidate rankings, model fitness score, risk-adjusted executor score, controls, reason codes, and a replay record.
+
+```bash
+python -m reference_engine.model_fitness examples/model_agent_routing_examples.json --pretty
+python -m unittest tests.test_model_fitness -v
+```
+
+## SMERC Beacon
+
+`examples/smerc_beacon.json` is a machine-readable discovery manifest for AI agents, automation tools, reviewers, and search systems. It points to canonical SMERC resources, declares governance surfaces, lists discovery endpoints, describes Model and Agent Fitness inputs and outputs, and preserves non-claims so tools do not overstate the project.
+
+```bash
+python -m reference_engine.beacon examples/smerc_beacon.json --pretty
+python -m unittest tests.test_beacon -v
+```
+
+## Agent Handshake Protocol
+
+`reference_engine/agent_handshake.py` connects SMERC Beacon discovery, agent declaration, Model/Agent Fitness routing, recoverability scoring, and replay into a single handshake response.
+
+```bash
+python -m reference_engine.agent_handshake examples/agent_handshake_request.json --pretty
+python -m unittest tests.test_agent_handshake -v
+```
+
+The same protocol is available through the authenticated runtime service at `POST /v1/agent/handshake` with `actions.evaluate` scope. The endpoint returns the combined handshake posture and replay record, then records an `agent.handshake.evaluated` security event for review.
+
+The reference handshake is pilot-grade. It does not authenticate remote agents by itself or replace scoped workload identity, signed permits, SPARTa routing, Decision Lifecycle Ledger evidence, or customer-specific policy.
+
+## Scoring Invariants
+
+`reference_engine/scoring_invariants.py` verifies declared safety properties for the recoverability and Model/Agent Fitness scoring formulas. The report checks monotonic behavior, fail-closed executor qualification, and the separation between hard constraints and softer ranking signals.
+
+```bash
+python -m reference_engine.scoring_invariants --pretty
+python -m reference_engine.scoring_invariants \
+  --json-output reports/scoring_invariants_results.json \
+  --markdown-output reports/Scoring_Invariants_Report.md
+python -m unittest tests.test_scoring_invariants -v
+```
+
+These invariants make score behavior more inspectable. They do not prove production incident reduction or customer-calibrated thresholds.
 
 ## Action Language
 
@@ -230,7 +377,22 @@ python -m reference_engine.sparta_router \
 
 SPARTa v1 is intentionally conservative. If SMERC returns `THROTTLE` but the tool plan cannot apply scope limits, dry runs, checkpoints, or rollback as required, the router marks the plan non-executable and routes it to review. See `specification/SMERC_SPARTa_Router_v1.md`.
 
+Adapters, coding agents, and review tools should also use `smerc.sparta-vocabulary.v1` for machine interpretation. It defines lifecycle verbs, route states, control verbs, evidence events, and failure reasons. Unknown vocabulary fails closed. See `specification/SMERC_SPARTa_Vocabulary_v1.md` and `examples/sparta/sparta_vocabulary.json`.
+
 Route reports can optionally be signed with `smerc.sparta-route-signature.v1` HMAC metadata for pilot-grade tamper detection. This does not replace managed production key infrastructure or prove downstream enforcement. See `reports/signed_sparta_route_example.json`.
+
+When a route is `REVIEW_REQUIRED`, the vendor-neutral human-review adapter can package the route into signed review request and response evidence:
+
+```bash
+python integrations/human_review/review_adapter.py verify-response \
+  --review-request reports/human_review_request_example.json \
+  --review-response reports/human_review_response_example.json \
+  --request-secret development-human-review-request-secret \
+  --response-secret development-human-review-response-secret \
+  --pretty
+```
+
+This proves request/response binding before a live Slack, Teams, Jira, or ServiceNow delivery adapter exists. It does not prove external identity-provider assurance by itself.
 
 The API can also route a stored decision by `replay_id`:
 
@@ -283,6 +445,38 @@ python -m reference_engine.decision_lifecycle_ledger \
 
 DLL is intentionally not an automatic learning system. It can recommend policy or calibration changes, but each learning recommendation remains `requires_review` until an accountable reviewer activates a policy through normal governance. See `docs/Decision_Lifecycle_Ledger.md`.
 
+## DLL Intelligence
+
+`smerc.dll-intelligence.v1` analyzes verified Decision Lifecycle Ledger records across a pilot. It surfaces near misses, harmful or helpful overrides, recurring missing evidence, rollback performance, recovery failures, governance drift signals, and review-gated policy recommendations.
+
+```bash
+python -m reference_engine.dll_intelligence \
+  --example-bundle-output examples/decision_lifecycle_ledger_portfolio.json \
+  --json-output reports/dll_intelligence_report.json \
+  --markdown-output reports/DLL_Intelligence_Report.md \
+  --pretty
+```
+
+DLL Intelligence is the governance memory layer: SMERC decides, SPARTa routes, DLL records, and DLL Intelligence asks what the organization is learning across decisions. It does not silently retrain models or activate policy. See `docs/DLL_Intelligence.md` and `reports/DLL_Intelligence_Report.md`.
+
+## End-To-End PR Guardian Demo
+
+`smerc.end-to-end-pr-guardian-demo.v1` connects the current runtime pieces into one pilot-grade proof loop for an AI-assisted pull request:
+
+```text
+AI-assisted PR request -> SMERC decision -> PR Guardian comment/certificate -> SPARTa route -> Decision Lifecycle Ledger -> DLL Intelligence
+```
+
+```bash
+python -m reference_engine.end_to_end_pr_guardian_demo --pretty
+```
+
+The command writes a CISO-readable report and machine-readable artifacts under `reports/`. See `docs/End_To_End_PR_Guardian_Demo.md` and `reports/End_To_End_PR_Guardian_Demo.md`.
+
+The report includes local proof-loop latency measurements for decision evaluation, PR artifact rendering, SPARTa routing, DLL creation, and DLL Intelligence analysis. Treat these as operational-overhead checks, not as production performance evidence.
+
+This is synthetic integration proof, not customer production evidence.
+
 ## Verifiable Control Evidence
 
 Configured execution adapters first authenticate and reserve a permit, then replace caller-supplied control names with short-lived `smerc.control-evidence.v1` receipts. Each receipt is signed by a key scoped to one tenant and executor audience and binds the adapter, permit, action hash, applied controls, native mechanisms, evidence references, and observation times.
@@ -315,14 +509,20 @@ Requires Python 3.10 or later. No third-party Python packages are required.
 python -m reference_engine.agent_permission_layer examples/agent_permission_actions.json --pretty
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m reference_engine.sparta_router --decision examples/sparta/throttle_decision.json --plan examples/sparta/github_actions_deploy_plan.json --pretty
+python -m reference_engine.sparta_conformance examples/sparta/adapter_registry.json --pretty
 python -m reference_engine.control_mapping examples/control_mapping/github_actions_controls.json --posture THROTTLE --tool github_actions --capability deploy_production --controls limit_scope preview_before_execution require_rollback_plan preserve_replay --pretty
 python -m reference_engine.governance_report examples/governance_report/github_actions_governance_bundle.json --pretty
 python -m reference_engine.decision_lifecycle_ledger --example --pretty
+python -m reference_engine.end_to_end_pr_guardian_demo --pretty
 python -m reference_engine.smerc_f_profile_packet examples/financial_action_requests.json --policies conservative balanced permissive --pretty
 python -m reference_engine.runtime_benchmark_suite examples/proxy_incident_replay_scenarios.json --pretty
 python -m reference_engine.benchmark_ledger_builder reports/runtime_governance_benchmark.json --pretty
 python -m reference_engine.pilot_ledger_intake reports/runtime_benchmark_dll_bundle.json examples/pilot_ledger_intake_example.json --decision-id "dll:proxy-deploy-001::baseline" --pretty
 python -m reference_engine.pilot_ledger_metrics reports/pilot_ledger_intake_result.json --pretty
+python -m reference_engine.github_actions_pilot_summary test_outputs/github_action_remote
+python -m reference_engine.design_partner_fit examples/design_partner_fit_example.json --pretty
+python -m reference_engine.first_pilot_packet --pretty
+python -m reference_engine.public_discovery_audit ../SMERC-Macro-Language-Model/site --pretty
 python -m unittest discover -s tests
 ```
 
@@ -457,6 +657,18 @@ python integrations/github_actions/run_smerc_gate.py \
 
 The GitHub Action can also call the authenticated `/v1/evaluate` endpoint. Remote mode supports an exact GitHub OIDC trust policy or the static `SMERC_API_KEY` compatibility path, requires HTTPS outside loopback tests, reuses an idempotency key across evaluation retries, and fails closed in enforce mode. See `integrations/github_actions/README.md`.
 
+Render a SMERC PR Guardian comment and certificate:
+
+```bash
+python integrations/github_pr_guardian/pr_guardian.py \
+  --decision-report smerc-decision.json \
+  --action-file integrations/github_actions/sample_action_request.json \
+  --comment-output smerc-pr-comment.md \
+  --certificate-output smerc-pr-certificate.json
+```
+
+PR Guardian is the visible pull-request review surface for AI-assisted changes. It turns a SMERC decision into posture, risk, confidence, replay ID, reason codes, controls, and a hash-bound certificate digest that can be posted as a PR comment. See `docs/GitHub_PR_Guardian.md`, `integrations/github_pr_guardian/README.md`, and `examples/github_pr_guardian/pr_guardian_workflow.yml`.
+
 Generate a synthetic GitHub Actions shadow-mode pilot report:
 
 ```bash
@@ -464,6 +676,14 @@ python -m reference_engine.pilot_report \
   examples/github_actions_shadow_mode_scenarios.json \
   --json-output reports/github_actions_shadow_mode_results.json \
   --markdown-output reports/GitHub_Actions_Shadow_Mode_Pilot_Report.md
+```
+
+Summarize downloaded `smerc-decision.json` artifacts from an actual GitHub Actions pilot:
+
+```bash
+python -m reference_engine.github_actions_pilot_summary downloaded-smerc-decisions \
+  --json-output reports/github_actions_pilot_artifact_summary.json \
+  --markdown-output reports/GitHub_Actions_Pilot_Artifact_Summary.md
 ```
 
 Generate a recoverability-engine evidence report:

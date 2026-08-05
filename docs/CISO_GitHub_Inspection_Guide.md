@@ -66,12 +66,13 @@ Review the execution sequence:
 ```text
 validate plan
 authenticate and reserve permit
+verify SPARTa route-to-permit binding when route evidence is supplied
 run required native controls
 sign control evidence
 consume reserved permit once
 execute command with bounded environment
 timeout/cancel/rollback when needed
-write non-secret report
+write non-secret report with SPARTa execution evidence
 ```
 
 ### 6. Test Coverage
@@ -140,4 +141,3 @@ Start with a two-to-four week shadow-mode GitHub Actions pilot:
 6. Decide whether limited enforcement is justified.
 
 The pilot succeeds only if SMERC changes the team's understanding of action risk in a measurable way.
-

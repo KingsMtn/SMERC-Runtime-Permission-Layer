@@ -1,0 +1,113 @@
+{
+  "blockers": [],
+  "evidence_boundary": "Readiness only. This does not prove production suitability, incident reduction, customer demand, or regulatory compliance.",
+  "evidence_checks": [
+    {
+      "detail": "repository evidence exists",
+      "item": "integrations/github_actions/README.md",
+      "status": "ready"
+    },
+    {
+      "detail": "repository evidence exists",
+      "item": "integrations/github_actions/remote_example_workflow.yml",
+      "status": "ready"
+    },
+    {
+      "detail": "repository evidence exists",
+      "item": "docs/API_Deployment_Guide.md",
+      "status": "ready"
+    },
+    {
+      "detail": "repository evidence exists",
+      "item": "docs/GitHub_OIDC_Operations.md",
+      "status": "ready"
+    },
+    {
+      "detail": "repository evidence exists",
+      "item": "pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md",
+      "status": "ready"
+    },
+    {
+      "detail": "repository evidence exists",
+      "item": "pilot_package/Weekly_Review_Template.md",
+      "status": "ready"
+    },
+    {
+      "detail": "repository evidence exists",
+      "item": "pilot_package/Go_No_Go_Criteria.md",
+      "status": "ready"
+    }
+  ],
+  "first_customer_question": "Can we run SMERC in observe mode against one GitHub Actions workflow using metadata-only action descriptions and compare the output with reviewer judgment for 30 days?",
+  "generated_at": "2026-08-02T02:31:34.848833+00:00",
+  "mode": "observe",
+  "pilot_name": "github-actions-shadow-mode-platform-team",
+  "ready_for_customer_observe": true,
+  "ready_for_week_zero": true,
+  "required_setup_items": [
+    "one selected repository or workflow family",
+    "security owner",
+    "platform owner",
+    "pilot reviewer group",
+    "metadata-only action request file",
+    "observe-mode workflow configuration",
+    "artifact retention period",
+    "weekly review cadence",
+    "stop conditions",
+    "day-30 go/no-go criteria"
+  ],
+  "schema": "smerc.github-actions-pilot-readiness.v1",
+  "setup_checks": [
+    {
+      "detail": "first customer test must not block workflow execution",
+      "item": "pilot starts in observe mode",
+      "status": "ready"
+    },
+    {
+      "detail": "public and customer language must stay inside evidence boundaries",
+      "item": "pilot explicitly excludes production certification claims",
+      "status": "ready"
+    },
+    {
+      "detail": "pilot should score workflow metadata, not sensitive payloads",
+      "item": "metadata-only approved data is defined",
+      "status": "ready"
+    },
+    {
+      "detail": "first pilot must state what not to send",
+      "item": "sensitive and regulated data exclusions are defined",
+      "status": "ready"
+    },
+    {
+      "detail": "OIDC reduces static secret handling in a real workflow",
+      "item": "GitHub OIDC is the preferred authentication path",
+      "status": "ready"
+    },
+    {
+      "detail": "a pilot must start with a concrete workflow",
+      "item": "at least one target workflow is declared",
+      "status": "ready"
+    },
+    {
+      "detail": "commercial evidence requires human comparison labels",
+      "item": "weekly metrics include reviewer agreement",
+      "status": "ready"
+    },
+    {
+      "detail": "operators need to know whether integration reliability is noisy",
+      "item": "weekly metrics include unavailable evaluation count",
+      "status": "ready"
+    },
+    {
+      "detail": "a bounded pilot needs explicit halt rules",
+      "item": "stop conditions are declared",
+      "status": "ready"
+    },
+    {
+      "detail": "day-30 decision should not drift into unapproved enforcement",
+      "item": "go/no-go options are declared",
+      "status": "ready"
+    }
+  ],
+  "warnings": []
+}

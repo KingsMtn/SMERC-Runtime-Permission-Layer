@@ -13,6 +13,7 @@ EXAMPLE = json.loads((ROOT / "examples" / "recoverability_single_action.json").r
 LANGUAGE_EXAMPLE = json.loads(
     (ROOT / "examples" / "action_language" / "production_database_change.json").read_text(encoding="utf-8")
 )
+AGENT_HANDSHAKE_EXAMPLE = json.loads((ROOT / "examples" / "agent_handshake_request.json").read_text(encoding="utf-8"))
 
 
 def example_ledger_for(tenant_id: str, decision_id: str):
@@ -81,6 +82,18 @@ class PythonSDKTests(unittest.TestCase):
         self.assertEqual(first["language_version"], "smerc.decision.v1")
         self.assertEqual(first["replay_id"], second["replay_id"])
 
+    def test_agent_handshake_calls_runtime_api(self):
+        client = self.client()
+
+        handshake = client.agent_handshake(AGENT_HANDSHAKE_EXAMPLE)
+
+        self.assertEqual(handshake["schema_version"], "smerc.agent_handshake.v1")
+        self.assertEqual(handshake["tenant_id"], "alpha")
+        self.assertEqual(handshake["handshake_posture"], "THROTTLE")
+        self.assertEqual(handshake["recommended_executor"], "github_deployment_agent")
+        self.assertIn("fitness_replay_id", handshake["replay"])
+        self.assertIn("action_replay_id", handshake["replay"])
+
     def test_batch_review_queue_review_and_metrics(self):
         client = self.client()
         batch = client.batch([EXAMPLE], idempotency_key="sdk-batch-1001")
@@ -100,10 +113,18 @@ class PythonSDKTests(unittest.TestCase):
         )
         reviews = client.list_reviews(decision["replay_id"])
         metrics = client.pilot_metrics()
+        health = client.runtime_health_metrics(limit=10, latency_slo_ms=500)
+        operator_status = client.operator_status(limit=10, latency_slo_ms=500)
 
         self.assertEqual(review["replay_id"], decision["replay_id"])
         self.assertEqual(reviews["count"], 1)
         self.assertGreaterEqual(metrics["reviewed_decision_count"], 1)
+        self.assertEqual(health["schema"], "smerc.runtime-health-metrics.v1")
+        self.assertGreaterEqual(health["decision_volume"]["decision_count"], 1)
+        self.assertGreaterEqual(health["latency"]["sample_count"], 1)
+        self.assertIsNotNone(health["latency"]["p95_ms"])
+        self.assertEqual(operator_status["schema"], "smerc.operator-status.v1")
+        self.assertEqual(operator_status["runtime_health"]["health_status"], "healthy")
 
     def test_security_events_are_available_to_authenticated_client(self):
         client = self.client()

@@ -43,15 +43,19 @@ test('client builds query parameters for decision and review queue reads', async
   });
 
   await client.listDecisions({ limit: 10, posture: 'ALLOW' });
+  await client.runtimeHealthMetrics({ limit: 10, latencySloMs: 500 });
+  await client.operatorStatus({ limit: 10, latencySloMs: 500 });
   await client.reviewQueue({ limit: 5, posture: 'THROTTLE', status: 'pending' });
   await client.securityEvents({ limit: 2 });
 
   assert.equal(urls[0], 'https://smerc.example/v1/decisions?limit=10&posture=ALLOW');
-  assert.equal(urls[1], 'https://smerc.example/v1/review-queue?limit=5&posture=THROTTLE&status=pending');
-  assert.equal(urls[2], 'https://smerc.example/v1/security-events?limit=2');
+  assert.equal(urls[1], 'https://smerc.example/v1/runtime/health-metrics?limit=10&latency_slo_ms=500');
+  assert.equal(urls[2], 'https://smerc.example/v1/operator/status?limit=10&latency_slo_ms=500');
+  assert.equal(urls[3], 'https://smerc.example/v1/review-queue?limit=5&posture=THROTTLE&status=pending');
+  assert.equal(urls[4], 'https://smerc.example/v1/security-events?limit=2');
 });
 
-test('client exposes replay, review, language, batch, permit, and token endpoints', async () => {
+test('client exposes replay, review, language, handshake, batch, permit, and token endpoints', async () => {
   const calls = [];
   const client = new SMERCClient('https://smerc.example', {
     fetchImpl: async (url, options) => {
@@ -67,6 +71,7 @@ test('client exposes replay, review, language, batch, permit, and token endpoint
   await client.listReviews('replay_1');
   await client.reviewDecision('replay_1', { verdict: 'agree' });
   await client.evaluateLanguageAction({ language_version: 'smerc.action.v1' });
+  await client.agentHandshake({ schema_version: 'smerc.agent_handshake.v1', handshake_id: 'handshake_1' });
   await client.batch([{ action_id: 'a' }]);
   await client.issuePermit({ replay_id: 'replay_1' });
   await client.preparePermit({ permit_token: 'token' });
@@ -86,6 +91,7 @@ test('client exposes replay, review, language, batch, permit, and token endpoint
     'GET /v1/decisions/replay_1/reviews',
     'POST /v1/decisions/replay_1/reviews',
     'POST /v1/language/evaluate',
+    'POST /v1/agent/handshake',
     'POST /v1/batch',
     'POST /v1/permits/issue',
     'POST /v1/permits/prepare',
@@ -97,6 +103,10 @@ test('client exposes replay, review, language, batch, permit, and token endpoint
     'POST /v1/pilot/dll/ledgers/dll_1/certificate',
     'POST /v1/pilot/evidence-packages',
   ]);
+  assert.deepEqual(JSON.parse(calls[7].body), {
+    schema_version: 'smerc.agent_handshake.v1',
+    handshake_id: 'handshake_1',
+  });
   assert.deepEqual(JSON.parse(calls.at(-1).body), {
     decision_id: 'dll_1',
     issuer: 'js-sdk-test',

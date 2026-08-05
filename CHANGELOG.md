@@ -2,6 +2,69 @@
 
 ## Unreleased
 
+- Added Microsoft ecosystem and MCP runtime-governance positioning materials, including a bounded Microsoft Tech Community post draft that points reviewers to the working MCP tool governance adapter without claiming partnership, certification, or production readiness.
+- Added MCP tool-call governance adapter, examples, docs, generated reports, and tests that map MCP-style tool-call metadata into SMERC recoverability decisions and SPARTa route behavior before execution.
+- Added a one-command API smoke test that checks health, readiness, schema discovery, evaluation, runtime health, and operator status for local or hosted pilot APIs with explicit evidence boundaries.
+- Added authenticated `/v1/operator/status` API support with SDK helpers and OpenAPI coverage so pilot operators can inspect runtime health, active policy identity, decision activity, and readiness caveats programmatically.
+- Added runtime health gating to operator status reports so latency, SLO status, unavailable rate, and observed evaluation count are visible beside policy bundle, readiness, and decision activity.
+- Added API-observed runtime latency capture on persisted decisions so `/v1/runtime/health-metrics` can calculate tenant-scoped p50/p95/p99 latency from stored evaluations instead of reporting unknown latency after live API use.
+- Added runtime health metrics reporting and a tenant-scoped `/v1/runtime/health-metrics` API surface for decision volume, posture distribution, p50/p95/p99 latency when observations exist, unavailable evaluations, fail-closed behavior, and evidence-labeled observation boundaries.
+- Added signed policy bundle manifests that bind SPL, runtime policy identity, artifact hashes, approval metadata, activation requirements, and verification results for pilot operator review without claiming OPA bundle parity.
+- Added pilot operator status reporting and OPA-style decision log export so existing policy, audit, and platform teams can inspect active policy/profile versions, readiness, decision distribution, unavailable evaluations, reason codes, controls, and replay IDs without claiming OPA parity.
+- Added a GitHub Actions customer pilot intake packet and validator for determining whether a prospect has a safe metadata boundary, owners, review process, success metrics, and 10 to 25 sample actions before week-zero qualification.
+- Added a CISO 5-minute proof package that connects the product claim, credibility packet, GitHub Actions operator quickstart, readiness report, and 30-day observe-mode pilot ask.
+- Added a GitHub Actions pilot operator quickstart and readiness generator that check whether the first observe-mode workflow has repository evidence, metadata boundaries, metrics, stop conditions, and day-30 go/no-go criteria before customer setup.
+- Added bounded credibility-partner outreach language that points reviewers to the public credibility page and GitHub repo while avoiding production-readiness claims.
+- Added a Credibility Partner Review Packet that converts the Governance Pattern Atlas into public links, a 30-minute review path, pilot-fit questions, and bounded outreach language.
+- Added a Governance Pattern Atlas that consolidates AML, change management, security response, model risk, and SRE benchmark families into one credibility-partner evidence summary.
+- Added an SRE/incident-management-inspired governance benchmark with reliability automation scenarios, CLI/report generation, documentation, and tests comparing incident playbooks with recoverability-aware runtime posture.
+- Added a model-risk-inspired governance benchmark with AI-agent scenarios, CLI/report generation, documentation, and tests separating model approval status from recoverability-aware runtime action permission.
+- Added a security-response-inspired governance benchmark with SOAR-style playbook scenarios, CLI/report generation, documentation, and tests comparing automated response playbooks with recoverability-aware runtime posture.
+- Added a change-management-inspired governance benchmark with GitHub Actions scenarios, CLI/report generation, documentation, and tests comparing traditional change labels with recoverability-aware runtime posture.
+- Added customer metadata validation to block unreplaced samples, unconfirmed substitution checklists, sample metrics, review-only prospects, and incomplete action intake before customer pilot package generation.
+- Added customer metadata substitution guidance and checklist for safely replacing public samples with prospect-specific inputs before generating a core pilot package.
+- Added a one-command core pilot package builder that outputs routing, action intake, handoff, and evidence summary artifacts into a review folder.
+- Added pilot evidence summary generation that combines prospect routing, customer action intake, handoff status, and reviewer metrics into a go/no-go package.
+- Added prospect routing to classify interested organizations into the core GitHub Actions pilot, SMERC-F financial shadow-mode pilot, or review-only path.
+- Added SMERC-F stablecoin/blockchain pilot-fit guidance and a bounded financial shadow-mode pilot path while keeping GitHub Actions as the primary pilot wedge.
+- Added an AML-inspired SMERC-F financial governance spur with scenarios, benchmark CLI, generated report, documentation, and tests comparing AML-style alerting with recoverability-aware action posture.
+- Added a pilot handoff checklist and example to gate the transition from reviewer quickstart and customer action intake into observe-mode setup.
+- Added metadata-only customer action intake for scoring prospect workflow examples before a shadow-mode pilot, including sample data, CLI, documentation, and tests.
+- Added a one-command reviewer quickstart that generates PR Guardian, SPARTa, DLL, CISO seed, and benchmark artifacts into a single local proof package.
+- Added accelerator-readiness and MACH37-readiness materials that keep SMERC focused on cyber review, GitHub Actions pilot proof, external-review signals, and evidence boundaries before future applications.
+- Added YC next-cycle readiness materials that convert the missed Fall 2026 on-time deadline into an evidence-first application plan and bounded future application draft.
+- Added `smerc.runtime-contract-index.v1`, a machine-readable assembly map for SMERC runtime contracts, handoffs, boundaries, schema, example, documentation, and tests.
+- Added `smerc.sparta-vocabulary.v1`, a machine-readable SPARTa vocabulary for lifecycle verbs, route states, control verbs, evidence events, failure reasons, adapter interpretation, schema, example, documentation, and tests.
+- Added local performance and latency reporting to the end-to-end PR Guardian proof loop, plus a competitive gaps and build-priorities note covering where OPA, AI gateways, access-control systems, approval workflows, and GRC platforms are stronger today.
+- Added an end-to-end PR Guardian demo that connects an AI-assisted pull request request to a SMERC runtime decision, PR comment/certificate, SPARTa route, Decision Lifecycle Ledger, DLL Intelligence summary, generated reports, documentation, and tests.
+- Added GitHub PR Guardian for AI-assisted pull requests, including PR comment rendering, hash-bound certificate artifacts, a workflow example, documentation, generated reports, and tests.
+- Added DLL Intelligence for multi-ledger governance memory: near-miss detection, override effectiveness, rollback performance, recurring evidence gaps, drift signals, review-gated policy queue, schema, example portfolio, reports, documentation, and tests.
+- Added a Model and Agent Fitness Layer that scores candidate executors by task fit, data boundary, tool authority, recoverability, reliability history, cost, and latency before selecting an execution posture.
+- Added model and agent routing examples, documentation, CLI support, and tests.
+- Added an AI-assisted build and red-team strategy that assigns roles to coding agents, second-opinion reviewers, GitHub-native agents, long-running agents, and human experts without treating AI output as validation.
+- Added `smerc.beacon.v1`, a machine-readable public discovery manifest for agents, tools, reviewers, and search systems, with validation and overclaim checks.
+- Added `smerc.agent_handshake.v1`, a reference protocol connecting beacon discovery, agent declaration, executor fitness, recoverability scoring, controls, and replay.
+- Added authenticated `POST /v1/agent/handshake` runtime API support with tenant policy evaluation, scoped authorization, schema discovery, security-event logging, and API tests.
+- Added Python and JavaScript SDK helpers for calling authenticated agent handshakes.
+- Added a generic Agent Handshake integration runner that maps SMERC postures into safe agent-runner states without executing actions.
+- Added an OpenAPI 3.1 pilot API contract with endpoint-coverage tests against the server discovery schema.
+- Added a customer pilot operating kit covering kickoff, integration questionnaire, data boundary, weekly review, 30/60/90 plan, sample report, responsibilities, and go/no-go criteria.
+- Added a design-partner qualification checklist that screens workflow fit, recoverability pain, metadata readiness, reviewer capacity, buyer ownership, data boundary, measurement readiness, and urgency before offering a pilot.
+- Added a machine-readable design-partner fit scorer with example input, CLI JSON/Markdown output, blocker detection, offer recommendation, and tests.
+- Added a first-pilot path that defines week-zero qualification, week-one observe setup, 30-day review, success metrics, evidence package, and commercial boundary.
+- Added a first-pilot packet generator that combines the GitHub Actions pilot manifest with the design-partner fit screen to produce JSON/Markdown start-decision packets.
+- Added a findability and AI-discovery guide covering canonical public links, search language, indexing assets, GitHub topics, and distribution checklist.
+- Added acronym-expansion guidance for Structural Momentum Entropy Range Confidence on key discovery surfaces.
+- Added a naming and search style guide using the brand/category/problem pattern for public labels.
+- Added a public discovery audit CLI that checks local site exports for required search, AI-readable, beacon, sitemap, and naming metadata.
+- Added generated public discovery audit JSON/Markdown reports and tests for the current public site metadata.
+- Added a public review snapshot summarizing current maturity, working artifacts, recent improvements, first review path, pilot path, and remaining evidence gaps.
+- Added v0.14 public-review release notes for external reviewers, validation, pilot discussion, and claim boundaries.
+- Added a Human/AI Pilot Operating Model defining the split between AI-proposed actions, SMERC scoring, and human-owned validation, labels, accountability, and go/no-go decisions.
+- Added a GitHub Actions pilot launch runbook and machine-readable pilot manifest covering local shadow mode, remote API mode, OIDC mode, evidence collection, and stop conditions.
+- Added a GitHub Actions pilot artifact summarizer that converts downloaded `smerc-decision.json` reports into JSON/Markdown operating summaries without claiming customer outcome evidence.
+- Added pricing and pilot-evidence positioning that ranges early paid pilots, centers the sale on measured pilot outcomes, and bounds the Decision Lifecycle Ledger as evidence support rather than a compliance guarantee.
+- Added scoring-invariant verification for recoverability and Model/Agent Fitness math, including generated JSON/Markdown reports and tests.
 - Added a CISO evidence walkthrough seed command, realistic seed action set, walkthrough documentation, and tests for review queue plus DLL evidence package readiness.
 - Added a CISO evidence package panel to the dependency-free pilot console for stored DLL package generation, JSON export, and Markdown export.
 - Added Python and JavaScript SDK helpers for retained DLL storage, stored certificate issuance, and pilot evidence package generation.

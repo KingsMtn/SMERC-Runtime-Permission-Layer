@@ -2,7 +2,7 @@
 
 ## What This Adds
 
-SPARTa turns a SMERC decision into a practical execution route.
+SPARTa, short for **Stateful Posture-Aware Routing and Tooling Adapter**, turns a SMERC decision into a practical execution route.
 
 Before this layer, SMERC could say `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`. SPARTa answers the next operational question:
 
@@ -119,8 +119,9 @@ The product claim should stay modest: SPARTa v1 is not a full workflow engine. I
 
 ## Current Limits
 
-- No adapter registry yet.
+- Adapter registry exists, but adapters are static configuration loaded at process start.
 - No dynamic adapter registration endpoint yet.
+- No live third-party adapter marketplace or certification path yet.
 - Signed route reports provide pilot-grade tamper detection only. They are not a production trust root.
 - No formal policy language binding yet.
 - No live evidence that SPARTa routes reduce real-world incidents.

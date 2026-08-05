@@ -20,12 +20,15 @@ Run contract validation without a permit:
 python integrations/github_deployment/deployment_adapter.py \
   --action-file examples/action_language/production_canary_release.json \
   --plan-file examples/github_deployment/execution_plan.json \
+  --sparta-route-file reports/signed_sparta_route_example.json \
   --mode validate
 ```
 
 Enforcement additionally requires `SMERC_EXECUTOR_TOKEN`, a matching `SMERC_CONTROL_EVIDENCE_KEY`, `--api-url`, and `--permit-token-file`. Keep the permit in an ephemeral file with restrictive permissions. Never place it in an output, log, cache, or artifact.
 
 `issue_permit.py` performs the preceding evaluation and issuance with separate `SMERC_PROPOSER_TOKEN` and `SMERC_ISSUER_TOKEN` credentials. It creates the permit file exclusively with restrictive permissions and prints only non-secret identifiers. The protected workflow in `examples/github_deployment/protected_deployment.yml` connects the two clients.
+
+When `--sparta-route-file` is supplied, the adapter verifies in enforce mode that the route replay ID, source posture, executable state, and declared controls match the one-time permit. A mismatch blocks before permit consumption or deployment command execution. The resulting execution report includes `smerc.sparta-execution-evidence.v1` so reviewers can follow the chain from SMERC decision to SPARTa route to native execution evidence.
 
 ## Honest Boundary
 

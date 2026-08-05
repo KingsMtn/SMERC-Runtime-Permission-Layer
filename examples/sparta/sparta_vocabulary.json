@@ -1,0 +1,88 @@
+{
+  "version": "smerc.sparta-vocabulary.v1",
+  "lifecycle_verbs": [
+    "DECLARE",
+    "PLAN",
+    "ROUTE",
+    "PREPARE",
+    "EXECUTE",
+    "CONSTRAIN",
+    "HOLD",
+    "BLOCK",
+    "ESCALATE",
+    "COLLECT_EVIDENCE",
+    "APPEND_LEDGER"
+  ],
+  "route_states": [
+    "EXECUTE",
+    "CONSTRAINED_EXECUTE",
+    "PAUSE",
+    "BLOCK",
+    "REVIEW_REQUIRED",
+    "BLOCKED_ESCALATION_UNAVAILABLE"
+  ],
+  "control_verbs": [
+    "LIMIT_SCOPE",
+    "PREVIEW_BEFORE_EXECUTION",
+    "CHECKPOINT_BEFORE_EXECUTION",
+    "REQUIRE_ROLLBACK_PLAN",
+    "REQUIRE_HUMAN_APPROVAL",
+    "PRESERVE_REPLAY",
+    "REQUIRE_RECOVERY_PATH",
+    "RATE_LIMIT_EXECUTION",
+    "DELAY_SETTLEMENT",
+    "REQUIRE_DUAL_CONTROL",
+    "CANCEL_ON_SIGNAL_CHANGE",
+    "REQUIRE_FRESH_EVIDENCE"
+  ],
+  "evidence_events": [
+    "ROUTE_ISSUED",
+    "ROUTE_VERIFIED",
+    "PERMIT_VERIFIED",
+    "CONTROL_APPLIED",
+    "CONTROL_UNAVAILABLE",
+    "EXECUTION_STARTED",
+    "EXECUTION_BLOCKED",
+    "EXECUTION_PAUSED",
+    "EXECUTION_COMPLETED",
+    "EXECUTION_FAILED",
+    "ROLLBACK_STARTED",
+    "ROLLBACK_COMPLETED",
+    "ROLLBACK_FAILED",
+    "REVIEW_REQUESTED",
+    "REVIEW_COMPLETED",
+    "LEDGER_APPENDED"
+  ],
+  "failure_reasons": [
+    "UNKNOWN_ADAPTER",
+    "UNSUPPORTED_ACTION",
+    "UNSUPPORTED_CAPABILITY",
+    "SCOPE_EXCEEDS_MAXIMUM",
+    "CONTROL_UNSUPPORTED",
+    "ROUTE_DIGEST_MISMATCH",
+    "PERMIT_MISSING",
+    "PERMIT_EXPIRED",
+    "PERMIT_ALREADY_USED",
+    "EVIDENCE_STALE",
+    "REVIEW_PATH_UNAVAILABLE",
+    "EXECUTION_RESULT_MISSING"
+  ],
+  "adapter_interpretation": {
+    "unknown_term_behavior": "fail_closed",
+    "non_executable_states": [
+      "PAUSE",
+      "BLOCK",
+      "REVIEW_REQUIRED",
+      "BLOCKED_ESCALATION_UNAVAILABLE"
+    ],
+    "conditional_execution_states": [
+      "EXECUTE",
+      "CONSTRAINED_EXECUTE"
+    ]
+  },
+  "boundary": [
+    "Machine-readable SPARTa vocabulary for adapter interpretation.",
+    "Unknown route states, control verbs, evidence events, or failure reasons fail closed.",
+    "This vocabulary does not prove downstream tool enforcement or production incident reduction."
+  ]
+}

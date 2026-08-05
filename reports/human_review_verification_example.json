@@ -1,0 +1,68 @@
+{
+  "evidence_boundary": "Example verification package for the vendor-neutral human review adapter; not external identity-provider attestation.",
+  "request": {
+    "applied_controls": [
+      "preserve_replay",
+      "require_explicit_approval",
+      "route_to_accountable_reviewer"
+    ],
+    "blocked_controls": [
+      "execute"
+    ],
+    "callback_ref": "pilot://human-review/replay_human_review_example_001",
+    "decision_replay_id": "replay_human_review_example_001",
+    "evidence_boundary": "Vendor-neutral human review request. Delivery through Slack, Teams, Jira, ServiceNow, email, or another workflow tool must preserve this signed payload and reviewer response.",
+    "expires_at": 1800001800,
+    "issued_at": 1800000000,
+    "plain_english_summary": "SPARTa routed the action to accountable human review because SMERC required escalation.",
+    "reason_codes": [
+      "SPARTA_ESCALATE_TO_ACCOUNTABLE_REVIEWER"
+    ],
+    "requested_by": "smerc-api",
+    "review_request_id": "review_request_02d5eb661e91167ba8352b7f00742218",
+    "reviewer_group": "security-operations",
+    "route_id": "sparta_service-ticket-review:create_change_review:human_review_ae1f8d25b127",
+    "route_report_digest": "d81c93b64ff933aadcf8626690ca8afea44aa237b57b55f72653ad3482b41a39",
+    "route_state": "REVIEW_REQUIRED",
+    "signature": {
+      "algorithm": "HMAC-SHA256",
+      "key_id": "development-human-review-request-key",
+      "payload_digest": "e99582fefc8305560471348e670a146e11422082ed5799ef0db9713881a6c6f6",
+      "signature": "40fa198fe7022ca915ffacc48d50fa7917878689e59015fb4dc3e8ca7c4c01e3",
+      "version": "smerc.human-review-signature.v1"
+    },
+    "source_posture": "ESCALATE",
+    "version": "smerc.human-review-request.v1"
+  },
+  "response": {
+    "decision_replay_id": "replay_human_review_example_001",
+    "evidence_boundary": "Signed reviewer response package. It records review intent but does not prove external identity provider assurance by itself.",
+    "final_posture": "THROTTLE",
+    "rationale": "Approve escalation as accountable review only; require a follow-on constrained execution request before automation proceeds.",
+    "request_digest": "e99582fefc8305560471348e670a146e11422082ed5799ef0db9713881a6c6f6",
+    "review_request_id": "review_request_02d5eb661e91167ba8352b7f00742218",
+    "review_response_id": "review_response_ed16192c645754cf3f729a7fe3e95dde",
+    "reviewed_at": 1800000300,
+    "reviewer_group": "security-operations",
+    "reviewer_id": "security-reviewer-7",
+    "route_id": "sparta_service-ticket-review:create_change_review:human_review_ae1f8d25b127",
+    "signature": {
+      "algorithm": "HMAC-SHA256",
+      "key_id": "development-human-review-response-key",
+      "payload_digest": "b85a27aba6178dbc36e684aebc97af4ae89a533a76a17ad394252e24359701b5",
+      "signature": "8f20137a7edf90a7bf0e917749477876a158d3ba99c9993533f059aa0fc3c791",
+      "version": "smerc.human-review-signature.v1"
+    },
+    "signature_verification": {
+      "errors": [],
+      "key_id": "development-human-review-response-key",
+      "payload_digest": "b85a27aba6178dbc36e684aebc97af4ae89a533a76a17ad394252e24359701b5",
+      "valid": true
+    },
+    "source_posture": "ESCALATE",
+    "verdict": "approve",
+    "version": "smerc.human-review-response.v1"
+  },
+  "valid": true,
+  "version": "smerc.human-review-verification.v1"
+}

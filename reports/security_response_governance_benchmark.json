@@ -1,0 +1,258 @@
+{
+  "delta_counts": {
+    "BOTH_AUTO_ALLOW": 1,
+    "BOTH_RESTRAIN": 3,
+    "PLAYBOOK_AUTO_SMERC_RESTRAINT": 3,
+    "PLAYBOOK_BLOCK_SMERC_BOUNDED_PATH": 1
+  },
+  "evidence_boundary": "Security-response-inspired benchmark only. It is not a SOAR platform, SIEM, EDR, incident-response service, malware classifier, threat-intelligence feed, compliance attestation, customer validation, production certification, or incident-reduction proof.",
+  "generated_at": "2026-07-31T02:34:37+00:00",
+  "records": [
+    {
+      "category": "identity_containment",
+      "confidence_score": 0.771,
+      "controls": [
+        "execute",
+        "record_replay",
+        "retain_cancel_handle"
+      ],
+      "delta_type": "BOTH_AUTO_ALLOW",
+      "enforcement_state": "release",
+      "interpretation": "Both the security playbook and SMERC allow automated execution under the reference scenario.",
+      "irreversible_exposure_score": 0.12,
+      "plain_english_summary": "Action 'SR_DISABLE_COMPROMISED_TEST_ACCOUNT' received ALLOW. Irreversible exposure is 0.120, reversible capacity is 0.892, and authorization score is 0.853. Controls: execute, record_replay, retain_cancel_handle.",
+      "reason_codes": [
+        "RECOVERABILITY_ACCEPTABLE"
+      ],
+      "replay_id": "replay_SR_DISABLE_COMPROMISED_TEST_ACCOUNT_1785465277593_d4b6285b0828",
+      "reversible_capacity_score": 0.892,
+      "risk_adjusted_authorization_score": 0.853,
+      "scenario_id": "SR_DISABLE_COMPROMISED_TEST_ACCOUNT",
+      "security_playbook_outcome": "AUTO_EXECUTE",
+      "security_playbook_rationale": "Low-privilege test account shows credential compromise indicators and can be re-enabled quickly.",
+      "smerc_posture": "ALLOW"
+    },
+    {
+      "category": "endpoint_containment",
+      "confidence_score": 0.623,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "PLAYBOOK_AUTO_SMERC_RESTRAINT",
+      "enforcement_state": "constrain",
+      "interpretation": "The security playbook would auto-execute, but SMERC restrains the action because the proposed response could be hard to reverse, too broad, weakly evidenced, or poorly contained.",
+      "irreversible_exposure_score": 0.583,
+      "plain_english_summary": "Action 'SR_QUARANTINE_EXECUTIVE_LAPTOP' received THROTTLE. Irreversible exposure is 0.583, reversible capacity is 0.605, and authorization score is 0.564. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "ANOMALY_PRESSURE_HIGH",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_SR_QUARANTINE_EXECUTIVE_LAPTOP_1785465277595_627811fbb9a1",
+      "reversible_capacity_score": 0.605,
+      "risk_adjusted_authorization_score": 0.564,
+      "scenario_id": "SR_QUARANTINE_EXECUTIVE_LAPTOP",
+      "security_playbook_outcome": "AUTO_EXECUTE",
+      "security_playbook_rationale": "EDR rule recommends immediate quarantine after high-confidence malware detection.",
+      "smerc_posture": "THROTTLE"
+    },
+    {
+      "category": "api_security",
+      "confidence_score": 0.534,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "delta_type": "PLAYBOOK_AUTO_SMERC_RESTRAINT",
+      "enforcement_state": "constrain",
+      "interpretation": "The security playbook would auto-execute, but SMERC restrains the action because the proposed response could be hard to reverse, too broad, weakly evidenced, or poorly contained.",
+      "irreversible_exposure_score": 0.758,
+      "plain_english_summary": "Action 'SR_BLOCK_CUSTOMER_API_TOKEN_FLEET' received THROTTLE. Irreversible exposure is 0.758, reversible capacity is 0.421, and authorization score is 0.410. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_SR_BLOCK_CUSTOMER_API_TOKEN_FLEET_1785465277595_bdf196c16f20",
+      "reversible_capacity_score": 0.421,
+      "risk_adjusted_authorization_score": 0.41,
+      "scenario_id": "SR_BLOCK_CUSTOMER_API_TOKEN_FLEET",
+      "security_playbook_outcome": "AUTO_EXECUTE",
+      "security_playbook_rationale": "Token abuse playbook automatically revokes tokens associated with high-velocity suspicious calls.",
+      "smerc_posture": "THROTTLE"
+    },
+    {
+      "category": "cloud_forensics",
+      "confidence_score": 0.507,
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "delta_type": "PLAYBOOK_AUTO_SMERC_RESTRAINT",
+      "enforcement_state": "block",
+      "interpretation": "The security playbook would auto-execute, but SMERC restrains the action because the proposed response could be hard to reverse, too broad, weakly evidenced, or poorly contained.",
+      "irreversible_exposure_score": 0.817,
+      "plain_english_summary": "Action 'SR_DELETE_SUSPECT_BUCKET_ARTIFACTS' received DENY. Irreversible exposure is 0.817, reversible capacity is 0.308, and authorization score is 0.336. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_SR_DELETE_SUSPECT_BUCKET_ARTIFACTS_1785465277595_3e5133cb349c",
+      "reversible_capacity_score": 0.308,
+      "risk_adjusted_authorization_score": 0.336,
+      "scenario_id": "SR_DELETE_SUSPECT_BUCKET_ARTIFACTS",
+      "security_playbook_outcome": "AUTO_EXECUTE",
+      "security_playbook_rationale": "Malware cleanup playbook removes artifacts matching known bad hashes from object storage.",
+      "smerc_posture": "DENY"
+    },
+    {
+      "category": "identity_response",
+      "confidence_score": 0.618,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "delta_type": "BOTH_RESTRAIN",
+      "enforcement_state": "constrain",
+      "interpretation": "Both lenses require restraint, but SMERC records recoverability scores, reason codes, and controls.",
+      "irreversible_exposure_score": 0.29,
+      "plain_english_summary": "Action 'SR_FORCE_PASSWORD_RESET_TARGETED' received THROTTLE. Irreversible exposure is 0.290, reversible capacity is 0.763, and authorization score is 0.706. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_SR_FORCE_PASSWORD_RESET_TARGETED_1785465277595_e8788551454c",
+      "reversible_capacity_score": 0.763,
+      "risk_adjusted_authorization_score": 0.706,
+      "scenario_id": "SR_FORCE_PASSWORD_RESET_TARGETED",
+      "security_playbook_outcome": "ANALYST_REVIEW",
+      "security_playbook_rationale": "The alert is medium confidence and standard playbook asks an analyst to review before user disruption.",
+      "smerc_posture": "THROTTLE"
+    },
+    {
+      "category": "network_containment",
+      "confidence_score": 0.58,
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "require_rollback_plan",
+        "rate_limit_external_side_effect",
+        "checkpoint_before_execution"
+      ],
+      "delta_type": "BOTH_RESTRAIN",
+      "enforcement_state": "constrain",
+      "interpretation": "Both lenses require restraint, but SMERC records recoverability scores, reason codes, and controls.",
+      "irreversible_exposure_score": 0.69,
+      "plain_english_summary": "Action 'SR_GLOBAL_FIREWALL_BLOCK' received THROTTLE. Irreversible exposure is 0.690, reversible capacity is 0.440, and authorization score is 0.449. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "CONTAINMENT_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_SR_GLOBAL_FIREWALL_BLOCK_1785465277597_0d16ab3ca4af",
+      "reversible_capacity_score": 0.44,
+      "risk_adjusted_authorization_score": 0.449,
+      "scenario_id": "SR_GLOBAL_FIREWALL_BLOCK",
+      "security_playbook_outcome": "ESCALATE_INCIDENT",
+      "security_playbook_rationale": "Potential command-and-control traffic requires incident escalation before a broad global block.",
+      "smerc_posture": "THROTTLE"
+    },
+    {
+      "category": "external_communications",
+      "confidence_score": 0.43,
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "delta_type": "BOTH_RESTRAIN",
+      "enforcement_state": "block",
+      "interpretation": "Both lenses require restraint, but SMERC records recoverability scores, reason codes, and controls.",
+      "irreversible_exposure_score": 0.932,
+      "plain_english_summary": "Action 'SR_SEND_CUSTOMER_BREACH_NOTICE' received DENY. Irreversible exposure is 0.932, reversible capacity is 0.179, and authorization score is 0.227. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "EVIDENCE_VALIDITY_LOW",
+        "AUTHORIZATION_CONFIDENCE_LOW",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_SR_SEND_CUSTOMER_BREACH_NOTICE_1785465277597_0cd03bcf84c9",
+      "reversible_capacity_score": 0.179,
+      "risk_adjusted_authorization_score": 0.227,
+      "scenario_id": "SR_SEND_CUSTOMER_BREACH_NOTICE",
+      "security_playbook_outcome": "ANALYST_REVIEW",
+      "security_playbook_rationale": "Customer notification requires legal, incident-command, and communications review.",
+      "smerc_posture": "DENY"
+    },
+    {
+      "category": "devsecops",
+      "confidence_score": 0.564,
+      "controls": [
+        "execute",
+        "record_replay",
+        "retain_cancel_handle"
+      ],
+      "delta_type": "PLAYBOOK_BLOCK_SMERC_BOUNDED_PATH",
+      "enforcement_state": "release",
+      "interpretation": "The security playbook blocks execution, while SMERC identifies a bounded path such as throttled scope or escalation with replay evidence.",
+      "irreversible_exposure_score": 0.289,
+      "plain_english_summary": "Action 'SR_DISABLE_SUSPICIOUS_CI_SECRET' received ALLOW. Irreversible exposure is 0.289, reversible capacity is 0.777, and authorization score is 0.697. Controls: execute, record_replay, retain_cancel_handle.",
+      "reason_codes": [
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_SR_DISABLE_SUSPICIOUS_CI_SECRET_1785465277597_1969fd473db0",
+      "reversible_capacity_score": 0.777,
+      "risk_adjusted_authorization_score": 0.697,
+      "scenario_id": "SR_DISABLE_SUSPICIOUS_CI_SECRET",
+      "security_playbook_outcome": "DO_NOT_EXECUTE",
+      "security_playbook_rationale": "The secret rotation playbook blocks automation because ownership metadata is incomplete.",
+      "smerc_posture": "ALLOW"
+    }
+  ],
+  "recoverability_delta_count": 4,
+  "recoverability_delta_rate": 0.5,
+  "scenario_count": 8,
+  "security_playbook_counts": {
+    "ANALYST_REVIEW": 2,
+    "AUTO_EXECUTE": 4,
+    "DO_NOT_EXECUTE": 1,
+    "ESCALATE_INCIDENT": 1
+  },
+  "smerc_posture_counts": {
+    "ALLOW": 2,
+    "DENY": 2,
+    "ESCALATE": 0,
+    "FREEZE": 0,
+    "THROTTLE": 4
+  },
+  "version": "smerc.security-response-governance-benchmark.v1"
+}

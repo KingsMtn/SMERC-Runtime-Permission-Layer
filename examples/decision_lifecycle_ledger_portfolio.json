@@ -1,0 +1,1165 @@
+{
+  "description": "Synthetic DLL portfolio for exercising DLL Intelligence. Not customer proof.",
+  "generated_at": "2026-07-18T03:46:17+00:00",
+  "ledgers": [
+    {
+      "decision_id": "dll_pilot_001_safe_read_only_report",
+      "head_record_hash": "95f013b5755e347edd682b1f900197e0b6bf0d5740107e3ce36b8486d73ab906",
+      "record_count": 7,
+      "records": [
+        {
+          "actor": "ai-ops-agent",
+          "decision_id": "dll_pilot_001_safe_read_only_report",
+          "event_type": "REQUEST",
+          "payload": {
+            "environment": "staging",
+            "initiated_by": "ai-ops-agent",
+            "requested_operation": "Generate read-only deployment status report.",
+            "risk_profile": "read_only_reporting"
+          },
+          "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "record_hash": "68ac9b594f1c8e6db28d3112007e03d56e8ce49924ef5b8c7791ccf3d984e5d4",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:00+00:00",
+          "sequence": 1,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-api",
+          "decision_id": "dll_pilot_001_safe_read_only_report",
+          "event_type": "EVIDENCE",
+          "payload": {
+            "available_evidence": [
+              "workflow_metadata",
+              "actor_identity",
+              "action_manifest"
+            ],
+            "confidence_score": 0.91,
+            "external_dependencies": [
+              "github_actions",
+              "sparta_router"
+            ],
+            "missing_evidence": [],
+            "model_version": "pilot-agent-declaration",
+            "policy_version": "smerc.policy.v1:pilot"
+          },
+          "previous_record_hash": "68ac9b594f1c8e6db28d3112007e03d56e8ce49924ef5b8c7791ccf3d984e5d4",
+          "record_hash": "b45e321e1509ae273ee60350ac293030a1fc493103d9a218263be5de36c4f0d8",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:02+00:00",
+          "sequence": 2,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-engine",
+          "decision_id": "dll_pilot_001_safe_read_only_report",
+          "event_type": "EVALUATION",
+          "payload": {
+            "authorization_recommendation": "ALLOW",
+            "entropy_indicators": [
+              "LOW_IMPACT",
+              "RECOVERY_PATH_STRONG"
+            ],
+            "reason_codes": [
+              "LOW_IMPACT",
+              "RECOVERY_PATH_STRONG"
+            ],
+            "recommended_safeguards": [
+              "record_decision"
+            ],
+            "recoverability_score": 0.79,
+            "structural_state": "staging action evaluated for recoverability and blast radius"
+          },
+          "previous_record_hash": "b45e321e1509ae273ee60350ac293030a1fc493103d9a218263be5de36c4f0d8",
+          "record_hash": "3fa9e26449d4f915d94dfc04977e6af68c6d569388133a27c1d8578767ee5ad7",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:03+00:00",
+          "sequence": 3,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-reviewer",
+          "decision_id": "dll_pilot_001_safe_read_only_report",
+          "event_type": "HUMAN_INTERACTION",
+          "payload": {
+            "final_recommendation": "ALLOW",
+            "interaction": "accepted",
+            "original_recommendation": "ALLOW",
+            "rationale": "Pilot reviewer disposition captured for DLL intelligence.",
+            "reviewer_id": "pilot-reviewer"
+          },
+          "previous_record_hash": "3fa9e26449d4f915d94dfc04977e6af68c6d569388133a27c1d8578767ee5ad7",
+          "record_hash": "4b58696c5adff88d9f53fb5f155a415fe03d10561e278cd3fbceb52ee213cf72",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:02:00+00:00",
+          "sequence": 4,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "sparta-adapter",
+          "decision_id": "dll_pilot_001_safe_read_only_report",
+          "event_type": "EXECUTION",
+          "payload": {
+            "duration_ms": 93000,
+            "executed_operation": "Generate read-only deployment status report.",
+            "execution_status": "succeeded",
+            "rollback_performed": false,
+            "rollback_success": null,
+            "started_at": "2026-07-18T12:05:00+00:00"
+          },
+          "previous_record_hash": "4b58696c5adff88d9f53fb5f155a415fe03d10561e278cd3fbceb52ee213cf72",
+          "record_hash": "434d4f3d4f2239af818d6e89501b25e6bf6312562cf60c3fb9dd5173e66394be",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:07:00+00:00",
+          "sequence": 5,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-review-lead",
+          "decision_id": "dll_pilot_001_safe_read_only_report",
+          "event_type": "OUTCOME",
+          "payload": {
+            "controls_sufficient": true,
+            "cost_incurred": 0.0,
+            "customer_impact": "none observed",
+            "financial_impact": "none observed",
+            "judged_correct": true,
+            "security_impact": "none observed",
+            "time_to_recover_minutes": 0.0,
+            "unexpected_consequences": false
+          },
+          "previous_record_hash": "434d4f3d4f2239af818d6e89501b25e6bf6312562cf60c3fb9dd5173e66394be",
+          "record_hash": "c2bb032c6e173cd74c2f1c58552e6d2200b5266fc5f9ca529f9c86e9af6d3bee",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:00:00+00:00",
+          "sequence": 6,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-dll",
+          "decision_id": "dll_pilot_001_safe_read_only_report",
+          "event_type": "LEARNING_RECOMMENDATION",
+          "payload": {
+            "activation_status": "requires_review",
+            "actual_outcome": "Outcome label captured by pilot reviewer.",
+            "confidence_calibration_changes": [
+              "Collect more customer-context outcomes before calibration."
+            ],
+            "expected_outcome": "Action outcome remains bounded by selected posture and controls.",
+            "human_override_effectiveness": "no override",
+            "prediction_error": "low",
+            "recommended_policy_updates": [
+              "Review posture threshold for read_only_reporting."
+            ],
+            "suggested_rule_modifications": [
+              "Map recurring controls for read_only_reporting actions."
+            ]
+          },
+          "previous_record_hash": "c2bb032c6e173cd74c2f1c58552e6d2200b5266fc5f9ca529f9c86e9af6d3bee",
+          "record_hash": "95f013b5755e347edd682b1f900197e0b6bf0d5740107e3ce36b8486d73ab906",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:05:00+00:00",
+          "sequence": 7,
+          "tenant_id": "example-design-partner"
+        }
+      ],
+      "summary": {
+        "decision_id": "dll_pilot_001_safe_read_only_report",
+        "event_counts": {
+          "EVALUATION": 1,
+          "EVIDENCE": 1,
+          "EXECUTION": 1,
+          "HUMAN_INTERACTION": 1,
+          "LEARNING_RECOMMENDATION": 1,
+          "OUTCOME": 1,
+          "REQUEST": 1
+        },
+        "final_event_type": "LEARNING_RECOMMENDATION",
+        "judged_correct": true,
+        "override_count": 0,
+        "pending_learning_recommendations": 1,
+        "record_count": 7,
+        "rollback_performed": false,
+        "rollback_success": null,
+        "tenant_id": "example-design-partner"
+      },
+      "tenant_id": "example-design-partner",
+      "verification": {
+        "errors": [],
+        "head_record_hash": "95f013b5755e347edd682b1f900197e0b6bf0d5740107e3ce36b8486d73ab906",
+        "record_count": 7,
+        "valid": true
+      },
+      "version": "smerc.decision-lifecycle-ledger.v1"
+    },
+    {
+      "decision_id": "dll_pilot_002_canary_deploy",
+      "head_record_hash": "b699500202df959c12848b99e1b8be8f89a23b88864d198cd8f679e270c2a46a",
+      "record_count": 7,
+      "records": [
+        {
+          "actor": "coding-agent",
+          "decision_id": "dll_pilot_002_canary_deploy",
+          "event_type": "REQUEST",
+          "payload": {
+            "environment": "production",
+            "initiated_by": "coding-agent",
+            "requested_operation": "Deploy generated API change to canary.",
+            "risk_profile": "github_actions_deployment"
+          },
+          "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "record_hash": "d2247effd411dd89387ddf8dac291f3d6114783246f9fa2fc98b19fdd186060d",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:00+00:00",
+          "sequence": 1,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-api",
+          "decision_id": "dll_pilot_002_canary_deploy",
+          "event_type": "EVIDENCE",
+          "payload": {
+            "available_evidence": [
+              "workflow_metadata",
+              "actor_identity",
+              "action_manifest"
+            ],
+            "confidence_score": 0.74,
+            "external_dependencies": [
+              "github_actions",
+              "sparta_router"
+            ],
+            "missing_evidence": [
+              "rollback_drill"
+            ],
+            "model_version": "pilot-agent-declaration",
+            "policy_version": "smerc.policy.v1:pilot"
+          },
+          "previous_record_hash": "d2247effd411dd89387ddf8dac291f3d6114783246f9fa2fc98b19fdd186060d",
+          "record_hash": "3470df8a906199d1edca075e3e17ff7be109f97826a422a1477ae6c23e933a89",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:02+00:00",
+          "sequence": 2,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-engine",
+          "decision_id": "dll_pilot_002_canary_deploy",
+          "event_type": "EVALUATION",
+          "payload": {
+            "authorization_recommendation": "THROTTLE",
+            "entropy_indicators": [
+              "RECOVERY_PATH_PARTIAL",
+              "IMPACT_SCOPE_ELEVATED"
+            ],
+            "reason_codes": [
+              "RECOVERY_PATH_PARTIAL",
+              "IMPACT_SCOPE_ELEVATED"
+            ],
+            "recommended_safeguards": [
+              "canary_only",
+              "retain_rollback_plan"
+            ],
+            "recoverability_score": 0.62,
+            "structural_state": "production action evaluated for recoverability and blast radius"
+          },
+          "previous_record_hash": "3470df8a906199d1edca075e3e17ff7be109f97826a422a1477ae6c23e933a89",
+          "record_hash": "5929f2989aec630d95da65082ada43d36c40f7804290188b1f9f92c4ab1d463a",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:03+00:00",
+          "sequence": 3,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-reviewer",
+          "decision_id": "dll_pilot_002_canary_deploy",
+          "event_type": "HUMAN_INTERACTION",
+          "payload": {
+            "final_recommendation": "THROTTLE",
+            "interaction": "accepted",
+            "original_recommendation": "THROTTLE",
+            "rationale": "Pilot reviewer disposition captured for DLL intelligence.",
+            "reviewer_id": "pilot-reviewer"
+          },
+          "previous_record_hash": "5929f2989aec630d95da65082ada43d36c40f7804290188b1f9f92c4ab1d463a",
+          "record_hash": "bf0be8e0c82c9ba6480b1fd1154cea54a1f626fb126cbcff48163e06e634de04",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:02:00+00:00",
+          "sequence": 4,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "sparta-adapter",
+          "decision_id": "dll_pilot_002_canary_deploy",
+          "event_type": "EXECUTION",
+          "payload": {
+            "duration_ms": 93000,
+            "executed_operation": "Deploy generated API change to canary.",
+            "execution_status": "succeeded",
+            "rollback_performed": false,
+            "rollback_success": null,
+            "started_at": "2026-07-18T12:05:00+00:00"
+          },
+          "previous_record_hash": "bf0be8e0c82c9ba6480b1fd1154cea54a1f626fb126cbcff48163e06e634de04",
+          "record_hash": "7f6a74a5b8a6543b431f2739ee38839df4e7c67336e377f06cd2b4ffeb922072",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:07:00+00:00",
+          "sequence": 5,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-review-lead",
+          "decision_id": "dll_pilot_002_canary_deploy",
+          "event_type": "OUTCOME",
+          "payload": {
+            "controls_sufficient": true,
+            "cost_incurred": 0.0,
+            "customer_impact": "none observed",
+            "financial_impact": "none observed",
+            "judged_correct": true,
+            "security_impact": "none observed",
+            "time_to_recover_minutes": 0.0,
+            "unexpected_consequences": false
+          },
+          "previous_record_hash": "7f6a74a5b8a6543b431f2739ee38839df4e7c67336e377f06cd2b4ffeb922072",
+          "record_hash": "a7c60ccaf4528e02db1ba32715885dd5334c9f722290cdb69528690c4ae14d6a",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:00:00+00:00",
+          "sequence": 6,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-dll",
+          "decision_id": "dll_pilot_002_canary_deploy",
+          "event_type": "LEARNING_RECOMMENDATION",
+          "payload": {
+            "activation_status": "requires_review",
+            "actual_outcome": "Outcome label captured by pilot reviewer.",
+            "confidence_calibration_changes": [
+              "Collect more customer-context outcomes before calibration."
+            ],
+            "expected_outcome": "Action outcome remains bounded by selected posture and controls.",
+            "human_override_effectiveness": "no override",
+            "prediction_error": "low",
+            "recommended_policy_updates": [
+              "Review posture threshold for github_actions_deployment."
+            ],
+            "suggested_rule_modifications": [
+              "Map recurring controls for github_actions_deployment actions."
+            ]
+          },
+          "previous_record_hash": "a7c60ccaf4528e02db1ba32715885dd5334c9f722290cdb69528690c4ae14d6a",
+          "record_hash": "b699500202df959c12848b99e1b8be8f89a23b88864d198cd8f679e270c2a46a",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:05:00+00:00",
+          "sequence": 7,
+          "tenant_id": "example-design-partner"
+        }
+      ],
+      "summary": {
+        "decision_id": "dll_pilot_002_canary_deploy",
+        "event_counts": {
+          "EVALUATION": 1,
+          "EVIDENCE": 1,
+          "EXECUTION": 1,
+          "HUMAN_INTERACTION": 1,
+          "LEARNING_RECOMMENDATION": 1,
+          "OUTCOME": 1,
+          "REQUEST": 1
+        },
+        "final_event_type": "LEARNING_RECOMMENDATION",
+        "judged_correct": true,
+        "override_count": 0,
+        "pending_learning_recommendations": 1,
+        "record_count": 7,
+        "rollback_performed": false,
+        "rollback_success": null,
+        "tenant_id": "example-design-partner"
+      },
+      "tenant_id": "example-design-partner",
+      "verification": {
+        "errors": [],
+        "head_record_hash": "b699500202df959c12848b99e1b8be8f89a23b88864d198cd8f679e270c2a46a",
+        "record_count": 7,
+        "valid": true
+      },
+      "version": "smerc.decision-lifecycle-ledger.v1"
+    },
+    {
+      "decision_id": "dll_pilot_003_delete_customer_table",
+      "head_record_hash": "0f47d22bc04c2944608bbebdfd9d3f332d8c97fd84d5d1f672423216975f0963",
+      "record_count": 7,
+      "records": [
+        {
+          "actor": "support-agent",
+          "decision_id": "dll_pilot_003_delete_customer_table",
+          "event_type": "REQUEST",
+          "payload": {
+            "environment": "production",
+            "initiated_by": "support-agent",
+            "requested_operation": "Delete a customer table after ambiguous cleanup request.",
+            "risk_profile": "data_destruction"
+          },
+          "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "record_hash": "057229f4976e382171399eedeedc40a4de341a3755209caee3c35f1f784cadb8",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:00+00:00",
+          "sequence": 1,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-api",
+          "decision_id": "dll_pilot_003_delete_customer_table",
+          "event_type": "EVIDENCE",
+          "payload": {
+            "available_evidence": [
+              "workflow_metadata",
+              "actor_identity",
+              "action_manifest"
+            ],
+            "confidence_score": 0.38,
+            "external_dependencies": [
+              "github_actions",
+              "sparta_router"
+            ],
+            "missing_evidence": [
+              "human_approval",
+              "backup_verification"
+            ],
+            "model_version": "pilot-agent-declaration",
+            "policy_version": "smerc.policy.v1:pilot"
+          },
+          "previous_record_hash": "057229f4976e382171399eedeedc40a4de341a3755209caee3c35f1f784cadb8",
+          "record_hash": "78606ffd4df0273b422e646673d622c914055afa0b847a57dd8731a4fc8ae06f",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:02+00:00",
+          "sequence": 2,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-engine",
+          "decision_id": "dll_pilot_003_delete_customer_table",
+          "event_type": "EVALUATION",
+          "payload": {
+            "authorization_recommendation": "DENY",
+            "entropy_indicators": [
+              "IRREVERSIBLE_EXPOSURE_HIGH",
+              "EVIDENCE_INCOMPLETE"
+            ],
+            "reason_codes": [
+              "IRREVERSIBLE_EXPOSURE_HIGH",
+              "EVIDENCE_INCOMPLETE"
+            ],
+            "recommended_safeguards": [
+              "block_execution",
+              "require_data_owner_review"
+            ],
+            "recoverability_score": 0.26,
+            "structural_state": "production action evaluated for recoverability and blast radius"
+          },
+          "previous_record_hash": "78606ffd4df0273b422e646673d622c914055afa0b847a57dd8731a4fc8ae06f",
+          "record_hash": "04efa62de35402fa0d4b8976046b5bf90d1059cfdc289dc7381fa9d6f4d5877b",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:03+00:00",
+          "sequence": 3,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-reviewer",
+          "decision_id": "dll_pilot_003_delete_customer_table",
+          "event_type": "HUMAN_INTERACTION",
+          "payload": {
+            "final_recommendation": "DENY",
+            "interaction": "accepted",
+            "original_recommendation": "DENY",
+            "rationale": "Pilot reviewer disposition captured for DLL intelligence.",
+            "reviewer_id": "pilot-reviewer"
+          },
+          "previous_record_hash": "04efa62de35402fa0d4b8976046b5bf90d1059cfdc289dc7381fa9d6f4d5877b",
+          "record_hash": "72e3926972dac0d88395e5a278b8cbc3607f5939001080ecd09ff919347b4a5c",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:02:00+00:00",
+          "sequence": 4,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "sparta-adapter",
+          "decision_id": "dll_pilot_003_delete_customer_table",
+          "event_type": "EXECUTION",
+          "payload": {
+            "duration_ms": 93000,
+            "executed_operation": "No automated execution.",
+            "execution_status": "blocked",
+            "rollback_performed": false,
+            "rollback_success": null,
+            "started_at": "2026-07-18T12:05:00+00:00"
+          },
+          "previous_record_hash": "72e3926972dac0d88395e5a278b8cbc3607f5939001080ecd09ff919347b4a5c",
+          "record_hash": "a35a3a6eea1233df812690318f9ae2a0b4acd8768052808dddd660003f50a12e",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:07:00+00:00",
+          "sequence": 5,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-review-lead",
+          "decision_id": "dll_pilot_003_delete_customer_table",
+          "event_type": "OUTCOME",
+          "payload": {
+            "controls_sufficient": true,
+            "cost_incurred": 0.0,
+            "customer_impact": "none observed",
+            "financial_impact": "none observed",
+            "judged_correct": true,
+            "security_impact": "none observed",
+            "time_to_recover_minutes": 0.0,
+            "unexpected_consequences": false
+          },
+          "previous_record_hash": "a35a3a6eea1233df812690318f9ae2a0b4acd8768052808dddd660003f50a12e",
+          "record_hash": "1446b7bb45936843f9f31072268a47fd4aa653f01cf010854f2dc4241e013596",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:00:00+00:00",
+          "sequence": 6,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-dll",
+          "decision_id": "dll_pilot_003_delete_customer_table",
+          "event_type": "LEARNING_RECOMMENDATION",
+          "payload": {
+            "activation_status": "requires_review",
+            "actual_outcome": "Outcome label captured by pilot reviewer.",
+            "confidence_calibration_changes": [
+              "Collect more customer-context outcomes before calibration."
+            ],
+            "expected_outcome": "Action outcome remains bounded by selected posture and controls.",
+            "human_override_effectiveness": "no override",
+            "prediction_error": "low",
+            "recommended_policy_updates": [
+              "Review posture threshold for data_destruction."
+            ],
+            "suggested_rule_modifications": [
+              "Map recurring controls for data_destruction actions."
+            ]
+          },
+          "previous_record_hash": "1446b7bb45936843f9f31072268a47fd4aa653f01cf010854f2dc4241e013596",
+          "record_hash": "0f47d22bc04c2944608bbebdfd9d3f332d8c97fd84d5d1f672423216975f0963",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:05:00+00:00",
+          "sequence": 7,
+          "tenant_id": "example-design-partner"
+        }
+      ],
+      "summary": {
+        "decision_id": "dll_pilot_003_delete_customer_table",
+        "event_counts": {
+          "EVALUATION": 1,
+          "EVIDENCE": 1,
+          "EXECUTION": 1,
+          "HUMAN_INTERACTION": 1,
+          "LEARNING_RECOMMENDATION": 1,
+          "OUTCOME": 1,
+          "REQUEST": 1
+        },
+        "final_event_type": "LEARNING_RECOMMENDATION",
+        "judged_correct": true,
+        "override_count": 0,
+        "pending_learning_recommendations": 1,
+        "record_count": 7,
+        "rollback_performed": false,
+        "rollback_success": null,
+        "tenant_id": "example-design-partner"
+      },
+      "tenant_id": "example-design-partner",
+      "verification": {
+        "errors": [],
+        "head_record_hash": "0f47d22bc04c2944608bbebdfd9d3f332d8c97fd84d5d1f672423216975f0963",
+        "record_count": 7,
+        "valid": true
+      },
+      "version": "smerc.decision-lifecycle-ledger.v1"
+    },
+    {
+      "decision_id": "dll_pilot_004_override_refund",
+      "head_record_hash": "c9c70dfffea1924deb9fdc6c71f1f13df1efe58903b149fa00ccb109687ab127",
+      "record_count": 7,
+      "records": [
+        {
+          "actor": "finance-agent",
+          "decision_id": "dll_pilot_004_override_refund",
+          "event_type": "REQUEST",
+          "payload": {
+            "environment": "production",
+            "initiated_by": "finance-agent",
+            "requested_operation": "Issue high-value customer refund.",
+            "risk_profile": "finance_operations"
+          },
+          "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "record_hash": "0bceb95a8832a79ca511ad322847fed011372674e7b13dcc542c62e3694205c7",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:00+00:00",
+          "sequence": 1,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-api",
+          "decision_id": "dll_pilot_004_override_refund",
+          "event_type": "EVIDENCE",
+          "payload": {
+            "available_evidence": [
+              "workflow_metadata",
+              "actor_identity",
+              "action_manifest"
+            ],
+            "confidence_score": 0.57,
+            "external_dependencies": [
+              "github_actions",
+              "sparta_router"
+            ],
+            "missing_evidence": [
+              "dual_approval",
+              "customer_entitlement_proof"
+            ],
+            "model_version": "pilot-agent-declaration",
+            "policy_version": "smerc.policy.v1:pilot"
+          },
+          "previous_record_hash": "0bceb95a8832a79ca511ad322847fed011372674e7b13dcc542c62e3694205c7",
+          "record_hash": "6afa67c828d040178af99b1ffce6e43a9d95d2e3ef4deb731950cc3b6f0a27fa",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:02+00:00",
+          "sequence": 2,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-engine",
+          "decision_id": "dll_pilot_004_override_refund",
+          "event_type": "EVALUATION",
+          "payload": {
+            "authorization_recommendation": "ESCALATE",
+            "entropy_indicators": [
+              "FINANCIAL_IMPACT_HIGH",
+              "EVIDENCE_INCOMPLETE"
+            ],
+            "reason_codes": [
+              "FINANCIAL_IMPACT_HIGH",
+              "EVIDENCE_INCOMPLETE"
+            ],
+            "recommended_safeguards": [
+              "dual_approval",
+              "transaction_limit"
+            ],
+            "recoverability_score": 0.44999999999999996,
+            "structural_state": "production action evaluated for recoverability and blast radius"
+          },
+          "previous_record_hash": "6afa67c828d040178af99b1ffce6e43a9d95d2e3ef4deb731950cc3b6f0a27fa",
+          "record_hash": "c29b075f05882412b40396824ba14e6d2e4aefb98e5569a086e3a2dbeea5c079",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:03+00:00",
+          "sequence": 3,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-reviewer",
+          "decision_id": "dll_pilot_004_override_refund",
+          "event_type": "HUMAN_INTERACTION",
+          "payload": {
+            "final_recommendation": "THROTTLE",
+            "interaction": "overrode",
+            "original_recommendation": "ESCALATE",
+            "rationale": "Pilot reviewer disposition captured for DLL intelligence.",
+            "reviewer_id": "pilot-reviewer"
+          },
+          "previous_record_hash": "c29b075f05882412b40396824ba14e6d2e4aefb98e5569a086e3a2dbeea5c079",
+          "record_hash": "b9a036fc03632563bda14903078a4f6fe438a344b65636c9b01254e9a4ce9fe8",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:02:00+00:00",
+          "sequence": 4,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "sparta-adapter",
+          "decision_id": "dll_pilot_004_override_refund",
+          "event_type": "EXECUTION",
+          "payload": {
+            "duration_ms": 93000,
+            "executed_operation": "Issue high-value customer refund.",
+            "execution_status": "succeeded",
+            "rollback_performed": false,
+            "rollback_success": null,
+            "started_at": "2026-07-18T12:05:00+00:00"
+          },
+          "previous_record_hash": "b9a036fc03632563bda14903078a4f6fe438a344b65636c9b01254e9a4ce9fe8",
+          "record_hash": "e40735b8492e9c057097470cd1f113f3ec2b6f512242bf481d4083038168b1f8",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:07:00+00:00",
+          "sequence": 5,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-review-lead",
+          "decision_id": "dll_pilot_004_override_refund",
+          "event_type": "OUTCOME",
+          "payload": {
+            "controls_sufficient": false,
+            "cost_incurred": 1200.0,
+            "customer_impact": "limited pilot impact",
+            "financial_impact": "1200 estimated",
+            "judged_correct": false,
+            "security_impact": "review required",
+            "time_to_recover_minutes": 240.0,
+            "unexpected_consequences": true
+          },
+          "previous_record_hash": "e40735b8492e9c057097470cd1f113f3ec2b6f512242bf481d4083038168b1f8",
+          "record_hash": "a1d58381d1d11888dad2e0d632bf21b7322cbc13ba43dcb7326c98e2210c440c",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:00:00+00:00",
+          "sequence": 6,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-dll",
+          "decision_id": "dll_pilot_004_override_refund",
+          "event_type": "LEARNING_RECOMMENDATION",
+          "payload": {
+            "activation_status": "requires_review",
+            "actual_outcome": "Outcome label captured by pilot reviewer.",
+            "confidence_calibration_changes": [
+              "Collect more customer-context outcomes before calibration."
+            ],
+            "expected_outcome": "Action outcome remains bounded by selected posture and controls.",
+            "human_override_effectiveness": "captured for review",
+            "prediction_error": "high",
+            "recommended_policy_updates": [
+              "Review posture threshold for finance_operations."
+            ],
+            "suggested_rule_modifications": [
+              "Map recurring controls for finance_operations actions."
+            ]
+          },
+          "previous_record_hash": "a1d58381d1d11888dad2e0d632bf21b7322cbc13ba43dcb7326c98e2210c440c",
+          "record_hash": "c9c70dfffea1924deb9fdc6c71f1f13df1efe58903b149fa00ccb109687ab127",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:05:00+00:00",
+          "sequence": 7,
+          "tenant_id": "example-design-partner"
+        }
+      ],
+      "summary": {
+        "decision_id": "dll_pilot_004_override_refund",
+        "event_counts": {
+          "EVALUATION": 1,
+          "EVIDENCE": 1,
+          "EXECUTION": 1,
+          "HUMAN_INTERACTION": 1,
+          "LEARNING_RECOMMENDATION": 1,
+          "OUTCOME": 1,
+          "REQUEST": 1
+        },
+        "final_event_type": "LEARNING_RECOMMENDATION",
+        "judged_correct": false,
+        "override_count": 1,
+        "pending_learning_recommendations": 1,
+        "record_count": 7,
+        "rollback_performed": false,
+        "rollback_success": null,
+        "tenant_id": "example-design-partner"
+      },
+      "tenant_id": "example-design-partner",
+      "verification": {
+        "errors": [],
+        "head_record_hash": "c9c70dfffea1924deb9fdc6c71f1f13df1efe58903b149fa00ccb109687ab127",
+        "record_count": 7,
+        "valid": true
+      },
+      "version": "smerc.decision-lifecycle-ledger.v1"
+    },
+    {
+      "decision_id": "dll_pilot_005_failed_deploy_rollback",
+      "head_record_hash": "34b3f9b8592dab82712ffda675c3aa4d607a8ac0922576b0741a8eb0f643f0e7",
+      "record_count": 7,
+      "records": [
+        {
+          "actor": "deployment-agent",
+          "decision_id": "dll_pilot_005_failed_deploy_rollback",
+          "event_type": "REQUEST",
+          "payload": {
+            "environment": "production",
+            "initiated_by": "deployment-agent",
+            "requested_operation": "Apply infrastructure autoscaling change.",
+            "risk_profile": "cloud_administration"
+          },
+          "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "record_hash": "9c20c006dad86e2471ca7082e757d59dce2c46ebebcb68cc540aebdb8e0f39ed",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:00+00:00",
+          "sequence": 1,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-api",
+          "decision_id": "dll_pilot_005_failed_deploy_rollback",
+          "event_type": "EVIDENCE",
+          "payload": {
+            "available_evidence": [
+              "workflow_metadata",
+              "actor_identity",
+              "action_manifest"
+            ],
+            "confidence_score": 0.66,
+            "external_dependencies": [
+              "github_actions",
+              "sparta_router"
+            ],
+            "missing_evidence": [
+              "rollback_drill"
+            ],
+            "model_version": "pilot-agent-declaration",
+            "policy_version": "smerc.policy.v1:pilot"
+          },
+          "previous_record_hash": "9c20c006dad86e2471ca7082e757d59dce2c46ebebcb68cc540aebdb8e0f39ed",
+          "record_hash": "503043200aca7307b5f6f7caa8e5e5129c9e90fabd6e4d735f61a1eaaf04e313",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:02+00:00",
+          "sequence": 2,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-engine",
+          "decision_id": "dll_pilot_005_failed_deploy_rollback",
+          "event_type": "EVALUATION",
+          "payload": {
+            "authorization_recommendation": "THROTTLE",
+            "entropy_indicators": [
+              "RECOVERY_PATH_PARTIAL",
+              "ANOMALY_PRESSURE_ELEVATED"
+            ],
+            "reason_codes": [
+              "RECOVERY_PATH_PARTIAL",
+              "ANOMALY_PRESSURE_ELEVATED"
+            ],
+            "recommended_safeguards": [
+              "canary_only",
+              "automatic_rollback"
+            ],
+            "recoverability_score": 0.54,
+            "structural_state": "production action evaluated for recoverability and blast radius"
+          },
+          "previous_record_hash": "503043200aca7307b5f6f7caa8e5e5129c9e90fabd6e4d735f61a1eaaf04e313",
+          "record_hash": "77143061b05c9fc956e76c41b09360fdf1936c296c11092aca2ed8fc4438b3b7",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:03+00:00",
+          "sequence": 3,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-reviewer",
+          "decision_id": "dll_pilot_005_failed_deploy_rollback",
+          "event_type": "HUMAN_INTERACTION",
+          "payload": {
+            "final_recommendation": "THROTTLE",
+            "interaction": "accepted",
+            "original_recommendation": "THROTTLE",
+            "rationale": "Pilot reviewer disposition captured for DLL intelligence.",
+            "reviewer_id": "pilot-reviewer"
+          },
+          "previous_record_hash": "77143061b05c9fc956e76c41b09360fdf1936c296c11092aca2ed8fc4438b3b7",
+          "record_hash": "473dc24fb77e4350ac95a75a39d0f876c1c6d054b308c09e4e6073e7f5ef84ca",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:02:00+00:00",
+          "sequence": 4,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "sparta-adapter",
+          "decision_id": "dll_pilot_005_failed_deploy_rollback",
+          "event_type": "EXECUTION",
+          "payload": {
+            "duration_ms": 93000,
+            "executed_operation": "Apply infrastructure autoscaling change.",
+            "execution_status": "failed",
+            "rollback_performed": true,
+            "rollback_success": true,
+            "started_at": "2026-07-18T12:05:00+00:00"
+          },
+          "previous_record_hash": "473dc24fb77e4350ac95a75a39d0f876c1c6d054b308c09e4e6073e7f5ef84ca",
+          "record_hash": "f91a77b79b0686c8df2cc89d32bff9d1845e11267425a1d237549ea1aaacde99",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:07:00+00:00",
+          "sequence": 5,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-review-lead",
+          "decision_id": "dll_pilot_005_failed_deploy_rollback",
+          "event_type": "OUTCOME",
+          "payload": {
+            "controls_sufficient": true,
+            "cost_incurred": 0.0,
+            "customer_impact": "none observed",
+            "financial_impact": "none observed",
+            "judged_correct": true,
+            "security_impact": "none observed",
+            "time_to_recover_minutes": 0.0,
+            "unexpected_consequences": false
+          },
+          "previous_record_hash": "f91a77b79b0686c8df2cc89d32bff9d1845e11267425a1d237549ea1aaacde99",
+          "record_hash": "89c35bf4aca12081b40072d3f9cacdd4c9b354c5f4cef114ee66749dfdcc0bd2",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:00:00+00:00",
+          "sequence": 6,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-dll",
+          "decision_id": "dll_pilot_005_failed_deploy_rollback",
+          "event_type": "LEARNING_RECOMMENDATION",
+          "payload": {
+            "activation_status": "requires_review",
+            "actual_outcome": "Outcome label captured by pilot reviewer.",
+            "confidence_calibration_changes": [
+              "Collect more customer-context outcomes before calibration."
+            ],
+            "expected_outcome": "Action outcome remains bounded by selected posture and controls.",
+            "human_override_effectiveness": "no override",
+            "prediction_error": "low",
+            "recommended_policy_updates": [
+              "Review posture threshold for cloud_administration."
+            ],
+            "suggested_rule_modifications": [
+              "Map recurring controls for cloud_administration actions."
+            ]
+          },
+          "previous_record_hash": "89c35bf4aca12081b40072d3f9cacdd4c9b354c5f4cef114ee66749dfdcc0bd2",
+          "record_hash": "34b3f9b8592dab82712ffda675c3aa4d607a8ac0922576b0741a8eb0f643f0e7",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:05:00+00:00",
+          "sequence": 7,
+          "tenant_id": "example-design-partner"
+        }
+      ],
+      "summary": {
+        "decision_id": "dll_pilot_005_failed_deploy_rollback",
+        "event_counts": {
+          "EVALUATION": 1,
+          "EVIDENCE": 1,
+          "EXECUTION": 1,
+          "HUMAN_INTERACTION": 1,
+          "LEARNING_RECOMMENDATION": 1,
+          "OUTCOME": 1,
+          "REQUEST": 1
+        },
+        "final_event_type": "LEARNING_RECOMMENDATION",
+        "judged_correct": true,
+        "override_count": 0,
+        "pending_learning_recommendations": 1,
+        "record_count": 7,
+        "rollback_performed": true,
+        "rollback_success": true,
+        "tenant_id": "example-design-partner"
+      },
+      "tenant_id": "example-design-partner",
+      "verification": {
+        "errors": [],
+        "head_record_hash": "34b3f9b8592dab82712ffda675c3aa4d607a8ac0922576b0741a8eb0f643f0e7",
+        "record_count": 7,
+        "valid": true
+      },
+      "version": "smerc.decision-lifecycle-ledger.v1"
+    },
+    {
+      "decision_id": "dll_pilot_006_security_key_rotation",
+      "head_record_hash": "2455238c6d1cef982bba3ce80c81f7cf29a0a9251d27de5d1fd7b245f2cd49cf",
+      "record_count": 7,
+      "records": [
+        {
+          "actor": "security-agent",
+          "decision_id": "dll_pilot_006_security_key_rotation",
+          "event_type": "REQUEST",
+          "payload": {
+            "environment": "production",
+            "initiated_by": "security-agent",
+            "requested_operation": "Rotate production signing key without owner confirmation.",
+            "risk_profile": "security_operations"
+          },
+          "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "record_hash": "0cd9807783ed37cb0c727f352b6799ece0d612d9c4fdfddacfc722b3e0400e11",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:00+00:00",
+          "sequence": 1,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-api",
+          "decision_id": "dll_pilot_006_security_key_rotation",
+          "event_type": "EVIDENCE",
+          "payload": {
+            "available_evidence": [
+              "workflow_metadata",
+              "actor_identity",
+              "action_manifest"
+            ],
+            "confidence_score": 0.49,
+            "external_dependencies": [
+              "github_actions",
+              "sparta_router"
+            ],
+            "missing_evidence": [
+              "owner_confirmation",
+              "rollback_drill"
+            ],
+            "model_version": "pilot-agent-declaration",
+            "policy_version": "smerc.policy.v1:pilot"
+          },
+          "previous_record_hash": "0cd9807783ed37cb0c727f352b6799ece0d612d9c4fdfddacfc722b3e0400e11",
+          "record_hash": "a29743c81a6ee33c284cfbcb9e47ce84a65e4c7e2baeae4edc5bc8793c9b50f3",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:02+00:00",
+          "sequence": 2,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-engine",
+          "decision_id": "dll_pilot_006_security_key_rotation",
+          "event_type": "EVALUATION",
+          "payload": {
+            "authorization_recommendation": "FREEZE",
+            "entropy_indicators": [
+              "AUTHORITY_CHANGE_HIGH",
+              "EVIDENCE_INCOMPLETE"
+            ],
+            "reason_codes": [
+              "AUTHORITY_CHANGE_HIGH",
+              "EVIDENCE_INCOMPLETE"
+            ],
+            "recommended_safeguards": [
+              "pause_automation",
+              "require_owner_confirmation"
+            ],
+            "recoverability_score": 0.37,
+            "structural_state": "production action evaluated for recoverability and blast radius"
+          },
+          "previous_record_hash": "a29743c81a6ee33c284cfbcb9e47ce84a65e4c7e2baeae4edc5bc8793c9b50f3",
+          "record_hash": "7285d2266771eee27f05a849dee9f89bdfe9f3f1f13f0633954e8ed95a3c992b",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:00:03+00:00",
+          "sequence": 3,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-reviewer",
+          "decision_id": "dll_pilot_006_security_key_rotation",
+          "event_type": "HUMAN_INTERACTION",
+          "payload": {
+            "final_recommendation": "FREEZE",
+            "interaction": "accepted",
+            "original_recommendation": "FREEZE",
+            "rationale": "Pilot reviewer disposition captured for DLL intelligence.",
+            "reviewer_id": "pilot-reviewer"
+          },
+          "previous_record_hash": "7285d2266771eee27f05a849dee9f89bdfe9f3f1f13f0633954e8ed95a3c992b",
+          "record_hash": "68f8e66d42f84d1e836a4d7b636ec0b845cf02ebf2b44acde625b781f91fb4df",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:02:00+00:00",
+          "sequence": 4,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "sparta-adapter",
+          "decision_id": "dll_pilot_006_security_key_rotation",
+          "event_type": "EXECUTION",
+          "payload": {
+            "duration_ms": 93000,
+            "executed_operation": "No automated execution.",
+            "execution_status": "not_executed",
+            "rollback_performed": false,
+            "rollback_success": null,
+            "started_at": "2026-07-18T12:05:00+00:00"
+          },
+          "previous_record_hash": "68f8e66d42f84d1e836a4d7b636ec0b845cf02ebf2b44acde625b781f91fb4df",
+          "record_hash": "9d9066db189d4deb3734d7828ed367c9768ea74c2df815777963d018a4c880f8",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-18T12:07:00+00:00",
+          "sequence": 5,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "pilot-review-lead",
+          "decision_id": "dll_pilot_006_security_key_rotation",
+          "event_type": "OUTCOME",
+          "payload": {
+            "controls_sufficient": true,
+            "cost_incurred": 0.0,
+            "customer_impact": "none observed",
+            "financial_impact": "none observed",
+            "judged_correct": true,
+            "security_impact": "none observed",
+            "time_to_recover_minutes": 0.0,
+            "unexpected_consequences": false
+          },
+          "previous_record_hash": "9d9066db189d4deb3734d7828ed367c9768ea74c2df815777963d018a4c880f8",
+          "record_hash": "9e0b4e9ffafb29b5315b18ec85aeae78c7c8287e43cd640b092d4278647450a3",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:00:00+00:00",
+          "sequence": 6,
+          "tenant_id": "example-design-partner"
+        },
+        {
+          "actor": "smerc-dll",
+          "decision_id": "dll_pilot_006_security_key_rotation",
+          "event_type": "LEARNING_RECOMMENDATION",
+          "payload": {
+            "activation_status": "requires_review",
+            "actual_outcome": "Outcome label captured by pilot reviewer.",
+            "confidence_calibration_changes": [
+              "Collect more customer-context outcomes before calibration."
+            ],
+            "expected_outcome": "Action outcome remains bounded by selected posture and controls.",
+            "human_override_effectiveness": "no override",
+            "prediction_error": "low",
+            "recommended_policy_updates": [
+              "Review posture threshold for security_operations."
+            ],
+            "suggested_rule_modifications": [
+              "Map recurring controls for security_operations actions."
+            ]
+          },
+          "previous_record_hash": "9e0b4e9ffafb29b5315b18ec85aeae78c7c8287e43cd640b092d4278647450a3",
+          "record_hash": "2455238c6d1cef982bba3ce80c81f7cf29a0a9251d27de5d1fd7b245f2cd49cf",
+          "record_version": "smerc.dll-record.v1",
+          "recorded_at": "2026-07-19T12:05:00+00:00",
+          "sequence": 7,
+          "tenant_id": "example-design-partner"
+        }
+      ],
+      "summary": {
+        "decision_id": "dll_pilot_006_security_key_rotation",
+        "event_counts": {
+          "EVALUATION": 1,
+          "EVIDENCE": 1,
+          "EXECUTION": 1,
+          "HUMAN_INTERACTION": 1,
+          "LEARNING_RECOMMENDATION": 1,
+          "OUTCOME": 1,
+          "REQUEST": 1
+        },
+        "final_event_type": "LEARNING_RECOMMENDATION",
+        "judged_correct": true,
+        "override_count": 0,
+        "pending_learning_recommendations": 1,
+        "record_count": 7,
+        "rollback_performed": false,
+        "rollback_success": null,
+        "tenant_id": "example-design-partner"
+      },
+      "tenant_id": "example-design-partner",
+      "verification": {
+        "errors": [],
+        "head_record_hash": "2455238c6d1cef982bba3ce80c81f7cf29a0a9251d27de5d1fd7b245f2cd49cf",
+        "record_count": 7,
+        "valid": true
+      },
+      "version": "smerc.decision-lifecycle-ledger.v1"
+    }
+  ],
+  "version": "smerc.dll-example-bundle.v1"
+}

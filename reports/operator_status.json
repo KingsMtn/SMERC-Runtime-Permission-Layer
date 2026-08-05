@@ -1,0 +1,176 @@
+{
+  "active_policy_version": "smerc.policy.reference",
+  "active_profile_version": "github_actions_strict",
+  "decision_activity": {
+    "decision_count": 10,
+    "posture_counts": {
+      "ALLOW": 2,
+      "DENY": 0,
+      "ESCALATE": 4,
+      "FREEZE": 1,
+      "THROTTLE": 3,
+      "UNAVAILABLE": 0
+    },
+    "top_controls": [
+      [
+        "preserve_replay",
+        5
+      ],
+      [
+        "log_replay",
+        5
+      ],
+      [
+        "route_to_human_review",
+        4
+      ],
+      [
+        "require_explicit_approval",
+        4
+      ],
+      [
+        "limit_scope",
+        3
+      ],
+      [
+        "preview_before_execution",
+        3
+      ],
+      [
+        "rate_limit_external_effect",
+        3
+      ],
+      [
+        "execute",
+        2
+      ],
+      [
+        "require_recovery_path",
+        2
+      ],
+      [
+        "pause_execution",
+        1
+      ]
+    ],
+    "top_reason_codes": [
+      [
+        "EXTERNAL_SIDE_EFFECT",
+        8
+      ],
+      [
+        "HIGH_HARM_POTENTIAL",
+        5
+      ],
+      [
+        "SENSITIVE_DATA_ACCESS",
+        4
+      ],
+      [
+        "LOW_REVERSIBILITY",
+        4
+      ],
+      [
+        "MODERATE_HARM_POTENTIAL",
+        3
+      ],
+      [
+        "CONSENT_OR_AUTHORIZATION_WEAK",
+        3
+      ],
+      [
+        "CONFIDENCE_SCORE_LOW",
+        3
+      ],
+      [
+        "RISK_SCORE_HIGH",
+        2
+      ],
+      [
+        "LOW_RISK_REPLAYABLE_ACTION",
+        2
+      ],
+      [
+        "LOW_MODEL_CONFIDENCE",
+        1
+      ]
+    ],
+    "unavailable_count": 0,
+    "unavailable_rate": 0.0
+  },
+  "evidence_boundary": "Operator status summarizes pilot artifacts and readiness reports. It does not prove production availability, incident reduction, compliance, or customer validation.",
+  "generated_at": "2026-08-02T03:41:53+00:00",
+  "operational_checks": [
+    {
+      "detail": "Active policy version is included in the operator report.",
+      "name": "policy_version_declared",
+      "status": "ready"
+    },
+    {
+      "detail": "Signed policy bundle verifies and is available for operator review.",
+      "name": "policy_bundle_verified",
+      "status": "ready"
+    },
+    {
+      "detail": "Active domain/profile version is included in the operator report.",
+      "name": "profile_version_declared",
+      "status": "ready"
+    },
+    {
+      "detail": "Week-zero readiness is generated from the GitHub Actions pilot readiness report.",
+      "name": "pilot_readiness",
+      "status": "ready"
+    },
+    {
+      "detail": "Customer intake must be ready for a review call before pilot setup.",
+      "name": "customer_intake",
+      "status": "ready"
+    },
+    {
+      "detail": "Decision artifacts are present for operator distribution and log export.",
+      "name": "decision_artifacts",
+      "status": "ready"
+    },
+    {
+      "detail": "Runtime health is healthy with p95 latency 44.2 ms and unavailable rate 0.0.",
+      "name": "runtime_health",
+      "status": "ready"
+    }
+  ],
+  "operator_status": "ready_for_review",
+  "policy_bundle": {
+    "bundle_digest": "158e581c4ffe0fdcf3221d3a10943c7cfb5078e4b0207343652a41d8f99fbed0",
+    "bundle_id": "github-actions-shadow-mode-2026-07-07",
+    "errors": [],
+    "evidence_ceiling": "OBSERVE",
+    "mode": "OBSERVE",
+    "policy_id": "github-actions-shadow-mode",
+    "policy_revision": "2026.07.07",
+    "present": true,
+    "signature_checked": true,
+    "valid": true,
+    "warnings": []
+  },
+  "readiness": {
+    "customer_blockers": [],
+    "customer_ready_for_review_call": true,
+    "customer_ready_for_week_zero": false,
+    "customer_warnings": [
+      "Business sponsor is not confirmed; this can be acceptable for technical review but may block paid pilot approval."
+    ],
+    "pilot_blockers": [],
+    "pilot_ready_for_customer_observe": true,
+    "pilot_ready_for_week_zero": true,
+    "pilot_warnings": []
+  },
+  "runtime_health": {
+    "health_status": "healthy",
+    "latency_p95_ms": 44.2,
+    "latency_slo_met": true,
+    "observed_evaluation_count": 10,
+    "present": true,
+    "unavailable_rate": 0.0
+  },
+  "schema": "smerc.operator-status.v1",
+  "tenant_id": "pilot-review"
+}

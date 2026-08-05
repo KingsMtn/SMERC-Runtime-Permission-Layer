@@ -64,7 +64,7 @@ Do not use this language:
 
 - "Production-ready security platform."
 - "Certified AI governance system."
-- "Proven to reduce incidents."
+- "Do not claim proven incident reduction."
 - "Enterprise-grade replacement for OPA, Permit.io, Microsoft, or Cloudflare."
 
 ## Next Maturity Step
