@@ -9,16 +9,19 @@ The goal is not to advertise a finished security product. The goal is to invite 
 - Public review page: `https://admirable-sorbet-9986d5.netlify.app/community.html`
 - CISO overview: `https://admirable-sorbet-9986d5.netlify.app/ciso.html`
 - GitHub Actions pilot: `https://admirable-sorbet-9986d5.netlify.app/github-action.html`
+- MCP governance: `https://admirable-sorbet-9986d5.netlify.app/mcp-governance.html`
+- Microsoft-style security replay: `https://admirable-sorbet-9986d5.netlify.app/microsoft-security-replay.html`
+- Visibility hub: `https://admirable-sorbet-9986d5.netlify.app/visibility.html`
 - Repository: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer`
 - Public review issue: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/issues/new?template=public_review_feedback.md`
 
 ## One-Sentence Description
 
-SMERC is runtime permission infrastructure for AI-agent and automation actions, evaluating whether a technically authorized action is recoverable enough to execute now.
+SMERC is a recoverability checkpoint before automated actions execute, evaluating whether a technically authorized action is recoverable enough to allow, throttle, freeze, deny, or escalate.
 
 ## Short Description
 
-SMERC sits between AI-agent/tool output and real-world execution. Before an agent edits code, deploys infrastructure, sends messages, deletes data, moves money, or triggers a workflow, SMERC scores recoverability signals and returns `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`.
+SMERC sits after detection, identity, and policy but before real-world execution. Before an agent edits code, deploys infrastructure, sends messages, deletes data, moves money, or triggers a workflow, SMERC scores recoverability signals and returns `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`.
 
 The project is pilot-grade. It is seeking critique on whether recoverability scoring fills a real gap in AI-agent governance.
 
@@ -27,15 +30,15 @@ The project is pilot-grade. It is seeking critique on whether recoverability sco
 Title:
 
 ```text
-Looking for feedback: recoverability-aware runtime permission layer for AI-agent actions
+Looking for feedback: recoverability checkpoint before automated actions execute
 ```
 
 Body:
 
 ```text
-I am looking for technical feedback on SMERC, a runtime permission layer for AI-agent and automation actions.
+I am looking for technical feedback on SMERC, a recoverability checkpoint before AI-agent, security, cloud, and automation actions execute.
 
-SMERC sits between model/tool output and real-world execution. Before an AI agent edits code, deploys infrastructure, sends messages, deletes data, or triggers a workflow, SMERC evaluates recoverability signals and returns ALLOW, THROTTLE, FREEZE, DENY, or ESCALATE.
+SMERC sits after detection, identity, and policy but before real-world execution. Before an AI agent edits code, deploys infrastructure, sends messages, deletes data, or triggers a workflow, SMERC evaluates recoverability signals and returns ALLOW, THROTTLE, FREEZE, DENY, or ESCALATE.
 
 The specific question is not only whether the actor is allowed in a traditional IAM or policy sense. The question is whether the proposed action is recoverable enough to execute now.
 
@@ -49,6 +52,12 @@ Useful critique:
 
 Public review page:
 https://admirable-sorbet-9986d5.netlify.app/community.html
+
+Microsoft-style replay:
+https://admirable-sorbet-9986d5.netlify.app/microsoft-security-replay.html
+
+MCP governance:
+https://admirable-sorbet-9986d5.netlify.app/mcp-governance.html
 
 GitHub repo:
 https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer
@@ -65,7 +74,7 @@ Feedback requested: runtime permission layer for AI-agent actions
 Body:
 
 ```text
-I am looking for open-source and developer feedback on SMERC, a runtime permission layer for AI-agent and automation actions.
+I am looking for open-source and developer feedback on SMERC, a recoverability checkpoint for AI-agent and automation actions.
 
 SMERC evaluates whether a proposed action is recoverable enough to execute, then returns ALLOW, THROTTLE, FREEZE, DENY, or ESCALATE.
 
@@ -85,7 +94,7 @@ https://admirable-sorbet-9986d5.netlify.app/community.html
 ```text
 I am looking for feedback from CISOs, security architects, platform engineers, DevSecOps teams, and AI governance leaders.
 
-SMERC is runtime permission infrastructure for AI-agent actions. It evaluates whether a technically authorized action is recoverable enough to execute now.
+SMERC is a recoverability checkpoint before automated actions execute. It evaluates whether a technically authorized action is recoverable enough to execute now.
 
 The premise is simple: in agentic systems, "allowed" is not the same as "safe to execute." Some actions can be reversed quickly. Others create irreversible exposure.
 

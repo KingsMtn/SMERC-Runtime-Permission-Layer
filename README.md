@@ -205,6 +205,7 @@ SMERC is designed to help companies reduce the blast radius of automated actions
 This is a value hypothesis, not a proven outcome claim. SMERC does not yet claim live incident reduction, outage prevention, compliance certification, or customer-validated savings.
 
 Read `docs/Potential_Company_Value.md` for the bounded company-value language and evidence requirements.
+Read `docs/Search_Visibility_Launch_Plan.md` for the search, GitHub-topic, Microsoft/community, and sitemap submission plan for making SMERC easier to discover without treating visibility as validation.
 
 ## Review In 10 Minutes
 

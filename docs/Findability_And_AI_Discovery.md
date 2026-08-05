@@ -13,9 +13,12 @@ That means discoverability should be treated as an operating requirement, not a 
 ## Current Canonical Links
 
 - Public site: `https://admirable-sorbet-9986d5.netlify.app/`
+- Visibility hub: `https://admirable-sorbet-9986d5.netlify.app/visibility.html`
 - AI agent governance explainer: `https://admirable-sorbet-9986d5.netlify.app/ai-agent-governance.html`
 - CISO overview: `https://admirable-sorbet-9986d5.netlify.app/ciso.html`
 - GitHub Actions pilot: `https://admirable-sorbet-9986d5.netlify.app/github-action.html`
+- MCP governance: `https://admirable-sorbet-9986d5.netlify.app/mcp-governance.html`
+- Microsoft-style security replay: `https://admirable-sorbet-9986d5.netlify.app/microsoft-security-replay.html`
 - Public repository: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer`
 - AI-readable summary: `https://admirable-sorbet-9986d5.netlify.app/llms.txt`
 - Structured project profile: `https://admirable-sorbet-9986d5.netlify.app/project.json`
@@ -30,6 +33,7 @@ Use these terms consistently in public titles, descriptions, documentation, and 
 
 - SMERC
 - Structural Momentum Entropy Range Confidence
+- recoverability checkpoint
 - runtime permission infrastructure
 - runtime permission layer
 - AI agent governance
@@ -42,12 +46,21 @@ Use these terms consistently in public titles, descriptions, documentation, and 
 - deployment governance
 - AI automation controls
 - CISO AI governance
+- MCP governance
+- Model Context Protocol governance
+- Microsoft Sentinel replay
+- Microsoft Defender replay
+- automated response recoverability
 
 ## Category Positioning
 
-SMERC should be described as:
+SMERC should now be described first as:
 
-> Recoverability-aware runtime permission infrastructure for AI agents and high-impact automation workflows.
+> A recoverability checkpoint before automated actions execute.
+
+Longer version:
+
+> SMERC sits after detection, identity, and policy but before execution, and decides whether an action should be allowed, throttled, frozen, denied, or escalated based on recoverability and evidence.
 
 When expanding the name for search and AI summaries, use:
 
@@ -132,10 +145,13 @@ Before assuming SMERC is discoverable, complete:
 Repeat these searches periodically:
 
 - `SMERC Runtime Permission Layer`
+- `SMERC recoverability checkpoint`
 - `Structural Momentum Entropy Range Confidence`
 - `SMERC AI agent governance`
 - `SMERC recoverability scoring`
 - `SMERC runtime permission infrastructure`
+- `SMERC Microsoft security replay`
+- `SMERC MCP governance`
 - `SMERC GitHub Actions governance`
 - `site:github.com/KingsMtn SMERC`
 - `site:admirable-sorbet-9986d5.netlify.app SMERC`
@@ -147,3 +163,5 @@ Search appearance is not proof of product-market fit.
 AI-readable files are not proof that major model providers ingest the site.
 
 Public indexing improves discoverability only after crawlers, links, and external references accumulate.
+
+SMERC does not claim incident reduction, outage prevention, Microsoft certification, or customer-validated savings until design-partner evidence supports those claims.
