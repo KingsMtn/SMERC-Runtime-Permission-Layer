@@ -182,6 +182,8 @@ Start here before reading the code:
 - `reports/Security_Response_Governance_Benchmark.md` compares security playbook outcomes with SMERC runtime postures across security automation scenarios.
 - `reports/Model_Risk_Governance_Benchmark.md` compares model-governance outcomes with SMERC runtime postures across AI-agent action scenarios.
 - `reports/SRE_Incident_Governance_Benchmark.md` compares SRE incident playbook outcomes with SMERC runtime postures across reliability automation scenarios.
+- `docs/ILION_Bench_v2_Replay.md` explains how to replay the external ILION-Bench v2 execution-safety benchmark through SMERC without committing third-party raw data.
+- `reports/ILION_Bench_v2_Replay_Report.md` shows the current local ILION replay summary, including strict binary match, governance-aligned, calibration-review, and middle-state rates.
 - `reports/Pilot_Ledger_Intake_Result.md` shows how pilot-supplied reviewer, execution, outcome, and learning evidence can be appended to a DLL with ordering checks.
 - `reports/Pilot_Ledger_Metrics_Report.md` summarizes completed DLL evidence with explicit denominators and sample-size caveats.
 - `docs/Pilot_DLL_API.md` describes stateless API endpoints for submitting pilot DLL intake evidence and calculating DLL metrics.

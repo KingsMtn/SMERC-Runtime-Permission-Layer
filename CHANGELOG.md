@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an ILION-Bench v2 external replay adapter, documentation, and tests for comparing binary agent-action safety labels with SMERC recoverability postures without committing raw third-party dataset files.
 - Added a search visibility launch plan and updated findability language around the recoverability-checkpoint wedge, Microsoft-style replay, MCP governance, GitHub topics, and search-console steps.
 - Added bounded potential company value language explaining how SMERC could reduce blast radius, support safer automation, and preserve replay evidence while avoiding unproven incident-reduction or savings claims.
 - Added recoverability-checkpoint positioning and a metadata-only automated-response shadow-mode pilot plan to sharpen SMERC around action recoverability after detection, identity, and policy but before execution.
