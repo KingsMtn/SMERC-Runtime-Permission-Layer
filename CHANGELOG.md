@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a self-service pilot start-here package and hand-off email so interested companies can evaluate one GitHub Actions workflow with less founder involvement while preserving metadata-only and observe-mode boundaries.
 - Added an ILION-Bench v2 external replay adapter, documentation, and tests for comparing binary agent-action safety labels with SMERC recoverability postures without committing raw third-party dataset files.
 - Added a search visibility launch plan and updated findability language around the recoverability-checkpoint wedge, Microsoft-style replay, MCP governance, GitHub topics, and search-console steps.
 - Added bounded potential company value language explaining how SMERC could reduce blast radius, support safer automation, and preserve replay evidence while avoiding unproven incident-reduction or savings claims.

@@ -159,6 +159,8 @@ Start here before reading the code:
 - `integrations/human_review/README.md` shows how SPARTa can package a review-required route into signed human-review request and response evidence before a live Slack, Teams, Jira, or ServiceNow adapter exists.
 - `docs/Pilot_Evaluation_Checklist.md` and `examples/pilot_evaluation_checklist.json` give design partners a concrete evaluation checklist.
 - `pilot_package/Pilot_Kickoff_Packet.md` and the adjacent pilot operating templates define how a customer pilot starts, runs, reviews, and reaches go/no-go decisions.
+- `pilot_package/Self_Service_Pilot_Start_Here.md` gives a founder-light path for a customer technical team to evaluate one GitHub Actions workflow without requiring live founder explanation.
+- `docs/Self_Service_Pilot_Hand_Off_Email.md` gives a concise hand-off email for sending interested companies to the self-service pilot path.
 - `pilot_package/Design_Partner_Qualification_Checklist.md` helps screen whether a prospect is weak, exploratory, moderate, or strong fit before offering a pilot.
 - `pilot_package/Human_AI_Pilot_Operating_Model.md` defines the split between AI-generated actions, SMERC scoring, and human-owned review, labels, and go/no-go decisions.
 - `pilot_package/GitHub_Actions_Pilot_Launch_Runbook.md` and `examples/github_actions_pilot_manifest.json` give a concrete first-workflow launch path for a GitHub Actions shadow-mode pilot.
