@@ -56,6 +56,32 @@ jobs:
       - name: Run audit-chain smoke test
         run: python -m reference_engine.financial_audit examples/financial_action_requests.json
 
+      - name: Run evidence ceiling smoke test
+        run: |
+          python -m reference_engine.evidence_program \
+            examples/evidence_program/core_assumptions.json \
+            examples/evidence_program/no_observations.json \
+            --json-output /tmp/smerc-evidence.json
+          python -c 'import json; data=json.load(open("/tmp/smerc-evidence.json")); assert data["deployment_ceiling"] == "OBSERVE"'
+
+      - name: Run policy and evidence provenance smoke tests
+        run: |
+          python -m reference_engine.recoverability_engine \
+            examples/recoverability_single_action.json \
+            --policy examples/policies/alpha_conservative.json \
+            > /tmp/smerc-policy-decision.json
+          python -c 'import json; data=json.load(open("/tmp/smerc-policy-decision.json")); assert data["policy"]["tenant_id"] == "alpha"; assert len(data["policy"]["policy_hash"]) == 64'
+          python -m reference_engine.evidence_provenance build \
+            examples/evidence_program/synthetic_observations.json \
+            examples/evidence_program/synthetic_artifact_digests.json \
+            /tmp/smerc-evidence-ledger.json \
+            --program-id smerc-core-validation-v1 \
+            --collector-id ci-collector \
+            --collection-method ci-smoke
+          python -m reference_engine.evidence_provenance verify \
+            examples/evidence_program/synthetic_observations.json \
+            /tmp/smerc-evidence-ledger.json
+
   container-smoke:
     runs-on: ubuntu-latest
     steps:
@@ -91,6 +117,17 @@ jobs:
             --header "Content-Type: application/json" \
             --data @examples/recoverability_single_action.json \
             | python -m json.tool
+
+      - name: Evaluate Action Language contract through container
+        run: |
+          curl --fail --silent --show-error \
+            --request POST http://127.0.0.1:8788/v1/language/evaluate \
+            --header "Authorization: Bearer ci-secret-01234567890123456789" \
+            --header "Idempotency-Key: ci-language-smoke" \
+            --header "Content-Type: application/json" \
+            --data @examples/action_language/production_database_change.json \
+            > /tmp/smerc-language-decision.json
+          python -c 'import json; data=json.load(open("/tmp/smerc-language-decision.json")); assert data["language_version"] == "smerc.decision.v1"; assert data["posture"] == "DENY"; assert data["transition"]["requires_new_request"] is True'
 
       - name: Evaluate through remote composite action
         id: remote-smerc

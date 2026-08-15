@@ -16,13 +16,19 @@ The first integration is a GitHub Actions gate for AI-assisted code, deployment,
 
 The current build includes:
 
+- versioned SMERC Action Language and Decision Language contracts
+- evidence and unknowns registry with deployment-limiting falsification rules
+- tenant-scoped policy calibration and evidence provenance admission
 - recoverability-aware scoring engine
+- model and agent fitness routing for selecting qualified executors
 - authenticated, tenant-scoped REST API service
+- SPARTa route and permit reports for constrained execution
 - SQLite pilot audit store with idempotent decision replay
 - immutable pilot review records and denominator-aware metrics
 - dependency-free pilot review console
 - GitHub Actions gate
 - local and authenticated remote GitHub Action evaluation
+- MCP tool-call governance example
 - synthetic shadow-mode scenario packs
 - evidence/report generators
 - Render deployment profile
@@ -38,12 +44,16 @@ It intentionally excludes private legal drafts, patent strategy, competition sub
 1. Read `docs/CISO_Quick_Review.md`.
 2. Read `docs/Security_Model.md`.
 3. Inspect `reference_engine/recoverability_engine.py`.
-4. Inspect `api_server.py` and `reference_engine/audit_store.py`.
-5. Review `integrations/github_actions/README.md`.
-6. Read `docs/Pilot_Review_Metrics.md`.
-7. Inspect `pilot_console/README.md`.
-8. Run the Python and console tests.
-9. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
+4. Inspect `reference_engine/model_fitness.py` and `docs/Model_Agent_Fitness_Layer.md`.
+5. Inspect `reference_engine/action_language.py` and `specification/SMERC_Action_Language_v1.md`.
+6. Inspect `reference_engine/sparta_router.py` and `docs/SPARTa_Route_And_Permit_Layer.md`.
+7. Read `docs/Policy_Calibration_And_Evidence_Provenance.md`.
+8. Inspect `api_server.py` and `reference_engine/audit_store.py`.
+9. Review `integrations/github_actions/README.md`.
+10. Read `docs/Pilot_Review_Metrics.md`.
+11. Inspect `pilot_console/README.md`.
+12. Run the Python and console tests.
+13. Review `pilot_package/SMERC_Shadow_Mode_Pilot_One_Pager.md`.
 
 ## What SMERC Evaluates
 
@@ -66,7 +76,63 @@ It outputs:
 - confidence score
 - reason codes
 - recommended constraints
+- policy identity, revision, mode, evidence ceiling, and hash
 - replay ID and replay record
+
+Optional context can preserve MCP, OPA, Cedar, IAM, agent identity, human sponsor, and trace metadata. SMERC uses those fields as evidence context; it does not claim to replace the systems that produced them.
+
+## Model and Agent Fitness
+
+`reference_engine/model_fitness.py` evaluates which model, agent, or automation executor is qualified for a proposed task. It is not a generic model leaderboard. It scores executor fit against required capabilities, data sensitivity, tool authority, recoverability, reliability history, cost, latency, impact scope, and anomaly pressure.
+
+The output includes:
+
+- recommended executor
+- allowed and blocked executors
+- execution posture
+- candidate rankings
+- model fitness score
+- risk-adjusted executor score
+- controls and reason codes
+- replay record
+
+Run the examples:
+
+```bash
+python -m reference_engine.model_fitness examples/model_agent_routing_examples.json --pretty
+python -m unittest tests.test_model_fitness -v
+```
+
+## Action Language
+
+`smerc.action.v1` is the machine-readable boundary between an agent proposing an action and SMERC deciding its runtime posture. It separates action identity, authority, risk signals, recoverability, effects, and bounded replay context. `smerc.decision.v1` returns structured reasons, controls, and measurable transition conditions alongside the existing scores and replay record.
+
+This is the practical meaning of Macro Language Model in the current product: SMERC does not generate micro-level content. It provides a versioned macro-level vocabulary for whether automated action may proceed, under what constraints, and what evidence is needed before a posture can change.
+
+```bash
+python -m reference_engine.action_language examples/action_language/production_database_change.json
+```
+
+Schemas and full semantics are in `schemas/` and `specification/SMERC_Action_Language_v1.md`.
+
+## SPARTa Route And Permit Layer
+
+`reference_engine/sparta_router.py` converts a SMERC decision into an operational route, permit status, reviewer path, required controls, execution boundaries, and replayable evidence. It is the "what happens next" layer after SMERC decides a posture.
+
+SPARTa is deliberately narrow:
+
+- SMERC decides whether the action is recoverable enough.
+- SPARTa converts that posture into route, controls, permit, and reviewer instructions.
+- DLL/audit records preserve the evidence for replay.
+
+Run an MCP tool-call example:
+
+```bash
+python -m reference_engine.recoverability_engine examples/mcp_tool_call_action.json --pretty > mcp-decision.json
+python -m reference_engine.sparta_router examples/mcp_tool_call_action.json mcp-decision.json --pretty
+```
+
+See `docs/SPARTa_Route_And_Permit_Layer.md`.
 
 ## Quick Start
 
@@ -103,6 +169,16 @@ curl -X POST http://127.0.0.1:8788/v1/evaluate \
   -H "Idempotency-Key: workflow-run-1001" \
   -H "Content-Type: application/json" \
   --data @examples/recoverability_single_action.json
+```
+
+Evaluate the versioned action contract through the authenticated API:
+
+```bash
+curl -X POST http://127.0.0.1:8788/v1/language/evaluate \
+  -H "Authorization: Bearer replace-with-a-long-random-secret" \
+  -H "Idempotency-Key: language-run-1001" \
+  -H "Content-Type: application/json" \
+  --data @examples/action_language/production_database_change.json
 ```
 
 Pilot API controls include bearer-key tenant mapping, tenant-scoped audit retrieval, idempotent evaluation replay, immutable reviewer annotations, body and batch limits, allowlisted CORS, liveness/readiness endpoints, and structured request IDs. See `docs/API_Deployment_Guide.md` and `docs/Pilot_Review_Metrics.md`.
@@ -160,6 +236,37 @@ python -m reference_engine.recoverability_report \
   --markdown-output reports/Recoverability_Engine_Report.md
 ```
 
+Evaluate the core assumptions against currently admitted evidence:
+
+```bash
+python -m reference_engine.evidence_program \
+  examples/evidence_program/core_assumptions.json \
+  examples/evidence_program/no_observations.json \
+  --json-output reports/evidence_readiness_baseline.json \
+  --markdown-output reports/SMERC_Evidence_Readiness_Baseline.md
+```
+
+With no qualified observations, the evidence engine limits deployment to `OBSERVE`. A challenged critical claim forces `STOP`. See `docs/Evidence_And_Unknowns_Program.md`.
+
+Bind decisions to a calibrated tenant policy and verify evidence provenance:
+
+```bash
+python -m reference_engine.recoverability_engine \
+  examples/recoverability_single_action.json \
+  --policy examples/policies/alpha_conservative.json \
+  --pretty
+
+python -m reference_engine.evidence_provenance build \
+  examples/evidence_program/synthetic_observations.json \
+  examples/evidence_program/synthetic_artifact_digests.json \
+  reports/synthetic_evidence_ledger.json \
+  --program-id smerc-core-validation-v1 \
+  --collector-id synthetic-collector \
+  --collection-method synthetic-demonstration
+```
+
+See `docs/Policy_Calibration_And_Evidence_Provenance.md` for policy activation, provenance strength, HMAC use, and limitations.
+
 Run the optional SMERC-F financial action-governance profile:
 
 ```bash
@@ -188,6 +295,7 @@ The recommended first deployment is `observe` mode.
 ## What SMERC Is Not
 
 - Not a replacement for IAM, OPA, branch protection, code review, SIEM, or existing approvals.
+- Not a replacement for Microsoft Agent Governance Toolkit, OPA/Rego, Cedar, MCP gateways, or enterprise IAM.
 - Not a prompt-injection filter.
 - Not a production-certified security platform.
 - Not a claim that current thresholds are already calibrated for every enterprise.
@@ -215,10 +323,12 @@ Policy calibration, deterministic hashes, accountable overrides, and tamper-evid
 
 - Working Python reference engine
 - Recoverability-focused scoring engine
+- SPARTa constrained-execution route and permit generator
 - Standard-library REST API service
 - Browser-based pilot review queue and metrics console
 - Installable local GitHub Action
 - Deterministic example action requests
+- MCP tool-call governance example with policy and trace context
 - GitHub Actions shadow-mode scenario pack
 - Generated pilot-style evidence report
 - Automated tests

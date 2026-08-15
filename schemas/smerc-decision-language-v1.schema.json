@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-decision-language-v1.schema.json",
+  "title": "SMERC Decision Language v1",
+  "type": "object",
+  "required": ["language_version", "action_language_version", "action_hash", "action_id", "posture", "enforcement_state", "scores", "reasons", "structured_controls", "transition", "replay_id", "replay"],
+  "properties": {
+    "language_version": {"const": "smerc.decision.v1"},
+    "action_language_version": {"const": "smerc.action.v1"},
+    "action_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "action_id": {"type": "string", "minLength": 1},
+    "posture": {"enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"]},
+    "enforcement_state": {"enum": ["release", "constrain", "pause", "block", "review"]},
+    "scores": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}},
+    "reasons": {"$ref": "#/$defs/terms"},
+    "structured_controls": {"$ref": "#/$defs/terms"},
+    "transition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "eligible_target_posture", "requires_new_request", "conditions"],
+      "properties": {
+        "mode": {"enum": ["maintain", "conditional"]},
+        "eligible_target_posture": {"type": ["string", "null"], "enum": ["ALLOW", "THROTTLE", null]},
+        "requires_new_request": {"type": "boolean"},
+        "conditions": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "replay_id": {"type": "string", "minLength": 1},
+    "replay": {"type": "object"}
+  },
+  "$defs": {
+    "terms": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["code", "title"],
+        "properties": {"code": {"type": "string", "minLength": 1}, "title": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

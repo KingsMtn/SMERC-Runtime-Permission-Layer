@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SMERC Evidence Provenance Ledger v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "program_id", "record_count", "head_record_hash", "records"],
+  "properties": {
+    "version": {"const": "smerc.evidence-ledger.v1"},
+    "program_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "record_count": {"type": "integer", "minimum": 0},
+    "head_record_hash": {"$ref": "#/$defs/hash"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sequence", "observation_id", "observation_sha256", "source_artifact_sha256", "collector_id", "collection_method", "recorded_at", "previous_record_hash", "authentication", "record_hash"],
+        "properties": {
+          "sequence": {"type": "integer", "minimum": 1},
+          "observation_id": {"type": "string", "minLength": 1, "maxLength": 128},
+          "observation_sha256": {"$ref": "#/$defs/hash"},
+          "source_artifact_sha256": {"$ref": "#/$defs/hash"},
+          "collector_id": {"type": "string", "minLength": 1, "maxLength": 128},
+          "collection_method": {"type": "string", "minLength": 1, "maxLength": 256},
+          "recorded_at": {"type": "string", "format": "date-time"},
+          "previous_record_hash": {"$ref": "#/$defs/hash"},
+          "authentication": {"enum": ["sha256_chain", "hmac_sha256_chain"]},
+          "record_hash": {"$ref": "#/$defs/hash"}
+        }
+      }
+    }
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

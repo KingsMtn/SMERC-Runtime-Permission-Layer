@@ -6,10 +6,17 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from api_server import create_server, parse_api_keys
+from reference_engine.policy import PolicyRegistry, RuntimePolicy
 
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = json.loads((ROOT / "examples" / "recoverability_action_requests.json").read_text(encoding="utf-8"))
+LANGUAGE_EXAMPLE = json.loads(
+    (ROOT / "examples" / "action_language" / "production_database_change.json").read_text(encoding="utf-8")
+)
+POLICY_EXAMPLE = json.loads(
+    (ROOT / "examples" / "policies" / "alpha_conservative.json").read_text(encoding="utf-8")
+)
 
 
 class APIServerTests(unittest.TestCase):
@@ -58,7 +65,8 @@ class APIServerTests(unittest.TestCase):
         health = self.request_json("/health")
         ready = self.request_json("/ready")
         self.assertEqual(health[0], 200)
-        self.assertEqual(health[2]["version"], "0.4")
+        self.assertEqual(health[2]["version"], "0.6")
+        self.assertEqual(health[2]["tenant_policy_count"], 0)
         self.assertEqual(ready[2]["status"], "ready")
 
     def test_schema_lists_versioned_endpoints_and_postures(self):
@@ -67,6 +75,9 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("reversibility", body["required_fields"])
         self.assertIn("ESCALATE", body["postures"])
         self.assertIn("POST /v1/evaluate", body["endpoints"])
+        self.assertIn("POST /v1/language/evaluate", body["endpoints"])
+        self.assertEqual(body["language_versions"]["action"], "smerc.action.v1")
+        self.assertEqual(body["policy_version"], "smerc.policy.v1")
         self.assertIn("POST /v1/decisions/{replay_id}/reviews", body["endpoints"])
         self.assertIn("GET /v1/pilot/metrics", body["endpoints"])
         self.assertIn("GET /v1/review-queue", body["endpoints"])
@@ -110,6 +121,31 @@ class APIServerTests(unittest.TestCase):
 
         status, _, _ = self.request_json(f"/v1/decisions/{decision['replay_id']}", key="beta-secret")
         self.assertEqual(status, 404)
+
+    def test_action_language_endpoint_is_authenticated_persisted_and_idempotent(self):
+        headers = {"idempotency-key": "language-run-1001"}
+        first = self.request_json(
+            "/v1/language/evaluate", method="POST", payload=LANGUAGE_EXAMPLE,
+            key="alpha-secret", headers=headers
+        )
+        second = self.request_json(
+            "/v1/language/evaluate", method="POST", payload=LANGUAGE_EXAMPLE,
+            key="alpha-secret", headers=headers
+        )
+        self.assertEqual(first[0], 200)
+        self.assertEqual(first[2]["language_version"], "smerc.decision.v1")
+        self.assertEqual(first[2]["tenant_id"], "alpha")
+        self.assertEqual(first[2]["replay_id"], second[2]["replay_id"])
+        self.assertEqual(second[1]["x-smerc-idempotent-replay"], "true")
+
+    def test_action_language_endpoint_rejects_invalid_contract(self):
+        payload = dict(LANGUAGE_EXAMPLE)
+        payload["language_version"] = "unknown"
+        status, _, body = self.request_json(
+            "/v1/language/evaluate", method="POST", payload=payload, key="alpha-secret"
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "bad_request")
 
     def test_idempotency_replays_same_decision(self):
         headers = {"idempotency-key": "deploy-run-1001"}
@@ -212,6 +248,24 @@ class LocalDevelopmentModeTests(unittest.TestCase):
     def test_server_requires_auth_unless_local_mode_is_explicit(self):
         with self.assertRaises(ValueError):
             create_server("127.0.0.1", 0, audit_db=":memory:", api_keys={})
+
+    def test_server_resolves_tenant_specific_policy_without_cross_tenant_fallback(self):
+        policy = RuntimePolicy.from_dict(POLICY_EXAMPLE)
+        server = create_server(
+            "127.0.0.1",
+            0,
+            audit_db=":memory:",
+            api_keys={"alpha": "alpha-secret", "beta": "beta-secret"},
+            policy_registry=PolicyRegistry([policy]),
+        )
+        try:
+            alpha = server.engine_for("alpha").evaluate(EXAMPLES[0])
+            beta = server.engine_for("beta").evaluate(EXAMPLES[0])
+            self.assertEqual(alpha["policy"]["policy_id"], policy.policy_id)
+            self.assertEqual(beta["policy"]["policy_id"], "smerc-reference-recoverability")
+            self.assertNotEqual(alpha["policy"]["policy_hash"], beta["policy"]["policy_hash"])
+        finally:
+            server.server_close()
 
 
 class PilotReviewAPITests(unittest.TestCase):

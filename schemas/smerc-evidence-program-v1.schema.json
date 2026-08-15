@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SMERC Evidence Program v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "program_id", "title", "claims"],
+  "properties": {
+    "version": {"const": "smerc.evidence-program.v1"},
+    "program_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "title": {"type": "string", "minLength": 1, "maxLength": 256},
+    "claims": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/claim"}}
+  },
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "statement", "unknown_class", "risk_level", "owner_role", "failure_consequence", "criteria"],
+      "properties": {
+        "claim_id": {"type": "string", "minLength": 1, "maxLength": 64},
+        "statement": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "unknown_class": {"enum": ["epistemic", "adversarial", "operational", "normative", "commercial", "regulatory"]},
+        "risk_level": {"enum": ["critical", "high", "moderate"]},
+        "owner_role": {"type": "string", "minLength": 1, "maxLength": 128},
+        "failure_consequence": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "criteria": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/criterion"}}
+      }
+    },
+    "criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criterion_id", "metric", "operator", "threshold", "minimum_sample_size", "minimum_source_quality", "required_segments"],
+      "properties": {
+        "criterion_id": {"type": "string", "minLength": 1, "maxLength": 64},
+        "metric": {"type": "string", "minLength": 1, "maxLength": 128},
+        "operator": {"enum": ["gte", "lte"]},
+        "threshold": {"type": "number"},
+        "minimum_sample_size": {"type": "integer", "minimum": 1},
+        "minimum_source_quality": {"type": "number", "minimum": 0, "maximum": 1},
+        "required_segments": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 128}}
+      }
+    }
+  }
+}

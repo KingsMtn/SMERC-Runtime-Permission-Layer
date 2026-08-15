@@ -1,0 +1,24 @@
+{
+  "version": "smerc.policy.v1",
+  "tenant_id": "alpha",
+  "policy_id": "alpha-github-actions-conservative",
+  "policy_revision": "1.0.0",
+  "mode": "RECOMMEND",
+  "evidence_program_id": "smerc-core-validation-v1",
+  "evidence_ceiling": "RECOMMEND",
+  "fail_behavior": "report_unavailable",
+  "approved_by_role": "design-partner-security-owner",
+  "effective_at": "2026-07-03T00:00:00Z",
+  "thresholds": {
+    "deny_exposure_min": 0.7,
+    "deny_capacity_max": 0.5,
+    "deny_confidence_max": 0.6,
+    "deny_cancel_reliability_max": 0.4,
+    "deny_cancel_exposure_min": 0.55,
+    "escalate_stress_min": 0.6,
+    "freeze_confidence_max": 0.55,
+    "freeze_capacity_max": 0.45,
+    "throttle_authorization_min": 0.75,
+    "throttle_exposure_min": 0.35
+  }
+}

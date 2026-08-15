@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.7.0 - 2026-07-03
+
+- Added a Model and Agent Fitness Layer that scores candidate executors by task fit, data boundary, tool authority, recoverability, reliability history, cost, and latency before selecting an execution posture.
+- Added model and agent routing examples, documentation, CLI support, and tests.
+- Added tenant-scoped, versioned runtime policy bundles with deterministic policy hashes in decisions and replay records.
+- Added evidence-ceiling, fail-behavior, threshold-coherence, and effective-revision safeguards.
+- Added append-only SHA-256 and HMAC-SHA-256 evidence provenance ledgers.
+- Added provenance-derived deployment caps, schemas, examples, documentation, API configuration, and tests.
+
+## 0.6.0 - 2026-07-02
+
+- Added an executable Evidence and Unknowns Program covering eight core product, safety, integration, authority, performance, and commercial assumptions.
+- Added strict evidence-program and observation validation with sample-size, source-quality, and segment requirements.
+- Added evidence-derived deployment ceilings from `STOP` through `CALIBRATED_ENFORCE`.
+- Added synthetic contradiction examples, schemas, tests, security guidance, and report generation.
+
+## 0.5.0 - 2026-06-30
+
+- Added strict `smerc.action.v1` and `smerc.decision.v1` machine-readable contracts.
+- Added deterministic action hashing, structured reasons and controls, and measurable posture-transition conditions.
+- Added authenticated `POST /v1/language/evaluate` with tenant-scoped persistence and endpoint-bound idempotency.
+- Added JSON Schemas, a production database example, specification, and contract/API tests.
+
 ## Unreleased - Pilot Evidence Collection
 
 - Added immutable, tenant-scoped reviewer annotations for replayed decisions.

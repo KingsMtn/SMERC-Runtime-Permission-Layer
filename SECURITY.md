@@ -19,6 +19,14 @@ Use the repository owner's private GitHub contact path to report a suspected sec
 
 A first pilot should provide action metadata rather than raw sensitive payloads. SMERC should not require production secrets, customer PII, private keys, raw credentials, full source-code contents, or privileged cloud credentials.
 
+Action Language context is bounded to 16,384 canonical JSON bytes. Contract objects reject unknown fields, but `context` remains caller-defined metadata and must be treated as untrusted input by downstream log, export, and display systems. The deterministic action hash detects equal canonical requests; it is not authentication, a signature, or proof of origin.
+
+Evidence observations are untrusted claims about outcomes. Dataset identifiers and source-quality scores do not prove provenance by themselves. A live evidence pipeline requires authenticated ingestion, append-only records, reviewer identity, source attestation, retention controls, and independent checks against metric manipulation.
+
+The reference provenance ledger binds observations and source-artifact digests into a SHA-256 or HMAC-SHA-256 chain. Hash-only mode detects mutation only when a trusted head hash is retained independently. HMAC mode depends on confidentiality, rotation, and access control for `SMERC_EVIDENCE_HMAC_KEY`; it does not provide public-key nonrepudiation. Never commit that key or place it in action metadata.
+
+Tenant policy files are trusted configuration. Limit write access, review threshold changes, retain prior policy hashes, and deploy policy revisions through approved change control. The reference server loads policies at startup and does not provide a remote policy-administration endpoint.
+
 ## Pilot API Controls
 
 The pilot API defaults to refusing startup without at least one tenant-mapped bearer key. It provides:

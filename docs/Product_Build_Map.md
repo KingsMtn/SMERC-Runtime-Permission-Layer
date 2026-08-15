@@ -8,7 +8,21 @@ SMERC is a recoverability-aware runtime permission layer for AI-agent and automa
 
 ## Current Product Components
 
-### 1. Recoverability Engine
+### 1. Action And Decision Language
+
+File: `reference_engine/action_language.py`
+
+Purpose:
+
+- validate strict `smerc.action.v1` envelopes
+- compile agent and workflow proposals into engine inputs
+- create deterministic action hashes for replay comparison
+- return structured reasons, controls, and posture-transition conditions
+- preserve compatibility with the recoverability engine and audit store
+
+This is the stable integration boundary. It turns SMERC's vocabulary into an executable contract instead of relying on prose or integration-specific field mappings.
+
+### 2. Recoverability Engine
 
 File: `reference_engine/recoverability_engine.py`
 
@@ -38,7 +52,25 @@ Enforcement states:
 - `block`
 - `review`
 
-### 2. API Vehicle
+### 3. SPARTa Route And Permit Layer
+
+File: `reference_engine/sparta_router.py`
+
+Purpose:
+
+- consume a SMERC decision and original action request
+- generate a route report
+- issue or withhold a machine-readable permit
+- select reviewer paths
+- attach required controls
+- preserve MCP tool-call context
+- preserve OPA, Cedar, IAM, and policy-version context
+- preserve trace-oriented evidence fields
+- optionally sign route reports with an HMAC secret
+
+SPARTa does not decide whether an action is recoverable enough. SMERC does that. SPARTa turns the posture into the operational route a customer can test in a pilot.
+
+### 4. API Vehicle
 
 File: `api_server.py`
 
@@ -48,6 +80,7 @@ Endpoints:
 - `GET /ready`
 - `GET /schema`
 - `POST /v1/evaluate`
+- `POST /v1/language/evaluate`
 - `POST /v1/batch`
 - `GET /v1/decisions`
 - `GET /v1/decisions/{replay_id}`
@@ -58,7 +91,7 @@ Endpoints:
 
 The API uses only the Python standard library so a reviewer can run it without a dependency stack. Pilot controls include tenant-mapped bearer keys, idempotency, bounded requests, allowlisted CORS, and structured errors.
 
-### 3. Pilot Audit Store
+### 5. Pilot Audit Store
 
 File: `reference_engine/audit_store.py`
 
@@ -74,7 +107,7 @@ Purpose:
 
 SQLite is intentionally scoped to a single-instance pilot. It is not presented as the final enterprise storage architecture.
 
-### 4. Pilot Review Console
+### 6. Pilot Review Console
 
 Folder: `pilot_console/`
 
@@ -88,7 +121,7 @@ Purpose:
 
 The console is a pilot operator surface. It does not provide production identity, RBAC, or enforcement controls.
 
-### 5. GitHub Actions Gate
+### 7. GitHub Actions Gate
 
 Folder: `integrations/github_actions/`
 
@@ -102,7 +135,7 @@ Purpose:
 - preserve idempotency across remote retries
 - fail closed on remote-service unavailability in enforce mode
 
-### 6. Evidence Generators
+### 8. Evidence Generators
 
 Files:
 
@@ -117,7 +150,38 @@ Purpose:
 - export denominator-aware pilot review metrics
 - show what a design partner would receive after a shadow-mode pilot
 
-### 7. Deployment Profile
+### 9. Evidence And Unknowns Program
+
+File: `reference_engine/evidence_program.py`
+
+Purpose:
+
+- register technical, adversarial, operational, normative, commercial, and regulatory unknowns
+- define falsifiable thresholds before observing outcomes
+- reject underpowered, low-quality, or incorrectly segmented observations
+- lower the deployment ceiling when critical evidence is missing or contradictory
+- generate JSON and Markdown readiness reports
+
+The program does not certify safety. It prevents unresolved assumptions from being hidden by implementation progress.
+
+### 10. Policy Calibration And Evidence Provenance
+
+Files:
+
+- `reference_engine/policy.py`
+- `reference_engine/evidence_provenance.py`
+
+Purpose:
+
+- bind every decision and replay to an exact tenant policy revision and hash
+- prevent policy mode from exceeding the admitted evidence ceiling
+- activate the latest effective tenant revision without early activation or silent fallback
+- detect mutated, missing, duplicated, or reordered evidence observations
+- cap deployment based on provenance strength
+
+Hash-chain provenance detects mutation but does not establish source truth. HMAC mode provides shared-key authenticity, not public nonrepudiation.
+
+### 11. Deployment Profile
 
 Files:
 
@@ -138,8 +202,11 @@ Purpose:
 - Pilot metrics preserve explicit denominators and null values when evidence is insufficient.
 - The review console can exercise the review and metrics workflow without third-party frontend dependencies.
 - The GitHub Actions integration can run in observe, recommend, or enforce mode.
+- SPARTa can translate SMERC decisions into constrained routes, withheld permits, reviewer paths, and control instructions.
 - The repo includes repeatable tests.
 - The evidence workflow produces report artifacts.
+- The evidence registry converts unresolved assumptions into enforceable deployment ceilings.
+- Tenant decisions carry replayable policy identity, while evidence provenance limits how far observations may advance deployment.
 
 ## What This Build Does Not Prove
 
@@ -147,6 +214,7 @@ Purpose:
 - It does not prove calibrated enterprise thresholds.
 - It does not prove willingness to pay.
 - It does not prove the model improves decisions against live workflow data.
+- It does not turn synthetic evidence into customer or production validation.
 - It does not replace existing security controls.
 
 ## Next Product Layer
@@ -162,3 +230,18 @@ The implemented review layer is ready for a design-partner pilot to collect:
 - examples where existing controls allowed an action but SMERC recommended constraint or review
 
 The software can collect these measurements; only a real pilot can determine whether they support the product thesis.
+
+## Compatibility Direction
+
+The product should integrate with, not replace:
+
+- IAM and agent identity systems
+- OPA/Rego
+- Cedar
+- Microsoft Agent Governance Toolkit
+- MCP gateways and tool servers
+- OpenTelemetry-compatible observability pipelines
+
+The useful commercial boundary is:
+
+> Existing policy systems decide whether the action is authorized. SMERC decides whether it is recoverable enough to execute now. SPARTa turns the decision into a constrained route, permit, reviewer path, and replayable evidence.

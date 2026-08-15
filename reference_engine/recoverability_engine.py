@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Any, Dict, List
 from uuid import uuid4
 
+from reference_engine.policy import DEFAULT_POLICY, RuntimePolicy, load_policy
+
 
 class RuntimePosture(str, Enum):
     ALLOW = "ALLOW"
@@ -125,6 +127,9 @@ class RecoverabilityAction:
 class RecoverabilityEngine:
     """Recoverability-aware runtime permission engine for automated actions."""
 
+    def __init__(self, policy: RuntimePolicy = DEFAULT_POLICY) -> None:
+        self.policy = policy
+
     def evaluate(self, payload: Dict[str, Any] | RecoverabilityAction) -> Dict[str, Any]:
         action = payload if isinstance(payload, RecoverabilityAction) else RecoverabilityAction.from_dict(payload)
         scores = self._scores(action)
@@ -138,6 +143,7 @@ class RecoverabilityEngine:
         )
         summary = self._summary(action, posture, scores, controls)
         evaluated_at = datetime.now(timezone.utc).isoformat()
+        policy_metadata = self.policy.decision_metadata()
 
         return {
             "action_id": action.action_id,
@@ -147,6 +153,7 @@ class RecoverabilityEngine:
             "reason_codes": reason_codes,
             "controls": controls,
             "plain_english_summary": summary,
+            "policy": policy_metadata,
             "replay_id": replay_id,
             "replay": {
                 "replay_id": replay_id,
@@ -159,6 +166,7 @@ class RecoverabilityEngine:
                 "scores": {key: round(value, 3) for key, value in scores.items()},
                 "reason_codes": reason_codes,
                 "controls": controls,
+                "policy": policy_metadata,
                 "context": action.context,
             },
         }
@@ -248,23 +256,32 @@ class RecoverabilityEngine:
             reasons.append("SENSITIVE_DATA")
         return reasons or ["RECOVERABILITY_ACCEPTABLE"]
 
-    @staticmethod
-    def _posture(action: RecoverabilityAction, scores: Dict[str, float]) -> RuntimePosture:
+    def _posture(self, action: RecoverabilityAction, scores: Dict[str, float]) -> RuntimePosture:
         exposure = scores["irreversible_exposure_score"]
         capacity = scores["reversible_capacity_score"]
         confidence = scores["confidence_score"]
         auth = scores["risk_adjusted_authorization_score"]
         stress = scores["operational_stress_score"]
+        policy = self.policy.thresholds
 
-        if exposure >= 0.78 and (capacity < 0.42 or confidence < 0.48):
+        if exposure >= policy.deny_exposure_min and (
+            capacity < policy.deny_capacity_max or confidence < policy.deny_confidence_max
+        ):
             return RuntimePosture.DENY
-        if action.cancel_reliability < 0.30 and exposure >= 0.62:
+        if (
+            action.cancel_reliability < policy.deny_cancel_reliability_max
+            and exposure >= policy.deny_cancel_exposure_min
+        ):
             return RuntimePosture.DENY
-        if stress >= 0.70 and (action.external_side_effect or action.sensitive_data):
+        if stress >= policy.escalate_stress_min and (action.external_side_effect or action.sensitive_data):
             return RuntimePosture.ESCALATE
-        if confidence < 0.45 or capacity < 0.36:
+        if confidence < policy.freeze_confidence_max or capacity < policy.freeze_capacity_max:
             return RuntimePosture.FREEZE
-        if auth < 0.62 or exposure >= 0.45 or action.external_side_effect:
+        if (
+            auth < policy.throttle_authorization_min
+            or exposure >= policy.throttle_exposure_min
+            or action.external_side_effect
+        ):
             return RuntimePosture.THROTTLE
         return RuntimePosture.ALLOW
 
@@ -317,22 +334,30 @@ def clamp(value: float) -> float:
     return max(0.0, min(1.0, value))
 
 
-def evaluate_action(payload: Dict[str, Any] | RecoverabilityAction) -> Dict[str, Any]:
-    return RecoverabilityEngine().evaluate(payload)
+def evaluate_action(
+    payload: Dict[str, Any] | RecoverabilityAction,
+    policy: RuntimePolicy = DEFAULT_POLICY,
+) -> Dict[str, Any]:
+    return RecoverabilityEngine(policy).evaluate(payload)
 
 
-def evaluate_batch(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    engine = RecoverabilityEngine()
+def evaluate_batch(
+    items: List[Dict[str, Any]],
+    policy: RuntimePolicy = DEFAULT_POLICY,
+) -> List[Dict[str, Any]]:
+    engine = RecoverabilityEngine(policy)
     return [engine.evaluate(item) for item in items]
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate automated actions with the SMERC recoverability engine.")
     parser.add_argument("path", help="Path to a JSON action request or JSON list of requests.")
+    parser.add_argument("--policy", type=Path, help="Optional SMERC policy bundle.")
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON output.")
     args = parser.parse_args()
     payload = json.loads(Path(args.path).read_text(encoding="utf-8"))
-    result = evaluate_batch(payload) if isinstance(payload, list) else evaluate_action(payload)
+    policy = load_policy(args.policy) if args.policy else DEFAULT_POLICY
+    result = evaluate_batch(payload, policy) if isinstance(payload, list) else evaluate_action(payload, policy)
     print(json.dumps(result, indent=2 if args.pretty else None))
 
 

@@ -1,6 +1,6 @@
 {
   "summary": {
-    "generated_at": "2026-06-26T02:11:01.395810+00:00",
+    "generated_at": "2026-07-03T04:22:15.042078+00:00",
     "total_actions": 5,
     "posture_counts": {
       "ALLOW": 1,
@@ -36,10 +36,18 @@
         "retain_cancel_handle"
       ],
       "plain_english_summary": "Action 'AGENT_RUN_TESTS' received ALLOW. Irreversible exposure is 0.077, reversible capacity is 0.918, and authorization score is 0.917. Controls: execute, record_replay, retain_cancel_handle.",
-      "replay_id": "replay_AGENT_RUN_TESTS_1782439861394",
+      "policy": {
+        "tenant_id": "*",
+        "policy_id": "smerc-reference-recoverability",
+        "policy_revision": "1.0.0",
+        "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+        "mode": "OBSERVE",
+        "evidence_ceiling": "OBSERVE"
+      },
+      "replay_id": "replay_AGENT_RUN_TESTS_1783052535042_3d2ae15e01c2",
       "replay": {
-        "replay_id": "replay_AGENT_RUN_TESTS_1782439861394",
-        "evaluated_at": "2026-06-26T02:11:01.394970+00:00",
+        "replay_id": "replay_AGENT_RUN_TESTS_1783052535042_3d2ae15e01c2",
+        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
         "actor": "coding_agent",
         "tool": "github_actions.test",
         "action_type": "ci_test",
@@ -61,6 +69,14 @@
           "record_replay",
           "retain_cancel_handle"
         ],
+        "policy": {
+          "tenant_id": "*",
+          "policy_id": "smerc-reference-recoverability",
+          "policy_revision": "1.0.0",
+          "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+          "mode": "OBSERVE",
+          "evidence_ceiling": "OBSERVE"
+        },
         "context": {
           "workflow": "pull_request",
           "expected_outcome": "ALLOW"
@@ -92,10 +108,18 @@
         "checkpoint_before_execution"
       ],
       "plain_english_summary": "Action 'AGENT_DEPLOY_PROD_CONFIG' received THROTTLE. Irreversible exposure is 0.502, reversible capacity is 0.588, and authorization score is 0.595. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
-      "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1782439861394",
+      "policy": {
+        "tenant_id": "*",
+        "policy_id": "smerc-reference-recoverability",
+        "policy_revision": "1.0.0",
+        "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+        "mode": "OBSERVE",
+        "evidence_ceiling": "OBSERVE"
+      },
+      "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1783052535042_77b0df7adfb6",
       "replay": {
-        "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1782439861394",
-        "evaluated_at": "2026-06-26T02:11:01.394970+00:00",
+        "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1783052535042_77b0df7adfb6",
+        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
         "actor": "deployment_agent",
         "tool": "github_actions.deploy",
         "action_type": "production_deploy",
@@ -121,6 +145,14 @@
           "rate_limit_external_side_effect",
           "checkpoint_before_execution"
         ],
+        "policy": {
+          "tenant_id": "*",
+          "policy_id": "smerc-reference-recoverability",
+          "policy_revision": "1.0.0",
+          "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+          "mode": "OBSERVE",
+          "evidence_ceiling": "OBSERVE"
+        },
         "context": {
           "workflow": "deployment",
           "expected_outcome": "THROTTLE"
@@ -155,10 +187,18 @@
         "preserve_replay"
       ],
       "plain_english_summary": "Action 'AGENT_DELETE_AUDIT_LOGS' received FREEZE. Irreversible exposure is 0.717, reversible capacity is 0.292, and authorization score is 0.337. Controls: pause_execution, collect_more_evidence, snapshot_current_state, preserve_replay.",
-      "replay_id": "replay_AGENT_DELETE_AUDIT_LOGS_1782439861394",
+      "policy": {
+        "tenant_id": "*",
+        "policy_id": "smerc-reference-recoverability",
+        "policy_revision": "1.0.0",
+        "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+        "mode": "OBSERVE",
+        "evidence_ceiling": "OBSERVE"
+      },
+      "replay_id": "replay_AGENT_DELETE_AUDIT_LOGS_1783052535042_407f424624b6",
       "replay": {
-        "replay_id": "replay_AGENT_DELETE_AUDIT_LOGS_1782439861394",
-        "evaluated_at": "2026-06-26T02:11:01.394970+00:00",
+        "replay_id": "replay_AGENT_DELETE_AUDIT_LOGS_1783052535042_407f424624b6",
+        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
         "actor": "maintenance_agent",
         "tool": "github_actions.cleanup",
         "action_type": "audit_log_delete",
@@ -187,6 +227,14 @@
           "snapshot_current_state",
           "preserve_replay"
         ],
+        "policy": {
+          "tenant_id": "*",
+          "policy_id": "smerc-reference-recoverability",
+          "policy_revision": "1.0.0",
+          "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+          "mode": "OBSERVE",
+          "evidence_ceiling": "OBSERVE"
+        },
         "context": {
           "workflow": "scheduled_cleanup",
           "expected_outcome": "FREEZE_OR_DENY"
@@ -224,10 +272,18 @@
         "require_new_request"
       ],
       "plain_english_summary": "Action 'AGENT_EXPORT_CUSTOMER_DATA' received DENY. Irreversible exposure is 0.874, reversible capacity is 0.230, and authorization score is 0.264. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
-      "replay_id": "replay_AGENT_EXPORT_CUSTOMER_DATA_1782439861394",
+      "policy": {
+        "tenant_id": "*",
+        "policy_id": "smerc-reference-recoverability",
+        "policy_revision": "1.0.0",
+        "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+        "mode": "OBSERVE",
+        "evidence_ceiling": "OBSERVE"
+      },
+      "replay_id": "replay_AGENT_EXPORT_CUSTOMER_DATA_1783052535042_b90663d3cc49",
       "replay": {
-        "replay_id": "replay_AGENT_EXPORT_CUSTOMER_DATA_1782439861394",
-        "evaluated_at": "2026-06-26T02:11:01.394970+00:00",
+        "replay_id": "replay_AGENT_EXPORT_CUSTOMER_DATA_1783052535042_b90663d3cc49",
+        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
         "actor": "support_agent",
         "tool": "support.export",
         "action_type": "data_export",
@@ -259,6 +315,14 @@
           "preserve_replay",
           "require_new_request"
         ],
+        "policy": {
+          "tenant_id": "*",
+          "policy_id": "smerc-reference-recoverability",
+          "policy_revision": "1.0.0",
+          "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+          "mode": "OBSERVE",
+          "evidence_ceiling": "OBSERVE"
+        },
         "context": {
           "workflow": "support_debug",
           "expected_outcome": "DENY_OR_ESCALATE"
@@ -292,10 +356,18 @@
         "checkpoint_before_execution"
       ],
       "plain_english_summary": "Action 'AGENT_ROTATE_SECRET' received THROTTLE. Irreversible exposure is 0.638, reversible capacity is 0.554, and authorization score is 0.547. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
-      "replay_id": "replay_AGENT_ROTATE_SECRET_1782439861395",
+      "policy": {
+        "tenant_id": "*",
+        "policy_id": "smerc-reference-recoverability",
+        "policy_revision": "1.0.0",
+        "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+        "mode": "OBSERVE",
+        "evidence_ceiling": "OBSERVE"
+      },
+      "replay_id": "replay_AGENT_ROTATE_SECRET_1783052535042_049f5f4d8ffc",
       "replay": {
-        "replay_id": "replay_AGENT_ROTATE_SECRET_1782439861395",
-        "evaluated_at": "2026-06-26T02:11:01.395810+00:00",
+        "replay_id": "replay_AGENT_ROTATE_SECRET_1783052535042_049f5f4d8ffc",
+        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
         "actor": "ops_agent",
         "tool": "secrets.rotate",
         "action_type": "secret_rotation",
@@ -323,6 +395,14 @@
           "rate_limit_external_side_effect",
           "checkpoint_before_execution"
         ],
+        "policy": {
+          "tenant_id": "*",
+          "policy_id": "smerc-reference-recoverability",
+          "policy_revision": "1.0.0",
+          "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+          "mode": "OBSERVE",
+          "evidence_ceiling": "OBSERVE"
+        },
         "context": {
           "workflow": "secret_rotation",
           "expected_outcome": "ESCALATE"
