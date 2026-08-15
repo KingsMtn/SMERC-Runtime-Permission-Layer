@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-timing-evidence-v1.schema.json",
+  "title": "SMERC Timing Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "tenant_id", "workflow_id", "records", "evidence_boundary"],
+  "properties": {
+    "version": {"const": "smerc.timing-evidence.v1"},
+    "tenant_id": {"$ref": "#/$defs/text"},
+    "workflow_id": {"$ref": "#/$defs/text"},
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["replay_id", "posture", "decision_latency_ms", "route_latency_ms", "workflow_overhead_ms", "cancellation_window_ms", "cancel_attempted", "cancel_success", "rollback_attempted", "rollback_latency_observed_ms", "rollback_success", "review_latency_ms", "unavailable_evaluation"],
+        "properties": {
+          "replay_id": {"$ref": "#/$defs/text"},
+          "posture": {"enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE", "UNAVAILABLE"]},
+          "decision_latency_ms": {"$ref": "#/$defs/non_negative_number"},
+          "route_latency_ms": {"anyOf": [{"$ref": "#/$defs/non_negative_number"}, {"type": "null"}]},
+          "workflow_overhead_ms": {"anyOf": [{"$ref": "#/$defs/non_negative_number"}, {"type": "null"}]},
+          "cancellation_window_ms": {"anyOf": [{"$ref": "#/$defs/non_negative_number"}, {"type": "null"}]},
+          "cancel_attempted": {"type": "boolean"},
+          "cancel_success": {"anyOf": [{"type": "boolean"}, {"type": "null"}]},
+          "rollback_attempted": {"type": "boolean"},
+          "rollback_latency_observed_ms": {"anyOf": [{"$ref": "#/$defs/non_negative_number"}, {"type": "null"}]},
+          "rollback_success": {"anyOf": [{"type": "boolean"}, {"type": "null"}]},
+          "review_latency_ms": {"anyOf": [{"$ref": "#/$defs/non_negative_number"}, {"type": "null"}]},
+          "unavailable_evaluation": {"type": "boolean"}
+        }
+      }
+    },
+    "evidence_boundary": {"$ref": "#/$defs/text"}
+  },
+  "$defs": {
+    "non_negative_number": {"type": "number", "minimum": 0},
+    "text": {"type": "string", "minLength": 1, "maxLength": 512}
+  }
+}

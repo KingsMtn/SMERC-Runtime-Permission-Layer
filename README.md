@@ -60,6 +60,8 @@ The current build includes:
 - model and agent fitness routing for selecting qualified executors
 - machine-readable SMERC Beacon manifest for AI/tool discovery
 - Agent Handshake Protocol connecting beacon discovery to executor routing and action posture evaluation
+- SPARK signal intake that validates non-secret evidence and compiles it into strict SMERC Action Language
+- Timing Evidence reports for decision latency, route latency, workflow overhead, cancellation, rollback, and unavailable evaluations
 - scoring-invariant verification for recoverability and executor fitness math
 - commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service

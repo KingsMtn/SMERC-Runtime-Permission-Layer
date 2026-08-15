@@ -50,7 +50,7 @@ jobs:
 
       - name: Validate machine-readable contracts
         run: |
-          python -c 'import json; paths=["schemas/smerc-action-language-v1.schema.json", "schemas/smerc-decision-language-v1.schema.json", "schemas/smerc-runtime-policy-v1.schema.json", "schemas/smerc-evidence-ledger-v1.schema.json", "schemas/smerc-action-bound-permit-v1.schema.json", "schemas/smerc-authenticated-principal-v1.schema.json", "schemas/smerc-security-event-v1.schema.json", "schemas/smerc-control-evidence-v1.schema.json", "schemas/smerc-access-token-v1.schema.json", "schemas/smerc-access-token-v2.schema.json", "schemas/smerc-github-oidc-trust-v1.schema.json", "schemas/smerc-execution-plan-v1.schema.json", "schemas/smerc-execution-report-v1.schema.json"]; [json.load(open(path)) for path in paths]'
+          python -c 'import json; paths=["schemas/smerc-action-language-v1.schema.json", "schemas/smerc-decision-language-v1.schema.json", "schemas/smerc-runtime-policy-v1.schema.json", "schemas/smerc-evidence-ledger-v1.schema.json", "schemas/smerc-action-bound-permit-v1.schema.json", "schemas/smerc-authenticated-principal-v1.schema.json", "schemas/smerc-security-event-v1.schema.json", "schemas/smerc-control-evidence-v1.schema.json", "schemas/smerc-access-token-v1.schema.json", "schemas/smerc-access-token-v2.schema.json", "schemas/smerc-github-oidc-trust-v1.schema.json", "schemas/smerc-execution-plan-v1.schema.json", "schemas/smerc-execution-report-v1.schema.json", "schemas/smerc-spark-evidence-v1.schema.json", "schemas/smerc-timing-evidence-v1.schema.json"]; [json.load(open(path)) for path in paths]'
 
       - name: Validate deployment composite contract without execution
         id: deployment-contract

@@ -1,0 +1,32 @@
+{
+  "version": "smerc.spark-evidence.v1",
+  "evidence_id": "spark-gha-001",
+  "collected_at": "2026-08-15T00:00:00Z",
+  "source_systems": ["github_actions", "identity", "policy"],
+  "action_metadata": {
+    "action_id": "deploy-prod-canary",
+    "description": "Deploy a billing service canary to production at 5 percent traffic.",
+    "actor": "github-actions:deploy-agent",
+    "tool": "github_actions",
+    "operation": "deploy_to_production",
+    "resource": "billing-service",
+    "environment": "production",
+    "authority_basis": "protected environment approval and deployment workflow policy",
+    "authority_confidence": 0.82,
+    "external_side_effect": true,
+    "sensitive_data": false
+  },
+  "recoverability_signals": {
+    "base_action_risk": 0.48,
+    "reversibility": 0.74,
+    "containment_strength": 0.81,
+    "rollback_latency": 0.27,
+    "evidence_validity": 0.86,
+    "anomaly_pressure": 0.16,
+    "impact_scope": 0.36,
+    "cancel_reliability": 0.72,
+    "rollback_method": "canary rollback to previous deployment artifact"
+  },
+  "evidence_gaps": [],
+  "non_secret_boundary": true
+}

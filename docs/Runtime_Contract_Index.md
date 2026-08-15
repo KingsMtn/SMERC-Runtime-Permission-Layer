@@ -6,7 +6,7 @@ Contract version: `smerc.runtime-contract-index.v1`.
 
 SMERC now has many working contracts: action language, decision language, policy, SPL, SPARTa route, SPARTa vocabulary, permits, control evidence, execution reports, Decision Lifecycle Ledger, DLL Intelligence, and certificates.
 
-It also has proposed adjacent contract directions for SPARK signal intake and timing evidence. These are documented as architecture direction, not production schemas.
+It also has pilot contracts for SPARK signal intake and timing evidence. These are implemented as reference modules and schemas for shadow-mode review, not production-certified collection or telemetry.
 
 The index answers the practical reviewer question:
 

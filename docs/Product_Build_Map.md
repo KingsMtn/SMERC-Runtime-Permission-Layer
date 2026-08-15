@@ -342,6 +342,41 @@ Purpose:
 
 This creates an executable pilot lifecycle, not a sandbox or production-certified deployment controller. Native control commands, runner integrity, descendant-process handling, external state restoration, and multi-instance replay prevention remain validation and hardening requirements.
 
+### 19. SPARK Signal Intake
+
+Files:
+
+- `reference_engine/spark_intake.py`
+- `schemas/smerc-spark-evidence-v1.schema.json`
+- `examples/spark/github_actions_spark_evidence.json`
+- `examples/spark/mcp_tool_spark_evidence.json`
+
+Purpose:
+
+- validate non-secret signal evidence before SMERC scoring
+- normalize action metadata, identity context, policy context, source systems, recoverability signals, and evidence gaps
+- compile SPARK evidence into strict `smerc.action.v1` Action Language
+- preserve source-system and evidence-gap context inside the action envelope for replay
+
+SPARK is pilot-grade signal intake. It improves evidence discipline but does not prove upstream systems supplied truthful or complete signals.
+
+### 20. Timing Evidence
+
+Files:
+
+- `reference_engine/timing_evidence.py`
+- `schemas/smerc-timing-evidence-v1.schema.json`
+- `examples/timing/github_actions_timing_evidence.json`
+
+Purpose:
+
+- validate pilot timing records
+- summarize decision latency, route latency, workflow overhead, cancellation windows, cancellation success, rollback latency, rollback success, review latency, and unavailable evaluations
+- classify operational timing status for pilot review
+- write JSON and Markdown timing reports
+
+Timing Evidence measures supplied pilot observations. It does not prove production SLA performance, rollback reliability across environments, or incident reduction.
+
 ## What This Build Proves
 
 - The scoring engine runs.
@@ -360,6 +395,8 @@ This creates an executable pilot lifecycle, not a sandbox or production-certifie
 - The GitHub deployment adapter can order native controls, one-time permit consumption, bounded execution, cancellation, rollback attempt, and non-secret reporting in one tested path.
 - The fake AcmeCloud production-like test can exercise safe, constrained, blocked, review-required, and rollback paths with valid Decision Lifecycle Ledger chains.
 - The real public incident replay can run public postmortem-derived scenarios through SMERC while preserving the source-fact versus analyst-assigned-signal boundary.
+- SPARK can convert non-secret intake evidence into strict Action Language for SMERC evaluation.
+- Timing Evidence can summarize pilot latency, cancellation, rollback, and unavailable-evaluation records.
 
 ## What This Build Does Not Prove
 
@@ -385,10 +422,10 @@ The implemented review layer is ready for a design-partner pilot to collect:
 
 The software can collect these measurements; only a real pilot can determine whether they support the product thesis.
 
-The next architecture layer should be SPARK signal intake plus timing evidence:
+The next architecture layer is now represented as pilot-grade SPARK signal intake plus timing evidence:
 
-- SPARK normalizes action metadata, identity context, policy context, workflow context, anomaly signals, and evidence gaps before SMERC scoring.
-- Timing Evidence records decision latency, route latency, workflow overhead, cancellation window, cancellation result, rollback latency, rollback result, review latency, and unavailable evaluations.
+- SPARK normalizes action metadata, identity context, policy context, workflow context, anomaly signals, and evidence gaps before SMERC scoring through `reference_engine/spark_intake.py`.
+- Timing Evidence records decision latency, route latency, workflow overhead, cancellation window, cancellation result, rollback latency, rollback result, review latency, and unavailable evaluations through `reference_engine/timing_evidence.py`.
 - Both layers should preserve the non-secret pilot boundary and avoid raw customer payloads.
 
 See `docs/SPARK_Signal_Intake_And_Timing_Evidence.md`.

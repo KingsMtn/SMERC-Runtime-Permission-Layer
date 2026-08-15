@@ -1,0 +1,53 @@
+{
+  "version": "smerc.timing-evidence.v1",
+  "tenant_id": "platform-team",
+  "workflow_id": "github-actions-shadow-mode",
+  "records": [
+    {
+      "replay_id": "replay-001",
+      "posture": "ALLOW",
+      "decision_latency_ms": 42,
+      "route_latency_ms": 12,
+      "workflow_overhead_ms": 84,
+      "cancellation_window_ms": 30000,
+      "cancel_attempted": false,
+      "cancel_success": null,
+      "rollback_attempted": false,
+      "rollback_latency_observed_ms": null,
+      "rollback_success": null,
+      "review_latency_ms": null,
+      "unavailable_evaluation": false
+    },
+    {
+      "replay_id": "replay-002",
+      "posture": "THROTTLE",
+      "decision_latency_ms": 57,
+      "route_latency_ms": 18,
+      "workflow_overhead_ms": 126,
+      "cancellation_window_ms": 45000,
+      "cancel_attempted": false,
+      "cancel_success": null,
+      "rollback_attempted": true,
+      "rollback_latency_observed_ms": 180000,
+      "rollback_success": true,
+      "review_latency_ms": 420000,
+      "unavailable_evaluation": false
+    },
+    {
+      "replay_id": "replay-003",
+      "posture": "FREEZE",
+      "decision_latency_ms": 61,
+      "route_latency_ms": 21,
+      "workflow_overhead_ms": 143,
+      "cancellation_window_ms": 60000,
+      "cancel_attempted": true,
+      "cancel_success": true,
+      "rollback_attempted": false,
+      "rollback_latency_observed_ms": null,
+      "rollback_success": null,
+      "review_latency_ms": 900000,
+      "unavailable_evaluation": false
+    }
+  ],
+  "evidence_boundary": "Synthetic timing evidence for local pilot review; not customer production latency or SLA evidence."
+}

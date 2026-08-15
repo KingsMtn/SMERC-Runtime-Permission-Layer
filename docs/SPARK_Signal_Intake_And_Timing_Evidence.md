@@ -75,7 +75,7 @@ SPARK should hand SMERC a strict action evidence envelope:
 }
 ```
 
-This contract is proposed. It should not be treated as a production schema until implemented and tested.
+This contract is implemented as a pilot schema in `schemas/smerc-spark-evidence-v1.schema.json` and a reference compiler in `reference_engine/spark_intake.py`.
 
 ## Timing Evidence Outputs
 
@@ -102,18 +102,18 @@ Timing Evidence should be interpreted conservatively:
 - Rollback success in a synthetic test does not prove rollback success in production.
 - Cancellation success depends on downstream systems, not only SMERC.
 
-## Best First Implementation
+## Pilot Implementation
 
-The first practical build should stay narrow:
+The current pilot implementation stays narrow:
 
-1. Add SPARK evidence fields to GitHub Actions metadata examples.
-2. Record local decision latency and report-generation latency.
-3. Add optional workflow overhead fields to pilot summaries.
-4. Add rollback and cancellation fields to execution reports when adapters can supply them.
-5. Keep all raw customer secrets and payloads out of SPARK evidence.
+1. SPARK evidence validates through `reference_engine.spark_intake`.
+2. SPARK evidence compiles into strict `smerc.action.v1` Action Language.
+3. Timing evidence validates through `reference_engine.timing_evidence`.
+4. Timing evidence reports latency, unavailable evaluation, cancellation, and rollback summary metrics.
+5. All examples keep raw customer secrets and payloads out of SPARK evidence.
 
 ## Boundary
 
-SPARK is a signal-intake concept and contract direction. Timing Evidence is a measurement direction.
+SPARK and Timing Evidence are pilot-grade contracts and reference modules.
 
 They do not prove production safety, customer demand, incident reduction, or downstream system truthfulness. They make the evidence boundary clearer before SMERC decisions are trusted.
