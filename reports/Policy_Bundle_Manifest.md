@@ -8,7 +8,7 @@
 - Evidence ceiling: `OBSERVE`
 - Fail behavior: `report_unavailable`
 - Policy hash: `cc7b8bfd3d8f87eb10158bba6b203d5691de16529dc289a840fd7c2e0417f886`
-- Bundle digest: `158e581c4ffe0fdcf3221d3a10943c7cfb5078e4b0207343652a41d8f99fbed0`
+- Bundle digest: `d7ff0961fe53f3507479c343d27a1ffa67309563bfeb85d858048755f2dae3b5`
 - Verification valid: `true`
 
 ## Approval
@@ -22,9 +22,9 @@
 
 | Type | Path | SHA-256 |
 | --- | --- | --- |
-| `spl` | `examples/policies/github_actions_shadow_spl.json` | `75ecc57a1271f313dc0f3a47eafc7616f4644154b9a188bb4fb803308ab83f90` |
-| `domain_profile` | `examples/domain_profiles/github_actions_strict.json` | `401601df03294e9274699894364bd3dc755ca2f5807315cb6821042b71ea9940` |
-| `control_mapping` | `examples/control_mapping/github_actions_controls.json` | `536b2913df1b13683e28ca553a5095e011403b5dd727a6aab458992077b7c508` |
+| `spl` | `examples/policies/github_actions_shadow_spl.json` | `3ba496421c32ab97c1d6bb70cf882085337922bf86a7f9914a8eea9c32eea044` |
+| `domain_profile` | `examples/domain_profiles/github_actions_strict.json` | `f0cc1986dad6fd0282cad0fe6c0a4e16aef27f79203e5498ae1d053cf08a8c44` |
+| `control_mapping` | `examples/control_mapping/github_actions_controls.json` | `b8816613a573cd6d95a7fcc95df4768cd6996dd9827380558a3e9fd03b262650` |
 
 ## Activation Requirements
 
