@@ -19,7 +19,11 @@ ARTIFACT_TYPES = {"spl", "runtime_policy", "domain_profile", "control_mapping", 
 
 
 def file_sha256(path: str | Path) -> str:
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    data = Path(path).read_bytes()
+    if b"\0" not in data:
+        # Policy artifacts are text; normalize checkout-specific line endings before binding them.
+        data = data.replace(b"\r\n", b"\n")
+    return hashlib.sha256(data).hexdigest()
 
 
 def bundle_digest(bundle: Mapping[str, Any]) -> str:
