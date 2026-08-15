@@ -100,6 +100,7 @@ The current project is ready for technical review and shadow-mode pilot discussi
 Start here before reading the code:
 
 - `docs/External_Review_Start_Here.md` gives external reviewers the shortest safe path through the repository.
+- `docs/AI_Agent_Recoverability_Governance.md` explains the institutional control gap: why AI-agent governance should ask whether an action is recoverable, not only whether it is allowed.
 - `docs/Reviewer_Quickstart.md` gives reviewers a one-command path that generates a local proof package linking PR Guardian, SPARTa, DLL, CISO seed evidence, and benchmark comparison.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
 - `docs/Credibility_Partner_Review_Packet.md` gives external reviewers a 30-minute packet for deciding whether metadata-only shadow-mode testing is worth discussing.
