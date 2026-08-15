@@ -14,6 +14,26 @@ SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permis
 
 The first integration is a GitHub Actions gate for AI-assisted code, deployment, and infrastructure workflows.
 
+## Start Here: GitHub Actions Shadow-Mode Pilot
+
+The primary pilot is intentionally narrow:
+
+> Run SMERC in observe mode on one GitHub Actions workflow, score proposed automated actions before execution, preserve replayable evidence, and compare SMERC posture against existing reviewer judgment.
+
+This is the clearest commercial path for a security, platform, or AI governance team because it does not require replacing IAM, OPA, branch protection, code review, CI/CD approvals, SIEM, or existing change-management controls.
+
+Use this sequence:
+
+1. Read `pilot_package/First_Pilot_Path.md` to confirm whether the workflow is a valid first pilot.
+2. Read `docs/GitHub_Actions_Pilot_Operator_Quickstart.md` for the shortest install-and-measure path.
+3. Run `python -m reference_engine.github_actions_pilot_readiness --pretty` to generate the readiness report.
+4. Run SMERC in `observe` mode only.
+5. Review posture distribution, reviewer agreement, false release candidates, false constraint candidates, useful constraint examples, unavailable evaluations, and latency impact before considering recommendation or enforcement.
+
+Current status: pilot-ready for shadow-mode technical review. Not production-certified, compliance-attested, or customer-proven to reduce incidents.
+
+## What Exists Now
+
 The current build includes:
 
 - versioned SMERC Action Language and Decision Language contracts
