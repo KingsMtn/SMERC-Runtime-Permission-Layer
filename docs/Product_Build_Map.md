@@ -384,3 +384,11 @@ The implemented review layer is ready for a design-partner pilot to collect:
 - examples where existing controls allowed an action but SMERC recommended constraint or review
 
 The software can collect these measurements; only a real pilot can determine whether they support the product thesis.
+
+The next architecture layer should be SPARK signal intake plus timing evidence:
+
+- SPARK normalizes action metadata, identity context, policy context, workflow context, anomaly signals, and evidence gaps before SMERC scoring.
+- Timing Evidence records decision latency, route latency, workflow overhead, cancellation window, cancellation result, rollback latency, rollback result, review latency, and unavailable evaluations.
+- Both layers should preserve the non-secret pilot boundary and avoid raw customer payloads.
+
+See `docs/SPARK_Signal_Intake_And_Timing_Evidence.md`.

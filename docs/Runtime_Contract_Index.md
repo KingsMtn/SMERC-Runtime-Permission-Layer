@@ -6,6 +6,8 @@ Contract version: `smerc.runtime-contract-index.v1`.
 
 SMERC now has many working contracts: action language, decision language, policy, SPL, SPARTa route, SPARTa vocabulary, permits, control evidence, execution reports, Decision Lifecycle Ledger, DLL Intelligence, and certificates.
 
+It also has proposed adjacent contract directions for SPARK signal intake and timing evidence. These are documented as architecture direction, not production schemas.
+
 The index answers the practical reviewer question:
 
 > How do these pieces fit together as one runtime governance system?
@@ -23,7 +25,7 @@ Without an index, an outside AI agent, integration partner, or CISO reviewer has
 With the index, the system becomes:
 
 ```text
-discover -> declare action -> decide posture -> route with SPARTa -> enforce or review -> collect evidence -> record DLL -> analyze DLL
+discover -> collect signals -> declare action -> decide posture -> route with SPARTa -> enforce or review -> collect evidence -> record DLL -> measure timing -> analyze DLL
 ```
 
 ## Boundary

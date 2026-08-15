@@ -3,6 +3,7 @@
   "purpose": "Canonical machine-readable assembly map for the SMERC runtime governance contracts.",
   "canonical_loop": [
     "discover_smerc",
+    "collect_signals_with_spark",
     "declare_action",
     "evaluate_runtime_posture",
     "select_or_verify_executor",
@@ -10,6 +11,7 @@
     "issue_or_verify_permit_when_enforcing",
     "apply_controls_and_collect_evidence",
     "record_decision_lifecycle",
+    "measure_timing_and_recovery",
     "analyze_verified_ledgers",
     "queue_reviewed_policy_recommendations"
   ],
@@ -31,6 +33,15 @@
       "primary_artifacts": ["schemas/smerc-action-language-v1.schema.json", "specification/SMERC_Action_Language_v1.md"],
       "hands_off_to": ["smerc.decision.v1"],
       "claim_boundary": "Action metadata quality depends on caller honesty and integration context."
+    },
+    {
+      "layer": "signal_intake",
+      "contract": "smerc.spark-evidence.v1",
+      "owner": "SPARK",
+      "role": "Proposed contract direction for normalizing action metadata, identity context, policy context, workflow context, anomaly signals, and evidence gaps before SMERC scoring.",
+      "primary_artifacts": ["docs/SPARK_Signal_Intake_And_Timing_Evidence.md"],
+      "hands_off_to": ["smerc.action.v1", "smerc.decision.v1"],
+      "claim_boundary": "SPARK evidence is proposed architecture direction, not a production schema or proof that upstream systems supplied truthful signals."
     },
     {
       "layer": "runtime_decision",
@@ -112,6 +123,15 @@
       "primary_artifacts": ["schemas/smerc-execution-report-v1.schema.json", "specification/SMERC_Execution_Plan_v1.md"],
       "hands_off_to": ["smerc.decision-lifecycle-ledger.v1"],
       "claim_boundary": "Execution report records adapter results; it is not independent proof of external system truth."
+    },
+    {
+      "layer": "timing_evidence",
+      "contract": "smerc.timing-evidence.v1",
+      "owner": "integration",
+      "role": "Proposed contract direction for measuring decision latency, route latency, workflow overhead, cancellation window, rollback latency, review latency, and unavailable evaluation behavior.",
+      "primary_artifacts": ["docs/SPARK_Signal_Intake_And_Timing_Evidence.md", "docs/Runtime_Health_Metrics.md"],
+      "hands_off_to": ["smerc.decision-lifecycle-ledger.v1", "smerc.dll-intelligence.v1"],
+      "claim_boundary": "Timing evidence measures observed pilot behavior; it does not prove production safety, rollback success across environments, or acceptable customer workflow impact."
     },
     {
       "layer": "decision_certificate",
