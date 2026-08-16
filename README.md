@@ -32,31 +32,41 @@ Use this sequence:
 
 Current status: pilot-ready for shadow-mode technical review. Not production-certified, compliance-attested, or customer-proven to reduce incidents.
 
+## Public Language
+
+SMERC should lead with familiar category language, not internal layer names.
+
+Preferred public phrase:
+
+> Recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, and high-impact workflows.
+
+Internal names come after the flow is understood: signal and evidence intake, recoverability decision, execution routing and controls, and decision lifecycle evidence. In the reference implementation those layers are called SPARK, SMERC, SPARTa, and DLL. See `docs/Public_Language_And_Naming.md`.
+
 ## What Exists Now
 
 The current build includes:
 
 - versioned SMERC Action Language and Decision Language contracts
-- machine-readable runtime contract index showing how SMERC, SPARTa, permits, control evidence, DLL, and DLL Intelligence fit together
+- machine-readable runtime contract index showing how the decision engine, execution routing, permits, control evidence, DLL, and DLL Intelligence fit together
 - evidence and unknowns registry with deployment-limiting falsification rules
 - tenant-scoped policy calibration and evidence provenance admission
 - signed, action-bound, single-use authorization permits
 - signed, action-bound control-evidence receipts for configured execution adapters
-- SPARTa posture-aware router that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes
-- machine-readable SPARTa vocabulary for lifecycle verbs, route states, control verbs, evidence events, and fail-closed adapter interpretation
-- SPARTa adapter registry and authenticated API route endpoint for stored SMERC decisions
-- optional HMAC-signed SPARTa route reports for pilot-grade tamper detection
-- static SPARTa adapter conformance report that checks declared adapter capabilities across ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE route behavior
-- GitHub deployment adapter SPARTa binding that verifies route replay, posture, executable state, and required controls before command execution
-- MCP-style tool governance adapter that maps proposed agent tool calls into SMERC recoverability posture, SPARTa route behavior, and client/proxy recommendations before execution
+- execution-routing layer that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes; internally this layer is called SPARTa
+- machine-readable execution-routing vocabulary for lifecycle verbs, route states, control verbs, evidence events, and fail-closed adapter interpretation
+- execution adapter registry and authenticated API route endpoint for stored SMERC decisions
+- optional HMAC-signed route reports for pilot-grade tamper detection
+- static adapter conformance report that checks declared adapter capabilities across ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE route behavior
+- GitHub deployment adapter route binding that verifies route replay, posture, executable state, and required controls before command execution
+- MCP-style tool governance adapter that maps proposed agent tool calls into SMERC recoverability posture, route behavior, and client/proxy recommendations before execution
 - MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses with DLL evidence
 - MCP Transport Proxy sample that wraps a JSON-RPC-style `tools/call` request and returns either a forwarded result or a SMERC-blocked proxy error
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
 - cloud automation guardrails positioning for infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions
-- control mapping library that maps SMERC/SPARTa controls to declared native tool mechanisms and evidence requirements
+- control mapping library that maps SMERC execution controls to declared native tool mechanisms and evidence requirements
 - replayable governance report generator that assembles decision, route, control mapping, and lifecycle evidence into one review package
 - Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
-- end-to-end PR Guardian demo connecting SMERC decision, PR comment/certificate, SPARTa route, Decision Lifecycle Ledger, and DLL Intelligence
+- end-to-end PR Guardian demo connecting SMERC decision, PR comment/certificate, execution route, Decision Lifecycle Ledger, and DLL Intelligence
 - scoped workload principals with proposer, issuer, executor, reviewer, and auditor separation
 - short-lived, scope-narrowed workload sessions issued from static pilot principals
 - GitHub Actions OIDC verification with repository-, workflow-, ref-, environment-, and run-bound attribution
@@ -64,10 +74,10 @@ The current build includes:
 - model and agent fitness routing for selecting qualified executors
 - machine-readable SMERC Beacon manifest for AI/tool discovery
 - Agent Handshake Protocol connecting beacon discovery to executor routing and action posture evaluation
-- SPARK signal intake that validates non-secret evidence and compiles it into strict SMERC Action Language
+- signal and evidence intake path that validates non-secret evidence and compiles it into strict SMERC Action Language; internally this path is called SPARK
 - Constraint Eligibility Layer that preserves hard denies before recoverability can modify a runtime decision
 - Timing Evidence reports for decision latency, route latency, workflow overhead, cancellation, rollback, and unavailable evaluations
-- self-contained GitHub Actions pilot package generator that assembles SPARK, eligibility, SMERC decision, SPARTa, DLL, DLL Intelligence, and timing evidence
+- self-contained GitHub Actions pilot package generator that assembles signal intake, eligibility, SMERC decision, execution route, DLL, DLL Intelligence, and timing evidence
 - scoring-invariant verification for recoverability and executor fitness math
 - commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service
@@ -127,6 +137,7 @@ Start here before reading the code:
 - `docs/Public_Review_Snapshot.md` gives a compact current-status snapshot for reviewers who need the fastest honest orientation.
 - `docs/Release_Notes_v0_14_Public_Review.md` gives a compact release-style summary for public review, validation, and pilot discussion.
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
+- `docs/Public_Language_And_Naming.md` explains how public surfaces should lead with familiar category language before internal layer names such as SPARK, SPARTa, and DLL.
 - `docs/CISO_5_Minute_Proof_Package.md` gives security executives the fastest proof path from claim to pilot ask without production-readiness claims.
 - `docs/GitHub_PR_Guardian.md` explains the developer-facing PR review surface for AI-assisted code and deployment changes.
 - `docs/End_To_End_PR_Guardian_Demo.md` shows the current modules working as one synthetic review loop from AI-assisted pull request to DLL Intelligence.

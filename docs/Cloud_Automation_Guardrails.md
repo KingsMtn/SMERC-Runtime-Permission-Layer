@@ -37,6 +37,15 @@ Cloud platforms already have authorization, policy, logging, and monitoring. The
 
 SMERC adds recoverability scoring before the action creates side effects.
 
+Internally, the reference implementation uses named layers for the same flow:
+
+- signal and evidence intake, called SPARK,
+- recoverability decision, called SMERC,
+- execution routing and control translation, called SPARTa,
+- decision lifecycle evidence, called DLL.
+
+Those names are secondary. Cloud and platform reviewers should first understand the plain-language flow: collect evidence, score recoverability, route execution, and preserve replay evidence.
+
 ## Example SMERC Inputs
 
 Cloud-admin events can be represented with the existing Action Language or self-service pilot bundle:

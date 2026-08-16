@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added public language and naming guidance so external surfaces lead with familiar category language before internal layer names such as SPARK, SPARTa, and DLL.
 - Added cloud automation guardrails positioning for cloud admin, infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions as a searchable next-lane surface for recoverability-aware runtime permissioning.
 - Added a Self-Service Pilot Connector that accepts mixed metadata-only GitHub Actions/action-language and MCP transport events, then produces a compact pilot-fit decision package with posture counts, highest exposure events, replay IDs, and recommended next action.
 - Added an MCP Transport Proxy sample that accepts a local JSON-RPC-style `tools/call` envelope, routes it through the MCP Proxy Runner, and returns either a forwarded result with replay evidence or a SMERC-blocked JSON-RPC error response.
