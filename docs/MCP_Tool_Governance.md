@@ -75,3 +75,27 @@ The current value is proof of fit:
 - DLL-style replay can preserve why a call was allowed, constrained, paused, escalated, or blocked.
 
 Production use would still require integration with the actual MCP client, server, identity provider, tool registry, audit store, and enforcement point.
+
+## MCP Proxy Runner
+
+The next layer is now implemented as `reference_engine/mcp_proxy_runner.py`.
+
+It wraps the MCP Tool Governance adapter in a local proxy loop with:
+
+- `shadow` mode
+- `enforce` mode
+- explicit proxy response
+- forwarding decision
+- Decision Lifecycle Ledger record
+- DLL Intelligence summary
+
+Run:
+
+```bash
+python -m reference_engine.mcp_proxy_runner \
+  --request examples/mcp/tool_call_delete_customer_records.json \
+  --mode enforce \
+  --pretty
+```
+
+See `docs/MCP_Proxy_Runner.md`.

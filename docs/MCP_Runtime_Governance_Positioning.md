@@ -44,10 +44,13 @@ The current implementation is intentionally metadata-only. It does not execute M
 Implemented artifacts:
 
 - `reference_engine/mcp_tool_governance.py`
+- `reference_engine/mcp_proxy_runner.py`
 - `examples/mcp/tool_call_delete_customer_records.json`
 - `examples/mcp/tool_call_search_docs.json`
 - `docs/MCP_Tool_Governance.md`
+- `docs/MCP_Proxy_Runner.md`
 - `tests/test_mcp_tool_governance.py`
+- `tests/test_mcp_proxy_runner.py`
 
 The adapter maps tool-call metadata into:
 
@@ -65,15 +68,16 @@ The near-term wedge is not a generic agent firewall claim. It is:
 
 That is commercially useful because it can be tested without taking over a customer's identity system, tool registry, cloud account, or production enforcement path.
 
-## Next Engineering Proof
+## Current Engineering Proof
 
-The next practical proof should be a thin MCP proxy sample that:
+The current proxy proof is `reference_engine/mcp_proxy_runner.py`. It:
 
 1. receives a proposed tool call,
-2. sends metadata to SMERC,
+2. evaluates metadata through SMERC,
 3. receives a SPARTa route,
-4. returns `call_tool`, `call_tool_with_constraints`, `require_approval_before_tool_call`, `pause_tool_call`, or `block_tool_call`,
-5. records a Decision Lifecycle Ledger entry.
+4. returns `observe_and_forward_tool_call`, `forward_tool_call`, `forward_constrained_tool_call`, `hold_for_approval`, `pause_tool_call`, or `block_tool_call`,
+5. records a Decision Lifecycle Ledger entry,
+6. generates DLL Intelligence summary evidence.
 
 ## Evidence Boundary
 

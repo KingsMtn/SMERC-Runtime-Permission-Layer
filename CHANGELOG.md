@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses, forwarding decisions, Decision Lifecycle Ledger evidence, DLL Intelligence summaries, reports, documentation, and tests.
 - Added Microsoft ecosystem and MCP runtime-governance positioning materials, including a bounded Microsoft Tech Community post draft that points reviewers to the working MCP tool governance adapter without claiming partnership, certification, or production readiness.
 - Added MCP tool-call governance adapter, examples, docs, generated reports, and tests that map MCP-style tool-call metadata into SMERC recoverability decisions and SPARTa route behavior before execution.
 - Added a one-command API smoke test that checks health, readiness, schema discovery, evaluation, runtime health, and operator status for local or hosted pilot APIs with explicit evidence boundaries.

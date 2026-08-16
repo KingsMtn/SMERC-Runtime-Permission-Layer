@@ -1,0 +1,862 @@
+{
+  "agent_id": "support_resolution_agent",
+  "decision_lifecycle_ledger": {
+    "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+    "head_record_hash": "1823e0ed978ad03283cc227e9aa41eac934593dcbb3f5413e54390ae1d103f58",
+    "record_count": 7,
+    "records": [
+      {
+        "actor": "support_resolution_agent",
+        "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "event_type": "REQUEST",
+        "payload": {
+          "environment": "internal-production",
+          "initiated_by": "support_resolution_agent",
+          "requested_operation": "Delete customer records after an AI support workflow inferred duplicate accounts.",
+          "risk_profile": "mcp_delete"
+        },
+        "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "record_hash": "1fc42467527546b5d0e1019b336e352971ab222da4a4d79f90f7b2e2e7ff92c9",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-16T04:06:21+00:00",
+        "sequence": 1,
+        "tenant_id": "mcp-proxy-runner"
+      },
+      {
+        "actor": "mcp-proxy-runner",
+        "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "event_type": "EVIDENCE",
+        "payload": {
+          "available_evidence": [
+            "agent_metadata",
+            "mcp_server_metadata",
+            "tool_call_metadata",
+            "risk_signals",
+            "sparta_route"
+          ],
+          "confidence_score": 0.524,
+          "external_dependencies": [
+            "mcp_client",
+            "mcp_server",
+            "agent_runtime"
+          ],
+          "missing_evidence": [
+            "live_mcp_transport_result",
+            "customer_reviewer_label"
+          ],
+          "model_version": "metadata-only-mcp-proxy-runner",
+          "policy_version": "default-reference-policy"
+        },
+        "previous_record_hash": "1fc42467527546b5d0e1019b336e352971ab222da4a4d79f90f7b2e2e7ff92c9",
+        "record_hash": "90d404949f45046c0ad77c6d91dc49e4f0cb854e3aa3acf12ca019db3b5e8db6",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-16T04:06:21+00:00",
+        "sequence": 2,
+        "tenant_id": "mcp-proxy-runner"
+      },
+      {
+        "actor": "smerc-mcp-governance",
+        "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "event_type": "EVALUATION",
+        "payload": {
+          "authorization_recommendation": "DENY",
+          "entropy_indicators": [
+            "IRREVERSIBLE_EXPOSURE_HIGH",
+            "RECOVERY_CAPACITY_LOW",
+            "ROLLBACK_LATENCY_HIGH",
+            "CANCEL_RELIABILITY_WEAK",
+            "CONTAINMENT_WEAK",
+            "IMPACT_SCOPE_WIDE",
+            "EXTERNAL_SIDE_EFFECT",
+            "SENSITIVE_DATA"
+          ],
+          "reason_codes": [
+            "IRREVERSIBLE_EXPOSURE_HIGH",
+            "RECOVERY_CAPACITY_LOW",
+            "ROLLBACK_LATENCY_HIGH",
+            "CANCEL_RELIABILITY_WEAK",
+            "CONTAINMENT_WEAK",
+            "IMPACT_SCOPE_WIDE",
+            "EXTERNAL_SIDE_EFFECT",
+            "SENSITIVE_DATA"
+          ],
+          "recommended_safeguards": [
+            "block_execution",
+            "preserve_replay",
+            "explain_denial"
+          ],
+          "recoverability_score": 0.242,
+          "structural_state": "MCP proxy produced block_tool_call before tool execution."
+        },
+        "previous_record_hash": "90d404949f45046c0ad77c6d91dc49e4f0cb854e3aa3acf12ca019db3b5e8db6",
+        "record_hash": "8524117460055ac081612e51da18c8feb108ade37d0745008dabc08b07f1e1a9",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-16T04:06:21+00:00",
+        "sequence": 3,
+        "tenant_id": "mcp-proxy-runner"
+      },
+      {
+        "actor": "mcp-proxy-runner",
+        "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "event_type": "HUMAN_INTERACTION",
+        "payload": {
+          "final_recommendation": "DENY",
+          "interaction": "accepted",
+          "original_recommendation": "DENY",
+          "rationale": "Synthetic MCP proxy runner accepts the generated posture to produce a complete review artifact.",
+          "reviewer_id": "mcp-proxy-runner"
+        },
+        "previous_record_hash": "8524117460055ac081612e51da18c8feb108ade37d0745008dabc08b07f1e1a9",
+        "record_hash": "c2f756d9375c2a0d32f2bc09d65e665045ae31eeac5a89a43ef35c74bc33831a",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-16T04:06:21+00:00",
+        "sequence": 4,
+        "tenant_id": "mcp-proxy-runner"
+      },
+      {
+        "actor": "mcp-proxy-runner",
+        "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "event_type": "EXECUTION",
+        "payload": {
+          "duration_ms": 0,
+          "executed_operation": "MCP proxy mode `enforce` selected `block_tool_call` for tool `delete_customer_records` after SMERC posture DENY and SPARTa route BLOCK.",
+          "execution_status": "blocked",
+          "rollback_performed": false,
+          "rollback_success": null,
+          "started_at": "2026-08-16T04:06:21+00:00"
+        },
+        "previous_record_hash": "c2f756d9375c2a0d32f2bc09d65e665045ae31eeac5a89a43ef35c74bc33831a",
+        "record_hash": "2a1145c00133f53d7a10586fe519947d2147a9779c6aed821ddbf13c3f533872",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-16T04:06:21+00:00",
+        "sequence": 5,
+        "tenant_id": "mcp-proxy-runner"
+      },
+      {
+        "actor": "mcp-proxy-runner",
+        "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "event_type": "OUTCOME",
+        "payload": {
+          "controls_sufficient": true,
+          "cost_incurred": 0.0,
+          "customer_impact": "none; local metadata-only proxy runner",
+          "financial_impact": "none; local metadata-only proxy runner",
+          "judged_correct": true,
+          "security_impact": "none; local metadata-only proxy runner",
+          "time_to_recover_minutes": 0.0,
+          "unexpected_consequences": false
+        },
+        "previous_record_hash": "2a1145c00133f53d7a10586fe519947d2147a9779c6aed821ddbf13c3f533872",
+        "record_hash": "42f10c941128c61d87f15775599835da3ce6c95f4447ec8eb21fe105d4261c5a",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-16T04:06:21+00:00",
+        "sequence": 6,
+        "tenant_id": "mcp-proxy-runner"
+      },
+      {
+        "actor": "dll-intelligence",
+        "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "event_type": "LEARNING_RECOMMENDATION",
+        "payload": {
+          "activation_status": "requires_review",
+          "actual_outcome": "Proxy response, SPARTa route, and DLL evidence were generated.",
+          "confidence_calibration_changes": [
+            "Do not calibrate from synthetic MCP examples."
+          ],
+          "expected_outcome": "MCP proxy runner exposes the pre-execution decision and response action.",
+          "human_override_effectiveness": "not measured in local metadata-only runner",
+          "prediction_error": "not measured in local metadata-only runner",
+          "recommended_policy_updates": [
+            "Collect live customer MCP call metadata before tuning thresholds."
+          ],
+          "suggested_rule_modifications": [
+            "Connect to a real MCP client/server only after reviewer agreement is measured."
+          ]
+        },
+        "previous_record_hash": "42f10c941128c61d87f15775599835da3ce6c95f4447ec8eb21fe105d4261c5a",
+        "record_hash": "1823e0ed978ad03283cc227e9aa41eac934593dcbb3f5413e54390ae1d103f58",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-16T04:06:21+00:00",
+        "sequence": 7,
+        "tenant_id": "mcp-proxy-runner"
+      }
+    ],
+    "summary": {
+      "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+      "event_counts": {
+        "EVALUATION": 1,
+        "EVIDENCE": 1,
+        "EXECUTION": 1,
+        "HUMAN_INTERACTION": 1,
+        "LEARNING_RECOMMENDATION": 1,
+        "OUTCOME": 1,
+        "REQUEST": 1
+      },
+      "final_event_type": "LEARNING_RECOMMENDATION",
+      "judged_correct": true,
+      "override_count": 0,
+      "pending_learning_recommendations": 1,
+      "record_count": 7,
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "mcp-proxy-runner"
+    },
+    "tenant_id": "mcp-proxy-runner",
+    "verification": {
+      "errors": [],
+      "head_record_hash": "1823e0ed978ad03283cc227e9aa41eac934593dcbb3f5413e54390ae1d103f58",
+      "record_count": 7,
+      "valid": true
+    },
+    "version": "smerc.decision-lifecycle-ledger.v1"
+  },
+  "dll_intelligence": {
+    "decision_rows": [
+      {
+        "confidence_score": 0.524,
+        "controls_sufficient": true,
+        "cost_incurred": 0.0,
+        "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "environment": "internal-production",
+        "execution_status": "blocked",
+        "final_posture": "DENY",
+        "head_record_hash": "1823e0ed978ad03283cc227e9aa41eac934593dcbb3f5413e54390ae1d103f58",
+        "initial_posture": "DENY",
+        "interaction": "accepted",
+        "judged_correct": true,
+        "learning_recommendations": {
+          "activation_status": "requires_review",
+          "confidence_calibration_changes": [
+            "Do not calibrate from synthetic MCP examples."
+          ],
+          "recommended_policy_updates": [
+            "Collect live customer MCP call metadata before tuning thresholds."
+          ],
+          "suggested_rule_modifications": [
+            "Connect to a real MCP client/server only after reviewer agreement is measured."
+          ]
+        },
+        "missing_evidence": [
+          "live_mcp_transport_result",
+          "customer_reviewer_label"
+        ],
+        "near_miss": true,
+        "override_harmful": false,
+        "override_helpful": false,
+        "reason_codes": [
+          "IRREVERSIBLE_EXPOSURE_HIGH",
+          "RECOVERY_CAPACITY_LOW",
+          "ROLLBACK_LATENCY_HIGH",
+          "CANCEL_RELIABILITY_WEAK",
+          "CONTAINMENT_WEAK",
+          "IMPACT_SCOPE_WIDE",
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA"
+        ],
+        "recommended_safeguards": [
+          "block_execution",
+          "preserve_replay",
+          "explain_denial"
+        ],
+        "recovery_failure": false,
+        "requested_operation": "Delete customer records after an AI support workflow inferred duplicate accounts.",
+        "risk_profile": "mcp_delete",
+        "rollback_performed": false,
+        "rollback_success": null,
+        "tenant_id": "mcp-proxy-runner",
+        "time_to_recover_minutes": 0.0,
+        "unexpected_consequences": false
+      }
+    ],
+    "evidence_boundary": [
+      "DLL Intelligence summarizes supplied lifecycle records; it does not prove incident reduction by itself.",
+      "Synthetic or analyst-assigned ledgers must be labeled before external use.",
+      "Policy and calibration recommendations require human review before activation."
+    ],
+    "generated_at": "2026-08-16T04:06:21+00:00",
+    "governance_drift_signals": [
+      "multiple_missing_evidence_items_per_decision_on_average"
+    ],
+    "near_miss_decisions": [
+      {
+        "decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "final_posture": "DENY",
+        "operation": "Delete customer records after an AI support workflow inferred duplicate accounts.",
+        "reason_codes": [
+          "IRREVERSIBLE_EXPOSURE_HIGH",
+          "RECOVERY_CAPACITY_LOW",
+          "ROLLBACK_LATENCY_HIGH",
+          "CANCEL_RELIABILITY_WEAK",
+          "CONTAINMENT_WEAK",
+          "IMPACT_SCOPE_WIDE",
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA"
+        ]
+      }
+    ],
+    "policy_review_queue": [
+      {
+        "activation_status": "requires_review",
+        "recommendation": "Collect live customer MCP call metadata before tuning thresholds.",
+        "recommendation_type": "policy_update",
+        "source_decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac"
+      },
+      {
+        "activation_status": "requires_review",
+        "recommendation": "Connect to a real MCP client/server only after reviewer agreement is measured.",
+        "recommendation_type": "rule_modification",
+        "source_decision_id": "dll_mcp_replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac"
+      }
+    ],
+    "recommended_next_action": "Collect at least 30 customer-context DLL records before presenting rates as pilot evidence.",
+    "recovery_failure_decisions": [],
+    "summary": {
+      "controls_sufficient_count": 1,
+      "controls_sufficient_rate": 1.0,
+      "executed_count": 1,
+      "final_posture_counts": {
+        "DENY": 1
+      },
+      "human_reviewed_count": 1,
+      "initial_posture_counts": {
+        "DENY": 1
+      },
+      "judged_correct_count": 1,
+      "judged_correct_rate": 1.0,
+      "ledger_count": 1,
+      "near_miss_count": 1,
+      "outcome_reviewed_count": 1,
+      "override_count": 0,
+      "override_harmful_count": 0,
+      "override_helpful_count": 0,
+      "override_rate": 0.0,
+      "recovery_failure_count": 0,
+      "rollback_performed_count": 0,
+      "rollback_success_count": 0,
+      "rollback_success_rate": null,
+      "unexpected_consequence_count": 0,
+      "unexpected_consequence_rate": 0.0
+    },
+    "top_missing_evidence": {
+      "customer_reviewer_label": 1,
+      "live_mcp_transport_result": 1
+    },
+    "top_reason_codes": {
+      "CANCEL_RELIABILITY_WEAK": 1,
+      "CONTAINMENT_WEAK": 1,
+      "EXTERNAL_SIDE_EFFECT": 1,
+      "IMPACT_SCOPE_WIDE": 1,
+      "IRREVERSIBLE_EXPOSURE_HIGH": 1,
+      "RECOVERY_CAPACITY_LOW": 1,
+      "ROLLBACK_LATENCY_HIGH": 1,
+      "SENSITIVE_DATA": 1
+    },
+    "top_safeguards": {
+      "block_execution": 1,
+      "explain_denial": 1,
+      "preserve_replay": 1
+    },
+    "version": "smerc.dll-intelligence.v1"
+  },
+  "evidence_boundary": "MCP Proxy Runner v1 is a local reference proxy loop. It evaluates supplied MCP-style metadata, returns a proxy action, and records DLL evidence. It does not implement MCP transport, OAuth, enterprise identity, prompt-injection defense, sandboxing, native tool execution, or production policy distribution.",
+  "generated_at": "2026-08-16T04:06:21+00:00",
+  "governance_report": {
+    "agent_id": "support_resolution_agent",
+    "decision": {
+      "action_id": "MCP_MCP_DELETE_CUSTOMER_RECORDS_001",
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "decision_trace": {
+        "profile": {
+          "label": "IT operations",
+          "notes": [
+            "Identity and endpoint actions need attention to rollback latency and scope."
+          ],
+          "profile_id": "it_ops"
+        },
+        "score_contributions": {
+          "confidence_score": {
+            "anomaly_resistance": 0.104,
+            "authorization_confidence": 0.187,
+            "containment_strength": 0.029,
+            "evidence_validity": 0.204,
+            "profile_multiplier": 1.0,
+            "total": 0.524
+          },
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.164,
+            "containment_gap": 0.083,
+            "external_side_effect": 0.08,
+            "impact_scope": 0.101,
+            "irreversibility": 0.211,
+            "profile_multiplier": 1.04,
+            "rollback_latency": 0.15,
+            "sensitive_data": 0.08,
+            "total": 0.903
+          },
+          "operational_stress_score": {
+            "anomaly_pressure": 0.084,
+            "base_action_risk": 0.182,
+            "cancel_gap": 0.043,
+            "confidence_gap": 0.054,
+            "evidence_gap": 0.069,
+            "impact_scope": 0.151,
+            "profile_multiplier": 1.05,
+            "rollback_latency": 0.088,
+            "total": 0.705
+          },
+          "reversible_capacity_score": {
+            "cancel_reliability": 0.045,
+            "containment_strength": 0.086,
+            "evidence_validity": 0.051,
+            "profile_multiplier": 1.0,
+            "reversibility": 0.037,
+            "rollback_speed": 0.023,
+            "total": 0.242
+          },
+          "risk_adjusted_authorization_score": {
+            "confidence_score": 0.157,
+            "profile_multiplier": 1.0,
+            "recoverability_margin": 0.024,
+            "reversible_capacity": 0.109,
+            "total": 0.29
+          }
+        },
+        "threshold_trace": [
+          {
+            "details": {
+              "capacity": 0.242,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.524,
+              "confidence_rule": "< 0.48"
+            },
+            "observed": 0.903,
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "threshold": ">= 0.78",
+            "triggered": true
+          },
+          {
+            "details": {
+              "exposure": 0.903,
+              "exposure_rule": ">= 0.62"
+            },
+            "observed": 0.28,
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "threshold": "< 0.3",
+            "triggered": true
+          },
+          {
+            "details": {
+              "external_side_effect": true,
+              "sensitive_data": true
+            },
+            "observed": 0.705,
+            "rule": "escalate_by_operational_stress",
+            "threshold": ">= 0.7",
+            "triggered": true
+          },
+          {
+            "details": {
+              "capacity": 0.242,
+              "confidence": 0.524
+            },
+            "observed": 0.242,
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": true
+          },
+          {
+            "details": {
+              "exposure": 0.903,
+              "external_side_effect": true,
+              "profile_allows_external_side_effect_release": false
+            },
+            "observed": 0.29,
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": true
+          }
+        ]
+      },
+      "domain_profile": {
+        "label": "IT operations",
+        "notes": [
+          "Identity and endpoint actions need attention to rollback latency and scope."
+        ],
+        "profile_id": "it_ops"
+      },
+      "enforcement_state": "block",
+      "plain_english_summary": "Action 'MCP_MCP_DELETE_CUSTOMER_RECORDS_001' received DENY. Irreversible exposure is 0.903, reversible capacity is 0.242, and authorization score is 0.290. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+      "policy": {
+        "evidence_ceiling": "OBSERVE",
+        "mode": "OBSERVE",
+        "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+        "policy_id": "smerc-reference-recoverability",
+        "policy_revision": "1.0.0",
+        "tenant_id": "*"
+      },
+      "posture": "DENY",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay": {
+        "action_type": "mcp_delete",
+        "actor": "support_resolution_agent",
+        "context": {
+          "domain_profile": "it_ops",
+          "mcp_server": "customer_data_mcp",
+          "mcp_tool": "delete_customer_records",
+          "operation_class": "delete"
+        },
+        "controls": [
+          "block_execution",
+          "explain_denial",
+          "preserve_replay",
+          "require_new_request"
+        ],
+        "decision_trace": {
+          "profile": {
+            "label": "IT operations",
+            "notes": [
+              "Identity and endpoint actions need attention to rollback latency and scope."
+            ],
+            "profile_id": "it_ops"
+          },
+          "score_contributions": {
+            "confidence_score": {
+              "anomaly_resistance": 0.104,
+              "authorization_confidence": 0.187,
+              "containment_strength": 0.029,
+              "evidence_validity": 0.204,
+              "profile_multiplier": 1.0,
+              "total": 0.524
+            },
+            "irreversible_exposure_score": {
+              "base_action_risk": 0.164,
+              "containment_gap": 0.083,
+              "external_side_effect": 0.08,
+              "impact_scope": 0.101,
+              "irreversibility": 0.211,
+              "profile_multiplier": 1.04,
+              "rollback_latency": 0.15,
+              "sensitive_data": 0.08,
+              "total": 0.903
+            },
+            "operational_stress_score": {
+              "anomaly_pressure": 0.084,
+              "base_action_risk": 0.182,
+              "cancel_gap": 0.043,
+              "confidence_gap": 0.054,
+              "evidence_gap": 0.069,
+              "impact_scope": 0.151,
+              "profile_multiplier": 1.05,
+              "rollback_latency": 0.088,
+              "total": 0.705
+            },
+            "reversible_capacity_score": {
+              "cancel_reliability": 0.045,
+              "containment_strength": 0.086,
+              "evidence_validity": 0.051,
+              "profile_multiplier": 1.0,
+              "reversibility": 0.037,
+              "rollback_speed": 0.023,
+              "total": 0.242
+            },
+            "risk_adjusted_authorization_score": {
+              "confidence_score": 0.157,
+              "profile_multiplier": 1.0,
+              "recoverability_margin": 0.024,
+              "reversible_capacity": 0.109,
+              "total": 0.29
+            }
+          },
+          "threshold_trace": [
+            {
+              "details": {
+                "capacity": 0.242,
+                "capacity_rule": "< 0.42",
+                "confidence": 0.524,
+                "confidence_rule": "< 0.48"
+              },
+              "observed": 0.903,
+              "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+              "threshold": ">= 0.78",
+              "triggered": true
+            },
+            {
+              "details": {
+                "exposure": 0.903,
+                "exposure_rule": ">= 0.62"
+              },
+              "observed": 0.28,
+              "rule": "deny_by_unreliable_cancel_and_high_exposure",
+              "threshold": "< 0.3",
+              "triggered": true
+            },
+            {
+              "details": {
+                "external_side_effect": true,
+                "sensitive_data": true
+              },
+              "observed": 0.705,
+              "rule": "escalate_by_operational_stress",
+              "threshold": ">= 0.7",
+              "triggered": true
+            },
+            {
+              "details": {
+                "capacity": 0.242,
+                "confidence": 0.524
+              },
+              "observed": 0.242,
+              "rule": "freeze_by_low_confidence_or_capacity",
+              "threshold": "confidence < 0.45 or capacity < 0.36",
+              "triggered": true
+            },
+            {
+              "details": {
+                "exposure": 0.903,
+                "external_side_effect": true,
+                "profile_allows_external_side_effect_release": false
+              },
+              "observed": 0.29,
+              "rule": "throttle_by_authorization_exposure_or_side_effect",
+              "threshold": "authorization < 0.62 or exposure >= 0.45",
+              "triggered": true
+            }
+          ]
+        },
+        "domain_profile": {
+          "label": "IT operations",
+          "notes": [
+            "Identity and endpoint actions need attention to rollback latency and scope."
+          ],
+          "profile_id": "it_ops"
+        },
+        "enforcement_state": "block",
+        "evaluated_at": "2026-08-16T04:06:21.649203+00:00",
+        "policy": {
+          "evidence_ceiling": "OBSERVE",
+          "mode": "OBSERVE",
+          "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+          "policy_id": "smerc-reference-recoverability",
+          "policy_revision": "1.0.0",
+          "tenant_id": "*"
+        },
+        "posture": "DENY",
+        "reason_codes": [
+          "IRREVERSIBLE_EXPOSURE_HIGH",
+          "RECOVERY_CAPACITY_LOW",
+          "ROLLBACK_LATENCY_HIGH",
+          "CANCEL_RELIABILITY_WEAK",
+          "CONTAINMENT_WEAK",
+          "IMPACT_SCOPE_WIDE",
+          "EXTERNAL_SIDE_EFFECT",
+          "SENSITIVE_DATA"
+        ],
+        "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+        "scores": {
+          "cancel_reliability_score": 0.28,
+          "confidence_score": 0.524,
+          "irreversible_exposure_score": 0.903,
+          "operational_stress_score": 0.705,
+          "reversible_capacity_score": 0.242,
+          "risk_adjusted_authorization_score": 0.29
+        },
+        "tool": "mcp.customer_data_mcp.delete_customer_records",
+        "transition_guidance": {
+          "blocking_factors": [
+            "confidence_below_release_target",
+            "irreversible_exposure_above_release_threshold",
+            "reversible_capacity_incomplete"
+          ],
+          "control_improvements": [
+            "block_execution",
+            "data minimization or scoped export proof",
+            "explain_denial",
+            "increase_containment",
+            "narrow_impact_scope",
+            "preserve_replay",
+            "prove_rollback_path",
+            "rate limit or stage external side effect",
+            "reliable cancellation handle",
+            "require_new_request"
+          ],
+          "current_posture": "DENY",
+          "evidence_needed": [
+            "rollback test or recovery evidence",
+            "stronger authorization and evidence validity"
+          ],
+          "release_conditions": {
+            "authorization_score_at_or_above": 0.62,
+            "confidence_score_target": 0.7,
+            "irreversible_exposure_below": 0.45,
+            "reversible_capacity_target": 0.6
+          },
+          "target_posture": "THROTTLE"
+        }
+      },
+      "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+      "scores": {
+        "cancel_reliability_score": 0.28,
+        "confidence_score": 0.524,
+        "irreversible_exposure_score": 0.903,
+        "operational_stress_score": 0.705,
+        "reversible_capacity_score": 0.242,
+        "risk_adjusted_authorization_score": 0.29
+      },
+      "transition_guidance": {
+        "blocking_factors": [
+          "confidence_below_release_target",
+          "irreversible_exposure_above_release_threshold",
+          "reversible_capacity_incomplete"
+        ],
+        "control_improvements": [
+          "block_execution",
+          "data minimization or scoped export proof",
+          "explain_denial",
+          "increase_containment",
+          "narrow_impact_scope",
+          "preserve_replay",
+          "prove_rollback_path",
+          "rate limit or stage external side effect",
+          "reliable cancellation handle",
+          "require_new_request"
+        ],
+        "current_posture": "DENY",
+        "evidence_needed": [
+          "rollback test or recovery evidence",
+          "stronger authorization and evidence validity"
+        ],
+        "release_conditions": {
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "irreversible_exposure_below": 0.45,
+          "reversible_capacity_target": 0.6
+        },
+        "target_posture": "THROTTLE"
+      }
+    },
+    "evidence_boundary": "This adapter evaluates MCP tool-call metadata before execution. It does not implement MCP transport, OAuth, enterprise identity, sandboxing, prompt-injection defense, or native tool enforcement.",
+    "generated_at": "2026-08-16T04:06:21+00:00",
+    "mcp_request_id": "MCP_DELETE_CUSTOMER_RECORDS_001",
+    "plain_english_summary": "SMERC evaluated MCP tool `delete_customer_records` for agent `support_resolution_agent` and returned DENY. SPARTa mapped that posture to `BLOCK`, so an MCP client or proxy should use `block_tool_call` rather than blindly executing the tool call.",
+    "recommended_mcp_result": "block_tool_call",
+    "schema": "smerc.mcp-tool-governance.v1",
+    "server_name": "customer_data_mcp",
+    "sparta_route": {
+      "applied_controls": [
+        "block_execution",
+        "preserve_replay",
+        "explain_denial"
+      ],
+      "blocked_controls": [
+        "execute"
+      ],
+      "decision_digest": "6cb8642b406b12e15fe763656e0ba246f9543b674ec18734149cf957b05ed971",
+      "decision_replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+      "effective_scope_units": 0,
+      "executable": false,
+      "plain_english_summary": "SPARTa blocked execution because SMERC determined the action is not structurally defensible.",
+      "plan_id": "mcp_plan_MCP_DELETE_CUSTOMER_RECORDS_001",
+      "reason_codes": [
+        "SPARTA_DENY_BLOCKS_EXECUTION"
+      ],
+      "recommended_next_action": "Do not execute this plan. Submit a materially safer action with stronger evidence or reduced impact.",
+      "route_id": "sparta_mcp_plan_MCP_DELETE_CUSTOMER_RECORDS_001_e9743aa581b4",
+      "route_state": "BLOCK",
+      "routed_at": "2026-08-16T04:06:21+00:00",
+      "source_posture": "DENY",
+      "tool_plan": {
+        "action": "delete",
+        "max_scope_units": 10000,
+        "metadata": {
+          "adapter": "mcp_tool_governance",
+          "mcp_protocol_boundary": "pre_execution_metadata_evaluation",
+          "mcp_server": "customer_data_mcp"
+        },
+        "plan_id": "mcp_plan_MCP_DELETE_CUSTOMER_RECORDS_001",
+        "requested_capability": "delete_records",
+        "requested_scope_units": 2500,
+        "side_effect_level": "destructive",
+        "supports_checkpoint": false,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": false,
+        "supports_scope_limit": true,
+        "tool": "delete_customer_records",
+        "version": "smerc.sparta-plan.v1"
+      },
+      "version": "smerc.sparta-route.v1"
+    },
+    "tool_name": "delete_customer_records"
+  },
+  "mcp_request_id": "MCP_DELETE_CUSTOMER_RECORDS_001",
+  "mode": "enforce",
+  "proxy_response": {
+    "constraint_applied": false,
+    "decision_reference": {
+      "posture": "DENY",
+      "recommended_mcp_result": "block_tool_call",
+      "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac",
+      "route_state": "BLOCK"
+    },
+    "forwarding_plan": {
+      "blocked_controls": [
+        "execute"
+      ],
+      "effective_scope_units": 0,
+      "required_controls": [
+        "block_execution",
+        "preserve_replay",
+        "explain_denial"
+      ],
+      "server": {
+        "name": "customer_data_mcp",
+        "transport": "streamable-http",
+        "trust_boundary": "internal-production"
+      },
+      "tool_name": "delete_customer_records"
+    },
+    "mode": "enforce",
+    "plain_english_summary": "MCP proxy mode `enforce` selected `block_tool_call` for tool `delete_customer_records` after SMERC posture DENY and SPARTa route BLOCK.",
+    "proxy_action": "block_tool_call",
+    "proxy_instructions": [
+      "Block the tool call.",
+      "Preserve the replay and explain the denial.",
+      "Require a materially safer new request before execution."
+    ],
+    "should_forward_tool_call": false,
+    "tool_call": {
+      "description": "Delete customer records after an AI support workflow inferred duplicate accounts.",
+      "domain_profile": "it_ops",
+      "external_side_effect": true,
+      "max_scope_units": 10000,
+      "operation_class": "delete",
+      "requested_capability": "delete_records",
+      "requested_scope_units": 2500,
+      "sensitive_data": true,
+      "supports_checkpoint": false,
+      "supports_dry_run": true,
+      "supports_human_approval": true,
+      "supports_rollback": false,
+      "supports_scope_limit": true,
+      "tool_name": "delete_customer_records"
+    },
+    "version": "smerc.mcp-proxy-response.v1"
+  },
+  "server_name": "customer_data_mcp",
+  "tool_name": "delete_customer_records",
+  "version": "smerc.mcp-proxy-runner.v1"
+}

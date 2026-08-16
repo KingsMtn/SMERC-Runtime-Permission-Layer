@@ -49,6 +49,7 @@ The current build includes:
 - static SPARTa adapter conformance report that checks declared adapter capabilities across ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE route behavior
 - GitHub deployment adapter SPARTa binding that verifies route replay, posture, executable state, and required controls before command execution
 - MCP-style tool governance adapter that maps proposed agent tool calls into SMERC recoverability posture, SPARTa route behavior, and client/proxy recommendations before execution
+- MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses with DLL evidence
 - control mapping library that maps SMERC/SPARTa controls to declared native tool mechanisms and evidence requirements
 - replayable governance report generator that assembles decision, route, control mapping, and lifecycle evidence into one review package
 - Decision Lifecycle Ledger that chains request, evidence, evaluation, human interaction, execution, outcome, and reviewed learning recommendations
@@ -148,6 +149,7 @@ Start here before reading the code:
 - `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.
 - `docs/Agent_Handshake_Protocol.md` explains how an agent discovers SMERC, declares itself, proposes an action, receives a posture, and preserves a replay record.
 - `docs/MCP_Tool_Governance.md` explains how SMERC can score MCP-style tool calls before execution and map them through SPARTa without replacing MCP, OAuth, IAM, or prompt defenses.
+- `docs/MCP_Proxy_Runner.md` explains the local MCP proxy runner that returns shadow/enforce proxy actions and records Decision Lifecycle Ledger evidence.
 - `docs/MCP_Runtime_Governance_Positioning.md` explains SMERC's focused category position as recoverability-aware runtime governance for MCP-style tool calls and agent actions.
 - `docs/Microsoft_Ecosystem_Positioning.md` gives Microsoft-oriented reviewers a bounded explanation of where SMERC can complement MCP, GitHub Actions, DevOps, identity, policy, and security operations.
 - `docs/Microsoft_Tech_Community_Post_Draft.md` gives a careful public discussion draft for Microsoft ecosystem feedback without implying partnership, certification, or production readiness.
@@ -539,6 +541,7 @@ Requires Python 3.10 or later. No third-party Python packages are required.
 python -m reference_engine.agent_permission_layer examples/agent_permission_actions.json --pretty
 python -m reference_engine.constraint_eligibility examples/constraint_eligibility/prohibited_audit_log_delete.json --pretty
 python -m reference_engine.github_actions_pilot_installer --output-dir reports/github_actions_pilot_package --pretty
+python -m reference_engine.mcp_proxy_runner --request examples/mcp/tool_call_delete_customer_records.json --mode enforce --pretty
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m reference_engine.sparta_router --decision examples/sparta/throttle_decision.json --plan examples/sparta/github_actions_deploy_plan.json --pretty
 python -m reference_engine.sparta_conformance examples/sparta/adapter_registry.json --pretty
