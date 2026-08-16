@@ -1,0 +1,65 @@
+{
+  "action_language": {
+    "action": {
+      "actor": "github-actions:deploy-agent",
+      "authority": {
+        "basis": "protected environment approval and deployment workflow policy",
+        "confidence": 0.82
+      },
+      "description": "Deploy a billing service canary to production at 5 percent traffic.",
+      "id": "deploy-prod-canary",
+      "target": {
+        "environment": "production",
+        "resource": "billing-service"
+      },
+      "tool": "github_actions",
+      "type": "deploy_to_production"
+    },
+    "context": {
+      "spark": {
+        "collected_at": "2026-08-15T00:00:00Z",
+        "evidence_gaps": [],
+        "evidence_hash": "5942a8e92bea01b986a8bb3f91eff85f50e4a46d9a35d1beb237f768334a2660",
+        "evidence_id": "spark-gha-001",
+        "non_secret_boundary": true,
+        "source_systems": [
+          "github_actions",
+          "identity",
+          "policy"
+        ],
+        "version": "smerc.spark-evidence.v1"
+      }
+    },
+    "effects": {
+      "external_side_effect": true,
+      "sensitive_data": false
+    },
+    "language_version": "smerc.action.v1",
+    "recoverability": {
+      "cancel_reliability": 0.72,
+      "containment_strength": 0.81,
+      "reversibility": 0.74,
+      "rollback_latency": 0.27,
+      "rollback_method": "canary rollback to previous deployment artifact"
+    },
+    "signals": {
+      "anomaly_pressure": 0.16,
+      "base_action_risk": 0.48,
+      "evidence_validity": 0.86,
+      "impact_scope": 0.36
+    }
+  },
+  "evidence_boundary": "SPARK validates and normalizes supplied non-secret pilot evidence. It does not prove upstream systems supplied truthful signals, customer production safety, or incident reduction.",
+  "evidence_gap_count": 0,
+  "evidence_gaps": [],
+  "evidence_hash": "5942a8e92bea01b986a8bb3f91eff85f50e4a46d9a35d1beb237f768334a2660",
+  "evidence_id": "spark-gha-001",
+  "generated_at": "2026-08-16T03:03:00+00:00",
+  "readiness": "complete",
+  "source_systems": [
+    "github_actions",
+    "identity",
+    "policy"
+  ],
+  "version": "smerc.spark-intake-report.v1"
+}

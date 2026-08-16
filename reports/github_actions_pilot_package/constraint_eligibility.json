@@ -1,0 +1,107 @@
+{
+  "action_hash": "3c50057054bf8899c3aba7b484156e1178e35bbff105b3faea3c04f97692a60b",
+  "action_id": "deploy-prod-canary",
+  "constraint_eligible": true,
+  "eligibility_labels": [
+    "constraint_eligible"
+  ],
+  "language_version": "smerc.constraint-eligibility.v1",
+  "matched_prohibited_patterns": [],
+  "modifier_inputs": {
+    "actor_authorized": true,
+    "adversarial_pressure": 0.16,
+    "approved_goal_consistent": true,
+    "authority_confidence": 0.82,
+    "containment_strength": 0.81,
+    "control_availability": 1.0,
+    "environment": "production",
+    "evidence_validity": 0.86,
+    "external_side_effect": true,
+    "identity_confidence": 1.0,
+    "impact_scope": 0.36,
+    "reversibility": 0.74,
+    "rollback_latency": 0.27,
+    "sensitive_data": false
+  },
+  "plain_english_summary": "Action 'deploy-prod-canary' is eligible for recoverability-aware runtime scoring. Recommended starting posture is ALLOW.",
+  "recommended_runtime_posture": "ALLOW",
+  "rule_results": [
+    {
+      "reason": "Action text matches a configured prohibited-action pattern.",
+      "recommended_posture": "categorically_prohibited",
+      "rule_id": "PROHIBITED_ACTION_PATTERN",
+      "severity": "hard_deny",
+      "triggered": false
+    },
+    {
+      "reason": "Actor is not authorized to request this action type.",
+      "recommended_posture": "requires_authority",
+      "rule_id": "ACTOR_NOT_AUTHORIZED",
+      "severity": "hard_deny",
+      "triggered": false
+    },
+    {
+      "reason": "Authority confidence is too weak for constrained execution.",
+      "recommended_posture": "requires_authority",
+      "rule_id": "LOW_AUTHORITY_CONFIDENCE",
+      "severity": "hard_deny",
+      "triggered": false
+    },
+    {
+      "reason": "Actor or workload identity is not strong enough for constrained execution.",
+      "recommended_posture": "requires_authority",
+      "rule_id": "LOW_IDENTITY_CONFIDENCE",
+      "severity": "hard_deny",
+      "triggered": false
+    },
+    {
+      "reason": "Requested action does not match the approved task or operating goal.",
+      "recommended_posture": "review_required",
+      "rule_id": "GOAL_INCONSISTENT",
+      "severity": "hard_deny",
+      "triggered": false
+    },
+    {
+      "reason": "Legal, regulatory, or contractual hold requires explicit review.",
+      "recommended_posture": "review_required",
+      "rule_id": "REGULATORY_HOLD",
+      "severity": "hard_deny",
+      "triggered": false
+    },
+    {
+      "reason": "Critical-environment sensitive external action has wide impact.",
+      "recommended_posture": "review_required",
+      "rule_id": "CRITICAL_ENV_WIDE_SENSITIVE_EFFECT",
+      "severity": "hard_deny",
+      "triggered": false
+    },
+    {
+      "reason": "Adversarial pressure is too high to treat the action as constraint-eligible.",
+      "recommended_posture": "review_required",
+      "rule_id": "SEVERE_ADVERSARIAL_PRESSURE",
+      "severity": "freeze",
+      "triggered": false
+    },
+    {
+      "reason": "Evidence validity is too weak for constrained execution.",
+      "recommended_posture": "review_required",
+      "rule_id": "EVIDENCE_TOO_WEAK",
+      "severity": "freeze",
+      "triggered": false
+    },
+    {
+      "reason": "No credible control path is currently available.",
+      "recommended_posture": "review_required",
+      "rule_id": "NO_AVAILABLE_CONTROLS",
+      "severity": "freeze",
+      "triggered": false
+    },
+    {
+      "reason": "Action remains sensitive to recoverability if it passes hard eligibility checks.",
+      "recommended_posture": null,
+      "rule_id": "RECOVERABILITY_SENSITIVE",
+      "severity": "modifier",
+      "triggered": false
+    }
+  ]
+}

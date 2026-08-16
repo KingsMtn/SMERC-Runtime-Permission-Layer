@@ -396,6 +396,23 @@ Purpose:
 
 This layer keeps SMERC from becoming a generic "turn blocks into constraints" system. It makes the product more conservative: recoverability modifies permission only after authority and hard policy survive review.
 
+### 22. GitHub Actions Pilot Installer
+
+Files:
+
+- `reference_engine/github_actions_pilot_installer.py`
+- `docs/GitHub_Actions_Pilot_Installer.md`
+- `reports/github_actions_pilot_package/`
+- `tests/test_github_actions_pilot_installer.py`
+
+Purpose:
+
+- generate one self-contained GitHub Actions shadow-mode pilot package
+- assemble SPARK intake, Constraint Eligibility, SMERC decision, SPARTa route, DLL, DLL Intelligence, and Timing Evidence into one folder
+- give reviewers a concrete artifact set instead of asking them to mentally connect separate modules
+
+This is the current "vehicle" layer. It still uses synthetic metadata-only evidence, but it proves the software components can be packaged as one inspectable pilot loop.
+
 ## What This Build Proves
 
 - The scoring engine runs.
@@ -417,6 +434,7 @@ This layer keeps SMERC from becoming a generic "turn blocks into constraints" sy
 - SPARK can convert non-secret intake evidence into strict Action Language for SMERC evaluation.
 - Timing Evidence can summarize pilot latency, cancellation, rollback, and unavailable-evaluation records.
 - Constraint Eligibility can separate hard-deny actions from actions that are allowed in principle but sensitive to recoverability.
+- The GitHub Actions Pilot Installer can generate a complete review folder that connects SPARK, eligibility, decision, route, ledger, intelligence, timing, and briefing artifacts.
 
 ## What This Build Does Not Prove
 
@@ -447,6 +465,7 @@ The newest architecture layers are represented as pilot-grade SPARK signal intak
 - SPARK normalizes action metadata, identity context, policy context, workflow context, anomaly signals, and evidence gaps before SMERC scoring through `reference_engine/spark_intake.py`.
 - Constraint Eligibility preserves hard denies and review-required decisions before recoverability scoring through `reference_engine/constraint_eligibility.py`.
 - Timing Evidence records decision latency, route latency, workflow overhead, cancellation window, cancellation result, rollback latency, rollback result, review latency, and unavailable evaluations through `reference_engine/timing_evidence.py`.
-- Both layers should preserve the non-secret pilot boundary and avoid raw customer payloads.
+- The GitHub Actions Pilot Installer turns those layers into one self-contained artifact package under `reports/github_actions_pilot_package/`.
+- All layers should preserve the non-secret pilot boundary and avoid raw customer payloads.
 
-See `docs/SPARK_Signal_Intake_And_Timing_Evidence.md` and `docs/Constraint_Eligibility_Layer.md`.
+See `docs/SPARK_Signal_Intake_And_Timing_Evidence.md`, `docs/Constraint_Eligibility_Layer.md`, and `docs/GitHub_Actions_Pilot_Installer.md`.

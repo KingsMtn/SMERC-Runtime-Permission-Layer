@@ -1,0 +1,105 @@
+{
+  "decision_latency": {
+    "average_ms": 53.33,
+    "maximum_ms": 61.0,
+    "minimum_ms": 42.0,
+    "p50_ms": 57.0,
+    "p95_ms": 60.6,
+    "sample_count": 3,
+    "slo_met": true,
+    "slo_ms": 250
+  },
+  "evidence_boundary": "Timing evidence summarizes supplied pilot timing records. It does not prove production latency, rollback reliability across environments, incident reduction, or SLA compliance.",
+  "generated_at": "2026-08-16T03:03:00+00:00",
+  "operational_status": "ready",
+  "posture_counts": {
+    "ALLOW": 1,
+    "DENY": 0,
+    "ESCALATE": 0,
+    "FREEZE": 1,
+    "THROTTLE": 1,
+    "UNAVAILABLE": 0
+  },
+  "record_count": 3,
+  "records": [
+    {
+      "cancel_attempted": false,
+      "cancel_success": null,
+      "cancellation_window_ms": 30000.0,
+      "decision_latency_ms": 42.0,
+      "posture": "ALLOW",
+      "replay_id": "replay-001",
+      "review_latency_ms": null,
+      "rollback_attempted": false,
+      "rollback_latency_observed_ms": null,
+      "rollback_success": null,
+      "route_latency_ms": 12.0,
+      "unavailable_evaluation": false,
+      "workflow_overhead_ms": 84.0
+    },
+    {
+      "cancel_attempted": false,
+      "cancel_success": null,
+      "cancellation_window_ms": 45000.0,
+      "decision_latency_ms": 57.0,
+      "posture": "THROTTLE",
+      "replay_id": "replay-002",
+      "review_latency_ms": 420000.0,
+      "rollback_attempted": true,
+      "rollback_latency_observed_ms": 180000.0,
+      "rollback_success": true,
+      "route_latency_ms": 18.0,
+      "unavailable_evaluation": false,
+      "workflow_overhead_ms": 126.0
+    },
+    {
+      "cancel_attempted": true,
+      "cancel_success": true,
+      "cancellation_window_ms": 60000.0,
+      "decision_latency_ms": 61.0,
+      "posture": "FREEZE",
+      "replay_id": "replay-003",
+      "review_latency_ms": 900000.0,
+      "rollback_attempted": false,
+      "rollback_latency_observed_ms": null,
+      "rollback_success": null,
+      "route_latency_ms": 21.0,
+      "unavailable_evaluation": false,
+      "workflow_overhead_ms": 143.0
+    }
+  ],
+  "resilience": {
+    "cancel_attempt_count": 1,
+    "cancel_success_count": 1,
+    "cancel_success_rate": 1.0,
+    "rollback_attempt_count": 1,
+    "rollback_success_count": 1,
+    "rollback_success_rate": 1.0,
+    "unavailable_evaluation_count": 0,
+    "unavailable_evaluation_rate": 0.0
+  },
+  "route_latency": {
+    "average_ms": 17.0,
+    "maximum_ms": 21.0,
+    "minimum_ms": 12.0,
+    "p50_ms": 18.0,
+    "p95_ms": 20.7,
+    "sample_count": 3,
+    "slo_met": true,
+    "slo_ms": 250
+  },
+  "source_evidence_boundary": "Synthetic timing evidence for local pilot review; not customer production latency or SLA evidence.",
+  "tenant_id": "platform-team",
+  "version": "smerc.timing-evidence-report.v1",
+  "workflow_id": "github-actions-shadow-mode",
+  "workflow_overhead": {
+    "average_ms": 117.67,
+    "maximum_ms": 143.0,
+    "minimum_ms": 84.0,
+    "p50_ms": 126.0,
+    "p95_ms": 141.3,
+    "sample_count": 3,
+    "slo_met": true,
+    "slo_ms": 250
+  }
+}

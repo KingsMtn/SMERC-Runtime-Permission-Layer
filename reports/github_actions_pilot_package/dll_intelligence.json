@@ -1,0 +1,121 @@
+{
+  "decision_rows": [
+    {
+      "confidence_score": 0.0,
+      "controls_sufficient": true,
+      "cost_incurred": 0.0,
+      "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+      "environment": "production",
+      "execution_status": "succeeded",
+      "final_posture": "THROTTLE",
+      "head_record_hash": "7f9172352697c5856a7ba4d2c0d9bcd6cf073586f9ee407d2eae31aed2b19bf3",
+      "initial_posture": "THROTTLE",
+      "interaction": "accepted",
+      "judged_correct": true,
+      "learning_recommendations": {
+        "activation_status": "requires_review",
+        "confidence_calibration_changes": [
+          "Do not calibrate from synthetic examples."
+        ],
+        "recommended_policy_updates": [
+          "Collect customer reviewer labels before changing thresholds."
+        ],
+        "suggested_rule_modifications": [
+          "Replace default examples with customer-approved non-secret workflow evidence."
+        ]
+      },
+      "missing_evidence": [],
+      "near_miss": true,
+      "override_harmful": false,
+      "override_helpful": false,
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "recommended_safeguards": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "recovery_failure": false,
+      "requested_operation": "Deploy a billing service canary to production at 5 percent traffic.",
+      "risk_profile": "github_actions_shadow_mode",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "github-actions-pilot-installer",
+      "time_to_recover_minutes": 0.0,
+      "unexpected_consequences": false
+    }
+  ],
+  "evidence_boundary": [
+    "DLL Intelligence summarizes supplied lifecycle records; it does not prove incident reduction by itself.",
+    "Synthetic or analyst-assigned ledgers must be labeled before external use.",
+    "Policy and calibration recommendations require human review before activation."
+  ],
+  "generated_at": "2026-08-16T03:03:00+00:00",
+  "governance_drift_signals": [],
+  "near_miss_decisions": [
+    {
+      "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+      "final_posture": "THROTTLE",
+      "operation": "Deploy a billing service canary to production at 5 percent traffic.",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ]
+    }
+  ],
+  "policy_review_queue": [
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Collect customer reviewer labels before changing thresholds.",
+      "recommendation_type": "policy_update",
+      "source_decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4"
+    },
+    {
+      "activation_status": "requires_review",
+      "recommendation": "Replace default examples with customer-approved non-secret workflow evidence.",
+      "recommendation_type": "rule_modification",
+      "source_decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4"
+    }
+  ],
+  "recommended_next_action": "Collect at least 30 customer-context DLL records before presenting rates as pilot evidence.",
+  "recovery_failure_decisions": [],
+  "summary": {
+    "controls_sufficient_count": 1,
+    "controls_sufficient_rate": 1.0,
+    "executed_count": 1,
+    "final_posture_counts": {
+      "THROTTLE": 1
+    },
+    "human_reviewed_count": 1,
+    "initial_posture_counts": {
+      "THROTTLE": 1
+    },
+    "judged_correct_count": 1,
+    "judged_correct_rate": 1.0,
+    "ledger_count": 1,
+    "near_miss_count": 1,
+    "outcome_reviewed_count": 1,
+    "override_count": 0,
+    "override_harmful_count": 0,
+    "override_helpful_count": 0,
+    "override_rate": 0.0,
+    "recovery_failure_count": 0,
+    "rollback_performed_count": 0,
+    "rollback_success_count": 0,
+    "rollback_success_rate": null,
+    "unexpected_consequence_count": 0,
+    "unexpected_consequence_rate": 0.0
+  },
+  "top_missing_evidence": {},
+  "top_reason_codes": {
+    "EXTERNAL_SIDE_EFFECT": 1
+  },
+  "top_safeguards": {
+    "limit_scope": 1,
+    "preview_before_execution": 1,
+    "rate_limit_external_side_effect": 1,
+    "record_replay": 1
+  },
+  "version": "smerc.dll-intelligence.v1"
+}

@@ -63,6 +63,7 @@ The current build includes:
 - SPARK signal intake that validates non-secret evidence and compiles it into strict SMERC Action Language
 - Constraint Eligibility Layer that preserves hard denies before recoverability can modify a runtime decision
 - Timing Evidence reports for decision latency, route latency, workflow overhead, cancellation, rollback, and unavailable evaluations
+- self-contained GitHub Actions pilot package generator that assembles SPARK, eligibility, SMERC decision, SPARTa, DLL, DLL Intelligence, and timing evidence
 - scoring-invariant verification for recoverability and executor fitness math
 - commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service
@@ -132,6 +133,7 @@ Start here before reading the code:
 - `docs/Thirty_Minute_Workflow_Proof.md` gives reviewers the shortest concrete path for testing one workflow and comparing SMERC with simple allow/deny review.
 - `docs/CISO_Evidence_Walkthrough.md` gives reviewers a local end-to-end flow from seeded decisions to pilot console evidence packages.
 - `docs/GitHub_Actions_Pilot_Operator_Quickstart.md` gives customer operators the shortest install-and-measure path for one observe-mode GitHub Actions workflow.
+- `docs/GitHub_Actions_Pilot_Installer.md` gives reviewers a one-command package generator for the connected GitHub Actions pilot artifact folder.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Accelerator_Readiness_Track.md` defines when SMERC should move from technical review to accelerator applications or investor-facing submissions.
@@ -535,6 +537,7 @@ Requires Python 3.10 or later. No third-party Python packages are required.
 ```bash
 python -m reference_engine.agent_permission_layer examples/agent_permission_actions.json --pretty
 python -m reference_engine.constraint_eligibility examples/constraint_eligibility/prohibited_audit_log_delete.json --pretty
+python -m reference_engine.github_actions_pilot_installer --output-dir reports/github_actions_pilot_package --pretty
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m reference_engine.sparta_router --decision examples/sparta/throttle_decision.json --plan examples/sparta/github_actions_deploy_plan.json --pretty
 python -m reference_engine.sparta_conformance examples/sparta/adapter_registry.json --pretty

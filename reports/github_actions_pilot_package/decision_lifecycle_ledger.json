@@ -1,0 +1,192 @@
+{
+  "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+  "head_record_hash": "7f9172352697c5856a7ba4d2c0d9bcd6cf073586f9ee407d2eae31aed2b19bf3",
+  "record_count": 7,
+  "records": [
+    {
+      "actor": "github-actions:deploy-agent",
+      "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+      "event_type": "REQUEST",
+      "payload": {
+        "environment": "production",
+        "initiated_by": "github-actions:deploy-agent",
+        "requested_operation": "Deploy a billing service canary to production at 5 percent traffic.",
+        "risk_profile": "github_actions_shadow_mode"
+      },
+      "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "87a55639aa5185447b2798c21ca90c5437447a5c7d534f18c142d16ce5905a73",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-08-16T03:03:00+00:00",
+      "sequence": 1,
+      "tenant_id": "github-actions-pilot-installer"
+    },
+    {
+      "actor": "spark-intake",
+      "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+      "event_type": "EVIDENCE",
+      "payload": {
+        "available_evidence": [
+          "github_actions",
+          "identity",
+          "policy"
+        ],
+        "confidence_score": 0.0,
+        "external_dependencies": [
+          "github_actions",
+          "repository_metadata",
+          "deployment_workflow"
+        ],
+        "missing_evidence": [],
+        "model_version": "metadata-only-pilot",
+        "policy_version": "default-reference-policy"
+      },
+      "previous_record_hash": "87a55639aa5185447b2798c21ca90c5437447a5c7d534f18c142d16ce5905a73",
+      "record_hash": "40ce0aebf0f4cc4b5e444efd6d1c149d14bda942732c37ad0e0e65a140d48cca",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-08-16T03:03:00+00:00",
+      "sequence": 2,
+      "tenant_id": "github-actions-pilot-installer"
+    },
+    {
+      "actor": "smerc-runtime",
+      "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+      "event_type": "EVALUATION",
+      "payload": {
+        "authorization_recommendation": "THROTTLE",
+        "entropy_indicators": [
+          "EXTERNAL_SIDE_EFFECT"
+        ],
+        "reason_codes": [
+          "EXTERNAL_SIDE_EFFECT"
+        ],
+        "recommended_safeguards": [
+          "limit_scope",
+          "preview_before_execution",
+          "record_replay",
+          "rate_limit_external_side_effect"
+        ],
+        "recoverability_score": 0.764,
+        "structural_state": "Constraint eligibility labels ['constraint_eligible'] produced posture THROTTLE before workflow execution."
+      },
+      "previous_record_hash": "40ce0aebf0f4cc4b5e444efd6d1c149d14bda942732c37ad0e0e65a140d48cca",
+      "record_hash": "88cd1b5c37af9ba5d30eddd7729d91d97bb03183a0526db7e14983890678c1d7",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-08-16T03:03:00+00:00",
+      "sequence": 3,
+      "tenant_id": "github-actions-pilot-installer"
+    },
+    {
+      "actor": "shadow-mode-reviewer",
+      "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+      "event_type": "HUMAN_INTERACTION",
+      "payload": {
+        "final_recommendation": "THROTTLE",
+        "interaction": "accepted",
+        "original_recommendation": "THROTTLE",
+        "rationale": "Synthetic installer package accepts the posture so the review artifact is complete.",
+        "reviewer_id": "shadow-mode-reviewer"
+      },
+      "previous_record_hash": "88cd1b5c37af9ba5d30eddd7729d91d97bb03183a0526db7e14983890678c1d7",
+      "record_hash": "1f24037d4782c4903bb687028b0cfef93638c9cc957888ac0915c2b2b5d3e1d4",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-08-16T03:03:00+00:00",
+      "sequence": 4,
+      "tenant_id": "github-actions-pilot-installer"
+    },
+    {
+      "actor": "sparta-router",
+      "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+      "event_type": "EXECUTION",
+      "payload": {
+        "duration_ms": 0,
+        "executed_operation": "SPARTa routed GitHub Actions plan into CONSTRAINED_EXECUTE.",
+        "execution_status": "succeeded",
+        "rollback_performed": false,
+        "rollback_success": null,
+        "started_at": "2026-08-16T03:03:00+00:00"
+      },
+      "previous_record_hash": "1f24037d4782c4903bb687028b0cfef93638c9cc957888ac0915c2b2b5d3e1d4",
+      "record_hash": "7d69911738a4466ee73e58d21c4c53fc15e2f5e12b69da890e81ed8768ba5d9b",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-08-16T03:03:00+00:00",
+      "sequence": 5,
+      "tenant_id": "github-actions-pilot-installer"
+    },
+    {
+      "actor": "pilot-installer",
+      "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+      "event_type": "OUTCOME",
+      "payload": {
+        "controls_sufficient": true,
+        "cost_incurred": 0.0,
+        "customer_impact": "none; synthetic installer package",
+        "financial_impact": "none; synthetic installer package",
+        "judged_correct": true,
+        "security_impact": "none; synthetic installer package",
+        "time_to_recover_minutes": 0.0,
+        "unexpected_consequences": false
+      },
+      "previous_record_hash": "7d69911738a4466ee73e58d21c4c53fc15e2f5e12b69da890e81ed8768ba5d9b",
+      "record_hash": "9fd940a04f4c982e0567a4a4435969d4d0e13dc89467da5d5091a311cd84ca1c",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-08-16T03:03:00+00:00",
+      "sequence": 6,
+      "tenant_id": "github-actions-pilot-installer"
+    },
+    {
+      "actor": "dll-intelligence",
+      "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+      "event_type": "LEARNING_RECOMMENDATION",
+      "payload": {
+        "activation_status": "requires_review",
+        "actual_outcome": "SPARK, eligibility, decision, SPARTa, DLL, timing, and report artifacts were generated.",
+        "confidence_calibration_changes": [
+          "Do not calibrate from synthetic examples."
+        ],
+        "expected_outcome": "Reviewer can inspect a complete GitHub Actions shadow-mode package.",
+        "human_override_effectiveness": "not measured in synthetic package",
+        "prediction_error": "not measured in synthetic package",
+        "recommended_policy_updates": [
+          "Collect customer reviewer labels before changing thresholds."
+        ],
+        "suggested_rule_modifications": [
+          "Replace default examples with customer-approved non-secret workflow evidence."
+        ]
+      },
+      "previous_record_hash": "9fd940a04f4c982e0567a4a4435969d4d0e13dc89467da5d5091a311cd84ca1c",
+      "record_hash": "7f9172352697c5856a7ba4d2c0d9bcd6cf073586f9ee407d2eae31aed2b19bf3",
+      "record_version": "smerc.dll-record.v1",
+      "recorded_at": "2026-08-16T03:03:00+00:00",
+      "sequence": 7,
+      "tenant_id": "github-actions-pilot-installer"
+    }
+  ],
+  "summary": {
+    "decision_id": "dll_replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+    "event_counts": {
+      "EVALUATION": 1,
+      "EVIDENCE": 1,
+      "EXECUTION": 1,
+      "HUMAN_INTERACTION": 1,
+      "LEARNING_RECOMMENDATION": 1,
+      "OUTCOME": 1,
+      "REQUEST": 1
+    },
+    "final_event_type": "LEARNING_RECOMMENDATION",
+    "judged_correct": true,
+    "override_count": 0,
+    "pending_learning_recommendations": 1,
+    "record_count": 7,
+    "rollback_performed": false,
+    "rollback_success": null,
+    "tenant_id": "github-actions-pilot-installer"
+  },
+  "tenant_id": "github-actions-pilot-installer",
+  "verification": {
+    "errors": [],
+    "head_record_hash": "7f9172352697c5856a7ba4d2c0d9bcd6cf073586f9ee407d2eae31aed2b19bf3",
+    "record_count": 7,
+    "valid": true
+  },
+  "version": "smerc.decision-lifecycle-ledger.v1"
+}

@@ -1,0 +1,452 @@
+{
+  "action_hash": "3c50057054bf8899c3aba7b484156e1178e35bbff105b3faea3c04f97692a60b",
+  "action_id": "deploy-prod-canary",
+  "action_language_version": "smerc.action.v1",
+  "constraint_eligibility": {
+    "constraint_eligible": true,
+    "eligibility_labels": [
+      "constraint_eligible"
+    ],
+    "language_version": "smerc.constraint-eligibility.v1",
+    "recommended_runtime_posture": "ALLOW"
+  },
+  "controls": [
+    "limit_scope",
+    "preview_before_execution",
+    "record_replay",
+    "rate_limit_external_side_effect"
+  ],
+  "decision_trace": {
+    "profile": {
+      "label": "General automated action",
+      "notes": [],
+      "profile_id": "general"
+    },
+    "score_contributions": {
+      "confidence_score": {
+        "anomaly_resistance": 0.151,
+        "authorization_confidence": 0.279,
+        "containment_strength": 0.065,
+        "evidence_validity": 0.344,
+        "profile_multiplier": 1.0,
+        "total": 0.839
+      },
+      "irreversible_exposure_score": {
+        "base_action_risk": 0.086,
+        "containment_gap": 0.025,
+        "external_side_effect": 0.08,
+        "impact_scope": 0.043,
+        "irreversibility": 0.062,
+        "profile_multiplier": 1.0,
+        "rollback_latency": 0.046,
+        "sensitive_data": 0.0,
+        "total": 0.343
+      },
+      "operational_stress_score": {
+        "anomaly_pressure": 0.032,
+        "base_action_risk": 0.096,
+        "cancel_gap": 0.017,
+        "confidence_gap": 0.022,
+        "evidence_gap": 0.02,
+        "impact_scope": 0.065,
+        "profile_multiplier": 1.0,
+        "rollback_latency": 0.027,
+        "total": 0.278
+      },
+      "reversible_capacity_score": {
+        "cancel_reliability": 0.115,
+        "containment_strength": 0.194,
+        "evidence_validity": 0.086,
+        "profile_multiplier": 1.0,
+        "reversibility": 0.229,
+        "rollback_speed": 0.139,
+        "total": 0.764
+      },
+      "risk_adjusted_authorization_score": {
+        "confidence_score": 0.252,
+        "profile_multiplier": 1.0,
+        "recoverability_margin": 0.164,
+        "reversible_capacity": 0.344,
+        "total": 0.76
+      }
+    },
+    "threshold_trace": [
+      {
+        "details": {
+          "capacity": 0.764,
+          "capacity_rule": "< 0.42",
+          "confidence": 0.839,
+          "confidence_rule": "< 0.48"
+        },
+        "observed": 0.343,
+        "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+        "threshold": ">= 0.78",
+        "triggered": false
+      },
+      {
+        "details": {
+          "exposure": 0.343,
+          "exposure_rule": ">= 0.62"
+        },
+        "observed": 0.72,
+        "rule": "deny_by_unreliable_cancel_and_high_exposure",
+        "threshold": "< 0.3",
+        "triggered": false
+      },
+      {
+        "details": {
+          "external_side_effect": true,
+          "sensitive_data": false
+        },
+        "observed": 0.278,
+        "rule": "escalate_by_operational_stress",
+        "threshold": ">= 0.7",
+        "triggered": false
+      },
+      {
+        "details": {
+          "capacity": 0.764,
+          "confidence": 0.839
+        },
+        "observed": 0.764,
+        "rule": "freeze_by_low_confidence_or_capacity",
+        "threshold": "confidence < 0.45 or capacity < 0.36",
+        "triggered": false
+      },
+      {
+        "details": {
+          "exposure": 0.343,
+          "external_side_effect": true,
+          "profile_allows_external_side_effect_release": false
+        },
+        "observed": 0.76,
+        "rule": "throttle_by_authorization_exposure_or_side_effect",
+        "threshold": "authorization < 0.62 or exposure >= 0.45",
+        "triggered": true
+      }
+    ]
+  },
+  "domain_profile": {
+    "label": "General automated action",
+    "notes": [],
+    "profile_id": "general"
+  },
+  "enforcement_state": "constrain",
+  "language_version": "smerc.decision.v1",
+  "plain_english_summary": "Action 'deploy-prod-canary' received THROTTLE. Irreversible exposure is 0.343, reversible capacity is 0.764, and authorization score is 0.760. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+  "policy": {
+    "evidence_ceiling": "OBSERVE",
+    "mode": "OBSERVE",
+    "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+    "policy_id": "smerc-reference-recoverability",
+    "policy_revision": "1.0.0",
+    "tenant_id": "*"
+  },
+  "posture": "THROTTLE",
+  "reason_codes": [
+    "EXTERNAL_SIDE_EFFECT"
+  ],
+  "reasons": [
+    {
+      "code": "EXTERNAL_SIDE_EFFECT",
+      "title": "Action has an external side effect"
+    }
+  ],
+  "replay": {
+    "action_hash": "3c50057054bf8899c3aba7b484156e1178e35bbff105b3faea3c04f97692a60b",
+    "action_type": "deploy_to_production",
+    "actor": "github-actions:deploy-agent",
+    "context": {
+      "smerc_language": {
+        "action_hash": "3c50057054bf8899c3aba7b484156e1178e35bbff105b3faea3c04f97692a60b",
+        "authority_basis": "protected environment approval and deployment workflow policy",
+        "rollback_method": "canary rollback to previous deployment artifact",
+        "target": {
+          "environment": "production",
+          "resource": "billing-service"
+        },
+        "version": "smerc.action.v1"
+      },
+      "spark": {
+        "collected_at": "2026-08-15T00:00:00Z",
+        "evidence_gaps": [],
+        "evidence_hash": "5942a8e92bea01b986a8bb3f91eff85f50e4a46d9a35d1beb237f768334a2660",
+        "evidence_id": "spark-gha-001",
+        "non_secret_boundary": true,
+        "source_systems": [
+          "github_actions",
+          "identity",
+          "policy"
+        ],
+        "version": "smerc.spark-evidence.v1"
+      }
+    },
+    "controls": [
+      "limit_scope",
+      "preview_before_execution",
+      "record_replay",
+      "rate_limit_external_side_effect"
+    ],
+    "decision_trace": {
+      "profile": {
+        "label": "General automated action",
+        "notes": [],
+        "profile_id": "general"
+      },
+      "score_contributions": {
+        "confidence_score": {
+          "anomaly_resistance": 0.151,
+          "authorization_confidence": 0.279,
+          "containment_strength": 0.065,
+          "evidence_validity": 0.344,
+          "profile_multiplier": 1.0,
+          "total": 0.839
+        },
+        "irreversible_exposure_score": {
+          "base_action_risk": 0.086,
+          "containment_gap": 0.025,
+          "external_side_effect": 0.08,
+          "impact_scope": 0.043,
+          "irreversibility": 0.062,
+          "profile_multiplier": 1.0,
+          "rollback_latency": 0.046,
+          "sensitive_data": 0.0,
+          "total": 0.343
+        },
+        "operational_stress_score": {
+          "anomaly_pressure": 0.032,
+          "base_action_risk": 0.096,
+          "cancel_gap": 0.017,
+          "confidence_gap": 0.022,
+          "evidence_gap": 0.02,
+          "impact_scope": 0.065,
+          "profile_multiplier": 1.0,
+          "rollback_latency": 0.027,
+          "total": 0.278
+        },
+        "reversible_capacity_score": {
+          "cancel_reliability": 0.115,
+          "containment_strength": 0.194,
+          "evidence_validity": 0.086,
+          "profile_multiplier": 1.0,
+          "reversibility": 0.229,
+          "rollback_speed": 0.139,
+          "total": 0.764
+        },
+        "risk_adjusted_authorization_score": {
+          "confidence_score": 0.252,
+          "profile_multiplier": 1.0,
+          "recoverability_margin": 0.164,
+          "reversible_capacity": 0.344,
+          "total": 0.76
+        }
+      },
+      "threshold_trace": [
+        {
+          "details": {
+            "capacity": 0.764,
+            "capacity_rule": "< 0.42",
+            "confidence": 0.839,
+            "confidence_rule": "< 0.48"
+          },
+          "observed": 0.343,
+          "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+          "threshold": ">= 0.78",
+          "triggered": false
+        },
+        {
+          "details": {
+            "exposure": 0.343,
+            "exposure_rule": ">= 0.62"
+          },
+          "observed": 0.72,
+          "rule": "deny_by_unreliable_cancel_and_high_exposure",
+          "threshold": "< 0.3",
+          "triggered": false
+        },
+        {
+          "details": {
+            "external_side_effect": true,
+            "sensitive_data": false
+          },
+          "observed": 0.278,
+          "rule": "escalate_by_operational_stress",
+          "threshold": ">= 0.7",
+          "triggered": false
+        },
+        {
+          "details": {
+            "capacity": 0.764,
+            "confidence": 0.839
+          },
+          "observed": 0.764,
+          "rule": "freeze_by_low_confidence_or_capacity",
+          "threshold": "confidence < 0.45 or capacity < 0.36",
+          "triggered": false
+        },
+        {
+          "details": {
+            "exposure": 0.343,
+            "external_side_effect": true,
+            "profile_allows_external_side_effect_release": false
+          },
+          "observed": 0.76,
+          "rule": "throttle_by_authorization_exposure_or_side_effect",
+          "threshold": "authorization < 0.62 or exposure >= 0.45",
+          "triggered": true
+        }
+      ]
+    },
+    "domain_profile": {
+      "label": "General automated action",
+      "notes": [],
+      "profile_id": "general"
+    },
+    "enforcement_state": "constrain",
+    "evaluated_at": "2026-08-16T03:03:00.076274+00:00",
+    "language_version": "smerc.decision.v1",
+    "policy": {
+      "evidence_ceiling": "OBSERVE",
+      "mode": "OBSERVE",
+      "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+      "policy_id": "smerc-reference-recoverability",
+      "policy_revision": "1.0.0",
+      "tenant_id": "*"
+    },
+    "posture": "THROTTLE",
+    "reason_codes": [
+      "EXTERNAL_SIDE_EFFECT"
+    ],
+    "replay_id": "replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+    "scores": {
+      "cancel_reliability_score": 0.72,
+      "confidence_score": 0.839,
+      "irreversible_exposure_score": 0.343,
+      "operational_stress_score": 0.278,
+      "reversible_capacity_score": 0.764,
+      "risk_adjusted_authorization_score": 0.76
+    },
+    "tool": "github_actions",
+    "transition": {
+      "conditions": [
+        {
+          "code": "IMPACT_SCOPE_REDUCED",
+          "description": "Reduce impact scope to 0.45 or lower.",
+          "field": "signals.impact_scope",
+          "operator": "lte",
+          "value": 0.45
+        },
+        {
+          "code": "PREVIEW_APPROVED",
+          "description": "Approve an execution preview.",
+          "field": "evidence.preview_approved",
+          "operator": "eq",
+          "value": true
+        },
+        {
+          "code": "EXTERNAL_RATE_LIMIT_SET",
+          "description": "Set an external-effect rate limit.",
+          "field": "controls.external_rate_limit",
+          "operator": "present",
+          "value": true
+        }
+      ],
+      "eligible_target_posture": "ALLOW",
+      "mode": "conditional",
+      "requires_new_request": false
+    },
+    "transition_guidance": {
+      "blocking_factors": [],
+      "control_improvements": [
+        "limit_scope",
+        "preview_before_execution",
+        "rate limit or stage external side effect",
+        "rate_limit_external_side_effect",
+        "record_replay"
+      ],
+      "current_posture": "THROTTLE",
+      "evidence_needed": [],
+      "release_conditions": {
+        "authorization_score_at_or_above": 0.62,
+        "confidence_score_target": 0.7,
+        "irreversible_exposure_below": 0.45,
+        "reversible_capacity_target": 0.6
+      },
+      "target_posture": "THROTTLE"
+    }
+  },
+  "replay_id": "replay_deploy-prod-canary_1786849380076_cbf0ac099db4",
+  "scores": {
+    "cancel_reliability_score": 0.72,
+    "confidence_score": 0.839,
+    "irreversible_exposure_score": 0.343,
+    "operational_stress_score": 0.278,
+    "reversible_capacity_score": 0.764,
+    "risk_adjusted_authorization_score": 0.76
+  },
+  "structured_controls": [
+    {
+      "code": "limit_scope",
+      "title": "Limit action scope"
+    },
+    {
+      "code": "preview_before_execution",
+      "title": "Preview before execution"
+    },
+    {
+      "code": "record_replay",
+      "title": "Record a replayable decision"
+    },
+    {
+      "code": "rate_limit_external_side_effect",
+      "title": "Rate-limit external effects"
+    }
+  ],
+  "transition": {
+    "conditions": [
+      {
+        "code": "IMPACT_SCOPE_REDUCED",
+        "description": "Reduce impact scope to 0.45 or lower.",
+        "field": "signals.impact_scope",
+        "operator": "lte",
+        "value": 0.45
+      },
+      {
+        "code": "PREVIEW_APPROVED",
+        "description": "Approve an execution preview.",
+        "field": "evidence.preview_approved",
+        "operator": "eq",
+        "value": true
+      },
+      {
+        "code": "EXTERNAL_RATE_LIMIT_SET",
+        "description": "Set an external-effect rate limit.",
+        "field": "controls.external_rate_limit",
+        "operator": "present",
+        "value": true
+      }
+    ],
+    "eligible_target_posture": "ALLOW",
+    "mode": "conditional",
+    "requires_new_request": false
+  },
+  "transition_guidance": {
+    "blocking_factors": [],
+    "control_improvements": [
+      "limit_scope",
+      "preview_before_execution",
+      "rate limit or stage external side effect",
+      "rate_limit_external_side_effect",
+      "record_replay"
+    ],
+    "current_posture": "THROTTLE",
+    "evidence_needed": [],
+    "release_conditions": {
+      "authorization_score_at_or_above": 0.62,
+      "confidence_score_target": 0.7,
+      "irreversible_exposure_below": 0.45,
+      "reversible_capacity_target": 0.6
+    },
+    "target_posture": "THROTTLE"
+  }
+}
