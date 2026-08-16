@@ -1,0 +1,158 @@
+{
+  "schema": "smerc.self-service-pilot-bundle.v1",
+  "organization": "Example Security Review Team",
+  "contact_role": "Security architect",
+  "workflow_context": "Metadata-only sample bundle for reviewing AI-agent deployment and MCP tool-call governance before any production pilot.",
+  "data_boundary": "Synthetic examples only. No secrets, tokens, customer records, source code, production logs, or regulated data are included.",
+  "events": [
+    {
+      "event_id": "SSP_DB_CHANGE_001",
+      "source_type": "action_language",
+      "payload": {
+        "language_version": "smerc.action.v1",
+        "action": {
+          "id": "db-change-2041",
+          "description": "AI coding agent proposes deleting an obsolete production customer table",
+          "actor": "coding-agent-release-7",
+          "tool": "database-admin-api",
+          "type": "delete_table",
+          "target": {
+            "resource": "production/customer_archive",
+            "environment": "production"
+          },
+          "authority": {
+            "basis": "unreviewed agent-generated migration",
+            "confidence": 0.38
+          }
+        },
+        "signals": {
+          "base_action_risk": 0.94,
+          "evidence_validity": 0.42,
+          "anomaly_pressure": 0.71,
+          "impact_scope": 0.88
+        },
+        "recoverability": {
+          "reversibility": 0.12,
+          "containment_strength": 0.24,
+          "rollback_latency": 0.91,
+          "cancel_reliability": 0.18,
+          "rollback_method": "Restore from the last verified backup after blocking writes"
+        },
+        "effects": {
+          "external_side_effect": true,
+          "sensitive_data": true
+        },
+        "context": {
+          "workflow": "agent-generated-database-migration",
+          "change_ticket": "CHG-2041"
+        }
+      }
+    },
+    {
+      "event_id": "SSP_STAGING_DEPLOY_001",
+      "source_type": "action_language",
+      "payload": {
+        "language_version": "smerc.action.v1",
+        "action": {
+          "id": "deploy-1842",
+          "description": "AI release assistant proposes a staged canary deployment to 5 percent of traffic",
+          "actor": "release-assistant",
+          "tool": "github-actions",
+          "type": "canary_deploy",
+          "target": {
+            "resource": "checkout-service",
+            "environment": "staging"
+          },
+          "authority": {
+            "basis": "approved deployment workflow",
+            "confidence": 0.82
+          }
+        },
+        "signals": {
+          "base_action_risk": 0.36,
+          "evidence_validity": 0.86,
+          "anomaly_pressure": 0.18,
+          "impact_scope": 0.22
+        },
+        "recoverability": {
+          "reversibility": 0.84,
+          "containment_strength": 0.81,
+          "rollback_latency": 0.16,
+          "cancel_reliability": 0.88,
+          "rollback_method": "Rollback through deployment controller to previous image digest"
+        },
+        "effects": {
+          "external_side_effect": false,
+          "sensitive_data": false
+        },
+        "context": {
+          "workflow": "canary-deployment",
+          "change_ticket": "CHG-1842"
+        }
+      }
+    },
+    {
+      "event_id": "SSP_MCP_DELETE_001",
+      "source_type": "mcp_transport",
+      "payload": {
+        "schema": "smerc.mcp-transport-proxy-envelope.v1",
+        "proxy_request_id": "MCP_TRANSPORT_DELETE_CUSTOMER_RECORDS_001",
+        "mode": "enforce",
+        "mcp_jsonrpc_request": {
+          "jsonrpc": "2.0",
+          "id": "tool-call-001",
+          "method": "tools/call",
+          "params": {
+            "name": "delete_customer_records",
+            "arguments": {
+              "inferred_duplicate_accounts": true,
+              "customer_count": 2500,
+              "source": "ai_support_workflow"
+            }
+          }
+        },
+        "governance_request": {
+          "schema": "smerc.mcp-tool-governance.v1",
+          "mcp_request_id": "MCP_DELETE_CUSTOMER_RECORDS_001",
+          "agent": {
+            "agent_id": "support_resolution_agent",
+            "display_name": "Support Resolution Agent",
+            "provider": "internal-agent-runtime"
+          },
+          "server": {
+            "name": "customer_data_mcp",
+            "transport": "streamable-http",
+            "trust_boundary": "internal-production"
+          },
+          "tool_call": {
+            "tool_name": "delete_customer_records",
+            "description": "Delete customer records after an AI support workflow inferred duplicate accounts.",
+            "operation_class": "delete",
+            "requested_capability": "delete_records",
+            "domain_profile": "it_ops",
+            "external_side_effect": true,
+            "sensitive_data": true,
+            "supports_dry_run": true,
+            "supports_scope_limit": true,
+            "supports_checkpoint": false,
+            "supports_rollback": false,
+            "supports_human_approval": true,
+            "requested_scope_units": 2500,
+            "max_scope_units": 10000
+          },
+          "risk_signals": {
+            "base_action_risk": 0.91,
+            "reversibility": 0.12,
+            "containment_strength": 0.36,
+            "rollback_latency": 0.88,
+            "evidence_validity": 0.51,
+            "anomaly_pressure": 0.42,
+            "impact_scope": 0.84,
+            "cancel_reliability": 0.28,
+            "authorization_confidence": 0.55
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "contact_role": "Security architect",
+  "data_boundary": "Synthetic examples only. No secrets, tokens, customer records, source code, production logs, or regulated data are included.",
+  "evidence_boundary": "Self-service pilot connector output is metadata-only pilot preparation. It is not production certification, security attestation, customer demand proof, incident-reduction proof, MCP compliance, or approval to enforce.",
+  "generated_at": "2026-08-16T04:32:34+00:00",
+  "organization": "Example Security Review Team",
+  "recommended_next_action": "Ask reviewers to label whether each posture is acceptable, compare SMERC output with existing approvals, and replace examples with 10 to 25 customer-approved non-secret events.",
+  "records": [
+    {
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "description": "AI coding agent proposes deleting an obsolete production customer table",
+      "enforcement_state": "block",
+      "event_id": "SSP_DB_CHANGE_001",
+      "plain_english_summary": "Action 'db-change-2041' received DENY. Irreversible exposure is 0.899, reversible capacity is 0.183, and authorization score is 0.218. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+      "posture": "DENY",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "EVIDENCE_VALIDITY_LOW",
+        "AUTHORIZATION_CONFIDENCE_LOW",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_db-change-2041_1786854754853_75f5f357bd65",
+      "scores": {
+        "cancel_reliability_score": 0.18,
+        "confidence_score": 0.369,
+        "irreversible_exposure_score": 0.899,
+        "operational_stress_score": 0.784,
+        "reversible_capacity_score": 0.183,
+        "risk_adjusted_authorization_score": 0.218
+      },
+      "source_type": "action_language"
+    },
+    {
+      "controls": [
+        "execute",
+        "record_replay",
+        "retain_cancel_handle"
+      ],
+      "description": "AI release assistant proposes a staged canary deployment to 5 percent of traffic",
+      "enforcement_state": "release",
+      "event_id": "SSP_STAGING_DEPLOY_001",
+      "plain_english_summary": "Action 'deploy-1842' received ALLOW. Irreversible exposure is 0.181, reversible capacity is 0.841, and authorization score is 0.834. Controls: execute, record_replay, retain_cancel_handle.",
+      "posture": "ALLOW",
+      "reason_codes": [
+        "RECOVERABILITY_ACCEPTABLE"
+      ],
+      "replay_id": "replay_deploy-1842_1786854754853_235a780bee94",
+      "scores": {
+        "cancel_reliability_score": 0.88,
+        "confidence_score": 0.835,
+        "irreversible_exposure_score": 0.181,
+        "operational_stress_score": 0.212,
+        "reversible_capacity_score": 0.841,
+        "risk_adjusted_authorization_score": 0.834
+      },
+      "source_type": "action_language"
+    },
+    {
+      "controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay",
+        "require_new_request"
+      ],
+      "description": "Delete customer records after an AI support workflow inferred duplicate accounts.",
+      "enforcement_state": "block",
+      "event_id": "SSP_MCP_DELETE_001",
+      "mcp_forwarded": false,
+      "mcp_proxy_action": "block_tool_call",
+      "mcp_response_shape": "error",
+      "plain_english_summary": "SMERC returned DENY and the transport proxy produced JSON-RPC error -32070 instead of forwarding the tool call.",
+      "posture": "DENY",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786854754854_38ccc519735c",
+      "scores": {
+        "cancel_reliability_score": 0.28,
+        "confidence_score": 0.524,
+        "irreversible_exposure_score": 0.903,
+        "operational_stress_score": 0.705,
+        "reversible_capacity_score": 0.242,
+        "risk_adjusted_authorization_score": 0.29
+      },
+      "source_type": "mcp_transport"
+    }
+  ],
+  "schema": "smerc.self-service-pilot-connector.v1",
+  "summary": {
+    "blocked_mcp_calls": 1,
+    "forwarded_mcp_calls": 0,
+    "highest_exposure_events": [
+      {
+        "event_id": "SSP_MCP_DELETE_001",
+        "irreversible_exposure_score": 0.903,
+        "posture": "DENY",
+        "reversible_capacity_score": 0.242,
+        "source_type": "mcp_transport"
+      },
+      {
+        "event_id": "SSP_DB_CHANGE_001",
+        "irreversible_exposure_score": 0.899,
+        "posture": "DENY",
+        "reversible_capacity_score": 0.183,
+        "source_type": "action_language"
+      },
+      {
+        "event_id": "SSP_STAGING_DEPLOY_001",
+        "irreversible_exposure_score": 0.181,
+        "posture": "ALLOW",
+        "reversible_capacity_score": 0.841,
+        "source_type": "action_language"
+      }
+    ],
+    "pilot_fit": {
+      "fit": "strong",
+      "reason": "The bundle includes mixed workflow and MCP tool-call examples where SMERC creates concrete restraint decisions."
+    },
+    "posture_counts": {
+      "ALLOW": 1,
+      "DENY": 2
+    },
+    "source_counts": {
+      "action_language": 2,
+      "mcp_transport": 1
+    },
+    "total_events": 3
+  },
+  "workflow_context": "Metadata-only sample bundle for reviewing AI-agent deployment and MCP tool-call governance before any production pilot."
+}

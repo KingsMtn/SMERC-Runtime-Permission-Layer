@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Self-Service Pilot Connector that accepts mixed metadata-only GitHub Actions/action-language and MCP transport events, then produces a compact pilot-fit decision package with posture counts, highest exposure events, replay IDs, and recommended next action.
 - Added an MCP Transport Proxy sample that accepts a local JSON-RPC-style `tools/call` envelope, routes it through the MCP Proxy Runner, and returns either a forwarded result with replay evidence or a SMERC-blocked JSON-RPC error response.
 - Added an MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses, forwarding decisions, Decision Lifecycle Ledger evidence, DLL Intelligence summaries, reports, documentation, and tests.
 - Added Microsoft ecosystem and MCP runtime-governance positioning materials, including a bounded Microsoft Tech Community post draft that points reviewers to the working MCP tool governance adapter without claiming partnership, certification, or production readiness.

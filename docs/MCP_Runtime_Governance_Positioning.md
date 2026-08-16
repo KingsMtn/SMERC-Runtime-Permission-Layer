@@ -46,16 +46,20 @@ Implemented artifacts:
 - `reference_engine/mcp_tool_governance.py`
 - `reference_engine/mcp_proxy_runner.py`
 - `reference_engine/mcp_transport_proxy.py`
+- `reference_engine/self_service_pilot_connector.py`
 - `examples/mcp/tool_call_delete_customer_records.json`
 - `examples/mcp/tool_call_search_docs.json`
 - `examples/mcp/transport_proxy_delete_customer_records.json`
 - `examples/mcp/transport_proxy_search_docs.json`
+- `examples/self_service_pilot_bundle.json`
 - `docs/MCP_Tool_Governance.md`
 - `docs/MCP_Proxy_Runner.md`
 - `docs/MCP_Transport_Proxy.md`
+- `docs/Self_Service_Pilot_Connector.md`
 - `tests/test_mcp_tool_governance.py`
 - `tests/test_mcp_proxy_runner.py`
 - `tests/test_mcp_transport_proxy.py`
+- `tests/test_self_service_pilot_connector.py`
 
 The adapter maps tool-call metadata into:
 
@@ -85,6 +89,8 @@ The current proxy proof is `reference_engine/mcp_proxy_runner.py`. It:
 6. generates DLL Intelligence summary evidence.
 
 The current transport sample is `reference_engine/mcp_transport_proxy.py`. It receives a local JSON-RPC-style `tools/call` envelope and returns either a forwarded result with SMERC replay evidence or a SMERC-blocked JSON-RPC error response.
+
+The self-service review path is `reference_engine/self_service_pilot_connector.py`. It lets a reviewer evaluate a mixed metadata-only bundle of action-language and MCP transport examples before deciding whether a real observe-mode pilot is worth discussion.
 
 ## Evidence Boundary
 

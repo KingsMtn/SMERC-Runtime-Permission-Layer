@@ -196,7 +196,7 @@ class AccessTokenAPITests(unittest.TestCase):
         cls.thread.join(timeout=2)
 
     def request(self, path, *, credential, method="GET", payload=None):
-        headers = {"authorization": f"Bearer {credential}"}
+        headers = {"authorization": f"Bearer {credential}", "connection": "close"}
         data = None
         if payload is not None:
             data = json.dumps(payload).encode("utf-8")
