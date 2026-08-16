@@ -137,3 +137,17 @@ The action also writes a JSON report and a GitHub step summary.
 - Compare SMERC results against existing approvals before enabling enforcement.
 
 See `remote_example_workflow.yml` for a complete shadow-mode workflow.
+
+## Pilot Package Workflow
+
+Use `pilot_package_workflow.yml` when a reviewer wants the complete SMERC pilot package without configuring a remote API first.
+
+It runs:
+
+```bash
+python -m reference_engine.github_actions_pilot_installer --output-dir smerc-pilot-package --pretty
+```
+
+and uploads the generated folder as the artifact `smerc-github-actions-pilot-package`.
+
+This is the safest first GitHub Actions path because it is local, observe-only, metadata-only, and does not block the workflow.

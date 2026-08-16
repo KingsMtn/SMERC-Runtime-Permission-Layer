@@ -22,6 +22,18 @@ SPARK evidence
 python -m reference_engine.github_actions_pilot_installer --output-dir reports/github_actions_pilot_package --pretty
 ```
 
+## Copyable GitHub Actions Workflow
+
+Use `integrations/github_actions/pilot_package_workflow.yml` as the first low-friction workflow. It does not call a remote API or enforce policy. It checks out the repo, runs the package generator, and uploads the generated pilot folder as a GitHub Actions artifact.
+
+For a review repo, copy it to:
+
+```text
+.github/workflows/smerc-pilot-package.yml
+```
+
+Then run it manually through `workflow_dispatch`.
+
 The generated folder includes:
 
 | File | Purpose |

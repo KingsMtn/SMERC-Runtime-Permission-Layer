@@ -134,6 +134,7 @@ Start here before reading the code:
 - `docs/CISO_Evidence_Walkthrough.md` gives reviewers a local end-to-end flow from seeded decisions to pilot console evidence packages.
 - `docs/GitHub_Actions_Pilot_Operator_Quickstart.md` gives customer operators the shortest install-and-measure path for one observe-mode GitHub Actions workflow.
 - `docs/GitHub_Actions_Pilot_Installer.md` gives reviewers a one-command package generator for the connected GitHub Actions pilot artifact folder.
+- `integrations/github_actions/pilot_package_workflow.yml` gives reviewers a copyable GitHub Actions workflow that generates and uploads the complete pilot package without a remote API.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Accelerator_Readiness_Track.md` defines when SMERC should move from technical review to accelerator applications or investor-facing submissions.

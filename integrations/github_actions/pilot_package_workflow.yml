@@ -1,0 +1,35 @@
+name: SMERC GitHub Actions Pilot Package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-smerc-pilot-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Generate SMERC pilot package
+        run: |
+          python -m reference_engine.github_actions_pilot_installer \
+            --spark-evidence examples/spark/github_actions_spark_evidence.json \
+            --sparta-plan examples/sparta/github_actions_deploy_plan.json \
+            --timing-evidence examples/timing/github_actions_timing_evidence.json \
+            --output-dir smerc-pilot-package \
+            --pretty
+
+      - name: Upload pilot package
+        uses: actions/upload-artifact@v4
+        with:
+          name: smerc-github-actions-pilot-package
+          path: smerc-pilot-package
+          retention-days: 14

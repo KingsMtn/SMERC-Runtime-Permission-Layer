@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RUNBOOK = ROOT / "pilot_package" / "GitHub_Actions_Pilot_Launch_Runbook.md"
 MANIFEST = ROOT / "examples" / "github_actions_pilot_manifest.json"
 PROTECTED_DEPLOYMENT = ROOT / "examples" / "github_deployment" / "protected_deployment.yml"
+PILOT_PACKAGE_WORKFLOW = ROOT / "integrations" / "github_actions" / "pilot_package_workflow.yml"
 
 
 class GitHubActionsPilotLaunchTests(unittest.TestCase):
@@ -38,6 +39,7 @@ class GitHubActionsPilotLaunchTests(unittest.TestCase):
         self.assertEqual(manifest["authentication_options"]["preferred"], "github-oidc")
         self.assertIn("metadata boundary violation", manifest["stop_conditions"])
         self.assertIn("move_to_recommend", manifest["go_no_go_options"])
+        self.assertIn("integrations/github_actions/pilot_package_workflow.yml", manifest["required_repository_evidence"])
 
     def test_manifest_references_existing_repository_evidence(self):
         manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
@@ -49,6 +51,14 @@ class GitHubActionsPilotLaunchTests(unittest.TestCase):
         self.assertIn("sparta-route-file:", text)
         self.assertIn("reports/signed_sparta_route_example.json", text)
         self.assertIn("permit-token-file:", text)
+
+    def test_pilot_package_workflow_generates_artifact_without_remote_api(self):
+        text = PILOT_PACKAGE_WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn("workflow_dispatch", text)
+        self.assertIn("reference_engine.github_actions_pilot_installer", text)
+        self.assertIn("smerc-pilot-package", text)
+        self.assertIn("actions/upload-artifact", text)
+        self.assertNotIn("SMERC_API_KEY", text)
 
 
 if __name__ == "__main__":
