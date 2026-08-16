@@ -1,0 +1,67 @@
+{
+  "schema": "smerc.mcp-transport-proxy-envelope.v1",
+  "proxy_request_id": "MCP_TRANSPORT_SEARCH_DOCS_001",
+  "mode": "enforce",
+  "mcp_jsonrpc_request": {
+    "jsonrpc": "2.0",
+    "id": "tool-call-002",
+    "method": "tools/call",
+    "params": {
+      "name": "search_internal_docs",
+      "arguments": {
+        "query": "customer refund policy",
+        "max_results": 5
+      }
+    }
+  },
+  "governance_request": {
+    "schema": "smerc.mcp-tool-governance.v1",
+    "mcp_request_id": "MCP_SEARCH_DOCS_001",
+    "agent": {
+      "agent_id": "support_resolution_agent",
+      "display_name": "Support Resolution Agent",
+      "provider": "internal-agent-runtime"
+    },
+    "server": {
+      "name": "internal_docs_mcp",
+      "transport": "streamable-http",
+      "trust_boundary": "internal-knowledge-base"
+    },
+    "tool_call": {
+      "tool_name": "search_internal_docs",
+      "description": "Search internal policy documents before drafting a customer-support answer.",
+      "operation_class": "read",
+      "requested_capability": "read_docs",
+      "domain_profile": "it_ops",
+      "external_side_effect": false,
+      "sensitive_data": false,
+      "supports_dry_run": true,
+      "supports_scope_limit": true,
+      "supports_checkpoint": true,
+      "supports_rollback": true,
+      "supports_human_approval": true,
+      "requested_scope_units": 5,
+      "max_scope_units": 25
+    },
+    "risk_signals": {
+      "base_action_risk": 0.12,
+      "reversibility": 0.95,
+      "containment_strength": 0.91,
+      "rollback_latency": 0.08,
+      "evidence_validity": 0.93,
+      "anomaly_pressure": 0.07,
+      "impact_scope": 0.11,
+      "cancel_reliability": 0.96,
+      "authorization_confidence": 0.92
+    }
+  },
+  "simulated_tool_result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Found 5 internal policy matches for customer refund policy."
+      }
+    ],
+    "isError": false
+  }
+}

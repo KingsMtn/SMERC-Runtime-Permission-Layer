@@ -89,6 +89,12 @@ For `examples/mcp/tool_call_search_docs.json`, enforce mode returns:
 - Decision Lifecycle Ledger
 - DLL Intelligence summary
 
+## Next Transport Sample
+
+`reference_engine/mcp_transport_proxy.py` wraps the proxy runner in a local JSON-RPC-style `tools/call` sample. It returns either a forwarded JSON-RPC result with SMERC replay evidence attached or a JSON-RPC error when SMERC does not forward the tool call.
+
+See `docs/MCP_Transport_Proxy.md`.
+
 ## Evidence Boundary
 
 This is pilot-grade local software. Production use would still require integration with the actual MCP client, MCP server, identity provider, tool registry, audit store, policy administration, human review queue, and enforcement point.

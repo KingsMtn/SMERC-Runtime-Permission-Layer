@@ -45,12 +45,17 @@ Implemented artifacts:
 
 - `reference_engine/mcp_tool_governance.py`
 - `reference_engine/mcp_proxy_runner.py`
+- `reference_engine/mcp_transport_proxy.py`
 - `examples/mcp/tool_call_delete_customer_records.json`
 - `examples/mcp/tool_call_search_docs.json`
+- `examples/mcp/transport_proxy_delete_customer_records.json`
+- `examples/mcp/transport_proxy_search_docs.json`
 - `docs/MCP_Tool_Governance.md`
 - `docs/MCP_Proxy_Runner.md`
+- `docs/MCP_Transport_Proxy.md`
 - `tests/test_mcp_tool_governance.py`
 - `tests/test_mcp_proxy_runner.py`
+- `tests/test_mcp_transport_proxy.py`
 
 The adapter maps tool-call metadata into:
 
@@ -78,6 +83,8 @@ The current proxy proof is `reference_engine/mcp_proxy_runner.py`. It:
 4. returns `observe_and_forward_tool_call`, `forward_tool_call`, `forward_constrained_tool_call`, `hold_for_approval`, `pause_tool_call`, or `block_tool_call`,
 5. records a Decision Lifecycle Ledger entry,
 6. generates DLL Intelligence summary evidence.
+
+The current transport sample is `reference_engine/mcp_transport_proxy.py`. It receives a local JSON-RPC-style `tools/call` envelope and returns either a forwarded result with SMERC replay evidence or a SMERC-blocked JSON-RPC error response.
 
 ## Evidence Boundary
 

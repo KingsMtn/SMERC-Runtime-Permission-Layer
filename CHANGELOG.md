@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an MCP Transport Proxy sample that accepts a local JSON-RPC-style `tools/call` envelope, routes it through the MCP Proxy Runner, and returns either a forwarded result with replay evidence or a SMERC-blocked JSON-RPC error response.
 - Added an MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses, forwarding decisions, Decision Lifecycle Ledger evidence, DLL Intelligence summaries, reports, documentation, and tests.
 - Added Microsoft ecosystem and MCP runtime-governance positioning materials, including a bounded Microsoft Tech Community post draft that points reviewers to the working MCP tool governance adapter without claiming partnership, certification, or production readiness.
 - Added MCP tool-call governance adapter, examples, docs, generated reports, and tests that map MCP-style tool-call metadata into SMERC recoverability decisions and SPARTa route behavior before execution.
