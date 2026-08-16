@@ -1,0 +1,42 @@
+{
+  "language_version": "smerc.action.v1",
+  "action": {
+    "id": "elig-funds-001",
+    "description": "AI finance agent proposes transferring funds to a newly observed counterparty",
+    "actor": "treasury-agent-3",
+    "tool": "treasury-payment-api",
+    "type": "transfer_funds",
+    "target": {
+      "resource": "wire-transfer/new-counterparty",
+      "environment": "financial_rail"
+    },
+    "authority": {
+      "basis": "no matching payment approval found",
+      "confidence": 0.31
+    }
+  },
+  "signals": {
+    "base_action_risk": 0.91,
+    "evidence_validity": 0.47,
+    "anomaly_pressure": 0.63,
+    "impact_scope": 0.74
+  },
+  "recoverability": {
+    "reversibility": 0.35,
+    "containment_strength": 0.42,
+    "rollback_latency": 0.78,
+    "cancel_reliability": 0.41,
+    "rollback_method": "Attempt recall through bank operations after settlement"
+  },
+  "effects": {
+    "external_side_effect": true,
+    "sensitive_data": true
+  },
+  "context": {
+    "identity_confidence": 0.82,
+    "actor_authorized": true,
+    "approved_goal_consistent": true,
+    "control_availability": 0.44,
+    "adversarial_pressure": 0.57
+  }
+}

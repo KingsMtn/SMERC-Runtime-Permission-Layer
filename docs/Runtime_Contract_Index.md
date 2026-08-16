@@ -4,7 +4,7 @@ The Runtime Contract Index is the assembly map for SMERC.
 
 Contract version: `smerc.runtime-contract-index.v1`.
 
-SMERC now has many working contracts: action language, decision language, policy, SPL, SPARTa route, SPARTa vocabulary, permits, control evidence, execution reports, Decision Lifecycle Ledger, DLL Intelligence, and certificates.
+SMERC now has many working contracts: action language, constraint eligibility, decision language, policy, SPL, SPARTa route, SPARTa vocabulary, permits, control evidence, execution reports, Decision Lifecycle Ledger, DLL Intelligence, and certificates.
 
 It also has pilot contracts for SPARK signal intake and timing evidence. These are implemented as reference modules and schemas for shadow-mode review, not production-certified collection or telemetry.
 
@@ -25,7 +25,7 @@ Without an index, an outside AI agent, integration partner, or CISO reviewer has
 With the index, the system becomes:
 
 ```text
-discover -> collect signals -> declare action -> decide posture -> route with SPARTa -> enforce or review -> collect evidence -> record DLL -> measure timing -> analyze DLL
+discover -> collect signals -> declare action -> check constraint eligibility -> decide posture -> route with SPARTa -> enforce or review -> collect evidence -> record DLL -> measure timing -> analyze DLL
 ```
 
 ## Boundary

@@ -377,6 +377,25 @@ Purpose:
 
 Timing Evidence measures supplied pilot observations. It does not prove production SLA performance, rollback reliability across environments, or incident reduction.
 
+### 21. Constraint Eligibility Layer
+
+Files:
+
+- `reference_engine/constraint_eligibility.py`
+- `schemas/smerc-constraint-eligibility-v1.schema.json`
+- `examples/constraint_eligibility/constraint_eligible_canary.json`
+- `examples/constraint_eligibility/prohibited_audit_log_delete.json`
+- `examples/constraint_eligibility/weak_authority_funds_transfer.json`
+- `docs/Constraint_Eligibility_Layer.md`
+
+Purpose:
+
+- determine whether an action is eligible for constrained authorization before recoverability scoring is allowed to soften posture
+- preserve hard-deny behavior for categorically prohibited actions, weak authority, weak identity, regulatory holds, goal mismatch, and severe evidence gaps
+- label actions as `categorically_prohibited`, `requires_authority`, `constraint_eligible`, `review_required`, or `recoverability_sensitive`
+
+This layer keeps SMERC from becoming a generic "turn blocks into constraints" system. It makes the product more conservative: recoverability modifies permission only after authority and hard policy survive review.
+
 ## What This Build Proves
 
 - The scoring engine runs.
@@ -397,6 +416,7 @@ Timing Evidence measures supplied pilot observations. It does not prove producti
 - The real public incident replay can run public postmortem-derived scenarios through SMERC while preserving the source-fact versus analyst-assigned-signal boundary.
 - SPARK can convert non-secret intake evidence into strict Action Language for SMERC evaluation.
 - Timing Evidence can summarize pilot latency, cancellation, rollback, and unavailable-evaluation records.
+- Constraint Eligibility can separate hard-deny actions from actions that are allowed in principle but sensitive to recoverability.
 
 ## What This Build Does Not Prove
 
@@ -422,10 +442,11 @@ The implemented review layer is ready for a design-partner pilot to collect:
 
 The software can collect these measurements; only a real pilot can determine whether they support the product thesis.
 
-The next architecture layer is now represented as pilot-grade SPARK signal intake plus timing evidence:
+The newest architecture layers are represented as pilot-grade SPARK signal intake, Constraint Eligibility, and timing evidence:
 
 - SPARK normalizes action metadata, identity context, policy context, workflow context, anomaly signals, and evidence gaps before SMERC scoring through `reference_engine/spark_intake.py`.
+- Constraint Eligibility preserves hard denies and review-required decisions before recoverability scoring through `reference_engine/constraint_eligibility.py`.
 - Timing Evidence records decision latency, route latency, workflow overhead, cancellation window, cancellation result, rollback latency, rollback result, review latency, and unavailable evaluations through `reference_engine/timing_evidence.py`.
 - Both layers should preserve the non-secret pilot boundary and avoid raw customer payloads.
 
-See `docs/SPARK_Signal_Intake_And_Timing_Evidence.md`.
+See `docs/SPARK_Signal_Intake_And_Timing_Evidence.md` and `docs/Constraint_Eligibility_Layer.md`.

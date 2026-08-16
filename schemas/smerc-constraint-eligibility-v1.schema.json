@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-constraint-eligibility-v1.schema.json",
+  "title": "SMERC Constraint Eligibility v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "language_version",
+    "action_hash",
+    "action_id",
+    "constraint_eligible",
+    "eligibility_labels",
+    "recommended_runtime_posture",
+    "matched_prohibited_patterns",
+    "modifier_inputs",
+    "rule_results",
+    "plain_english_summary"
+  ],
+  "properties": {
+    "language_version": {"const": "smerc.constraint-eligibility.v1"},
+    "action_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "action_id": {"type": "string", "minLength": 1, "maxLength": 512},
+    "constraint_eligible": {"type": "boolean"},
+    "eligibility_labels": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "categorically_prohibited",
+          "requires_authority",
+          "constraint_eligible",
+          "review_required",
+          "recoverability_sensitive"
+        ]
+      }
+    },
+    "recommended_runtime_posture": {"enum": ["ALLOW", "THROTTLE", "DENY", "ESCALATE"]},
+    "matched_prohibited_patterns": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1, "maxLength": 128}
+    },
+    "modifier_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_confidence",
+        "identity_confidence",
+        "actor_authorized",
+        "approved_goal_consistent",
+        "environment",
+        "impact_scope",
+        "evidence_validity",
+        "adversarial_pressure",
+        "control_availability",
+        "sensitive_data",
+        "external_side_effect",
+        "reversibility",
+        "containment_strength",
+        "rollback_latency"
+      ],
+      "properties": {
+        "authority_confidence": {"$ref": "#/$defs/score"},
+        "identity_confidence": {"$ref": "#/$defs/score"},
+        "actor_authorized": {"type": "boolean"},
+        "approved_goal_consistent": {"type": "boolean"},
+        "environment": {"type": "string", "minLength": 1, "maxLength": 512},
+        "impact_scope": {"$ref": "#/$defs/score"},
+        "evidence_validity": {"$ref": "#/$defs/score"},
+        "adversarial_pressure": {"$ref": "#/$defs/score"},
+        "control_availability": {"$ref": "#/$defs/score"},
+        "sensitive_data": {"type": "boolean"},
+        "external_side_effect": {"type": "boolean"},
+        "reversibility": {"$ref": "#/$defs/score"},
+        "containment_strength": {"$ref": "#/$defs/score"},
+        "rollback_latency": {"$ref": "#/$defs/score"}
+      }
+    },
+    "rule_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule_id", "triggered", "severity", "reason", "recommended_posture"],
+        "properties": {
+          "rule_id": {"type": "string", "minLength": 1, "maxLength": 128},
+          "triggered": {"type": "boolean"},
+          "severity": {"enum": ["hard_deny", "freeze", "modifier"]},
+          "reason": {"type": "string", "minLength": 1, "maxLength": 512},
+          "recommended_posture": {
+            "type": ["string", "null"],
+            "enum": [
+              "categorically_prohibited",
+              "requires_authority",
+              "review_required",
+              null
+            ]
+          }
+        }
+      }
+    },
+    "plain_english_summary": {"type": "string", "minLength": 1, "maxLength": 1024}
+  },
+  "$defs": {
+    "score": {"type": "number", "minimum": 0, "maximum": 1}
+  }
+}

@@ -5,6 +5,7 @@
     "discover_smerc",
     "collect_signals_with_spark",
     "declare_action",
+    "check_constraint_eligibility",
     "evaluate_runtime_posture",
     "select_or_verify_executor",
     "route_with_sparta",
@@ -42,6 +43,15 @@
       "primary_artifacts": ["schemas/smerc-spark-evidence-v1.schema.json", "reference_engine/spark_intake.py", "docs/SPARK_Signal_Intake_And_Timing_Evidence.md"],
       "hands_off_to": ["smerc.action.v1", "smerc.decision.v1"],
       "claim_boundary": "SPARK evidence is a pilot contract; it does not prove that upstream systems supplied truthful signals."
+    },
+    {
+      "layer": "runtime_decision",
+      "contract": "smerc.constraint-eligibility.v1",
+      "owner": "SMERC",
+      "role": "Classify whether an action is eligible for constrained authorization before recoverability scoring is allowed to modify runtime posture.",
+      "primary_artifacts": ["schemas/smerc-constraint-eligibility-v1.schema.json", "reference_engine/constraint_eligibility.py", "docs/Constraint_Eligibility_Layer.md"],
+      "hands_off_to": ["smerc.decision.v1", "smerc.sparta-route.v1"],
+      "claim_boundary": "Constraint eligibility preserves hard denies and review-required paths; it does not prove caller authority or downstream enforcement truth."
     },
     {
       "layer": "runtime_decision",
@@ -167,6 +177,12 @@
       "to": "smerc.decision.v1",
       "required_artifact": "action_hash_or_replayable_action_payload",
       "rule": "Runtime decisions must preserve enough action context to replay the decision."
+    },
+    {
+      "from": "smerc.constraint-eligibility.v1",
+      "to": "smerc.decision.v1",
+      "required_artifact": "eligibility_labels_and_recommended_runtime_posture",
+      "rule": "Recoverability scoring may not relax a categorically prohibited, authority-failed, or review-required eligibility result."
     },
     {
       "from": "smerc.decision.v1",

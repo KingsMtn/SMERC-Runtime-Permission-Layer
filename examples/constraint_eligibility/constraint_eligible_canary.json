@@ -1,0 +1,42 @@
+{
+  "language_version": "smerc.action.v1",
+  "action": {
+    "id": "elig-canary-001",
+    "description": "AI release agent proposes a 5 percent production canary deployment",
+    "actor": "release-agent-prod",
+    "tool": "github-actions",
+    "type": "deploy_canary",
+    "target": {
+      "resource": "payments-api",
+      "environment": "production"
+    },
+    "authority": {
+      "basis": "approved deployment workflow with protected environment",
+      "confidence": 0.86
+    }
+  },
+  "signals": {
+    "base_action_risk": 0.56,
+    "evidence_validity": 0.82,
+    "anomaly_pressure": 0.18,
+    "impact_scope": 0.22
+  },
+  "recoverability": {
+    "reversibility": 0.77,
+    "containment_strength": 0.81,
+    "rollback_latency": 0.24,
+    "cancel_reliability": 0.88,
+    "rollback_method": "Rollback to previous image through protected deployment job"
+  },
+  "effects": {
+    "external_side_effect": true,
+    "sensitive_data": false
+  },
+  "context": {
+    "identity_confidence": 0.93,
+    "actor_authorized": true,
+    "approved_goal_consistent": true,
+    "control_availability": 0.91,
+    "adversarial_pressure": 0.12
+  }
+}
