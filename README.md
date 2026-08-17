@@ -81,6 +81,7 @@ The current build includes:
 - Timing Evidence reports for decision latency, route latency, workflow overhead, cancellation, rollback, and unavailable evaluations
 - self-contained GitHub Actions pilot package generator that assembles signal intake, eligibility, SMERC decision, execution route, DLL, DLL Intelligence, and timing evidence
 - scoring-invariant verification for recoverability and executor fitness math
+- Self-Governance Sandbox that scores proposed SMERC policy, threshold, adapter, and scoring changes before they can affect SMERC itself
 - commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service
 - OpenAPI 3.1 pilot API contract
@@ -178,6 +179,7 @@ Start here before reading the code:
 - `docs/Microsoft_Tech_Community_Post_Draft.md` gives a careful public discussion draft for Microsoft ecosystem feedback without implying partnership, certification, or production readiness.
 - `docs/AI_Assisted_Build_And_Red_Team_Strategy.md` explains how outside AI tools can help with engineering critique and agent simulation without replacing human validation.
 - `docs/Scoring_Invariants_And_Calibration.md` explains the declared scoring invariants, what passes today, and what still requires design-partner calibration.
+- `docs/Self_Governance_Sandbox.md` explains how proposed changes to SMERC itself are capped to test-only, reviewed, benchmarked, and recorded before activation.
 - `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
 - `docs/SPARTa_v2_Execution_Adapter_Framework.md` explains how SPARTa can mature into the execution-adapter layer for GitHub Actions, ticketing, review, cloud, and financial workflows.
 - `specification/SMERC_SPARTa_Vocabulary_v1.md` defines the machine-readable `smerc.sparta-vocabulary.v1` terms that agents and adapters should use instead of inventing route meanings.

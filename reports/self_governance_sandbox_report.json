@@ -1,0 +1,160 @@
+{
+  "activation_allowed_count": 0,
+  "ceiling_applied_count": 1,
+  "evidence_boundary": "Synthetic SMERC self-change examples. This is not proof that SMERC can autonomously improve itself.",
+  "generated_at": "2026-08-17T03:12:02+00:00",
+  "markdown_report": "# SMERC Self-Governance Sandbox Report\n\n- Generated: `2026-08-17T03:12:02+00:00`\n- Proposals evaluated: `3`\n- Self-governed posture counts: `{'DENY': 1, 'THROTTLE': 2}`\n- Self-change ceiling applied: `1`\n- Test-only proposals: `2`\n- Activation allowed: `0`\n\n## Proposal Results\n\n| Proposal | Base Posture | Self-Governed Posture | Test Only | Activation Allowed |\n|---|---:|---:|---:|---:|\n| SMERC-SELF-001 | ALLOW | THROTTLE | true | false |\n| SMERC-SELF-002 | THROTTLE | THROTTLE | true | false |\n| SMERC-SELF-003 | DENY | DENY | false | false |\n\n## Recommended Next Action\n\nUse self-governance outputs for local policy-change review only. Publish externally only after the workflow is tied to real pull requests, reviewer labels, and before/after benchmark evidence.\n\n## Evidence Boundary\n\nSynthetic SMERC self-change examples. This is not proof that SMERC can autonomously improve itself.\n",
+  "proposal_count": 3,
+  "recommended_next_action": "Use self-governance outputs for local policy-change review only. Publish externally only after the workflow is tied to real pull requests, reviewer labels, and before/after benchmark evidence.",
+  "results": [
+    {
+      "activation_allowed": false,
+      "base_reason_codes": [
+        "RECOVERABILITY_ACCEPTABLE"
+      ],
+      "base_smerc_posture": "ALLOW",
+      "change_type": "runtime_metadata_trust_change",
+      "evidence_boundary": "This sandbox governs proposed changes to SMERC itself. It does not authorize silent self-training, autonomous production policy mutation, or deployment without human-owned review and outcome evidence.",
+      "generated_at": "2026-08-17T03:12:02+00:00",
+      "plain_english_summary": "SMERC-SELF-001 looks recoverable enough to test, but SMERC self-changes are capped at test-only until human review, benchmark comparison, rollback evidence, and DLL recording are complete.",
+      "policy_update_requires_review": true,
+      "proposal_id": "SMERC-SELF-001",
+      "required_controls": [
+        "compare_before_after_benchmark",
+        "execute",
+        "record_policy_change_dll",
+        "record_replay",
+        "require_reviewer_approval",
+        "retain_cancel_handle",
+        "shadow_mode_before_activation",
+        "test_only"
+      ],
+      "scores": {
+        "cancel_reliability_score": 0.84,
+        "confidence_score": 0.777,
+        "irreversible_exposure_score": 0.286,
+        "operational_stress_score": 0.328,
+        "reversible_capacity_score": 0.775,
+        "risk_adjusted_authorization_score": 0.761
+      },
+      "self_change_ceiling_applied": true,
+      "self_governance_reason_codes": [
+        "SMERC_SELF_CHANGE_REVIEW_REQUIRED",
+        "ALLOW_CAPPED_FOR_GOVERNANCE_LAYER_CHANGE"
+      ],
+      "self_governed_posture": "THROTTLE",
+      "test_only_allowed": true,
+      "version": "smerc.self-governance-sandbox.v1"
+    },
+    {
+      "activation_allowed": false,
+      "base_reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "EVIDENCE_VALIDITY_LOW",
+        "AUTHORIZATION_CONFIDENCE_LOW",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "base_smerc_posture": "THROTTLE",
+      "change_type": "policy_threshold_change",
+      "evidence_boundary": "This sandbox governs proposed changes to SMERC itself. It does not authorize silent self-training, autonomous production policy mutation, or deployment without human-owned review and outcome evidence.",
+      "generated_at": "2026-08-17T03:12:02+00:00",
+      "plain_english_summary": "SMERC-SELF-002 may proceed only under constrained self-governance controls.",
+      "policy_update_requires_review": true,
+      "proposal_id": "SMERC-SELF-002",
+      "required_controls": [
+        "checkpoint_before_execution",
+        "compare_before_after_benchmark",
+        "limit_scope",
+        "preview_before_execution",
+        "rate_limit_external_side_effect",
+        "record_policy_change_dll",
+        "record_replay",
+        "require_reviewer_approval",
+        "require_rollback_plan",
+        "shadow_mode_before_activation",
+        "test_only"
+      ],
+      "scores": {
+        "cancel_reliability_score": 0.51,
+        "confidence_score": 0.487,
+        "irreversible_exposure_score": 0.635,
+        "operational_stress_score": 0.618,
+        "reversible_capacity_score": 0.448,
+        "risk_adjusted_authorization_score": 0.439
+      },
+      "self_change_ceiling_applied": false,
+      "self_governance_reason_codes": [
+        "SMERC_SELF_CHANGE_REVIEW_REQUIRED",
+        "PRODUCTION_POLICY_CHANGE"
+      ],
+      "self_governed_posture": "THROTTLE",
+      "test_only_allowed": true,
+      "version": "smerc.self-governance-sandbox.v1"
+    },
+    {
+      "activation_allowed": false,
+      "base_reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "EVIDENCE_VALIDITY_LOW",
+        "AUTHORIZATION_CONFIDENCE_LOW",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "base_smerc_posture": "DENY",
+      "change_type": "autonomous_policy_update",
+      "evidence_boundary": "This sandbox governs proposed changes to SMERC itself. It does not authorize silent self-training, autonomous production policy mutation, or deployment without human-owned review and outcome evidence.",
+      "generated_at": "2026-08-17T03:12:02+00:00",
+      "plain_english_summary": "SMERC-SELF-003 should not be activated because the proposed governance-layer change is not structurally defensible.",
+      "policy_update_requires_review": true,
+      "proposal_id": "SMERC-SELF-003",
+      "required_controls": [
+        "block_execution",
+        "compare_before_after_benchmark",
+        "define_policy_rollback_plan",
+        "do_not_activate_policy_change",
+        "explain_denial",
+        "preserve_replay",
+        "record_policy_change_dll",
+        "require_before_after_benchmark",
+        "require_design_review",
+        "require_human_reviewer",
+        "require_new_request",
+        "require_regression_suite",
+        "require_review_record",
+        "require_reviewer_approval",
+        "retain_previous_policy_version",
+        "start_in_shadow_mode"
+      ],
+      "scores": {
+        "cancel_reliability_score": 0.38,
+        "confidence_score": 0.292,
+        "irreversible_exposure_score": 0.85,
+        "operational_stress_score": 0.799,
+        "reversible_capacity_score": 0.294,
+        "risk_adjusted_authorization_score": 0.258
+      },
+      "self_change_ceiling_applied": false,
+      "self_governance_reason_codes": [
+        "SMERC_SELF_CHANGE_REVIEW_REQUIRED",
+        "SELF_CHANGE_EVIDENCE_INCOMPLETE",
+        "AUTONOMOUS_POLICY_MUTATION_PROHIBITED",
+        "PRODUCTION_POLICY_CHANGE"
+      ],
+      "self_governed_posture": "DENY",
+      "test_only_allowed": false,
+      "version": "smerc.self-governance-sandbox.v1"
+    }
+  ],
+  "self_governed_posture_counts": {
+    "DENY": 1,
+    "THROTTLE": 2
+  },
+  "test_only_count": 2,
+  "version": "smerc.self-governance-sandbox-report.v1"
+}

@@ -1,0 +1,137 @@
+{
+  "schema": "smerc.self-governance-change-proposals.v1",
+  "proposals": [
+    {
+      "schema": "smerc.self-governance-change.v1",
+      "proposal_id": "SMERC-SELF-001",
+      "change_type": "runtime_metadata_trust_change",
+      "proposed_action": {
+        "action_id": "SMERC_CHANGE_TRUST_GATE",
+        "description": "Add a Runtime Evidence Trust Gate that caps decisions when high-impact metadata is agent self-reported.",
+        "actor": "smerc_maintainer",
+        "tool": "github_actions",
+        "action_type": "runtime_metadata_trust_change",
+        "base_action_risk": 0.52,
+        "reversibility": 0.74,
+        "containment_strength": 0.82,
+        "rollback_latency": 0.28,
+        "evidence_validity": 0.78,
+        "anomaly_pressure": 0.18,
+        "impact_scope": 0.42,
+        "cancel_reliability": 0.84,
+        "authorization_confidence": 0.74,
+        "external_side_effect": false,
+        "sensitive_data": false,
+        "context": {
+          "domain_profile": "github_actions",
+          "tests": "focused_and_full_suite_pass"
+        }
+      },
+      "reviewer_evidence": {
+        "human_reviewer_required": true,
+        "review_record_required": true
+      },
+      "rollback_plan": {
+        "rollback_defined": true,
+        "previous_policy_retained": true
+      },
+      "benchmark_evidence": {
+        "before_after_required": true,
+        "regression_suite_required": true
+      },
+      "activation": {
+        "shadow_mode_first": true,
+        "affects_production_policy": false,
+        "automatic_activation": false
+      }
+    },
+    {
+      "schema": "smerc.self-governance-change.v1",
+      "proposal_id": "SMERC-SELF-002",
+      "change_type": "policy_threshold_change",
+      "proposed_action": {
+        "action_id": "SMERC_CHANGE_ALLOW_THRESHOLD",
+        "description": "Lower the ALLOW threshold to increase the number of automated releases.",
+        "actor": "smerc_maintainer",
+        "tool": "github_actions",
+        "action_type": "policy_threshold_change",
+        "base_action_risk": 0.78,
+        "reversibility": 0.43,
+        "containment_strength": 0.48,
+        "rollback_latency": 0.62,
+        "evidence_validity": 0.46,
+        "anomaly_pressure": 0.38,
+        "impact_scope": 0.72,
+        "cancel_reliability": 0.51,
+        "authorization_confidence": 0.45,
+        "external_side_effect": true,
+        "sensitive_data": false,
+        "context": {
+          "domain_profile": "github_actions",
+          "tests": "not_customer_calibrated"
+        }
+      },
+      "reviewer_evidence": {
+        "human_reviewer_required": true,
+        "review_record_required": true
+      },
+      "rollback_plan": {
+        "rollback_defined": true,
+        "previous_policy_retained": true
+      },
+      "benchmark_evidence": {
+        "before_after_required": true,
+        "regression_suite_required": true
+      },
+      "activation": {
+        "shadow_mode_first": true,
+        "affects_production_policy": true,
+        "automatic_activation": false
+      }
+    },
+    {
+      "schema": "smerc.self-governance-change.v1",
+      "proposal_id": "SMERC-SELF-003",
+      "change_type": "autonomous_policy_update",
+      "proposed_action": {
+        "action_id": "SMERC_CHANGE_SELF_TRAIN",
+        "description": "Allow SMERC to automatically rewrite scoring weights from its own prior outputs without human review.",
+        "actor": "agentic_builder",
+        "tool": "github_actions",
+        "action_type": "autonomous_policy_update",
+        "base_action_risk": 0.91,
+        "reversibility": 0.25,
+        "containment_strength": 0.31,
+        "rollback_latency": 0.74,
+        "evidence_validity": 0.32,
+        "anomaly_pressure": 0.64,
+        "impact_scope": 0.88,
+        "cancel_reliability": 0.38,
+        "authorization_confidence": 0.22,
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "context": {
+          "domain_profile": "github_actions",
+          "tests": "none"
+        }
+      },
+      "reviewer_evidence": {
+        "human_reviewer_required": false,
+        "review_record_required": false
+      },
+      "rollback_plan": {
+        "rollback_defined": false,
+        "previous_policy_retained": false
+      },
+      "benchmark_evidence": {
+        "before_after_required": false,
+        "regression_suite_required": false
+      },
+      "activation": {
+        "shadow_mode_first": false,
+        "affects_production_policy": true,
+        "automatic_activation": true
+      }
+    }
+  ]
+}
