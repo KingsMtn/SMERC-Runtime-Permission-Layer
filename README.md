@@ -144,6 +144,7 @@ Start here before reading the code:
 - `docs/End_To_End_PR_Guardian_Demo.md` shows the current modules working as one synthetic review loop from AI-assisted pull request to DLL Intelligence.
 - `docs/Competitive_Gaps_And_Build_Priorities.md` states what adjacent products do better today and what SMERC should build next.
 - `docs/Competitive_Proof_Data_Map.md` maps the proof categories used by adjacent MCP gateway, AI gateway, policy, and runtime governance products to SMERC-compatible public evidence.
+- `docs/Competitive_Proof_Parity_Harness.md` explains the one-command report that runs SMERC across those same proof categories.
 - `examples/runtime_contract_index.json` gives agents, adapters, SDKs, and reviewers the canonical contract handoff map.
 - `docs/Maturity_Model.md` defines the evidence-based maturity scale used for SMERC claims.
 - `docs/CISO_30_Minute_Review_Package.md` gives CISOs a timed review path for deciding whether a shadow-mode pilot is justified.
