@@ -1,0 +1,92 @@
+{
+  "schema": "smerc.mcp-tool-risk-examples.v1",
+  "tools": {
+    "delete_customer_records": {
+      "name": "delete_customer_records",
+      "description": "Delete customer records after an AI support workflow identifies duplicate accounts.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "customer_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": ["customer_ids", "reason"]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "supportsRollback": false,
+        "supportsScopeLimit": true,
+        "supportsDryRun": true
+      },
+      "metadata": {
+        "owner": "support-automation",
+        "environment": "production"
+      }
+    },
+    "search_internal_docs": {
+      "name": "search_internal_docs",
+      "description": "Search internal engineering documentation for deployment rollback instructions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": ["query"]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "supportsRollback": true,
+        "supportsScopeLimit": true,
+        "supportsDryRun": true
+      },
+      "metadata": {
+        "owner": "developer-experience",
+        "environment": "internal-readonly"
+      }
+    },
+    "deploy_production_service": {
+      "name": "deploy_production_service",
+      "description": "Deploy a production service from the current build artifact.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["service", "version"]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "supportsRollback": true,
+        "supportsScopeLimit": true,
+        "supportsDryRun": true
+      },
+      "metadata": {
+        "owner": "platform-engineering",
+        "environment": "production"
+      }
+    }
+  }
+}

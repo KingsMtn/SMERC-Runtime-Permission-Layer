@@ -1,0 +1,88 @@
+{
+  "derived_risk_signals": {
+    "anomaly_pressure": 0.24,
+    "authorization_confidence": 0.82,
+    "base_action_risk": 0.775,
+    "cancel_reliability": 0.4,
+    "containment_strength": 0.52,
+    "evidence_validity": 0.87,
+    "impact_scope": 0.795,
+    "reversibility": 0.22,
+    "rollback_latency": 0.64
+  },
+  "evidence_boundary": "This scanner uses deterministic keyword, annotation, and schema heuristics to triage MCP tool definitions. It is a front-door risk scanner, not proof that a live tool call is safe or unsafe.",
+  "generated_at": "2026-08-17T01:48:39+00:00",
+  "irreversible_exposure_score": 0.844,
+  "likely_smerc_posture": "DENY",
+  "mcp_governance_request_skeleton": {
+    "agent": {
+      "agent_id": "agent_under_review",
+      "display_name": "Agent under review",
+      "provider": "unknown"
+    },
+    "mcp_request_id": "MCP_DELETE_CUSTOMER_RECORDS_REVIEW",
+    "risk_signals": {
+      "anomaly_pressure": 0.24,
+      "authorization_confidence": 0.82,
+      "base_action_risk": 0.775,
+      "cancel_reliability": 0.4,
+      "containment_strength": 0.52,
+      "evidence_validity": 0.87,
+      "impact_scope": 0.795,
+      "reversibility": 0.22,
+      "rollback_latency": 0.64
+    },
+    "schema": "smerc.mcp-tool-governance.v1",
+    "server": {
+      "name": "mcp_server_under_review",
+      "transport": "unknown",
+      "trust_boundary": "unknown"
+    },
+    "tool_call": {
+      "description": "Delete customer records after an AI support workflow identifies duplicate accounts.",
+      "domain_profile": "customer_comms",
+      "external_side_effect": true,
+      "max_scope_units": 1,
+      "operation_class": "delete",
+      "requested_capability": "delete",
+      "requested_scope_units": 1,
+      "sensitive_data": true,
+      "supports_checkpoint": false,
+      "supports_dry_run": true,
+      "supports_human_approval": true,
+      "supports_rollback": false,
+      "supports_scope_limit": true,
+      "tool_name": "delete_customer_records"
+    }
+  },
+  "missing_metadata": [],
+  "operation_class": "delete",
+  "plain_english_summary": "SMERC scanned MCP tool `delete_customer_records` as a likely `delete` operation and returned DENY. This should be treated as a triage result for reviewers before the tool is granted autonomous execution authority.",
+  "reason_codes": [
+    "CANCEL_RELIABILITY_WEAK",
+    "EXTERNAL_SIDE_EFFECT",
+    "HIGH_IMPACT_TOOL_CLASS",
+    "IMPACT_SCOPE_WIDE",
+    "IRREVERSIBLE_EXPOSURE_HIGH",
+    "LOW_INFERRED_REVERSIBILITY",
+    "RECOVERY_CAPACITY_LOW",
+    "SENSITIVE_DATA",
+    "SENSITIVE_DOMAIN_TERMS",
+    "TOOL_CAN_CREATE_SIDE_EFFECTS"
+  ],
+  "recommended_controls": [
+    "block_execution",
+    "explain_denial",
+    "preserve_replay",
+    "record_decision_lifecycle",
+    "require_dry_run",
+    "require_human_approval",
+    "require_new_request",
+    "require_rollback_plan",
+    "require_scope_limit"
+  ],
+  "reversible_capacity_score": 0.388,
+  "risk_adjusted_authorization_score": 0.455,
+  "schema": "smerc.mcp-tool-risk-scanner.v1",
+  "tool_name": "delete_customer_records"
+}

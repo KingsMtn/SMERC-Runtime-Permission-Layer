@@ -59,6 +59,7 @@ The current build includes:
 - static adapter conformance report that checks declared adapter capabilities across ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE route behavior
 - GitHub deployment adapter route binding that verifies route replay, posture, executable state, and required controls before command execution
 - MCP-style tool governance adapter that maps proposed agent tool calls into SMERC recoverability posture, route behavior, and client/proxy recommendations before execution
+- MCP Tool Risk Scanner that lets reviewers triage MCP tool definitions before granting autonomous agents tool access
 - MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses with DLL evidence
 - MCP Transport Proxy sample that wraps a JSON-RPC-style `tools/call` request and returns either a forwarded result or a SMERC-blocked proxy error
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
@@ -163,6 +164,7 @@ Start here before reading the code:
 - `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.
 - `docs/Agent_Handshake_Protocol.md` explains how an agent discovers SMERC, declares itself, proposes an action, receives a posture, and preserves a replay record.
 - `docs/MCP_Tool_Governance.md` explains how SMERC can score MCP-style tool calls before execution and map them through SPARTa without replacing MCP, OAuth, IAM, or prompt defenses.
+- `docs/MCP_Tool_Risk_Scanner.md` explains how to scan MCP tool definitions for recoverability and autonomy risk before those tools are granted to agents.
 - `docs/MCP_Proxy_Runner.md` explains the local MCP proxy runner that returns shadow/enforce proxy actions and records Decision Lifecycle Ledger evidence.
 - `docs/MCP_Transport_Proxy.md` explains the local JSON-RPC-style transport proxy sample for `tools/call` forwarding or blocking.
 - `docs/Self_Service_Pilot_Connector.md` explains how a reviewer can run a mixed metadata-only sample bundle and receive a compact pilot-fit decision package.
