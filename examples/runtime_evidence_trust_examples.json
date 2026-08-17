@@ -1,0 +1,146 @@
+{
+  "schema": "smerc.runtime-evidence-trust-examples.v1",
+  "scenarios": [
+    {
+      "schema": "smerc.runtime-evidence-trust-input.v1",
+      "action_id": "trusted-github-actions-deploy",
+      "evidence_sources": [
+        {
+          "source": "github_oidc",
+          "assertion_type": "github_oidc_claims",
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 42
+        },
+        {
+          "source": "deployment_adapter",
+          "assertion_type": "deployment_adapter_receipt",
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 18
+        },
+        {
+          "source": "review_ticket",
+          "assertion_type": "human_review_record",
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 240
+        }
+      ],
+      "required_fields": [
+        "actor",
+        "authority_basis",
+        "environment",
+        "operation",
+        "resource",
+        "impact_scope",
+        "reversibility",
+        "rollback_method",
+        "containment_strength"
+      ],
+      "observed_fields": {
+        "actor": "github_oidc",
+        "authority_basis": "review_ticket",
+        "environment": "github_oidc",
+        "operation": "deployment_adapter",
+        "resource": "deployment_adapter",
+        "impact_scope": "deployment_adapter",
+        "reversibility": "deployment_adapter",
+        "rollback_method": "deployment_adapter",
+        "containment_strength": "deployment_adapter"
+      },
+      "agent_supplied_fields": []
+    },
+    {
+      "schema": "smerc.runtime-evidence-trust-input.v1",
+      "action_id": "mixed-mcp-tool-call",
+      "evidence_sources": [
+        {
+          "source": "mcp_proxy",
+          "assertion_type": "mcp_proxy_observation",
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 65
+        },
+        {
+          "source": "agent_request",
+          "assertion_type": "agent_self_description",
+          "authenticated": false,
+          "signed": false,
+          "agent_supplied": true,
+          "freshness_seconds": 65
+        }
+      ],
+      "required_fields": [
+        "actor",
+        "authority_basis",
+        "environment",
+        "operation",
+        "resource",
+        "impact_scope",
+        "reversibility",
+        "rollback_method",
+        "containment_strength"
+      ],
+      "observed_fields": {
+        "actor": "mcp_proxy",
+        "environment": "mcp_proxy",
+        "operation": "mcp_proxy",
+        "resource": "mcp_proxy",
+        "impact_scope": "mcp_proxy",
+        "reversibility": "agent_request",
+        "rollback_method": "agent_request",
+        "containment_strength": "mcp_proxy"
+      },
+      "agent_supplied_fields": [
+        "reversibility",
+        "rollback_method"
+      ]
+    },
+    {
+      "schema": "smerc.runtime-evidence-trust-input.v1",
+      "action_id": "agent-self-reported-database-cleanup",
+      "evidence_sources": [
+        {
+          "source": "agent_request",
+          "assertion_type": "agent_self_description",
+          "authenticated": false,
+          "signed": false,
+          "agent_supplied": true,
+          "freshness_seconds": 7200
+        }
+      ],
+      "required_fields": [
+        "actor",
+        "authority_basis",
+        "environment",
+        "operation",
+        "resource",
+        "impact_scope",
+        "reversibility",
+        "rollback_method",
+        "containment_strength"
+      ],
+      "observed_fields": {
+        "actor": "agent_request",
+        "operation": "agent_request",
+        "resource": "agent_request",
+        "impact_scope": "agent_request",
+        "reversibility": "agent_request",
+        "rollback_method": "agent_request"
+      },
+      "agent_supplied_fields": [
+        "actor",
+        "operation",
+        "resource",
+        "impact_scope",
+        "reversibility",
+        "rollback_method"
+      ]
+    }
+  ]
+}

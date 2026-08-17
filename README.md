@@ -76,6 +76,7 @@ The current build includes:
 - machine-readable SMERC Beacon manifest for AI/tool discovery
 - Agent Handshake Protocol connecting beacon discovery to executor routing and action posture evaluation
 - signal and evidence intake path that validates non-secret evidence and compiles it into strict SMERC Action Language; internally this path is called SPARK
+- Runtime Evidence Trust Gate that caps or rejects decisions when high-impact metadata comes only from the proposing agent instead of a trusted proxy, OIDC claim, adapter, audit event, ticket, or reviewer record
 - Constraint Eligibility Layer that preserves hard denies before recoverability can modify a runtime decision
 - Timing Evidence reports for decision latency, route latency, workflow overhead, cancellation, rollback, and unavailable evaluations
 - self-contained GitHub Actions pilot package generator that assembles signal intake, eligibility, SMERC decision, execution route, DLL, DLL Intelligence, and timing evidence
@@ -130,6 +131,7 @@ Start here before reading the code:
 - `docs/Core_Pilot_Package.md` builds the core pilot review folder in one command from routing, action intake, handoff, and evidence summary inputs.
 - `docs/Runtime_Contract_Index.md` explains the machine-readable `smerc.runtime-contract-index.v1` assembly map for SMERC's contracts and handoffs.
 - `docs/SPARK_Signal_Intake_And_Timing_Evidence.md` explains the proposed SPARK signal-intake layer and timing evidence metrics around recoverability decisions.
+- `docs/Runtime_Evidence_Trust_Gate.md` explains how SMERC screens whether action metadata is trustworthy enough to support a runtime decision.
 - `docs/Constraint_Eligibility_Layer.md` explains why recoverability is a permission modifier, not a substitute for authority, hard policy, or categorical denies.
 - `docs/Policy_Bundle_Manifest.md` explains signed, versioned policy bundle manifests for reviewed SPL, profile, control, approval, and activation evidence.
 - `docs/Operator_Status_And_OPA_Log_Export.md` explains the pilot operator status report, `/v1/operator/status` API, and OPA-style decision log export for existing policy/audit pipelines.

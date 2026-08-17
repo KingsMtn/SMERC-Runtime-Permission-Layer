@@ -1,0 +1,166 @@
+{
+  "admissible_count": 1,
+  "average_trusted_metadata_score": 0.474,
+  "capped_posture_count": 2,
+  "evidence_boundary": "Synthetic examples demonstrate metadata-trust handling. Replace these records with customer-approved runtime metadata from proxies, OIDC claims, adapters, ticketing systems, or audit logs during a pilot.",
+  "generated_at": "2026-08-17T02:51:59+00:00",
+  "markdown_report": "# SMERC Runtime Evidence Trust Gate Report\n\n- Generated: `2026-08-17T02:51:59+00:00`\n- Scenarios evaluated: `3`\n- Trust level counts: `{'HIGH': 1, 'LOW': 2}`\n- Average trusted metadata score: `0.474`\n- Admissible for runtime decision: `1`\n- Decisions capped below ALLOW: `2`\n\n## Scenario Results\n\n| Action | Trust | Score | Max Posture | Missing Fields | High-Impact Self-Reported Fields |\n|---|---:|---:|---:|---|---|\n| trusted-github-actions-deploy | HIGH | 1.0 | ALLOW | None | None |\n| mixed-mcp-tool-call | LOW | 0.423 | FREEZE | authority_basis | reversibility, rollback_method |\n| agent-self-reported-database-cleanup | LOW | 0.0 | FREEZE | authority_basis, containment_strength, environment | actor, impact_scope, operation, resource, reversibility, rollback_method |\n\n## Evidence Boundary\n\nSynthetic examples demonstrate metadata-trust handling. Replace these records with customer-approved runtime metadata from proxies, OIDC claims, adapters, ticketing systems, or audit logs during a pilot.\n",
+  "results": [
+    {
+      "action_id": "trusted-github-actions-deploy",
+      "admissible_for_runtime_decision": true,
+      "agent_supplied_fields": [],
+      "agent_supplied_penalty": 0.0,
+      "authentication_score": 1.0,
+      "evidence_boundary": "This gate evaluates whether supplied metadata is reliable enough for shadow-mode governance evidence. It does not prove the action is safe, production-ready, compliant, or customer-validated.",
+      "field_coverage_score": 1.0,
+      "freshness_score": 1.0,
+      "generated_at": "2026-08-17T02:51:59+00:00",
+      "high_impact_self_reported_fields": [],
+      "independence_score": 1.0,
+      "max_recommended_posture": "ALLOW",
+      "missing_required_fields": [],
+      "plain_english_summary": "The supplied runtime metadata is fresh, authenticated, independently observed, and sufficient for normal shadow-mode decision evidence.",
+      "reason_codes": [
+        "RUNTIME_EVIDENCE_TRUST_HIGH"
+      ],
+      "required_controls": [
+        "no_additional_metadata_trust_control_required"
+      ],
+      "source_trust_score": 1.0,
+      "trust_level": "HIGH",
+      "trusted_fields": [
+        "actor",
+        "authority_basis",
+        "containment_strength",
+        "environment",
+        "impact_scope",
+        "operation",
+        "resource",
+        "reversibility",
+        "rollback_method"
+      ],
+      "trusted_metadata_score": 1.0,
+      "version": "smerc.runtime-evidence-trust.v1"
+    },
+    {
+      "action_id": "mixed-mcp-tool-call",
+      "admissible_for_runtime_decision": false,
+      "agent_supplied_fields": [
+        "reversibility",
+        "rollback_method"
+      ],
+      "agent_supplied_penalty": 0.25,
+      "authentication_score": 0.5,
+      "evidence_boundary": "This gate evaluates whether supplied metadata is reliable enough for shadow-mode governance evidence. It does not prove the action is safe, production-ready, compliant, or customer-validated.",
+      "field_coverage_score": 0.889,
+      "freshness_score": 1.0,
+      "generated_at": "2026-08-17T02:51:59+00:00",
+      "high_impact_self_reported_fields": [
+        "reversibility",
+        "rollback_method"
+      ],
+      "independence_score": 0.5,
+      "max_recommended_posture": "FREEZE",
+      "missing_required_fields": [
+        "authority_basis"
+      ],
+      "plain_english_summary": "The action includes high-impact fields supplied by the proposing agent. SMERC should not treat this metadata as sufficient for autonomous release; cap the decision at FREEZE until trusted runtime or adapter evidence replaces those fields.",
+      "reason_codes": [
+        "RUNTIME_EVIDENCE_TRUST_LOW",
+        "REQUIRED_METADATA_INCOMPLETE",
+        "UNRECOGNIZED_EVIDENCE_ASSERTION_TYPE",
+        "UNAUTHENTICATED_OR_UNSIGNED_SOURCE",
+        "AGENT_SUPPLIED_METADATA_PRESENT",
+        "HIGH_IMPACT_METADATA_SELF_REPORTED"
+      ],
+      "required_controls": [
+        "require_trusted_runtime_observation",
+        "do_not_allow_based_on_agent_self_description",
+        "replace_high_impact_fields_with_proxy_or_adapter_evidence",
+        "collect_missing_required_metadata_before_recommendation"
+      ],
+      "source_trust_score": 0.5,
+      "trust_level": "LOW",
+      "trusted_fields": [
+        "actor",
+        "containment_strength",
+        "environment",
+        "impact_scope",
+        "operation",
+        "resource",
+        "reversibility",
+        "rollback_method"
+      ],
+      "trusted_metadata_score": 0.423,
+      "version": "smerc.runtime-evidence-trust.v1"
+    },
+    {
+      "action_id": "agent-self-reported-database-cleanup",
+      "admissible_for_runtime_decision": false,
+      "agent_supplied_fields": [
+        "actor",
+        "impact_scope",
+        "operation",
+        "resource",
+        "reversibility",
+        "rollback_method"
+      ],
+      "agent_supplied_penalty": 0.39,
+      "authentication_score": 0.0,
+      "evidence_boundary": "This gate evaluates whether supplied metadata is reliable enough for shadow-mode governance evidence. It does not prove the action is safe, production-ready, compliant, or customer-validated.",
+      "field_coverage_score": 0.667,
+      "freshness_score": 0.4,
+      "generated_at": "2026-08-17T02:51:59+00:00",
+      "high_impact_self_reported_fields": [
+        "actor",
+        "impact_scope",
+        "operation",
+        "resource",
+        "reversibility",
+        "rollback_method"
+      ],
+      "independence_score": 0.0,
+      "max_recommended_posture": "FREEZE",
+      "missing_required_fields": [
+        "authority_basis",
+        "containment_strength",
+        "environment"
+      ],
+      "plain_english_summary": "The action includes high-impact fields supplied by the proposing agent. SMERC should not treat this metadata as sufficient for autonomous release; cap the decision at FREEZE until trusted runtime or adapter evidence replaces those fields.",
+      "reason_codes": [
+        "RUNTIME_EVIDENCE_TRUST_LOW",
+        "REQUIRED_METADATA_INCOMPLETE",
+        "UNRECOGNIZED_EVIDENCE_ASSERTION_TYPE",
+        "UNAUTHENTICATED_OR_UNSIGNED_SOURCE",
+        "AGENT_SUPPLIED_METADATA_PRESENT",
+        "HIGH_IMPACT_METADATA_SELF_REPORTED",
+        "STALE_RUNTIME_EVIDENCE"
+      ],
+      "required_controls": [
+        "require_trusted_runtime_observation",
+        "do_not_allow_based_on_agent_self_description",
+        "replace_high_impact_fields_with_proxy_or_adapter_evidence",
+        "collect_missing_required_metadata_before_recommendation"
+      ],
+      "source_trust_score": 0.0,
+      "trust_level": "LOW",
+      "trusted_fields": [
+        "actor",
+        "impact_scope",
+        "operation",
+        "resource",
+        "reversibility",
+        "rollback_method"
+      ],
+      "trusted_metadata_score": 0.0,
+      "version": "smerc.runtime-evidence-trust.v1"
+    }
+  ],
+  "scenario_count": 3,
+  "trust_level_counts": {
+    "HIGH": 1,
+    "LOW": 2
+  },
+  "version": "smerc.runtime-evidence-trust-report.v1"
+}
