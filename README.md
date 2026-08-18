@@ -4,7 +4,7 @@
 
 ## External Technical Review Edition
 
-SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture:
+SMERC, short for Structural Momentum Entropy Range Confidence, is recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, and high-impact workflows. It evaluates a proposed action before execution and returns a replayable posture:
 
 - `ALLOW`
 - `THROTTLE`
@@ -12,7 +12,7 @@ SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permis
 - `DENY`
 - `ESCALATE`
 
-The first integration is a GitHub Actions gate for AI-assisted code, deployment, and infrastructure workflows.
+The first integration is a GitHub Actions gate for AI-assisted code, deployment, and infrastructure workflows. The same core contracts also support MCP-style tool-call governance and metadata-trust checks for agentic runtimes.
 
 ## Start Here: GitHub Actions Shadow-Mode Pilot
 
