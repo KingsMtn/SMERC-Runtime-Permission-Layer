@@ -198,6 +198,7 @@ Start here before reading the code:
 - `docs/SRE_Incident_Inspired_Governance.md` explains how SMERC complements reliability automation by scoring whether incident mitigations are recoverable enough to execute.
 - `docs/SMERC_F_Stablecoin_Blockchain_Pilot_Fit.md` explains when stablecoin, blockchain, payment, treasury, or tokenized-finance teams are a strong SMERC-F fit.
 - `docs/SMERC_F_Fortune_500_Financial_Services_Review.md` gives Fortune 500 financial-services reviewers a safe metadata-only evaluation path for automated financial actions.
+- `docs/SMERC_F_Financial_Public_Data_Replay.md` explains how public-data-shaped stablecoin, blockchain, and incident records are converted into SMERC-F replay scenarios.
 - `pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md` gives a bounded metadata-only SMERC-F pilot path for financial-action review without live fund movement.
 - `pilot_package/Fortune_500_Financial_Services_Review_Checklist.md` screens whether a large financial-services review has the owners, data boundary, and metrics needed before a pilot is offered.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
@@ -804,6 +805,16 @@ python -m reference_engine.financial_replay \
   examples/financial_replay_scenarios.json \
   --report reports/SMERC_F_Replay_Report.md
 ```
+
+Run the SMERC-F public-data replay harness:
+
+```bash
+python -m reference_engine.smerc_f_public_data_replay \
+  examples/smerc_f_public_data_replay_inputs.json \
+  --pretty
+```
+
+The public-data replay harness expands 10 public-data-shaped source rows into 50 replay scenarios. It is useful for showing ingestion, transformation, posture, and report shape. It is not customer validation, address attribution, AML screening, sanctions screening, transaction monitoring, custody, settlement, payment execution, incident-prevention proof, or production certification.
 
 ## GitHub Actions Modes
 
