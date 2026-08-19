@@ -199,6 +199,7 @@ Start here before reading the code:
 - `docs/SMERC_F_Stablecoin_Blockchain_Pilot_Fit.md` explains when stablecoin, blockchain, payment, treasury, or tokenized-finance teams are a strong SMERC-F fit.
 - `docs/SMERC_F_Fortune_500_Financial_Services_Review.md` gives Fortune 500 financial-services reviewers a safe metadata-only evaluation path for automated financial actions.
 - `docs/SMERC_F_Financial_Source_Ingestion.md` explains how exported financial, stablecoin, blockchain, and incident metadata can be normalized into SMERC-F replay inputs.
+- `docs/SMERC_F_Regulatory_Context_Profile.md` explains how legislation-inspired operational context can inform SMERC-F scoring without making legal or compliance claims.
 - `docs/SMERC_F_Financial_Public_Data_Replay.md` explains how public-data-shaped stablecoin, blockchain, and incident records are converted into SMERC-F replay scenarios.
 - `pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md` gives a bounded metadata-only SMERC-F pilot path for financial-action review without live fund movement.
 - `pilot_package/Fortune_500_Financial_Services_Review_Checklist.md` screens whether a large financial-services review has the owners, data boundary, and metrics needed before a pilot is offered.
@@ -826,6 +827,14 @@ python -m reference_engine.smerc_f_source_ingestion \
 ```
 
 The source ingestion adapter accepts Dune-, BigQuery-, Chainabuse-, DefiLlama-, and Elliptic-shaped exported metadata, normalizes it into SMERC-F replay rows, and regenerates the replay report. It does not call live vendor APIs, enrich addresses, determine illicit activity, move funds, or certify financial controls.
+
+Run the SMERC-F regulatory context overlay:
+
+```bash
+python -m reference_engine.smerc_f_regulatory_context --pretty
+```
+
+The regulatory context overlay uses legislation-inspired operational fields such as issuer status, reserve sensitivity, redemption pressure, custody dependency, lawful-order capability, jurisdiction complexity, customer-impact radius, and disclosure gaps to compare baseline replay with context-enriched replay. It does not interpret law, provide legal advice, determine compliance, screen AML or sanctions, classify illicit activity, move funds, or certify financial controls.
 
 ## GitHub Actions Modes
 
