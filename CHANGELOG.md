@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a SMERC-F financial source ingestion adapter that normalizes Dune-, BigQuery-, Chainabuse-, DefiLlama-, and Elliptic-shaped exported metadata into replay-ready SMERC-F rows and bounded reports.
 - Added a SMERC-F financial public-data replay harness that expands Dune-, BigQuery-, Chainabuse-, DefiLlama-, and Elliptic-shaped public records into 50 recoverability-scored financial action scenarios with bounded reports and tests.
 - Added a Fortune 500 financial-services review package and checklist for SMERC-F, focusing on metadata-only shadow-mode evaluation of automated financial actions without claiming AML, fraud, custody, settlement, trading, payment execution, or production-certified financial control.
 - Added public language and naming guidance so external surfaces lead with familiar category language before internal layer names such as SPARK, SPARTa, and DLL.
