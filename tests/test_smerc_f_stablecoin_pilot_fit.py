@@ -29,6 +29,20 @@ class SMERCFStablecoinPilotFitTests(unittest.TestCase):
         self.assertIn("docs/SMERC_F_Stablecoin_Blockchain_Pilot_Fit.md", readme)
         self.assertIn("pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md", readme)
 
+    def test_fortune_500_financial_review_package_is_bounded(self):
+        doc = (ROOT / "docs" / "SMERC_F_Fortune_500_Financial_Services_Review.md").read_text()
+        checklist = (ROOT / "pilot_package" / "Fortune_500_Financial_Services_Review_Checklist.md").read_text()
+        readme = (ROOT / "README.md").read_text()
+
+        combined = doc + "\n" + checklist
+        self.assertIn("Fortune 500", doc)
+        self.assertIn("metadata-only", combined)
+        self.assertIn("Do not connect SMERC-F to live funds", doc)
+        self.assertIn("not AML, fraud detection, custody, settlement, trading, or payment execution", checklist)
+        self.assertIn("reviewer agreement rate", combined)
+        self.assertIn("docs/SMERC_F_Fortune_500_Financial_Services_Review.md", readme)
+        self.assertIn("pilot_package/Fortune_500_Financial_Services_Review_Checklist.md", readme)
+
 
 if __name__ == "__main__":
     unittest.main()
