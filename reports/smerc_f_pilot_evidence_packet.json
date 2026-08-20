@@ -1,0 +1,179 @@
+{
+  "artifact_summary": {
+    "baseline_restraint_rate": 0.833,
+    "context_enriched_restraint_rate": 0.867,
+    "public_replay_decision_delta_rate": 0.86,
+    "public_replay_restraint_rate": 0.86,
+    "public_replay_scenarios": 50,
+    "public_replay_source_rows": 10,
+    "regulatory_context_rows": 6,
+    "regulatory_context_scenarios": 30,
+    "regulatory_state_change_count": 3,
+    "regulatory_state_change_rate": 0.1,
+    "source_export_rows": 6,
+    "source_normalized_rows": 6,
+    "source_replay_scenarios": 30,
+    "source_restraint_rate": 0.833
+  },
+  "audience": [
+    "CISO",
+    "financial-services security reviewer",
+    "payments risk owner",
+    "treasury operations reviewer",
+    "stablecoin or tokenized-finance infrastructure reviewer",
+    "AI governance owner"
+  ],
+  "claim_boundaries": [
+    "This packet is not AML compliance.",
+    "This packet is not legal compliance.",
+    "This packet is not fraud detection.",
+    "This packet is not sanctions screening.",
+    "This packet is not custody software.",
+    "This packet is not settlement infrastructure.",
+    "This packet is not payment execution.",
+    "This packet is not production certification.",
+    "This packet does not prove customer demand, incident reduction, regulatory approval, or production safety."
+  ],
+  "evidence_boundary": "Pilot evidence packet only. It combines existing public-data-shaped SMERC-F artifacts into a review package. It does not prove customer demand, production suitability, incident reduction, legal compliance, AML compliance, fraud detection, sanctions screening, custody, settlement, payment execution, or production certification.",
+  "evidence_chain": [
+    {
+      "artifact": "examples/smerc_f_source_exports.json",
+      "meaning": "Public-data-shaped source exports represent the kind of metadata a financial workflow or vendor system could provide.",
+      "step": "source_export"
+    },
+    {
+      "artifact": "examples/smerc_f_normalized_source_rows.json",
+      "meaning": "Source exports are converted into SMERC-F replay rows without private customer data, wallet keys, or live execution instructions.",
+      "step": "normalization"
+    },
+    {
+      "artifact": "reports/SMERC_F_Regulatory_Context_Report.md",
+      "meaning": "Legislation-inspired operational context can adjust recoverability posture without interpreting law or determining compliance.",
+      "step": "regulatory_context_overlay"
+    },
+    {
+      "artifact": "reports/SMERC_F_Public_Data_Replay_Report.md",
+      "meaning": "SMERC-F expands source rows into replay variants and returns ALLOW, THROTTLE, FREEZE, DENY, or ESCALATE with drivers and controls.",
+      "step": "public_replay"
+    },
+    {
+      "artifact": "pilot_package/Fortune_500_Financial_Services_Review_Checklist.md",
+      "meaning": "A financial-services reviewer compares SMERC-F posture against current controls and human judgment before any enforcement discussion.",
+      "step": "reviewer_decision"
+    }
+  ],
+  "generated_at": "2026-08-20T00:29:17+00:00",
+  "most_useful_examples": [
+    {
+      "action_id": "CHAINABUSE_VERIFIED_004_ACCELERATED_AUTOMATION",
+      "current_control_outcome": "baseline",
+      "irreversible_exposure": 0.832,
+      "reversible_capacity": "-",
+      "review_reason": "Regulatory-context overlay changed posture from FREEZE to DENY.",
+      "smerc_f_state": "DENY",
+      "source_type": "regulatory_context_overlay"
+    },
+    {
+      "action_id": "BIGQUERY_ERC20_BATCH_003_MISSING_EVIDENCE",
+      "current_control_outcome": "baseline",
+      "irreversible_exposure": 0.694,
+      "reversible_capacity": "-",
+      "review_reason": "Regulatory-context overlay changed posture from ESCALATE to FREEZE.",
+      "smerc_f_state": "FREEZE",
+      "source_type": "regulatory_context_overlay"
+    },
+    {
+      "action_id": "DUNE_USDT_CEX_TRANSFER_002_MARKET_STRESS",
+      "current_control_outcome": "baseline",
+      "irreversible_exposure": 0.527,
+      "reversible_capacity": "-",
+      "review_reason": "Regulatory-context overlay changed posture from ALLOW to THROTTLE.",
+      "smerc_f_state": "THROTTLE",
+      "source_type": "regulatory_context_overlay"
+    },
+    {
+      "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_MARKET_STRESS",
+      "current_control_outcome": "ALLOW",
+      "irreversible_exposure": 0.925,
+      "reversible_capacity": 0.287,
+      "review_reason": "High irreversible exposure with explicit drivers and controls.",
+      "smerc_f_state": "DENY",
+      "source_type": "defillama_hack_incident"
+    },
+    {
+      "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_ACCELERATED_AUTOMATION",
+      "current_control_outcome": "ALLOW",
+      "irreversible_exposure": 0.915,
+      "reversible_capacity": 0.287,
+      "review_reason": "High irreversible exposure with explicit drivers and controls.",
+      "smerc_f_state": "DENY",
+      "source_type": "defillama_hack_incident"
+    },
+    {
+      "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_MISSING_EVIDENCE",
+      "current_control_outcome": "ALLOW",
+      "irreversible_exposure": 0.892,
+      "reversible_capacity": 0.251,
+      "review_reason": "High irreversible exposure with explicit drivers and controls.",
+      "smerc_f_state": "DENY",
+      "source_type": "defillama_hack_incident"
+    },
+    {
+      "action_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE_MARKET_STRESS",
+      "current_control_outcome": "ALLOW",
+      "irreversible_exposure": 0.852,
+      "reversible_capacity": 0.356,
+      "review_reason": "High irreversible exposure with explicit drivers and controls.",
+      "smerc_f_state": "DENY",
+      "source_type": "dune_stablecoin_transfer"
+    },
+    {
+      "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_BASE",
+      "current_control_outcome": "ALLOW",
+      "irreversible_exposure": 0.829,
+      "reversible_capacity": 0.351,
+      "review_reason": "High irreversible exposure with explicit drivers and controls.",
+      "smerc_f_state": "DENY",
+      "source_type": "defillama_hack_incident"
+    }
+  ],
+  "pilot_go_no_go": {
+    "go_conditions": [
+      "one automated financial workflow family is available for metadata-only review",
+      "reviewers can label whether SMERC-F posture is useful",
+      "metadata excludes customer identifiers, raw regulated payloads, wallet keys, secrets, and live execution instructions",
+      "existing financial controls remain source-of-truth during shadow mode",
+      "reviewers accept the boundary that SMERC-F is not AML, sanctions, fraud, custody, settlement, or payment execution"
+    ],
+    "stop_conditions": [
+      "safe metadata cannot be provided",
+      "reviewers cannot compare posture with human judgment",
+      "recoverability does not change review behavior",
+      "the prospect wants production enforcement immediately",
+      "the prospect expects SMERC-F to replace compliance, AML, fraud, sanctions, custody, settlement, or payment systems"
+    ],
+    "success_metrics": [
+      "reviewer agreement rate",
+      "false release candidates",
+      "false restraint candidates",
+      "useful THROTTLE decisions",
+      "useful FREEZE decisions",
+      "useful ESCALATE decisions",
+      "metadata gaps",
+      "posture distribution",
+      "median and p95 scoring latency",
+      "reviewer time impact"
+    ]
+  },
+  "recommended_next_action": "Offer a 30-day metadata-only shadow-mode review for one financial workflow family, using reviewer labels to test whether recoverability posture changes review behavior.",
+  "review_positioning": "SMERC-F is a metadata-only shadow-mode recoverability review layer for automated financial actions. It asks whether an action that may be authorized by existing systems is recoverable enough to proceed.",
+  "review_questions": [
+    "Would SMERC-F have changed how your team reviewed any of these actions?",
+    "Which metadata fields would your systems already provide?",
+    "Which posture changes look useful versus noisy?",
+    "Which actions should never be constrained because delay creates more harm?",
+    "Which actions require stronger recoverability controls before automation proceeds?",
+    "What evidence would be required before moving from observe mode to recommend mode?"
+  ],
+  "version": "smerc-f.pilot-evidence-packet.v1"
+}

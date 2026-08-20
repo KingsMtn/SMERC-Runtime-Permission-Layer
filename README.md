@@ -201,6 +201,7 @@ Start here before reading the code:
 - `docs/SMERC_F_Financial_Source_Ingestion.md` explains how exported financial, stablecoin, blockchain, and incident metadata can be normalized into SMERC-F replay inputs.
 - `docs/SMERC_F_Regulatory_Context_Profile.md` explains how legislation-inspired operational context can inform SMERC-F scoring without making legal or compliance claims.
 - `docs/SMERC_F_Financial_Public_Data_Replay.md` explains how public-data-shaped stablecoin, blockchain, and incident records are converted into SMERC-F replay scenarios.
+- `docs/SMERC_F_Pilot_Evidence_Packet.md` explains how source-ingestion, regulatory-context, and replay reports combine into a single financial-services pilot review packet.
 - `pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md` gives a bounded metadata-only SMERC-F pilot path for financial-action review without live fund movement.
 - `pilot_package/Fortune_500_Financial_Services_Review_Checklist.md` screens whether a large financial-services review has the owners, data boundary, and metrics needed before a pilot is offered.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
@@ -835,6 +836,14 @@ python -m reference_engine.smerc_f_regulatory_context --pretty
 ```
 
 The regulatory context overlay uses legislation-inspired operational fields such as issuer status, reserve sensitivity, redemption pressure, custody dependency, lawful-order capability, jurisdiction complexity, customer-impact radius, and disclosure gaps to compare baseline replay with context-enriched replay. It does not interpret law, provide legal advice, determine compliance, screen AML or sanctions, classify illicit activity, move funds, or certify financial controls.
+
+Run the SMERC-F pilot evidence packet:
+
+```bash
+python -m reference_engine.smerc_f_pilot_evidence_packet --pretty
+```
+
+The pilot evidence packet combines the source-ingestion report, regulatory-context overlay, public-data replay, reviewer questions, go/no-go criteria, and claim boundaries into one financial-services review package. It is not AML compliance, legal compliance, fraud detection, sanctions screening, custody software, settlement infrastructure, payment execution, production certification, customer-demand proof, incident-reduction proof, or production-safety proof.
 
 ## GitHub Actions Modes
 

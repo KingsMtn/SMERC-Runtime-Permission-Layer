@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a SMERC-F pilot evidence packet that combines source ingestion, regulatory-context overlay, public replay, reviewer questions, go/no-go criteria, and claim boundaries for financial-services review.
 - Added a SMERC-F regulatory context overlay that compares baseline financial replay with legislation-inspired operational metadata without making legal, AML, sanctions, fraud, custody, settlement, or compliance claims.
 - Added a SMERC-F financial source ingestion adapter that normalizes Dune-, BigQuery-, Chainabuse-, DefiLlama-, and Elliptic-shaped exported metadata into replay-ready SMERC-F rows and bounded reports.
 - Added a SMERC-F financial public-data replay harness that expands Dune-, BigQuery-, Chainabuse-, DefiLlama-, and Elliptic-shaped public records into 50 recoverability-scored financial action scenarios with bounded reports and tests.
