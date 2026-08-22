@@ -198,6 +198,7 @@ Start here before reading the code:
 - `docs/SRE_Incident_Inspired_Governance.md` explains how SMERC complements reliability automation by scoring whether incident mitigations are recoverable enough to execute.
 - `docs/SMERC_F_Stablecoin_Blockchain_Pilot_Fit.md` explains when stablecoin, blockchain, payment, treasury, or tokenized-finance teams are a strong SMERC-F fit.
 - `docs/SMERC_F_Fortune_500_Financial_Services_Review.md` gives Fortune 500 financial-services reviewers a safe metadata-only evaluation path for automated financial actions.
+- `docs/SMERC_F_Metadata_Intake_Contract.md` defines the first safe SMERC-F customer intake boundary: metadata-only, shadow-mode, one workflow family, no live fund movement, and no production enforcement.
 - `docs/SMERC_F_Financial_Source_Ingestion.md` explains how exported financial, stablecoin, blockchain, and incident metadata can be normalized into SMERC-F replay inputs.
 - `docs/SMERC_F_Regulatory_Context_Profile.md` explains how legislation-inspired operational context can inform SMERC-F scoring without making legal or compliance claims.
 - `docs/SMERC_F_Financial_Public_Data_Replay.md` explains how public-data-shaped stablecoin, blockchain, and incident records are converted into SMERC-F replay scenarios.
