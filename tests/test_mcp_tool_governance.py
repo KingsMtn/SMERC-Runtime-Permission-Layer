@@ -1,5 +1,4 @@
 import json
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -16,6 +15,7 @@ DELETE_CALL = ROOT / "examples" / "mcp" / "tool_call_delete_customer_records.jso
 SEARCH_CALL = ROOT / "examples" / "mcp" / "tool_call_search_docs.json"
 DOC = ROOT / "docs" / "MCP_Tool_Governance.md"
 README = ROOT / "README.md"
+TEST_OUTPUTS = ROOT / "test_outputs"
 
 
 def load(path):
@@ -57,12 +57,11 @@ class MCPToolGovernanceTests(unittest.TestCase):
         self.assertIn("SMERC MCP Tool Governance Report", markdown)
         self.assertIn("Evidence Boundary", markdown)
         self.assertIn("block_tool_call", markdown)
-        with tempfile.TemporaryDirectory() as directory:
-            json_path = Path(directory) / "mcp.json"
-            markdown_path = Path(directory) / "mcp.md"
-            write_outputs(report, json_path=json_path, markdown_path=markdown_path)
-            self.assertTrue(json_path.exists())
-            self.assertTrue(markdown_path.exists())
+        json_path = TEST_OUTPUTS / "mcp_tool_governance_test.json"
+        markdown_path = TEST_OUTPUTS / "mcp_tool_governance_test.md"
+        write_outputs(report, json_path=json_path, markdown_path=markdown_path)
+        self.assertTrue(json_path.exists())
+        self.assertTrue(markdown_path.exists())
 
     def test_docs_and_readme_link_mcp_lane(self):
         self.assertIn("python -m reference_engine.mcp_tool_governance", DOC.read_text(encoding="utf-8"))

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an MCP Governance Gateway that evaluates registry-defined MCP tool-call sessions with repeated-call pressure, scope pressure, session-budget metering, SMERC posture routing, SPARTa route behavior, proxy action recommendations, generated reports, and SMERC-F financial tool-family support.
 - Added a SMERC-F metadata intake contract and sample customer template for safe financial-services shadow-mode review without customer records, raw regulated transaction payloads, wallet keys, live fund movement, or production enforcement.
 - Added a SMERC-F pilot evidence packet that combines source ingestion, regulatory-context overlay, public replay, reviewer questions, go/no-go criteria, and claim boundaries for financial-services review.
 - Added a SMERC-F regulatory context overlay that compares baseline financial replay with legislation-inspired operational metadata without making legal, AML, sanctions, fraud, custody, settlement, or compliance claims.

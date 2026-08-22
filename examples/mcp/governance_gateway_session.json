@@ -1,0 +1,171 @@
+{
+  "version": "smerc.mcp-gateway-session.v1",
+  "session_id": "mcp_gateway_reference_session_001",
+  "session_budget_units": 8.0,
+  "requests": [
+    {
+      "schema": "smerc.mcp-tool-governance.v1",
+      "mcp_request_id": "MCP_SEARCH_DOCS_001",
+      "agent": {
+        "agent_id": "research_agent",
+        "display_name": "Research Agent",
+        "provider": "internal-agent-runtime"
+      },
+      "server": {
+        "name": "knowledge_mcp",
+        "transport": "streamable-http",
+        "trust_boundary": "internal-docs"
+      },
+      "tool_call": {
+        "tool_name": "search_documents",
+        "description": "Search internal documentation for deployment checklist references.",
+        "operation_class": "read",
+        "requested_capability": "search",
+        "domain_profile": "it_ops",
+        "external_side_effect": false,
+        "sensitive_data": false,
+        "supports_dry_run": true,
+        "supports_scope_limit": true,
+        "supports_checkpoint": true,
+        "supports_rollback": true,
+        "supports_human_approval": true,
+        "requested_scope_units": 20,
+        "max_scope_units": 500
+      },
+      "risk_signals": {
+        "base_action_risk": 0.12,
+        "reversibility": 0.94,
+        "containment_strength": 0.88,
+        "rollback_latency": 0.08,
+        "evidence_validity": 0.91,
+        "anomaly_pressure": 0.07,
+        "impact_scope": 0.18,
+        "cancel_reliability": 0.92,
+        "authorization_confidence": 0.93
+      }
+    },
+    {
+      "schema": "smerc.mcp-tool-governance.v1",
+      "mcp_request_id": "MCP_DELETE_CUSTOMER_RECORDS_002",
+      "agent": {
+        "agent_id": "support_resolution_agent",
+        "display_name": "Support Resolution Agent",
+        "provider": "internal-agent-runtime"
+      },
+      "server": {
+        "name": "customer_data_mcp",
+        "transport": "streamable-http",
+        "trust_boundary": "internal-production"
+      },
+      "tool_call": {
+        "tool_name": "delete_customer_records",
+        "description": "Delete customer records after an AI support workflow inferred duplicate accounts.",
+        "operation_class": "delete",
+        "requested_capability": "delete_records",
+        "domain_profile": "it_ops",
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "supports_dry_run": true,
+        "supports_scope_limit": true,
+        "supports_checkpoint": false,
+        "supports_rollback": false,
+        "supports_human_approval": true,
+        "requested_scope_units": 2500,
+        "max_scope_units": 10000
+      },
+      "risk_signals": {
+        "base_action_risk": 0.91,
+        "reversibility": 0.12,
+        "containment_strength": 0.36,
+        "rollback_latency": 0.88,
+        "evidence_validity": 0.51,
+        "anomaly_pressure": 0.42,
+        "impact_scope": 0.84,
+        "cancel_reliability": 0.28,
+        "authorization_confidence": 0.55
+      }
+    },
+    {
+      "schema": "smerc.mcp-tool-governance.v1",
+      "mcp_request_id": "MCP_STABLECOIN_TRANSFER_003",
+      "agent": {
+        "agent_id": "treasury_agent",
+        "display_name": "Treasury Agent",
+        "provider": "internal-agent-runtime"
+      },
+      "server": {
+        "name": "finance_ops_mcp",
+        "transport": "streamable-http",
+        "trust_boundary": "financial-shadow-mode"
+      },
+      "tool_call": {
+        "tool_name": "stablecoin_treasury_transfer",
+        "description": "Propose a stablecoin treasury transfer from an operating wallet to an external liquidity venue.",
+        "operation_class": "payment",
+        "requested_capability": "treasury_transfer",
+        "domain_profile": "finance_ops",
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "supports_dry_run": true,
+        "supports_scope_limit": true,
+        "supports_checkpoint": true,
+        "supports_rollback": false,
+        "supports_human_approval": true,
+        "requested_scope_units": 12,
+        "max_scope_units": 20
+      },
+      "risk_signals": {
+        "base_action_risk": 0.72,
+        "reversibility": 0.28,
+        "containment_strength": 0.42,
+        "rollback_latency": 0.78,
+        "evidence_validity": 0.74,
+        "anomaly_pressure": 0.51,
+        "impact_scope": 0.66,
+        "cancel_reliability": 0.35,
+        "authorization_confidence": 0.71
+      }
+    },
+    {
+      "schema": "smerc.mcp-tool-governance.v1",
+      "mcp_request_id": "MCP_STABLECOIN_TRANSFER_004",
+      "agent": {
+        "agent_id": "treasury_agent",
+        "display_name": "Treasury Agent",
+        "provider": "internal-agent-runtime"
+      },
+      "server": {
+        "name": "finance_ops_mcp",
+        "transport": "streamable-http",
+        "trust_boundary": "financial-shadow-mode"
+      },
+      "tool_call": {
+        "tool_name": "stablecoin_treasury_transfer",
+        "description": "Repeat a stablecoin treasury transfer proposal during elevated redemption pressure.",
+        "operation_class": "payment",
+        "requested_capability": "treasury_transfer",
+        "domain_profile": "finance_ops",
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "supports_dry_run": true,
+        "supports_scope_limit": true,
+        "supports_checkpoint": true,
+        "supports_rollback": false,
+        "supports_human_approval": true,
+        "requested_scope_units": 12,
+        "max_scope_units": 20
+      },
+      "risk_signals": {
+        "base_action_risk": 0.76,
+        "reversibility": 0.24,
+        "containment_strength": 0.38,
+        "rollback_latency": 0.82,
+        "evidence_validity": 0.69,
+        "anomaly_pressure": 0.58,
+        "impact_scope": 0.72,
+        "cancel_reliability": 0.31,
+        "authorization_confidence": 0.66
+      }
+    }
+  ]
+}

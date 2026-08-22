@@ -1,0 +1,45 @@
+{
+  "version": "smerc.mcp-tool-registry.v1",
+  "registry_id": "mcp_gateway_registry_reference_v1",
+  "tools": [
+    {
+      "server_name": "knowledge_mcp",
+      "tool_name": "search_documents",
+      "profile": "general",
+      "domain_profile": "it_ops",
+      "risk_tier": "low",
+      "cost_units": 0.2,
+      "max_calls_per_session": 6,
+      "max_agent_calls_per_session": 10,
+      "max_scope_units": 500,
+      "risk_pressure": 0.05,
+      "required_metadata": ["agent_id", "tool_name", "operation_class", "requested_scope_units"]
+    },
+    {
+      "server_name": "customer_data_mcp",
+      "tool_name": "delete_customer_records",
+      "profile": "customer_data",
+      "domain_profile": "it_ops",
+      "risk_tier": "destructive",
+      "cost_units": 4.0,
+      "max_calls_per_session": 1,
+      "max_agent_calls_per_session": 4,
+      "max_scope_units": 25,
+      "risk_pressure": 0.42,
+      "required_metadata": ["rollback_plan", "human_approval", "scope_limit", "replay_id"]
+    },
+    {
+      "server_name": "finance_ops_mcp",
+      "tool_name": "stablecoin_treasury_transfer",
+      "profile": "smerc_f",
+      "domain_profile": "finance_ops",
+      "risk_tier": "financial",
+      "cost_units": 3.5,
+      "max_calls_per_session": 2,
+      "max_agent_calls_per_session": 4,
+      "max_scope_units": 10,
+      "risk_pressure": 0.34,
+      "required_metadata": ["amount_band_usd", "settlement_finality", "containment_strength", "dual_control_available"]
+    }
+  ]
+}

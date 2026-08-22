@@ -1,0 +1,344 @@
+{
+  "blocked_or_held_count": 3,
+  "commercial_boundary": "This gateway package demonstrates MCP tool registry governance, repeated-call pressure, cost metering, and SMERC posture routing. It does not implement OAuth, mTLS, native MCP transport, payment rails, x402, wallet settlement, prompt-injection defense, sandboxing, SIEM export, or production billing.",
+  "cumulative_cost_units": 11.2,
+  "decisions": [
+    {
+      "agent_id": "research_agent",
+      "controls": [
+        "execute",
+        "record_execution_report"
+      ],
+      "gateway_pressure": {
+        "cumulative_cost_units": 0.2,
+        "drivers": [],
+        "observed_agent_count": 1,
+        "observed_tool_count": 1,
+        "score": 0.05,
+        "session_budget_units": 8.0
+      },
+      "mcp_request_id": "MCP_SEARCH_DOCS_001",
+      "mode": "enforce",
+      "posture": "ALLOW",
+      "profile": "general",
+      "proxy_action": "forward_tool_call",
+      "reason_codes": [
+        "RECOVERABILITY_ACCEPTABLE"
+      ],
+      "recommended_mcp_result": "call_tool",
+      "replay_id": "replay_MCP_MCP_SEARCH_DOCS_001_1787365800485_2e90fdf480ae",
+      "risk_tier": "low",
+      "route_state": "EXECUTE",
+      "sequence": 1,
+      "server_name": "knowledge_mcp",
+      "should_forward_tool_call": true,
+      "tool_name": "search_documents"
+    },
+    {
+      "agent_id": "support_resolution_agent",
+      "controls": [
+        "block_execution",
+        "preserve_replay",
+        "explain_denial"
+      ],
+      "gateway_pressure": {
+        "cumulative_cost_units": 4.2,
+        "drivers": [
+          "scope_exceeds_registry_limit",
+          "high_risk_tool_tier"
+        ],
+        "observed_agent_count": 1,
+        "observed_tool_count": 1,
+        "score": 0.7,
+        "session_budget_units": 8.0
+      },
+      "mcp_request_id": "MCP_DELETE_CUSTOMER_RECORDS_002",
+      "mode": "enforce",
+      "posture": "DENY",
+      "profile": "customer_data",
+      "proxy_action": "block_tool_call",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "recommended_mcp_result": "block_tool_call",
+      "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_002_1787365800489_e6c79bc07cfe",
+      "risk_tier": "destructive",
+      "route_state": "BLOCK",
+      "sequence": 2,
+      "server_name": "customer_data_mcp",
+      "should_forward_tool_call": false,
+      "tool_name": "delete_customer_records"
+    },
+    {
+      "agent_id": "treasury_agent",
+      "controls": [
+        "block_execution",
+        "preserve_replay",
+        "explain_denial"
+      ],
+      "gateway_pressure": {
+        "cumulative_cost_units": 7.7,
+        "drivers": [
+          "scope_exceeds_registry_limit",
+          "high_risk_tool_tier"
+        ],
+        "observed_agent_count": 1,
+        "observed_tool_count": 1,
+        "score": 0.62,
+        "session_budget_units": 8.0
+      },
+      "mcp_request_id": "MCP_STABLECOIN_TRANSFER_003",
+      "mode": "enforce",
+      "posture": "DENY",
+      "profile": "smerc_f",
+      "proxy_action": "block_tool_call",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "recommended_mcp_result": "block_tool_call",
+      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_003_1787365800492_b6d627f6cca9",
+      "risk_tier": "financial",
+      "route_state": "BLOCK",
+      "sequence": 3,
+      "server_name": "finance_ops_mcp",
+      "should_forward_tool_call": false,
+      "tool_name": "stablecoin_treasury_transfer"
+    },
+    {
+      "agent_id": "treasury_agent",
+      "controls": [
+        "block_execution",
+        "preserve_replay",
+        "explain_denial"
+      ],
+      "gateway_pressure": {
+        "cumulative_cost_units": 11.2,
+        "drivers": [
+          "session_budget_pressure",
+          "scope_exceeds_registry_limit",
+          "high_risk_tool_tier"
+        ],
+        "observed_agent_count": 2,
+        "observed_tool_count": 2,
+        "score": 0.78,
+        "session_budget_units": 8.0
+      },
+      "mcp_request_id": "MCP_STABLECOIN_TRANSFER_004",
+      "mode": "enforce",
+      "posture": "DENY",
+      "profile": "smerc_f",
+      "proxy_action": "block_tool_call",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "recommended_mcp_result": "block_tool_call",
+      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_004_1787365800492_0ba6dcfe5325",
+      "risk_tier": "financial",
+      "route_state": "BLOCK",
+      "sequence": 4,
+      "server_name": "finance_ops_mcp",
+      "should_forward_tool_call": false,
+      "tool_name": "stablecoin_treasury_transfer"
+    }
+  ],
+  "forwarded_count": 1,
+  "generated_at": "2026-08-22T02:30:00+00:00",
+  "highest_pressure_calls": [
+    {
+      "agent_id": "treasury_agent",
+      "controls": [
+        "block_execution",
+        "preserve_replay",
+        "explain_denial"
+      ],
+      "gateway_pressure": {
+        "cumulative_cost_units": 11.2,
+        "drivers": [
+          "session_budget_pressure",
+          "scope_exceeds_registry_limit",
+          "high_risk_tool_tier"
+        ],
+        "observed_agent_count": 2,
+        "observed_tool_count": 2,
+        "score": 0.78,
+        "session_budget_units": 8.0
+      },
+      "mcp_request_id": "MCP_STABLECOIN_TRANSFER_004",
+      "mode": "enforce",
+      "posture": "DENY",
+      "profile": "smerc_f",
+      "proxy_action": "block_tool_call",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "recommended_mcp_result": "block_tool_call",
+      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_004_1787365800492_0ba6dcfe5325",
+      "risk_tier": "financial",
+      "route_state": "BLOCK",
+      "sequence": 4,
+      "server_name": "finance_ops_mcp",
+      "should_forward_tool_call": false,
+      "tool_name": "stablecoin_treasury_transfer"
+    },
+    {
+      "agent_id": "support_resolution_agent",
+      "controls": [
+        "block_execution",
+        "preserve_replay",
+        "explain_denial"
+      ],
+      "gateway_pressure": {
+        "cumulative_cost_units": 4.2,
+        "drivers": [
+          "scope_exceeds_registry_limit",
+          "high_risk_tool_tier"
+        ],
+        "observed_agent_count": 1,
+        "observed_tool_count": 1,
+        "score": 0.7,
+        "session_budget_units": 8.0
+      },
+      "mcp_request_id": "MCP_DELETE_CUSTOMER_RECORDS_002",
+      "mode": "enforce",
+      "posture": "DENY",
+      "profile": "customer_data",
+      "proxy_action": "block_tool_call",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "ANOMALY_PRESSURE_HIGH",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "recommended_mcp_result": "block_tool_call",
+      "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_002_1787365800489_e6c79bc07cfe",
+      "risk_tier": "destructive",
+      "route_state": "BLOCK",
+      "sequence": 2,
+      "server_name": "customer_data_mcp",
+      "should_forward_tool_call": false,
+      "tool_name": "delete_customer_records"
+    },
+    {
+      "agent_id": "treasury_agent",
+      "controls": [
+        "block_execution",
+        "preserve_replay",
+        "explain_denial"
+      ],
+      "gateway_pressure": {
+        "cumulative_cost_units": 7.7,
+        "drivers": [
+          "scope_exceeds_registry_limit",
+          "high_risk_tool_tier"
+        ],
+        "observed_agent_count": 1,
+        "observed_tool_count": 1,
+        "score": 0.62,
+        "session_budget_units": 8.0
+      },
+      "mcp_request_id": "MCP_STABLECOIN_TRANSFER_003",
+      "mode": "enforce",
+      "posture": "DENY",
+      "profile": "smerc_f",
+      "proxy_action": "block_tool_call",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CANCEL_RELIABILITY_WEAK",
+        "CONTAINMENT_WEAK",
+        "EXTERNAL_SIDE_EFFECT",
+        "SENSITIVE_DATA"
+      ],
+      "recommended_mcp_result": "block_tool_call",
+      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_003_1787365800492_b6d627f6cca9",
+      "risk_tier": "financial",
+      "route_state": "BLOCK",
+      "sequence": 3,
+      "server_name": "finance_ops_mcp",
+      "should_forward_tool_call": false,
+      "tool_name": "stablecoin_treasury_transfer"
+    },
+    {
+      "agent_id": "research_agent",
+      "controls": [
+        "execute",
+        "record_execution_report"
+      ],
+      "gateway_pressure": {
+        "cumulative_cost_units": 0.2,
+        "drivers": [],
+        "observed_agent_count": 1,
+        "observed_tool_count": 1,
+        "score": 0.05,
+        "session_budget_units": 8.0
+      },
+      "mcp_request_id": "MCP_SEARCH_DOCS_001",
+      "mode": "enforce",
+      "posture": "ALLOW",
+      "profile": "general",
+      "proxy_action": "forward_tool_call",
+      "reason_codes": [
+        "RECOVERABILITY_ACCEPTABLE"
+      ],
+      "recommended_mcp_result": "call_tool",
+      "replay_id": "replay_MCP_MCP_SEARCH_DOCS_001_1787365800485_2e90fdf480ae",
+      "risk_tier": "low",
+      "route_state": "EXECUTE",
+      "sequence": 1,
+      "server_name": "knowledge_mcp",
+      "should_forward_tool_call": true,
+      "tool_name": "search_documents"
+    }
+  ],
+  "mode": "enforce",
+  "posture_counts": {
+    "ALLOW": 1,
+    "DENY": 3
+  },
+  "proxy_action_counts": {
+    "block_tool_call": 3,
+    "forward_tool_call": 1
+  },
+  "recommended_next_action": "Use this gateway in shadow mode against one MCP tool family, then compare SMERC posture, loop pressure, and reviewer labels before any enforcement or monetization work.",
+  "registered_tool_count": 3,
+  "registry_id": "mcp_gateway_registry_reference_v1",
+  "request_count": 4,
+  "session_id": "mcp_gateway_reference_session_001",
+  "version": "smerc.mcp-governance-gateway.v1"
+}

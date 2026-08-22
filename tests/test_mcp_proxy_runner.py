@@ -1,7 +1,6 @@
 import json
 import subprocess
 import sys
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -11,6 +10,7 @@ from reference_engine.mcp_proxy_runner import MCP_PROXY_RUNNER_VERSION, render_m
 ROOT = Path(__file__).resolve().parents[1]
 DELETE_CALL = ROOT / "examples" / "mcp" / "tool_call_delete_customer_records.json"
 SEARCH_CALL = ROOT / "examples" / "mcp" / "tool_call_search_docs.json"
+TEST_OUTPUTS = ROOT / "test_outputs"
 
 
 def load(path):
@@ -65,42 +65,40 @@ class MCPProxyRunnerTests(unittest.TestCase):
         self.assertIn("Proxy Decision", markdown)
         self.assertIn("block_tool_call", markdown)
         self.assertIn("Decision Lifecycle Ledger", markdown)
-        with tempfile.TemporaryDirectory() as directory:
-            json_path = Path(directory) / "proxy.json"
-            markdown_path = Path(directory) / "proxy.md"
-            write_outputs(report, json_path=json_path, markdown_path=markdown_path)
-            self.assertTrue(json_path.exists())
-            self.assertTrue(markdown_path.exists())
+        json_path = TEST_OUTPUTS / "mcp_proxy_test.json"
+        markdown_path = TEST_OUTPUTS / "mcp_proxy_test.md"
+        write_outputs(report, json_path=json_path, markdown_path=markdown_path)
+        self.assertTrue(json_path.exists())
+        self.assertTrue(markdown_path.exists())
 
     def test_cli_writes_report_files(self):
-        with tempfile.TemporaryDirectory() as directory:
-            json_path = Path(directory) / "proxy.json"
-            markdown_path = Path(directory) / "proxy.md"
-            result = subprocess.run(
-                [
-                    sys.executable,
-                    "-m",
-                    "reference_engine.mcp_proxy_runner",
-                    "--request",
-                    str(DELETE_CALL),
-                    "--mode",
-                    "enforce",
-                    "--json-output",
-                    str(json_path),
-                    "--markdown-output",
-                    str(markdown_path),
-                    "--pretty",
-                ],
-                cwd=ROOT,
-                text=True,
-                capture_output=True,
-                timeout=20,
-            )
+        json_path = TEST_OUTPUTS / "mcp_proxy_cli_test.json"
+        markdown_path = TEST_OUTPUTS / "mcp_proxy_cli_test.md"
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "reference_engine.mcp_proxy_runner",
+                "--request",
+                str(DELETE_CALL),
+                "--mode",
+                "enforce",
+                "--json-output",
+                str(json_path),
+                "--markdown-output",
+                str(markdown_path),
+                "--pretty",
+            ],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            timeout=20,
+        )
 
-            self.assertEqual(result.returncode, 0, result.stderr)
-            report = json.loads(json_path.read_text(encoding="utf-8"))
-            self.assertEqual(report["proxy_response"]["proxy_action"], "block_tool_call")
-            self.assertIn("SMERC MCP Proxy Runner Report", markdown_path.read_text(encoding="utf-8"))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(json_path.read_text(encoding="utf-8"))
+        self.assertEqual(report["proxy_response"]["proxy_action"], "block_tool_call")
+        self.assertIn("SMERC MCP Proxy Runner Report", markdown_path.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

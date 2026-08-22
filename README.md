@@ -62,6 +62,7 @@ The current build includes:
 - MCP Tool Risk Scanner that lets reviewers triage MCP tool definitions before granting autonomous agents tool access
 - MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses with DLL evidence
 - MCP Transport Proxy sample that wraps a JSON-RPC-style `tools/call` request and returns either a forwarded result or a SMERC-blocked proxy error
+- MCP Governance Gateway that evaluates registry-defined MCP tool-call sessions with loop pressure, scope pressure, session-budget metering, proxy actions, SPARTa routes, DLL evidence, and SMERC-F financial tool-family support
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
 - cloud automation guardrails positioning for infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions
 - control mapping library that maps SMERC execution controls to declared native tool mechanisms and evidence requirements
@@ -172,6 +173,7 @@ Start here before reading the code:
 - `docs/MCP_Tool_Risk_Scanner.md` explains how to scan MCP tool definitions for recoverability and autonomy risk before those tools are granted to agents.
 - `docs/MCP_Proxy_Runner.md` explains the local MCP proxy runner that returns shadow/enforce proxy actions and records Decision Lifecycle Ledger evidence.
 - `docs/MCP_Transport_Proxy.md` explains the local JSON-RPC-style transport proxy sample for `tools/call` forwarding or blocking.
+- `docs/MCP_Governance_Gateway.md` explains the registry-driven MCP gateway that evaluates tool-call sessions, repeated-call pressure, scope pressure, session-budget metering, SMERC posture, SPARTa route behavior, and SMERC-F financial tool profiles.
 - `docs/Self_Service_Pilot_Connector.md` explains how a reviewer can run a mixed metadata-only sample bundle and receive a compact pilot-fit decision package.
 - `docs/Cloud_Automation_Guardrails.md` explains how SMERC can be evaluated as a recoverability-aware checkpoint for cloud automation and infrastructure actions.
 - `docs/MCP_Runtime_Governance_Positioning.md` explains SMERC's focused category position as recoverability-aware runtime governance for MCP-style tool calls and agent actions.
@@ -575,6 +577,7 @@ python -m reference_engine.constraint_eligibility examples/constraint_eligibilit
 python -m reference_engine.github_actions_pilot_installer --output-dir reports/github_actions_pilot_package --pretty
 python -m reference_engine.mcp_proxy_runner --request examples/mcp/tool_call_delete_customer_records.json --mode enforce --pretty
 python -m reference_engine.mcp_transport_proxy --envelope examples/mcp/transport_proxy_delete_customer_records.json --pretty
+python -m reference_engine.mcp_governance_gateway --mode enforce --pretty
 python -m reference_engine.self_service_pilot_connector --bundle examples/self_service_pilot_bundle.json --pretty
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m reference_engine.sparta_router --decision examples/sparta/throttle_decision.json --plan examples/sparta/github_actions_deploy_plan.json --pretty
