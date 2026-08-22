@@ -4,6 +4,8 @@
 
 This package gives a Chief Information Security Officer or delegated security architect a fast, evidence-based way to review SMERC without a live founder walkthrough.
 
+For the shortest serious first pass, start with `docs/CISO_Security_Architect_15_Minute_Review.md`, then use this 30-minute package for deeper inspection.
+
 The review question is narrow:
 
 > Is SMERC credible enough to test in a bounded shadow-mode pilot for AI-agent or automation actions?
