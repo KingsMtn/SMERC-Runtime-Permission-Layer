@@ -61,7 +61,7 @@ Those are validation and productization requirements, not claims in this reposit
 
 | Reviewer | Start Here | Goal |
 | --- | --- | --- |
-| CISO or security executive | `docs/CISO_Security_Architect_15_Minute_Review.md`, then `docs/CISO_30_Minute_Review_Package.md` | Decide whether a shadow-mode pilot is worth discussing. |
+| CISO or security executive | `docs/CISO_5_Minute_Proof_Package.md`, then `docs/CISO_Security_Architect_15_Minute_Review.md`, then `docs/CISO_30_Minute_Review_Package.md` | Decide whether a shadow-mode pilot is worth discussing. |
 | Security architect | `docs/CISO_Security_Architect_15_Minute_Review.md`, then `docs/CISO_GitHub_Inspection_Guide.md` | Inspect action boundary, MCP gateway, scoring, permits, controls, and audit path. |
 | Platform engineer | `docs/CISO_Evidence_Walkthrough.md` and `docs/Developer_Quickstart.md` | Run the seeded evidence flow, engine, API, tests, and GitHub integration locally. |
 | Design partner | `pilot_package/Level_5_Shadow_Mode_Pilot_Packet.md` | Understand pilot scope, stop conditions, and evidence required. |
@@ -70,12 +70,12 @@ Those are validation and productization requirements, not claims in this reposit
 
 ## Recommended 15-Minute Review
 
-1. Read `docs/CISO_Security_Architect_15_Minute_Review.md`.
-2. Inspect `docs/MCP_Governance_Gateway.md`.
-3. Open `reports/MCP_Governance_Gateway_Report.md`.
-4. Read `docs/GitHub_Actions_Pilot_Operator_Quickstart.md`.
-5. Read `docs/Public_Review_Snapshot.md`.
-6. Inspect `reference_engine/recoverability_engine.py`.
+1. Read `docs/CISO_5_Minute_Proof_Package.md`.
+2. Read `docs/CISO_Security_Architect_15_Minute_Review.md`.
+3. Inspect `docs/MCP_Governance_Gateway.md`.
+4. Open `reports/MCP_Governance_Gateway_Report.md`.
+5. Read `docs/GitHub_Actions_Pilot_Operator_Quickstart.md`.
+6. Read `docs/Public_Review_Snapshot.md`.
 7. Review the latest GitHub Actions test status.
 
 ## Recommended 30-Minute Technical Review
