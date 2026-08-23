@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping
 
+from reference_engine.autonomy_budget import evaluate_autonomy_budget
 from reference_engine.mcp_proxy_runner import run_mcp_proxy
 
 
@@ -78,6 +79,7 @@ def evaluate_gateway_session(
                 "tool_name": proxy_report["tool_name"],
                 "profile": str(tool_policy.get("profile", "general")),
                 "risk_tier": str(tool_policy.get("risk_tier", "unknown")),
+                "requested_scope_units": request["tool_call"].get("requested_scope_units", 1),
                 "mode": mode,
                 "ref_gate": ref_gate,
                 "gateway_pressure": gateway_pressure,
@@ -96,6 +98,7 @@ def evaluate_gateway_session(
     proxy_action_counts = _counts(item["proxy_action"] for item in gateway_decisions)
     forwarded_count = sum(1 for item in gateway_decisions if item["should_forward_tool_call"])
     blocked_or_held_count = len(gateway_decisions) - forwarded_count
+    autonomy_budget = evaluate_autonomy_budget(decisions=gateway_decisions)
     return {
         "version": MCP_GOVERNANCE_GATEWAY_VERSION,
         "generated_at": _now(),
@@ -111,6 +114,7 @@ def evaluate_gateway_session(
         "posture_counts": posture_counts,
         "proxy_action_counts": proxy_action_counts,
         "highest_pressure_calls": _highest_pressure(gateway_decisions),
+        "autonomy_budget": autonomy_budget,
         "decisions": gateway_decisions,
         "commercial_boundary": (
             "This gateway package demonstrates MCP tool registry governance, deterministic pre-execution metadata "
@@ -143,6 +147,9 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Forwarded calls: `{report['forwarded_count']}`",
         f"- Blocked or held calls: `{report['blocked_or_held_count']}`",
         f"- Ref gate failures: `{report['ref_gate_failure_count']}`",
+        f"- Autonomy state: `{report['autonomy_budget']['autonomy_state']}`",
+        f"- Remaining actions: `{report['autonomy_budget']['remaining']['actions']}`",
+        f"- Remaining risk spend: `{report['autonomy_budget']['remaining']['risk_spend']}`",
         "",
         "## Posture Distribution",
         "",
@@ -150,6 +157,20 @@ def render_markdown(report: Mapping[str, Any]) -> str:
     lines.extend(f"- `{key}`: `{value}`" for key, value in sorted(report["posture_counts"].items()))
     lines.extend(["", "## Proxy Actions", ""])
     lines.extend(f"- `{key}`: `{value}`" for key, value in sorted(report["proxy_action_counts"].items()))
+    lines.extend(
+        [
+            "",
+            "## Autonomy Budget",
+            "",
+            f"- State: `{report['autonomy_budget']['autonomy_state']}`",
+            f"- Actions spent: `{report['autonomy_budget']['spent']['actions']}` of `{report['autonomy_budget']['budget']['max_actions']}`",
+            f"- Scope units spent: `{report['autonomy_budget']['spent']['scope_units']}` of `{report['autonomy_budget']['budget']['max_scope_units']}`",
+            f"- Risk spend: `{report['autonomy_budget']['spent']['risk_spend']}` of `{report['autonomy_budget']['budget']['max_risk_spend']}`",
+            f"- Review triggers: `{', '.join(report['autonomy_budget']['review_triggers']) or 'none'}`",
+            "",
+            str(report["autonomy_budget"]["plain_english_summary"]),
+        ]
+    )
     lines.extend(
         [
             "",

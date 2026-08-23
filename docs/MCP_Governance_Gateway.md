@@ -12,6 +12,7 @@ It combines:
 - deterministic ref-gate checks for typed contracts, attestation, least privilege, and expected object shape
 - loop and velocity pressure
 - cost-unit metering
+- Autonomy Budgeting for current action, scope, risk-spend, and tool-tier allowance
 - Decision Lifecycle Ledger evidence from the MCP proxy runner
 - SMERC-F financial profile support for financial tool families
 
@@ -48,6 +49,8 @@ It also checks whether the proposed call passes a deterministic ref gate:
 - `object_shape_expected`
 
 If a required ref-gate field is false, the gateway fails closed before recoverability can soften the decision. The report records the failing driver, raises pressure to `1.0`, and caps confidence and evidence validity.
+
+The generated report also includes an Autonomy Budget summary. That summary shows whether the session still has available action budget, scope budget, risk budget, and tool-tier authority after the evaluated call sequence.
 
 ## Why It Comes Before More SMERC-F
 
@@ -91,3 +94,4 @@ See also:
 
 - `docs/SMERC_And_The_Ref_Pattern.md`
 - `docs/Autonomy_Health_Framework.md`
+- `docs/Autonomy_Budgeting_Framework.md`

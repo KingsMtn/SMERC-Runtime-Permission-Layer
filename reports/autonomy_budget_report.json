@@ -1,0 +1,97 @@
+{
+  "allowed_tool_risk_tiers": [],
+  "autonomy_state": "SUSPEND_AUTONOMY",
+  "blocked_tool_risk_tiers": [
+    "low",
+    "medium",
+    "high",
+    "financial",
+    "destructive"
+  ],
+  "budget": {
+    "allowed_tool_risk_tiers": [
+      "low",
+      "medium",
+      "high",
+      "financial",
+      "destructive"
+    ],
+    "max_actions": 10,
+    "max_risk_spend": 3.0,
+    "max_scope_units": 1000,
+    "valid_for_minutes": 60
+  },
+  "decision_ledger": [
+    {
+      "autonomy_state_after": "HEALTHY",
+      "posture": "ALLOW",
+      "ref_gate_status": "pass",
+      "remaining_actions": 9,
+      "remaining_risk_spend": 2.987,
+      "remaining_scope_units": 980.0,
+      "request_id": "MCP_SEARCH_DOCS_001",
+      "risk_spend": 0.013,
+      "sequence": 1,
+      "tool_name": "search_documents"
+    },
+    {
+      "autonomy_state_after": "SUSPEND_AUTONOMY",
+      "posture": "DENY",
+      "ref_gate_status": "pass",
+      "remaining_actions": 8,
+      "remaining_risk_spend": 2.287,
+      "remaining_scope_units": 0.0,
+      "request_id": "MCP_DELETE_CUSTOMER_RECORDS_002",
+      "risk_spend": 0.7,
+      "sequence": 2,
+      "tool_name": "delete_customer_records"
+    },
+    {
+      "autonomy_state_after": "SUSPEND_AUTONOMY",
+      "posture": "DENY",
+      "ref_gate_status": "pass",
+      "remaining_actions": 7,
+      "remaining_risk_spend": 1.667,
+      "remaining_scope_units": 0.0,
+      "request_id": "MCP_STABLECOIN_TRANSFER_003",
+      "risk_spend": 0.62,
+      "sequence": 3,
+      "tool_name": "stablecoin_treasury_transfer"
+    },
+    {
+      "autonomy_state_after": "SUSPEND_AUTONOMY",
+      "posture": "DENY",
+      "ref_gate_status": "fail",
+      "remaining_actions": 6,
+      "remaining_risk_spend": 0.167,
+      "remaining_scope_units": 0.0,
+      "request_id": "MCP_STABLECOIN_TRANSFER_004",
+      "risk_spend": 1.5,
+      "sequence": 4,
+      "tool_name": "stablecoin_treasury_transfer"
+    }
+  ],
+  "generated_at": "2026-08-23T01:06:57+00:00",
+  "initial_state": "HEALTHY",
+  "plain_english_summary": "Autonomy should be suspended for this session because the action stream exhausted or violated the current autonomy budget. Human review should requalify the agent or tool family before more autonomous execution is allowed.",
+  "remaining": {
+    "actions": 6,
+    "risk_spend": 0.167,
+    "scope_units": 0.0,
+    "valid_for_minutes": 0
+  },
+  "review_triggers": [
+    "ref_gate_failure",
+    "scope_budget_exhausted",
+    "repeated_blocked_or_held_attempts",
+    "autonomy_removed_until_review"
+  ],
+  "spent": {
+    "actions": 4,
+    "blocked_or_held_attempts": 3,
+    "ref_gate_failures": 1,
+    "risk_spend": 2.833,
+    "scope_units": 2544.0
+  },
+  "version": "smerc.autonomy-budget.v1"
+}
