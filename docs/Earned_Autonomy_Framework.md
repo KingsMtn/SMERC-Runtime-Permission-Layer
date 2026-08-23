@@ -62,6 +62,8 @@ Earned Autonomy sets the starting budget context:
 
 Current behavior can still reduce or remove autonomy. A `TIER_3_BOUNDED` system can lose session autonomy if it exceeds scope, triggers repeated denies, or fails a ref gate.
 
+Autonomy Continuance then asks whether the actor still has the right to continue after authority provenance, intent integrity, consequence horizon, and collective autonomy are checked.
+
 ## Run
 
 ```bash
@@ -79,3 +81,5 @@ Generated outputs:
 ## Boundary
 
 Earned Autonomy is a reference model for pilot evaluation. It is not a production trust score, employee score, legal compliance rating, insurance rating, or automated personnel-management system. Real deployments must calibrate tiers with customer-owned review labels, operational outcomes, and governance approval.
+
+See also `docs/Autonomy_Continuance_Framework.md`.

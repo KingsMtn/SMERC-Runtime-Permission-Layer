@@ -1,0 +1,51 @@
+{
+  "version": "smerc.autonomy-continuance.v1",
+  "case_id": "AUTONOMY_CONTINUANCE_001",
+  "subject_id": "treasury_agent",
+  "authority": {
+    "identity_verified": true,
+    "delegation_valid": true,
+    "policy_binding_valid": true,
+    "tool_grant_valid": true,
+    "approval_required": true,
+    "approval_present": true,
+    "credential_age_minutes": 12,
+    "max_credential_age_minutes": 30
+  },
+  "intent": {
+    "declared_intent": "simulate treasury liquidity options",
+    "operation_class": "payment",
+    "tool_name": "stablecoin_treasury_transfer",
+    "declared_allowed_tools": ["read_balance", "simulate_transfer"],
+    "declared_scope_units": 5,
+    "requested_scope_units": 12,
+    "declared_data_boundary": "financial-shadow-mode",
+    "requested_data_boundary": "financial-shadow-mode"
+  },
+  "consequence_horizon": {
+    "external_side_effect": true,
+    "customer_impact_possible": false,
+    "financial_settlement_possible": true,
+    "rollback_window_minutes": 180,
+    "downstream_system_count": 4
+  },
+  "collective_autonomy": {
+    "active_actor_count": 6,
+    "shared_tool_actor_count": 4,
+    "correlated_objective": true,
+    "aggregate_scope_units": 340,
+    "aggregate_scope_limit": 250
+  },
+  "earned_autonomy": {
+    "earned_tier": "TIER_3_BOUNDED",
+    "subject_id": "treasury_agent"
+  },
+  "autonomy_budget": {
+    "autonomy_state": "SUSPEND_AUTONOMY",
+    "remaining": {
+      "actions": 3,
+      "scope_units": 0,
+      "risk_spend": 0
+    }
+  }
+}

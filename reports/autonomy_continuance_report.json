@@ -1,0 +1,61 @@
+{
+  "authority_provenance": {
+    "drivers": [],
+    "score": 1.0,
+    "status": "VERIFIED"
+  },
+  "autonomy_budget": {
+    "autonomy_state": "SUSPEND_AUTONOMY",
+    "remaining": {
+      "actions": 3,
+      "risk_spend": 0,
+      "scope_units": 0
+    }
+  },
+  "case_id": "AUTONOMY_CONTINUANCE_001",
+  "collective_autonomy": {
+    "drivers": [
+      "many_active_actors",
+      "shared_tool_concentration",
+      "correlated_objective",
+      "aggregate_scope_limit_exceeded"
+    ],
+    "state": "COLLECTIVE_RISK_HIGH"
+  },
+  "consequence_horizon": {
+    "drivers": [
+      "external_side_effect",
+      "financial_settlement_possible",
+      "long_rollback_window",
+      "multi_system_downstream_effect"
+    ],
+    "horizon": "LONG",
+    "score": 0.8
+  },
+  "earned_autonomy": {
+    "earned_tier": "TIER_3_BOUNDED",
+    "subject_id": "treasury_agent"
+  },
+  "generated_at": "2026-08-23T01:21:50+00:00",
+  "intent_integrity": {
+    "drivers": [
+      "scope_exceeds_declared_intent",
+      "tool_not_in_declared_intent"
+    ],
+    "score": 0.15,
+    "status": "DIVERGED"
+  },
+  "plain_english_summary": "The current right-to-continue state is REQUALIFY. Authority is VERIFIED, intent is DIVERGED, consequence horizon is LONG, and collective autonomy is COLLECTIVE_RISK_HIGH.",
+  "right_to_continue": {
+    "drivers": [
+      "intent_integrity_failed",
+      "long_consequence_horizon",
+      "collective_autonomy_risk",
+      "autonomy_budget_not_sufficient"
+    ],
+    "recommended_next_action": "Stop autonomous continuation and require owner review before any further action.",
+    "state": "REQUALIFY"
+  },
+  "subject_id": "treasury_agent",
+  "version": "smerc.autonomy-continuance.v1"
+}

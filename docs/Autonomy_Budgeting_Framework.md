@@ -84,8 +84,10 @@ For a pilot, this can be measured by:
 - whether autonomy suspension reduces false release candidates
 - whether degraded autonomy preserves useful low-risk work while blocking high-risk execution
 
+Autonomy Continuance sits after the current budget decision and asks whether the actor still has the right to continue from the current point.
+
 ## Boundary
 
 This is a reference model for shadow-mode evaluation. It is not a production entitlement service, IAM system, billing engine, legal compliance engine, or certified safety controller. Customer pilots must calibrate thresholds against real reviewer labels and operational outcomes.
 
-See also `docs/Earned_Autonomy_Framework.md`.
+See also `docs/Earned_Autonomy_Framework.md` and `docs/Autonomy_Continuance_Framework.md`.

@@ -69,6 +69,7 @@ That is the product distinction:
 - Autonomy Health governs the ongoing permission level of the actor
 - Earned Autonomy sets the starting tier from historical behavior
 - Autonomy Budgeting meters how much current freedom the actor receives
+- Autonomy Continuance decides whether the actor still has the right to continue after authority, intent, consequence, and collective behavior are checked
 - DLL preserves the evidence needed to justify those changes
 
 ## Commercial Use
@@ -85,4 +86,4 @@ Autonomy Health can become a CISO-visible dashboard for:
 
 Autonomy Health is currently a framework and operating model. It should not be marketed as proven until pilot data shows that the score correlates with reviewer agreement, irreversible exposure reduction, lower false release rate, lower recovery cost, or fewer severe automation incidents.
 
-See also `docs/Earned_Autonomy_Framework.md` and `docs/Autonomy_Budgeting_Framework.md`.
+See also `docs/Earned_Autonomy_Framework.md`, `docs/Autonomy_Budgeting_Framework.md`, and `docs/Autonomy_Continuance_Framework.md`.
