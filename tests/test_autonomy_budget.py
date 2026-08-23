@@ -18,6 +18,7 @@ REGISTRY = ROOT / "examples" / "mcp" / "governance_gateway_registry.json"
 SESSION = ROOT / "examples" / "mcp" / "governance_gateway_session.json"
 DOC = ROOT / "docs" / "Autonomy_Budgeting_Framework.md"
 TEST_OUTPUTS = ROOT / "test_outputs"
+TEST_OUTPUTS.mkdir(exist_ok=True)
 
 
 class AutonomyBudgetTests(unittest.TestCase):

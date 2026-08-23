@@ -18,6 +18,7 @@ REGISTRY = ROOT / "examples" / "mcp" / "governance_gateway_registry.json"
 SESSION = ROOT / "examples" / "mcp" / "governance_gateway_session.json"
 DOC = ROOT / "docs" / "MCP_Governance_Gateway.md"
 TEST_OUTPUTS = ROOT / "test_outputs"
+TEST_OUTPUTS.mkdir(exist_ok=True)
 
 
 class MCPGovernanceGatewayTests(unittest.TestCase):
