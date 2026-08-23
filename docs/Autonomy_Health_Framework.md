@@ -56,7 +56,7 @@ SMERC decisions feed Autonomy Health through:
 
 Autonomy Health then feeds back into future SMERC evaluation by adjusting caps, required evidence, review requirements, domain profiles, and enforcement state.
 
-Autonomy Budgeting is the operating mechanism that turns this health judgment into a current allowance: number of actions, scope units, risk spend, valid time window, and allowed tool tiers.
+Earned Autonomy sets the starting allowance from historical evidence. Autonomy Budgeting is the operating mechanism that turns this health judgment into a current allowance: number of actions, scope units, risk spend, valid time window, and allowed tool tiers.
 
 ## Example
 
@@ -67,6 +67,7 @@ That is the product distinction:
 - recoverability scoring governs the proposed action
 - ref-gate checks prevent malformed or untrusted requests from being scored around
 - Autonomy Health governs the ongoing permission level of the actor
+- Earned Autonomy sets the starting tier from historical behavior
 - Autonomy Budgeting meters how much current freedom the actor receives
 - DLL preserves the evidence needed to justify those changes
 
@@ -84,4 +85,4 @@ Autonomy Health can become a CISO-visible dashboard for:
 
 Autonomy Health is currently a framework and operating model. It should not be marketed as proven until pilot data shows that the score correlates with reviewer agreement, irreversible exposure reduction, lower false release rate, lower recovery cost, or fewer severe automation incidents.
 
-See also `docs/Autonomy_Budgeting_Framework.md`.
+See also `docs/Earned_Autonomy_Framework.md` and `docs/Autonomy_Budgeting_Framework.md`.

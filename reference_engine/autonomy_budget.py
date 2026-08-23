@@ -67,6 +67,7 @@ def evaluate_autonomy_budget(
     decisions: Iterable[Mapping[str, Any]],
     initial_state: str = "HEALTHY",
     budget_overrides: Mapping[str, Any] | None = None,
+    earned_autonomy: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     if initial_state not in AUTONOMY_STATES:
         raise ValueError(f"initial_state must be one of: {', '.join(sorted(AUTONOMY_STATES))}")
@@ -123,6 +124,7 @@ def evaluate_autonomy_budget(
         "generated_at": _now(),
         "initial_state": initial_state,
         "autonomy_state": state,
+        "earned_autonomy": dict(earned_autonomy or {}),
         "budget": budget,
         "spent": {
             "actions": spent_actions,
@@ -165,6 +167,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         "",
         f"- Initial state: `{report['initial_state']}`",
         f"- Current autonomy state: `{report['autonomy_state']}`",
+        f"- Earned tier: `{report.get('earned_autonomy', {}).get('earned_tier', 'not_supplied')}`",
         f"- Actions spent: `{report['spent']['actions']}` of `{report['budget']['max_actions']}`",
         f"- Scope units spent: `{report['spent']['scope_units']}` of `{report['budget']['max_scope_units']}`",
         f"- Risk spend: `{report['spent']['risk_spend']}` of `{report['budget']['max_risk_spend']}`",
@@ -318,7 +321,14 @@ def main() -> int:
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args()
     gateway_report = json.loads(Path(args.gateway_report).read_text(encoding="utf-8"))
-    report = evaluate_autonomy_budget(decisions=gateway_report["decisions"], initial_state=args.initial_state)
+    earned_autonomy = gateway_report.get("earned_autonomy") or {}
+    budget_context = earned_autonomy.get("budget_context", {}) if isinstance(earned_autonomy, Mapping) else {}
+    report = evaluate_autonomy_budget(
+        decisions=gateway_report["decisions"],
+        initial_state=str(budget_context.get("initial_state", args.initial_state)),
+        budget_overrides=budget_context.get("budget_overrides"),
+        earned_autonomy=earned_autonomy,
+    )
     write_outputs(report, json_path=args.json_output, markdown_path=args.markdown_output)
     print(json.dumps(report, indent=2 if args.pretty else None, sort_keys=True))
     return 0

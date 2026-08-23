@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping
 
 from reference_engine.autonomy_budget import evaluate_autonomy_budget
+from reference_engine.earned_autonomy import budget_context_for_tier
 from reference_engine.mcp_proxy_runner import run_mcp_proxy
 
 
@@ -98,7 +99,13 @@ def evaluate_gateway_session(
     proxy_action_counts = _counts(item["proxy_action"] for item in gateway_decisions)
     forwarded_count = sum(1 for item in gateway_decisions if item["should_forward_tool_call"])
     blocked_or_held_count = len(gateway_decisions) - forwarded_count
-    autonomy_budget = evaluate_autonomy_budget(decisions=gateway_decisions)
+    earned_autonomy = _earned_autonomy_context(session)
+    autonomy_budget = evaluate_autonomy_budget(
+        decisions=gateway_decisions,
+        initial_state=earned_autonomy["budget_context"]["initial_state"] if earned_autonomy else "HEALTHY",
+        budget_overrides=earned_autonomy["budget_context"]["budget_overrides"] if earned_autonomy else None,
+        earned_autonomy=earned_autonomy,
+    )
     return {
         "version": MCP_GOVERNANCE_GATEWAY_VERSION,
         "generated_at": _now(),
@@ -114,6 +121,7 @@ def evaluate_gateway_session(
         "posture_counts": posture_counts,
         "proxy_action_counts": proxy_action_counts,
         "highest_pressure_calls": _highest_pressure(gateway_decisions),
+        "earned_autonomy": earned_autonomy,
         "autonomy_budget": autonomy_budget,
         "decisions": gateway_decisions,
         "commercial_boundary": (
@@ -147,6 +155,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Forwarded calls: `{report['forwarded_count']}`",
         f"- Blocked or held calls: `{report['blocked_or_held_count']}`",
         f"- Ref gate failures: `{report['ref_gate_failure_count']}`",
+        f"- Earned autonomy tier: `{report['earned_autonomy']['earned_tier'] if report.get('earned_autonomy') else 'not_supplied'}`",
         f"- Autonomy state: `{report['autonomy_budget']['autonomy_state']}`",
         f"- Remaining actions: `{report['autonomy_budget']['remaining']['actions']}`",
         f"- Remaining risk spend: `{report['autonomy_budget']['remaining']['risk_spend']}`",
@@ -162,6 +171,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             "",
             "## Autonomy Budget",
             "",
+            f"- Earned tier: `{report['earned_autonomy']['earned_tier'] if report.get('earned_autonomy') else 'not_supplied'}`",
             f"- State: `{report['autonomy_budget']['autonomy_state']}`",
             f"- Actions spent: `{report['autonomy_budget']['spent']['actions']}` of `{report['autonomy_budget']['budget']['max_actions']}`",
             f"- Scope units spent: `{report['autonomy_budget']['spent']['scope_units']}` of `{report['autonomy_budget']['budget']['max_scope_units']}`",
@@ -258,6 +268,19 @@ def _unknown_tool_policy(request: Mapping[str, Any]) -> Dict[str, Any]:
         "max_agent_calls_per_session": 3,
         "risk_pressure": 0.35,
         "required_metadata": ["registered_tool_policy"],
+    }
+
+
+def _earned_autonomy_context(session: Mapping[str, Any]) -> Dict[str, Any] | None:
+    supplied = session.get("earned_autonomy")
+    if not isinstance(supplied, Mapping):
+        return None
+    tier = str(supplied.get("earned_tier", "TIER_2_CONSTRAINED"))
+    return {
+        "subject_id": str(supplied.get("subject_id", "unknown_subject")),
+        "earned_tier": tier,
+        "source": str(supplied.get("source", "supplied_session_profile")),
+        "budget_context": budget_context_for_tier(tier),
     }
 
 

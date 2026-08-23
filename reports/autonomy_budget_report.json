@@ -12,23 +12,21 @@
     "allowed_tool_risk_tiers": [
       "low",
       "medium",
-      "high",
-      "financial",
-      "destructive"
+      "high"
     ],
-    "max_actions": 10,
-    "max_risk_spend": 3.0,
-    "max_scope_units": 1000,
-    "valid_for_minutes": 60
+    "max_actions": 7,
+    "max_risk_spend": 1.8,
+    "max_scope_units": 250,
+    "valid_for_minutes": 30
   },
   "decision_ledger": [
     {
       "autonomy_state_after": "HEALTHY",
       "posture": "ALLOW",
       "ref_gate_status": "pass",
-      "remaining_actions": 9,
-      "remaining_risk_spend": 2.987,
-      "remaining_scope_units": 980.0,
+      "remaining_actions": 6,
+      "remaining_risk_spend": 1.787,
+      "remaining_scope_units": 230.0,
       "request_id": "MCP_SEARCH_DOCS_001",
       "risk_spend": 0.013,
       "sequence": 1,
@@ -38,8 +36,8 @@
       "autonomy_state_after": "SUSPEND_AUTONOMY",
       "posture": "DENY",
       "ref_gate_status": "pass",
-      "remaining_actions": 8,
-      "remaining_risk_spend": 2.287,
+      "remaining_actions": 5,
+      "remaining_risk_spend": 1.087,
       "remaining_scope_units": 0.0,
       "request_id": "MCP_DELETE_CUSTOMER_RECORDS_002",
       "risk_spend": 0.7,
@@ -50,8 +48,8 @@
       "autonomy_state_after": "SUSPEND_AUTONOMY",
       "posture": "DENY",
       "ref_gate_status": "pass",
-      "remaining_actions": 7,
-      "remaining_risk_spend": 1.667,
+      "remaining_actions": 4,
+      "remaining_risk_spend": 0.467,
       "remaining_scope_units": 0.0,
       "request_id": "MCP_STABLECOIN_TRANSFER_003",
       "risk_spend": 0.62,
@@ -62,8 +60,8 @@
       "autonomy_state_after": "SUSPEND_AUTONOMY",
       "posture": "DENY",
       "ref_gate_status": "fail",
-      "remaining_actions": 6,
-      "remaining_risk_spend": 0.167,
+      "remaining_actions": 3,
+      "remaining_risk_spend": 0.0,
       "remaining_scope_units": 0.0,
       "request_id": "MCP_STABLECOIN_TRANSFER_004",
       "risk_spend": 1.5,
@@ -71,18 +69,39 @@
       "tool_name": "stablecoin_treasury_transfer"
     }
   ],
-  "generated_at": "2026-08-23T01:06:57+00:00",
+  "earned_autonomy": {
+    "budget_context": {
+      "budget_overrides": {
+        "allowed_tool_risk_tiers": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "max_actions": 7,
+        "max_risk_spend": 1.8,
+        "max_scope_units": 250,
+        "valid_for_minutes": 30
+      },
+      "earned_tier": "TIER_3_BOUNDED",
+      "initial_state": "HEALTHY"
+    },
+    "earned_tier": "TIER_3_BOUNDED",
+    "source": "examples/autonomy/agent_history.json",
+    "subject_id": "treasury_agent"
+  },
+  "generated_at": "2026-08-23T01:16:34+00:00",
   "initial_state": "HEALTHY",
   "plain_english_summary": "Autonomy should be suspended for this session because the action stream exhausted or violated the current autonomy budget. Human review should requalify the agent or tool family before more autonomous execution is allowed.",
   "remaining": {
-    "actions": 6,
-    "risk_spend": 0.167,
+    "actions": 3,
+    "risk_spend": 0.0,
     "scope_units": 0.0,
     "valid_for_minutes": 0
   },
   "review_triggers": [
     "ref_gate_failure",
     "scope_budget_exhausted",
+    "risk_budget_exhausted",
     "repeated_blocked_or_held_attempts",
     "autonomy_removed_until_review"
   ],

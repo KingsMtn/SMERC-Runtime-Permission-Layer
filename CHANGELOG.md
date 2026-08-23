@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an Earned Autonomy reference engine, example agent history, CLI, docs, reports, and tests that convert historical reviewer agreement, overrides, ref-gate failures, rollback results, false releases, incidents, scope violations, and evidence gaps into a starting autonomy tier.
 - Added an Autonomy Budgeting reference engine, CLI, docs, reports, and tests that meter current AI-agent freedom by action count, scope units, cumulative risk spend, ref-gate failures, blocked or held attempts, and allowed tool risk tiers.
 - Added deterministic ref-gate checks to the MCP Governance Gateway for typed contract validity, attestation validity, least-privilege confirmation, and expected object shape, including fail-closed scoring behavior, example MCP session metadata, generated report fields, documentation, and tests.
 - Added an Autonomy Health framework for evaluating whether an AI agent, workflow, or tool family should retain, reduce, suspend, or requalify its level of independence over time.

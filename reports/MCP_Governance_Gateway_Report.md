@@ -1,6 +1,6 @@
 # SMERC MCP Governance Gateway Report
 
-Generated: `2026-08-23T01:06:49+00:00`
+Generated: `2026-08-23T01:16:33+00:00`
 
 ## Executive Summary
 
@@ -13,9 +13,10 @@ Generated: `2026-08-23T01:06:49+00:00`
 - Forwarded calls: `1`
 - Blocked or held calls: `3`
 - Ref gate failures: `1`
+- Earned autonomy tier: `TIER_3_BOUNDED`
 - Autonomy state: `SUSPEND_AUTONOMY`
-- Remaining actions: `6`
-- Remaining risk spend: `0.167`
+- Remaining actions: `3`
+- Remaining risk spend: `0.0`
 
 ## Posture Distribution
 
@@ -29,11 +30,12 @@ Generated: `2026-08-23T01:06:49+00:00`
 
 ## Autonomy Budget
 
+- Earned tier: `TIER_3_BOUNDED`
 - State: `SUSPEND_AUTONOMY`
-- Actions spent: `4` of `10`
-- Scope units spent: `2544.0` of `1000`
-- Risk spend: `2.833` of `3.0`
-- Review triggers: `ref_gate_failure, scope_budget_exhausted, repeated_blocked_or_held_attempts, autonomy_removed_until_review`
+- Actions spent: `4` of `7`
+- Scope units spent: `2544.0` of `250`
+- Risk spend: `2.833` of `1.8`
+- Review triggers: `ref_gate_failure, scope_budget_exhausted, risk_budget_exhausted, repeated_blocked_or_held_attempts, autonomy_removed_until_review`
 
 Autonomy should be suspended for this session because the action stream exhausted or violated the current autonomy budget. Human review should requalify the agent or tool family before more autonomous execution is allowed.
 

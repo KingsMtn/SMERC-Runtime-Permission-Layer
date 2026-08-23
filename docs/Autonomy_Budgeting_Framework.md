@@ -24,6 +24,7 @@ This is useful because safe autonomy is not binary. An agent may be allowed to r
 
 Autonomy Budgeting consumes:
 
+- earned autonomy tier and starting budget context
 - SMERC posture: `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`.
 - Gateway pressure: loop pressure, scope pressure, budget pressure, high-risk tool tier, and ref-gate drivers.
 - Ref-gate status: typed contract, attestation, least privilege, and expected object shape.
@@ -67,6 +68,8 @@ Generated outputs:
 - `reports/MCP_Governance_Gateway_Report.md`
 - `reports/autonomy_budget_report.json`
 - `reports/Autonomy_Budget_Report.md`
+- `reports/earned_autonomy_report.json`
+- `reports/Earned_Autonomy_Report.md`
 
 ## Commercial Meaning
 
@@ -84,3 +87,5 @@ For a pilot, this can be measured by:
 ## Boundary
 
 This is a reference model for shadow-mode evaluation. It is not a production entitlement service, IAM system, billing engine, legal compliance engine, or certified safety controller. Customer pilots must calibrate thresholds against real reviewer labels and operational outcomes.
+
+See also `docs/Earned_Autonomy_Framework.md`.
