@@ -131,6 +131,14 @@ If you are evaluating SMERC as a potential platform feature, strategic partnersh
 - `docs/Why_SMERC_Fits_Strategic_Platforms.md` compares SMERC's runtime checkpoint to IAM, policy engines, AI gateways, approvals, and audit logs.
 - `docs/IP_Asset_Map.md` maps the strongest technical mechanisms and weaker broad claims to avoid.
 - `docs/Technical_Diligence_Index.md` gives a short inspection path through the implementation.
+- `docs/Strategic_Reviewer_Brief.md` gives a one-page external review brief.
+- `docs/Strategic_Outbound_Message.md` gives a bounded message for requesting serious review.
+
+Generate the strategic reviewer evidence packet:
+
+```bash
+python -m reference_engine.strategic_reviewer_packet --pretty
+```
 
 The strategic path is evidence-first: prove that recoverability-aware runtime permissioning changes reviewer judgment in a useful way before claiming broad commercial value.
 
