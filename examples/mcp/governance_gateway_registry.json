@@ -13,6 +13,13 @@
       "max_agent_calls_per_session": 10,
       "max_scope_units": 500,
       "risk_pressure": 0.05,
+      "requires_ref_gate": true,
+      "required_ref_evidence": [
+        "typed_contract_valid",
+        "attestation_valid",
+        "least_privilege_confirmed",
+        "object_shape_expected"
+      ],
       "required_metadata": ["agent_id", "tool_name", "operation_class", "requested_scope_units"]
     },
     {
@@ -26,6 +33,13 @@
       "max_agent_calls_per_session": 4,
       "max_scope_units": 25,
       "risk_pressure": 0.42,
+      "requires_ref_gate": true,
+      "required_ref_evidence": [
+        "typed_contract_valid",
+        "attestation_valid",
+        "least_privilege_confirmed",
+        "object_shape_expected"
+      ],
       "required_metadata": ["rollback_plan", "human_approval", "scope_limit", "replay_id"]
     },
     {
@@ -39,6 +53,13 @@
       "max_agent_calls_per_session": 4,
       "max_scope_units": 10,
       "risk_pressure": 0.34,
+      "requires_ref_gate": true,
+      "required_ref_evidence": [
+        "typed_contract_valid",
+        "attestation_valid",
+        "least_privilege_confirmed",
+        "object_shape_expected"
+      ],
       "required_metadata": ["amount_band_usd", "settlement_finality", "containment_strength", "dual_control_available"]
     }
   ]

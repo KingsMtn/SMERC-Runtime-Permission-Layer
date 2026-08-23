@@ -63,6 +63,7 @@ The current build includes:
 - MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses with DLL evidence
 - MCP Transport Proxy sample that wraps a JSON-RPC-style `tools/call` request and returns either a forwarded result or a SMERC-blocked proxy error
 - MCP Governance Gateway that evaluates registry-defined MCP tool-call sessions with loop pressure, scope pressure, session-budget metering, proxy actions, SPARTa routes, DLL evidence, and SMERC-F financial tool-family support
+- deterministic ref-gate-style metadata checks for typed contract validity, attestation validity, least-privilege confirmation, and expected object shape before recoverability scoring is allowed to influence high-impact MCP tool calls
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
 - cloud automation guardrails positioning for infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions
 - control mapping library that maps SMERC execution controls to declared native tool mechanisms and evidence requirements
@@ -83,6 +84,7 @@ The current build includes:
 - self-contained GitHub Actions pilot package generator that assembles signal intake, eligibility, SMERC decision, execution route, DLL, DLL Intelligence, and timing evidence
 - scoring-invariant verification for recoverability and executor fitness math
 - Self-Governance Sandbox that scores proposed SMERC policy, threshold, adapter, and scoring changes before they can affect SMERC itself
+- Autonomy Health operating model for deciding whether an AI agent, workflow, or tool family should keep, reduce, suspend, or requalify its level of independence over time
 - commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service
 - OpenAPI 3.1 pilot API contract
@@ -175,6 +177,8 @@ Start here before reading the code:
 - `docs/MCP_Proxy_Runner.md` explains the local MCP proxy runner that returns shadow/enforce proxy actions and records Decision Lifecycle Ledger evidence.
 - `docs/MCP_Transport_Proxy.md` explains the local JSON-RPC-style transport proxy sample for `tools/call` forwarding or blocking.
 - `docs/MCP_Governance_Gateway.md` explains the registry-driven MCP gateway that evaluates tool-call sessions, repeated-call pressure, scope pressure, session-budget metering, SMERC posture, SPARTa route behavior, and SMERC-F financial tool profiles.
+- `docs/SMERC_And_The_Ref_Pattern.md` explains how deterministic pre-execution checks for typed contracts, attestation, least privilege, and object shape prevent malformed or untrusted MCP tool calls from being scored around.
+- `docs/Autonomy_Health_Framework.md` explains the continuous governance layer for deciding how much independence an AI agent, workflow, or tool family should retain over time.
 - `docs/Self_Service_Pilot_Connector.md` explains how a reviewer can run a mixed metadata-only sample bundle and receive a compact pilot-fit decision package.
 - `docs/Cloud_Automation_Guardrails.md` explains how SMERC can be evaluated as a recoverability-aware checkpoint for cloud automation and infrastructure actions.
 - `docs/MCP_Runtime_Governance_Positioning.md` explains SMERC's focused category position as recoverability-aware runtime governance for MCP-style tool calls and agent actions.

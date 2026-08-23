@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added deterministic ref-gate checks to the MCP Governance Gateway for typed contract validity, attestation validity, least-privilege confirmation, and expected object shape, including fail-closed scoring behavior, example MCP session metadata, generated report fields, documentation, and tests.
+- Added an Autonomy Health framework for evaluating whether an AI agent, workflow, or tool family should retain, reduce, suspend, or requalify its level of independence over time.
 - Added a CISO/security architect 15-minute review path that routes serious reviewers from product claim to MCP Gateway proof, GitHub Actions pilot path, replay evidence, pilot decision criteria, and explicit non-claim boundaries.
 - Added an MCP Governance Gateway that evaluates registry-defined MCP tool-call sessions with repeated-call pressure, scope pressure, session-budget metering, SMERC posture routing, SPARTa route behavior, proxy action recommendations, generated reports, and SMERC-F financial tool-family support.
 - Added a SMERC-F metadata intake contract and sample customer template for safe financial-services shadow-mode review without customer records, raw regulated transaction payloads, wallet keys, live fund movement, or production enforcement.

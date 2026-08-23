@@ -1,6 +1,6 @@
 {
   "blocked_or_held_count": 3,
-  "commercial_boundary": "This gateway package demonstrates MCP tool registry governance, repeated-call pressure, cost metering, and SMERC posture routing. It does not implement OAuth, mTLS, native MCP transport, payment rails, x402, wallet settlement, prompt-injection defense, sandboxing, SIEM export, or production billing.",
+  "commercial_boundary": "This gateway package demonstrates MCP tool registry governance, deterministic pre-execution metadata checks, repeated-call pressure, cost metering, and SMERC posture routing. It does not implement OAuth, mTLS, native MCP transport, payment rails, x402, wallet settlement, prompt-injection defense, sandboxing, SIEM export, or production billing.",
   "cumulative_cost_units": 11.2,
   "decisions": [
     {
@@ -26,7 +26,31 @@
         "RECOVERABILITY_ACCEPTABLE"
       ],
       "recommended_mcp_result": "call_tool",
-      "replay_id": "replay_MCP_MCP_SEARCH_DOCS_001_1787365800485_2e90fdf480ae",
+      "ref_gate": {
+        "checks": {
+          "attestation_valid": {
+            "source": "explicit",
+            "value": true
+          },
+          "least_privilege_confirmed": {
+            "source": "explicit",
+            "value": true
+          },
+          "object_shape_expected": {
+            "source": "explicit",
+            "value": true
+          },
+          "typed_contract_valid": {
+            "source": "explicit",
+            "value": true
+          }
+        },
+        "drivers": [],
+        "pattern": "deterministic_pre_execution_ref_gate",
+        "required": true,
+        "status": "pass"
+      },
+      "replay_id": "replay_MCP_MCP_SEARCH_DOCS_001_1787446515552_a8368cd86e20",
       "risk_tier": "low",
       "route_state": "EXECUTE",
       "sequence": 1,
@@ -69,7 +93,31 @@
         "SENSITIVE_DATA"
       ],
       "recommended_mcp_result": "block_tool_call",
-      "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_002_1787365800489_e6c79bc07cfe",
+      "ref_gate": {
+        "checks": {
+          "attestation_valid": {
+            "source": "explicit",
+            "value": true
+          },
+          "least_privilege_confirmed": {
+            "source": "explicit",
+            "value": true
+          },
+          "object_shape_expected": {
+            "source": "explicit",
+            "value": true
+          },
+          "typed_contract_valid": {
+            "source": "explicit",
+            "value": true
+          }
+        },
+        "drivers": [],
+        "pattern": "deterministic_pre_execution_ref_gate",
+        "required": true,
+        "status": "pass"
+      },
+      "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_002_1787446515558_fad2f1efe188",
       "risk_tier": "destructive",
       "route_state": "BLOCK",
       "sequence": 2,
@@ -110,7 +158,31 @@
         "SENSITIVE_DATA"
       ],
       "recommended_mcp_result": "block_tool_call",
-      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_003_1787365800492_b6d627f6cca9",
+      "ref_gate": {
+        "checks": {
+          "attestation_valid": {
+            "source": "explicit",
+            "value": true
+          },
+          "least_privilege_confirmed": {
+            "source": "explicit",
+            "value": true
+          },
+          "object_shape_expected": {
+            "source": "explicit",
+            "value": true
+          },
+          "typed_contract_valid": {
+            "source": "explicit",
+            "value": true
+          }
+        },
+        "drivers": [],
+        "pattern": "deterministic_pre_execution_ref_gate",
+        "required": true,
+        "status": "pass"
+      },
+      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_003_1787446515559_5397b3b5ba04",
       "risk_tier": "financial",
       "route_state": "BLOCK",
       "sequence": 3,
@@ -130,11 +202,12 @@
         "drivers": [
           "session_budget_pressure",
           "scope_exceeds_registry_limit",
-          "high_risk_tool_tier"
+          "high_risk_tool_tier",
+          "object_shape_unexpected"
         ],
         "observed_agent_count": 2,
         "observed_tool_count": 2,
-        "score": 0.78,
+        "score": 1.0,
         "session_budget_units": 8.0
       },
       "mcp_request_id": "MCP_STABLECOIN_TRANSFER_004",
@@ -148,13 +221,41 @@
         "ROLLBACK_LATENCY_HIGH",
         "CANCEL_RELIABILITY_WEAK",
         "CONTAINMENT_WEAK",
+        "EVIDENCE_VALIDITY_LOW",
+        "AUTHORIZATION_CONFIDENCE_LOW",
         "ANOMALY_PRESSURE_HIGH",
         "IMPACT_SCOPE_WIDE",
         "EXTERNAL_SIDE_EFFECT",
         "SENSITIVE_DATA"
       ],
       "recommended_mcp_result": "block_tool_call",
-      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_004_1787365800492_0ba6dcfe5325",
+      "ref_gate": {
+        "checks": {
+          "attestation_valid": {
+            "source": "explicit",
+            "value": true
+          },
+          "least_privilege_confirmed": {
+            "source": "explicit",
+            "value": true
+          },
+          "object_shape_expected": {
+            "source": "explicit",
+            "value": false
+          },
+          "typed_contract_valid": {
+            "source": "explicit",
+            "value": true
+          }
+        },
+        "drivers": [
+          "object_shape_unexpected"
+        ],
+        "pattern": "deterministic_pre_execution_ref_gate",
+        "required": true,
+        "status": "fail"
+      },
+      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_004_1787446515562_5d026ee0ddfa",
       "risk_tier": "financial",
       "route_state": "BLOCK",
       "sequence": 4,
@@ -164,7 +265,7 @@
     }
   ],
   "forwarded_count": 1,
-  "generated_at": "2026-08-22T02:30:00+00:00",
+  "generated_at": "2026-08-23T00:55:15+00:00",
   "highest_pressure_calls": [
     {
       "agent_id": "treasury_agent",
@@ -178,11 +279,12 @@
         "drivers": [
           "session_budget_pressure",
           "scope_exceeds_registry_limit",
-          "high_risk_tool_tier"
+          "high_risk_tool_tier",
+          "object_shape_unexpected"
         ],
         "observed_agent_count": 2,
         "observed_tool_count": 2,
-        "score": 0.78,
+        "score": 1.0,
         "session_budget_units": 8.0
       },
       "mcp_request_id": "MCP_STABLECOIN_TRANSFER_004",
@@ -196,13 +298,41 @@
         "ROLLBACK_LATENCY_HIGH",
         "CANCEL_RELIABILITY_WEAK",
         "CONTAINMENT_WEAK",
+        "EVIDENCE_VALIDITY_LOW",
+        "AUTHORIZATION_CONFIDENCE_LOW",
         "ANOMALY_PRESSURE_HIGH",
         "IMPACT_SCOPE_WIDE",
         "EXTERNAL_SIDE_EFFECT",
         "SENSITIVE_DATA"
       ],
       "recommended_mcp_result": "block_tool_call",
-      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_004_1787365800492_0ba6dcfe5325",
+      "ref_gate": {
+        "checks": {
+          "attestation_valid": {
+            "source": "explicit",
+            "value": true
+          },
+          "least_privilege_confirmed": {
+            "source": "explicit",
+            "value": true
+          },
+          "object_shape_expected": {
+            "source": "explicit",
+            "value": false
+          },
+          "typed_contract_valid": {
+            "source": "explicit",
+            "value": true
+          }
+        },
+        "drivers": [
+          "object_shape_unexpected"
+        ],
+        "pattern": "deterministic_pre_execution_ref_gate",
+        "required": true,
+        "status": "fail"
+      },
+      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_004_1787446515562_5d026ee0ddfa",
       "risk_tier": "financial",
       "route_state": "BLOCK",
       "sequence": 4,
@@ -245,7 +375,31 @@
         "SENSITIVE_DATA"
       ],
       "recommended_mcp_result": "block_tool_call",
-      "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_002_1787365800489_e6c79bc07cfe",
+      "ref_gate": {
+        "checks": {
+          "attestation_valid": {
+            "source": "explicit",
+            "value": true
+          },
+          "least_privilege_confirmed": {
+            "source": "explicit",
+            "value": true
+          },
+          "object_shape_expected": {
+            "source": "explicit",
+            "value": true
+          },
+          "typed_contract_valid": {
+            "source": "explicit",
+            "value": true
+          }
+        },
+        "drivers": [],
+        "pattern": "deterministic_pre_execution_ref_gate",
+        "required": true,
+        "status": "pass"
+      },
+      "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_002_1787446515558_fad2f1efe188",
       "risk_tier": "destructive",
       "route_state": "BLOCK",
       "sequence": 2,
@@ -286,7 +440,31 @@
         "SENSITIVE_DATA"
       ],
       "recommended_mcp_result": "block_tool_call",
-      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_003_1787365800492_b6d627f6cca9",
+      "ref_gate": {
+        "checks": {
+          "attestation_valid": {
+            "source": "explicit",
+            "value": true
+          },
+          "least_privilege_confirmed": {
+            "source": "explicit",
+            "value": true
+          },
+          "object_shape_expected": {
+            "source": "explicit",
+            "value": true
+          },
+          "typed_contract_valid": {
+            "source": "explicit",
+            "value": true
+          }
+        },
+        "drivers": [],
+        "pattern": "deterministic_pre_execution_ref_gate",
+        "required": true,
+        "status": "pass"
+      },
+      "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_003_1787446515559_5397b3b5ba04",
       "risk_tier": "financial",
       "route_state": "BLOCK",
       "sequence": 3,
@@ -317,7 +495,31 @@
         "RECOVERABILITY_ACCEPTABLE"
       ],
       "recommended_mcp_result": "call_tool",
-      "replay_id": "replay_MCP_MCP_SEARCH_DOCS_001_1787365800485_2e90fdf480ae",
+      "ref_gate": {
+        "checks": {
+          "attestation_valid": {
+            "source": "explicit",
+            "value": true
+          },
+          "least_privilege_confirmed": {
+            "source": "explicit",
+            "value": true
+          },
+          "object_shape_expected": {
+            "source": "explicit",
+            "value": true
+          },
+          "typed_contract_valid": {
+            "source": "explicit",
+            "value": true
+          }
+        },
+        "drivers": [],
+        "pattern": "deterministic_pre_execution_ref_gate",
+        "required": true,
+        "status": "pass"
+      },
+      "replay_id": "replay_MCP_MCP_SEARCH_DOCS_001_1787446515552_a8368cd86e20",
       "risk_tier": "low",
       "route_state": "EXECUTE",
       "sequence": 1,
@@ -335,7 +537,8 @@
     "block_tool_call": 3,
     "forward_tool_call": 1
   },
-  "recommended_next_action": "Use this gateway in shadow mode against one MCP tool family, then compare SMERC posture, loop pressure, and reviewer labels before any enforcement or monetization work.",
+  "recommended_next_action": "Use this gateway in shadow mode against one typed MCP tool family, require explicit trusted metadata for contract, attestation, privilege, and object-shape checks, then compare SMERC posture, ref-gate failures, loop pressure, and reviewer labels before any enforcement or monetization work.",
+  "ref_gate_failure_count": 1,
   "registered_tool_count": 3,
   "registry_id": "mcp_gateway_registry_reference_v1",
   "request_count": 4,

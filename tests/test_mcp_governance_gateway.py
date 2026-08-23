@@ -28,6 +28,7 @@ class MCPGovernanceGatewayTests(unittest.TestCase):
         self.assertEqual(report["request_count"], 4)
         self.assertEqual(report["registered_tool_count"], 3)
         self.assertGreater(report["blocked_or_held_count"], 0)
+        self.assertEqual(report["ref_gate_failure_count"], 1)
         self.assertIn("smerc_f", {item["profile"] for item in report["decisions"]})
         self.assertTrue(any("high_risk_tool_tier" in item["gateway_pressure"]["drivers"] for item in report["decisions"]))
         self.assertTrue(any(item["tool_name"] == "stablecoin_treasury_transfer" for item in report["decisions"]))
@@ -38,9 +39,21 @@ class MCPGovernanceGatewayTests(unittest.TestCase):
 
         self.assertIn("scope_exceeds_registry_limit", drivers)
         self.assertIn("session_budget_pressure", drivers)
+        self.assertIn("object_shape_unexpected", drivers)
         self.assertGreater(report["cumulative_cost_units"], 8.0)
         highest = report["highest_pressure_calls"][0]
-        self.assertGreaterEqual(highest["gateway_pressure"]["score"], 0.5)
+        self.assertEqual(highest["gateway_pressure"]["score"], 1.0)
+        self.assertEqual(highest["ref_gate"]["status"], "fail")
+
+    def test_gateway_fails_closed_on_ref_gate_failure(self):
+        report = evaluate_gateway_session(registry=load_json(REGISTRY), session=load_json(SESSION), mode="enforce")
+        failed = [item for item in report["decisions"] if item["ref_gate"]["status"] == "fail"]
+
+        self.assertEqual(len(failed), 1)
+        self.assertEqual(failed[0]["mcp_request_id"], "MCP_STABLECOIN_TRANSFER_004")
+        self.assertIn("object_shape_unexpected", failed[0]["ref_gate"]["drivers"])
+        self.assertFalse(failed[0]["should_forward_tool_call"])
+        self.assertIn(failed[0]["posture"], {"DENY", "FREEZE"})
 
     def test_markdown_and_docs_are_bounded(self):
         report = evaluate_gateway_session(registry=load_json(REGISTRY), session=load_json(SESSION), mode="enforce")
@@ -49,6 +62,7 @@ class MCPGovernanceGatewayTests(unittest.TestCase):
 
         self.assertIn("SMERC MCP Governance Gateway Report", markdown)
         self.assertIn("Highest Pressure Calls", markdown)
+        self.assertIn("Ref Gate", markdown)
         self.assertIn("SMERC-F", docs)
         for phrase in ["OAuth", "mTLS", "payment rails", "x402", "prompt-injection defense", "production billing"]:
             self.assertIn(phrase, docs)

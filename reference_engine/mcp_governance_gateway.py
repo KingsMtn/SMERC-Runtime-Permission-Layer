@@ -15,6 +15,12 @@ MCP_GOVERNANCE_GATEWAY_VERSION = "smerc.mcp-governance-gateway.v1"
 REGISTRY_VERSION = "smerc.mcp-tool-registry.v1"
 SESSION_VERSION = "smerc.mcp-gateway-session.v1"
 MODES = {"shadow", "enforce"}
+REF_GATE_FIELDS = {
+    "typed_contract_valid": "typed_contract_invalid",
+    "attestation_valid": "attestation_invalid",
+    "least_privilege_confirmed": "least_privilege_unconfirmed",
+    "object_shape_expected": "object_shape_unexpected",
+}
 
 
 def load_json(path: str | Path) -> Any:
@@ -59,7 +65,9 @@ def evaluate_gateway_session(
             cumulative_cost_units=cumulative_cost_units,
             session_budget=float(session.get("session_budget_units", 100.0)),
         )
-        enriched_request = _enrich_request(request, tool_policy, gateway_pressure)
+        ref_gate = _ref_gate(request, tool_policy)
+        gateway_pressure = _merge_ref_gate_pressure(gateway_pressure, ref_gate)
+        enriched_request = _enrich_request(request, tool_policy, gateway_pressure, ref_gate)
         proxy_report = run_mcp_proxy(enriched_request, mode=mode)
         gateway_decisions.append(
             {
@@ -71,6 +79,7 @@ def evaluate_gateway_session(
                 "profile": str(tool_policy.get("profile", "general")),
                 "risk_tier": str(tool_policy.get("risk_tier", "unknown")),
                 "mode": mode,
+                "ref_gate": ref_gate,
                 "gateway_pressure": gateway_pressure,
                 "proxy_action": proxy_report["proxy_response"]["proxy_action"],
                 "should_forward_tool_call": proxy_report["proxy_response"]["should_forward_tool_call"],
@@ -98,18 +107,21 @@ def evaluate_gateway_session(
         "cumulative_cost_units": round(cumulative_cost_units, 3),
         "forwarded_count": forwarded_count,
         "blocked_or_held_count": blocked_or_held_count,
+        "ref_gate_failure_count": sum(1 for item in gateway_decisions if item["ref_gate"]["status"] == "fail"),
         "posture_counts": posture_counts,
         "proxy_action_counts": proxy_action_counts,
         "highest_pressure_calls": _highest_pressure(gateway_decisions),
         "decisions": gateway_decisions,
         "commercial_boundary": (
-            "This gateway package demonstrates MCP tool registry governance, repeated-call pressure, cost metering, "
-            "and SMERC posture routing. It does not implement OAuth, mTLS, native MCP transport, payment rails, "
-            "x402, wallet settlement, prompt-injection defense, sandboxing, SIEM export, or production billing."
+            "This gateway package demonstrates MCP tool registry governance, deterministic pre-execution metadata "
+            "checks, repeated-call pressure, cost metering, and SMERC posture routing. It does not implement OAuth, "
+            "mTLS, native MCP transport, payment rails, x402, wallet settlement, prompt-injection defense, "
+            "sandboxing, SIEM export, or production billing."
         ),
         "recommended_next_action": (
-            "Use this gateway in shadow mode against one MCP tool family, then compare SMERC posture, loop pressure, "
-            "and reviewer labels before any enforcement or monetization work."
+            "Use this gateway in shadow mode against one typed MCP tool family, require explicit trusted metadata "
+            "for contract, attestation, privilege, and object-shape checks, then compare SMERC posture, ref-gate "
+            "failures, loop pressure, and reviewer labels before any enforcement or monetization work."
         ),
     }
 
@@ -130,6 +142,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Cumulative cost units: `{report['cumulative_cost_units']}`",
         f"- Forwarded calls: `{report['forwarded_count']}`",
         f"- Blocked or held calls: `{report['blocked_or_held_count']}`",
+        f"- Ref gate failures: `{report['ref_gate_failure_count']}`",
         "",
         "## Posture Distribution",
         "",
@@ -142,15 +155,15 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             "",
             "## Highest Pressure Calls",
             "",
-            "| Request | Tool | Profile | Pressure | Posture | Proxy Action | Drivers |",
-            "| --- | --- | --- | ---: | --- | --- | --- |",
+            "| Request | Tool | Profile | Ref Gate | Pressure | Posture | Proxy Action | Drivers |",
+            "| --- | --- | --- | --- | ---: | --- | --- | --- |",
         ]
     )
     for item in report["highest_pressure_calls"]:
         drivers = ", ".join(item["gateway_pressure"]["drivers"]) or "none"
         lines.append(
             f"| `{item['mcp_request_id']}` | `{item['server_name']}.{item['tool_name']}` | "
-            f"`{item['profile']}` | {item['gateway_pressure']['score']} | `{item['posture']}` | "
+            f"`{item['profile']}` | `{item['ref_gate']['status']}` | {item['gateway_pressure']['score']} | `{item['posture']}` | "
             f"`{item['proxy_action']}` | {drivers} |"
         )
     lines.extend(
@@ -158,14 +171,14 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             "",
             "## Decision Table",
             "",
-            "| # | Request | Tool | Profile | Posture | Route | Proxy Action | Forward |",
-            "| ---: | --- | --- | --- | --- | --- | --- | --- |",
+            "| # | Request | Tool | Profile | Ref Gate | Posture | Route | Proxy Action | Forward |",
+            "| ---: | --- | --- | --- | --- | --- | --- | --- | --- |",
         ]
     )
     for item in report["decisions"]:
         lines.append(
             f"| {item['sequence']} | `{item['mcp_request_id']}` | `{item['server_name']}.{item['tool_name']}` | "
-            f"`{item['profile']}` | `{item['posture']}` | `{item['route_state']}` | "
+            f"`{item['profile']}` | `{item['ref_gate']['status']}` | `{item['posture']}` | `{item['route_state']}` | "
             f"`{item['proxy_action']}` | `{str(item['should_forward_tool_call']).lower()}` |"
         )
     lines.extend(
@@ -263,10 +276,45 @@ def _gateway_pressure(
     }
 
 
+def _ref_gate(request: Mapping[str, Any], tool_policy: Mapping[str, Any]) -> Dict[str, Any]:
+    tool_call = request["tool_call"]
+    required = bool(tool_policy.get("requires_ref_gate", False))
+    checks: dict[str, Any] = {}
+    drivers = []
+    for field, driver in REF_GATE_FIELDS.items():
+        if field in tool_call:
+            value = bool(tool_call[field])
+            source = "explicit"
+        else:
+            value = not required
+            source = "missing"
+        checks[field] = {"value": value, "source": source}
+        if not value:
+            drivers.append(driver if source == "explicit" else f"{field}_missing")
+    return {
+        "pattern": "deterministic_pre_execution_ref_gate",
+        "status": "fail" if drivers else "pass",
+        "required": required,
+        "drivers": drivers,
+        "checks": checks,
+    }
+
+
+def _merge_ref_gate_pressure(gateway_pressure: Mapping[str, Any], ref_gate: Mapping[str, Any]) -> Dict[str, Any]:
+    merged = copy.deepcopy(dict(gateway_pressure))
+    if ref_gate["status"] == "fail":
+        drivers = list(merged["drivers"])
+        drivers.extend(driver for driver in ref_gate["drivers"] if driver not in drivers)
+        merged["score"] = 1.0
+        merged["drivers"] = drivers
+    return merged
+
+
 def _enrich_request(
     request: Mapping[str, Any],
     tool_policy: Mapping[str, Any],
     gateway_pressure: Mapping[str, Any],
+    ref_gate: Mapping[str, Any],
 ) -> Dict[str, Any]:
     enriched = copy.deepcopy(dict(request))
     signals = dict(enriched["risk_signals"])
@@ -276,6 +324,12 @@ def _enrich_request(
     if "tool_loop_pressure" in gateway_pressure["drivers"] or "session_budget_pressure" in gateway_pressure["drivers"]:
         signals["authorization_confidence"] = _clamp(min(float(signals["authorization_confidence"]), 1.0 - pressure / 2))
         signals["evidence_validity"] = _clamp(min(float(signals["evidence_validity"]), 1.0 - pressure / 3))
+    if ref_gate["status"] == "fail":
+        signals["base_action_risk"] = 1.0
+        signals["anomaly_pressure"] = 1.0
+        signals["authorization_confidence"] = _clamp(min(float(signals["authorization_confidence"]), 0.12))
+        signals["evidence_validity"] = _clamp(min(float(signals["evidence_validity"]), 0.12))
+        signals["containment_strength"] = _clamp(min(float(signals["containment_strength"]), 0.25))
     enriched["risk_signals"] = signals
     enriched["tool_call"] = dict(enriched["tool_call"])
     if "domain_profile" not in enriched["tool_call"] and tool_policy.get("domain_profile"):
