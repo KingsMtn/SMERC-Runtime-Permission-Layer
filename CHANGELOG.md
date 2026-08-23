@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added strategic acquisition positioning, strategic buyer map, platform-fit rationale, IP asset map, and technical diligence index for large-company review.
 - Added an Autonomy Continuance reference engine, example case, CLI, docs, reports, and tests for Authority Provenance, Intent Integrity, Consequence Horizon, Collective Autonomy, and Right To Continue.
 - Added an Earned Autonomy reference engine, example agent history, CLI, docs, reports, and tests that convert historical reviewer agreement, overrides, ref-gate failures, rollback results, false releases, incidents, scope violations, and evidence gaps into a starting autonomy tier.
 - Added an Autonomy Budgeting reference engine, CLI, docs, reports, and tests that meter current AI-agent freedom by action count, scope units, cumulative risk spend, ref-gate failures, blocked or held attempts, and allowed tool risk tiers.

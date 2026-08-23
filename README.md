@@ -122,6 +122,18 @@ SMERC is open to design-partner, integration-partner, research-review, and open-
 
 The current project is ready for technical review and shadow-mode pilot discussion. It is not production-certified, compliance-attested, or proven to reduce incidents in live environments.
 
+## Strategic Review
+
+If you are evaluating SMERC as a potential platform feature, strategic partnership, acquisition target, or serious design-partner candidate, start here:
+
+- `docs/Strategic_Acquisition_Positioning.md` explains the acquisition-relevant thesis and what evidence is still missing.
+- `docs/Strategic_Buyer_Map.md` maps the platform categories where SMERC may matter.
+- `docs/Why_SMERC_Fits_Strategic_Platforms.md` compares SMERC's runtime checkpoint to IAM, policy engines, AI gateways, approvals, and audit logs.
+- `docs/IP_Asset_Map.md` maps the strongest technical mechanisms and weaker broad claims to avoid.
+- `docs/Technical_Diligence_Index.md` gives a short inspection path through the implementation.
+
+The strategic path is evidence-first: prove that recoverability-aware runtime permissioning changes reviewer judgment in a useful way before claiming broad commercial value.
+
 ## If You Are New To SMERC
 
 Start here before reading the code:
