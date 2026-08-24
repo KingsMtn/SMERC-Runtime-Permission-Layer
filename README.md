@@ -1,10 +1,14 @@
-# SMERC Runtime Permission Layer
+# Runtime Permission Layer for AI Agents and MCP Tool Calls
 
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
 ## External Technical Review Edition
 
-SMERC, short for Structural Momentum Entropy Range Confidence, is recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, and high-impact workflows. It evaluates a proposed action before execution and returns a replayable posture:
+SMERC is recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, and high-impact workflows.
+
+It sits between automated systems and consequential actions. Before an AI agent, workflow bot, MCP tool, or deployment process sends data, changes infrastructure, deploys code, modifies permissions, moves money, or calls a high-impact API, SMERC evaluates whether the action is recoverable enough to proceed.
+
+SMERC is short for Structural Momentum Entropy Range Confidence. It evaluates a proposed action before execution and returns a replayable posture:
 
 - `ALLOW`
 - `THROTTLE`
