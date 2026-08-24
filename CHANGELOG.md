@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a copyable GitHub Actions customer-evaluation workflow that runs the metadata-only customer evaluation package and uploads a review artifact without SMERC API credentials.
 - Added a Customer Evaluation runner, sample metadata-only action set, docs, report outputs, and tests for customer-supplied action review before a shadow-mode pilot.
 - Added Ref-gated runtime proof output to the one-command reviewer quickstart so reviewers can inspect hard evidence gates, capped scoring, SPARTa routing, DLL evidence, CISO seed evidence, and benchmark results from one generated package.
 - Added a Ref-gated runtime proof loop, generated report, tests, documentation, and an OpenSSF issue #50 response draft showing hard mechanical gates before recoverability scoring.

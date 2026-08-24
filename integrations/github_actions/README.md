@@ -151,3 +151,17 @@ python -m reference_engine.github_actions_pilot_installer --output-dir smerc-pil
 and uploads the generated folder as the artifact `smerc-github-actions-pilot-package`.
 
 This is the safest first GitHub Actions path because it is local, observe-only, metadata-only, and does not block the workflow.
+
+## Customer Evaluation Workflow
+
+Use `customer_evaluation_workflow.yml` when a reviewer wants to run SMERC against 5 to 25 metadata-only customer actions before any API deployment or pilot integration.
+
+It runs:
+
+```bash
+python -m reference_engine.customer_evaluation examples/customer_eval_actions.json --pretty
+```
+
+and uploads the generated folder as the artifact `smerc-customer-evaluation-report`.
+
+This path is useful before a pilot because it exercises Ref-gate checks, SMERC recoverability scoring, SPARTa route behavior, Decision Lifecycle Ledger evidence, autonomy budget impact, and pilot-fit recommendation without credentials or production access.

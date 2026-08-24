@@ -101,6 +101,7 @@ The current build includes:
 - generic Agent Handshake integration runner
 - local and authenticated remote GitHub Action evaluation
 - permit-consuming GitHub deployment adapter with native controls, cancellation, rollback, and non-secret execution reports
+- copyable GitHub Actions customer-evaluation workflow that runs metadata-only customer actions and uploads a review artifact without requiring SMERC API credentials
 - dependency-free Python SDK for API pilots and integration tests
 - dependency-free JavaScript SDK for Node, agent runners, GitHub tooling, and browser pilot utilities
 - synthetic shadow-mode scenario packs
@@ -186,6 +187,7 @@ Start here before reading the code:
 - `docs/GitHub_Actions_Pilot_Operator_Quickstart.md` gives customer operators the shortest install-and-measure path for one observe-mode GitHub Actions workflow.
 - `docs/GitHub_Actions_Pilot_Installer.md` gives reviewers a one-command package generator for the connected GitHub Actions pilot artifact folder.
 - `integrations/github_actions/pilot_package_workflow.yml` gives reviewers a copyable GitHub Actions workflow that generates and uploads the complete pilot package without a remote API.
+- `integrations/github_actions/customer_evaluation_workflow.yml` gives reviewers a copyable GitHub Actions workflow that runs the metadata-only customer evaluation package and uploads the report artifact without a remote API.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Accelerator_Readiness_Track.md` defines when SMERC should move from technical review to accelerator applications or investor-facing submissions.

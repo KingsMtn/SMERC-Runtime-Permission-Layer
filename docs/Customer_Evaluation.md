@@ -23,6 +23,27 @@ reports/customer_evaluation/customer_evaluation_report.json
 reports/customer_evaluation/Customer_Evaluation_Report.md
 ```
 
+## Run From GitHub Actions
+
+Copy `integrations/github_actions/customer_evaluation_workflow.yml` into `.github/workflows/smerc-customer-evaluation.yml` in a review repository.
+
+Then run the workflow manually with:
+
+```text
+action_file = examples/customer_eval_actions.json
+```
+
+For a real evaluation, replace the default path with a repository-local metadata-only input file that follows `smerc.customer-evaluation.v1`.
+
+The workflow:
+
+- checks out the repository
+- sets up Python
+- runs `python -m reference_engine.customer_evaluation`
+- uploads `smerc-customer-evaluation` as a 14-day artifact
+
+It does not require a remote SMERC API, secrets, production credentials, or write access to customer systems.
+
 ## What The Evaluation Includes
 
 - metadata-only input validation

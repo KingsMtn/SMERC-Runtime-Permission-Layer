@@ -1,0 +1,38 @@
+name: SMERC Customer Evaluation
+
+on:
+  workflow_dispatch:
+    inputs:
+      action_file:
+        description: Metadata-only SMERC customer evaluation JSON file.
+        required: true
+        default: examples/customer_eval_actions.json
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate-customer-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Run metadata-only SMERC customer evaluation
+        run: |
+          python -m reference_engine.customer_evaluation "${{ inputs.action_file }}" \
+            --json-output smerc-customer-evaluation/customer_evaluation_report.json \
+            --markdown-output smerc-customer-evaluation/Customer_Evaluation_Report.md \
+            --pretty
+
+      - name: Upload customer evaluation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: smerc-customer-evaluation-report
+          path: smerc-customer-evaluation
+          retention-days: 14
