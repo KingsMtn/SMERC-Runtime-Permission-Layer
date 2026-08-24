@@ -1,4 +1,3 @@
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -12,6 +11,8 @@ from reference_engine.customer_action_intake import (
 
 ROOT = Path(__file__).resolve().parents[1]
 SAMPLE = ROOT / "examples" / "customer_action_intake_sample.json"
+TEST_OUTPUTS = ROOT / "test_outputs" / "customer_action_intake"
+TEST_OUTPUTS.mkdir(parents=True, exist_ok=True)
 
 
 class CustomerActionIntakeTests(unittest.TestCase):
@@ -42,12 +43,11 @@ class CustomerActionIntakeTests(unittest.TestCase):
 
     def test_writes_json_and_markdown_outputs(self):
         report = evaluate_customer_intake(load_payload(SAMPLE))
-        with tempfile.TemporaryDirectory() as tmp:
-            json_output = Path(tmp) / "intake.json"
-            markdown_output = Path(tmp) / "intake.md"
-            write_outputs(report, json_output, markdown_output)
-            self.assertTrue(json_output.exists())
-            self.assertTrue(markdown_output.exists())
+        json_output = TEST_OUTPUTS / "intake.json"
+        markdown_output = TEST_OUTPUTS / "intake.md"
+        write_outputs(report, json_output, markdown_output)
+        self.assertTrue(json_output.exists())
+        self.assertTrue(markdown_output.exists())
 
     def test_readme_links_customer_action_intake(self):
         readme = (ROOT / "README.md").read_text()
