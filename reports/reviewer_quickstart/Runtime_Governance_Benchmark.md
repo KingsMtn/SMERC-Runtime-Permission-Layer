@@ -1,6 +1,6 @@
 # SMERC Runtime Governance Benchmark Suite
 
-Generated: `2026-07-28T02:25:21.554246+00:00`
+Generated: `2026-08-24T21:53:41.031182+00:00`
 
 ## Executive Summary
 

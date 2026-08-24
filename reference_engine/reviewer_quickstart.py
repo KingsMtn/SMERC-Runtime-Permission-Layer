@@ -15,6 +15,11 @@ from reference_engine.end_to_end_pr_guardian_demo import (
     build_end_to_end_demo,
     write_outputs as write_pr_guardian_outputs,
 )
+from reference_engine.mcp_governance_gateway import load_json
+from reference_engine.ref_gated_runtime_proof import (
+    build_ref_gated_runtime_proof,
+    write_outputs as write_ref_gated_outputs,
+)
 from reference_engine.runtime_benchmark_suite import (
     build_runtime_benchmark,
     write_outputs as write_benchmark_outputs,
@@ -34,6 +39,8 @@ def build_reviewer_quickstart(
     audit_db: str | Path = "./smerc_reviewer_quickstart.sqlite3",
     ciso_actions: str | Path = "examples/ciso_review_seed_actions.json",
     benchmark_seed: str | Path = "examples/proxy_incident_replay_scenarios.json",
+    mcp_registry: str | Path = "examples/mcp/governance_gateway_registry.json",
+    mcp_session: str | Path = "examples/mcp/governance_gateway_session.json",
 ) -> Dict[str, Any]:
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
@@ -68,9 +75,18 @@ def build_reviewer_quickstart(
     benchmark_payload = build_runtime_benchmark(benchmark_seed)
     write_benchmark_outputs(benchmark_payload, benchmark_json, benchmark_markdown)
 
+    ref_gated_json = output / "ref_gated_runtime_proof.json"
+    ref_gated_markdown = output / "Ref_Gated_Runtime_Proof.md"
+    ref_gated_report = build_ref_gated_runtime_proof(
+        registry=load_json(mcp_registry),
+        session=load_json(mcp_session),
+    )
+    write_ref_gated_outputs(ref_gated_report, json_path=ref_gated_json, markdown_path=ref_gated_markdown)
+
     pr_decision = pr_bundle["decision_report"]["decision"]
     pr_route_report = pr_bundle["sparta_route"]["route_report"]
     benchmark_summary = benchmark_payload["summary"]
+    ref_gated_summary = ref_gated_report["summary"]
 
     return {
         "version": REVIEWER_QUICKSTART_VERSION,
@@ -97,6 +113,8 @@ def build_reviewer_quickstart(
             "ciso_seed_json": _relative(ciso_json),
             "runtime_benchmark": _relative(benchmark_markdown),
             "runtime_benchmark_json": _relative(benchmark_json),
+            "ref_gated_runtime_proof": _relative(ref_gated_markdown),
+            "ref_gated_runtime_proof_json": _relative(ref_gated_json),
             "audit_database": str(audit_db),
         },
         "proof_highlights": {
@@ -109,6 +127,10 @@ def build_reviewer_quickstart(
             "benchmark_total_scenarios": benchmark_summary["total_scenarios"],
             "benchmark_decision_difference_rate": benchmark_summary["decision_difference_rate"],
             "benchmark_evidence_limit": benchmark_summary["evidence_limit"],
+            "ref_gated_request_count": ref_gated_summary["request_count"],
+            "ref_gate_failure_count": ref_gated_summary["ref_gate_failure_count"],
+            "ref_gated_scoring_capped_count": ref_gated_summary["scoring_capped_count"],
+            "ref_gated_autonomy_state": ref_gated_summary["autonomy_state"],
             "seeded_ciso_decisions": ciso_report["seeded_decision_count"],
             "stored_ciso_ledgers": ciso_report["stored_ledger_count"],
         },
@@ -117,6 +139,7 @@ def build_reviewer_quickstart(
             "Open the PR Guardian demo and confirm the action, posture, route, DLL, and DLL Intelligence are linked.",
             "Open the CISO seed report and confirm the review queue has replayable seeded decisions.",
             "Open the runtime benchmark and inspect where SMERC differs from simple allow/deny.",
+            "Open the Ref-gated runtime proof and confirm hard evidence gates run before recoverability scoring.",
             "Decide whether one real GitHub Actions workflow is worth testing in observe mode.",
         ],
         "pilot_gate": [
@@ -166,6 +189,10 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             f"- CISO stored ledgers: `{highlights['stored_ciso_ledgers']}`",
             f"- Benchmark scenarios: `{highlights['benchmark_total_scenarios']}`",
             f"- Benchmark decision difference rate: `{highlights['benchmark_decision_difference_rate']}`",
+            f"- Ref-gated requests: `{highlights['ref_gated_request_count']}`",
+            f"- Ref-gate failures: `{highlights['ref_gate_failure_count']}`",
+            f"- Ref-gated scoring capped: `{highlights['ref_gated_scoring_capped_count']}`",
+            f"- Ref-gated autonomy state: `{highlights['ref_gated_autonomy_state']}`",
             "",
             "## Generated Artifacts",
             "",
@@ -182,7 +209,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             "",
             "## What This Proves",
             "",
-            "This proves that SMERC can generate a coherent local review package connecting a proposed AI-agent action, runtime posture, visible PR review artifact, SPARTa route, Decision Lifecycle Ledger, DLL Intelligence, seeded CISO review evidence, and benchmark comparison.",
+            "This proves that SMERC can generate a coherent local review package connecting a proposed AI-agent action, runtime posture, visible PR review artifact, hard Ref-gated tool-call screening, SPARTa route, Decision Lifecycle Ledger, DLL Intelligence, seeded CISO review evidence, and benchmark comparison.",
             "",
             "## What This Does Not Prove",
             "",
@@ -209,6 +236,8 @@ def main() -> int:
     parser.add_argument("--audit-db", default="./smerc_reviewer_quickstart.sqlite3")
     parser.add_argument("--ciso-actions", default="examples/ciso_review_seed_actions.json")
     parser.add_argument("--benchmark-seed", default="examples/proxy_incident_replay_scenarios.json")
+    parser.add_argument("--mcp-registry", default="examples/mcp/governance_gateway_registry.json")
+    parser.add_argument("--mcp-session", default="examples/mcp/governance_gateway_session.json")
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args()
 
@@ -217,6 +246,8 @@ def main() -> int:
         audit_db=args.audit_db,
         ciso_actions=args.ciso_actions,
         benchmark_seed=args.benchmark_seed,
+        mcp_registry=args.mcp_registry,
+        mcp_session=args.mcp_session,
     )
     write_report(report, output_dir=args.output_dir)
     print(json.dumps(report, indent=2 if args.pretty else None, sort_keys=True))

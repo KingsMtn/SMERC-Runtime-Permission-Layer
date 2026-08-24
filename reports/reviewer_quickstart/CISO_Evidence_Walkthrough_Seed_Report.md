@@ -1,7 +1,7 @@
 # SMERC CISO Evidence Walkthrough Seed Report
 
 Version: `smerc.ciso-review-seed.v1`
-Generated at: `2026-07-28T02:25:21+00:00`
+Generated at: `2026-08-24T21:53:41+00:00`
 Tenant: `pilot-team`
 Audit database: `./smerc_reviewer_quickstart.sqlite3`
 
@@ -13,11 +13,11 @@ This walkthrough seeds synthetic but realistic review data. It proves the local 
 
 | Action | Posture | Replay ID | DLL decision ID |
 | --- | --- | --- | --- |
-| `CISO_REVIEW_RUN_TESTS` | `ALLOW` | `replay_CISO_REVIEW_RUN_TESTS_1785205521523_9370188fdf9e` | `dll:ciso-review:ciso_review_run_tests` |
-| `CISO_REVIEW_DEPLOY_CANARY` | `THROTTLE` | `replay_CISO_REVIEW_DEPLOY_CANARY_1785205521523_3cfef05cdd52` | `dll:ciso-review:ciso_review_deploy_canary` |
-| `CISO_REVIEW_ROTATE_SECRET` | `THROTTLE` | `replay_CISO_REVIEW_ROTATE_SECRET_1785205521539_82839170422d` | `dll:ciso-review:ciso_review_rotate_secret` |
-| `CISO_REVIEW_DELETE_AUDIT_LOGS` | `ESCALATE` | `replay_CISO_REVIEW_DELETE_AUDIT_LOGS_1785205521539_8e19a005daa7` | `dll:ciso-review:ciso_review_delete_audit_logs` |
-| `CISO_REVIEW_EXPORT_CUSTOMER_DATA` | `DENY` | `replay_CISO_REVIEW_EXPORT_CUSTOMER_DATA_1785205521544_e14ec322cd0d` | `dll:ciso-review:ciso_review_export_customer_data` |
+| `CISO_REVIEW_RUN_TESTS` | `ALLOW` | `replay_CISO_REVIEW_RUN_TESTS_1787608420979_6b433054460e` | `dll:ciso-review:ciso_review_run_tests` |
+| `CISO_REVIEW_DEPLOY_CANARY` | `THROTTLE` | `replay_CISO_REVIEW_DEPLOY_CANARY_1787608420989_614169e6abf3` | `dll:ciso-review:ciso_review_deploy_canary` |
+| `CISO_REVIEW_ROTATE_SECRET` | `THROTTLE` | `replay_CISO_REVIEW_ROTATE_SECRET_1787608420989_b56b50b7d55d` | `dll:ciso-review:ciso_review_rotate_secret` |
+| `CISO_REVIEW_DELETE_AUDIT_LOGS` | `ESCALATE` | `replay_CISO_REVIEW_DELETE_AUDIT_LOGS_1787608420997_4380f0b1ba10` | `dll:ciso-review:ciso_review_delete_audit_logs` |
+| `CISO_REVIEW_EXPORT_CUSTOMER_DATA` | `DENY` | `replay_CISO_REVIEW_EXPORT_CUSTOMER_DATA_1787608420997_e14582ccf373` | `dll:ciso-review:ciso_review_export_customer_data` |
 
 ## Reviewer Flow
 

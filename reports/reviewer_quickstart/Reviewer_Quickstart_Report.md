@@ -1,7 +1,7 @@
 # SMERC Reviewer Quickstart Report
 
 Version: `smerc.reviewer-quickstart.v1`
-Generated at: `2026-07-28T02:25:21+00:00`
+Generated at: `2026-08-24T21:53:41+00:00`
 
 ## Review Question
 
@@ -23,7 +23,7 @@ python -m reference_engine.reviewer_quickstart --pretty
 ## Proof Highlights
 
 - PR Guardian posture: `ESCALATE`
-- PR Guardian replay ID: `replay_AI_AUTH_MIDDLEWARE_PR_1785205521491`
+- PR Guardian replay ID: `replay_AI_AUTH_MIDDLEWARE_PR_1787608420912`
 - SPARTa route state: `REVIEW_REQUIRED`
 - SPARTa executable: `False`
 - DLL record count: `7`
@@ -32,6 +32,10 @@ python -m reference_engine.reviewer_quickstart --pretty
 - CISO stored ledgers: `5`
 - Benchmark scenarios: `84`
 - Benchmark decision difference rate: `0.786`
+- Ref-gated requests: `4`
+- Ref-gate failures: `1`
+- Ref-gated scoring capped: `1`
+- Ref-gated autonomy state: `SUSPEND_AUTONOMY`
 
 ## Generated Artifacts
 
@@ -48,6 +52,8 @@ python -m reference_engine.reviewer_quickstart --pretty
 - ciso_seed_json: `reports/reviewer_quickstart/ciso_evidence_walkthrough_seed.json`
 - runtime_benchmark: `reports/reviewer_quickstart/Runtime_Governance_Benchmark.md`
 - runtime_benchmark_json: `reports/reviewer_quickstart/runtime_governance_benchmark.json`
+- ref_gated_runtime_proof: `reports/reviewer_quickstart/Ref_Gated_Runtime_Proof.md`
+- ref_gated_runtime_proof_json: `reports/reviewer_quickstart/ref_gated_runtime_proof.json`
 - audit_database: `./smerc_reviewer_quickstart.sqlite3`
 
 ## Reviewer Path
@@ -56,7 +62,8 @@ python -m reference_engine.reviewer_quickstart --pretty
 2. Open the PR Guardian demo and confirm the action, posture, route, DLL, and DLL Intelligence are linked.
 3. Open the CISO seed report and confirm the review queue has replayable seeded decisions.
 4. Open the runtime benchmark and inspect where SMERC differs from simple allow/deny.
-5. Decide whether one real GitHub Actions workflow is worth testing in observe mode.
+5. Open the Ref-gated runtime proof and confirm hard evidence gates run before recoverability scoring.
+6. Decide whether one real GitHub Actions workflow is worth testing in observe mode.
 
 ## Pilot Gate
 
@@ -67,7 +74,7 @@ python -m reference_engine.reviewer_quickstart --pretty
 
 ## What This Proves
 
-This proves that SMERC can generate a coherent local review package connecting a proposed AI-agent action, runtime posture, visible PR review artifact, SPARTa route, Decision Lifecycle Ledger, DLL Intelligence, seeded CISO review evidence, and benchmark comparison.
+This proves that SMERC can generate a coherent local review package connecting a proposed AI-agent action, runtime posture, visible PR review artifact, hard Ref-gated tool-call screening, SPARTa route, Decision Lifecycle Ledger, DLL Intelligence, seeded CISO review evidence, and benchmark comparison.
 
 ## What This Does Not Prove
 

@@ -12,6 +12,7 @@ It gives a security, platform, accelerator, or design-partner reviewer one comma
 - DLL Intelligence
 - CISO seeded review decisions
 - runtime benchmark comparison
+- Ref-gated runtime proof showing hard evidence gates before recoverability scoring
 
 ## Run
 
@@ -42,7 +43,8 @@ A reviewer should be able to answer:
 3. How did SPARTa route that posture?
 4. What evidence was preserved?
 5. Where does the benchmark differ from simple allow/deny?
-6. What would a first shadow-mode pilot measure?
+6. Did hard evidence gates run before recoverability scoring?
+7. What would a first shadow-mode pilot measure?
 
 ## Evidence Boundary
 

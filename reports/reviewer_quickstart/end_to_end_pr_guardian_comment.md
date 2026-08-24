@@ -4,7 +4,7 @@
 **Posture:** `ESCALATE`  
 **Risk score:** `0.656`  
 **Confidence score:** `0.535`  
-**Replay ID:** `replay_AI_AUTH_MIDDLEWARE_PR_1785205521491`
+**Replay ID:** `replay_AI_AUTH_MIDDLEWARE_PR_1787608420912`
 
 **Action:** AI coding agent proposes changing authentication middleware and deployment configuration in a pull request.
 **Pull request:** `#101`
@@ -27,7 +27,7 @@ Route to accountable human review before execution.
 
 ### Decision Certificate
 
-- Certificate digest: `26cc596227598d6d69a5d60dbddd0b941471faa74f5b9fdb77877eb5db8615e2`
+- Certificate digest: `4cacc913ab6b5f342bd49b1a6628420d205fcfefc6e3cb4f281ed1295ef1911b`
 - Integration status: `evaluated`
 - Mode: `observe`
 

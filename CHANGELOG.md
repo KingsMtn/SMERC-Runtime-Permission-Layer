@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added Ref-gated runtime proof output to the one-command reviewer quickstart so reviewers can inspect hard evidence gates, capped scoring, SPARTa routing, DLL evidence, CISO seed evidence, and benchmark results from one generated package.
 - Added a Ref-gated runtime proof loop, generated report, tests, documentation, and an OpenSSF issue #50 response draft showing hard mechanical gates before recoverability scoring.
 - Added a one-command strategic reviewer evidence packet, strategic reviewer brief, outbound message, and GitHub issue template for large-company/platform review.
 - Added strategic acquisition positioning, strategic buyer map, platform-fit rationale, IP asset map, and technical diligence index for large-company review.

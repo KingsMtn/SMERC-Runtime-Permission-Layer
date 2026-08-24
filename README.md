@@ -150,7 +150,7 @@ Start here before reading the code:
 - `docs/External_Review_Start_Here.md` gives external reviewers the shortest safe path through the repository.
 - `docs/CISO_Security_Architect_15_Minute_Review.md` gives CISOs and security architects the fastest serious review path from product claim to MCP Gateway proof, GitHub Actions pilot path, replay evidence, and pilot decision.
 - `docs/AI_Agent_Recoverability_Governance.md` explains the institutional control gap: why AI-agent governance should ask whether an action is recoverable, not only whether it is allowed.
-- `docs/Reviewer_Quickstart.md` gives reviewers a one-command path that generates a local proof package linking PR Guardian, SPARTa, DLL, CISO seed evidence, and benchmark comparison.
+- `docs/Reviewer_Quickstart.md` gives reviewers a one-command path that generates a local proof package linking PR Guardian, Ref-gated tool-call screening, SPARTa, DLL, CISO seed evidence, and benchmark comparison.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
 - `docs/Credibility_Partner_Review_Packet.md` gives external reviewers a 30-minute packet for deciding whether metadata-only shadow-mode testing is worth discussing.
 - `docs/Credibility_Partner_Outreach.md` gives a short, bounded outreach message for asking credibility partners to review SMERC without overclaiming readiness.
