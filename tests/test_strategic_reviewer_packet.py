@@ -1,4 +1,3 @@
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -11,6 +10,8 @@ from reference_engine.strategic_reviewer_packet import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+TEST_OUTPUTS = ROOT / "test_outputs" / "strategic_reviewer_packet"
+TEST_OUTPUTS.mkdir(parents=True, exist_ok=True)
 
 
 class StrategicReviewerPacketTests(unittest.TestCase):
@@ -24,9 +25,8 @@ class StrategicReviewerPacketTests(unittest.TestCase):
         self.assertIn("pilot-grade", " ".join(packet["claim_boundaries"]))
 
     def test_markdown_contains_outbound_message_and_boundaries(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            packet = collect_evidence(output_dir=tmp)
-            markdown = render_markdown(packet)
+        packet = collect_evidence(output_dir=TEST_OUTPUTS / "markdown")
+        markdown = render_markdown(packet)
 
         self.assertIn("# SMERC Strategic Reviewer Evidence Packet", markdown)
         self.assertIn("Suggested Outbound Message", markdown)
@@ -34,12 +34,12 @@ class StrategicReviewerPacketTests(unittest.TestCase):
         self.assertIn("recoverability-aware permissioning", markdown)
 
     def test_write_outputs(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            packet = collect_evidence(output_dir=Path(tmp) / "bundle")
-            write_outputs(packet, output_dir=Path(tmp) / "bundle")
+        output_dir = TEST_OUTPUTS / "bundle"
+        packet = collect_evidence(output_dir=output_dir)
+        write_outputs(packet, output_dir=output_dir)
 
-            self.assertTrue((Path(tmp) / "bundle" / "strategic_reviewer_packet.json").exists())
-            self.assertTrue((Path(tmp) / "bundle" / "Strategic_Reviewer_Evidence_Packet.md").exists())
+        self.assertTrue((output_dir / "strategic_reviewer_packet.json").exists())
+        self.assertTrue((output_dir / "Strategic_Reviewer_Evidence_Packet.md").exists())
 
     def test_docs_and_readme_link_packet(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

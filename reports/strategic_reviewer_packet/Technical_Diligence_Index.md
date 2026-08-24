@@ -35,6 +35,9 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `docs/MCP_Proxy_Runner.md`
 - `docs/MCP_Transport_Proxy.md`
 - `docs/MCP_Tool_Risk_Scanner.md`
+- `docs/Ref_Gated_Runtime_Proof_Loop.md`
+- `reference_engine/ref_gated_runtime_proof.py`
+- `reports/Ref_Gated_Runtime_Proof.md`
 
 ## Execution Routing And Controls
 

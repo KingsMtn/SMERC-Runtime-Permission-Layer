@@ -88,6 +88,7 @@ The current build includes:
 - Autonomy Budgeting reference engine that meters current AI independence by action count, scope units, cumulative risk spend, ref-gate failures, and blocked or held attempts
 - Earned Autonomy reference engine that converts historical review agreement, overrides, ref-gate history, rollback evidence, false releases, incidents, scope discipline, and evidence quality into a starting autonomy tier
 - Autonomy Continuance reference engine that evaluates Authority Provenance, Intent Integrity, Consequence Horizon, Collective Autonomy, and Right To Continue after an actor has already begun operating
+- Ref-gated runtime proof loop showing hard mechanical evidence gates before SMERC recoverability scoring, SPARTa routing, autonomy budget impact, and DLL evidence
 - commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service
 - OpenAPI 3.1 pilot API contract
@@ -201,6 +202,7 @@ Start here before reading the code:
 - `docs/MCP_Transport_Proxy.md` explains the local JSON-RPC-style transport proxy sample for `tools/call` forwarding or blocking.
 - `docs/MCP_Governance_Gateway.md` explains the registry-driven MCP gateway that evaluates tool-call sessions, repeated-call pressure, scope pressure, session-budget metering, SMERC posture, SPARTa route behavior, and SMERC-F financial tool profiles.
 - `docs/SMERC_And_The_Ref_Pattern.md` explains how deterministic pre-execution checks for typed contracts, attestation, least privilege, and object shape prevent malformed or untrusted MCP tool calls from being scored around.
+- `docs/Ref_Gated_Runtime_Proof_Loop.md` gives the executable proof loop for hard Ref gates before SMERC scoring, SPARTa routing, autonomy budget, and DLL evidence.
 - `docs/Autonomy_Health_Framework.md` explains the continuous governance layer for deciding how much independence an AI agent, workflow, or tool family should retain over time.
 - `docs/Autonomy_Budgeting_Framework.md` explains how SMERC meters current agent freedom by action budget, scope budget, risk spend, valid time window, and allowed tool tiers.
 - `docs/Earned_Autonomy_Framework.md` explains how historical evidence sets the starting autonomy tier before the current session spends or loses that budget.

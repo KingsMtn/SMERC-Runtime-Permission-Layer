@@ -1,7 +1,7 @@
 # SMERC Strategic Reviewer Evidence Packet
 
 Version: `smerc.strategic-reviewer-evidence-packet.v1`
-Generated at: `2026-08-23T01:56:38+00:00`
+Generated at: `2026-08-24T21:41:58+00:00`
 
 ## Review Question
 
@@ -17,8 +17,8 @@ Does SMERC fill a strategic runtime-control gap between access policy and real-w
 
 ## Evidence Bundle
 
-- Evidence items declared: `11`
-- Evidence items copied: `11`
+- Evidence items declared: `12`
+- Evidence items copied: `12`
 - Missing items: `0`
 
 | Evidence | Category | Present | Copied To | Why It Matters |
@@ -30,6 +30,7 @@ Does SMERC fill a strategic runtime-control gap between access policy and real-w
 | `docs/Technical_Diligence_Index.md` | `technical` | `True` | `reports/strategic_reviewer_packet/Technical_Diligence_Index.md` | Gives reviewers a short implementation inspection path. |
 | `reports/GitHub_Actions_Pilot_Readiness.md` | `pilot` | `True` | `reports/strategic_reviewer_packet/GitHub_Actions_Pilot_Readiness.md` | Shows the first narrow pilot path and readiness criteria. |
 | `reports/MCP_Governance_Gateway_Report.md` | `mcp` | `True` | `reports/strategic_reviewer_packet/MCP_Governance_Gateway_Report.md` | Shows MCP-style tool-call governance output. |
+| `reports/Ref_Gated_Runtime_Proof.md` | `runtime` | `True` | `reports/strategic_reviewer_packet/Ref_Gated_Runtime_Proof.md` | Shows hard Ref gates before SMERC scoring, SPARTa routing, autonomy budget, and DLL evidence. |
 | `reports/Autonomy_Continuance_Report.md` | `autonomy` | `True` | `reports/strategic_reviewer_packet/Autonomy_Continuance_Report.md` | Shows Authority Provenance, Intent Integrity, Consequence Horizon, Collective Autonomy, and Right To Continue. |
 | `reports/SMERC_F_Pilot_Evidence_Packet.md` | `financial` | `True` | `reports/strategic_reviewer_packet/SMERC_F_Pilot_Evidence_Packet.md` | Shows the financial-action profile while preserving strict non-claim boundaries. |
 | `reports/Runtime_Evidence_Trust_Gate_Report.md` | `trust` | `True` | `reports/strategic_reviewer_packet/Runtime_Evidence_Trust_Gate_Report.md` | Shows how SMERC limits weak agent-supplied metadata before recoverability scoring. |

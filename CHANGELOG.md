@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Ref-gated runtime proof loop, generated report, tests, documentation, and an OpenSSF issue #50 response draft showing hard mechanical gates before recoverability scoring.
 - Added a one-command strategic reviewer evidence packet, strategic reviewer brief, outbound message, and GitHub issue template for large-company/platform review.
 - Added strategic acquisition positioning, strategic buyer map, platform-fit rationale, IP asset map, and technical diligence index for large-company review.
 - Added an Autonomy Continuance reference engine, example case, CLI, docs, reports, and tests for Authority Provenance, Intent Integrity, Consequence Horizon, Collective Autonomy, and Right To Continue.

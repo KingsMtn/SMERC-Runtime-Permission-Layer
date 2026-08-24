@@ -63,6 +63,12 @@ EVIDENCE_ITEMS = [
         "why_it_matters": "Shows MCP-style tool-call governance output.",
     },
     {
+        "id": "ref_gated_runtime_proof",
+        "source": "reports/Ref_Gated_Runtime_Proof.md",
+        "category": "runtime",
+        "why_it_matters": "Shows hard Ref gates before SMERC scoring, SPARTa routing, autonomy budget, and DLL evidence.",
+    },
+    {
         "id": "autonomy_continuance",
         "source": "reports/Autonomy_Continuance_Report.md",
         "category": "autonomy",
