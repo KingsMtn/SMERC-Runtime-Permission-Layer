@@ -175,6 +175,7 @@ Start here before reading the code:
 - `docs/SPARK_Signal_Intake_And_Timing_Evidence.md` explains the proposed SPARK signal-intake layer and timing evidence metrics around recoverability decisions.
 - `docs/Runtime_Evidence_Trust_Gate.md` explains how SMERC screens whether action metadata is trustworthy enough to support a runtime decision.
 - `docs/Constraint_Eligibility_Layer.md` explains why recoverability is a permission modifier, not a substitute for authority, hard policy, or categorical denies.
+- `docs/OpenSSF_Feedback_Alignment.md` explains how external OpenSSF issue #50 feedback sharpened the runtime order: hard mechanical evidence gates first, recoverability scoring second, route and audit evidence third.
 - `docs/Policy_Bundle_Manifest.md` explains signed, versioned policy bundle manifests for reviewed SPL, profile, control, approval, and activation evidence.
 - `docs/Operator_Status_And_OPA_Log_Export.md` explains the pilot operator status report, `/v1/operator/status` API, and OPA-style decision log export for existing policy/audit pipelines.
 - `docs/Runtime_Health_Metrics.md` explains runtime health, latency, unavailable-evaluation, and fail-closed metrics for pilot operations.
