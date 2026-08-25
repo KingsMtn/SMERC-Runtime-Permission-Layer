@@ -160,6 +160,7 @@ Start here before reading the code:
 - `docs/AI_Agent_Recoverability_Governance.md` explains the institutional control gap: why AI-agent governance should ask whether an action is recoverable, not only whether it is allowed.
 - `docs/Reviewer_Quickstart.md` gives reviewers a one-command path that generates a local proof package linking PR Guardian, Ref-gated tool-call screening, SPARTa, DLL, CISO seed evidence, and benchmark comparison.
 - `docs/Customer_Evaluation.md` gives prospective design partners a one-command metadata-only evaluation path for testing 5 to 25 of their own AI-agent or automation actions before a pilot discussion.
+- `docs/Run_Customer_Evaluation_From_GitHub.md` gives non-local reviewers a click-by-click path for running the public customer-evaluation workflow from GitHub Actions and downloading the report artifact.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
 - `docs/Credibility_Partner_Review_Packet.md` gives external reviewers a 30-minute packet for deciding whether metadata-only shadow-mode testing is worth discussing.
 - `docs/Credibility_Partner_Outreach.md` gives a short, bounded outreach message for asking credibility partners to review SMERC without overclaiming readiness.
