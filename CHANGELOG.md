@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Cloud Admin Customer Evaluation pack and GitHub Actions workflow option for metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy review.
 - Added a company test package and runnable metadata template so a prospect can evaluate one workflow without sharing sensitive data or production access.
 - Added a click-by-click reviewer guide for running the public runtime customer-evaluation workflow from GitHub Actions.
 - Added a repository-native Runtime Customer Evaluations GitHub Actions workflow for running the general and financial runtime evaluation examples from the Actions tab.

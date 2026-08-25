@@ -11,6 +11,7 @@ on:
         options:
           - both
           - general
+          - cloud-admin
           - smerc-f
           - company-template
 
@@ -42,6 +43,13 @@ jobs:
           python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json \
             --json-output smerc-customer-evaluations/smerc-f/customer_evaluation_report.json \
             --markdown-output smerc-customer-evaluations/smerc-f/Customer_Evaluation_Report.md
+
+      - name: Run cloud admin customer evaluation
+        if: ${{ inputs.evaluation_set == 'both' || inputs.evaluation_set == 'cloud-admin' }}
+        run: |
+          python -m reference_engine.customer_evaluation examples/cloud_admin_customer_eval_actions.json \
+            --json-output smerc-customer-evaluations/cloud-admin/customer_evaluation_report.json \
+            --markdown-output smerc-customer-evaluations/cloud-admin/Customer_Evaluation_Report.md
 
       - name: Run company metadata template evaluation
         if: ${{ inputs.evaluation_set == 'company-template' }}

@@ -52,8 +52,9 @@ Use it when a reviewer wants to see the public examples execute directly from th
 
 Set `evaluation_set` to one of these manual options:
 
-- `both` runs the general customer evaluation and the SMERC-F financial customer evaluation.
+- `both` runs the general customer evaluation, the cloud-admin customer evaluation, and the SMERC-F financial customer evaluation.
 - `general` runs only `examples/customer_eval_actions.json`.
+- `cloud-admin` runs only `examples/cloud_admin_customer_eval_actions.json`.
 - `smerc-f` runs only `examples/smerc_f_customer_eval_actions.json`.
 
 The workflow uploads one artifact named `smerc-customer-evaluations` containing generated markdown and JSON reports.

@@ -13,8 +13,10 @@ class CustomerEvaluationsWorkflowTests(unittest.TestCase):
         self.assertIn("workflow_dispatch", text)
         self.assertIn("evaluation_set", text)
         self.assertIn("examples/customer_eval_actions.json", text)
+        self.assertIn("examples/cloud_admin_customer_eval_actions.json", text)
         self.assertIn("examples/smerc_f_customer_eval_actions.json", text)
         self.assertIn("examples/customer_metadata_template.json", text)
+        self.assertIn("cloud-admin", text)
         self.assertIn("company-template", text)
         self.assertIn("python -m reference_engine.customer_evaluation", text)
         self.assertIn("smerc-customer-evaluations", text)
@@ -26,11 +28,14 @@ class CustomerEvaluationsWorkflowTests(unittest.TestCase):
     def test_docs_reference_repository_actions_workflow(self):
         general_doc = (ROOT / "docs" / "Customer_Evaluation.md").read_text(encoding="utf-8")
         finance_doc = (ROOT / "docs" / "SMERC_F_Customer_Evaluation.md").read_text(encoding="utf-8")
+        cloud_doc = (ROOT / "docs" / "Cloud_Admin_Customer_Evaluation.md").read_text(encoding="utf-8")
 
         self.assertIn(".github/workflows/customer-evaluations.yml", general_doc)
         self.assertIn("evaluation_set", general_doc)
         self.assertIn(".github/workflows/customer-evaluations.yml", finance_doc)
         self.assertIn("evaluation_set = smerc-f", finance_doc)
+        self.assertIn("customer-evaluations.yml", cloud_doc)
+        self.assertIn("evaluation_set = cloud-admin", cloud_doc)
 
 
 if __name__ == "__main__":
