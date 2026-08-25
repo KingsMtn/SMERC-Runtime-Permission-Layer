@@ -14,6 +14,7 @@ class RunCustomerEvaluationGuideTests(unittest.TestCase):
         self.assertIn("actions/workflows/customer-evaluations.yml", text)
         self.assertIn("evaluation_set", text)
         self.assertIn("both", text)
+        self.assertIn("company-template", text)
         self.assertIn("smerc-customer-evaluations", text)
         self.assertIn("financial runtime customer-evaluation", text)
         self.assertIn("What This Does Not Prove", text)

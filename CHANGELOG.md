@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a company test package and runnable metadata template so a prospect can evaluate one workflow without sharing sensitive data or production access.
 - Added a click-by-click reviewer guide for running the public runtime customer-evaluation workflow from GitHub Actions.
 - Added a repository-native Runtime Customer Evaluations GitHub Actions workflow for running the general and financial runtime evaluation examples from the Actions tab.
 - Added a Financial Runtime Customer Evaluation pack, internally called SMERC-F, with finance-specific metadata-only actions, reviewer guidance, generated reports, and tests.

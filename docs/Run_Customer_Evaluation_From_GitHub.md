@@ -11,7 +11,7 @@ The workflow runs the repository's metadata-only sample actions through the cust
 1. Open the repository workflow:
    `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/customer-evaluations.yml`
 2. Select **Run workflow**.
-3. Set `evaluation_set` to `both`.
+3. Set `evaluation_set` to `both` to run the public examples, or `company-template` to run the company metadata template.
 4. Start the run.
 5. Open the completed run.
 6. Download the artifact named `smerc-customer-evaluations`.
@@ -22,6 +22,7 @@ The artifact includes generated JSON and Markdown reports for:
 
 - the general customer-evaluation action set
 - the financial runtime customer-evaluation action set, internally called SMERC-F
+- the company metadata template when `evaluation_set` is `company-template`
 - a compact summary showing action counts, posture counts, route-state counts, Ref-gate counts, ledger validity, autonomy state, and pilot-fit result
 
 ## What This Proves
@@ -58,3 +59,5 @@ Metadata-only action examples
 ## Recommended Reviewer Next Step
 
 If the public workflow looks useful, replace the sample action set with 5 to 25 metadata-only actions from one customer workflow and run the same evaluation before discussing a shadow-mode pilot.
+
+Use `docs/Company_Test_Package.md` and `examples/customer_metadata_template.json` for the replacement path.

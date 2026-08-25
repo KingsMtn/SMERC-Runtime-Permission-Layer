@@ -14,6 +14,8 @@ class CustomerEvaluationsWorkflowTests(unittest.TestCase):
         self.assertIn("evaluation_set", text)
         self.assertIn("examples/customer_eval_actions.json", text)
         self.assertIn("examples/smerc_f_customer_eval_actions.json", text)
+        self.assertIn("examples/customer_metadata_template.json", text)
+        self.assertIn("company-template", text)
         self.assertIn("python -m reference_engine.customer_evaluation", text)
         self.assertIn("smerc-customer-evaluations", text)
         self.assertIn("SUMMARY.md", text)

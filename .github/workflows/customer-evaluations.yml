@@ -12,6 +12,7 @@ on:
           - both
           - general
           - smerc-f
+          - company-template
 
 permissions:
   contents: read
@@ -41,6 +42,13 @@ jobs:
           python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json \
             --json-output smerc-customer-evaluations/smerc-f/customer_evaluation_report.json \
             --markdown-output smerc-customer-evaluations/smerc-f/Customer_Evaluation_Report.md
+
+      - name: Run company metadata template evaluation
+        if: ${{ inputs.evaluation_set == 'company-template' }}
+        run: |
+          python -m reference_engine.customer_evaluation examples/customer_metadata_template.json \
+            --json-output smerc-customer-evaluations/company-template/customer_evaluation_report.json \
+            --markdown-output smerc-customer-evaluations/company-template/Customer_Evaluation_Report.md
 
       - name: Summarize generated evaluations
         run: |
