@@ -51,6 +51,24 @@ action_file = examples/smerc_f_customer_eval_actions.json
 
 The workflow uses read-only repository access and uploads the report artifact. It does not require SMERC API credentials, production credentials, wallet keys, payment credentials, or write access to financial systems.
 
+## Run From This Repository's Actions Tab
+
+This repository includes `.github/workflows/customer-evaluations.yml`.
+
+Run it manually from GitHub Actions and choose:
+
+```text
+evaluation_set = smerc-f
+```
+
+To compare the general and financial packs in one run, choose:
+
+```text
+evaluation_set = both
+```
+
+The workflow uploads `smerc-customer-evaluations`, including the SMERC-F markdown report, JSON report, and a compact summary.
+
 ## What The Sample Covers
 
 The included SMERC-F customer-evaluation sample covers:

@@ -70,6 +70,7 @@ The current build includes:
 - deterministic ref-gate-style metadata checks for typed contract validity, attestation validity, least-privilege confirmation, and expected object shape before recoverability scoring is allowed to influence high-impact MCP tool calls
 - Customer Evaluation runner that accepts 5 to 25 metadata-only customer actions and returns Ref-gate results, SMERC postures, SPARTa routes, DLL evidence, autonomy budget impact, and a pilot-fit recommendation
 - SMERC-F Customer Evaluation pack with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
+- repository-native Customer Evaluations GitHub Actions workflow that runs the general and SMERC-F evaluation packs from the Actions tab and uploads review artifacts
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
 - cloud automation guardrails positioning for infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions
 - control mapping library that maps SMERC execution controls to declared native tool mechanisms and evidence requirements
@@ -193,6 +194,7 @@ Start here before reading the code:
 - `docs/GitHub_Actions_Pilot_Installer.md` gives reviewers a one-command package generator for the connected GitHub Actions pilot artifact folder.
 - `integrations/github_actions/pilot_package_workflow.yml` gives reviewers a copyable GitHub Actions workflow that generates and uploads the complete pilot package without a remote API.
 - `integrations/github_actions/customer_evaluation_workflow.yml` gives reviewers a copyable GitHub Actions workflow that runs the metadata-only customer evaluation package and uploads the report artifact without a remote API.
+- `.github/workflows/customer-evaluations.yml` lets reviewers run the general and SMERC-F customer-evaluation examples directly from this repository's GitHub Actions tab.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Accelerator_Readiness_Track.md` defines when SMERC should move from technical review to accelerator applications or investor-facing submissions.
