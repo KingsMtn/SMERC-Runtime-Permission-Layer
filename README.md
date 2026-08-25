@@ -36,6 +36,24 @@ Use this sequence:
 
 Current status: pilot-ready for shadow-mode technical review. Not production-certified, compliance-attested, or customer-proven to reduce incidents.
 
+## Fastest Local Proof
+
+Run one synthetic customer action through the current software path:
+
+```bash
+python -m reference_engine.customer_proof_loop examples/customer_proof_action.json --output-dir reports/customer_proof_loop --pretty
+```
+
+This produces a JSON evidence bundle and Markdown report showing:
+
+- runtime admission gate result
+- recoverability decision
+- SPARTa route
+- Decision Lifecycle Ledger chain
+- pass/fail checks for hard gates, recoverability, route execution, and ledger validity
+
+Read `docs/Customer_Proof_Loop.md` for the proof boundary and customer-use notes.
+
 ## Public Language
 
 SMERC should lead with familiar category language, not internal layer names.
@@ -89,6 +107,7 @@ The current build includes:
 - Runtime Evidence Trust Gate that caps or rejects decisions when high-impact metadata comes only from the proposing agent instead of a trusted proxy, OIDC claim, adapter, audit event, ticket, or reviewer record
 - Constraint Eligibility Layer that preserves hard denies before recoverability can modify a runtime decision
 - Timing Evidence reports for decision latency, route latency, workflow overhead, cancellation, rollback, and unavailable evaluations
+- one-command Customer Proof Loop that runs runtime admission, recoverability scoring, SPARTa routing, and Decision Lifecycle Ledger evidence into one reviewable report
 - self-contained GitHub Actions pilot package generator that assembles signal intake, eligibility, SMERC decision, execution route, DLL, DLL Intelligence, and timing evidence
 - scoring-invariant verification for recoverability and executor fitness math
 - Self-Governance Sandbox that scores proposed SMERC policy, threshold, adapter, and scoring changes before they can affect SMERC itself
@@ -174,6 +193,7 @@ Start here before reading the code:
 - `docs/Runtime_Contract_Index.md` explains the machine-readable `smerc.runtime-contract-index.v1` assembly map for SMERC's contracts and handoffs.
 - `docs/SPARK_Signal_Intake_And_Timing_Evidence.md` explains the proposed SPARK signal-intake layer and timing evidence metrics around recoverability decisions.
 - `docs/Runtime_Admission_Gate.md` explains the reusable pre-scoring admission contract for identity, scope, permits, typed contracts, attestation, least privilege, object shape, and required evidence.
+- `docs/Customer_Proof_Loop.md` gives reviewers a one-command path that runs a synthetic customer action through runtime admission, recoverability scoring, SPARTa routing, and Decision Lifecycle Ledger evidence.
 - `docs/Runtime_Evidence_Trust_Gate.md` explains how SMERC screens whether action metadata is trustworthy enough to support a runtime decision.
 - `docs/Constraint_Eligibility_Layer.md` explains why recoverability is a permission modifier, not a substitute for authority, hard policy, or categorical denies.
 - `docs/OpenSSF_Feedback_Alignment.md` explains how external OpenSSF issue #50 feedback sharpened the runtime order: hard mechanical evidence gates first, recoverability scoring second, route and audit evidence third.

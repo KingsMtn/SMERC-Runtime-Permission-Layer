@@ -1,0 +1,72 @@
+{
+  "version": "smerc.customer-proof-loop-input.v1",
+  "tenant_id": "customer-proof-demo",
+  "domain_profile": "general",
+  "admission": {
+    "version": "smerc.runtime-admission-input.v1",
+    "request_id": "customer-proof-github-actions-001",
+    "required_checks": [
+      "identity_valid",
+      "session_scope_valid",
+      "permit_valid",
+      "typed_contract_valid",
+      "attestation_valid",
+      "least_privilege_confirmed",
+      "object_shape_expected",
+      "required_evidence_present"
+    ],
+    "checks": {
+      "identity_valid": true,
+      "session_scope_valid": true,
+      "permit_valid": true,
+      "typed_contract_valid": true,
+      "attestation_valid": true,
+      "least_privilege_confirmed": true,
+      "object_shape_expected": true,
+      "required_evidence_present": true
+    }
+  },
+  "action": {
+    "action_id": "AGENT_DEPLOY_PROD_CONFIG",
+    "description": "AI deployment agent proposes a production configuration change.",
+    "actor": "deployment_agent",
+    "tool": "github_actions.deploy",
+    "action_type": "production_deploy",
+    "base_action_risk": 0.62,
+    "reversibility": 0.58,
+    "containment_strength": 0.55,
+    "rollback_latency": 0.48,
+    "evidence_validity": 0.70,
+    "anomaly_pressure": 0.33,
+    "impact_scope": 0.58,
+    "cancel_reliability": 0.67,
+    "authorization_confidence": 0.71,
+    "external_side_effect": true,
+    "sensitive_data": false,
+    "context": {
+      "workflow": "deployment",
+      "rollback_plan": "documented",
+      "environment": "production"
+    }
+  },
+  "sparta_plan": {
+    "version": "smerc.sparta-plan.v1",
+    "plan_id": "github-prod-canary-deploy",
+    "tool": "github_actions",
+    "action": "deploy_canary",
+    "requested_capability": "deployment",
+    "supports_dry_run": true,
+    "supports_scope_limit": true,
+    "supports_checkpoint": true,
+    "supports_rollback": true,
+    "supports_human_approval": true,
+    "max_scope_units": 100,
+    "requested_scope_units": 80,
+    "side_effect_level": "external",
+    "metadata": {
+      "environment": "production",
+      "workflow": "deploy.yml",
+      "service": "payments-api"
+    }
+  }
+}
