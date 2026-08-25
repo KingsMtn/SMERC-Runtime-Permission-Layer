@@ -71,6 +71,7 @@ The reviewable OpenAPI 3.1 contract is `schemas/smerc-runtime-api-openapi-v1.jso
 | `GET /health` | No | Process liveness |
 | `GET /ready` | No | Audit-store readiness |
 | `GET /schema` | No | Input and endpoint contract |
+| `POST /v1/admission/evaluate` | Bearer | Evaluate hard admission checks before recoverability scoring |
 | `POST /v1/evaluate` | Bearer | Evaluate and store one action |
 | `POST /v1/auth/token` | Static Bearer | Exchange a bootstrap credential for a short-lived narrowed session |
 | `POST /v1/auth/github` | GitHub OIDC Bearer | Verify a trusted GitHub job and issue one workload-bound session |

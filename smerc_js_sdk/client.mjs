@@ -43,6 +43,10 @@ export class SMERCClient {
     return this.request('POST', '/v1/evaluate', { body: action, idempotencyKey: options.idempotencyKey });
   }
 
+  evaluateAdmission(admission) {
+    return this.request('POST', '/v1/admission/evaluate', { body: admission });
+  }
+
   evaluateLanguageAction(actionEnvelope, options = {}) {
     return this.request('POST', '/v1/language/evaluate', {
       body: actionEnvelope,

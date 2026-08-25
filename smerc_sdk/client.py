@@ -61,6 +61,9 @@ class SMERCClient:
     def evaluate(self, action: Mapping[str, Any], *, idempotency_key: Optional[str] = None) -> JsonObject:
         return self._request("POST", "/v1/evaluate", body=dict(action), idempotency_key=idempotency_key)
 
+    def evaluate_admission(self, admission: Mapping[str, Any]) -> JsonObject:
+        return self._request("POST", "/v1/admission/evaluate", body=dict(admission))
+
     def evaluate_language_action(
         self,
         action_envelope: Mapping[str, Any],

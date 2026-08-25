@@ -39,6 +39,17 @@ class OpenAPIContractTests(unittest.TestCase):
         self.assertIn("fitness_replay_id", response_schema["properties"]["replay"]["required"])
         self.assertIn("action_replay_id", response_schema["properties"]["replay"]["required"])
 
+    def test_admission_contract_declares_pre_scoring_gate(self):
+        operation = self.contract["paths"]["/v1/admission/evaluate"]["post"]
+        request_schema = self.contract["components"]["schemas"]["RuntimeAdmissionRequest"]
+        response_schema = self.contract["components"]["schemas"]["RuntimeAdmissionResponse"]
+
+        self.assertIn("actions.evaluate", operation["description"])
+        self.assertIn("before recoverability scoring", operation["description"])
+        self.assertIn("identity_valid", request_schema["properties"]["required_checks"]["items"]["enum"])
+        self.assertEqual(response_schema["properties"]["decision"]["enum"], ["ADMIT", "REJECT", "ESCALATE"])
+        self.assertIn("admissible_for_recoverability_scoring", response_schema["required"])
+
     def test_contract_keeps_pilot_boundary_language(self):
         description = self.contract["info"]["description"]
         self.assertIn("pilot", description.lower())

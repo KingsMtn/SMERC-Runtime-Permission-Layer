@@ -14,6 +14,7 @@ LANGUAGE_EXAMPLE = json.loads(
     (ROOT / "examples" / "action_language" / "production_database_change.json").read_text(encoding="utf-8")
 )
 AGENT_HANDSHAKE_EXAMPLE = json.loads((ROOT / "examples" / "agent_handshake_request.json").read_text(encoding="utf-8"))
+ADMISSION_EXAMPLE = json.loads((ROOT / "examples" / "runtime_admission_request.json").read_text(encoding="utf-8"))
 
 
 def example_ledger_for(tenant_id: str, decision_id: str):
@@ -72,6 +73,16 @@ class PythonSDKTests(unittest.TestCase):
         self.assertEqual(replay["replay_id"], decision["replay_id"])
         self.assertGreaterEqual(listed["count"], 1)
         self.assertTrue(all(item["posture"] == decision["posture"] for item in listed["decisions"]))
+
+    def test_evaluate_admission_calls_runtime_api(self):
+        client = self.client()
+
+        admission = client.evaluate_admission(ADMISSION_EXAMPLE)
+
+        self.assertEqual(admission["version"], "smerc.runtime-admission-gate.v1")
+        self.assertEqual(admission["tenant_id"], "alpha")
+        self.assertEqual(admission["decision"], "ADMIT")
+        self.assertTrue(admission["admissible_for_recoverability_scoring"])
 
     def test_language_evaluate_and_idempotent_replay(self):
         client = self.client()

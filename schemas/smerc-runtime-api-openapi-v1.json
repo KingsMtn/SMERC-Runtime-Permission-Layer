@@ -147,6 +147,44 @@
         }
       }
     },
+    "/v1/admission/evaluate": {
+      "post": {
+        "tags": ["Admission"],
+        "summary": "Evaluate hard runtime admission checks before recoverability scoring",
+        "description": "Requires actions.evaluate scope. Checks identity, session scope, permits, typed contracts, attestation, least privilege, object shape, and required evidence before recoverability scoring can influence execution.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RuntimeAdmissionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Runtime admission gate result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuntimeAdmissionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
     "/v1/language/evaluate": {
       "post": {
         "tags": ["Evaluation"],
@@ -826,6 +864,92 @@
             }
           },
           "replay": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      },
+      "RuntimeAdmissionRequest": {
+        "type": "object",
+        "required": ["version", "request_id", "checks"],
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "smerc.runtime-admission-input.v1"
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "required_checks": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "identity_valid",
+                "session_scope_valid",
+                "permit_valid",
+                "typed_contract_valid",
+                "attestation_valid",
+                "least_privilege_confirmed",
+                "object_shape_expected",
+                "required_evidence_present"
+              ]
+            }
+          },
+          "checks": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "RuntimeAdmissionResponse": {
+        "type": "object",
+        "required": [
+          "version",
+          "request_id",
+          "decision",
+          "admissible_for_recoverability_scoring",
+          "max_recommended_posture",
+          "reason_codes",
+          "required_controls"
+        ],
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "smerc.runtime-admission-gate.v1"
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string",
+            "enum": ["ADMIT", "REJECT", "ESCALATE"]
+          },
+          "admissible_for_recoverability_scoring": {
+            "type": "boolean"
+          },
+          "max_recommended_posture": {
+            "$ref": "#/components/schemas/Posture"
+          },
+          "reason_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "required_controls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "authenticated_principal": {
+            "type": "object"
+          },
+          "runtime_observation": {
             "type": "object"
           }
         },

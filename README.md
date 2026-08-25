@@ -687,6 +687,15 @@ curl -X POST http://127.0.0.1:8788/v1/evaluate \
   --data @examples/recoverability_single_action.json
 ```
 
+Run the pre-scoring admission gate first when testing hard gates:
+
+```bash
+curl -X POST http://127.0.0.1:8788/v1/admission/evaluate \
+  -H "Authorization: Bearer development-console-secret-2026-rotate" \
+  -H "Content-Type: application/json" \
+  --data @examples/runtime_admission_request.json
+```
+
 Call the same authenticated API from Python:
 
 ```python

@@ -81,6 +81,11 @@ from reference_engine.recoverability_engine import (
     RuntimePosture,
     load_domain_profile_dir,
 )
+from reference_engine.runtime_admission_gate import (
+    ADMISSION_INPUT_VERSION,
+    RUNTIME_ADMISSION_GATE_VERSION,
+    evaluate_runtime_admission_gate,
+)
 from reference_engine.runtime_health_metrics import (
     RUNTIME_HEALTH_VERSION,
     build_runtime_health_metrics,
@@ -491,6 +496,12 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 self._write_json(self._evaluate_agent_handshake(principal, payload), request_id=request_id)
                 return
 
+            if path == "/v1/admission/evaluate":
+                if not isinstance(payload, dict):
+                    raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Admission evaluation expects one JSON object.")
+                self._write_json(self._evaluate_admission(principal, payload), request_id=request_id)
+                return
+
             if path == "/v1/pilot/dll/intake":
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Pilot DLL intake expects one JSON object.")
@@ -563,7 +574,7 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 return
 
             if path not in {"/evaluate", "/batch", "/v1/evaluate", "/v1/batch", "/v1/language/evaluate"}:
-                raise APIError(HTTPStatus.NOT_FOUND, "not_found", "Use /evaluate, /batch, /v1/agent/handshake, or a review endpoint.")
+                raise APIError(HTTPStatus.NOT_FOUND, "not_found", "Use /evaluate, /batch, /v1/admission/evaluate, /v1/agent/handshake, or a review endpoint.")
 
             if path == "/v1/language/evaluate":
                 if not isinstance(payload, dict):
@@ -1632,6 +1643,37 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             raise APIError(HTTPStatus.CONFLICT, "idempotency_conflict", str(exc)) from exc
         return stored, False
 
+    def _evaluate_admission(self, principal: APIPrincipal, payload: Dict[str, Any]) -> Dict[str, Any]:
+        started_at = time.perf_counter()
+        try:
+            result = evaluate_runtime_admission_gate(payload)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_admission_request", str(exc)) from exc
+        observation = {
+            "schema": "smerc.runtime-observation.v1",
+            "source": "smerc-runtime-api",
+            "integration_status": "ok",
+            "evaluation_latency_ms": round((time.perf_counter() - started_at) * 1000, 3),
+            "observed_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            "fail_behavior": "reject_or_escalate_before_recoverability_scoring",
+        }
+        result["tenant_id"] = principal.tenant_id
+        result["authenticated_principal"] = principal.public_identity()
+        result["runtime_observation"] = observation
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "admission.evaluated",
+            result["request_id"],
+            {
+                "decision": result["decision"],
+                "admissible_for_recoverability_scoring": result["admissible_for_recoverability_scoring"],
+                "max_recommended_posture": result["max_recommended_posture"],
+                "reason_codes": result["reason_codes"],
+            },
+        )
+        return result
+
     def _evaluate_and_record(
         self,
         principal: APIPrincipal,
@@ -1792,6 +1834,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         if path == "/v1/sparta/route":
             return "routes.write"
         if path == "/v1/agent/handshake":
+            return "actions.evaluate"
+        if path == "/v1/admission/evaluate":
             return "actions.evaluate"
         if path == "/v1/pilot/dll/intake":
             return "reviews.write"
@@ -1955,6 +1999,8 @@ def schema() -> Dict[str, Any]:
         "language_versions": {
             "action": ACTION_VERSION,
             "decision": DECISION_VERSION,
+            "runtime_admission_gate": RUNTIME_ADMISSION_GATE_VERSION,
+            "runtime_admission_input": ADMISSION_INPUT_VERSION,
             "agent_handshake": HANDSHAKE_VERSION,
             "permit": PERMIT_VERSION,
             "control_evidence": CONTROL_EVIDENCE_VERSION,
@@ -2013,6 +2059,7 @@ def schema() -> Dict[str, Any]:
             "GET /ready": "unauthenticated persistence readiness",
             "GET /schema": "input and endpoint shape",
             "POST /v1/evaluate": "evaluate and persist one action",
+            "POST /v1/admission/evaluate": "evaluate hard runtime admission checks before recoverability scoring",
             "POST /v1/auth/token": "exchange a static bootstrap credential for a short-lived narrowed token",
             "POST /v1/auth/github": "exchange one verified GitHub Actions OIDC token for a workload-bound session",
             "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",
