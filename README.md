@@ -69,6 +69,7 @@ The current build includes:
 - MCP Governance Gateway that evaluates registry-defined MCP tool-call sessions with loop pressure, scope pressure, session-budget metering, proxy actions, SPARTa routes, DLL evidence, and SMERC-F financial tool-family support
 - deterministic ref-gate-style metadata checks for typed contract validity, attestation validity, least-privilege confirmation, and expected object shape before recoverability scoring is allowed to influence high-impact MCP tool calls
 - Customer Evaluation runner that accepts 5 to 25 metadata-only customer actions and returns Ref-gate results, SMERC postures, SPARTa routes, DLL evidence, autonomy budget impact, and a pilot-fit recommendation
+- SMERC-F Customer Evaluation pack with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
 - cloud automation guardrails positioning for infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions
 - control mapping library that maps SMERC execution controls to declared native tool mechanisms and evidence requirements
@@ -246,6 +247,7 @@ Start here before reading the code:
 - `docs/SMERC_F_Regulatory_Context_Profile.md` explains how legislation-inspired operational context can inform SMERC-F scoring without making legal or compliance claims.
 - `docs/SMERC_F_Financial_Public_Data_Replay.md` explains how public-data-shaped stablecoin, blockchain, and incident records are converted into SMERC-F replay scenarios.
 - `docs/SMERC_F_Pilot_Evidence_Packet.md` explains how source-ingestion, regulatory-context, and replay reports combine into a single financial-services pilot review packet.
+- `docs/SMERC_F_Customer_Evaluation.md` gives financial-services reviewers a metadata-only customer-evaluation path using the general customer-evaluation runner and finance-specific sample actions.
 - `pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md` gives a bounded metadata-only SMERC-F pilot path for financial-action review without live fund movement.
 - `pilot_package/Fortune_500_Financial_Services_Review_Checklist.md` screens whether a large financial-services review has the owners, data boundary, and metrics needed before a pilot is offered.
 - `docs/Public_Review_And_Feedback.md` gives public reviewers and community posts a safe critique path.
@@ -889,6 +891,18 @@ python -m reference_engine.smerc_f_pilot_evidence_packet --pretty
 ```
 
 The pilot evidence packet combines the source-ingestion report, regulatory-context overlay, public-data replay, reviewer questions, go/no-go criteria, and claim boundaries into one financial-services review package. It is not AML compliance, legal compliance, fraud detection, sanctions screening, custody software, settlement infrastructure, payment execution, production certification, customer-demand proof, incident-reduction proof, or production-safety proof.
+
+Run the SMERC-F customer evaluation sample:
+
+```bash
+python -m reference_engine.customer_evaluation \
+  examples/smerc_f_customer_eval_actions.json \
+  --json-output reports/smerc_f_customer_evaluation/customer_evaluation_report.json \
+  --markdown-output reports/smerc_f_customer_evaluation/Customer_Evaluation_Report.md \
+  --pretty
+```
+
+The SMERC-F customer evaluation path reuses the general customer-evaluation runner with finance-specific metadata-only actions. It is intended to help a financial-services reviewer decide whether a bounded shadow-mode review is justified before any production integration.
 
 ## GitHub Actions Modes
 
