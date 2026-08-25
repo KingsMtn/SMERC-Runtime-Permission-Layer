@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a reusable Runtime Admission Gate module and tests so hard identity, scope, permit, typed-contract, attestation, least-privilege, object-shape, and evidence checks can reject or escalate requests before recoverability scoring.
 - Added an OpenSSF feedback alignment note clarifying that typed contracts, attestation, least privilege, and object-shape checks must run before recoverability scoring can support execution.
 - Added a Cloud Admin Customer Evaluation pack and GitHub Actions workflow option for metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy review.
 - Added a company test package and runnable metadata template so a prospect can evaluate one workflow without sharing sensitive data or production access.

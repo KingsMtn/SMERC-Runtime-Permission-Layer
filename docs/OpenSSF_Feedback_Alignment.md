@@ -58,11 +58,13 @@ That means:
 Implemented or demonstrated artifacts:
 
 - `reference_engine.ref_gated_runtime_proof`
+- `reference_engine.runtime_admission_gate`
 - `reference_engine.customer_evaluation`
 - `reference_engine.mcp_governance_gateway`
 - `docs/Ref_Gated_Runtime_Proof_Loop.md`
 - `docs/SMERC_And_The_Ref_Pattern.md`
 - `docs/Runtime_Evidence_Trust_Gate.md`
+- `docs/Runtime_Admission_Gate.md`
 - `examples/customer_eval_actions.json`
 - `examples/cloud_admin_customer_eval_actions.json`
 - `examples/smerc_f_customer_eval_actions.json`

@@ -173,6 +173,7 @@ Start here before reading the code:
 - `docs/Core_Pilot_Package.md` builds the core pilot review folder in one command from routing, action intake, handoff, and evidence summary inputs.
 - `docs/Runtime_Contract_Index.md` explains the machine-readable `smerc.runtime-contract-index.v1` assembly map for SMERC's contracts and handoffs.
 - `docs/SPARK_Signal_Intake_And_Timing_Evidence.md` explains the proposed SPARK signal-intake layer and timing evidence metrics around recoverability decisions.
+- `docs/Runtime_Admission_Gate.md` explains the reusable pre-scoring admission contract for identity, scope, permits, typed contracts, attestation, least privilege, object shape, and required evidence.
 - `docs/Runtime_Evidence_Trust_Gate.md` explains how SMERC screens whether action metadata is trustworthy enough to support a runtime decision.
 - `docs/Constraint_Eligibility_Layer.md` explains why recoverability is a permission modifier, not a substitute for authority, hard policy, or categorical denies.
 - `docs/OpenSSF_Feedback_Alignment.md` explains how external OpenSSF issue #50 feedback sharpened the runtime order: hard mechanical evidence gates first, recoverability scoring second, route and audit evidence third.

@@ -11,18 +11,13 @@ from typing import Any, Dict, Iterable, Mapping
 from reference_engine.autonomy_budget import evaluate_autonomy_budget
 from reference_engine.earned_autonomy import budget_context_for_tier
 from reference_engine.mcp_proxy_runner import run_mcp_proxy
+from reference_engine.runtime_admission_gate import ref_gate_compat_report
 
 
 MCP_GOVERNANCE_GATEWAY_VERSION = "smerc.mcp-governance-gateway.v1"
 REGISTRY_VERSION = "smerc.mcp-tool-registry.v1"
 SESSION_VERSION = "smerc.mcp-gateway-session.v1"
 MODES = {"shadow", "enforce"}
-REF_GATE_FIELDS = {
-    "typed_contract_valid": "typed_contract_invalid",
-    "attestation_valid": "attestation_invalid",
-    "least_privilege_confirmed": "least_privilege_unconfirmed",
-    "object_shape_expected": "object_shape_unexpected",
-}
 
 
 def load_json(path: str | Path) -> Any:
@@ -323,25 +318,7 @@ def _gateway_pressure(
 def _ref_gate(request: Mapping[str, Any], tool_policy: Mapping[str, Any]) -> Dict[str, Any]:
     tool_call = request["tool_call"]
     required = bool(tool_policy.get("requires_ref_gate", False))
-    checks: dict[str, Any] = {}
-    drivers = []
-    for field, driver in REF_GATE_FIELDS.items():
-        if field in tool_call:
-            value = bool(tool_call[field])
-            source = "explicit"
-        else:
-            value = not required
-            source = "missing"
-        checks[field] = {"value": value, "source": source}
-        if not value:
-            drivers.append(driver if source == "explicit" else f"{field}_missing")
-    return {
-        "pattern": "deterministic_pre_execution_ref_gate",
-        "status": "fail" if drivers else "pass",
-        "required": required,
-        "drivers": drivers,
-        "checks": checks,
-    }
+    return ref_gate_compat_report(tool_call, required=required)
 
 
 def _merge_ref_gate_pressure(gateway_pressure: Mapping[str, Any], ref_gate: Mapping[str, Any]) -> Dict[str, Any]:
