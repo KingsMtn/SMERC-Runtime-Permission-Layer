@@ -1,4 +1,4 @@
-# Run SMERC Customer Evaluation From GitHub
+# Run SMERC Runtime Evaluation From GitHub
 
 ## Purpose
 
@@ -21,7 +21,7 @@ The workflow runs the repository's metadata-only sample actions through the cust
 The artifact includes generated JSON and Markdown reports for:
 
 - the general customer-evaluation action set
-- the SMERC-F financial customer-evaluation action set
+- the financial runtime customer-evaluation action set, internally called SMERC-F
 - a compact summary showing action counts, posture counts, route-state counts, Ref-gate counts, ledger validity, autonomy state, and pilot-fit result
 
 ## What This Proves
@@ -33,7 +33,7 @@ It demonstrates:
 - metadata-only action intake
 - Ref-gate checks
 - SMERC posture evaluation
-- SPARTa route behavior
+- execution-routing behavior, internally called SPARTa
 - Decision Lifecycle Ledger evidence
 - autonomy-budget impact
 - generated reviewer reports

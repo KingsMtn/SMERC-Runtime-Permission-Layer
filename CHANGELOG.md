@@ -2,9 +2,9 @@
 
 ## Unreleased
 
-- Added a click-by-click reviewer guide for running the public customer-evaluation workflow from GitHub Actions.
-- Added a repository-native Customer Evaluations GitHub Actions workflow for running the general and SMERC-F evaluation examples from the Actions tab.
-- Added a SMERC-F customer-evaluation pack with finance-specific metadata-only actions, reviewer guidance, generated reports, and tests.
+- Added a click-by-click reviewer guide for running the public runtime customer-evaluation workflow from GitHub Actions.
+- Added a repository-native Runtime Customer Evaluations GitHub Actions workflow for running the general and financial runtime evaluation examples from the Actions tab.
+- Added a Financial Runtime Customer Evaluation pack, internally called SMERC-F, with finance-specific metadata-only actions, reviewer guidance, generated reports, and tests.
 - Added a copyable GitHub Actions customer-evaluation workflow that runs the metadata-only customer evaluation package and uploads a review artifact without SMERC API credentials.
 - Added a Customer Evaluation runner, sample metadata-only action set, docs, report outputs, and tests for customer-supplied action review before a shadow-mode pilot.
 - Added Ref-gated runtime proof output to the one-command reviewer quickstart so reviewers can inspect hard evidence gates, capped scoring, SPARTa routing, DLL evidence, CISO seed evidence, and benchmark results from one generated package.

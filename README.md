@@ -69,8 +69,8 @@ The current build includes:
 - MCP Governance Gateway that evaluates registry-defined MCP tool-call sessions with loop pressure, scope pressure, session-budget metering, proxy actions, SPARTa routes, DLL evidence, and SMERC-F financial tool-family support
 - deterministic ref-gate-style metadata checks for typed contract validity, attestation validity, least-privilege confirmation, and expected object shape before recoverability scoring is allowed to influence high-impact MCP tool calls
 - Customer Evaluation runner that accepts 5 to 25 metadata-only customer actions and returns Ref-gate results, SMERC postures, SPARTa routes, DLL evidence, autonomy budget impact, and a pilot-fit recommendation
-- SMERC-F Customer Evaluation pack with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
-- repository-native Customer Evaluations GitHub Actions workflow that runs the general and SMERC-F evaluation packs from the Actions tab and uploads review artifacts
+- Financial Runtime Customer Evaluation pack, internally called SMERC-F, with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
+- repository-native Runtime Customer Evaluations GitHub Actions workflow that runs the general and financial runtime evaluation packs from the Actions tab and uploads review artifacts
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
 - cloud automation guardrails positioning for infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions
 - control mapping library that maps SMERC execution controls to declared native tool mechanisms and evidence requirements
@@ -166,7 +166,7 @@ Start here before reading the code:
 - `docs/Credibility_Partner_Outreach.md` gives a short, bounded outreach message for asking credibility partners to review SMERC without overclaiming readiness.
 - `docs/ILION_Bench_Replay.md` explains how to replay the public ILION-Bench v2 agent execution-safety dataset through SMERC without committing the external dataset into this repository.
 - `docs/Customer_Action_Intake.md` gives prospects a metadata-only action intake path for scoring their own workflow examples before a shadow-mode pilot.
-- `docs/Prospect_Routing.md` routes interested organizations to the core GitHub Actions pilot, SMERC-F financial pilot, or review-only path.
+- `docs/Prospect_Routing.md` routes interested organizations to the core GitHub Actions pilot, financial runtime pilot, or review-only path.
 - `docs/Core_Pilot_Package.md` builds the core pilot review folder in one command from routing, action intake, handoff, and evidence summary inputs.
 - `docs/Runtime_Contract_Index.md` explains the machine-readable `smerc.runtime-contract-index.v1` assembly map for SMERC's contracts and handoffs.
 - `docs/SPARK_Signal_Intake_And_Timing_Evidence.md` explains the proposed SPARK signal-intake layer and timing evidence metrics around recoverability decisions.
@@ -195,7 +195,7 @@ Start here before reading the code:
 - `docs/GitHub_Actions_Pilot_Installer.md` gives reviewers a one-command package generator for the connected GitHub Actions pilot artifact folder.
 - `integrations/github_actions/pilot_package_workflow.yml` gives reviewers a copyable GitHub Actions workflow that generates and uploads the complete pilot package without a remote API.
 - `integrations/github_actions/customer_evaluation_workflow.yml` gives reviewers a copyable GitHub Actions workflow that runs the metadata-only customer evaluation package and uploads the report artifact without a remote API.
-- `.github/workflows/customer-evaluations.yml` lets reviewers run the general and SMERC-F customer-evaluation examples directly from this repository's GitHub Actions tab.
+- `.github/workflows/customer-evaluations.yml` lets reviewers run the general and financial runtime customer-evaluation examples directly from this repository's GitHub Actions tab.
 - `docs/CISO_GitHub_Inspection_Guide.md` shows what a security or platform reviewer should inspect first.
 - `docs/Founder_Explanation_Card.md` gives a short nontechnical explanation for founder calls, YC-style applications, and design-partner conversations.
 - `docs/Accelerator_Readiness_Track.md` defines when SMERC should move from technical review to accelerator applications or investor-facing submissions.
@@ -844,14 +844,14 @@ python -m reference_engine.evidence_provenance build \
 
 See `docs/Policy_Calibration_And_Evidence_Provenance.md` for policy activation, provenance strength, HMAC use, and limitations.
 
-Run the optional SMERC-F financial action-governance profile:
+Run the optional Financial Runtime Governance profile, internally called SMERC-F:
 
 ```bash
 python -m reference_engine.financial_permission_profile \
   examples/financial_action_requests.json --policy balanced --pretty
 ```
 
-Run the SMERC-F historical-context replay suite:
+Run the financial runtime historical-context replay suite:
 
 ```bash
 python -m reference_engine.financial_replay \
@@ -859,7 +859,7 @@ python -m reference_engine.financial_replay \
   --report reports/SMERC_F_Replay_Report.md
 ```
 
-Run the SMERC-F public-data replay harness:
+Run the financial runtime public-data replay harness:
 
 ```bash
 python -m reference_engine.smerc_f_public_data_replay \
@@ -869,7 +869,7 @@ python -m reference_engine.smerc_f_public_data_replay \
 
 The public-data replay harness expands 10 public-data-shaped source rows into 50 replay scenarios. It is useful for showing ingestion, transformation, posture, and report shape. It is not customer validation, address attribution, AML screening, sanctions screening, transaction monitoring, custody, settlement, payment execution, incident-prevention proof, or production certification.
 
-Run the SMERC-F source ingestion adapter:
+Run the financial runtime source ingestion adapter:
 
 ```bash
 python -m reference_engine.smerc_f_source_ingestion \
@@ -879,7 +879,7 @@ python -m reference_engine.smerc_f_source_ingestion \
 
 The source ingestion adapter accepts Dune-, BigQuery-, Chainabuse-, DefiLlama-, and Elliptic-shaped exported metadata, normalizes it into SMERC-F replay rows, and regenerates the replay report. It does not call live vendor APIs, enrich addresses, determine illicit activity, move funds, or certify financial controls.
 
-Run the SMERC-F regulatory context overlay:
+Run the financial runtime regulatory context overlay:
 
 ```bash
 python -m reference_engine.smerc_f_regulatory_context --pretty
@@ -887,7 +887,7 @@ python -m reference_engine.smerc_f_regulatory_context --pretty
 
 The regulatory context overlay uses legislation-inspired operational fields such as issuer status, reserve sensitivity, redemption pressure, custody dependency, lawful-order capability, jurisdiction complexity, customer-impact radius, and disclosure gaps to compare baseline replay with context-enriched replay. It does not interpret law, provide legal advice, determine compliance, screen AML or sanctions, classify illicit activity, move funds, or certify financial controls.
 
-Run the SMERC-F pilot evidence packet:
+Run the financial runtime pilot evidence packet:
 
 ```bash
 python -m reference_engine.smerc_f_pilot_evidence_packet --pretty
@@ -895,7 +895,7 @@ python -m reference_engine.smerc_f_pilot_evidence_packet --pretty
 
 The pilot evidence packet combines the source-ingestion report, regulatory-context overlay, public-data replay, reviewer questions, go/no-go criteria, and claim boundaries into one financial-services review package. It is not AML compliance, legal compliance, fraud detection, sanctions screening, custody software, settlement infrastructure, payment execution, production certification, customer-demand proof, incident-reduction proof, or production-safety proof.
 
-Run the SMERC-F customer evaluation sample:
+Run the Financial Runtime Customer Evaluation sample:
 
 ```bash
 python -m reference_engine.customer_evaluation \
@@ -905,7 +905,7 @@ python -m reference_engine.customer_evaluation \
   --pretty
 ```
 
-The SMERC-F customer evaluation path reuses the general customer-evaluation runner with finance-specific metadata-only actions. It is intended to help a financial-services reviewer decide whether a bounded shadow-mode review is justified before any production integration.
+The Financial Runtime Customer Evaluation path reuses the general customer-evaluation runner with finance-specific metadata-only actions. The internal profile name is SMERC-F. It is intended to help a financial-services reviewer decide whether a bounded shadow-mode review is justified before any production integration.
 
 ## GitHub Actions Modes
 

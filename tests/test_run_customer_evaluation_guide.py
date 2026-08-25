@@ -15,7 +15,7 @@ class RunCustomerEvaluationGuideTests(unittest.TestCase):
         self.assertIn("evaluation_set", text)
         self.assertIn("both", text)
         self.assertIn("smerc-customer-evaluations", text)
-        self.assertIn("SMERC-F financial customer-evaluation", text)
+        self.assertIn("financial runtime customer-evaluation", text)
         self.assertIn("What This Does Not Prove", text)
         self.assertIn("production safety", text)
         self.assertIn("shadow-mode pilot", text)
