@@ -1,0 +1,152 @@
+{
+  "average_content_risk_score": 0.616,
+  "average_evidence_reliability_score": 0.803,
+  "evidence_boundary": "Synthetic examples demonstrate content-evidence ingestion. Replace these with customer-approved scanner or reviewer signals during a pilot; do not send raw source code, customer data, secrets, or private prompts.",
+  "generated_at": "2026-08-26T20:52:34+00:00",
+  "markdown_report": "# SMERC Content Evidence Adapter Report\n\n- Generated: `2026-08-26T20:52:34+00:00`\n- Scenarios evaluated: `5`\n- Average content risk score: `0.616`\n- Average evidence reliability score: `0.803`\n- Max posture counts: `{'ALLOW': 1, 'DENY': 1, 'ESCALATE': 2, 'FREEZE': 1}`\n\n| Action | Target | Risk | Reliability | Trust | Max Posture | Findings |\n| --- | --- | ---: | ---: | --- | --- | --- |\n| CONTENT_SQL_DROP_001 | sql_migration | 0.881 | 1.0 | HIGH | DENY | customer_data_deletion, destructive_database_operation |\n| CONTENT_CUSTOMER_EMAIL_002 | customer_email | 0.711 | 1.0 | HIGH | ESCALATE | external_legal_commitment, regulated_data_exposure |\n| CONTENT_CODE_DIFF_003 | code_diff | 0.108 | 1.0 | HIGH | ALLOW | None |\n| CONTENT_SCANNER_DOWN_004 | mcp_tool_payload | 0.62 | 0.135 | MISSING_CONTENT | FREEZE | None |\n| CONTENT_STALE_SCAN_005 | deployment_artifact | 0.76 | 0.88 | HIGH | ESCALATE | privilege_escalation |\n\n## Evidence Boundary\n\nSynthetic examples demonstrate content-evidence ingestion. Replace these with customer-approved scanner or reviewer signals during a pilot; do not send raw source code, customer data, secrets, or private prompts.\n",
+  "max_posture_counts": {
+    "ALLOW": 1,
+    "DENY": 1,
+    "ESCALATE": 2,
+    "FREEZE": 1
+  },
+  "results": [
+    {
+      "action_id": "CONTENT_SQL_DROP_001",
+      "content_available": true,
+      "content_risk_score": 0.881,
+      "content_target": "sql_migration",
+      "content_trust_level": "HIGH",
+      "evidence_boundary": "SMERC does not classify raw content in this module. It normalizes trusted content-risk signals from scanners, eval platforms, policy engines, or reviewers so those signals can influence runtime posture.",
+      "evidence_reliability_score": 1.0,
+      "generated_at": "2026-08-26T20:52:34+00:00",
+      "high_risk_findings": [
+        "customer_data_deletion",
+        "destructive_database_operation"
+      ],
+      "max_recommended_posture": "DENY",
+      "plain_english_summary": "Content evidence for action 'CONTENT_SQL_DROP_001' produced risk 0.881 with trust level HIGH. The content evidence adapter caps unrestricted release at DENY.",
+      "reason_codes": [
+        "CONTENT_FINDING_CUSTOMER_DATA_DELETION",
+        "CONTENT_FINDING_DESTRUCTIVE_DATABASE_OPERATION",
+        "CONTENT_RISK_HIGH"
+      ],
+      "required_controls": [
+        "route_high_risk_content_to_accountable_reviewer",
+        "preserve_content_evidence_trace",
+        "block_execution_until_content_risk_is_resolved"
+      ],
+      "unavailable_assessments": [],
+      "version": "smerc.content-evidence.v1"
+    },
+    {
+      "action_id": "CONTENT_CUSTOMER_EMAIL_002",
+      "content_available": true,
+      "content_risk_score": 0.711,
+      "content_target": "customer_email",
+      "content_trust_level": "HIGH",
+      "evidence_boundary": "SMERC does not classify raw content in this module. It normalizes trusted content-risk signals from scanners, eval platforms, policy engines, or reviewers so those signals can influence runtime posture.",
+      "evidence_reliability_score": 1.0,
+      "generated_at": "2026-08-26T20:52:34+00:00",
+      "high_risk_findings": [
+        "external_legal_commitment",
+        "regulated_data_exposure"
+      ],
+      "max_recommended_posture": "ESCALATE",
+      "plain_english_summary": "Content evidence for action 'CONTENT_CUSTOMER_EMAIL_002' produced risk 0.711 with trust level HIGH. The content evidence adapter caps unrestricted release at ESCALATE.",
+      "reason_codes": [
+        "CONTENT_FINDING_EXTERNAL_LEGAL_COMMITMENT",
+        "CONTENT_FINDING_REGULATED_DATA_EXPOSURE",
+        "CONTENT_RISK_HIGH"
+      ],
+      "required_controls": [
+        "route_high_risk_content_to_accountable_reviewer",
+        "preserve_content_evidence_trace"
+      ],
+      "unavailable_assessments": [],
+      "version": "smerc.content-evidence.v1"
+    },
+    {
+      "action_id": "CONTENT_CODE_DIFF_003",
+      "content_available": true,
+      "content_risk_score": 0.108,
+      "content_target": "code_diff",
+      "content_trust_level": "HIGH",
+      "evidence_boundary": "SMERC does not classify raw content in this module. It normalizes trusted content-risk signals from scanners, eval platforms, policy engines, or reviewers so those signals can influence runtime posture.",
+      "evidence_reliability_score": 1.0,
+      "generated_at": "2026-08-26T20:52:34+00:00",
+      "high_risk_findings": [],
+      "max_recommended_posture": "ALLOW",
+      "plain_english_summary": "Content evidence for action 'CONTENT_CODE_DIFF_003' produced risk 0.108 with trust level HIGH. The content evidence adapter caps unrestricted release at ALLOW.",
+      "reason_codes": [
+        "CONTENT_EVIDENCE_ACCEPTABLE"
+      ],
+      "required_controls": [
+        "no_additional_content_control_required"
+      ],
+      "unavailable_assessments": [],
+      "version": "smerc.content-evidence.v1"
+    },
+    {
+      "action_id": "CONTENT_SCANNER_DOWN_004",
+      "content_available": false,
+      "content_risk_score": 0.62,
+      "content_target": "mcp_tool_payload",
+      "content_trust_level": "MISSING_CONTENT",
+      "evidence_boundary": "SMERC does not classify raw content in this module. It normalizes trusted content-risk signals from scanners, eval platforms, policy engines, or reviewers so those signals can influence runtime posture.",
+      "evidence_reliability_score": 0.135,
+      "generated_at": "2026-08-26T20:52:34+00:00",
+      "high_risk_findings": [],
+      "max_recommended_posture": "FREEZE",
+      "plain_english_summary": "Content evidence for action 'CONTENT_SCANNER_DOWN_004' produced risk 0.620 with trust level MISSING_CONTENT. The content evidence adapter caps unrestricted release at FREEZE.",
+      "reason_codes": [
+        "AGENT_SUPPLIED_CONTENT_EVIDENCE",
+        "CONTENT_EVIDENCE_RELIABILITY_LOW",
+        "CONTENT_NOT_AVAILABLE",
+        "CONTENT_RISK_ELEVATED",
+        "CONTENT_SCANNER_UNAVAILABLE"
+      ],
+      "required_controls": [
+        "collect_content_or_trusted_summary_before_release",
+        "retry_or_replace_unavailable_scanners",
+        "preserve_content_evidence_trace"
+      ],
+      "unavailable_assessments": [
+        {
+          "scanner_type": "dlp",
+          "source": "dlp-engine",
+          "status": "timeout"
+        }
+      ],
+      "version": "smerc.content-evidence.v1"
+    },
+    {
+      "action_id": "CONTENT_STALE_SCAN_005",
+      "content_available": true,
+      "content_risk_score": 0.76,
+      "content_target": "deployment_artifact",
+      "content_trust_level": "HIGH",
+      "evidence_boundary": "SMERC does not classify raw content in this module. It normalizes trusted content-risk signals from scanners, eval platforms, policy engines, or reviewers so those signals can influence runtime posture.",
+      "evidence_reliability_score": 0.88,
+      "generated_at": "2026-08-26T20:52:34+00:00",
+      "high_risk_findings": [
+        "privilege_escalation"
+      ],
+      "max_recommended_posture": "ESCALATE",
+      "plain_english_summary": "Content evidence for action 'CONTENT_STALE_SCAN_005' produced risk 0.760 with trust level HIGH. The content evidence adapter caps unrestricted release at ESCALATE.",
+      "reason_codes": [
+        "CONTENT_FINDING_PRIVILEGE_ESCALATION",
+        "CONTENT_RISK_HIGH",
+        "STALE_CONTENT_EVIDENCE"
+      ],
+      "required_controls": [
+        "route_high_risk_content_to_accountable_reviewer",
+        "preserve_content_evidence_trace"
+      ],
+      "unavailable_assessments": [],
+      "version": "smerc.content-evidence.v1"
+    }
+  ],
+  "scenario_count": 5,
+  "version": "smerc.content-evidence-report.v1"
+}

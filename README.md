@@ -123,6 +123,8 @@ The current build includes:
 - Agent Handshake Protocol connecting beacon discovery to executor routing and action posture evaluation
 - signal and evidence intake path that validates non-secret evidence and compiles it into strict SMERC Action Language; internally this path is called SPARK
 - Runtime Evidence Trust Gate that caps or rejects decisions when high-impact metadata comes only from the proposing agent instead of a trusted proxy, OIDC claim, adapter, audit event, ticket, or reviewer record
+- Content Evidence Adapter that consumes trusted scanner, eval, policy, and reviewer signals for code, SQL, email, DLP, prompt-injection, malware, secrets, and other content-risk findings without replacing those systems
+- Fallback Policy Layer that deterministically fails safe when scanners, policy bundles, metadata, adapters, review queues, rollback plans, or SMERC runtime dependencies are unavailable, stale, incomplete, conflicting, or timed out
 - Constraint Eligibility Layer that preserves hard denies before recoverability can modify a runtime decision
 - Timing Evidence reports for decision latency, route latency, workflow overhead, cancellation, rollback, and unavailable evaluations
 - one-command Customer Proof Loop that runs runtime admission, recoverability scoring, SPARTa routing, and Decision Lifecycle Ledger evidence into one reviewable report
@@ -213,6 +215,8 @@ Start here before reading the code:
 - `docs/Runtime_Admission_Gate.md` explains the reusable pre-scoring admission contract for identity, scope, permits, typed contracts, attestation, least privilege, object shape, and required evidence.
 - `docs/Customer_Proof_Loop.md` gives reviewers a one-command path that runs a synthetic customer action through runtime admission, recoverability scoring, SPARTa routing, and Decision Lifecycle Ledger evidence.
 - `docs/Runtime_Evidence_Trust_Gate.md` explains how SMERC screens whether action metadata is trustworthy enough to support a runtime decision.
+- `docs/Content_Evidence_Adapter.md` explains how SMERC consumes trusted content-risk signals from scanners, eval platforms, policy engines, and reviewers without pretending to replace them.
+- `docs/Fallback_Policy_Layer.md` explains deterministic fail-safe posture handling when evidence, scanners, adapters, policies, review queues, rollback plans, or runtime dependencies are unavailable or stale.
 - `docs/Constraint_Eligibility_Layer.md` explains why recoverability is a permission modifier, not a substitute for authority, hard policy, or categorical denies.
 - `docs/OpenSSF_Feedback_Alignment.md` explains how external OpenSSF issue #50 feedback sharpened the runtime order: hard mechanical evidence gates first, recoverability scoring second, route and audit evidence third.
 - `docs/Policy_Bundle_Manifest.md` explains signed, versioned policy bundle manifests for reviewed SPL, profile, control, approval, and activation evidence.
@@ -668,6 +672,8 @@ python -m reference_engine.mcp_proxy_runner --request examples/mcp/tool_call_del
 python -m reference_engine.mcp_transport_proxy --envelope examples/mcp/transport_proxy_delete_customer_records.json --pretty
 python -m reference_engine.mcp_governance_gateway --mode enforce --pretty
 python -m reference_engine.self_service_pilot_connector --bundle examples/self_service_pilot_bundle.json --pretty
+python -m reference_engine.content_evidence --pretty
+python -m reference_engine.fallback_policy --pretty
 python -m reference_engine.recoverability_engine examples/recoverability_single_action.json --pretty
 python -m reference_engine.sparta_router --decision examples/sparta/throttle_decision.json --plan examples/sparta/github_actions_deploy_plan.json --pretty
 python -m reference_engine.sparta_conformance examples/sparta/adapter_registry.json --pretty

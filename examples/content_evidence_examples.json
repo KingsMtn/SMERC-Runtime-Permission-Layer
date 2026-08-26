@@ -1,0 +1,153 @@
+{
+  "version": "smerc.content-evidence-examples.v1",
+  "scenarios": [
+    {
+      "schema": "smerc.content-evidence-input.v1",
+      "action_id": "CONTENT_SQL_DROP_001",
+      "content_target": "sql_migration",
+      "content_available": true,
+      "assessments": [
+        {
+          "source": "sql-analyzer",
+          "scanner_type": "sql_analyzer",
+          "status": "available",
+          "finding_type": "destructive_database_operation",
+          "severity": 0.92,
+          "confidence": 0.91,
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 120
+        },
+        {
+          "source": "human-change-review",
+          "scanner_type": "human_review",
+          "status": "available",
+          "finding_type": "customer_data_deletion",
+          "severity": 0.84,
+          "confidence": 0.86,
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 240
+        }
+      ]
+    },
+    {
+      "schema": "smerc.content-evidence-input.v1",
+      "action_id": "CONTENT_CUSTOMER_EMAIL_002",
+      "content_target": "customer_email",
+      "content_available": true,
+      "assessments": [
+        {
+          "source": "email-classifier",
+          "scanner_type": "email_security",
+          "status": "available",
+          "finding_type": "external_legal_commitment",
+          "severity": 0.74,
+          "confidence": 0.82,
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 90
+        },
+        {
+          "source": "dlp-engine",
+          "scanner_type": "dlp",
+          "status": "available",
+          "finding_type": "regulated_data_exposure",
+          "severity": 0.68,
+          "confidence": 0.79,
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 95
+        }
+      ]
+    },
+    {
+      "schema": "smerc.content-evidence-input.v1",
+      "action_id": "CONTENT_CODE_DIFF_003",
+      "content_target": "code_diff",
+      "content_available": true,
+      "assessments": [
+        {
+          "source": "sast",
+          "scanner_type": "sast",
+          "status": "available",
+          "finding_type": "low_risk_refactor",
+          "severity": 0.18,
+          "confidence": 0.88,
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 180
+        },
+        {
+          "source": "secrets-scan",
+          "scanner_type": "secrets_scanner",
+          "status": "available",
+          "finding_type": "no_secret_detected",
+          "severity": 0.04,
+          "confidence": 0.94,
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 185
+        }
+      ]
+    },
+    {
+      "schema": "smerc.content-evidence-input.v1",
+      "action_id": "CONTENT_SCANNER_DOWN_004",
+      "content_target": "mcp_tool_payload",
+      "content_available": false,
+      "assessments": [
+        {
+          "source": "dlp-engine",
+          "scanner_type": "dlp",
+          "status": "timeout",
+          "finding_type": "unknown",
+          "severity": 0.0,
+          "confidence": 0.0,
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 0
+        },
+        {
+          "source": "agent-self-description",
+          "scanner_type": "ai_eval_platform",
+          "status": "available",
+          "finding_type": "claimed_safe",
+          "severity": 0.1,
+          "confidence": 0.35,
+          "authenticated": false,
+          "signed": false,
+          "agent_supplied": true,
+          "freshness_seconds": 30
+        }
+      ]
+    },
+    {
+      "schema": "smerc.content-evidence-input.v1",
+      "action_id": "CONTENT_STALE_SCAN_005",
+      "content_target": "deployment_artifact",
+      "content_available": true,
+      "assessments": [
+        {
+          "source": "sast",
+          "scanner_type": "sast",
+          "status": "available",
+          "finding_type": "privilege_escalation",
+          "severity": 0.76,
+          "confidence": 0.71,
+          "authenticated": true,
+          "signed": true,
+          "agent_supplied": false,
+          "freshness_seconds": 7200
+        }
+      ]
+    }
+  ]
+}

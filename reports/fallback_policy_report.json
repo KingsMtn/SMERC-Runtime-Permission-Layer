@@ -1,0 +1,127 @@
+{
+  "evidence_boundary": "Synthetic fallback examples demonstrate deterministic failure handling, not production validation.",
+  "fallback_applied_count": 4,
+  "fallback_posture_counts": {
+    "ALLOW": 1,
+    "DENY": 2,
+    "FREEZE": 2
+  },
+  "generated_at": "2026-08-26T20:52:33+00:00",
+  "markdown_report": "# SMERC Fallback Policy Layer Report\n\n- Generated: `2026-08-26T20:52:33+00:00`\n- Scenarios evaluated: `5`\n- Fallback applied: `4`\n- Fallback posture counts: `{'ALLOW': 1, 'DENY': 2, 'FREEZE': 2}`\n\n| Action | Class | Proposed | Fallback | Failure | High Impact | Reasons |\n| --- | --- | --- | --- | --- | --- | --- |\n| FALLBACK_SAFE_TEST_001 | run_tests | ALLOW | ALLOW | none | False | FALLBACK_NOT_APPLIED |\n| FALLBACK_SCANNER_DOWN_002 | delete_data | THROTTLE | FREEZE | content_scanner_unavailable | True | FALLBACK_CONTENT_SCANNER_UNAVAILABLE, FALLBACK_FAILURE_CONTENT_SCANNER_UNAVAILABLE |\n| FALLBACK_STALE_POLICY_003 | modify_production | ALLOW | FREEZE | policy_bundle_stale | True | FALLBACK_FAILURE_POLICY_BUNDLE_STALE, FALLBACK_POLICY_STALE |\n| FALLBACK_NO_ROLLBACK_004 | move_money | THROTTLE | DENY | rollback_plan_missing | True | FALLBACK_FAILURE_ROLLBACK_PLAN_MISSING, FALLBACK_LOW_RECOVERY_HIGH_EXPOSURE, FALLBACK_ROLLBACK_PLAN_MISSING_FOR_HIGH_IMPACT |\n| FALLBACK_REVIEW_DOWN_005 | security_response | FREEZE | DENY | review_queue_unavailable | True | FALLBACK_FAILURE_REVIEW_QUEUE_UNAVAILABLE, FALLBACK_REVIEW_QUEUE_UNAVAILABLE_FOR_HELD_HIGH_IMPACT_ACTION |\n\n## Evidence Boundary\n\nSynthetic fallback examples demonstrate deterministic failure handling, not production validation.\n",
+  "results": [
+    {
+      "action_class": "run_tests",
+      "action_id": "FALLBACK_SAFE_TEST_001",
+      "controls": [
+        "preserve_fallback_decision_record"
+      ],
+      "evidence_boundary": "Fallback policy is deterministic fail-safe routing for unavailable, stale, incomplete, conflicting, or timeout-prone evidence. It is not proof of production safety or regulatory compliance.",
+      "failure_type": "none",
+      "fallback_applied": false,
+      "fallback_posture": "ALLOW",
+      "generated_at": "2026-08-26T20:52:33+00:00",
+      "high_impact": false,
+      "plain_english_summary": "Fallback policy did not modify action 'FALLBACK_SAFE_TEST_001'.",
+      "proposed_posture": "ALLOW",
+      "reason_codes": [
+        "FALLBACK_NOT_APPLIED"
+      ],
+      "version": "smerc.fallback-policy.v1"
+    },
+    {
+      "action_class": "delete_data",
+      "action_id": "FALLBACK_SCANNER_DOWN_002",
+      "controls": [
+        "collect_required_evidence",
+        "pause_execution",
+        "preserve_fallback_decision_record",
+        "replace_or_retry_content_scanner",
+        "retry_failed_dependency"
+      ],
+      "evidence_boundary": "Fallback policy is deterministic fail-safe routing for unavailable, stale, incomplete, conflicting, or timeout-prone evidence. It is not proof of production safety or regulatory compliance.",
+      "failure_type": "content_scanner_unavailable",
+      "fallback_applied": true,
+      "fallback_posture": "FREEZE",
+      "generated_at": "2026-08-26T20:52:33+00:00",
+      "high_impact": true,
+      "plain_english_summary": "Fallback policy changed or confirmed action 'FALLBACK_SCANNER_DOWN_002' from THROTTLE to FREEZE because FALLBACK_CONTENT_SCANNER_UNAVAILABLE, FALLBACK_FAILURE_CONTENT_SCANNER_UNAVAILABLE.",
+      "proposed_posture": "THROTTLE",
+      "reason_codes": [
+        "FALLBACK_CONTENT_SCANNER_UNAVAILABLE",
+        "FALLBACK_FAILURE_CONTENT_SCANNER_UNAVAILABLE"
+      ],
+      "version": "smerc.fallback-policy.v1"
+    },
+    {
+      "action_class": "modify_production",
+      "action_id": "FALLBACK_STALE_POLICY_003",
+      "controls": [
+        "collect_required_evidence",
+        "pause_execution",
+        "preserve_fallback_decision_record",
+        "refresh_policy_bundle",
+        "retry_failed_dependency"
+      ],
+      "evidence_boundary": "Fallback policy is deterministic fail-safe routing for unavailable, stale, incomplete, conflicting, or timeout-prone evidence. It is not proof of production safety or regulatory compliance.",
+      "failure_type": "policy_bundle_stale",
+      "fallback_applied": true,
+      "fallback_posture": "FREEZE",
+      "generated_at": "2026-08-26T20:52:33+00:00",
+      "high_impact": true,
+      "plain_english_summary": "Fallback policy changed or confirmed action 'FALLBACK_STALE_POLICY_003' from ALLOW to FREEZE because FALLBACK_FAILURE_POLICY_BUNDLE_STALE, FALLBACK_POLICY_STALE.",
+      "proposed_posture": "ALLOW",
+      "reason_codes": [
+        "FALLBACK_FAILURE_POLICY_BUNDLE_STALE",
+        "FALLBACK_POLICY_STALE"
+      ],
+      "version": "smerc.fallback-policy.v1"
+    },
+    {
+      "action_class": "move_money",
+      "action_id": "FALLBACK_NO_ROLLBACK_004",
+      "controls": [
+        "block_execution",
+        "preserve_fallback_decision_record",
+        "require_new_request_after_fault_repair"
+      ],
+      "evidence_boundary": "Fallback policy is deterministic fail-safe routing for unavailable, stale, incomplete, conflicting, or timeout-prone evidence. It is not proof of production safety or regulatory compliance.",
+      "failure_type": "rollback_plan_missing",
+      "fallback_applied": true,
+      "fallback_posture": "DENY",
+      "generated_at": "2026-08-26T20:52:33+00:00",
+      "high_impact": true,
+      "plain_english_summary": "Fallback policy changed or confirmed action 'FALLBACK_NO_ROLLBACK_004' from THROTTLE to DENY because FALLBACK_FAILURE_ROLLBACK_PLAN_MISSING, FALLBACK_LOW_RECOVERY_HIGH_EXPOSURE, FALLBACK_ROLLBACK_PLAN_MISSING_FOR_HIGH_IMPACT.",
+      "proposed_posture": "THROTTLE",
+      "reason_codes": [
+        "FALLBACK_FAILURE_ROLLBACK_PLAN_MISSING",
+        "FALLBACK_LOW_RECOVERY_HIGH_EXPOSURE",
+        "FALLBACK_ROLLBACK_PLAN_MISSING_FOR_HIGH_IMPACT"
+      ],
+      "version": "smerc.fallback-policy.v1"
+    },
+    {
+      "action_class": "security_response",
+      "action_id": "FALLBACK_REVIEW_DOWN_005",
+      "controls": [
+        "block_execution",
+        "preserve_fallback_decision_record",
+        "require_new_request_after_fault_repair"
+      ],
+      "evidence_boundary": "Fallback policy is deterministic fail-safe routing for unavailable, stale, incomplete, conflicting, or timeout-prone evidence. It is not proof of production safety or regulatory compliance.",
+      "failure_type": "review_queue_unavailable",
+      "fallback_applied": true,
+      "fallback_posture": "DENY",
+      "generated_at": "2026-08-26T20:52:33+00:00",
+      "high_impact": true,
+      "plain_english_summary": "Fallback policy changed or confirmed action 'FALLBACK_REVIEW_DOWN_005' from FREEZE to DENY because FALLBACK_FAILURE_REVIEW_QUEUE_UNAVAILABLE, FALLBACK_REVIEW_QUEUE_UNAVAILABLE_FOR_HELD_HIGH_IMPACT_ACTION.",
+      "proposed_posture": "FREEZE",
+      "reason_codes": [
+        "FALLBACK_FAILURE_REVIEW_QUEUE_UNAVAILABLE",
+        "FALLBACK_REVIEW_QUEUE_UNAVAILABLE_FOR_HELD_HIGH_IMPACT_ACTION"
+      ],
+      "version": "smerc.fallback-policy.v1"
+    }
+  ],
+  "scenario_count": 5,
+  "version": "smerc.fallback-policy-report.v1"
+}
