@@ -38,6 +38,22 @@ Use this sequence:
 
 Current status: pilot-ready for shadow-mode technical review. Not production-certified, compliance-attested, or customer-proven to reduce incidents.
 
+## Start Here: Self-Service Company Evaluation
+
+If you are a company reviewer and want to test SMERC without a live integration, start with `customer_eval/README.md`.
+
+That kit gives a 20-minute metadata-only path:
+
+1. Choose one workflow family.
+2. Replace `examples/customer_metadata_template.json` with 5 to 25 safe action records.
+3. Run `python -m reference_engine.customer_evaluation`.
+4. Review hard admission results, SMERC postures, SPARTa routes, Decision Lifecycle Ledger evidence, autonomy-budget impact, and pilot-fit output.
+5. Move to a shadow-mode pilot only if reviewers find useful differences from existing controls.
+
+Public page: https://admirable-sorbet-9986d5.netlify.app/customer-evaluation.html
+
+This self-service path is designed to reduce founder explanation. It still requires customer-owned reviewer judgment before any pilot or enforcement discussion.
+
 ## Fastest Local Proof
 
 Run one synthetic customer action through the current software path:

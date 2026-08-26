@@ -1,0 +1,56 @@
+{
+  "version": "smerc.customer-eval-kit.v1",
+  "purpose": "Self-service metadata-only company evaluation kit for SMERC runtime permission infrastructure.",
+  "public_site": "https://admirable-sorbet-9986d5.netlify.app/customer-evaluation.html",
+  "repository": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer",
+  "primary_workflow": ".github/workflows/customer-evaluations.yml",
+  "primary_command": "python -m reference_engine.customer_evaluation examples/customer_metadata_template.json --json-output reports/company_test/customer_evaluation_report.json --markdown-output reports/company_test/Customer_Evaluation_Report.md --pretty",
+  "input_packs": [
+    {
+      "id": "company-template",
+      "path": "examples/customer_metadata_template.json",
+      "use": "Company-owned metadata-only replacement template."
+    },
+    {
+      "id": "general",
+      "path": "examples/customer_eval_actions.json",
+      "use": "General AI-agent and automation action examples."
+    },
+    {
+      "id": "cloud-admin",
+      "path": "examples/cloud_admin_customer_eval_actions.json",
+      "use": "Cloud administration action examples."
+    },
+    {
+      "id": "financial-runtime",
+      "path": "examples/smerc_f_customer_eval_actions.json",
+      "use": "Financial runtime action examples."
+    }
+  ],
+  "outputs": [
+    "hard_admission_result",
+    "recoverability_posture",
+    "irreversible_exposure_score",
+    "reversible_capacity_score",
+    "risk_adjusted_authorization_score",
+    "sparta_route",
+    "controls",
+    "decision_lifecycle_ledger",
+    "autonomy_budget",
+    "pilot_fit"
+  ],
+  "evidence_boundary": "Metadata-only evaluation. This kit does not prove production safety, compliance, incident reduction, customer demand, or enforce-mode readiness.",
+  "prohibited_inputs": [
+    "secrets",
+    "api_keys",
+    "passwords",
+    "access_tokens",
+    "wallet_keys",
+    "private_keys",
+    "raw_customer_records",
+    "source_code",
+    "private_prompts",
+    "production_logs",
+    "regulated_transaction_payloads"
+  ]
+}
