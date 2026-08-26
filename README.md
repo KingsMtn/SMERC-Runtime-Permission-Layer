@@ -6,6 +6,8 @@
 
 SMERC is recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, and high-impact workflows.
 
+Mission: SMERC helps intelligent systems make safer decisions before irreversible actions occur, so people and organizations can trust the technology shaping their lives.
+
 It sits between automated systems and consequential actions. Before an AI agent, workflow bot, MCP tool, or deployment process sends data, changes infrastructure, deploys code, modifies permissions, moves money, or calls a high-impact API, SMERC evaluates whether the action is recoverable enough to proceed.
 
 SMERC is short for Structural Momentum Entropy Range Confidence. It evaluates a proposed action before execution and returns a replayable posture:

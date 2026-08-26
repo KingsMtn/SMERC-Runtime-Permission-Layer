@@ -4,6 +4,10 @@
 
 SMERC helps companies stop AI agents and automation from causing hard-to-reverse damage before an action executes.
 
+## Mission
+
+SMERC helps intelligent systems make safer decisions before irreversible actions occur, so people and organizations can trust the technology shaping their lives.
+
 ## Slightly Longer
 
 SMERC is runtime permission infrastructure for AI-agent actions. It sits between an agent, tool, workflow, or deployment system and the action that would create a real side effect.
