@@ -1,0 +1,231 @@
+{
+  "version": "smerc.pilot-intake.v1",
+  "tenant_id": "synthetic-enterprise-review",
+  "organization": "Synthetic Enterprise Review",
+  "reviewer_role": "security_architect",
+  "workflow_family": "Five mixed examples for GitHub Actions, MCP tool calls, cloud administration, security response, and financial operations.",
+  "data_boundary": "Synthetic metadata-only examples. No secrets, credentials, source code, customer records, production logs, wallet keys, or regulated transaction payloads are included.",
+  "initial_autonomy_state": "HEALTHY",
+  "actions": [
+    {
+      "action_id": "FILLED_GHA_001",
+      "description": "AI release assistant requests a production canary deploy for a customer-facing API after automated code review passes.",
+      "actor": "release_agent",
+      "system": "github_actions.production_deploy",
+      "workflow_stage": "production_canary",
+      "current_control_outcome": "ALLOW",
+      "current_control_reason": "Branch protection and deployment approval are satisfied, so the current process allows the canary.",
+      "possible_consequence": "A bad release could affect a limited customer population before rollback completes.",
+      "rollback_path": "Rollback to the previous artifact and disable the feature flag within 15 minutes.",
+      "scores": {
+        "base_action_risk": 0.58,
+        "reversibility": 0.68,
+        "containment_strength": 0.76,
+        "rollback_latency": 0.32,
+        "evidence_validity": 0.81,
+        "anomaly_pressure": 0.24,
+        "impact_scope": 0.48,
+        "cancel_reliability": 0.78,
+        "authorization_confidence": 0.83
+      },
+      "properties": {
+        "action_type": "production_canary_deploy",
+        "domain_profile": "github_actions",
+        "external_side_effect": true,
+        "sensitive_data": false,
+        "requested_scope_units": 20,
+        "max_scope_units": 100,
+        "side_effect_level": "external"
+      },
+      "ref_gate": {
+        "typed_contract_valid": true,
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": true
+      },
+      "tool_capabilities": {
+        "supports_dry_run": true,
+        "supports_scope_limit": true,
+        "supports_checkpoint": true,
+        "supports_rollback": true,
+        "supports_human_approval": true
+      }
+    },
+    {
+      "action_id": "FILLED_MCP_002",
+      "description": "Customer support agent requests an MCP tool call to bulk delete duplicate customer records inferred from low-confidence matching.",
+      "actor": "support_resolution_agent",
+      "system": "customer_records_mcp.bulk_delete",
+      "workflow_stage": "customer_data_remediation",
+      "current_control_outcome": "REVIEW",
+      "current_control_reason": "Current process sends destructive customer-data changes to manual review.",
+      "possible_consequence": "Incorrect deletion could create data loss, customer harm, and recovery work.",
+      "rollback_path": "Partial restore may be possible if record lineage and recent backups are verified.",
+      "scores": {
+        "base_action_risk": 0.92,
+        "reversibility": 0.16,
+        "containment_strength": 0.31,
+        "rollback_latency": 0.86,
+        "evidence_validity": 0.49,
+        "anomaly_pressure": 0.42,
+        "impact_scope": 0.82,
+        "cancel_reliability": 0.26,
+        "authorization_confidence": 0.54
+      },
+      "properties": {
+        "action_type": "delete_records",
+        "domain_profile": "it_ops",
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "requested_scope_units": 1800,
+        "max_scope_units": 10000,
+        "side_effect_level": "destructive"
+      },
+      "ref_gate": {
+        "typed_contract_valid": true,
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": true
+      },
+      "tool_capabilities": {
+        "supports_dry_run": true,
+        "supports_scope_limit": true,
+        "supports_checkpoint": false,
+        "supports_rollback": false,
+        "supports_human_approval": true
+      }
+    },
+    {
+      "action_id": "FILLED_CLOUD_003",
+      "description": "Cloud automation requests broad production IAM permission expansion for a service role used by deployment jobs.",
+      "actor": "cloud_admin_agent",
+      "system": "cloud_iam.policy_update",
+      "workflow_stage": "production_permission_change",
+      "current_control_outcome": "ALLOW",
+      "current_control_reason": "Ticket approval exists, but least-privilege evidence is incomplete.",
+      "possible_consequence": "Future automation or compromised credentials could gain a larger blast radius.",
+      "rollback_path": "Revert the IAM policy if the permission delta is captured and dependent jobs are known.",
+      "scores": {
+        "base_action_risk": 0.75,
+        "reversibility": 0.41,
+        "containment_strength": 0.44,
+        "rollback_latency": 0.56,
+        "evidence_validity": 0.61,
+        "anomaly_pressure": 0.47,
+        "impact_scope": 0.76,
+        "cancel_reliability": 0.59,
+        "authorization_confidence": 0.62
+      },
+      "properties": {
+        "action_type": "iam_policy_change",
+        "domain_profile": "cloud_admin",
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "requested_scope_units": 90,
+        "max_scope_units": 100,
+        "side_effect_level": "external"
+      },
+      "ref_gate": {
+        "typed_contract_valid": true,
+        "attestation_valid": true,
+        "least_privilege_confirmed": false,
+        "object_shape_expected": true
+      },
+      "tool_capabilities": {
+        "supports_dry_run": true,
+        "supports_scope_limit": true,
+        "supports_checkpoint": true,
+        "supports_rollback": true,
+        "supports_human_approval": true
+      }
+    },
+    {
+      "action_id": "FILLED_SEC_004",
+      "description": "Security automation requests endpoint isolation for 200 workstations after a high-volume alert burst with mixed-confidence signals.",
+      "actor": "security_response_agent",
+      "system": "security_response.endpoint_isolation",
+      "workflow_stage": "containment_action",
+      "current_control_outcome": "REVIEW",
+      "current_control_reason": "Current process requires analyst approval for broad endpoint isolation.",
+      "possible_consequence": "False-positive isolation could disrupt business operations for many users.",
+      "rollback_path": "Release isolation after analyst approval; recovery depends on endpoint health and policy propagation.",
+      "scores": {
+        "base_action_risk": 0.69,
+        "reversibility": 0.58,
+        "containment_strength": 0.71,
+        "rollback_latency": 0.46,
+        "evidence_validity": 0.64,
+        "anomaly_pressure": 0.72,
+        "impact_scope": 0.7,
+        "cancel_reliability": 0.62,
+        "authorization_confidence": 0.66
+      },
+      "properties": {
+        "action_type": "endpoint_isolation",
+        "domain_profile": "security_ops",
+        "external_side_effect": true,
+        "sensitive_data": false,
+        "requested_scope_units": 200,
+        "max_scope_units": 250,
+        "side_effect_level": "external"
+      },
+      "ref_gate": {
+        "typed_contract_valid": true,
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": true
+      },
+      "tool_capabilities": {
+        "supports_dry_run": true,
+        "supports_scope_limit": true,
+        "supports_checkpoint": true,
+        "supports_rollback": true,
+        "supports_human_approval": true
+      }
+    },
+    {
+      "action_id": "FILLED_FIN_005",
+      "description": "Treasury automation requests a stablecoin liquidity transfer to an external venue during elevated redemption pressure.",
+      "actor": "treasury_agent",
+      "system": "finance_ops.stablecoin_transfer",
+      "workflow_stage": "treasury_transfer_shadow_mode",
+      "current_control_outcome": "BLOCK",
+      "current_control_reason": "Current policy blocks automated external treasury transfers during elevated stress.",
+      "possible_consequence": "Funds could move to the wrong venue or amplify liquidity stress before manual recovery.",
+      "rollback_path": "Reversal is limited and depends on venue cooperation, settlement timing, and available liquidity.",
+      "scores": {
+        "base_action_risk": 0.78,
+        "reversibility": 0.22,
+        "containment_strength": 0.37,
+        "rollback_latency": 0.83,
+        "evidence_validity": 0.68,
+        "anomaly_pressure": 0.61,
+        "impact_scope": 0.74,
+        "cancel_reliability": 0.3,
+        "authorization_confidence": 0.65
+      },
+      "properties": {
+        "action_type": "stablecoin_treasury_transfer",
+        "domain_profile": "finance_ops",
+        "external_side_effect": true,
+        "sensitive_data": true,
+        "requested_scope_units": 12,
+        "max_scope_units": 20,
+        "side_effect_level": "financial"
+      },
+      "ref_gate": {
+        "typed_contract_valid": true,
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": false
+      },
+      "tool_capabilities": {
+        "supports_dry_run": true,
+        "supports_scope_limit": true,
+        "supports_checkpoint": true,
+        "supports_rollback": false,
+        "supports_human_approval": true
+      }
+    }
+  ]
+}

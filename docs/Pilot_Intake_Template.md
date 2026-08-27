@@ -31,6 +31,20 @@ The file uses the `smerc.pilot-intake.v1` format. It is friendlier than the lowe
 - whether the tool supports dry run, scope limit, checkpoint, rollback, and human approval
 - recoverability, evidence, anomaly, scope, and authorization scores from `0.0` to `1.0`
 
+For a completed synthetic example, start with:
+
+```bash
+examples/pilot_intake_filled_examples.json
+```
+
+The filled example includes five metadata-only actions:
+
+- GitHub Actions production canary deploy
+- MCP customer-record deletion request
+- cloud IAM permission expansion
+- security response endpoint isolation
+- financial/stablecoin liquidity transfer
+
 ## Data Boundary
 
 Do not include:
@@ -54,6 +68,15 @@ Use metadata only. A good action description is enough for a first review.
 python -m reference_engine.pilot_intake_report examples/pilot_intake_template.json \
   --json-output reports/pilot_intake/pilot_intake_report.json \
   --markdown-output reports/pilot_intake/Pilot_Intake_Report.md \
+  --pretty
+```
+
+Run the filled example:
+
+```bash
+python -m reference_engine.pilot_intake_report examples/pilot_intake_filled_examples.json \
+  --json-output reports/pilot_intake/filled_pilot_intake_report.json \
+  --markdown-output reports/pilot_intake/Filled_Pilot_Intake_Report.md \
   --pretty
 ```
 

@@ -15,6 +15,7 @@ from reference_engine.pilot_intake_report import (
 
 ROOT = Path(__file__).resolve().parents[1]
 SAMPLE = ROOT / "examples" / "pilot_intake_template.json"
+FILLED_SAMPLE = ROOT / "examples" / "pilot_intake_filled_examples.json"
 TEST_OUTPUTS = ROOT / "test_outputs" / "pilot_intake"
 TEST_OUTPUTS.mkdir(parents=True, exist_ok=True)
 
@@ -29,6 +30,13 @@ class PilotIntakeReportTests(unittest.TestCase):
         self.assertIn(report["summary"]["pilot_fit"]["fit"], {"moderate", "strong"})
         self.assertEqual(len(report["comparisons"]), 5)
         self.assertIn("customer_evaluation", report)
+
+    def test_filled_examples_build_report(self):
+        report = build_pilot_intake_report(load_payload(FILLED_SAMPLE))
+
+        self.assertEqual(report["summary"]["actions_evaluated"], 5)
+        self.assertGreaterEqual(report["summary"]["decision_difference_count"], 1)
+        self.assertIn("Synthetic Enterprise Review", render_markdown(report))
 
     def test_compiles_to_existing_customer_evaluation_contract(self):
         compiled = compile_customer_evaluation_payload(validate_payload(load_payload(SAMPLE)))

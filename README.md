@@ -60,6 +60,8 @@ If a reviewer wants the most practical first test, use `docs/Pilot_Intake_Templa
 
 That path asks for 5 to 25 metadata-only actions plus the company's current posture for each action: `ALLOW`, `BLOCK`, `REVIEW`, or `UNKNOWN`. SMERC then generates a comparison report showing where current controls and SMERC differ, whether any actions are constrained rather than blocked, which actions have the highest irreversible exposure, and whether a shadow-mode pilot is justified.
 
+For a completed synthetic intake, use `examples/pilot_intake_filled_examples.json`.
+
 Run:
 
 ```bash
