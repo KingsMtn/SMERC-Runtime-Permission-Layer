@@ -62,6 +62,9 @@ That path asks for 5 to 25 metadata-only actions plus the company's current post
 
 For a completed synthetic intake, use `examples/pilot_intake_filled_examples.json`.
 
+Reviewers who prefer GitHub can open a structured pilot intake request:
+`https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/issues/new?template=pilot_intake_request.md`.
+
 Run:
 
 ```bash

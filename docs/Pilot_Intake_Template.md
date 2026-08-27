@@ -45,6 +45,12 @@ The filled example includes five metadata-only actions:
 - security response endpoint isolation
 - financial/stablecoin liquidity transfer
 
+If a reviewer prefers GitHub over the public Netlify form, use the pilot intake issue template:
+
+```text
+https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/issues/new?template=pilot_intake_request.md
+```
+
 ## Data Boundary
 
 Do not include:
