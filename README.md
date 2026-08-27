@@ -54,6 +54,23 @@ Public page: https://admirable-sorbet-9986d5.netlify.app/customer-evaluation.htm
 
 This self-service path is designed to reduce founder explanation. It still requires customer-owned reviewer judgment before any pilot or enforcement discussion.
 
+## Start Here: Pilot Intake Report
+
+If a reviewer wants the most practical first test, use `docs/Pilot_Intake_Template.md` and `examples/pilot_intake_template.json`.
+
+That path asks for 5 to 25 metadata-only actions plus the company's current posture for each action: `ALLOW`, `BLOCK`, `REVIEW`, or `UNKNOWN`. SMERC then generates a comparison report showing where current controls and SMERC differ, whether any actions are constrained rather than blocked, which actions have the highest irreversible exposure, and whether a shadow-mode pilot is justified.
+
+Run:
+
+```bash
+python -m reference_engine.pilot_intake_report examples/pilot_intake_template.json \
+  --json-output reports/pilot_intake/pilot_intake_report.json \
+  --markdown-output reports/pilot_intake/Pilot_Intake_Report.md \
+  --pretty
+```
+
+This is the best current handoff from public interest to a concrete company review. It is still metadata-only and does not prove production safety, compliance, customer demand, or enforce-mode readiness.
+
 ## Fastest Local Proof
 
 Run one synthetic customer action through the current software path:
@@ -208,6 +225,7 @@ Start here before reading the code:
 - `docs/Credibility_Partner_Outreach.md` gives a short, bounded outreach message for asking credibility partners to review SMERC without overclaiming readiness.
 - `docs/ILION_Bench_Replay.md` explains how to replay the public ILION-Bench v2 agent execution-safety dataset through SMERC without committing the external dataset into this repository.
 - `docs/Customer_Action_Intake.md` gives prospects a metadata-only action intake path for scoring their own workflow examples before a shadow-mode pilot.
+- `docs/Pilot_Intake_Template.md` gives prospects the most practical first test: compare current `ALLOW`, `BLOCK`, `REVIEW`, or `UNKNOWN` outcomes against SMERC posture and generate a pilot intake report.
 - `docs/Prospect_Routing.md` routes interested organizations to the core GitHub Actions pilot, financial runtime pilot, or review-only path.
 - `docs/Core_Pilot_Package.md` builds the core pilot review folder in one command from routing, action intake, handoff, and evidence summary inputs.
 - `docs/Runtime_Contract_Index.md` explains the machine-readable `smerc.runtime-contract-index.v1` assembly map for SMERC's contracts and handoffs.
