@@ -3,6 +3,10 @@
     {
       "action_id": "FILLED_GHA_001",
       "actor": "release_agent",
+      "agent_identity_gate_status": "PASS",
+      "agent_identity_reason_codes": [
+        "AGENT_IDENTITY_VERIFIED"
+      ],
       "constrained_rather_than_blocked": false,
       "control_impact": "SMERC keeps the action possible but adds runtime controls.",
       "current_control_outcome": "ALLOW",
@@ -31,42 +35,54 @@
     {
       "action_id": "FILLED_MCP_002",
       "actor": "support_resolution_agent",
+      "agent_identity_gate_status": "FAIL",
+      "agent_identity_reason_codes": [
+        "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
+        "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY"
+      ],
       "constrained_rather_than_blocked": false,
       "control_impact": "SMERC broadly agrees with the current control posture.",
       "current_control_outcome": "REVIEW",
       "current_control_reason": "Current process sends destructive customer-data changes to manual review.",
-      "decision_changed": true,
+      "decision_changed": false,
       "description": "Customer support agent requests an MCP tool call to bulk delete duplicate customer records inferred from low-confidence matching.",
       "irreversible_exposure_score": 0.896,
       "possible_consequence": "Incorrect deletion could create data loss, customer harm, and recovery work.",
       "reason_codes": [
-        "IRREVERSIBLE_EXPOSURE_HIGH",
-        "RECOVERY_CAPACITY_LOW",
-        "ROLLBACK_LATENCY_HIGH",
         "CANCEL_RELIABILITY_WEAK",
         "CONTAINMENT_WEAK",
+        "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
         "EVIDENCE_VALIDITY_LOW",
-        "IMPACT_SCOPE_WIDE",
         "EXTERNAL_SIDE_EFFECT",
+        "IMPACT_SCOPE_WIDE",
+        "IRREVERSIBLE_EXPOSURE_HIGH",
+        "RECOVERY_CAPACITY_LOW",
+        "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY",
+        "ROLLBACK_LATENCY_HIGH",
         "SENSITIVE_DATA"
       ],
       "recommended_controls": [
-        "block_execution",
-        "explain_denial",
+        "pause_agent_execution",
+        "resolve_agent_identity",
         "preserve_replay",
-        "require_new_request"
+        "require_human_review_before_execution"
       ],
       "reversible_capacity_score": 0.241,
       "risk_adjusted_authorization_score": 0.287,
       "rollback_path": "Partial restore may be possible if record lineage and recent backups are verified.",
-      "smerc_posture": "DENY",
-      "sparta_route_state": "BLOCK",
+      "smerc_posture": "FREEZE",
+      "sparta_route_state": "PAUSE",
       "system": "customer_records_mcp.bulk_delete",
       "workflow_stage": "customer_data_remediation"
     },
     {
       "action_id": "FILLED_CLOUD_003",
       "actor": "cloud_admin_agent",
+      "agent_identity_gate_status": "FAIL",
+      "agent_identity_reason_codes": [
+        "RECENT_OVERRIDE_PATTERN",
+        "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY"
+      ],
       "constrained_rather_than_blocked": false,
       "control_impact": "SMERC would stop or route an action current controls would allow.",
       "current_control_outcome": "ALLOW",
@@ -100,6 +116,10 @@
     {
       "action_id": "FILLED_SEC_004",
       "actor": "security_response_agent",
+      "agent_identity_gate_status": "PASS",
+      "agent_identity_reason_codes": [
+        "AGENT_IDENTITY_VERIFIED"
+      ],
       "constrained_rather_than_blocked": false,
       "control_impact": "SMERC broadly agrees with the current control posture.",
       "current_control_outcome": "REVIEW",
@@ -132,6 +152,13 @@
     {
       "action_id": "FILLED_FIN_005",
       "actor": "treasury_agent",
+      "agent_identity_gate_status": "FAIL",
+      "agent_identity_reason_codes": [
+        "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
+        "LOW_RECENT_SUCCESS_RATE",
+        "RECENT_DENIAL_PATTERN",
+        "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY"
+      ],
       "constrained_rather_than_blocked": false,
       "control_impact": "SMERC broadly agrees with the current control posture.",
       "current_control_outcome": "BLOCK",
@@ -205,13 +232,13 @@
         },
         {
           "autonomy_state_after": "SUSPEND_AUTONOMY",
-          "posture": "DENY",
+          "posture": "FREEZE",
           "ref_gate_status": "pass",
           "remaining_actions": 8,
-          "remaining_risk_spend": 2.059,
+          "remaining_risk_spend": 2.171,
           "remaining_scope_units": 0.0,
           "request_id": "FILLED_MCP_002",
-          "risk_spend": 0.748,
+          "risk_spend": 0.636,
           "sequence": 2,
           "tool_name": "customer_records_mcp.bulk_delete"
         },
@@ -220,7 +247,7 @@
           "posture": "DENY",
           "ref_gate_status": "fail",
           "remaining_actions": 7,
-          "remaining_risk_spend": 0.68,
+          "remaining_risk_spend": 0.792,
           "remaining_scope_units": 0.0,
           "request_id": "FILLED_CLOUD_003",
           "risk_spend": 1.379,
@@ -232,7 +259,7 @@
           "posture": "THROTTLE",
           "ref_gate_status": "pass",
           "remaining_actions": 6,
-          "remaining_risk_spend": 0.379,
+          "remaining_risk_spend": 0.491,
           "remaining_scope_units": 0.0,
           "request_id": "FILLED_SEC_004",
           "risk_spend": 0.301,
@@ -253,7 +280,7 @@
         }
       ],
       "earned_autonomy": {},
-      "generated_at": "2026-08-27T02:20:55+00:00",
+      "generated_at": "2026-08-28T00:46:49+00:00",
       "initial_state": "HEALTHY",
       "plain_english_summary": "Autonomy should be suspended for this session because the action stream exhausted or violated the current autonomy budget. Human review should requalify the agent or tool family before more autonomous execution is allowed.",
       "remaining": {
@@ -273,16 +300,16 @@
         "actions": 5,
         "blocked_or_held_attempts": 3,
         "ref_gate_failures": 2,
-        "risk_spend": 4.102,
+        "risk_spend": 3.99,
         "scope_units": 2122.0
       },
       "version": "smerc.autonomy-budget.v1"
     },
     "contact_role": "security_architect",
     "data_boundary": "Synthetic metadata-only examples. No secrets, credentials, source code, customer records, production logs, wallet keys, or regulated transaction payloads are included.",
-    "evaluation_date": "2026-08-26",
+    "evaluation_date": "2026-08-27",
     "evidence_boundary": "This is a metadata-only customer evaluation. It proves local runtime coherence on supplied action metadata; it does not prove production safety, compliance, incident reduction, customer demand, or readiness to enforce in a live environment.",
-    "generated_at": "2026-08-27T02:20:55+00:00",
+    "generated_at": "2026-08-28T00:46:49+00:00",
     "organization": "Synthetic Enterprise Review",
     "pilot_fit": {
       "fit": "strong",
@@ -569,7 +596,7 @@
               "profile_id": "github_actions"
             },
             "enforcement_state": "constrain",
-            "evaluated_at": "2026-08-27T02:20:55.726195+00:00",
+            "evaluated_at": "2026-08-28T00:46:49.567485+00:00",
             "policy": {
               "evidence_ceiling": "OBSERVE",
               "mode": "OBSERVE",
@@ -582,7 +609,7 @@
             "reason_codes": [
               "EXTERNAL_SIDE_EFFECT"
             ],
-            "replay_id": "replay_FILLED_GHA_001_1787797255726_500cc34886d0",
+            "replay_id": "replay_FILLED_GHA_001_1787878009567_63ce8cb458df",
             "scores": {
               "cancel_reliability_score": 0.78,
               "confidence_score": 0.804,
@@ -612,7 +639,7 @@
               "target_posture": "THROTTLE"
             }
           },
-          "replay_id": "replay_FILLED_GHA_001_1787797255726_500cc34886d0",
+          "replay_id": "replay_FILLED_GHA_001_1787878009567_63ce8cb458df",
           "scores": {
             "cancel_reliability_score": 0.78,
             "confidence_score": 0.804,
@@ -643,7 +670,7 @@
         },
         "decision_lifecycle_ledger": {
           "decision_id": "customer_eval_FILLED_GHA_001",
-          "head_record_hash": "000d2c613942a88b82de92852d198ac0df9ea0ff2611b08f1897bbae5bab9c2a",
+          "head_record_hash": "9d512cd61e332bbc9e0e924652deb9095a9d6045b302f5b8d786b184e786c85b",
           "record_count": 5,
           "records": [
             {
@@ -657,9 +684,9 @@
                 "risk_profile": "github_actions"
               },
               "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-              "record_hash": "e32d2c40f14b7b2b3a1736d0cf83c92c75cebaf00fdd7a449f6a1eec8585caf1",
+              "record_hash": "34b75f3121d0ace593b0cc074ee42060ccc2e52a8cdacc45b2ad541ce7aa00e6",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 1,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -671,6 +698,7 @@
                 "available_evidence": [
                   "metadata_only_action",
                   "ref_gate_declaration",
+                  "agent_identity_gate",
                   "tool_plan_declaration"
                 ],
                 "confidence_score": 0.804,
@@ -681,10 +709,10 @@
                 "model_version": "customer-supplied-agent-metadata",
                 "policy_version": "smerc-reference-recoverability"
               },
-              "previous_record_hash": "e32d2c40f14b7b2b3a1736d0cf83c92c75cebaf00fdd7a449f6a1eec8585caf1",
-              "record_hash": "bbf0f1b2ffd29cce997c32a29faa57980697b650affbf9ac38ede5f4272d1a51",
+              "previous_record_hash": "34b75f3121d0ace593b0cc074ee42060ccc2e52a8cdacc45b2ad541ce7aa00e6",
+              "record_hash": "5393e092e1ac5d3fe79a03bcee28ccd43b4e6802c2ea8d9a1c9bd01e290d8dee",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 2,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -704,15 +732,17 @@
                   "limit_scope",
                   "preview_before_execution",
                   "record_replay",
-                  "rate_limit_external_side_effect"
+                  "rate_limit_external_side_effect",
+                  "record_agent_identity",
+                  "retain_identity_evaluation"
                 ],
                 "recoverability_score": 0.728,
                 "structural_state": "ref_gate=pass; scoring=admitted; route=CONSTRAINED_EXECUTE"
               },
-              "previous_record_hash": "bbf0f1b2ffd29cce997c32a29faa57980697b650affbf9ac38ede5f4272d1a51",
-              "record_hash": "ff4cfb5d6b0cd4af3a3df07d58c7cec44ad55d5623db44c136ad6204e02432f4",
+              "previous_record_hash": "5393e092e1ac5d3fe79a03bcee28ccd43b4e6802c2ea8d9a1c9bd01e290d8dee",
+              "record_hash": "6f331d8d9991297d168078fb83751908332c7efdca724c048f0cad3d8d9943cd",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 3,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -726,12 +756,12 @@
                 "execution_status": "succeeded",
                 "rollback_performed": false,
                 "rollback_success": null,
-                "started_at": "2026-08-27T02:20:55+00:00"
+                "started_at": "2026-08-28T00:46:49+00:00"
               },
-              "previous_record_hash": "ff4cfb5d6b0cd4af3a3df07d58c7cec44ad55d5623db44c136ad6204e02432f4",
-              "record_hash": "dfd77c9d13675094b69743bcbc296bb116e3e6950256179ae010e8e80fc01444",
+              "previous_record_hash": "6f331d8d9991297d168078fb83751908332c7efdca724c048f0cad3d8d9943cd",
+              "record_hash": "34653ea60930801428fffe065c53ee6c8400c86b1bc8c16f58a43fb5450513e2",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 4,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -749,10 +779,10 @@
                 "time_to_recover_minutes": 0.0,
                 "unexpected_consequences": false
               },
-              "previous_record_hash": "dfd77c9d13675094b69743bcbc296bb116e3e6950256179ae010e8e80fc01444",
-              "record_hash": "000d2c613942a88b82de92852d198ac0df9ea0ff2611b08f1897bbae5bab9c2a",
+              "previous_record_hash": "34653ea60930801428fffe065c53ee6c8400c86b1bc8c16f58a43fb5450513e2",
+              "record_hash": "9d512cd61e332bbc9e0e924652deb9095a9d6045b302f5b8d786b184e786c85b",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 5,
               "tenant_id": "synthetic-enterprise-review"
             }
@@ -780,13 +810,31 @@
           "tenant_id": "synthetic-enterprise-review",
           "verification": {
             "errors": [],
-            "head_record_hash": "000d2c613942a88b82de92852d198ac0df9ea0ff2611b08f1897bbae5bab9c2a",
+            "head_record_hash": "9d512cd61e332bbc9e0e924652deb9095a9d6045b302f5b8d786b184e786c85b",
             "record_count": 5,
             "valid": true
           },
           "version": "smerc.decision-lifecycle-ledger.v1"
         },
         "description": "AI release assistant requests a production canary deploy for a customer-facing API after automated code review passes.",
+        "identity_gate": {
+          "agent_id": "release_agent",
+          "agent_name": "Release Assistant",
+          "agent_type": "llm_agent",
+          "identity_score": 0.8,
+          "owner_team": "platform_engineering",
+          "plain_english_summary": "Agent 'release_agent' is verified for execute access to 'github_actions.production_deploy' with external side-effect level under its current identity record.",
+          "reason_codes": [
+            "AGENT_IDENTITY_VERIFIED"
+          ],
+          "recommended_controls": [
+            "record_agent_identity",
+            "retain_identity_evaluation"
+          ],
+          "status": "PASS",
+          "trust_modifier": 1.04,
+          "version": "smerc.agent-identity.v1"
+        },
         "ref_gate": {
           "failures": [],
           "rule": "typed contract, attestation, least privilege, and object shape must pass before recoverability can support execution",
@@ -804,8 +852,8 @@
             "require_rollback_plan"
           ],
           "blocked_controls": [],
-          "decision_digest": "6c5be5ee6b25885e6a904ffc447a4052bcc307a580b4548e27d5d774e7d2d369",
-          "decision_replay_id": "replay_FILLED_GHA_001_1787797255726_500cc34886d0",
+          "decision_digest": "41d370851bb9f7fb4207e4fcdc0fdfac9a0a2127d0a3b8d4675856e2d861d515",
+          "decision_replay_id": "replay_FILLED_GHA_001_1787878009567_63ce8cb458df",
           "effective_scope_units": 20,
           "executable": true,
           "plain_english_summary": "SPARTa converted the throttled SMERC posture into a constrained execution route with smaller scope and recovery controls.",
@@ -814,9 +862,9 @@
             "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
           ],
           "recommended_next_action": "Execute only through an adapter that enforces the listed controls and records control evidence.",
-          "route_id": "sparta_plan_filled_gha_001_401f399e6976",
+          "route_id": "sparta_plan_filled_gha_001_55115700036c",
           "route_state": "CONSTRAINED_EXECUTE",
-          "routed_at": "2026-08-27T02:20:55+00:00",
+          "routed_at": "2026-08-28T00:46:49+00:00",
           "source_posture": "THROTTLE",
           "tool_plan": {
             "action": "production_canary_deploy",
@@ -845,10 +893,10 @@
         "decision": {
           "action_id": "FILLED_MCP_002",
           "controls": [
-            "block_execution",
-            "explain_denial",
+            "pause_agent_execution",
+            "resolve_agent_identity",
             "preserve_replay",
-            "require_new_request"
+            "require_human_review_before_execution"
           ],
           "decision_trace": {
             "profile": {
@@ -969,8 +1017,8 @@
             ],
             "profile_id": "it_ops"
           },
-          "enforcement_state": "block",
-          "plain_english_summary": "Action 'FILLED_MCP_002' received DENY. Irreversible exposure is 0.896, reversible capacity is 0.241, and authorization score is 0.287. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
+          "enforcement_state": "pause",
+          "plain_english_summary": "Action 'FILLED_MCP_002' was capped to FREEZE because agent identity admission failed: CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT, REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY.",
           "policy": {
             "evidence_ceiling": "OBSERVE",
             "mode": "OBSERVE",
@@ -979,16 +1027,18 @@
             "policy_revision": "1.0.0",
             "tenant_id": "*"
           },
-          "posture": "DENY",
+          "posture": "FREEZE",
           "reason_codes": [
-            "IRREVERSIBLE_EXPOSURE_HIGH",
-            "RECOVERY_CAPACITY_LOW",
-            "ROLLBACK_LATENCY_HIGH",
             "CANCEL_RELIABILITY_WEAK",
             "CONTAINMENT_WEAK",
+            "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
             "EVIDENCE_VALIDITY_LOW",
-            "IMPACT_SCOPE_WIDE",
             "EXTERNAL_SIDE_EFFECT",
+            "IMPACT_SCOPE_WIDE",
+            "IRREVERSIBLE_EXPOSURE_HIGH",
+            "RECOVERY_CAPACITY_LOW",
+            "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY",
+            "ROLLBACK_LATENCY_HIGH",
             "SENSITIVE_DATA"
           ],
           "replay": {
@@ -1127,7 +1177,7 @@
               "profile_id": "it_ops"
             },
             "enforcement_state": "block",
-            "evaluated_at": "2026-08-27T02:20:55.726195+00:00",
+            "evaluated_at": "2026-08-28T00:46:49.568009+00:00",
             "policy": {
               "evidence_ceiling": "OBSERVE",
               "mode": "OBSERVE",
@@ -1148,7 +1198,7 @@
               "EXTERNAL_SIDE_EFFECT",
               "SENSITIVE_DATA"
             ],
-            "replay_id": "replay_FILLED_MCP_002_1787797255726_053145898305",
+            "replay_id": "replay_FILLED_MCP_002_1787878009568_d85295b17158",
             "scores": {
               "cancel_reliability_score": 0.26,
               "confidence_score": 0.509,
@@ -1190,7 +1240,7 @@
               "target_posture": "THROTTLE"
             }
           },
-          "replay_id": "replay_FILLED_MCP_002_1787797255726_053145898305",
+          "replay_id": "replay_FILLED_MCP_002_1787878009568_d85295b17158",
           "scores": {
             "cancel_reliability_score": 0.26,
             "confidence_score": 0.509,
@@ -1233,7 +1283,7 @@
         },
         "decision_lifecycle_ledger": {
           "decision_id": "customer_eval_FILLED_MCP_002",
-          "head_record_hash": "d969d8195184b2262e3f05b7f6c4e9b58f413a201cf6cef2263aa41eeb8bd0f2",
+          "head_record_hash": "7744d9c524f63a0311949a2445ed705e602557955a0457064e3cb06eab4e9ba5",
           "record_count": 5,
           "records": [
             {
@@ -1247,9 +1297,9 @@
                 "risk_profile": "it_ops"
               },
               "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-              "record_hash": "b264778fd6e7cffcfe677b82058df17b57c1dfe388f2a09f862eea2079046e15",
+              "record_hash": "d7def9a8a0981aab993fc93395ad6bad83f8561c26edd992985557179eae4e71",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 1,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -1261,6 +1311,7 @@
                 "available_evidence": [
                   "metadata_only_action",
                   "ref_gate_declaration",
+                  "agent_identity_gate",
                   "tool_plan_declaration"
                 ],
                 "confidence_score": 0.509,
@@ -1271,10 +1322,10 @@
                 "model_version": "customer-supplied-agent-metadata",
                 "policy_version": "smerc-reference-recoverability"
               },
-              "previous_record_hash": "b264778fd6e7cffcfe677b82058df17b57c1dfe388f2a09f862eea2079046e15",
-              "record_hash": "7f8dd05e0ec2048297defd3dda584dfba34d18091c758dc77d38ce66b9d0590f",
+              "previous_record_hash": "d7def9a8a0981aab993fc93395ad6bad83f8561c26edd992985557179eae4e71",
+              "record_hash": "994c4a540c3b22226b4624b906c6ab2a861ea12fa9a227afcd9d1d00306cd2fe",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 2,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -1283,42 +1334,51 @@
               "decision_id": "customer_eval_FILLED_MCP_002",
               "event_type": "EVALUATION",
               "payload": {
-                "authorization_recommendation": "DENY",
+                "authorization_recommendation": "FREEZE",
                 "entropy_indicators": [
-                  "IRREVERSIBLE_EXPOSURE_HIGH",
-                  "RECOVERY_CAPACITY_LOW",
-                  "ROLLBACK_LATENCY_HIGH",
                   "CANCEL_RELIABILITY_WEAK",
                   "CONTAINMENT_WEAK",
+                  "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
                   "EVIDENCE_VALIDITY_LOW",
-                  "IMPACT_SCOPE_WIDE",
                   "EXTERNAL_SIDE_EFFECT",
+                  "IMPACT_SCOPE_WIDE",
+                  "IRREVERSIBLE_EXPOSURE_HIGH",
+                  "RECOVERY_CAPACITY_LOW",
+                  "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY",
+                  "ROLLBACK_LATENCY_HIGH",
                   "SENSITIVE_DATA"
                 ],
                 "reason_codes": [
-                  "IRREVERSIBLE_EXPOSURE_HIGH",
-                  "RECOVERY_CAPACITY_LOW",
-                  "ROLLBACK_LATENCY_HIGH",
                   "CANCEL_RELIABILITY_WEAK",
                   "CONTAINMENT_WEAK",
+                  "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
                   "EVIDENCE_VALIDITY_LOW",
-                  "IMPACT_SCOPE_WIDE",
                   "EXTERNAL_SIDE_EFFECT",
+                  "IMPACT_SCOPE_WIDE",
+                  "IRREVERSIBLE_EXPOSURE_HIGH",
+                  "RECOVERY_CAPACITY_LOW",
+                  "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY",
+                  "ROLLBACK_LATENCY_HIGH",
                   "SENSITIVE_DATA"
                 ],
                 "recommended_safeguards": [
-                  "block_execution",
-                  "explain_denial",
+                  "pause_agent_execution",
+                  "resolve_agent_identity",
                   "preserve_replay",
-                  "require_new_request"
+                  "require_human_review_before_execution",
+                  "record_agent_identity",
+                  "retain_identity_evaluation",
+                  "cap_agent_to_authorized_autonomy",
+                  "require_scoped_workload_credential",
+                  "preserve_identity_gate_reason_codes"
                 ],
                 "recoverability_score": 0.241,
-                "structural_state": "ref_gate=pass; scoring=admitted; route=BLOCK"
+                "structural_state": "ref_gate=pass; scoring=capped_by_agent_identity_gate; route=PAUSE"
               },
-              "previous_record_hash": "7f8dd05e0ec2048297defd3dda584dfba34d18091c758dc77d38ce66b9d0590f",
-              "record_hash": "11341944b469f0fbedf9c5686f9352020b737d06e7be333a60082fc520e36ef5",
+              "previous_record_hash": "994c4a540c3b22226b4624b906c6ab2a861ea12fa9a227afcd9d1d00306cd2fe",
+              "record_hash": "52b44d039705e8867d26d9d20bbb896464f9113a14e0344aeb2a38748e31175e",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 3,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -1328,16 +1388,16 @@
               "event_type": "EXECUTION",
               "payload": {
                 "duration_ms": 0,
-                "executed_operation": "BLOCK",
+                "executed_operation": "PAUSE",
                 "execution_status": "not_executed",
                 "rollback_performed": false,
                 "rollback_success": null,
-                "started_at": "2026-08-27T02:20:55+00:00"
+                "started_at": "2026-08-28T00:46:49+00:00"
               },
-              "previous_record_hash": "11341944b469f0fbedf9c5686f9352020b737d06e7be333a60082fc520e36ef5",
-              "record_hash": "fae9ee3f905ad5d48778c9e4f6471b24cb35f6849c7e55f9d5afbe8c923180db",
+              "previous_record_hash": "52b44d039705e8867d26d9d20bbb896464f9113a14e0344aeb2a38748e31175e",
+              "record_hash": "bb5f1b09dbf3d790b9f677942d2b3c54592b4af6e671fa400105377746fe5cd2",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 4,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -1355,10 +1415,10 @@
                 "time_to_recover_minutes": 0.0,
                 "unexpected_consequences": false
               },
-              "previous_record_hash": "fae9ee3f905ad5d48778c9e4f6471b24cb35f6849c7e55f9d5afbe8c923180db",
-              "record_hash": "d969d8195184b2262e3f05b7f6c4e9b58f413a201cf6cef2263aa41eeb8bd0f2",
+              "previous_record_hash": "bb5f1b09dbf3d790b9f677942d2b3c54592b4af6e671fa400105377746fe5cd2",
+              "record_hash": "7744d9c524f63a0311949a2445ed705e602557955a0457064e3cb06eab4e9ba5",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 5,
               "tenant_id": "synthetic-enterprise-review"
             }
@@ -1386,43 +1446,65 @@
           "tenant_id": "synthetic-enterprise-review",
           "verification": {
             "errors": [],
-            "head_record_hash": "d969d8195184b2262e3f05b7f6c4e9b58f413a201cf6cef2263aa41eeb8bd0f2",
+            "head_record_hash": "7744d9c524f63a0311949a2445ed705e602557955a0457064e3cb06eab4e9ba5",
             "record_count": 5,
             "valid": true
           },
           "version": "smerc.decision-lifecycle-ledger.v1"
         },
         "description": "Customer support agent requests an MCP tool call to bulk delete duplicate customer records inferred from low-confidence matching.",
+        "identity_gate": {
+          "agent_id": "support_resolution_agent",
+          "agent_name": "Support Resolution Agent",
+          "agent_type": "llm_agent",
+          "identity_score": 0.18,
+          "owner_team": "customer_support",
+          "plain_english_summary": "Agent 'support_resolution_agent' should not execute this request until identity authority, tool family, credential scope, or recent behavior concerns are resolved.",
+          "reason_codes": [
+            "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
+            "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY"
+          ],
+          "recommended_controls": [
+            "record_agent_identity",
+            "retain_identity_evaluation",
+            "cap_agent_to_authorized_autonomy",
+            "require_scoped_workload_credential",
+            "preserve_identity_gate_reason_codes"
+          ],
+          "status": "FAIL",
+          "trust_modifier": 0.75,
+          "version": "smerc.agent-identity.v1"
+        },
         "ref_gate": {
           "failures": [],
           "rule": "typed contract, attestation, least privilege, and object shape must pass before recoverability can support execution",
           "status": "pass"
         },
-        "scoring_admission": "admitted",
+        "scoring_admission": "capped_by_agent_identity_gate",
         "sequence": 2,
         "sparta_route": {
           "applied_controls": [
-            "block_execution",
+            "pause_execution",
             "preserve_replay",
-            "explain_denial"
+            "snapshot_current_state"
           ],
           "blocked_controls": [
             "execute"
           ],
-          "decision_digest": "cfecd70d521cc324d8232fac9ef94a2619c08d8befd76a737592c80e09a6ca7b",
-          "decision_replay_id": "replay_FILLED_MCP_002_1787797255726_053145898305",
+          "decision_digest": "284f037609a98d8d6b18e0dc97d60c67218d3ae4f10fb35ec59efafe6238197e",
+          "decision_replay_id": "replay_FILLED_MCP_002_1787878009568_d85295b17158",
           "effective_scope_units": 0,
           "executable": false,
-          "plain_english_summary": "SPARTa blocked execution because SMERC determined the action is not structurally defensible.",
+          "plain_english_summary": "SPARTa paused execution because SMERC returned FREEZE, indicating instability or unacceptable deployment risk.",
           "plan_id": "plan_filled_mcp_002",
           "reason_codes": [
-            "SPARTA_DENY_BLOCKS_EXECUTION"
+            "SPARTA_FREEZE_PAUSES_AUTOMATION"
           ],
-          "recommended_next_action": "Do not execute this plan. Submit a materially safer action with stronger evidence or reduced impact.",
-          "route_id": "sparta_plan_filled_mcp_002_33bfbd4ac3ad",
-          "route_state": "BLOCK",
-          "routed_at": "2026-08-27T02:20:55+00:00",
-          "source_posture": "DENY",
+          "recommended_next_action": "Preserve the replay, snapshot current state, and require accountable review before a new request.",
+          "route_id": "sparta_plan_filled_mcp_002_3ef5c9a94a22",
+          "route_state": "PAUSE",
+          "routed_at": "2026-08-28T00:46:49+00:00",
+          "source_posture": "FREEZE",
           "tool_plan": {
             "action": "delete_records",
             "max_scope_units": 10000,
@@ -1731,7 +1813,7 @@
               "profile_id": "cloud_admin"
             },
             "enforcement_state": "constrain",
-            "evaluated_at": "2026-08-27T02:20:55.726195+00:00",
+            "evaluated_at": "2026-08-28T00:46:49.570091+00:00",
             "policy": {
               "evidence_ceiling": "OBSERVE",
               "mode": "OBSERVE",
@@ -1748,7 +1830,7 @@
               "EXTERNAL_SIDE_EFFECT",
               "SENSITIVE_DATA"
             ],
-            "replay_id": "replay_FILLED_CLOUD_003_1787797255726_5a41e9208451",
+            "replay_id": "replay_FILLED_CLOUD_003_1787878009570_c3ca4177a7c1",
             "scores": {
               "cancel_reliability_score": 0.59,
               "confidence_score": 0.585,
@@ -1792,7 +1874,7 @@
               "target_posture": "THROTTLE"
             }
           },
-          "replay_id": "replay_FILLED_CLOUD_003_1787797255726_5a41e9208451",
+          "replay_id": "replay_FILLED_CLOUD_003_1787878009570_c3ca4177a7c1",
           "scores": {
             "cancel_reliability_score": 0.59,
             "confidence_score": 0.585,
@@ -1837,7 +1919,7 @@
         },
         "decision_lifecycle_ledger": {
           "decision_id": "customer_eval_FILLED_CLOUD_003",
-          "head_record_hash": "96e74cbcfff5e772bc92cdf425d9cf7f8b1d3da130115675e361bfd49c8c4177",
+          "head_record_hash": "70a9d12112320b9599b95b1e35eba2769edf0c68d06fe6c6a8e5f458d202018c",
           "record_count": 5,
           "records": [
             {
@@ -1851,9 +1933,9 @@
                 "risk_profile": "cloud_admin"
               },
               "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-              "record_hash": "21561b83ea3fa46f1c676f6b6ca3bd746f85d84effe90572f00b19ef0aad0028",
+              "record_hash": "f2f0ad773a9ca4e2034af55bfdcb8d4711b931d8dc06c58ee9023e5f5c4669ba",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 1,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -1865,6 +1947,7 @@
                 "available_evidence": [
                   "metadata_only_action",
                   "ref_gate_declaration",
+                  "agent_identity_gate",
                   "tool_plan_declaration"
                 ],
                 "confidence_score": 0.585,
@@ -1877,10 +1960,10 @@
                 "model_version": "customer-supplied-agent-metadata",
                 "policy_version": "smerc-reference-recoverability"
               },
-              "previous_record_hash": "21561b83ea3fa46f1c676f6b6ca3bd746f85d84effe90572f00b19ef0aad0028",
-              "record_hash": "92105104da5d0e9f843c0db2d7fa29c2494bf2564f7c14c2878f14f680086d36",
+              "previous_record_hash": "f2f0ad773a9ca4e2034af55bfdcb8d4711b931d8dc06c58ee9023e5f5c4669ba",
+              "record_hash": "cee7d168babb17ba7865b83626255ab181ba7baa82d20342e75f719757e2fbc3",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 2,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -1910,15 +1993,20 @@
                   "block_execution",
                   "preserve_replay",
                   "repair_ref_gate_evidence",
-                  "require_new_request"
+                  "require_new_request",
+                  "record_agent_identity",
+                  "retain_identity_evaluation",
+                  "cap_agent_to_authorized_autonomy",
+                  "inspect_override_history",
+                  "preserve_identity_gate_reason_codes"
                 ],
                 "recoverability_score": 0.458,
                 "structural_state": "ref_gate=fail; scoring=capped_by_ref_gate; route=BLOCK"
               },
-              "previous_record_hash": "92105104da5d0e9f843c0db2d7fa29c2494bf2564f7c14c2878f14f680086d36",
-              "record_hash": "307c4e2991546efc6641fe57a7b886f0e2838c4bd806eae61b836cbd54ac50e1",
+              "previous_record_hash": "cee7d168babb17ba7865b83626255ab181ba7baa82d20342e75f719757e2fbc3",
+              "record_hash": "ce23db31bd2b659b95413d226e217271cb24c16af0cfd9146234eb9c96d0cecf",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 3,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -1932,12 +2020,12 @@
                 "execution_status": "not_executed",
                 "rollback_performed": false,
                 "rollback_success": null,
-                "started_at": "2026-08-27T02:20:55+00:00"
+                "started_at": "2026-08-28T00:46:49+00:00"
               },
-              "previous_record_hash": "307c4e2991546efc6641fe57a7b886f0e2838c4bd806eae61b836cbd54ac50e1",
-              "record_hash": "15fe4e82aea30c17afd0f945be6e29e77a672179b75077f35011ebfccb1a581e",
+              "previous_record_hash": "ce23db31bd2b659b95413d226e217271cb24c16af0cfd9146234eb9c96d0cecf",
+              "record_hash": "b36abc97cc253c021f731ce7da467c7a214eb09ee016cd759b31bf14619ceb1c",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 4,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -1955,10 +2043,10 @@
                 "time_to_recover_minutes": 0.0,
                 "unexpected_consequences": false
               },
-              "previous_record_hash": "15fe4e82aea30c17afd0f945be6e29e77a672179b75077f35011ebfccb1a581e",
-              "record_hash": "96e74cbcfff5e772bc92cdf425d9cf7f8b1d3da130115675e361bfd49c8c4177",
+              "previous_record_hash": "b36abc97cc253c021f731ce7da467c7a214eb09ee016cd759b31bf14619ceb1c",
+              "record_hash": "70a9d12112320b9599b95b1e35eba2769edf0c68d06fe6c6a8e5f458d202018c",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 5,
               "tenant_id": "synthetic-enterprise-review"
             }
@@ -1986,13 +2074,35 @@
           "tenant_id": "synthetic-enterprise-review",
           "verification": {
             "errors": [],
-            "head_record_hash": "96e74cbcfff5e772bc92cdf425d9cf7f8b1d3da130115675e361bfd49c8c4177",
+            "head_record_hash": "70a9d12112320b9599b95b1e35eba2769edf0c68d06fe6c6a8e5f458d202018c",
             "record_count": 5,
             "valid": true
           },
           "version": "smerc.decision-lifecycle-ledger.v1"
         },
         "description": "Cloud automation requests broad production IAM permission expansion for a service role used by deployment jobs.",
+        "identity_gate": {
+          "agent_id": "cloud_admin_agent",
+          "agent_name": "Cloud Admin Agent",
+          "agent_type": "automation_runner",
+          "identity_score": 0.32,
+          "owner_team": "cloud_platform",
+          "plain_english_summary": "Agent 'cloud_admin_agent' should not execute this request until identity authority, tool family, credential scope, or recent behavior concerns are resolved.",
+          "reason_codes": [
+            "RECENT_OVERRIDE_PATTERN",
+            "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY"
+          ],
+          "recommended_controls": [
+            "record_agent_identity",
+            "retain_identity_evaluation",
+            "cap_agent_to_authorized_autonomy",
+            "inspect_override_history",
+            "preserve_identity_gate_reason_codes"
+          ],
+          "status": "FAIL",
+          "trust_modifier": 0.75,
+          "version": "smerc.agent-identity.v1"
+        },
         "ref_gate": {
           "failures": [
             "least_privilege_confirmed"
@@ -2011,8 +2121,8 @@
           "blocked_controls": [
             "execute"
           ],
-          "decision_digest": "2916f6e247ed7a861c0e2af2280b33ec2a013ba1229208b56634d66df85997cb",
-          "decision_replay_id": "replay_FILLED_CLOUD_003_1787797255726_5a41e9208451",
+          "decision_digest": "2393b44f3424b865c397f2fe967d8abf6fbffe28bd002a2c5cf97894ac10a2d8",
+          "decision_replay_id": "replay_FILLED_CLOUD_003_1787878009570_c3ca4177a7c1",
           "effective_scope_units": 0,
           "executable": false,
           "plain_english_summary": "SPARTa blocked execution because SMERC determined the action is not structurally defensible.",
@@ -2021,9 +2131,9 @@
             "SPARTA_DENY_BLOCKS_EXECUTION"
           ],
           "recommended_next_action": "Do not execute this plan. Submit a materially safer action with stronger evidence or reduced impact.",
-          "route_id": "sparta_plan_filled_cloud_003_7bbe944793ff",
+          "route_id": "sparta_plan_filled_cloud_003_f920f4604c32",
           "route_state": "BLOCK",
-          "routed_at": "2026-08-27T02:20:55+00:00",
+          "routed_at": "2026-08-28T00:46:49+00:00",
           "source_posture": "DENY",
           "tool_plan": {
             "action": "iam_policy_change",
@@ -2331,7 +2441,7 @@
               "profile_id": "security_ops"
             },
             "enforcement_state": "constrain",
-            "evaluated_at": "2026-08-27T02:20:55.726195+00:00",
+            "evaluated_at": "2026-08-28T00:46:49.570091+00:00",
             "policy": {
               "evidence_ceiling": "OBSERVE",
               "mode": "OBSERVE",
@@ -2347,7 +2457,7 @@
               "IMPACT_SCOPE_WIDE",
               "EXTERNAL_SIDE_EFFECT"
             ],
-            "replay_id": "replay_FILLED_SEC_004_1787797255726_7001c2bde6e0",
+            "replay_id": "replay_FILLED_SEC_004_1787878009570_1b31fb0bdfcb",
             "scores": {
               "cancel_reliability_score": 0.62,
               "confidence_score": 0.564,
@@ -2387,7 +2497,7 @@
               "target_posture": "THROTTLE"
             }
           },
-          "replay_id": "replay_FILLED_SEC_004_1787797255726_7001c2bde6e0",
+          "replay_id": "replay_FILLED_SEC_004_1787878009570_1b31fb0bdfcb",
           "scores": {
             "cancel_reliability_score": 0.62,
             "confidence_score": 0.564,
@@ -2428,7 +2538,7 @@
         },
         "decision_lifecycle_ledger": {
           "decision_id": "customer_eval_FILLED_SEC_004",
-          "head_record_hash": "ad88162ca2f579d13e1eeb4d9e8fe90b5e8f26f4dc83c8cab1145770e39d0edf",
+          "head_record_hash": "b3e59880b4ac6c25e699b6817d2bf8bf647c6929a405ea52f652862e36c027be",
           "record_count": 5,
           "records": [
             {
@@ -2442,9 +2552,9 @@
                 "risk_profile": "security_ops"
               },
               "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-              "record_hash": "acb04ace023f7fe4f2ed5ba6394f5e19971cb5ffecca5b1b32e875804db781ec",
+              "record_hash": "cb9e44877e3610aa261b829fb28e2196c7288b7ef04c57a9307ddfb2f4012571",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 1,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -2456,6 +2566,7 @@
                 "available_evidence": [
                   "metadata_only_action",
                   "ref_gate_declaration",
+                  "agent_identity_gate",
                   "tool_plan_declaration"
                 ],
                 "confidence_score": 0.564,
@@ -2466,10 +2577,10 @@
                 "model_version": "customer-supplied-agent-metadata",
                 "policy_version": "smerc-reference-recoverability"
               },
-              "previous_record_hash": "acb04ace023f7fe4f2ed5ba6394f5e19971cb5ffecca5b1b32e875804db781ec",
-              "record_hash": "2608e25de9ca92bbcc79f99e7bcbdef0e52505d9ed893628ea9fe7e13b166ca4",
+              "previous_record_hash": "cb9e44877e3610aa261b829fb28e2196c7288b7ef04c57a9307ddfb2f4012571",
+              "record_hash": "1fff7b667bb5d9f0f52e048576535d6ada1a9dfd498be6bc47af9011d2798cbf",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 2,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -2496,15 +2607,17 @@
                   "preview_before_execution",
                   "record_replay",
                   "require_rollback_plan",
-                  "rate_limit_external_side_effect"
+                  "rate_limit_external_side_effect",
+                  "record_agent_identity",
+                  "retain_identity_evaluation"
                 ],
                 "recoverability_score": 0.616,
                 "structural_state": "ref_gate=pass; scoring=admitted; route=CONSTRAINED_EXECUTE"
               },
-              "previous_record_hash": "2608e25de9ca92bbcc79f99e7bcbdef0e52505d9ed893628ea9fe7e13b166ca4",
-              "record_hash": "816049bf039224d62d135542e4f4451c7c1b1d84a1567d6524f03f3ea8c6b74c",
+              "previous_record_hash": "1fff7b667bb5d9f0f52e048576535d6ada1a9dfd498be6bc47af9011d2798cbf",
+              "record_hash": "b20bfd6162ae8e4367c388c36376626f9565d0443af46e18444a83a3d2a5ab49",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 3,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -2518,12 +2631,12 @@
                 "execution_status": "succeeded",
                 "rollback_performed": false,
                 "rollback_success": null,
-                "started_at": "2026-08-27T02:20:55+00:00"
+                "started_at": "2026-08-28T00:46:49+00:00"
               },
-              "previous_record_hash": "816049bf039224d62d135542e4f4451c7c1b1d84a1567d6524f03f3ea8c6b74c",
-              "record_hash": "90f98e3cf0f434542cefaaa8acaec4d3672b70bc8d7b5d654c4ffa9d2fd33a61",
+              "previous_record_hash": "b20bfd6162ae8e4367c388c36376626f9565d0443af46e18444a83a3d2a5ab49",
+              "record_hash": "e5f178278720870a2879bb9b7c1b6f650768063223f9d43bc13768887e708fb3",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 4,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -2541,10 +2654,10 @@
                 "time_to_recover_minutes": 0.0,
                 "unexpected_consequences": false
               },
-              "previous_record_hash": "90f98e3cf0f434542cefaaa8acaec4d3672b70bc8d7b5d654c4ffa9d2fd33a61",
-              "record_hash": "ad88162ca2f579d13e1eeb4d9e8fe90b5e8f26f4dc83c8cab1145770e39d0edf",
+              "previous_record_hash": "e5f178278720870a2879bb9b7c1b6f650768063223f9d43bc13768887e708fb3",
+              "record_hash": "b3e59880b4ac6c25e699b6817d2bf8bf647c6929a405ea52f652862e36c027be",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 5,
               "tenant_id": "synthetic-enterprise-review"
             }
@@ -2572,13 +2685,31 @@
           "tenant_id": "synthetic-enterprise-review",
           "verification": {
             "errors": [],
-            "head_record_hash": "ad88162ca2f579d13e1eeb4d9e8fe90b5e8f26f4dc83c8cab1145770e39d0edf",
+            "head_record_hash": "b3e59880b4ac6c25e699b6817d2bf8bf647c6929a405ea52f652862e36c027be",
             "record_count": 5,
             "valid": true
           },
           "version": "smerc.decision-lifecycle-ledger.v1"
         },
         "description": "Security automation requests endpoint isolation for 200 workstations after a high-volume alert burst with mixed-confidence signals.",
+        "identity_gate": {
+          "agent_id": "security_response_agent",
+          "agent_name": "Security Response Agent",
+          "agent_type": "workflow_bot",
+          "identity_score": 0.8,
+          "owner_team": "security_operations",
+          "plain_english_summary": "Agent 'security_response_agent' is verified for execute access to 'security_response.endpoint_isolation' with external side-effect level under its current identity record.",
+          "reason_codes": [
+            "AGENT_IDENTITY_VERIFIED"
+          ],
+          "recommended_controls": [
+            "record_agent_identity",
+            "retain_identity_evaluation"
+          ],
+          "status": "PASS",
+          "trust_modifier": 1.04,
+          "version": "smerc.agent-identity.v1"
+        },
         "ref_gate": {
           "failures": [],
           "rule": "typed contract, attestation, least privilege, and object shape must pass before recoverability can support execution",
@@ -2596,8 +2727,8 @@
             "require_rollback_plan"
           ],
           "blocked_controls": [],
-          "decision_digest": "d637e4ff1d30f75c4286aa6e3cfa1a6bfdbb836cc323fea29bc32279d2609d9a",
-          "decision_replay_id": "replay_FILLED_SEC_004_1787797255726_7001c2bde6e0",
+          "decision_digest": "a584a94fb575ff7c2de8fb91a5416efd9619ff1fb8b97b060cf6296e8c99fcee",
+          "decision_replay_id": "replay_FILLED_SEC_004_1787878009570_1b31fb0bdfcb",
           "effective_scope_units": 63,
           "executable": true,
           "plain_english_summary": "SPARTa converted the throttled SMERC posture into a constrained execution route with smaller scope and recovery controls.",
@@ -2606,9 +2737,9 @@
             "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
           ],
           "recommended_next_action": "Execute only through an adapter that enforces the listed controls and records control evidence.",
-          "route_id": "sparta_plan_filled_sec_004_4e4aa7e06661",
+          "route_id": "sparta_plan_filled_sec_004_4fa6833702b2",
           "route_state": "CONSTRAINED_EXECUTE",
-          "routed_at": "2026-08-27T02:20:55+00:00",
+          "routed_at": "2026-08-28T00:46:49+00:00",
           "source_posture": "THROTTLE",
           "tool_plan": {
             "action": "endpoint_isolation",
@@ -2919,7 +3050,7 @@
               "profile_id": "finance_ops"
             },
             "enforcement_state": "block",
-            "evaluated_at": "2026-08-27T02:20:55.726195+00:00",
+            "evaluated_at": "2026-08-28T00:46:49.570091+00:00",
             "policy": {
               "evidence_ceiling": "OBSERVE",
               "mode": "OBSERVE",
@@ -2939,7 +3070,7 @@
               "EXTERNAL_SIDE_EFFECT",
               "SENSITIVE_DATA"
             ],
-            "replay_id": "replay_FILLED_FIN_005_1787797255726_fe61ba2dd236",
+            "replay_id": "replay_FILLED_FIN_005_1787878009570_2a2f23cb9ef3",
             "scores": {
               "cancel_reliability_score": 0.3,
               "confidence_score": 0.575,
@@ -2981,7 +3112,7 @@
               "target_posture": "THROTTLE"
             }
           },
-          "replay_id": "replay_FILLED_FIN_005_1787797255726_fe61ba2dd236",
+          "replay_id": "replay_FILLED_FIN_005_1787878009570_2a2f23cb9ef3",
           "scores": {
             "cancel_reliability_score": 0.3,
             "confidence_score": 0.575,
@@ -3024,7 +3155,7 @@
         },
         "decision_lifecycle_ledger": {
           "decision_id": "customer_eval_FILLED_FIN_005",
-          "head_record_hash": "6bf0f2ceed8ae0112d65a431a8c6929d4d6920413e2d5f9a457d3ace49fc1cbd",
+          "head_record_hash": "44f9c19216cdab4716194abd60486d11bb97e550ed082d0814a349050f2d28e3",
           "record_count": 5,
           "records": [
             {
@@ -3038,9 +3169,9 @@
                 "risk_profile": "finance_ops"
               },
               "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-              "record_hash": "ffe8d338ebad4117d425ff04cd9c452507a9ff8acc8e5bfb73044a682d8d5c5c",
+              "record_hash": "1d58703a5927223734a2895939ed7b2bd7b2624168abfce1360fc222f5c8716b",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 1,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -3052,6 +3183,7 @@
                 "available_evidence": [
                   "metadata_only_action",
                   "ref_gate_declaration",
+                  "agent_identity_gate",
                   "tool_plan_declaration"
                 ],
                 "confidence_score": 0.575,
@@ -3064,10 +3196,10 @@
                 "model_version": "customer-supplied-agent-metadata",
                 "policy_version": "smerc-reference-recoverability"
               },
-              "previous_record_hash": "ffe8d338ebad4117d425ff04cd9c452507a9ff8acc8e5bfb73044a682d8d5c5c",
-              "record_hash": "5177934267139f07fea553b35a16eb7135aaf2b13b506c3030fce5463d4b1046",
+              "previous_record_hash": "1d58703a5927223734a2895939ed7b2bd7b2624168abfce1360fc222f5c8716b",
+              "record_hash": "7d15d0a79b7916a5eedad0abd77e402a2295d511b5c991671c13bf15e2c0a579",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 2,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -3103,15 +3235,22 @@
                   "block_execution",
                   "preserve_replay",
                   "repair_ref_gate_evidence",
-                  "require_new_request"
+                  "require_new_request",
+                  "record_agent_identity",
+                  "retain_identity_evaluation",
+                  "cap_agent_to_authorized_autonomy",
+                  "require_scoped_workload_credential",
+                  "inspect_recent_denial_history",
+                  "reduce_agent_autonomy_budget",
+                  "preserve_identity_gate_reason_codes"
                 ],
                 "recoverability_score": 0.281,
                 "structural_state": "ref_gate=fail; scoring=capped_by_ref_gate; route=BLOCK"
               },
-              "previous_record_hash": "5177934267139f07fea553b35a16eb7135aaf2b13b506c3030fce5463d4b1046",
-              "record_hash": "e04c8e87f74d83e4e5260009157f8a25f9b9c256e80250b9410aec2187e53192",
+              "previous_record_hash": "7d15d0a79b7916a5eedad0abd77e402a2295d511b5c991671c13bf15e2c0a579",
+              "record_hash": "f02e560ab18015df8458e4f52a496899e9f33db9e80c7f154d71c4ffca704a0b",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 3,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -3125,12 +3264,12 @@
                 "execution_status": "not_executed",
                 "rollback_performed": false,
                 "rollback_success": null,
-                "started_at": "2026-08-27T02:20:55+00:00"
+                "started_at": "2026-08-28T00:46:49+00:00"
               },
-              "previous_record_hash": "e04c8e87f74d83e4e5260009157f8a25f9b9c256e80250b9410aec2187e53192",
-              "record_hash": "4376a78ee083f98655aa41a3b85e7493e9b727584e9c177e0da58488176ce38a",
+              "previous_record_hash": "f02e560ab18015df8458e4f52a496899e9f33db9e80c7f154d71c4ffca704a0b",
+              "record_hash": "7b8b68de6a001507a8592039a1ed83eb412492858caa1106fe406175ea1e9a7c",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 4,
               "tenant_id": "synthetic-enterprise-review"
             },
@@ -3148,10 +3287,10 @@
                 "time_to_recover_minutes": 0.0,
                 "unexpected_consequences": false
               },
-              "previous_record_hash": "4376a78ee083f98655aa41a3b85e7493e9b727584e9c177e0da58488176ce38a",
-              "record_hash": "6bf0f2ceed8ae0112d65a431a8c6929d4d6920413e2d5f9a457d3ace49fc1cbd",
+              "previous_record_hash": "7b8b68de6a001507a8592039a1ed83eb412492858caa1106fe406175ea1e9a7c",
+              "record_hash": "44f9c19216cdab4716194abd60486d11bb97e550ed082d0814a349050f2d28e3",
               "record_version": "smerc.dll-record.v1",
-              "recorded_at": "2026-08-27T02:20:55+00:00",
+              "recorded_at": "2026-08-28T00:46:49+00:00",
               "sequence": 5,
               "tenant_id": "synthetic-enterprise-review"
             }
@@ -3179,13 +3318,39 @@
           "tenant_id": "synthetic-enterprise-review",
           "verification": {
             "errors": [],
-            "head_record_hash": "6bf0f2ceed8ae0112d65a431a8c6929d4d6920413e2d5f9a457d3ace49fc1cbd",
+            "head_record_hash": "44f9c19216cdab4716194abd60486d11bb97e550ed082d0814a349050f2d28e3",
             "record_count": 5,
             "valid": true
           },
           "version": "smerc.decision-lifecycle-ledger.v1"
         },
         "description": "Treasury automation requests a stablecoin liquidity transfer to an external venue during elevated redemption pressure.",
+        "identity_gate": {
+          "agent_id": "treasury_agent",
+          "agent_name": "Treasury Automation Agent",
+          "agent_type": "llm_agent",
+          "identity_score": 0.0,
+          "owner_team": "treasury_operations",
+          "plain_english_summary": "Agent 'treasury_agent' should not execute this request until identity authority, tool family, credential scope, or recent behavior concerns are resolved.",
+          "reason_codes": [
+            "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
+            "LOW_RECENT_SUCCESS_RATE",
+            "RECENT_DENIAL_PATTERN",
+            "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY"
+          ],
+          "recommended_controls": [
+            "record_agent_identity",
+            "retain_identity_evaluation",
+            "cap_agent_to_authorized_autonomy",
+            "require_scoped_workload_credential",
+            "inspect_recent_denial_history",
+            "reduce_agent_autonomy_budget",
+            "preserve_identity_gate_reason_codes"
+          ],
+          "status": "FAIL",
+          "trust_modifier": 0.75,
+          "version": "smerc.agent-identity.v1"
+        },
         "ref_gate": {
           "failures": [
             "object_shape_expected"
@@ -3204,8 +3369,8 @@
           "blocked_controls": [
             "execute"
           ],
-          "decision_digest": "9a5ac17aa8e351df4c260e9d95e29cfa73b7f52b986183562db0b2d3df1d7f9b",
-          "decision_replay_id": "replay_FILLED_FIN_005_1787797255726_fe61ba2dd236",
+          "decision_digest": "929c7a5f108aed6aa7b225bf938b19ecaa50d433fa6eae1a61f59f96d3cda81e",
+          "decision_replay_id": "replay_FILLED_FIN_005_1787878009570_2a2f23cb9ef3",
           "effective_scope_units": 0,
           "executable": false,
           "plain_english_summary": "SPARTa blocked execution because SMERC determined the action is not structurally defensible.",
@@ -3214,9 +3379,9 @@
             "SPARTA_DENY_BLOCKS_EXECUTION"
           ],
           "recommended_next_action": "Do not execute this plan. Submit a materially safer action with stronger evidence or reduced impact.",
-          "route_id": "sparta_plan_filled_fin_005_92fccf2e92d4",
+          "route_id": "sparta_plan_filled_fin_005_3571b27a2606",
           "route_state": "BLOCK",
-          "routed_at": "2026-08-27T02:20:55+00:00",
+          "routed_at": "2026-08-28T00:46:49+00:00",
           "source_posture": "DENY",
           "tool_plan": {
             "action": "stablecoin_treasury_transfer",
@@ -3253,8 +3418,8 @@
         {
           "action_id": "FILLED_MCP_002",
           "irreversible_exposure_score": 0.896,
-          "posture": "DENY",
-          "route_state": "BLOCK"
+          "posture": "FREEZE",
+          "route_state": "PAUSE"
         },
         {
           "action_id": "FILLED_CLOUD_003",
@@ -3275,9 +3440,14 @@
           "route_state": "CONSTRAINED_EXECUTE"
         }
       ],
+      "identity_gate_counts": {
+        "FAIL": 3,
+        "PASS": 2
+      },
       "non_executable_routes": 3,
       "posture_counts": {
-        "DENY": 3,
+        "DENY": 2,
+        "FREEZE": 1,
         "THROTTLE": 2
       },
       "ref_gate_counts": {
@@ -3285,8 +3455,9 @@
         "pass": 3
       },
       "route_state_counts": {
-        "BLOCK": 3,
-        "CONSTRAINED_EXECUTE": 2
+        "BLOCK": 2,
+        "CONSTRAINED_EXECUTE": 2,
+        "PAUSE": 1
       },
       "total_actions": 5,
       "valid_ledgers": 5
@@ -3297,7 +3468,7 @@
   },
   "data_boundary": "Synthetic metadata-only examples. No secrets, credentials, source code, customer records, production logs, wallet keys, or regulated transaction payloads are included.",
   "evidence_boundary": "This report is based on metadata-only pilot intake. It compares current reviewer/policy posture against SMERC runtime posture for discussion. It does not prove production validation, compliance, incident reduction, customer demand, or approval to enforce.",
-  "generated_at": "2026-08-27T02:20:55+00:00",
+  "generated_at": "2026-08-28T00:46:49+00:00",
   "organization": "Synthetic Enterprise Review",
   "recommended_next_action": "Proceed to a bounded shadow-mode pilot only if customer reviewers agree the differences are useful. Start with one workflow, preserve existing controls, and measure reviewer agreement, false releases, false constraints, latency, and review burden.",
   "reviewer_role": "security_architect",
@@ -3310,12 +3481,19 @@
       "BLOCK": 1,
       "REVIEW": 2
     },
-    "decision_difference_count": 4,
-    "decision_difference_rate": 0.8,
+    "decision_difference_count": 3,
+    "decision_difference_rate": 0.6,
     "highest_exposure_actions": [
       {
         "action_id": "FILLED_FIN_005",
         "actor": "treasury_agent",
+        "agent_identity_gate_status": "FAIL",
+        "agent_identity_reason_codes": [
+          "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
+          "LOW_RECENT_SUCCESS_RATE",
+          "RECENT_DENIAL_PATTERN",
+          "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY"
+        ],
         "constrained_rather_than_blocked": false,
         "control_impact": "SMERC broadly agrees with the current control posture.",
         "current_control_outcome": "BLOCK",
@@ -3352,42 +3530,54 @@
       {
         "action_id": "FILLED_MCP_002",
         "actor": "support_resolution_agent",
+        "agent_identity_gate_status": "FAIL",
+        "agent_identity_reason_codes": [
+          "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
+          "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY"
+        ],
         "constrained_rather_than_blocked": false,
         "control_impact": "SMERC broadly agrees with the current control posture.",
         "current_control_outcome": "REVIEW",
         "current_control_reason": "Current process sends destructive customer-data changes to manual review.",
-        "decision_changed": true,
+        "decision_changed": false,
         "description": "Customer support agent requests an MCP tool call to bulk delete duplicate customer records inferred from low-confidence matching.",
         "irreversible_exposure_score": 0.896,
         "possible_consequence": "Incorrect deletion could create data loss, customer harm, and recovery work.",
         "reason_codes": [
-          "IRREVERSIBLE_EXPOSURE_HIGH",
-          "RECOVERY_CAPACITY_LOW",
-          "ROLLBACK_LATENCY_HIGH",
           "CANCEL_RELIABILITY_WEAK",
           "CONTAINMENT_WEAK",
+          "CREDENTIAL_SCOPE_TOO_WEAK_FOR_SIDE_EFFECT",
           "EVIDENCE_VALIDITY_LOW",
-          "IMPACT_SCOPE_WIDE",
           "EXTERNAL_SIDE_EFFECT",
+          "IMPACT_SCOPE_WIDE",
+          "IRREVERSIBLE_EXPOSURE_HIGH",
+          "RECOVERY_CAPACITY_LOW",
+          "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY",
+          "ROLLBACK_LATENCY_HIGH",
           "SENSITIVE_DATA"
         ],
         "recommended_controls": [
-          "block_execution",
-          "explain_denial",
+          "pause_agent_execution",
+          "resolve_agent_identity",
           "preserve_replay",
-          "require_new_request"
+          "require_human_review_before_execution"
         ],
         "reversible_capacity_score": 0.241,
         "risk_adjusted_authorization_score": 0.287,
         "rollback_path": "Partial restore may be possible if record lineage and recent backups are verified.",
-        "smerc_posture": "DENY",
-        "sparta_route_state": "BLOCK",
+        "smerc_posture": "FREEZE",
+        "sparta_route_state": "PAUSE",
         "system": "customer_records_mcp.bulk_delete",
         "workflow_stage": "customer_data_remediation"
       },
       {
         "action_id": "FILLED_CLOUD_003",
         "actor": "cloud_admin_agent",
+        "agent_identity_gate_status": "FAIL",
+        "agent_identity_reason_codes": [
+          "RECENT_OVERRIDE_PATTERN",
+          "REQUESTED_AUTONOMY_EXCEEDS_AGENT_AUTHORITY"
+        ],
         "constrained_rather_than_blocked": false,
         "control_impact": "SMERC would stop or route an action current controls would allow.",
         "current_control_outcome": "ALLOW",
@@ -3421,6 +3611,10 @@
       {
         "action_id": "FILLED_SEC_004",
         "actor": "security_response_agent",
+        "agent_identity_gate_status": "PASS",
+        "agent_identity_reason_codes": [
+          "AGENT_IDENTITY_VERIFIED"
+        ],
         "constrained_rather_than_blocked": false,
         "control_impact": "SMERC broadly agrees with the current control posture.",
         "current_control_outcome": "REVIEW",
@@ -3453,6 +3647,10 @@
       {
         "action_id": "FILLED_GHA_001",
         "actor": "release_agent",
+        "agent_identity_gate_status": "PASS",
+        "agent_identity_reason_codes": [
+          "AGENT_IDENTITY_VERIFIED"
+        ],
         "constrained_rather_than_blocked": false,
         "control_impact": "SMERC keeps the action possible but adds runtime controls.",
         "current_control_outcome": "ALLOW",
@@ -3484,7 +3682,8 @@
       "reason": "The evaluation includes multiple side-effecting actions, at least one constrained path, and hard-stop cases worth reviewer labeling."
     },
     "smerc_posture_counts": {
-      "DENY": 3,
+      "DENY": 2,
+      "FREEZE": 1,
       "THROTTLE": 2
     }
   },

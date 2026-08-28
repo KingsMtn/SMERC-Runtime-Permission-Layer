@@ -9,6 +9,7 @@ from typing import Any, Dict, Mapping
 
 from reference_engine.autonomy_budget import evaluate_autonomy_budget
 from reference_engine.decision_lifecycle_ledger import DecisionLifecycleLedger
+from reference_engine.agent_identity import evaluate_agent_identity
 from reference_engine.recoverability_engine import RecoverabilityEngine
 from reference_engine.sparta_router import route_decision
 
@@ -31,6 +32,7 @@ TOP_LEVEL_FIELDS = {
     "initial_autonomy_state",
     "actions",
 }
+OPTIONAL_TOP_LEVEL_FIELDS = {"agents"}
 RECOVERABILITY_FIELDS = {
     "action_id",
     "description",
@@ -73,7 +75,7 @@ def load_payload(path: str | Path) -> Dict[str, Any]:
 
 
 def validate_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
-    _exact_fields(payload, TOP_LEVEL_FIELDS, "customer_evaluation")
+    _exact_fields(payload, TOP_LEVEL_FIELDS, "customer_evaluation", optional=OPTIONAL_TOP_LEVEL_FIELDS)
     if payload["version"] != CUSTOMER_EVALUATION_VERSION:
         raise ValueError(f"version must be {CUSTOMER_EVALUATION_VERSION}")
     actions = payload["actions"]
@@ -99,6 +101,19 @@ def validate_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
         parsed["action_id"] = action_id
         parsed["ref_gate"] = ref_gate
         parsed_actions.append(parsed)
+    agents = payload.get("agents", [])
+    if not isinstance(agents, list):
+        raise TypeError("agents must be a list when provided")
+    parsed_agents = {}
+    for index, agent in enumerate(agents):
+        if not isinstance(agent, dict):
+            raise TypeError(f"agents[{index}] must be an object")
+        parsed_agent = dict(agent)
+        agent_id = _text(parsed_agent.get("agent_id"), f"agents[{index}].agent_id", 128)
+        if agent_id in parsed_agents:
+            raise ValueError(f"duplicate agent_id: {agent_id}")
+        parsed_agents[agent_id] = parsed_agent
+
     return {
         "version": CUSTOMER_EVALUATION_VERSION,
         "tenant_id": _text(payload["tenant_id"], "tenant_id", 128),
@@ -108,6 +123,7 @@ def validate_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
         "data_boundary": _text(payload["data_boundary"], "data_boundary", 1200),
         "workflow_context": _text(payload["workflow_context"], "workflow_context", 1200),
         "initial_autonomy_state": _text(payload["initial_autonomy_state"], "initial_autonomy_state", 64),
+        "agents": parsed_agents,
         "actions": parsed_actions,
     }
 
@@ -120,18 +136,30 @@ def build_customer_evaluation(payload: Mapping[str, Any]) -> Dict[str, Any]:
     postures: Counter[str] = Counter()
     routes: Counter[str] = Counter()
     ref_gate_statuses: Counter[str] = Counter()
+    identity_gate_statuses: Counter[str] = Counter()
 
     for sequence, action in enumerate(parsed["actions"], start=1):
         ref_gate = _evaluate_ref_gate(action["ref_gate"])
-        scoring_admission = "admitted" if ref_gate["status"] == "pass" else "capped_by_ref_gate"
+        identity_gate = evaluate_agent_identity(
+            parsed["agents"].get(action["actor"]),
+            actor=action["actor"],
+            requested_tool=action["tool"],
+            requested_autonomy_level=_requested_autonomy(action),
+            requested_side_effect_level=action["tool_plan"]["side_effect_level"],
+            required=bool(parsed["agents"]),
+        )
+        scoring_admission = _scoring_admission(ref_gate, identity_gate)
         decision = engine.evaluate(_recoverability_payload(action))
         if ref_gate["status"] == "fail":
             decision = _cap_decision_for_ref_gate(decision, ref_gate)
+        elif identity_gate["status"] == "FAIL":
+            decision = _cap_decision_for_identity_gate(decision, identity_gate)
         route = route_decision(decision, action["tool_plan"])
         ledger = _build_ledger(
             tenant_id=parsed["tenant_id"],
             action=action,
             ref_gate=ref_gate,
+            identity_gate=identity_gate,
             scoring_admission=scoring_admission,
             decision=decision,
             route=route,
@@ -139,6 +167,7 @@ def build_customer_evaluation(payload: Mapping[str, Any]) -> Dict[str, Any]:
         postures[decision["posture"]] += 1
         routes[route["route_state"]] += 1
         ref_gate_statuses[ref_gate["status"]] += 1
+        identity_gate_statuses[identity_gate["status"]] += 1
         pressure = _gateway_pressure(decision, ref_gate)
         budget_inputs.append(
             {
@@ -157,6 +186,7 @@ def build_customer_evaluation(payload: Mapping[str, Any]) -> Dict[str, Any]:
                 "action_id": action["action_id"],
                 "description": action["description"],
                 "ref_gate": ref_gate,
+                "identity_gate": identity_gate,
                 "scoring_admission": scoring_admission,
                 "decision": decision,
                 "sparta_route": route,
@@ -173,6 +203,7 @@ def build_customer_evaluation(payload: Mapping[str, Any]) -> Dict[str, Any]:
         "posture_counts": dict(sorted(postures.items())),
         "route_state_counts": dict(sorted(routes.items())),
         "ref_gate_counts": dict(sorted(ref_gate_statuses.items())),
+        "identity_gate_counts": dict(sorted(identity_gate_statuses.items())),
         "non_executable_routes": sum(1 for record in records if not record["sparta_route"]["executable"]),
         "valid_ledgers": sum(
             1 for record in records if record["decision_lifecycle_ledger"]["verification"]["valid"]
@@ -236,6 +267,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         "",
         f"- Actions evaluated: `{summary['total_actions']}`",
         f"- Ref-gate counts: `{summary['ref_gate_counts']}`",
+        f"- Agent identity-gate counts: `{summary['identity_gate_counts']}`",
         f"- Posture counts: `{summary['posture_counts']}`",
         f"- Route state counts: `{summary['route_state_counts']}`",
         f"- Non-executable routes: `{summary['non_executable_routes']}`",
@@ -281,6 +313,8 @@ def render_markdown(report: Mapping[str, Any]) -> str:
                 f"- Description: {record['description']}",
                 f"- Ref gate: `{record['ref_gate']['status']}`",
                 f"- Ref failures: `{record['ref_gate']['failures']}`",
+                f"- Agent identity gate: `{record['identity_gate']['status']}`",
+                f"- Agent identity reasons: `{record['identity_gate']['reason_codes']}`",
                 f"- Scoring admission: `{record['scoring_admission']}`",
                 f"- SMERC posture: `{decision['posture']}`",
                 f"- Scores: `{decision['scores']}`",
@@ -331,6 +365,16 @@ def _evaluate_ref_gate(ref_gate: Mapping[str, bool]) -> Dict[str, Any]:
     }
 
 
+def _scoring_admission(ref_gate: Mapping[str, Any], identity_gate: Mapping[str, Any]) -> str:
+    if ref_gate["status"] == "fail":
+        return "capped_by_ref_gate"
+    if identity_gate["status"] == "FAIL":
+        return "capped_by_agent_identity_gate"
+    if identity_gate["status"] == "WATCH":
+        return "admitted_with_agent_identity_watch"
+    return "admitted"
+
+
 def _cap_decision_for_ref_gate(decision: Mapping[str, Any], ref_gate: Mapping[str, Any]) -> Dict[str, Any]:
     capped = dict(decision)
     reason_codes = sorted(set(list(capped.get("reason_codes", [])) + [f"REF_GATE_{item.upper()}_FAILED" for item in ref_gate["failures"]]))
@@ -345,11 +389,31 @@ def _cap_decision_for_ref_gate(decision: Mapping[str, Any], ref_gate: Mapping[st
     return capped
 
 
+def _cap_decision_for_identity_gate(decision: Mapping[str, Any], identity_gate: Mapping[str, Any]) -> Dict[str, Any]:
+    capped = dict(decision)
+    reason_codes = sorted(set(list(capped.get("reason_codes", [])) + list(identity_gate["reason_codes"])))
+    capped["posture"] = "FREEZE"
+    capped["enforcement_state"] = "pause"
+    capped["reason_codes"] = reason_codes
+    capped["controls"] = [
+        "pause_agent_execution",
+        "resolve_agent_identity",
+        "preserve_replay",
+        "require_human_review_before_execution",
+    ]
+    capped["plain_english_summary"] = (
+        f"Action '{decision['action_id']}' was capped to FREEZE because agent identity admission failed: "
+        f"{', '.join(identity_gate['reason_codes'])}."
+    )
+    return capped
+
+
 def _build_ledger(
     *,
     tenant_id: str,
     action: Mapping[str, Any],
     ref_gate: Mapping[str, Any],
+    identity_gate: Mapping[str, Any],
     scoring_admission: str,
     decision: Mapping[str, Any],
     route: Mapping[str, Any],
@@ -369,9 +433,14 @@ def _build_ledger(
         "EVIDENCE",
         "smerc-customer-evaluation",
         {
-            "available_evidence": ["metadata_only_action", "ref_gate_declaration", "tool_plan_declaration"],
+            "available_evidence": [
+                "metadata_only_action",
+                "ref_gate_declaration",
+                "agent_identity_gate",
+                "tool_plan_declaration",
+            ],
             "confidence_score": float(decision["scores"]["confidence_score"]),
-            "missing_evidence": [] if ref_gate["status"] == "pass" else [f"ref_gate:{item}" for item in ref_gate["failures"]],
+            "missing_evidence": _missing_evidence(ref_gate, identity_gate),
             "external_dependencies": [str(action["tool"])],
             "model_version": "customer-supplied-agent-metadata",
             "policy_version": str(decision.get("policy", {}).get("policy_id", "smerc.policy.v1")),
@@ -386,7 +455,7 @@ def _build_ledger(
             "recoverability_score": float(decision["scores"]["reversible_capacity_score"]),
             "authorization_recommendation": str(decision["posture"]),
             "reason_codes": list(decision["reason_codes"]),
-            "recommended_safeguards": list(decision["controls"]),
+            "recommended_safeguards": list(decision["controls"]) + list(identity_gate.get("recommended_controls", [])),
         },
     )
     ledger.append(
@@ -416,6 +485,22 @@ def _build_ledger(
         },
     )
     return ledger
+
+
+def _missing_evidence(ref_gate: Mapping[str, Any], identity_gate: Mapping[str, Any]) -> list[str]:
+    missing = [] if ref_gate["status"] == "pass" else [f"ref_gate:{item}" for item in ref_gate["failures"]]
+    if identity_gate["status"] == "FAIL" and "AGENT_IDENTITY_MISSING" in identity_gate["reason_codes"]:
+        missing.append("agent_identity:identity_record")
+    return missing
+
+
+def _requested_autonomy(action: Mapping[str, Any]) -> str:
+    side_effect = action["tool_plan"]["side_effect_level"]
+    if side_effect in {"financial", "destructive", "external"}:
+        return "execute"
+    if action["tool_plan"]["requested_scope_units"] > 1:
+        return "constrain"
+    return "recommend"
 
 
 def _gateway_pressure(decision: Mapping[str, Any], ref_gate: Mapping[str, Any]) -> float:
@@ -480,9 +565,10 @@ def _ref_gate(value: Any, path: str) -> Dict[str, bool]:
     return parsed
 
 
-def _exact_fields(value: Mapping[str, Any], fields: set[str], path: str) -> None:
+def _exact_fields(value: Mapping[str, Any], fields: set[str], path: str, optional: set[str] | None = None) -> None:
+    optional = optional or set()
     missing = sorted(fields - set(value))
-    unknown = sorted(set(value) - fields)
+    unknown = sorted(set(value) - fields - optional)
     if missing:
         raise ValueError(f"{path} is missing field(s): {', '.join(missing)}")
     if unknown:

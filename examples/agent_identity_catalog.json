@@ -1,0 +1,105 @@
+{
+  "version": "smerc.agent-identity-catalog.v1",
+  "agents": [
+    {
+      "version": "smerc.agent-identity.v1",
+      "agent_id": "release_agent",
+      "agent_name": "Release Assistant",
+      "agent_type": "llm_agent",
+      "provider": "synthetic",
+      "owner_team": "platform_engineering",
+      "trust_tier": "trusted",
+      "authorized_tool_families": ["github_actions"],
+      "max_autonomy_level": "execute",
+      "credential_scope": "production_write",
+      "recent_denials": 0,
+      "recent_overrides": 1,
+      "recent_success_rate": 0.94,
+      "model": "customer_supplied_release_agent",
+      "last_reviewed_at": "2026-08-01",
+      "context": {
+        "review_note": "Synthetic identity for production canary deployment examples."
+      }
+    },
+    {
+      "version": "smerc.agent-identity.v1",
+      "agent_id": "support_resolution_agent",
+      "agent_name": "Support Resolution Agent",
+      "agent_type": "llm_agent",
+      "provider": "synthetic",
+      "owner_team": "customer_support",
+      "trust_tier": "standard",
+      "authorized_tool_families": ["customer_records_mcp"],
+      "max_autonomy_level": "constrain",
+      "credential_scope": "scoped_write",
+      "recent_denials": 2,
+      "recent_overrides": 1,
+      "recent_success_rate": 0.82,
+      "model": "customer_supplied_support_agent",
+      "last_reviewed_at": "2026-08-01",
+      "context": {
+        "review_note": "Synthetic identity for data remediation examples."
+      }
+    },
+    {
+      "version": "smerc.agent-identity.v1",
+      "agent_id": "cloud_admin_agent",
+      "agent_name": "Cloud Admin Agent",
+      "agent_type": "automation_runner",
+      "provider": "synthetic",
+      "owner_team": "cloud_platform",
+      "trust_tier": "standard",
+      "authorized_tool_families": ["cloud_iam"],
+      "max_autonomy_level": "constrain",
+      "credential_scope": "production_write",
+      "recent_denials": 1,
+      "recent_overrides": 3,
+      "recent_success_rate": 0.79,
+      "model": "customer_supplied_cloud_agent",
+      "last_reviewed_at": "2026-08-01",
+      "context": {
+        "review_note": "Synthetic identity shows autonomy capped below full execute authority."
+      }
+    },
+    {
+      "version": "smerc.agent-identity.v1",
+      "agent_id": "security_response_agent",
+      "agent_name": "Security Response Agent",
+      "agent_type": "workflow_bot",
+      "provider": "synthetic",
+      "owner_team": "security_operations",
+      "trust_tier": "trusted",
+      "authorized_tool_families": ["security_response"],
+      "max_autonomy_level": "execute",
+      "credential_scope": "production_write",
+      "recent_denials": 1,
+      "recent_overrides": 1,
+      "recent_success_rate": 0.88,
+      "model": "customer_supplied_soc_agent",
+      "last_reviewed_at": "2026-08-01",
+      "context": {
+        "review_note": "Synthetic identity for broad endpoint response examples."
+      }
+    },
+    {
+      "version": "smerc.agent-identity.v1",
+      "agent_id": "treasury_agent",
+      "agent_name": "Treasury Automation Agent",
+      "agent_type": "llm_agent",
+      "provider": "synthetic",
+      "owner_team": "treasury_operations",
+      "trust_tier": "standard",
+      "authorized_tool_families": ["finance_ops"],
+      "max_autonomy_level": "constrain",
+      "credential_scope": "production_write",
+      "recent_denials": 4,
+      "recent_overrides": 2,
+      "recent_success_rate": 0.74,
+      "model": "customer_supplied_treasury_agent",
+      "last_reviewed_at": "2026-08-01",
+      "context": {
+        "review_note": "Synthetic identity intentionally lacks financial/destructive credential scope."
+      }
+    }
+  ]
+}

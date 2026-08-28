@@ -72,6 +72,7 @@ TOP_LEVEL_FIELDS = {
     "initial_autonomy_state",
     "actions",
 }
+OPTIONAL_TOP_LEVEL_FIELDS = {"agents"}
 ALLOWED_CURRENT_OUTCOMES = {"ALLOW", "BLOCK", "REVIEW", "UNKNOWN"}
 SENSITIVE_KEY_FRAGMENTS = {
     "secret",
@@ -140,7 +141,7 @@ def build_pilot_intake_report(payload: Mapping[str, Any]) -> Dict[str, Any]:
 
 
 def validate_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
-    _exact_fields(payload, TOP_LEVEL_FIELDS, "pilot_intake")
+    _exact_fields(payload, TOP_LEVEL_FIELDS, "pilot_intake", optional=OPTIONAL_TOP_LEVEL_FIELDS)
     if payload["version"] != PILOT_INTAKE_VERSION:
         raise ValueError(f"version must be {PILOT_INTAKE_VERSION}")
     actions = payload["actions"]
@@ -181,6 +182,21 @@ def validate_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
             f"actions[{index}].tool_capabilities",
         )
         parsed_actions.append(parsed)
+    agents = payload.get("agents", [])
+    if not isinstance(agents, list):
+        raise TypeError("agents must be a list when provided")
+    parsed_agents = []
+    seen_agents = set()
+    for index, agent in enumerate(agents):
+        if not isinstance(agent, dict):
+            raise TypeError(f"agents[{index}] must be an object")
+        _reject_sensitive_keys(agent, f"agents[{index}]")
+        agent_id = _text(agent.get("agent_id"), f"agents[{index}].agent_id", 128)
+        if agent_id in seen_agents:
+            raise ValueError(f"duplicate agent_id: {agent_id}")
+        seen_agents.add(agent_id)
+        parsed_agents.append(dict(agent))
+
     return {
         "version": PILOT_INTAKE_VERSION,
         "tenant_id": _text(payload["tenant_id"], "tenant_id", 128),
@@ -189,6 +205,7 @@ def validate_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
         "workflow_family": _text(payload["workflow_family"], "workflow_family", 500),
         "data_boundary": _text(payload["data_boundary"], "data_boundary", 1200),
         "initial_autonomy_state": _text(payload["initial_autonomy_state"], "initial_autonomy_state", 64),
+        "agents": parsed_agents,
         "actions": parsed_actions,
     }
 
@@ -255,6 +272,7 @@ def compile_customer_evaluation_payload(payload: Mapping[str, Any]) -> Dict[str,
         "data_boundary": payload["data_boundary"],
         "workflow_context": payload["workflow_family"],
         "initial_autonomy_state": payload["initial_autonomy_state"],
+        "agents": list(payload.get("agents", [])),
         "actions": actions,
     }
 
@@ -278,6 +296,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Actions evaluated: `{summary['actions_evaluated']}`",
         f"- Current control outcomes: `{summary['current_control_counts']}`",
         f"- SMERC posture counts: `{summary['smerc_posture_counts']}`",
+        f"- Agent identity-gate counts: `{report['customer_evaluation']['summary']['identity_gate_counts']}`",
         f"- Decisions that differ: `{summary['decision_difference_count']}` (`{summary['decision_difference_rate']}`)",
         f"- Constrained rather than blocked: `{summary['constrained_rather_than_blocked_count']}` (`{summary['constrained_rather_than_blocked_rate']}`)",
         f"- Pilot fit: `{summary['pilot_fit']['fit']}`",
@@ -319,6 +338,8 @@ def render_markdown(report: Mapping[str, Any]) -> str:
                 f"- Rollback path: {item['rollback_path']}",
                 f"- SMERC posture: `{item['smerc_posture']}`",
                 f"- SPARTa route: `{item['sparta_route_state']}`",
+                f"- Agent identity gate: `{item['agent_identity_gate_status']}`",
+                f"- Agent identity reasons: `{item['agent_identity_reason_codes']}`",
                 f"- Reason codes: `{item['reason_codes']}`",
                 f"- Recommended controls: `{item['recommended_controls']}`",
                 f"- Control impact: {item['control_impact']}",
@@ -355,6 +376,8 @@ def _comparison(record: Mapping[str, Any], intake_action: Mapping[str, Any]) -> 
         "rollback_path": intake_action["rollback_path"],
         "smerc_posture": smerc,
         "sparta_route_state": route["route_state"],
+        "agent_identity_gate_status": record["identity_gate"]["status"],
+        "agent_identity_reason_codes": record["identity_gate"]["reason_codes"],
         "decision_changed": _decision_changed(current, smerc),
         "constrained_rather_than_blocked": current == "BLOCK" and smerc == "THROTTLE",
         "irreversible_exposure_score": decision["scores"]["irreversible_exposure_score"],
@@ -471,9 +494,10 @@ def _text(value: Any, path: str, maximum: int) -> str:
     return text
 
 
-def _exact_fields(value: Mapping[str, Any], fields: set[str], path: str) -> None:
+def _exact_fields(value: Mapping[str, Any], fields: set[str], path: str, optional: set[str] | None = None) -> None:
+    optional = optional or set()
     missing = sorted(fields - set(value))
-    unknown = sorted(set(value) - fields)
+    unknown = sorted(set(value) - fields - optional)
     if missing:
         raise ValueError(f"{path} is missing field(s): {', '.join(missing)}")
     if unknown:
@@ -484,7 +508,7 @@ def _reject_sensitive_keys(value: Any, path: str) -> None:
     if isinstance(value, dict):
         for key, child in value.items():
             normalized = str(key).lower()
-            if any(fragment in normalized for fragment in SENSITIVE_KEY_FRAGMENTS):
+            if normalized != "credential_scope" and any(fragment in normalized for fragment in SENSITIVE_KEY_FRAGMENTS):
                 raise ValueError(f"{path}.{key} appears to contain prohibited sensitive material")
             _reject_sensitive_keys(child, f"{path}.{key}")
     elif isinstance(value, list):

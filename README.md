@@ -112,6 +112,7 @@ The current build includes:
 - machine-readable runtime contract index showing how the decision engine, execution routing, permits, control evidence, DLL, and DLL Intelligence fit together
 - evidence and unknowns registry with deployment-limiting falsification rules
 - tenant-scoped policy calibration and evidence provenance admission
+- agent identity gate that checks actor authority, tool-family permission, autonomy level, credential scope, and recent behavior before action execution
 - signed, action-bound, single-use authorization permits
 - signed, action-bound control-evidence receipts for configured execution adapters
 - execution-routing layer that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes; internally this layer is called SPARTa
@@ -470,6 +471,24 @@ The output includes a recommended executor, allowed and blocked executors, execu
 python -m reference_engine.model_fitness examples/model_agent_routing_examples.json --pretty
 python -m unittest tests.test_model_fitness -v
 ```
+
+## Agent Identity Gate
+
+`reference_engine/agent_identity.py` evaluates whether the requesting actor is allowed to ask for a tool action before recoverability scoring and SPARTa routing are trusted. It checks trust tier, authorized tool family, maximum autonomy level, credential scope, recent denials, recent overrides, and recent success rate.
+
+The output includes `PASS`, `WATCH`, or `FAIL`, identity score, trust modifier, reason codes, recommended controls, and a plain-English summary. When customer evaluation includes agent identities, failed identity admission caps the action to `FREEZE` unless a stricter Ref-gate failure caps it to `DENY`.
+
+```bash
+python -m reference_engine.agent_identity examples/agent_identity_catalog.json \
+  --actor release_agent \
+  --tool github_actions.production_deploy \
+  --autonomy execute \
+  --side-effect external \
+  --pretty
+python -m unittest tests.test_agent_identity -v
+```
+
+See `docs/Agent_Identity_Gate.md`.
 
 ## SMERC Beacon
 
