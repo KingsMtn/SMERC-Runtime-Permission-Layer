@@ -10,6 +10,15 @@ Mission: SMERC helps intelligent systems make safer decisions before irreversibl
 
 It sits between automated systems and consequential actions. Before an AI agent, workflow bot, MCP tool, or deployment process sends data, changes infrastructure, deploys code, modifies permissions, moves money, or calls a high-impact API, SMERC evaluates whether the action is recoverable enough to proceed.
 
+Public reviewer site: https://admirable-sorbet-9986d5.netlify.app/
+
+Fast reviewer paths:
+
+- CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
+- Technical reviewer: `docs/External_Review_Start_Here.md`
+- Pilot reviewer: `docs/Pilot_Intake_Template.md`
+- Strategic/platform reviewer: `docs/Why_SMERC_Fits_Strategic_Platforms.md`
+
 SMERC is short for Structural Momentum Entropy Range Confidence. It evaluates a proposed action before execution and returns a replayable posture:
 
 - `ALLOW`
