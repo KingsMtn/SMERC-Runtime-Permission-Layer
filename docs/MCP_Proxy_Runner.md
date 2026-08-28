@@ -8,6 +8,7 @@ It does prove a concrete runtime path:
 
 ```text
 MCP-style tool request
+  -> optional agent identity admission gate
   -> SMERC MCP Tool Governance
   -> SMERC recoverability decision
   -> SPARTa route
@@ -22,6 +23,12 @@ MCP-style tool request
 | --- | --- |
 | `shadow` | Always forwards the tool call, but records what SMERC would have recommended. |
 | `enforce` | Applies the proxy action derived from SMERC and SPARTa. |
+
+Pilot-hardening option:
+
+| Option | Behavior |
+| --- | --- |
+| `--require-agent-identity` | Requires a `smerc.agent-identity.v1` record for the requesting actor. Missing or under-authorized identity caps the call before forwarding. |
 
 ## Proxy Actions
 
@@ -56,10 +63,21 @@ python -m reference_engine.mcp_proxy_runner \
   --pretty
 ```
 
+Enforce mode with agent identity required:
+
+```bash
+python -m reference_engine.mcp_proxy_runner \
+  --request examples/mcp/tool_call_search_docs.json \
+  --mode enforce \
+  --require-agent-identity \
+  --pretty
+```
+
 ## Example
 
 For `examples/mcp/tool_call_delete_customer_records.json`, enforce mode returns:
 
+- identity gate: `FAIL`
 - SMERC posture: `DENY`
 - SPARTa route: `BLOCK`
 - proxy action: `block_tool_call`
@@ -68,6 +86,7 @@ For `examples/mcp/tool_call_delete_customer_records.json`, enforce mode returns:
 
 For `examples/mcp/tool_call_search_docs.json`, enforce mode returns:
 
+- identity gate: `PASS`
 - SMERC posture: `ALLOW`
 - SPARTa route: `EXECUTE`
 - proxy action: `forward_tool_call`
@@ -83,6 +102,7 @@ For `examples/mcp/tool_call_search_docs.json`, enforce mode returns:
 
 - shadow/enforce mode behavior
 - explicit proxy response shape
+- optional agent identity admission before forwarding
 - forwarding decision
 - forwarding plan
 - proxy instructions

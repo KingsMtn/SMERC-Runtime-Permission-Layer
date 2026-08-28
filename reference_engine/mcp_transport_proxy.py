@@ -18,13 +18,18 @@ JSON_RPC_VERSION = "2.0"
 
 def run_mcp_transport_proxy(envelope: Mapping[str, Any]) -> Dict[str, Any]:
     request = _parse_envelope(envelope)
-    proxy_report = run_mcp_proxy(request["governance_request"], mode=request["mode"])
+    proxy_report = run_mcp_proxy(
+        request["governance_request"],
+        mode=request["mode"],
+        require_agent_identity=bool(request.get("require_agent_identity", False)),
+    )
     response = _mcp_response(request, proxy_report)
     return {
         "schema": MCP_TRANSPORT_PROXY_VERSION,
         "generated_at": _now(),
         "proxy_request_id": request["proxy_request_id"],
         "mode": request["mode"],
+        "require_agent_identity": bool(request.get("require_agent_identity", False)),
         "jsonrpc_request_id": request["mcp_jsonrpc_request"]["id"],
         "mcp_method": request["mcp_jsonrpc_request"]["method"],
         "tool_name": request["governance_request"]["tool_call"]["tool_name"],
@@ -52,6 +57,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         "",
         f"- Proxy request: `{report['proxy_request_id']}`",
         f"- Mode: `{report['mode']}`",
+        f"- Agent identity required: `{str(report['require_agent_identity']).lower()}`",
         f"- JSON-RPC request ID: `{report['jsonrpc_request_id']}`",
         f"- MCP method: `{report['mcp_method']}`",
         f"- Tool: `{report['tool_name']}`",
@@ -143,7 +149,7 @@ def _parse_envelope(envelope: Mapping[str, Any]) -> Dict[str, Any]:
     missing = sorted(required - set(envelope))
     if missing:
         raise ValueError(f"MCP transport proxy envelope missing field(s): {', '.join(missing)}")
-    allowed = required | {"simulated_tool_result"}
+    allowed = required | {"simulated_tool_result", "require_agent_identity"}
     unknown = sorted(set(envelope) - allowed)
     if unknown:
         raise ValueError(f"MCP transport proxy envelope contains unknown field(s): {', '.join(unknown)}")
@@ -226,11 +232,15 @@ def _now() -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run a local JSON-RPC-style MCP transport proxy sample.")
     parser.add_argument("--envelope", default="examples/mcp/transport_proxy_delete_customer_records.json")
+    parser.add_argument("--require-agent-identity", action="store_true")
     parser.add_argument("--json-output", default="reports/mcp_transport_proxy_report.json")
     parser.add_argument("--markdown-output", default="reports/MCP_Transport_Proxy_Report.md")
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args()
-    report = run_mcp_transport_proxy(load_json(args.envelope))
+    envelope = load_json(args.envelope)
+    if args.require_agent_identity:
+        envelope["require_agent_identity"] = True
+    report = run_mcp_transport_proxy(envelope)
     write_outputs(report, json_path=args.json_output, markdown_path=args.markdown_output)
     print(json.dumps(report, indent=2 if args.pretty else None, sort_keys=True))
     return 0

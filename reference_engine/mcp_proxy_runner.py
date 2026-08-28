@@ -19,10 +19,11 @@ def run_mcp_proxy(
     payload: Mapping[str, Any],
     *,
     mode: str = "shadow",
+    require_agent_identity: bool = False,
 ) -> Dict[str, Any]:
     if mode not in PROXY_MODES:
         raise ValueError(f"mode must be one of: {', '.join(sorted(PROXY_MODES))}")
-    governance = evaluate_mcp_tool_call(payload)
+    governance = evaluate_mcp_tool_call(payload, require_agent_identity=require_agent_identity)
     proxy_action = _proxy_action(governance["recommended_mcp_result"], mode)
     response = _proxy_response(payload, governance, proxy_action, mode)
     ledger = _build_ledger(payload, governance, response)
@@ -31,6 +32,7 @@ def run_mcp_proxy(
         "version": MCP_PROXY_RUNNER_VERSION,
         "generated_at": _now(),
         "mode": mode,
+        "require_agent_identity": require_agent_identity,
         "mcp_request_id": governance["mcp_request_id"],
         "agent_id": governance["agent_id"],
         "server_name": governance["server_name"],
@@ -58,6 +60,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         "## Proxy Decision",
         "",
         f"- Mode: `{report['mode']}`",
+        f"- Agent identity required: `{str(report['require_agent_identity']).lower()}`",
         f"- MCP request: `{report['mcp_request_id']}`",
         f"- Agent: `{report['agent_id']}`",
         f"- Server: `{report['server_name']}`",
@@ -66,6 +69,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Should forward tool call: `{str(response['should_forward_tool_call']).lower()}`",
         f"- SMERC posture: `{governance['decision']['posture']}`",
         f"- SPARTa route: `{governance['sparta_route']['route_state']}`",
+        f"- Identity gate: `{governance['identity_gate']['status']}`",
         f"- Replay ID: `{governance['decision']['replay_id']}`",
         "",
         "## Proxy Instructions",
@@ -210,6 +214,7 @@ def _build_ledger(
         {
             "available_evidence": [
                 "agent_metadata",
+                "agent_identity_gate",
                 "mcp_server_metadata",
                 "tool_call_metadata",
                 "risk_signals",
@@ -297,11 +302,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run a local SMERC MCP proxy loop against one MCP-style tool call.")
     parser.add_argument("--request", default="examples/mcp/tool_call_delete_customer_records.json")
     parser.add_argument("--mode", choices=sorted(PROXY_MODES), default="shadow")
+    parser.add_argument("--require-agent-identity", action="store_true")
     parser.add_argument("--json-output", default="reports/mcp_proxy_runner_report.json")
     parser.add_argument("--markdown-output", default="reports/MCP_Proxy_Runner_Report.md")
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args()
-    report = run_mcp_proxy(load_json(args.request), mode=args.mode)
+    report = run_mcp_proxy(load_json(args.request), mode=args.mode, require_agent_identity=args.require_agent_identity)
     write_outputs(report, json_path=args.json_output, markdown_path=args.markdown_output)
     print(json.dumps(report, indent=2 if args.pretty else None, sort_keys=True))
     return 0

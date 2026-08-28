@@ -52,6 +52,19 @@ class AgentIdentityTests(unittest.TestCase):
         self.assertEqual(result["status"], "FAIL")
         self.assertIn("TOOL_FAMILY_NOT_AUTHORIZED", result["reason_codes"])
 
+    def test_standard_trust_agent_without_blockers_is_watch_not_silent_pass(self):
+        catalog = load_catalog(CATALOG)
+        result = evaluate_agent_identity(
+            catalog["support_resolution_agent"],
+            actor="support_resolution_agent",
+            requested_tool="customer_records_mcp.merge_preview",
+            requested_autonomy_level="constrain",
+            requested_side_effect_level="internal",
+        )
+
+        self.assertEqual(result["status"], "WATCH")
+        self.assertIn("AGENT_IDENTITY_REQUIRES_MONITORING", result["reason_codes"])
+
     def test_autonomy_overreach_fails(self):
         catalog = load_catalog(CATALOG)
         result = evaluate_agent_identity(

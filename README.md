@@ -123,8 +123,8 @@ The current build includes:
 - GitHub deployment adapter route binding that verifies route replay, posture, executable state, and required controls before command execution
 - MCP-style tool governance adapter that maps proposed agent tool calls into SMERC recoverability posture, route behavior, and client/proxy recommendations before execution
 - MCP Tool Risk Scanner that lets reviewers triage MCP tool definitions before granting autonomous agents tool access
-- MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses with DLL evidence
-- MCP Transport Proxy sample that wraps a JSON-RPC-style `tools/call` request and returns either a forwarded result or a SMERC-blocked proxy error
+- MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses with optional agent identity admission and DLL evidence
+- MCP Transport Proxy sample that wraps a JSON-RPC-style `tools/call` request and returns either a forwarded result or a SMERC-blocked proxy error, with an identity-required pilot-hardening option
 - MCP Governance Gateway that evaluates registry-defined MCP tool-call sessions with loop pressure, scope pressure, session-budget metering, proxy actions, SPARTa routes, DLL evidence, and SMERC-F financial tool-family support
 - deterministic ref-gate-style metadata checks for typed contract validity, attestation validity, least-privilege confirmation, and expected object shape before recoverability scoring is allowed to influence high-impact MCP tool calls
 - Customer Evaluation runner that accepts 5 to 25 metadata-only customer actions and returns Ref-gate results, SMERC postures, SPARTa routes, DLL evidence, autonomy budget impact, and a pilot-fit recommendation
@@ -711,7 +711,8 @@ python -m reference_engine.agent_permission_layer examples/agent_permission_acti
 python -m reference_engine.constraint_eligibility examples/constraint_eligibility/prohibited_audit_log_delete.json --pretty
 python -m reference_engine.github_actions_pilot_installer --output-dir reports/github_actions_pilot_package --pretty
 python -m reference_engine.mcp_proxy_runner --request examples/mcp/tool_call_delete_customer_records.json --mode enforce --pretty
-python -m reference_engine.mcp_transport_proxy --envelope examples/mcp/transport_proxy_delete_customer_records.json --pretty
+python -m reference_engine.mcp_proxy_runner --request examples/mcp/tool_call_search_docs.json --mode enforce --require-agent-identity --pretty
+python -m reference_engine.mcp_transport_proxy --envelope examples/mcp/transport_proxy_delete_customer_records.json --require-agent-identity --pretty
 python -m reference_engine.mcp_governance_gateway --mode enforce --pretty
 python -m reference_engine.self_service_pilot_connector --bundle examples/self_service_pilot_bundle.json --pretty
 python -m reference_engine.content_evidence --pretty

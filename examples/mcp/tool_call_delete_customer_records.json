@@ -6,6 +6,24 @@
     "display_name": "Support Resolution Agent",
     "provider": "internal-agent-runtime"
   },
+  "agent_identity": {
+    "version": "smerc.agent-identity.v1",
+    "agent_id": "support_resolution_agent",
+    "agent_name": "Support Resolution Agent",
+    "agent_type": "llm_agent",
+    "provider": "internal-agent-runtime",
+    "owner_team": "customer_support",
+    "trust_tier": "standard",
+    "authorized_tool_families": ["customer_data_mcp"],
+    "max_autonomy_level": "constrain",
+    "credential_scope": "scoped_write",
+    "recent_denials": 2,
+    "recent_overrides": 1,
+    "recent_success_rate": 0.82,
+    "model": "support-resolution-agent-v1",
+    "last_reviewed_at": "2026-08-01",
+    "context": {}
+  },
   "server": {
     "name": "customer_data_mcp",
     "transport": "streamable-http",

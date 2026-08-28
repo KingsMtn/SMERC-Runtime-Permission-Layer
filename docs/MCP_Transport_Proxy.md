@@ -15,6 +15,7 @@ It is not a production MCP gateway and does not claim MCP compliance.
 JSON-RPC-style tools/call request
   -> MCP Transport Proxy sample
   -> MCP Proxy Runner
+  -> optional agent identity admission gate
   -> MCP Tool Governance
   -> SMERC recoverability decision
   -> SPARTa route
@@ -57,6 +58,17 @@ python -m reference_engine.mcp_transport_proxy \
   --markdown-output reports/MCP_Transport_Proxy_Report.md \
   --pretty
 ```
+
+Require agent identity before forwarding:
+
+```bash
+python -m reference_engine.mcp_transport_proxy \
+  --envelope examples/mcp/transport_proxy_search_docs.json \
+  --require-agent-identity \
+  --pretty
+```
+
+You can also set `"require_agent_identity": true` in the transport envelope to force fail-closed identity admission.
 
 ## Example Outcomes
 

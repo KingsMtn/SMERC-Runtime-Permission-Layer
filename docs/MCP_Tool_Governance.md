@@ -84,6 +84,7 @@ It wraps the MCP Tool Governance adapter in a local proxy loop with:
 
 - `shadow` mode
 - `enforce` mode
+- optional `--require-agent-identity` pilot-hardening mode
 - explicit proxy response
 - forwarding decision
 - Decision Lifecycle Ledger record
@@ -95,6 +96,7 @@ Run:
 python -m reference_engine.mcp_proxy_runner \
   --request examples/mcp/tool_call_delete_customer_records.json \
   --mode enforce \
+  --require-agent-identity \
   --pretty
 ```
 

@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Mapping
 
+from reference_engine.agent_identity import evaluate_agent_identity
 from reference_engine.recoverability_engine import RecoverabilityEngine
 from reference_engine.sparta_router import SPARTA_PLAN_VERSION, route_decision
 
@@ -25,11 +26,22 @@ def evaluate_mcp_tool_call(
     payload: Mapping[str, Any],
     *,
     engine: RecoverabilityEngine | None = None,
+    require_agent_identity: bool = False,
 ) -> Dict[str, Any]:
     request = _parse_request(payload)
     action = _action_from_request(request)
     plan = _plan_from_request(request)
     decision = (engine or RecoverabilityEngine()).evaluate(action)
+    identity_gate = evaluate_agent_identity(
+        request.get("agent_identity"),
+        actor=request["agent"]["agent_id"],
+        requested_tool=f"{request['server']['name']}.{request['tool_call']['tool_name']}",
+        requested_autonomy_level=_requested_autonomy(request["tool_call"]),
+        requested_side_effect_level=plan["side_effect_level"],
+        required=require_agent_identity,
+    )
+    if identity_gate["status"] == "FAIL":
+        decision = _cap_decision_for_identity_gate(decision, identity_gate)
     route = route_decision(decision, plan)
     return {
         "schema": MCP_TOOL_GOVERNANCE_VERSION,
@@ -38,6 +50,7 @@ def evaluate_mcp_tool_call(
         "agent_id": request["agent"]["agent_id"],
         "server_name": request["server"]["name"],
         "tool_name": request["tool_call"]["tool_name"],
+        "identity_gate": identity_gate,
         "decision": decision,
         "sparta_route": route,
         "recommended_mcp_result": _recommended_result(route),
@@ -74,6 +87,12 @@ def render_markdown(report: Mapping[str, Any]) -> str:
     lines.extend(f"- `{code}`" for code in decision.get("reason_codes", []))
     lines.extend(
         [
+            "",
+            "## Agent Identity Gate",
+            "",
+            f"- Status: `{report['identity_gate']['status']}`",
+            f"- Score: `{report['identity_gate']['identity_score']}`",
+            f"- Reason codes: `{report['identity_gate']['reason_codes']}`",
             "",
             "## Controls",
             "",
@@ -112,7 +131,8 @@ def _parse_request(payload: Mapping[str, Any]) -> Dict[str, Any]:
     missing = sorted(required - set(payload))
     if missing:
         raise ValueError(f"MCP governance request missing field(s): {', '.join(missing)}")
-    unknown = sorted(set(payload) - required)
+    allowed = required | {"agent_identity"}
+    unknown = sorted(set(payload) - allowed)
     if unknown:
         raise ValueError(f"MCP governance request contains unknown field(s): {', '.join(unknown)}")
     request = dict(payload)
@@ -122,6 +142,29 @@ def _parse_request(payload: Mapping[str, Any]) -> Dict[str, Any]:
             raise TypeError(f"{section} must be an object")
         request[section] = dict(request[section])
     return request
+
+
+def _cap_decision_for_identity_gate(decision: Mapping[str, Any], identity_gate: Mapping[str, Any]) -> Dict[str, Any]:
+    if decision["posture"] == "DENY":
+        capped = dict(decision)
+        capped["reason_codes"] = sorted(set(list(capped["reason_codes"]) + list(identity_gate["reason_codes"])))
+        capped["controls"] = _dedupe(list(capped.get("controls", [])) + list(identity_gate["recommended_controls"]))
+        return capped
+    capped = dict(decision)
+    capped["posture"] = "FREEZE"
+    capped["enforcement_state"] = "pause"
+    capped["reason_codes"] = sorted(set(list(capped.get("reason_codes", [])) + list(identity_gate["reason_codes"])))
+    capped["controls"] = [
+        "pause_tool_call",
+        "resolve_agent_identity",
+        "preserve_replay",
+        "require_human_review_before_execution",
+    ]
+    capped["plain_english_summary"] = (
+        f"MCP action '{decision['action_id']}' was capped to FREEZE because agent identity admission failed: "
+        f"{', '.join(identity_gate['reason_codes'])}."
+    )
+    return capped
 
 
 def _action_from_request(request: Mapping[str, Any]) -> Dict[str, Any]:
@@ -194,12 +237,27 @@ def _recommended_result(route: Mapping[str, Any]) -> str:
     return "block_tool_call"
 
 
+def _requested_autonomy(tool_call: Mapping[str, Any]) -> str:
+    operation_class = _text(tool_call.get("operation_class", "execute"), "tool_call.operation_class")
+    if operation_class == "read":
+        return "recommend"
+    return "execute"
+
+
 def _summary(request: Mapping[str, Any], decision: Mapping[str, Any], route: Mapping[str, Any]) -> str:
     return (
         f"SMERC evaluated MCP tool `{request['tool_call']['tool_name']}` for agent `{request['agent']['agent_id']}` "
         f"and returned {decision['posture']}. SPARTa mapped that posture to `{route['route_state']}`, so an MCP "
         f"client or proxy should use `{_recommended_result(route)}` rather than blindly executing the tool call."
     )
+
+
+def _dedupe(items: list[str]) -> list[str]:
+    result: list[str] = []
+    for item in items:
+        if item not in result:
+            result.append(item)
+    return result
 
 
 def _score(value: Any, path: str) -> float:

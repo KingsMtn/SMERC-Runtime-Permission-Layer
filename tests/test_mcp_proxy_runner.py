@@ -53,6 +53,23 @@ class MCPProxyRunnerTests(unittest.TestCase):
         self.assertFalse(response["constraint_applied"])
         self.assertEqual(response["decision_reference"]["posture"], "ALLOW")
 
+    def test_identity_required_blocks_missing_identity_before_forwarding(self):
+        payload = load(SEARCH_CALL)
+        del payload["agent_identity"]
+
+        report = run_mcp_proxy(payload, mode="enforce", require_agent_identity=True)
+
+        self.assertEqual(report["governance_report"]["identity_gate"]["status"], "FAIL")
+        self.assertEqual(report["proxy_response"]["proxy_action"], "pause_tool_call")
+        self.assertFalse(report["proxy_response"]["should_forward_tool_call"])
+
+    def test_identity_required_allows_verified_read_identity(self):
+        report = run_mcp_proxy(load(SEARCH_CALL), mode="enforce", require_agent_identity=True)
+
+        self.assertEqual(report["governance_report"]["identity_gate"]["status"], "PASS")
+        self.assertEqual(report["proxy_response"]["proxy_action"], "forward_tool_call")
+        self.assertTrue(report["proxy_response"]["should_forward_tool_call"])
+
     def test_invalid_mode_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "mode must be"):
             run_mcp_proxy(load(SEARCH_CALL), mode="observe")

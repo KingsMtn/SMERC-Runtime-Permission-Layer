@@ -39,7 +39,7 @@ CREDENTIAL_SCOPE_ORDER = {
 }
 SIDE_EFFECT_MIN_SCOPE = {
     "none": "none",
-    "internal": "scoped_write",
+    "internal": "read_only",
     "external": "production_write",
     "financial": "financial_or_destructive",
     "destructive": "financial_or_destructive",
@@ -251,6 +251,8 @@ def evaluate_agent_identity(
     else:
         status = "PASS"
 
+    if status == "WATCH" and not reasons:
+        reasons.append("AGENT_IDENTITY_REQUIRES_MONITORING")
     if status != "PASS":
         controls.append("preserve_identity_gate_reason_codes")
     trust_modifier = 1.04 if status == "PASS" and score >= 0.80 else (0.90 if status == "WATCH" else 0.75)

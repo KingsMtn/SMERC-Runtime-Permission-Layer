@@ -1,63 +1,61 @@
 # SMERC MCP Proxy Runner Report
 
-Generated: `2026-08-16T04:06:21+00:00`
+Generated: `2026-08-28T01:21:30+00:00`
 
 ## Proxy Decision
 
 - Mode: `enforce`
-- MCP request: `MCP_DELETE_CUSTOMER_RECORDS_001`
-- Agent: `support_resolution_agent`
-- Server: `customer_data_mcp`
-- Tool: `delete_customer_records`
-- Proxy action: `block_tool_call`
-- Should forward tool call: `false`
-- SMERC posture: `DENY`
-- SPARTa route: `BLOCK`
-- Replay ID: `replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_001_1786853181649_12068616b0ac`
+- Agent identity required: `true`
+- MCP request: `MCP_SEARCH_INTERNAL_DOCS_001`
+- Agent: `developer_assistant_agent`
+- Server: `engineering_docs_mcp`
+- Tool: `search_internal_docs`
+- Proxy action: `forward_tool_call`
+- Should forward tool call: `true`
+- SMERC posture: `ALLOW`
+- SPARTa route: `EXECUTE`
+- Identity gate: `PASS`
+- Replay ID: `replay_MCP_MCP_SEARCH_INTERNAL_DOCS_001_1787880090001_fa9f37fec260`
 
 ## Proxy Instructions
 
-- Block the tool call.
-- Preserve the replay and explain the denial.
-- Require a materially safer new request before execution.
+- Forward the tool call and preserve the replay and route evidence.
 
 ## Governance Report
 
 # SMERC MCP Tool Governance Report
 
-Generated: `2026-08-16T04:06:21+00:00`
+Generated: `2026-08-28T01:21:30+00:00`
 
 ## Summary
 
-- MCP request: `MCP_DELETE_CUSTOMER_RECORDS_001`
-- Agent: `support_resolution_agent`
-- MCP server: `customer_data_mcp`
-- Tool: `delete_customer_records`
-- SMERC posture: `DENY`
-- SPARTa route state: `BLOCK`
-- Executable: `false`
-- Recommended MCP result: `block_tool_call`
+- MCP request: `MCP_SEARCH_INTERNAL_DOCS_001`
+- Agent: `developer_assistant_agent`
+- MCP server: `engineering_docs_mcp`
+- Tool: `search_internal_docs`
+- SMERC posture: `ALLOW`
+- SPARTa route state: `EXECUTE`
+- Executable: `true`
+- Recommended MCP result: `call_tool`
 
 ## Reason Codes
 
-- `IRREVERSIBLE_EXPOSURE_HIGH`
-- `RECOVERY_CAPACITY_LOW`
-- `ROLLBACK_LATENCY_HIGH`
-- `CANCEL_RELIABILITY_WEAK`
-- `CONTAINMENT_WEAK`
-- `IMPACT_SCOPE_WIDE`
-- `EXTERNAL_SIDE_EFFECT`
-- `SENSITIVE_DATA`
+- `RECOVERABILITY_ACCEPTABLE`
+
+## Agent Identity Gate
+
+- Status: `PASS`
+- Score: `0.8`
+- Reason codes: `['AGENT_IDENTITY_VERIFIED']`
 
 ## Controls
 
-- `block_execution`
-- `preserve_replay`
-- `explain_denial`
+- `execute`
+- `record_execution_report`
 
 ## Plain English
 
-SMERC evaluated MCP tool `delete_customer_records` for agent `support_resolution_agent` and returned DENY. SPARTa mapped that posture to `BLOCK`, so an MCP client or proxy should use `block_tool_call` rather than blindly executing the tool call.
+SMERC evaluated MCP tool `search_internal_docs` for agent `developer_assistant_agent` and returned ALLOW. SPARTa mapped that posture to `EXECUTE`, so an MCP client or proxy should use `call_tool` rather than blindly executing the tool call.
 
 ## Evidence Boundary
 
