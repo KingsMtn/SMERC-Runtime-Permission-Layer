@@ -4,6 +4,7 @@ from pathlib import Path
 from reference_engine.smerc_f_public_data_replay import (
     build_replay_report,
     expand_public_rows,
+    financial_reason_codes,
     load_public_rows,
     render_markdown,
     row_to_financial_action,
@@ -56,13 +57,40 @@ class SMERCFPublicDataReplayTests(unittest.TestCase):
         self.assertGreater(report["restraint_count"], 0)
         self.assertGreater(report["decision_delta_count"], 0)
         self.assertEqual(len(report["highest_exposure_records"]), 10)
+        self.assertIn("SETTLEMENT_REVERSIBILITY_LOW", report["financial_reason_code_counts"])
+        self.assertIn("LIQUIDITY_ROUTE_FRAGILE", report["financial_reason_code_counts"])
+
+    def test_records_include_financial_reason_codes_and_impact(self):
+        report = build_replay_report(load_public_rows(INPUTS))
+
+        for record in report["records"]:
+            self.assertIn("financial_reason_codes", record)
+            self.assertIn("financial_reason_labels", record)
+            self.assertIn("work_result_impact", record)
+            self.assertIn("work", record["work_result_impact"])
+            self.assertIn("result", record["work_result_impact"])
+            self.assertIn("impact", record["work_result_impact"])
+
+    def test_financial_reason_codes_are_not_compliance_claims(self):
+        rows = load_public_rows(INPUTS)
+        action = row_to_financial_action(rows[0], variant="market_stress")
+        report = build_replay_report(rows)
+        matching = next(record for record in report["records"] if record["action_id"] == action["action_id"])
+
+        codes = financial_reason_codes(rows[0], action, {"state": matching["smerc_f_state"], "drivers": matching["drivers"]})
+        self.assertIn("REDEMPTION_PRESSURE_HIGH", codes)
+        self.assertIn("SETTLEMENT_REVERSIBILITY_LOW", codes)
 
     def test_markdown_keeps_financial_claims_bounded(self):
         markdown = render_markdown(build_replay_report(load_public_rows(INPUTS)))
 
         self.assertIn("SMERC-F Financial Public-Data Replay Report", markdown)
         self.assertIn("not customer validation", markdown)
+        self.assertIn("not customer validation, AML compliance", markdown)
         self.assertIn("not whether SMERC-F replaces", markdown)
+        self.assertIn("Financial Reason Code Library", markdown)
+        self.assertIn("Current Control Vs SMERC-F", markdown)
+        self.assertIn("Work / Result / Impact", markdown)
         self.assertIn("Dune stablecoin", markdown)
 
     def test_docs_and_readme_link_public_data_replay(self):
@@ -73,6 +101,7 @@ class SMERCFPublicDataReplayTests(unittest.TestCase):
         self.assertIn("docs/SMERC_F_Financial_Public_Data_Replay.md", readme)
         self.assertIn("Fortune 500", docs)
         self.assertIn("metadata-only action examples", docs)
+        self.assertIn("financial reason-code layer", docs)
 
 
 if __name__ == "__main__":

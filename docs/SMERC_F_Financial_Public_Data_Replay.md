@@ -58,7 +58,11 @@ SMERC-F then returns:
 - confidence
 - drivers
 - controls
+- financial reason codes
+- Work / Result / Impact explanation
 - decision hash
+
+The financial reason-code layer is documented in `docs/SMERC_F_Financial_Reason_Codes.md`. It helps reviewers separate ordinary control outcomes from recoverability-specific reasons such as weak evidence, low settlement reversibility, fragile liquidity routing, redemption pressure, and automation velocity.
 
 ## Run
 
@@ -92,6 +96,8 @@ SMERC-F does not replace those systems.
 SMERC-F adds a different question:
 
 > If this action is allowed, reviewed, or alerted by existing systems, is automated execution recoverable enough to proceed now?
+
+The public report now states the work, result, and impact for high-exposure records so a financial-services reviewer can see the value without relying on founder explanation.
 
 The important replay records are usually those where a current control outcome is `ALLOW` but SMERC-F returns `THROTTLE`, `FREEZE`, or `ESCALATE`. Those are candidate examples where recoverability may add useful restraint before execution.
 

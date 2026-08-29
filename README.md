@@ -120,7 +120,7 @@ Financial-services reviewers should use the Financial Runtime path, internally c
 python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty
 ```
 
-SMERC-F covers metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions. It is not AML compliance, sanctions screening, fraud detection, custody, settlement, trading, payment execution, legal advice, or production financial-control certification.
+SMERC-F covers metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions. The public-data replay also adds a financial reason-code layer for low settlement reversibility, weak evidence, liquidity fragility, redemption pressure, collateral exposure, counterparty concentration, and automation velocity. It is not AML compliance, sanctions screening, fraud detection, custody, settlement, trading, payment execution, legal advice, or production financial-control certification.
 
 ## Start Here: Pilot Intake Report
 
@@ -427,6 +427,7 @@ Start here before reading the code:
 - `docs/SMERC_F_Financial_Source_Ingestion.md` explains how exported financial, stablecoin, blockchain, and incident metadata can be normalized into SMERC-F replay inputs.
 - `docs/SMERC_F_Regulatory_Context_Profile.md` explains how legislation-inspired operational context can inform SMERC-F scoring without making legal or compliance claims.
 - `docs/SMERC_F_Financial_Public_Data_Replay.md` explains how public-data-shaped stablecoin, blockchain, and incident records are converted into SMERC-F replay scenarios.
+- `docs/SMERC_F_Financial_Reason_Codes.md` explains the financial reason-code layer that turns public-data replay results into reviewer-readable work, result, and impact evidence.
 - `docs/SMERC_F_Pilot_Evidence_Packet.md` explains how source-ingestion, regulatory-context, and replay reports combine into a single financial-services pilot review packet.
 - `docs/SMERC_F_Customer_Evaluation.md` gives financial-services reviewers a metadata-only customer-evaluation path using the general customer-evaluation runner and finance-specific sample actions.
 - `pilot_package/SMERC_F_Financial_Shadow_Mode_Pilot_Path.md` gives a bounded metadata-only SMERC-F pilot path for financial-action review without live fund movement.
@@ -1075,7 +1076,9 @@ python -m reference_engine.smerc_f_public_data_replay \
   --pretty
 ```
 
-The public-data replay harness expands 10 public-data-shaped source rows into 50 replay scenarios. It is useful for showing ingestion, transformation, posture, and report shape. It is not customer validation, address attribution, AML screening, sanctions screening, transaction monitoring, custody, settlement, payment execution, incident-prevention proof, or production certification.
+The public-data replay harness expands 10 public-data-shaped source rows into 50 replay scenarios. It is useful for showing ingestion, transformation, posture, reason codes, and report shape. It is not customer validation, address attribution, AML screening, sanctions screening, transaction monitoring, custody, settlement, payment execution, incident-prevention proof, or production certification.
+
+The generated report includes a financial reason-code layer and Work / Result / Impact examples so banks, fintechs, stablecoin operators, and treasury teams can see whether recoverability changes pre-execution judgment.
 
 Run the financial runtime source ingestion adapter:
 

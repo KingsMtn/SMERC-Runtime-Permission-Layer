@@ -13,6 +13,19 @@ from reference_engine.financial_permission_profile import FinancialPermissionPro
 
 VERSION = "smerc-f.public-data-replay.v1"
 RESTRAINT_STATES = {"THROTTLE", "FREEZE", "DENY", "ESCALATE"}
+FINANCIAL_REASON_CODE_LABELS = {
+    "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+    "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+    "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action.",
+    "GOVERNANCE_CHANGE_AUTHORITY_RISK": "A governance or authority-changing action may alter who can act later.",
+    "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+    "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+    "NO_FINANCIAL_REASON_CODE_TRIGGERED": "No financial reason code triggered.",
+    "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+    "REPORTED_ADDRESS_RISK": "A reported-address or incident signal should be preserved before action.",
+    "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+    "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly.",
+}
 PUBLIC_SOURCE_TYPES = {
     "chainabuse_report",
     "defillama_hack_incident",
@@ -195,21 +208,77 @@ def classify_delta(current_control_outcome: str, smerc_state: str) -> str:
     return "CONTROL_AND_SMERC_ALIGNED"
 
 
+def financial_reason_codes(source: Mapping[str, Any], action: Mapping[str, Any], decision: Mapping[str, Any]) -> list[str]:
+    action_type = str(action["action_type"]).lower()
+    source_type = str(source["source_type"])
+    codes: list[str] = []
+
+    if action["stablecoin_imbalance"] >= 0.70 and (
+        "redemption" in action_type or "stablecoin" in str(source["asset"]).lower() or source_type == "dune_stablecoin_transfer"
+    ):
+        codes.append("REDEMPTION_PRESSURE_HIGH")
+    if action["evidence_validity"] < 0.60 or "EVIDENCE_VALIDITY_WEAK" in decision["drivers"]:
+        codes.append("FINANCIAL_EVIDENCE_WEAK")
+    if action["reversibility"] < 0.35 or _ratio(source["settlement_finality"], f"{source['source_id']} settlement_finality") >= 0.80:
+        codes.append("SETTLEMENT_REVERSIBILITY_LOW")
+    if action["counterparty_concentration"] >= 0.65 or _ratio(source["recipient_reputation"], f"{source['source_id']} recipient_reputation") <= 0.25:
+        codes.append("COUNTERPARTY_CONCENTRATION_HIGH")
+    if action["liquidity_concentration"] >= 0.65 and action["market_instability"] >= 0.50:
+        codes.append("LIQUIDITY_ROUTE_FRAGILE")
+    if "collateral" in action_type or action["collateral_stress"] >= 0.72:
+        codes.append("TOKENIZED_COLLATERAL_EXPOSURE_HIGH")
+    if action["agent_velocity"] >= 0.70:
+        codes.append("AUTOMATION_VELOCITY_HIGH")
+    if action["market_instability"] >= 0.65:
+        codes.append("MARKET_STRESS_ELEVATED")
+    if source_type == "chainabuse_report" and (source.get("trusted") is True or action["settlement_anomaly"] >= 0.75):
+        codes.append("REPORTED_ADDRESS_RISK")
+    if "governance" in action_type or "policy" in action_type:
+        codes.append("GOVERNANCE_CHANGE_AUTHORITY_RISK")
+
+    return codes or ["NO_FINANCIAL_REASON_CODE_TRIGGERED"]
+
+
+def work_result_impact(source: Mapping[str, Any], action: Mapping[str, Any], decision: Mapping[str, Any], delta: str, codes: list[str]) -> Dict[str, str]:
+    work = (
+        f"Replay {action['action_type']} from {source['source_type']} metadata and compare the current "
+        f"`{source['current_control_outcome']}` control outcome with SMERC-F `{decision['state']}`."
+    )
+    result = (
+        f"SMERC-F returned `{decision['state']}` with irreversible exposure {decision['irreversible_exposure']} "
+        f"and financial reason codes: {', '.join(codes)}."
+    )
+    if delta == "CONTROL_ALLOW_SMERC_RESTRAINT":
+        impact = "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed."
+    elif delta == "CONTROL_REVIEW_SMERC_RESTRAINT":
+        impact = "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route."
+    elif delta == "CONTROL_REVIEW_SMERC_ALLOW":
+        impact = "Candidate proof point: strong recovery evidence may help avoid unnecessary friction for bounded actions."
+    elif delta == "CONTROL_BLOCK_SMERC_NON_DENY":
+        impact = "Reviewer question: a block may be stricter than the recoverability posture, so policy calibration matters."
+    else:
+        impact = "Alignment case: SMERC-F preserved replay evidence without changing the current control direction."
+    return {"work": work, "result": result, "impact": impact}
+
+
 def build_replay_report(rows: list[Mapping[str, Any]], *, policy: str = "balanced") -> Dict[str, Any]:
     engine = FinancialPermissionProfile(policy)
     records: list[Dict[str, Any]] = []
     state_counts: Counter[str] = Counter()
     delta_counts: Counter[str] = Counter()
     source_counts: Counter[str] = Counter()
+    reason_counts: Counter[str] = Counter()
     source_lookup = {str(row["source_id"]).upper(): row for row in rows}
 
     for action in expand_public_rows(rows):
         source = next(row for key, row in source_lookup.items() if action["action_id"].startswith(key))
         decision = engine.evaluate(action)
         delta = classify_delta(str(source["current_control_outcome"]), decision["state"])
+        reason_codes = financial_reason_codes(source, action, decision)
         state_counts[decision["state"]] += 1
         delta_counts[delta] += 1
         source_counts[str(source["source_type"])] += 1
+        reason_counts.update(reason_codes)
         records.append(
             {
                 "source_id": source["source_id"],
@@ -225,7 +294,10 @@ def build_replay_report(rows: list[Mapping[str, Any]], *, policy: str = "balance
                 "confidence": decision["confidence"],
                 "drivers": decision["drivers"],
                 "controls": decision["controls"],
+                "financial_reason_codes": reason_codes,
+                "financial_reason_labels": {code: FINANCIAL_REASON_CODE_LABELS.get(code, "No financial reason code triggered.") for code in reason_codes},
                 "delta_type": delta,
+                "work_result_impact": work_result_impact(source, action, decision, delta, reason_codes),
                 "decision_hash": decision["decision_hash"],
             }
         )
@@ -242,6 +314,8 @@ def build_replay_report(rows: list[Mapping[str, Any]], *, policy: str = "balance
         "source_type_counts": dict(sorted(source_counts.items())),
         "smerc_f_state_counts": {state: state_counts.get(state, 0) for state in ("ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE")},
         "delta_counts": dict(sorted(delta_counts.items())),
+        "financial_reason_code_counts": dict(sorted(reason_counts.items())),
+        "financial_reason_code_labels": FINANCIAL_REASON_CODE_LABELS,
         "decision_delta_count": delta_count,
         "decision_delta_rate": round(delta_count / total, 3) if total else 0.0,
         "restraint_count": restraint_count,
@@ -293,13 +367,28 @@ def render_markdown(report: Mapping[str, Any]) -> str:
     lines.extend(["", "## Delta Types", "", "| Delta | Count |", "| --- | ---: |"])
     for delta, count in report["delta_counts"].items():
         lines.append(f"| `{delta}` | {count} |")
-    lines.extend(["", "## Highest Irreversible Exposure Records", "", "| Action | Source | Current control | SMERC-F | Exposure | Capacity | Key drivers |", "| --- | --- | --- | --- | ---: | ---: | --- |"])
+    lines.extend(["", "## Financial Reason Code Library", "", "| Reason code | Count | Meaning |", "| --- | ---: | --- |"])
+    for code, count in report["financial_reason_code_counts"].items():
+        label = report["financial_reason_code_labels"].get(code, "No financial reason code triggered.")
+        lines.append(f"| `{code}` | {count} | {label} |")
+    lines.extend(["", "## Current Control Vs SMERC-F", "", "| Current control | SMERC-F posture | Delta | Example impact |", "| --- | --- | --- | --- |"])
+    for record in report["records"][:12]:
+        impact = record["work_result_impact"]["impact"]
+        lines.append(
+            f"| `{record['current_control_outcome']}` | `{record['smerc_f_state']}` | `{record['delta_type']}` | {impact} |"
+        )
+    lines.extend(["", "## Highest Irreversible Exposure Records", "", "| Action | Source | Current control | SMERC-F | Exposure | Capacity | Financial codes | Key drivers |", "| --- | --- | --- | --- | ---: | ---: | --- | --- |"])
     for record in report["highest_exposure_records"]:
         drivers = ", ".join(f"`{driver}`" for driver in record["drivers"][:4])
+        codes = ", ".join(f"`{code}`" for code in record["financial_reason_codes"][:4])
         lines.append(
             f"| `{record['action_id']}` | `{record['source_type']}` | `{record['current_control_outcome']}` | "
-            f"`{record['smerc_f_state']}` | {record['irreversible_exposure']} | {record['reversible_capacity']} | {drivers} |"
+            f"`{record['smerc_f_state']}` | {record['irreversible_exposure']} | {record['reversible_capacity']} | {codes} | {drivers} |"
         )
+    lines.extend(["", "## Work / Result / Impact Examples", "", "| Work | Result | Impact |", "| --- | --- | --- |"])
+    for record in report["highest_exposure_records"][:5]:
+        summary = record["work_result_impact"]
+        lines.append(f"| {summary['work']} | {summary['result']} | {summary['impact']} |")
     lines.extend(
         [
             "",
@@ -307,7 +396,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             "",
             "The useful question is not whether SMERC-F replaces financial-crime, blockchain-analytics, IAM, OPA, or approval systems. It does not. The useful question is whether those systems can provide risk or policy context while SMERC-F adds a recoverability-aware action posture before automation executes.",
             "",
-            "A financial reviewer should inspect scenarios where the current control outcome is `ALLOW` but SMERC-F returns `THROTTLE`, `FREEZE`, or `ESCALATE`. Those are the candidate cases where recoverability may add a governance signal.",
+            "A financial reviewer should inspect scenarios where the current control outcome is `ALLOW` but SMERC-F returns `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`. Those are the candidate cases where recoverability may add a governance signal.",
             "",
             "## Public Data Sources Represented",
             "",

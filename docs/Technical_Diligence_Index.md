@@ -111,6 +111,13 @@ Impact: a reviewer can inspect the whole governance lifecycle instead of reading
 - `docs/SMERC_F_Pilot_Evidence_Packet.md`
 - `docs/SMERC_F_Financial_Source_Ingestion.md`
 - `docs/SMERC_F_Financial_Public_Data_Replay.md`
+- `docs/SMERC_F_Financial_Reason_Codes.md`
+
+Work: replay public-data-shaped financial actions through SMERC-F and attach financial reason codes.
+
+Result: records show current control outcome, SMERC-F posture, exposure, capacity, reason codes, and Work / Result / Impact explanation.
+
+Impact: financial-services reviewers can inspect whether recoverability adds useful pre-execution judgment without treating SMERC-F as AML, sanctions, custody, settlement, or payment software.
 
 ## Claims Boundary
 

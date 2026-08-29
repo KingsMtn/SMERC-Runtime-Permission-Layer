@@ -7,7 +7,33 @@
     "CONTROL_REVIEW_SMERC_RESTRAINT": 20
   },
   "evidence_boundary": "Public-data-shaped replay only. Source records are normalized examples derived from public dataset schemas, public incident categories, and public documentation. The replay does not reconstruct customer telemetry, prove prevention, detect AML violations, screen sanctions, move funds, or certify production financial controls.",
-  "generated_at": "2026-08-19T01:56:31+00:00",
+  "financial_reason_code_counts": {
+    "AUTOMATION_VELOCITY_HIGH": 15,
+    "COUNTERPARTY_CONCENTRATION_HIGH": 22,
+    "FINANCIAL_EVIDENCE_WEAK": 11,
+    "GOVERNANCE_CHANGE_AUTHORITY_RISK": 5,
+    "LIQUIDITY_ROUTE_FRAGILE": 16,
+    "MARKET_STRESS_ELEVATED": 12,
+    "NO_FINANCIAL_REASON_CODE_TRIGGERED": 6,
+    "REDEMPTION_PRESSURE_HIGH": 11,
+    "REPORTED_ADDRESS_RISK": 5,
+    "SETTLEMENT_REVERSIBILITY_LOW": 39,
+    "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": 7
+  },
+  "financial_reason_code_labels": {
+    "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+    "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+    "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action.",
+    "GOVERNANCE_CHANGE_AUTHORITY_RISK": "A governance or authority-changing action may alter who can act later.",
+    "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+    "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+    "NO_FINANCIAL_REASON_CODE_TRIGGERED": "No financial reason code triggered.",
+    "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+    "REPORTED_ADDRESS_RISK": "A reported-address or incident signal should be preserved before action.",
+    "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+    "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+  },
+  "generated_at": "2026-08-29T23:59:39+00:00",
   "highest_exposure_records": [
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_MARKET_STRESS",
@@ -34,12 +60,35 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.925,
       "reversible_capacity": 0.287,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.925 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_ACCELERATED_AUTOMATION",
@@ -66,12 +115,35 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.915,
       "reversible_capacity": 0.287,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.915 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_MISSING_EVIDENCE",
@@ -99,12 +171,37 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "FINANCIAL_EVIDENCE_WEAK",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.892,
       "reversible_capacity": 0.251,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.892 and financial reason codes: REDEMPTION_PRESSURE_HIGH, FINANCIAL_EVIDENCE_WEAK, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE_MARKET_STRESS",
@@ -130,12 +227,35 @@
         "SETTLEMENT_ANOMALY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.852,
       "reversible_capacity": 0.356,
       "smerc_f_state": "DENY",
       "source_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.852 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay approve_stablecoin_redemption_batch from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_BASE",
@@ -162,12 +282,35 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.829,
       "reversible_capacity": 0.351,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.829 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_REDUCED_SCOPE",
@@ -194,12 +337,35 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.829,
       "reversible_capacity": 0.351,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.829 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE_ACCELERATED_AUTOMATION",
@@ -225,12 +391,33 @@
         "COLLATERAL_STRESS",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.821,
       "reversible_capacity": 0.36,
       "smerc_f_state": "DENY",
       "source_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.821 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay approve_stablecoin_redemption_batch from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT_MARKET_STRESS",
@@ -256,12 +443,33 @@
         "AGENT_VELOCITY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "MARKET_STRESS_ELEVATED",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK": "A governance or authority-changing action may alter who can act later.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.8,
       "reversible_capacity": 0.334,
       "smerc_f_state": "FREEZE",
       "source_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.8 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, MARKET_STRESS_ELEVATED, GOVERNANCE_CHANGE_AUTHORITY_RISK.",
+        "work": "Replay execute_governance_parameter_change from defillama_hack_incident metadata and compare the current `REVIEW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT_MARKET_STRESS",
@@ -287,12 +495,27 @@
         "AUTHORIZATION_SUPPORT_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "REPORTED_ADDRESS_RISK"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "REPORTED_ADDRESS_RISK": "A reported-address or incident signal should be preserved before action.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.781,
       "reversible_capacity": 0.294,
       "smerc_f_state": "FREEZE",
       "source_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.781 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, REPORTED_ADDRESS_RISK.",
+        "work": "Replay release_withdrawal_to_reported_address from chainabuse_report metadata and compare the current `ALERT` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE_MISSING_EVIDENCE",
@@ -318,12 +541,33 @@
         "COLLATERAL_STRESS",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.78,
       "reversible_capacity": 0.351,
       "smerc_f_state": "FREEZE",
       "source_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.78 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay approve_stablecoin_redemption_batch from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `FREEZE`."
+      }
     }
   ],
   "policy": "balanced",
@@ -350,12 +594,23 @@
         "SETTLEMENT_ANOMALY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.623,
       "reversible_capacity": 0.469,
       "smerc_f_state": "THROTTLE",
       "source_id": "DUNE_STABLECOIN_TRANSFER_HIGH_VALUE_BRIDGE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.623 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay release_bridge_settlement from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_TRANSFER_HIGH_VALUE_BRIDGE_REDUCED_SCOPE",
@@ -379,12 +634,23 @@
         "SETTLEMENT_ANOMALY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.623,
       "reversible_capacity": 0.469,
       "smerc_f_state": "THROTTLE",
       "source_id": "DUNE_STABLECOIN_TRANSFER_HIGH_VALUE_BRIDGE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.623 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay release_bridge_settlement from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_TRANSFER_HIGH_VALUE_BRIDGE_MISSING_EVIDENCE",
@@ -409,12 +675,29 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.686,
       "reversible_capacity": 0.368,
       "smerc_f_state": "FREEZE",
       "source_id": "DUNE_STABLECOIN_TRANSFER_HIGH_VALUE_BRIDGE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.686 and financial reason codes: FINANCIAL_EVIDENCE_WEAK, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE.",
+        "work": "Replay release_bridge_settlement from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_TRANSFER_HIGH_VALUE_BRIDGE_ACCELERATED_AUTOMATION",
@@ -438,12 +721,29 @@
         "SETTLEMENT_ANOMALY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "AUTOMATION_VELOCITY_HIGH"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.727,
       "reversible_capacity": 0.377,
       "smerc_f_state": "FREEZE",
       "source_id": "DUNE_STABLECOIN_TRANSFER_HIGH_VALUE_BRIDGE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.727 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, AUTOMATION_VELOCITY_HIGH.",
+        "work": "Replay release_bridge_settlement from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_TRANSFER_HIGH_VALUE_BRIDGE_MARKET_STRESS",
@@ -469,12 +769,31 @@
         "SETTLEMENT_ANOMALY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.767,
       "reversible_capacity": 0.373,
       "smerc_f_state": "FREEZE",
       "source_id": "DUNE_STABLECOIN_TRANSFER_HIGH_VALUE_BRIDGE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.767 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, MARKET_STRESS_ELEVATED.",
+        "work": "Replay release_bridge_settlement from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX_BASE",
@@ -492,12 +811,23 @@
       "drivers": [
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED"
+      ],
+      "financial_reason_labels": {
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED": "No financial reason code triggered."
+      },
       "irreversible_exposure": 0.357,
       "reversible_capacity": 0.577,
       "smerc_f_state": "ALLOW",
       "source_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Alignment case: SMERC-F preserved replay evidence without changing the current control direction.",
+        "result": "SMERC-F returned `ALLOW` with irreversible exposure 0.357 and financial reason codes: NO_FINANCIAL_REASON_CODE_TRIGGERED.",
+        "work": "Replay release_customer_withdrawal from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `ALLOW`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX_REDUCED_SCOPE",
@@ -515,12 +845,23 @@
       "drivers": [
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED"
+      ],
+      "financial_reason_labels": {
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED": "No financial reason code triggered."
+      },
       "irreversible_exposure": 0.357,
       "reversible_capacity": 0.577,
       "smerc_f_state": "ALLOW",
       "source_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Alignment case: SMERC-F preserved replay evidence without changing the current control direction.",
+        "result": "SMERC-F returned `ALLOW` with irreversible exposure 0.357 and financial reason codes: NO_FINANCIAL_REASON_CODE_TRIGGERED.",
+        "work": "Replay release_customer_withdrawal from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `ALLOW`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX_MISSING_EVIDENCE",
@@ -538,12 +879,23 @@
       "drivers": [
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.421,
       "reversible_capacity": 0.477,
       "smerc_f_state": "ALLOW",
       "source_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Alignment case: SMERC-F preserved replay evidence without changing the current control direction.",
+        "result": "SMERC-F returned `ALLOW` with irreversible exposure 0.421 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay release_customer_withdrawal from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `ALLOW`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX_ACCELERATED_AUTOMATION",
@@ -561,12 +913,23 @@
       "drivers": [
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.462,
       "reversible_capacity": 0.486,
       "smerc_f_state": "ALLOW",
       "source_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Alignment case: SMERC-F preserved replay evidence without changing the current control direction.",
+        "result": "SMERC-F returned `ALLOW` with irreversible exposure 0.462 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay release_customer_withdrawal from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `ALLOW`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX_MARKET_STRESS",
@@ -584,12 +947,23 @@
       "drivers": [
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.501,
       "reversible_capacity": 0.481,
       "smerc_f_state": "ALLOW",
       "source_id": "DUNE_STABLECOIN_TRANSFER_ROUTINE_CEX",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/transfers/stablecoins-evm-transfers",
+      "work_result_impact": {
+        "impact": "Alignment case: SMERC-F preserved replay evidence without changing the current control direction.",
+        "result": "SMERC-F returned `ALLOW` with irreversible exposure 0.501 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay release_customer_withdrawal from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `ALLOW`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE_BASE",
@@ -615,12 +989,31 @@
         "MARKET_INSTABILITY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "AUTOMATION_VELOCITY_HIGH"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.717,
       "reversible_capacity": 0.452,
       "smerc_f_state": "FREEZE",
       "source_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.717 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, AUTOMATION_VELOCITY_HIGH.",
+        "work": "Replay approve_stablecoin_redemption_batch from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE_REDUCED_SCOPE",
@@ -646,12 +1039,31 @@
         "MARKET_INSTABILITY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "AUTOMATION_VELOCITY_HIGH"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.717,
       "reversible_capacity": 0.452,
       "smerc_f_state": "FREEZE",
       "source_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.717 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, AUTOMATION_VELOCITY_HIGH.",
+        "work": "Replay approve_stablecoin_redemption_batch from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE_MISSING_EVIDENCE",
@@ -677,12 +1089,33 @@
         "COLLATERAL_STRESS",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.78,
       "reversible_capacity": 0.351,
       "smerc_f_state": "FREEZE",
       "source_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.78 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay approve_stablecoin_redemption_batch from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE_ACCELERATED_AUTOMATION",
@@ -708,12 +1141,33 @@
         "COLLATERAL_STRESS",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.821,
       "reversible_capacity": 0.36,
       "smerc_f_state": "DENY",
       "source_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.821 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay approve_stablecoin_redemption_batch from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE_MARKET_STRESS",
@@ -739,12 +1193,35 @@
         "SETTLEMENT_ANOMALY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.852,
       "reversible_capacity": 0.356,
       "smerc_f_state": "DENY",
       "source_id": "DUNE_STABLECOIN_ISSUER_REDEMPTION_IMBALANCE",
       "source_type": "dune_stablecoin_transfer",
-      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview"
+      "source_url": "https://docs.dune.com/data-catalog/curated/stablecoins/overview",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.852 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay approve_stablecoin_redemption_batch from dune_stablecoin_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT_BASE",
@@ -766,12 +1243,27 @@
         "AUTHORIZATION_SUPPORT_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "REPORTED_ADDRESS_RISK"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "REPORTED_ADDRESS_RISK": "A reported-address or incident signal should be preserved before action.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.641,
       "reversible_capacity": 0.383,
       "smerc_f_state": "ESCALATE",
       "source_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `ESCALATE` with irreversible exposure 0.641 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, REPORTED_ADDRESS_RISK.",
+        "work": "Replay release_withdrawal_to_reported_address from chainabuse_report metadata and compare the current `ALERT` control outcome with SMERC-F `ESCALATE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT_REDUCED_SCOPE",
@@ -793,12 +1285,27 @@
         "AUTHORIZATION_SUPPORT_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "REPORTED_ADDRESS_RISK"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "REPORTED_ADDRESS_RISK": "A reported-address or incident signal should be preserved before action.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.641,
       "reversible_capacity": 0.383,
       "smerc_f_state": "ESCALATE",
       "source_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `ESCALATE` with irreversible exposure 0.641 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, REPORTED_ADDRESS_RISK.",
+        "work": "Replay release_withdrawal_to_reported_address from chainabuse_report metadata and compare the current `ALERT` control outcome with SMERC-F `ESCALATE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT_MISSING_EVIDENCE",
@@ -822,12 +1329,27 @@
         "AUTHORIZATION_SUPPORT_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "REPORTED_ADDRESS_RISK"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "REPORTED_ADDRESS_RISK": "A reported-address or incident signal should be preserved before action.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.703,
       "reversible_capacity": 0.282,
       "smerc_f_state": "FREEZE",
       "source_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.703 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, REPORTED_ADDRESS_RISK.",
+        "work": "Replay release_withdrawal_to_reported_address from chainabuse_report metadata and compare the current `ALERT` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT_ACCELERATED_AUTOMATION",
@@ -850,12 +1372,29 @@
         "AUTHORIZATION_SUPPORT_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "REPORTED_ADDRESS_RISK"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "REPORTED_ADDRESS_RISK": "A reported-address or incident signal should be preserved before action.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.744,
       "reversible_capacity": 0.294,
       "smerc_f_state": "FREEZE",
       "source_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.744 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, AUTOMATION_VELOCITY_HIGH, REPORTED_ADDRESS_RISK.",
+        "work": "Replay release_withdrawal_to_reported_address from chainabuse_report metadata and compare the current `ALERT` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT_MARKET_STRESS",
@@ -881,12 +1420,27 @@
         "AUTHORIZATION_SUPPORT_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "REPORTED_ADDRESS_RISK"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "REPORTED_ADDRESS_RISK": "A reported-address or incident signal should be preserved before action.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.781,
       "reversible_capacity": 0.294,
       "smerc_f_state": "FREEZE",
       "source_id": "CHAINABUSE_VERIFIED_ADDRESS_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.781 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, REPORTED_ADDRESS_RISK.",
+        "work": "Replay release_withdrawal_to_reported_address from chainabuse_report metadata and compare the current `ALERT` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT_BASE",
@@ -905,12 +1459,23 @@
         "MODEL_DISAGREEMENT",
         "EVIDENCE_VALIDITY_WEAK"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK"
+      ],
+      "financial_reason_labels": {
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action."
+      },
       "irreversible_exposure": 0.345,
       "reversible_capacity": 0.518,
       "smerc_f_state": "ESCALATE",
       "source_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `ESCALATE` with irreversible exposure 0.345 and financial reason codes: FINANCIAL_EVIDENCE_WEAK.",
+        "work": "Replay hold_or_release_small_refund from chainabuse_report metadata and compare the current `REVIEW` control outcome with SMERC-F `ESCALATE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT_REDUCED_SCOPE",
@@ -929,12 +1494,23 @@
         "MODEL_DISAGREEMENT",
         "EVIDENCE_VALIDITY_WEAK"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK"
+      ],
+      "financial_reason_labels": {
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action."
+      },
       "irreversible_exposure": 0.345,
       "reversible_capacity": 0.518,
       "smerc_f_state": "ESCALATE",
       "source_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `ESCALATE` with irreversible exposure 0.345 and financial reason codes: FINANCIAL_EVIDENCE_WEAK.",
+        "work": "Replay hold_or_release_small_refund from chainabuse_report metadata and compare the current `REVIEW` control outcome with SMERC-F `ESCALATE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT_MISSING_EVIDENCE",
@@ -955,12 +1531,23 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK"
+      ],
+      "financial_reason_labels": {
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action."
+      },
       "irreversible_exposure": 0.408,
       "reversible_capacity": 0.417,
       "smerc_f_state": "ESCALATE",
       "source_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `ESCALATE` with irreversible exposure 0.408 and financial reason codes: FINANCIAL_EVIDENCE_WEAK.",
+        "work": "Replay hold_or_release_small_refund from chainabuse_report metadata and compare the current `REVIEW` control outcome with SMERC-F `ESCALATE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT_ACCELERATED_AUTOMATION",
@@ -980,12 +1567,23 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK"
+      ],
+      "financial_reason_labels": {
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action."
+      },
       "irreversible_exposure": 0.449,
       "reversible_capacity": 0.426,
       "smerc_f_state": "ESCALATE",
       "source_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `ESCALATE` with irreversible exposure 0.449 and financial reason codes: FINANCIAL_EVIDENCE_WEAK.",
+        "work": "Replay hold_or_release_small_refund from chainabuse_report metadata and compare the current `REVIEW` control outcome with SMERC-F `ESCALATE`."
+      }
     },
     {
       "action_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT_MARKET_STRESS",
@@ -1005,12 +1603,25 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK",
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.489,
       "reversible_capacity": 0.422,
       "smerc_f_state": "ESCALATE",
       "source_id": "CHAINABUSE_UNVERIFIED_LOW_VALUE_REPORT",
       "source_type": "chainabuse_report",
-      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api"
+      "source_url": "https://docs.chainabuse.com/docs/welcome-to-chainabuse-api",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `ESCALATE` with irreversible exposure 0.489 and financial reason codes: FINANCIAL_EVIDENCE_WEAK, SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay hold_or_release_small_refund from chainabuse_report metadata and compare the current `REVIEW` control outcome with SMERC-F `ESCALATE`."
+      }
     },
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_BASE",
@@ -1037,12 +1648,35 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.829,
       "reversible_capacity": 0.351,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.829 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_REDUCED_SCOPE",
@@ -1069,12 +1703,35 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.829,
       "reversible_capacity": 0.351,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.829 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_MISSING_EVIDENCE",
@@ -1102,12 +1759,37 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "FINANCIAL_EVIDENCE_WEAK",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.892,
       "reversible_capacity": 0.251,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.892 and financial reason codes: REDEMPTION_PRESSURE_HIGH, FINANCIAL_EVIDENCE_WEAK, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_ACCELERATED_AUTOMATION",
@@ -1134,12 +1816,35 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.915,
       "reversible_capacity": 0.287,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.915 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT_MARKET_STRESS",
@@ -1166,12 +1871,35 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "REDEMPTION_PRESSURE_HIGH",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "AUTOMATION_VELOCITY_HIGH",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "REDEMPTION_PRESSURE_HIGH": "Stablecoin or reserve movement pressure suggests execution should slow or pause.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.925,
       "reversible_capacity": 0.287,
       "smerc_f_state": "DENY",
       "source_id": "DEFILLAMA_ORACLE_MANIPULATION_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `DENY` with irreversible exposure 0.925 and financial reason codes: REDEMPTION_PRESSURE_HIGH, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, AUTOMATION_VELOCITY_HIGH, MARKET_STRESS_ELEVATED.",
+        "work": "Replay resume_protocol_liquidity_rebalance from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `DENY`."
+      }
     },
     {
       "action_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT_BASE",
@@ -1194,12 +1922,25 @@
         "AGENT_VELOCITY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK"
+      ],
+      "financial_reason_labels": {
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK": "A governance or authority-changing action may alter who can act later.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.656,
       "reversible_capacity": 0.43,
       "smerc_f_state": "THROTTLE",
       "source_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.656 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, GOVERNANCE_CHANGE_AUTHORITY_RISK.",
+        "work": "Replay execute_governance_parameter_change from defillama_hack_incident metadata and compare the current `REVIEW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT_REDUCED_SCOPE",
@@ -1222,12 +1963,25 @@
         "AGENT_VELOCITY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK"
+      ],
+      "financial_reason_labels": {
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK": "A governance or authority-changing action may alter who can act later.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.656,
       "reversible_capacity": 0.43,
       "smerc_f_state": "THROTTLE",
       "source_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.656 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, GOVERNANCE_CHANGE_AUTHORITY_RISK.",
+        "work": "Replay execute_governance_parameter_change from defillama_hack_incident metadata and compare the current `REVIEW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT_MISSING_EVIDENCE",
@@ -1254,12 +2008,27 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK"
+      ],
+      "financial_reason_labels": {
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action.",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK": "A governance or authority-changing action may alter who can act later.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.719,
       "reversible_capacity": 0.329,
       "smerc_f_state": "FREEZE",
       "source_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.719 and financial reason codes: FINANCIAL_EVIDENCE_WEAK, SETTLEMENT_REVERSIBILITY_LOW, GOVERNANCE_CHANGE_AUTHORITY_RISK.",
+        "work": "Replay execute_governance_parameter_change from defillama_hack_incident metadata and compare the current `REVIEW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT_ACCELERATED_AUTOMATION",
@@ -1285,12 +2054,27 @@
         "LIQUIDITY_CONCENTRATION",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "AUTOMATION_VELOCITY_HIGH",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK": "A governance or authority-changing action may alter who can act later.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.76,
       "reversible_capacity": 0.338,
       "smerc_f_state": "FREEZE",
       "source_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.76 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, AUTOMATION_VELOCITY_HIGH, GOVERNANCE_CHANGE_AUTHORITY_RISK.",
+        "work": "Replay execute_governance_parameter_change from defillama_hack_incident metadata and compare the current `REVIEW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT_MARKET_STRESS",
@@ -1316,12 +2100,33 @@
         "AGENT_VELOCITY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH",
+        "MARKET_STRESS_ELEVATED",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "GOVERNANCE_CHANGE_AUTHORITY_RISK": "A governance or authority-changing action may alter who can act later.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution.",
+        "TOKENIZED_COLLATERAL_EXPOSURE_HIGH": "Collateral or tokenized-asset pressure raises the cost of acting too quickly."
+      },
       "irreversible_exposure": 0.8,
       "reversible_capacity": 0.334,
       "smerc_f_state": "FREEZE",
       "source_id": "DEFILLAMA_GOVERNANCE_PROPOSAL_INCIDENT",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.8 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, TOKENIZED_COLLATERAL_EXPOSURE_HIGH, MARKET_STRESS_ELEVATED, GOVERNANCE_CHANGE_AUTHORITY_RISK.",
+        "work": "Replay execute_governance_parameter_change from defillama_hack_incident metadata and compare the current `REVIEW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS_BASE",
@@ -1340,12 +2145,23 @@
         "SETTLEMENT_ANOMALY",
         "MODEL_DISAGREEMENT"
       ],
+      "financial_reason_codes": [
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED"
+      ],
+      "financial_reason_labels": {
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED": "No financial reason code triggered."
+      },
       "irreversible_exposure": 0.407,
       "reversible_capacity": 0.557,
       "smerc_f_state": "ALLOW",
       "source_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Alignment case: SMERC-F preserved replay evidence without changing the current control direction.",
+        "result": "SMERC-F returned `ALLOW` with irreversible exposure 0.407 and financial reason codes: NO_FINANCIAL_REASON_CODE_TRIGGERED.",
+        "work": "Replay process_event_driven_release from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `ALLOW`."
+      }
     },
     {
       "action_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS_REDUCED_SCOPE",
@@ -1364,12 +2180,23 @@
         "SETTLEMENT_ANOMALY",
         "MODEL_DISAGREEMENT"
       ],
+      "financial_reason_codes": [
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED"
+      ],
+      "financial_reason_labels": {
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED": "No financial reason code triggered."
+      },
       "irreversible_exposure": 0.407,
       "reversible_capacity": 0.557,
       "smerc_f_state": "ALLOW",
       "source_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Alignment case: SMERC-F preserved replay evidence without changing the current control direction.",
+        "result": "SMERC-F returned `ALLOW` with irreversible exposure 0.407 and financial reason codes: NO_FINANCIAL_REASON_CODE_TRIGGERED.",
+        "work": "Replay process_event_driven_release from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `ALLOW`."
+      }
     },
     {
       "action_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS_MISSING_EVIDENCE",
@@ -1390,12 +2217,23 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK"
+      ],
+      "financial_reason_labels": {
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action."
+      },
       "irreversible_exposure": 0.47,
       "reversible_capacity": 0.456,
       "smerc_f_state": "ESCALATE",
       "source_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `ESCALATE` with irreversible exposure 0.47 and financial reason codes: FINANCIAL_EVIDENCE_WEAK.",
+        "work": "Replay process_event_driven_release from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `ESCALATE`."
+      }
     },
     {
       "action_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS_ACCELERATED_AUTOMATION",
@@ -1417,12 +2255,23 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED"
+      ],
+      "financial_reason_labels": {
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED": "No financial reason code triggered."
+      },
       "irreversible_exposure": 0.512,
       "reversible_capacity": 0.465,
       "smerc_f_state": "THROTTLE",
       "source_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.512 and financial reason codes: NO_FINANCIAL_REASON_CODE_TRIGGERED.",
+        "work": "Replay process_event_driven_release from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS_MARKET_STRESS",
@@ -1443,12 +2292,23 @@
         "MODEL_DISAGREEMENT",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED"
+      ],
+      "financial_reason_labels": {
+        "NO_FINANCIAL_REASON_CODE_TRIGGERED": "No financial reason code triggered."
+      },
       "irreversible_exposure": 0.552,
       "reversible_capacity": 0.461,
       "smerc_f_state": "THROTTLE",
       "source_id": "DEFILLAMA_LOG_SPOOFING_ZERO_LOSS",
       "source_type": "defillama_hack_incident",
-      "source_url": "https://defillama.com/hacks"
+      "source_url": "https://defillama.com/hacks",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.552 and financial reason codes: NO_FINANCIAL_REASON_CODE_TRIGGERED.",
+        "work": "Replay process_event_driven_release from defillama_hack_incident metadata and compare the current `ALLOW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH_BASE",
@@ -1469,12 +2329,23 @@
         "STABLECOIN_IMBALANCE",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.566,
       "reversible_capacity": 0.484,
       "smerc_f_state": "THROTTLE",
       "source_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH",
       "source_type": "ethereum_bigquery_transfer",
-      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset"
+      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.566 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay approve_batch_transfer_settlement from ethereum_bigquery_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH_REDUCED_SCOPE",
@@ -1495,12 +2366,23 @@
         "STABLECOIN_IMBALANCE",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.566,
       "reversible_capacity": 0.484,
       "smerc_f_state": "THROTTLE",
       "source_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH",
       "source_type": "ethereum_bigquery_transfer",
-      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset"
+      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.566 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay approve_batch_transfer_settlement from ethereum_bigquery_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH_MISSING_EVIDENCE",
@@ -1524,12 +2406,25 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK",
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.629,
       "reversible_capacity": 0.383,
       "smerc_f_state": "ESCALATE",
       "source_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH",
       "source_type": "ethereum_bigquery_transfer",
-      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset"
+      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `ESCALATE` with irreversible exposure 0.629 and financial reason codes: FINANCIAL_EVIDENCE_WEAK, SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay approve_batch_transfer_settlement from ethereum_bigquery_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `ESCALATE`."
+      }
     },
     {
       "action_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH_ACCELERATED_AUTOMATION",
@@ -1552,12 +2447,25 @@
         "STABLECOIN_IMBALANCE",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "AUTOMATION_VELOCITY_HIGH"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.67,
       "reversible_capacity": 0.392,
       "smerc_f_state": "THROTTLE",
       "source_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH",
       "source_type": "ethereum_bigquery_transfer",
-      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset"
+      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.67 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, AUTOMATION_VELOCITY_HIGH.",
+        "work": "Replay approve_batch_transfer_settlement from ethereum_bigquery_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH_MARKET_STRESS",
@@ -1581,12 +2489,27 @@
         "AGENT_VELOCITY",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.71,
       "reversible_capacity": 0.388,
       "smerc_f_state": "FREEZE",
       "source_id": "BIGQUERY_ETHEREUM_TOKEN_TRANSFER_BATCH",
       "source_type": "ethereum_bigquery_transfer",
-      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset"
+      "source_url": "https://cloud.google.com/blog/products/data-analytics/ethereum-bigquery-how-we-built-dataset",
+      "work_result_impact": {
+        "impact": "Candidate proof point: recoverability would add restraint before an action an existing control shape allowed.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.71 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, LIQUIDITY_ROUTE_FRAGILE, MARKET_STRESS_ELEVATED.",
+        "work": "Replay approve_batch_transfer_settlement from ethereum_bigquery_transfer metadata and compare the current `ALLOW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK_BASE",
@@ -1608,12 +2531,23 @@
         "STABLECOIN_IMBALANCE",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.635,
       "reversible_capacity": 0.362,
       "smerc_f_state": "THROTTLE",
       "source_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK",
       "source_type": "elliptic_bitcoin_graph",
-      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data"
+      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.635 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay release_cross_asset_settlement from elliptic_bitcoin_graph metadata and compare the current `REVIEW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK_REDUCED_SCOPE",
@@ -1635,12 +2569,23 @@
         "STABLECOIN_IMBALANCE",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW"
+      ],
+      "financial_reason_labels": {
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.635,
       "reversible_capacity": 0.362,
       "smerc_f_state": "THROTTLE",
       "source_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK",
       "source_type": "elliptic_bitcoin_graph",
-      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data"
+      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `THROTTLE` with irreversible exposure 0.635 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW.",
+        "work": "Replay release_cross_asset_settlement from elliptic_bitcoin_graph metadata and compare the current `REVIEW` control outcome with SMERC-F `THROTTLE`."
+      }
     },
     {
       "action_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK_MISSING_EVIDENCE",
@@ -1664,12 +2609,27 @@
         "EVIDENCE_VALIDITY_WEAK",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "FINANCIAL_EVIDENCE_WEAK",
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "FINANCIAL_EVIDENCE_WEAK": "The evidence available before execution is too thin for an automated financial action.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.699,
       "reversible_capacity": 0.261,
       "smerc_f_state": "FREEZE",
       "source_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK",
       "source_type": "elliptic_bitcoin_graph",
-      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data"
+      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.699 and financial reason codes: FINANCIAL_EVIDENCE_WEAK, SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH.",
+        "work": "Replay release_cross_asset_settlement from elliptic_bitcoin_graph metadata and compare the current `REVIEW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK_ACCELERATED_AUTOMATION",
@@ -1692,12 +2652,27 @@
         "STABLECOIN_IMBALANCE",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "AUTOMATION_VELOCITY_HIGH"
+      ],
+      "financial_reason_labels": {
+        "AUTOMATION_VELOCITY_HIGH": "Automation speed is high enough that a bad action could compound before review.",
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.739,
       "reversible_capacity": 0.27,
       "smerc_f_state": "FREEZE",
       "source_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK",
       "source_type": "elliptic_bitcoin_graph",
-      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data"
+      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.739 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, AUTOMATION_VELOCITY_HIGH.",
+        "work": "Replay release_cross_asset_settlement from elliptic_bitcoin_graph metadata and compare the current `REVIEW` control outcome with SMERC-F `FREEZE`."
+      }
     },
     {
       "action_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK_MARKET_STRESS",
@@ -1722,12 +2697,29 @@
         "COLLATERAL_STRESS",
         "LOW_REVERSIBILITY"
       ],
+      "financial_reason_codes": [
+        "SETTLEMENT_REVERSIBILITY_LOW",
+        "COUNTERPARTY_CONCENTRATION_HIGH",
+        "LIQUIDITY_ROUTE_FRAGILE",
+        "MARKET_STRESS_ELEVATED"
+      ],
+      "financial_reason_labels": {
+        "COUNTERPARTY_CONCENTRATION_HIGH": "Counterparty or recipient concentration creates a larger correlated exposure.",
+        "LIQUIDITY_ROUTE_FRAGILE": "Liquidity and market stress suggest the action may not unwind cleanly.",
+        "MARKET_STRESS_ELEVATED": "Market stress is high enough to make ordinary routing assumptions less reliable.",
+        "SETTLEMENT_REVERSIBILITY_LOW": "Settlement finality or low reversibility limits recovery after execution."
+      },
       "irreversible_exposure": 0.777,
       "reversible_capacity": 0.27,
       "smerc_f_state": "FREEZE",
       "source_id": "ELLIPTIC_UNKNOWN_HIGH_GRAPH_RISK",
       "source_type": "elliptic_bitcoin_graph",
-      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data"
+      "source_url": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set/data",
+      "work_result_impact": {
+        "impact": "Candidate proof point: existing review/alert context can be converted into a clearer pre-execution route.",
+        "result": "SMERC-F returned `FREEZE` with irreversible exposure 0.777 and financial reason codes: SETTLEMENT_REVERSIBILITY_LOW, COUNTERPARTY_CONCENTRATION_HIGH, LIQUIDITY_ROUTE_FRAGILE, MARKET_STRESS_ELEVATED.",
+        "work": "Replay release_cross_asset_settlement from elliptic_bitcoin_graph metadata and compare the current `REVIEW` control outcome with SMERC-F `FREEZE`."
+      }
     }
   ],
   "restraint_count": 43,

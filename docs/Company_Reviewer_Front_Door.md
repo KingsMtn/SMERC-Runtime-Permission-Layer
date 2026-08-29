@@ -99,6 +99,8 @@ SMERC-F is not AML compliance, sanctions screening, fraud detection, custody, se
 
 The first financial review should remain metadata-only and shadow-mode. Existing financial controls remain authoritative.
 
+For public-data-shaped financial replay, read `docs/SMERC_F_Financial_Public_Data_Replay.md` and `docs/SMERC_F_Financial_Reason_Codes.md`. Those reports show whether the driver was low settlement reversibility, weak evidence, liquidity fragility, redemption pressure, collateral exposure, counterparty concentration, or automation velocity.
+
 ## Work / Result / Impact
 
 Work: run safe metadata-only action examples through hard gates, recoverability scoring, SPARTa routing, ledger evidence, and pilot-fit reporting.
