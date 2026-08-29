@@ -1,4 +1,5 @@
 import unittest
+import json
 from pathlib import Path
 
 
@@ -28,6 +29,8 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("openapi.json", text)
         self.assertIn("AI Reviewer Bundle", text)
         self.assertIn("without relying on founder explanation", text)
+        self.assertIn("docs/AI_Readable_Reviewer_Bundle.md", text)
+        self.assertIn("examples/ai_reviewer_bundle.json", text)
 
     def test_naming_guide_preserves_brand_category_problem_order(self):
         text = (ROOT / "docs" / "Naming_And_Search_Style_Guide.md").read_text(encoding="utf-8")
@@ -37,6 +40,35 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("Structural Momentum Entropy Range Confidence", text)
         self.assertIn("Recoverability scoring before automated actions execute", text)
         self.assertIn("Do not overstate", text)
+
+    def test_repo_ai_reviewer_bundle_has_links_and_boundaries(self):
+        bundle = json.loads(
+            (ROOT / "examples" / "ai_reviewer_bundle.json").read_text(encoding="utf-8")
+        )
+        doc = (ROOT / "docs" / "AI_Readable_Reviewer_Bundle.md").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        self.assertEqual(bundle["schema_version"], "smerc.ai_reviewer_bundle.v1")
+        self.assertIn("https://admirable-sorbet-9986d5.netlify.app/", bundle["canonical_site"])
+        self.assertIn("https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer", bundle["canonical_repository"])
+        self.assertIn("recoverability-aware runtime permission infrastructure", bundle["category"])
+        self.assertIn("customer validation", bundle["current_evidence"]["evidence_boundary"])
+        self.assertIn("SMERC is not production-certified.", bundle["non_claims"])
+        self.assertIn("docs/AI_Readable_Reviewer_Bundle.md", readme)
+        self.assertIn("examples/ai_reviewer_bundle.json", readme)
+        self.assertIn("What It Does Not Prove", doc)
+        self.assertIn("Impact", doc)
+
+    def test_accelerator_map_preserves_overlap_and_difference(self):
+        text = (ROOT / "docs" / "Accelerator_And_Adjacent_Company_Map.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("The market is already active", text)
+        self.assertIn("YC has backed companies close to AI-agent authorization", text)
+        self.assertIn("recoverability checkpoint", text)
+        self.assertIn("MACH37", text)
+        self.assertIn("not a competitive legal opinion", text)
 
 
 if __name__ == "__main__":

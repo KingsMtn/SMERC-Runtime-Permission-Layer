@@ -72,6 +72,8 @@ The public site should maintain:
 - `/project.json`
 - `/smerc-beacon.json`
 - `/.well-known/smerc.json`
+- repository reviewer bundle at `docs/AI_Readable_Reviewer_Bundle.md`
+- repository machine-readable reviewer bundle at `examples/ai_reviewer_bundle.json`
 - canonical links and descriptions on key HTML pages
 - JSON-LD structured data on the home page and AI governance explainer
 

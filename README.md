@@ -15,8 +15,10 @@ Public reviewer site: https://admirable-sorbet-9986d5.netlify.app/
 Fast reviewer paths:
 
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
+- AI/search reviewer: `docs/AI_Readable_Reviewer_Bundle.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - Skeptical competitive review: `docs/External_Signal_And_Competitive_Review.md`
+- Accelerator/adjacent company map: `docs/Accelerator_And_Adjacent_Company_Map.md`
 - Public scenario benchmark: `docs/Public_Action_Governance_Benchmark.md`
 - Pilot reviewer: `docs/Pilot_Intake_Template.md`
 - Strategic/platform reviewer: `docs/Why_SMERC_Fits_Strategic_Platforms.md`
@@ -58,6 +60,22 @@ The narrow SMERC wedge is recoverability before execution:
 > Existing systems ask whether an agent or workflow is authorized. SMERC asks whether the proposed action is recoverable enough to execute now, and preserves why that decision was made.
 
 Read `docs/External_Signal_And_Competitive_Review.md` for the skeptical comparison, public signal review, overlap risks, and current non-claims.
+
+Read `docs/Accelerator_And_Adjacent_Company_Map.md` for the accelerator and adjacent-company view. That document explains why SMERC should be positioned as a recoverability checkpoint that complements agent authorization, MCP infrastructure, AI gateways, sandboxes, approval workflows, and audit systems instead of pretending those categories do not exist.
+
+## AI-Readable Reviewer Bundle
+
+SMERC has a structured reviewer bundle for AI assistants, search systems, technical reviewers, and company evaluators:
+
+- Human guide: `docs/AI_Readable_Reviewer_Bundle.md`
+- Machine-readable bundle: `examples/ai_reviewer_bundle.json`
+- Public site companion: `https://admirable-sorbet-9986d5.netlify.app/ai-review.json`
+
+Work: stable summary, implemented surfaces, evidence links, non-claims, review sequence, and search terms.
+
+Result: reviewers and AI systems can summarize SMERC without guessing from scattered pages.
+
+Impact: the project becomes easier to inspect, compare, index, and route to the right reviewer while preserving the boundary that public indexing is not customer validation.
 
 ## Public Action Governance Benchmark
 
@@ -275,6 +293,9 @@ The strategic path is evidence-first: prove that recoverability-aware runtime pe
 Start here before reading the code:
 
 - `docs/External_Review_Start_Here.md` gives external reviewers the shortest safe path through the repository.
+- `docs/AI_Readable_Reviewer_Bundle.md` gives AI assistants, search systems, and human reviewers a stable summary of what SMERC is, what exists, what can be tested, and what should not be claimed.
+- `examples/ai_reviewer_bundle.json` gives machine readers a structured review bundle with canonical links, implemented surfaces, review sequence, search terms, and non-claims.
+- `docs/Accelerator_And_Adjacent_Company_Map.md` gives accelerator and strategic reviewers a blunt map of adjacent company categories and SMERC's recoverability-specific lane.
 - `docs/CISO_Security_Architect_15_Minute_Review.md` gives CISOs and security architects the fastest serious review path from product claim to MCP Gateway proof, GitHub Actions pilot path, replay evidence, and pilot decision.
 - `docs/AI_Agent_Recoverability_Governance.md` explains the institutional control gap: why AI-agent governance should ask whether an action is recoverable, not only whether it is allowed.
 - `docs/Reviewer_Quickstart.md` gives reviewers a one-command path that generates a local proof package linking PR Guardian, Ref-gated tool-call screening, SPARTa, DLL, CISO seed evidence, and benchmark comparison.

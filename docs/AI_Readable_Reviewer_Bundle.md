@@ -1,0 +1,109 @@
+# AI-Readable Reviewer Bundle
+
+## Purpose
+
+This bundle gives AI assistants, search systems, technical reviewers, CISOs, security architects, and platform teams a short, structured way to understand SMERC without relying on founder explanation.
+
+Canonical machine-readable file:
+
+- `examples/ai_reviewer_bundle.json`
+
+Public site companion:
+
+- `https://admirable-sorbet-9986d5.netlify.app/ai-review.json`
+
+## Recommended Summary
+
+SMERC, short for Structural Momentum Entropy Range Confidence, is recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, financial-action workflows, and high-impact automated systems.
+
+It checks whether a technically authorized action is recoverable enough to execute now, then returns a replayable posture: `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`.
+
+## What It Is
+
+SMERC is a pre-execution governance checkpoint.
+
+It sits after detection, identity, policy, and intent signals, but before an automated system creates side effects. It does not ask only whether an actor is authorized. It asks whether the proposed action is recoverable, bounded, supported by trusted evidence, and safe to proceed right now.
+
+## What Exists
+
+The repository contains working pilot-grade artifacts:
+
+- recoverability scoring engine
+- runtime admission gate
+- hard policy and evidence gates
+- fallback policy layer
+- agent identity gate
+- model and agent fitness routing
+- SPARTa execution routing and control translation
+- Decision Lifecycle Ledger
+- DLL intelligence reports
+- GitHub Actions pilot package
+- GitHub PR Guardian
+- MCP governance gateway
+- MCP tool risk scanner
+- MCP proxy runner
+- cloud-admin customer evaluation
+- financial runtime evaluation profile
+- public scenario benchmark
+- OpenAPI pilot contract
+- Python SDK
+- JavaScript SDK
+- Docker and Render deployment materials
+
+## What It Proves
+
+Current evidence proves that SMERC can run metadata-only action examples through a repeatable path:
+
+1. admit or reject the action facts
+2. score recoverability and risk
+3. return a posture and reason codes
+4. route controls through SPARTa
+5. preserve Decision Lifecycle Ledger evidence
+6. generate reviewable reports
+7. compare SMERC output with simple allow/deny patterns
+
+The public benchmark currently shows that SMERC creates middle-state governance behavior across MCP tool calls, coding agents, cloud administration, financial runtime actions, execution tickets, and security approval workflows.
+
+## What It Does Not Prove
+
+SMERC does not yet prove:
+
+- production certification
+- compliance attestation
+- independent security audit readiness
+- live incident reduction
+- customer willingness to pay
+- enterprise-scale operational fit
+- calibrated thresholds for a specific company
+
+Those require external reviewers, customer-owned metadata, shadow-mode pilots, security review, and measured operational burden.
+
+## Review Sequence
+
+1. Read `docs/Public_Review_Snapshot.md`.
+2. Read `docs/External_Signal_And_Competitive_Review.md`.
+3. Inspect `reports/Public_Action_Governance_Benchmark.md`.
+4. Run `python -m reference_engine.pilot_in_a_box --pretty`.
+5. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
+6. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+
+## Impact
+
+The impact of this bundle is clarity.
+
+It helps a reviewer or AI assistant answer:
+
+- what SMERC is
+- where it fits
+- what has been built
+- what can be tested now
+- what claims should not be made
+- what evidence is still missing
+
+It also improves indexing quality by giving search engines and AI systems stable source material instead of forcing them to infer the project from scattered pages.
+
+## Boundary
+
+The reviewer bundle is not product-market fit. It is not a sales substitute. It is a clean handoff for technical review and customer discovery.
+
+The next proof is external: a reviewer must run SMERC against real but safe metadata and decide whether recoverability before execution changes their judgment enough to justify a shadow-mode pilot.

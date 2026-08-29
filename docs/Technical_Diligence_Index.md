@@ -6,10 +6,11 @@ This index is for strategic reviewers, platform teams, security architects, and 
 
 1. Read `docs/Public_Review_Snapshot.md`.
 2. Read `docs/CISO_Security_Architect_15_Minute_Review.md`.
-3. Read `docs/External_Signal_And_Competitive_Review.md`.
-4. Inspect the current CI badge in `README.md`.
-5. Run the developer quickstart in `docs/Developer_Quickstart.md`.
-6. Review one generated report in `reports/`.
+3. Read `docs/AI_Readable_Reviewer_Bundle.md`.
+4. Read `docs/External_Signal_And_Competitive_Review.md`.
+5. Inspect the current CI badge in `README.md`.
+6. Run the developer quickstart in `docs/Developer_Quickstart.md`.
+7. Review one generated report in `reports/`.
 
 ## Core Runtime
 
@@ -23,7 +24,10 @@ This index is for strategic reviewers, platform teams, security architects, and 
 
 ## Competitive And External Signal
 
+- `docs/AI_Readable_Reviewer_Bundle.md`
+- `examples/ai_reviewer_bundle.json`
 - `docs/External_Signal_And_Competitive_Review.md`
+- `docs/Accelerator_And_Adjacent_Company_Map.md`
 - `docs/Public_Action_Governance_Benchmark.md`
 - `docs/Competitive_Gaps_And_Build_Priorities.md`
 - `reports/Competitive_Proof_Parity_Report.md`

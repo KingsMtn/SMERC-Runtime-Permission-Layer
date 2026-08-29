@@ -69,6 +69,13 @@ It includes:
 
 `ai-review.json` is the most direct machine-readable review bundle for AI assistants, search tools, and technical reviewers. It points to the public site, GitHub repository, implemented proof surfaces, non-claims, suggested evaluation sequence, and the safest first pilot path.
 
+The repository companion files are:
+
+- `docs/AI_Readable_Reviewer_Bundle.md`
+- `examples/ai_reviewer_bundle.json`
+
+These files make the same story inspectable inside GitHub, where technical reviewers and code-aware AI systems are more likely to begin.
+
 `pilot-runbook.json` gives a narrower operator path for a metadata-only self-service pilot. It is designed to help a company test SMERC without sharing secrets, production credentials, customer data, or live execution authority.
 
 `openapi.json` exposes the pilot API contract for reviewers who want to inspect the runtime shape instead of reading narrative docs first.
