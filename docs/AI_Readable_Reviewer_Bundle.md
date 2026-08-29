@@ -86,12 +86,14 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 ## Review Sequence
 
 1. Read `docs/Public_Review_Snapshot.md`.
-2. Run `python -m reference_engine.complete_lifecycle_proof`.
-3. Read `docs/External_Signal_And_Competitive_Review.md`.
-4. Inspect `reports/Public_Action_Governance_Benchmark.md`.
-5. Run `python -m reference_engine.pilot_in_a_box --pretty`.
-6. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
-7. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+2. Read `docs/Company_Reviewer_Front_Door.md`.
+3. Run `python -m reference_engine.complete_lifecycle_proof`.
+4. Read `docs/External_Signal_And_Competitive_Review.md`.
+5. Inspect `reports/Public_Action_Governance_Benchmark.md`.
+6. Run `python -m reference_engine.pilot_in_a_box --pretty`.
+7. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
+8. For financial-services review, run `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty`.
+9. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 

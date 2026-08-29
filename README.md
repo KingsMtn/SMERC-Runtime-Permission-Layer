@@ -15,6 +15,7 @@ Public reviewer site: https://admirable-sorbet-9986d5.netlify.app/
 Fast reviewer paths:
 
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
+- Company reviewer front door: `docs/Company_Reviewer_Front_Door.md`
 - AI/search reviewer: `docs/AI_Readable_Reviewer_Bundle.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
@@ -99,7 +100,7 @@ Impact: reviewers can see whether recoverability creates useful middle states be
 
 ## Start Here: Self-Service Company Evaluation
 
-If you are a company reviewer and want to test SMERC without a live integration, start with `customer_eval/README.md`.
+If you are a company reviewer and want to test SMERC without a live integration, start with `docs/Company_Reviewer_Front_Door.md` or `customer_eval/README.md`.
 
 That kit gives a 20-minute metadata-only path:
 
@@ -112,6 +113,14 @@ That kit gives a 20-minute metadata-only path:
 Public page: https://admirable-sorbet-9986d5.netlify.app/customer-evaluation.html
 
 This self-service path is designed to reduce founder explanation. It still requires customer-owned reviewer judgment before any pilot or enforcement discussion.
+
+Financial-services reviewers should use the Financial Runtime path, internally called SMERC-F:
+
+```bash
+python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty
+```
+
+SMERC-F covers metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions. It is not AML compliance, sanctions screening, fraud detection, custody, settlement, trading, payment execution, legal advice, or production financial-control certification.
 
 ## Start Here: Pilot Intake Report
 

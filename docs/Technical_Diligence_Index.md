@@ -5,12 +5,13 @@ This index is for strategic reviewers, platform teams, security architects, and 
 ## 15-Minute Path
 
 1. Read `docs/Public_Review_Snapshot.md`.
-2. Read `docs/CISO_Security_Architect_15_Minute_Review.md`.
-3. Read `docs/AI_Readable_Reviewer_Bundle.md`.
-4. Read `docs/External_Signal_And_Competitive_Review.md`.
-5. Inspect the current CI badge in `README.md`.
-6. Run the developer quickstart in `docs/Developer_Quickstart.md`.
-7. Review one generated report in `reports/`.
+2. Read `docs/Company_Reviewer_Front_Door.md`.
+3. Read `docs/CISO_Security_Architect_15_Minute_Review.md`.
+4. Read `docs/AI_Readable_Reviewer_Bundle.md`.
+5. Read `docs/External_Signal_And_Competitive_Review.md`.
+6. Inspect the current CI badge in `README.md`.
+7. Run the developer quickstart in `docs/Developer_Quickstart.md`.
+8. Review one generated report in `reports/`.
 
 ## Core Runtime
 
@@ -38,6 +39,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 
 ## Primary Pilot Path
 
+- `docs/Company_Reviewer_Front_Door.md`
 - `pilot_package/First_Pilot_Path.md`
 - `docs/GitHub_Actions_Pilot_Operator_Quickstart.md`
 - `reference_engine/github_actions_pilot_readiness.py`

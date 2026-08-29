@@ -42,6 +42,7 @@
     "public_benchmark": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Public_Action_Governance_Benchmark.md",
     "external_signal_review": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/External_Signal_And_Competitive_Review.md",
     "public_review_snapshot": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Public_Review_Snapshot.md",
+    "company_reviewer_front_door": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Company_Reviewer_Front_Door.md",
     "technical_diligence_index": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Technical_Diligence_Index.md",
     "complete_lifecycle_proof": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Complete_Lifecycle_Proof.md",
     "complete_lifecycle_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/complete_lifecycle/Complete_Lifecycle_Proof_Report.md",
@@ -57,30 +58,42 @@
     },
     {
       "step": 2,
+      "name": "Read the company reviewer front door",
+      "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Company_Reviewer_Front_Door.md",
+      "result": "Reviewer chooses the shortest path: general customer evaluation, cloud-admin evaluation, financial runtime evaluation, or complete lifecycle proof."
+    },
+    {
+      "step": 3,
       "name": "Run the complete lifecycle proof",
       "command": "python -m reference_engine.complete_lifecycle_proof",
       "result": "Reviewer sees the connected lifecycle: ADMIT -> FREEZE -> PAUSE -> UNLOCK -> THROTTLE -> CONSTRAINED_EXECUTE -> permit verified -> execution succeeded -> ledger valid."
     },
     {
-      "step": 3,
+      "step": 4,
       "name": "Inspect the public action governance benchmark",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Public_Action_Governance_Benchmark.md",
       "result": "Reviewer sees where SMERC differs from simple allow/deny across metadata-only action scenarios."
     },
     {
-      "step": 4,
+      "step": 5,
       "name": "Run the pilot-in-a-box path",
       "command": "python -m reference_engine.pilot_in_a_box --pretty",
       "result": "Reviewer receives a local proof package across general AI-agent, cloud-admin, financial-runtime, and single-action examples."
     },
     {
-      "step": 5,
+      "step": 6,
       "name": "Replace examples with 5 to 25 safe company-owned metadata records",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/customer_eval/README.md",
       "result": "Reviewer can test whether SMERC changes judgment on actions that resemble their own workflows without sharing secrets or production authority."
     },
     {
-      "step": 6,
+      "step": 7,
+      "name": "Run the Financial Runtime evaluation when the workflow is financial",
+      "command": "python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty",
+      "result": "Financial-services reviewers can test metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions."
+    },
+    {
+      "step": 8,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."

@@ -10,6 +10,8 @@ The evaluation answers one question:
 
 Use this kit for a metadata-only review of AI-agent actions, MCP tool calls, GitHub Actions, cloud automation, or financial runtime workflows.
 
+For the shortest company-facing guide, start with `docs/Company_Reviewer_Front_Door.md`.
+
 ## Fastest Path
 
 1. Open `examples/customer_metadata_template.json`.
@@ -79,6 +81,7 @@ The generated report includes:
 | `examples/customer_eval_actions.json` | General AI-agent and automation examples. |
 | `examples/cloud_admin_customer_eval_actions.json` | Cloud IAM, network, Kubernetes, DNS, database, and backup actions. |
 | `examples/smerc_f_customer_eval_actions.json` | Financial runtime actions for refund, payment, treasury, stablecoin, tokenized collateral, and limit-change review. |
+| `docs/Company_Reviewer_Front_Door.md` | Shortest route for a company reviewer choosing general, cloud-admin, financial runtime, or complete lifecycle proof. |
 | `docs/Company_Test_Package.md` | Plain-English company test guide. |
 | `docs/Run_Customer_Evaluation_From_GitHub.md` | Click-by-click GitHub Actions path. |
 | `docs/Customer_Evaluation.md` | Technical evaluation guide. |
@@ -107,4 +110,3 @@ Do not propose a pilot if:
 ## Evidence Boundary
 
 This kit proves only that SMERC can process supplied metadata and generate a coherent review artifact. It does not prove production safety, regulatory compliance, incident reduction, customer demand, or enforce-mode readiness.
-
