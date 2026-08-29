@@ -178,7 +178,7 @@ Avoid leading with:
 The next technical proof should focus on gaps competitors will attack:
 
 1. **Comparison benchmark**
-   Show the same scenarios through allow/deny, OPA-style decisions, sandbox-style containment, gateway-style checks, and SMERC recoverability postures.
+   Show the same scenarios through allow/deny, OPA-style decisions, sandbox-style containment, gateway-style checks, and SMERC recoverability postures. The first public-pattern scenario set now starts in `docs/Public_Action_Governance_Benchmark.md`.
 
 2. **Evidence postconditions**
    Record not only the decision but whether the expected control or rollback actually happened.
@@ -191,6 +191,30 @@ The next technical proof should focus on gaps competitors will attack:
 
 5. **Customer-owned calibration**
    Make it easy for a reviewer to replace synthetic actions with 5 to 25 metadata-only customer actions.
+
+## Public Benchmark Added
+
+The repository includes a public action-governance benchmark that converts external discussion patterns into testable metadata-only scenarios:
+
+- MCP tool-call governance
+- sandboxed coding agents
+- cloud administration
+- financial runtime actions
+- signed execution tickets
+- approval workflows
+
+Start with:
+
+```bash
+python -m reference_engine.runtime_benchmark_suite examples/public_action_governance_benchmark.json \
+  --json-output reports/public_action_governance_benchmark.json \
+  --markdown-output reports/Public_Action_Governance_Benchmark.md \
+  --pretty
+```
+
+The generated report is `reports/Public_Action_Governance_Benchmark.md`.
+
+This benchmark is useful for technical review and scenario calibration. It is not customer validation.
 
 ## Recommended Public Review Question
 

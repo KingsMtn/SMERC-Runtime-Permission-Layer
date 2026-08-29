@@ -24,8 +24,10 @@ This index is for strategic reviewers, platform teams, security architects, and 
 ## Competitive And External Signal
 
 - `docs/External_Signal_And_Competitive_Review.md`
+- `docs/Public_Action_Governance_Benchmark.md`
 - `docs/Competitive_Gaps_And_Build_Priorities.md`
 - `reports/Competitive_Proof_Parity_Report.md`
+- `reports/Public_Action_Governance_Benchmark.md`
 - `reports/Runtime_Governance_Benchmark.md`
 
 ## Primary Pilot Path

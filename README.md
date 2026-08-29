@@ -17,6 +17,7 @@ Fast reviewer paths:
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - Skeptical competitive review: `docs/External_Signal_And_Competitive_Review.md`
+- Public scenario benchmark: `docs/Public_Action_Governance_Benchmark.md`
 - Pilot reviewer: `docs/Pilot_Intake_Template.md`
 - Strategic/platform reviewer: `docs/Why_SMERC_Fits_Strategic_Platforms.md`
 
@@ -57,6 +58,25 @@ The narrow SMERC wedge is recoverability before execution:
 > Existing systems ask whether an agent or workflow is authorized. SMERC asks whether the proposed action is recoverable enough to execute now, and preserves why that decision was made.
 
 Read `docs/External_Signal_And_Competitive_Review.md` for the skeptical comparison, public signal review, overlap risks, and current non-claims.
+
+## Public Action Governance Benchmark
+
+The public benchmark turns outside market patterns into a repeatable SMERC test set. It covers MCP tool calls, sandboxed coding agents, cloud administration, financial runtime actions, signed execution tickets, and security approval workflows.
+
+Run:
+
+```bash
+python -m reference_engine.runtime_benchmark_suite examples/public_action_governance_benchmark.json \
+  --json-output reports/public_action_governance_benchmark.json \
+  --markdown-output reports/Public_Action_Governance_Benchmark.md \
+  --pretty
+```
+
+Work: realistic metadata-only action scenarios.
+
+Result: SMERC posture distribution and decision differences versus simple allow/deny.
+
+Impact: reviewers can see whether recoverability creates useful middle states before a company shares private data or grants execution authority.
 
 ## Start Here: Self-Service Company Evaluation
 
