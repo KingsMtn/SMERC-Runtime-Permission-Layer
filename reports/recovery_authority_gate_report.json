@@ -1,0 +1,34 @@
+{
+  "case_id": "RAG-001",
+  "generated_at": "2026-08-29T14:56:18+00:00",
+  "paused_decision": {
+    "action_hash": "sha256:sample-freeze-action",
+    "drivers": [],
+    "posture": "FREEZE",
+    "proposing_actor_id": "agent-release-writer",
+    "replay_id": "replay_20260829_cloud_deploy_freeze",
+    "state": "PAUSED_DECISION_VALID"
+  },
+  "plain_english_summary": "The recovery authority state is UNLOCK for paused posture FREEZE. The unlock actor is UNLOCK_ACTOR_VALID, evidence is UNLOCK_EVIDENCE_SUFFICIENT, and recovery path is RECOVERY_PATH_READY.",
+  "recovery_authority": {
+    "drivers": [],
+    "required_next_step": "Issue a short-lived action-bound permit, append DLL evidence, and continue with post-unlock monitoring.",
+    "state": "UNLOCK"
+  },
+  "recovery_path": {
+    "drivers": [],
+    "state": "RECOVERY_PATH_READY"
+  },
+  "unlock_actor": {
+    "actor_id": "security-reviewer-primary",
+    "drivers": [],
+    "role": "security_reviewer",
+    "state": "UNLOCK_ACTOR_VALID"
+  },
+  "unlock_evidence": {
+    "drivers": [],
+    "score": 1.0,
+    "state": "UNLOCK_EVIDENCE_SUFFICIENT"
+  },
+  "version": "smerc.recovery-authority-gate.v1"
+}

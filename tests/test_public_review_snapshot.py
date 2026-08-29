@@ -15,6 +15,8 @@ class PublicReviewSnapshotTests(unittest.TestCase):
         self.assertIn("Pilot-ready for bounded shadow-mode evaluation", text)
         self.assertIn("GitHub Actions shadow-mode integration", text)
         self.assertIn("Decision Lifecycle Ledger", text)
+        self.assertIn("Recovery Authority Gate", text)
+        self.assertIn("the proposer cannot simply unlock itself", text)
         self.assertIn("Model and Agent Fitness Layer", text)
         self.assertIn("pilot_package/First_Pilot_Path.md", text)
         self.assertIn("Do not claim", text)

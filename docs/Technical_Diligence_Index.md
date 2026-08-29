@@ -21,6 +21,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `reference_engine/autonomy_budget.py`
 - `reference_engine/earned_autonomy.py`
 - `reference_engine/autonomy_continuance.py`
+- `reference_engine/recovery_authority_gate.py`
 
 ## Competitive And External Signal
 
@@ -76,6 +77,14 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `docs/Autonomy_Budgeting_Framework.md`
 - `docs/Earned_Autonomy_Framework.md`
 - `docs/Autonomy_Continuance_Framework.md`
+- `docs/Recovery_Authority_Gate.md`
+
+## Pause And Unlock Governance
+
+- `reference_engine/recovery_authority_gate.py`
+- `examples/recovery_authority/unlock_request.json`
+- `reports/Recovery_Authority_Gate_Report.md`
+- `reports/recovery_authority_gate_report.json`
 
 ## Financial-Action Profile
 

@@ -33,6 +33,7 @@ The repository contains working product artifacts, not only concept documents:
 - pilot review console
 - GitHub Actions shadow-mode integration
 - action-bound permits
+- Recovery Authority Gate for governed unlock after `FREEZE`, `ESCALATE`, or `DENY`
 - signed control evidence
 - GitHub deployment adapter with cancellation, rollback attempt, and non-secret execution reports
 - SPARTa posture-aware routing
@@ -126,7 +127,9 @@ To move toward enterprise beta, SMERC needs:
 
 ## Bottom Line
 
-SMERC is not just a collection of documents. It has working engine, API, integration, audit, routing, permit, evidence, and pilot-review components.
+SMERC is not just a collection of documents. It has working engine, API, integration, audit, routing, permit, evidence, unlock, and pilot-review components.
+
+It now includes a reference Recovery Authority Gate, which answers what happens after SMERC pauses an action: the proposer cannot simply unlock itself; continuation requires verified authority, fresh recovery evidence, a bounded route, permit gating, monitoring, and ledger evidence.
 
 The honest status is:
 

@@ -147,6 +147,7 @@ This produces a JSON evidence bundle and Markdown report showing:
 - runtime admission gate result
 - recoverability decision
 - SPARTa route
+- Recovery Authority Gate for paused or escalated continuation
 - Decision Lifecycle Ledger chain
 - pass/fail checks for hard gates, recoverability, route execution, and ledger validity
 
@@ -232,6 +233,7 @@ The current build includes:
 - Autonomy Budgeting reference engine that meters current AI independence by action count, scope units, cumulative risk spend, ref-gate failures, and blocked or held attempts
 - Earned Autonomy reference engine that converts historical review agreement, overrides, ref-gate history, rollback evidence, false releases, incidents, scope discipline, and evidence quality into a starting autonomy tier
 - Autonomy Continuance reference engine that evaluates Authority Provenance, Intent Integrity, Consequence Horizon, Collective Autonomy, and Right To Continue after an actor has already begun operating
+- Recovery Authority Gate that evaluates whether a paused, frozen, denied, or escalated action can be reopened through verified authority, fresh evidence, a bounded recovery path, action-bound permits, and ledger evidence
 - Ref-gated runtime proof loop showing hard mechanical evidence gates before SMERC recoverability scoring, SPARTa routing, autonomy budget impact, and DLL evidence
 - commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service
@@ -367,6 +369,7 @@ Start here before reading the code:
 - `docs/Autonomy_Budgeting_Framework.md` explains how SMERC meters current agent freedom by action budget, scope budget, risk spend, valid time window, and allowed tool tiers.
 - `docs/Earned_Autonomy_Framework.md` explains how historical evidence sets the starting autonomy tier before the current session spends or loses that budget.
 - `docs/Autonomy_Continuance_Framework.md` explains how Authority Provenance, Intent Integrity, Consequence Horizon, Collective Autonomy, and Right To Continue determine whether an AI actor can keep operating from its current point.
+- `docs/Recovery_Authority_Gate.md` explains the governed unlock path after a SMERC pause: who or what can reopen the action, what evidence is required, and why the original proposing actor should not approve itself.
 - `docs/Self_Service_Pilot_Connector.md` explains how a reviewer can run a mixed metadata-only sample bundle and receive a compact pilot-fit decision package.
 - `docs/Cloud_Automation_Guardrails.md` explains how SMERC can be evaluated as a recoverability-aware checkpoint for cloud automation and infrastructure actions.
 - `docs/MCP_Runtime_Governance_Positioning.md` explains SMERC's focused category position as recoverability-aware runtime governance for MCP-style tool calls and agent actions.

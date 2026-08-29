@@ -52,6 +52,7 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("https://admirable-sorbet-9986d5.netlify.app/", bundle["canonical_site"])
         self.assertIn("https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer", bundle["canonical_repository"])
         self.assertIn("recoverability-aware runtime permission infrastructure", bundle["category"])
+        self.assertIn("Recovery Authority Gate for governed unlock after pause", bundle["implemented_surfaces"])
         self.assertIn("customer validation", bundle["current_evidence"]["evidence_boundary"])
         self.assertIn("SMERC is not production-certified.", bundle["non_claims"])
         self.assertIn("docs/AI_Readable_Reviewer_Bundle.md", readme)

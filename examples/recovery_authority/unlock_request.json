@@ -1,0 +1,38 @@
+{
+  "version": "smerc.recovery-authority-gate.v1",
+  "case_id": "RAG-001",
+  "paused_decision": {
+    "posture": "FREEZE",
+    "replay_id": "replay_20260829_cloud_deploy_freeze",
+    "action_hash": "sha256:sample-freeze-action",
+    "proposing_actor_id": "agent-release-writer"
+  },
+  "unlock_actor": {
+    "actor_id": "security-reviewer-primary",
+    "role": "security_reviewer",
+    "allowed_roles": ["security_reviewer", "platform_owner", "incident_commander"],
+    "identity_verified": true,
+    "delegated_authority_valid": true,
+    "conflict_of_interest": false
+  },
+  "unlock_evidence": {
+    "rollback_plan_verified": true,
+    "blast_radius_bounded": true,
+    "missing_evidence_resolved": true,
+    "fresh_scan_passed": true,
+    "evidence_age_minutes": 8,
+    "max_evidence_age_minutes": 30,
+    "override_reason_required": true,
+    "override_reason": "Canary scope reduced to one region with rollback workflow verified."
+  },
+  "recovery_path": {
+    "route_bound_to_replay": true,
+    "permit_required": true,
+    "permit_issuer_separate_from_proposer": true,
+    "continuation_window_bounded": true,
+    "required_reviewer_count": 1,
+    "available_reviewer_count": 1,
+    "ledger_append_required": true,
+    "post_unlock_monitoring_required": true
+  }
+}

@@ -37,6 +37,7 @@ The repository contains working pilot-grade artifacts:
 - SPARTa execution routing and control translation
 - Decision Lifecycle Ledger
 - DLL intelligence reports
+- Recovery Authority Gate for governed unlock after pause
 - GitHub Actions pilot package
 - GitHub PR Guardian
 - MCP governance gateway
@@ -58,9 +59,10 @@ Current evidence proves that SMERC can run metadata-only action examples through
 2. score recoverability and risk
 3. return a posture and reason codes
 4. route controls through SPARTa
-5. preserve Decision Lifecycle Ledger evidence
-6. generate reviewable reports
-7. compare SMERC output with simple allow/deny patterns
+5. evaluate who or what may safely unlock a paused action
+6. preserve Decision Lifecycle Ledger evidence
+7. generate reviewable reports
+8. compare SMERC output with simple allow/deny patterns
 
 The public benchmark currently shows that SMERC creates middle-state governance behavior across MCP tool calls, coding agents, cloud administration, financial runtime actions, execution tickets, and security approval workflows.
 
