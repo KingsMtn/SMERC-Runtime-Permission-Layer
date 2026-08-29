@@ -6,9 +6,10 @@ This index is for strategic reviewers, platform teams, security architects, and 
 
 1. Read `docs/Public_Review_Snapshot.md`.
 2. Read `docs/CISO_Security_Architect_15_Minute_Review.md`.
-3. Inspect the current CI badge in `README.md`.
-4. Run the developer quickstart in `docs/Developer_Quickstart.md`.
-5. Review one generated report in `reports/`.
+3. Read `docs/External_Signal_And_Competitive_Review.md`.
+4. Inspect the current CI badge in `README.md`.
+5. Run the developer quickstart in `docs/Developer_Quickstart.md`.
+6. Review one generated report in `reports/`.
 
 ## Core Runtime
 
@@ -19,6 +20,13 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `reference_engine/autonomy_budget.py`
 - `reference_engine/earned_autonomy.py`
 - `reference_engine/autonomy_continuance.py`
+
+## Competitive And External Signal
+
+- `docs/External_Signal_And_Competitive_Review.md`
+- `docs/Competitive_Gaps_And_Build_Priorities.md`
+- `reports/Competitive_Proof_Parity_Report.md`
+- `reports/Runtime_Governance_Benchmark.md`
 
 ## Primary Pilot Path
 

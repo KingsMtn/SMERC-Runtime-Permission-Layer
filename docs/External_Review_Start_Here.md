@@ -72,11 +72,12 @@ Those are validation and productization requirements, not claims in this reposit
 
 1. Read `docs/CISO_5_Minute_Proof_Package.md`.
 2. Read `docs/CISO_Security_Architect_15_Minute_Review.md`.
-3. Inspect `docs/MCP_Governance_Gateway.md`.
-4. Open `reports/MCP_Governance_Gateway_Report.md`.
-5. Read `docs/GitHub_Actions_Pilot_Operator_Quickstart.md`.
-6. Read `docs/Public_Review_Snapshot.md`.
-7. Review the latest GitHub Actions test status.
+3. Read `docs/External_Signal_And_Competitive_Review.md`.
+4. Inspect `docs/MCP_Governance_Gateway.md`.
+5. Open `reports/MCP_Governance_Gateway_Report.md`.
+6. Read `docs/GitHub_Actions_Pilot_Operator_Quickstart.md`.
+7. Read `docs/Public_Review_Snapshot.md`.
+8. Review the latest GitHub Actions test status.
 
 ## Recommended 30-Minute Technical Review
 
@@ -109,6 +110,8 @@ Useful pilot files:
 ## Evidence Boundary
 
 The synthetic and proxy reports are useful for product inspection, repeatable testing, and pilot planning. They are not customer evidence.
+
+External community signal currently supports the problem space, not a broad market claim. See `docs/External_Signal_And_Competitive_Review.md` for the competitive overlap, public responses, and current positioning risk.
 
 The project should move from review to stronger claims only after a real pilot produces:
 

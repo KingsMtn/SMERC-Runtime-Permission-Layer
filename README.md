@@ -16,6 +16,7 @@ Fast reviewer paths:
 
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
+- Skeptical competitive review: `docs/External_Signal_And_Competitive_Review.md`
 - Pilot reviewer: `docs/Pilot_Intake_Template.md`
 - Strategic/platform reviewer: `docs/Why_SMERC_Fits_Strategic_Platforms.md`
 
@@ -46,6 +47,16 @@ Use this sequence:
 5. Review posture distribution, reviewer agreement, false release candidates, false constraint candidates, useful constraint examples, unavailable evaluations, and latency impact before considering recommendation or enforcement.
 
 Current status: pilot-ready for shadow-mode technical review. Not production-certified, compliance-attested, or customer-proven to reduce incidents.
+
+## Competitive Reality Check
+
+SMERC is not the only project working near agent runtime governance. OPA, AI gateways, sandboxed agent runtimes, MCP security tools, approval workflows, and signed audit systems already solve adjacent pieces of the problem.
+
+The narrow SMERC wedge is recoverability before execution:
+
+> Existing systems ask whether an agent or workflow is authorized. SMERC asks whether the proposed action is recoverable enough to execute now, and preserves why that decision was made.
+
+Read `docs/External_Signal_And_Competitive_Review.md` for the skeptical comparison, public signal review, overlap risks, and current non-claims.
 
 ## Start Here: Self-Service Company Evaluation
 
