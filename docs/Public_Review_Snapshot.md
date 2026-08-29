@@ -34,6 +34,7 @@ The repository contains working product artifacts, not only concept documents:
 - GitHub Actions shadow-mode integration
 - action-bound permits
 - Recovery Authority Gate for governed unlock after `FREEZE`, `ESCALATE`, or `DENY`
+- complete lifecycle proof connecting admission, recoverability scoring, SPARTa, Recovery Authority Gate, permit verification, synthetic execution, and DLL evidence
 - signed control evidence
 - GitHub deployment adapter with cancellation, rollback attempt, and non-secret execution reports
 - SPARTa posture-aware routing
@@ -51,6 +52,7 @@ The repository contains working product artifacts, not only concept documents:
 
 Recent external-review improvements:
 
+- complete end-to-end lifecycle proof with work/result/impact reporting
 - first-pilot path for 30-day GitHub Actions shadow-mode evidence
 - design-partner fit scorer
 - first-pilot packet generator
@@ -80,6 +82,7 @@ For a 30-minute technical review:
 6. Inspect `integrations/github_deployment/`.
 7. Inspect `reference_engine/sparta_router.py`.
 8. Inspect `reference_engine/decision_lifecycle_ledger.py`.
+9. Run `python -m reference_engine.complete_lifecycle_proof`.
 
 ## Best First Pilot Path
 
@@ -130,6 +133,8 @@ To move toward enterprise beta, SMERC needs:
 SMERC is not just a collection of documents. It has working engine, API, integration, audit, routing, permit, evidence, unlock, and pilot-review components.
 
 It now includes a reference Recovery Authority Gate, which answers what happens after SMERC pauses an action: the proposer cannot simply unlock itself; continuation requires verified authority, fresh recovery evidence, a bounded route, permit gating, monitoring, and ledger evidence.
+
+It also includes a complete lifecycle proof that connects the core parts into one reviewable run: `ADMIT -> FREEZE -> PAUSE -> UNLOCK -> THROTTLE -> CONSTRAINED_EXECUTE -> permit verified -> execution succeeded -> ledger valid`.
 
 The honest status is:
 

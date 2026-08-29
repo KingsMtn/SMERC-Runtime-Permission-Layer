@@ -24,6 +24,7 @@
     "Decision Lifecycle Ledger",
     "DLL intelligence reports",
     "Recovery Authority Gate for governed unlock after pause",
+    "complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence",
     "GitHub Actions pilot package",
     "GitHub PR Guardian",
     "MCP governance gateway",
@@ -42,6 +43,8 @@
     "external_signal_review": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/External_Signal_And_Competitive_Review.md",
     "public_review_snapshot": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Public_Review_Snapshot.md",
     "technical_diligence_index": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Technical_Diligence_Index.md",
+    "complete_lifecycle_proof": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Complete_Lifecycle_Proof.md",
+    "complete_lifecycle_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/complete_lifecycle/Complete_Lifecycle_Proof_Report.md",
     "latest_ci_status": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions",
     "evidence_boundary": "Synthetic examples, public-pattern benchmark scenarios, local reports, and public technical review are not the same as customer validation, production certification, incident-reduction proof, or willingness-to-pay proof."
   },
@@ -54,24 +57,30 @@
     },
     {
       "step": 2,
+      "name": "Run the complete lifecycle proof",
+      "command": "python -m reference_engine.complete_lifecycle_proof",
+      "result": "Reviewer sees the connected lifecycle: ADMIT -> FREEZE -> PAUSE -> UNLOCK -> THROTTLE -> CONSTRAINED_EXECUTE -> permit verified -> execution succeeded -> ledger valid."
+    },
+    {
+      "step": 3,
       "name": "Inspect the public action governance benchmark",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Public_Action_Governance_Benchmark.md",
       "result": "Reviewer sees where SMERC differs from simple allow/deny across metadata-only action scenarios."
     },
     {
-      "step": 3,
+      "step": 4,
       "name": "Run the pilot-in-a-box path",
       "command": "python -m reference_engine.pilot_in_a_box --pretty",
       "result": "Reviewer receives a local proof package across general AI-agent, cloud-admin, financial-runtime, and single-action examples."
     },
     {
-      "step": 4,
+      "step": 5,
       "name": "Replace examples with 5 to 25 safe company-owned metadata records",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/customer_eval/README.md",
       "result": "Reviewer can test whether SMERC changes judgment on actions that resemble their own workflows without sharing secrets or production authority."
     },
     {
-      "step": 5,
+      "step": 6,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."

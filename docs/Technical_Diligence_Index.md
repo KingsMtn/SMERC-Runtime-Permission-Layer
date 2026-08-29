@@ -17,6 +17,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `reference_engine/agent_permission_layer.py`
 - `reference_engine/recoverability_engine.py`
 - `reference_engine/sparta_router.py`
+- `reference_engine/complete_lifecycle_proof.py`
 - `reference_engine/runtime_evidence_trust.py`
 - `reference_engine/autonomy_budget.py`
 - `reference_engine/earned_autonomy.py`
@@ -67,9 +68,24 @@ This index is for strategic reviewers, platform teams, security architects, and 
 
 - `docs/Decision_Lifecycle_Ledger.md`
 - `docs/DLL_Intelligence.md`
+- `docs/Complete_Lifecycle_Proof.md`
 - `docs/Governance_Report_Generator.md`
 - `docs/Pilot_Ledger_Intake.md`
 - `docs/Pilot_Ledger_Metrics.md`
+
+## Complete Lifecycle Proof
+
+- `docs/Complete_Lifecycle_Proof.md`
+- `reference_engine/complete_lifecycle_proof.py`
+- `examples/complete_lifecycle/lifecycle_case.json`
+- `reports/complete_lifecycle/Complete_Lifecycle_Proof_Report.md`
+- `reports/complete_lifecycle/complete_lifecycle_proof.json`
+
+Work: connect runtime admission, SMERC recoverability scoring, SPARTa routing, Recovery Authority Gate, action-bound permits, execution result, and DLL evidence.
+
+Result: the reference case returns `COMPLETE` with a paused initial action, verified unlock, constrained continuation, verified permit, synthetic execution success, and valid ledger.
+
+Impact: a reviewer can inspect the whole governance lifecycle instead of reading disconnected module pages.
 
 ## Autonomy Governance
 

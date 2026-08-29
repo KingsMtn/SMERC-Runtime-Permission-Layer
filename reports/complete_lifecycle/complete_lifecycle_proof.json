@@ -1,0 +1,1412 @@
+{
+  "action_bound_permit": {
+    "permit": {
+      "action_hash": "e341aee27b23b43dcc18a4644a37cb3883e7ce539c80ddc858d13fbbc53a4b50",
+      "audience": "github-actions-deployer",
+      "authorization": "constrain",
+      "expires_at": 1120,
+      "issued_at": 1000,
+      "max_uses": 1,
+      "not_before": 1000,
+      "permit_id": "permit_e0c332b23d454add8340d521eaea42db",
+      "policy": {
+        "evidence_ceiling": "LIMITED_ENFORCE",
+        "mode": "ENFORCE",
+        "policy_hash": "00192af901a8427eaec15d64539ac3ecd4681163e545a23f4e0cb0f0e30367b3",
+        "policy_id": "complete-lifecycle-proof-policy",
+        "policy_revision": "1.0.0"
+      },
+      "posture": "THROTTLE",
+      "replay_id": "replay_prod-release-canary-4301_1788016601625_5d560d1c94e6",
+      "required_controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "rate_limit_external_side_effect"
+      ],
+      "tenant_id": "alpha",
+      "version": "smerc.permit.v1"
+    },
+    "verification": {
+      "audience": "github-actions-deployer",
+      "authorization": "constrain",
+      "permit_id": "permit_e0c332b23d454add8340d521eaea42db",
+      "required_controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "rate_limit_external_side_effect"
+      ]
+    },
+    "verified": true
+  },
+  "continuation_decision": {
+    "action_hash": "e341aee27b23b43dcc18a4644a37cb3883e7ce539c80ddc858d13fbbc53a4b50",
+    "action_id": "prod-release-canary-4301",
+    "action_language_version": "smerc.action.v1",
+    "controls": [
+      "limit_scope",
+      "preview_before_execution",
+      "record_replay",
+      "rate_limit_external_side_effect"
+    ],
+    "decision_trace": {
+      "profile": {
+        "label": "General automated action",
+        "notes": [],
+        "profile_id": "general"
+      },
+      "score_contributions": {
+        "confidence_score": {
+          "anomaly_resistance": 0.171,
+          "authorization_confidence": 0.313,
+          "containment_strength": 0.075,
+          "evidence_validity": 0.376,
+          "profile_multiplier": 1.0,
+          "total": 0.935
+        },
+        "irreversible_exposure_score": {
+          "base_action_risk": 0.058,
+          "containment_gap": 0.008,
+          "external_side_effect": 0.08,
+          "impact_scope": 0.026,
+          "irreversibility": 0.012,
+          "profile_multiplier": 1.0,
+          "rollback_latency": 0.007,
+          "sensitive_data": 0.0,
+          "total": 0.191
+        },
+        "operational_stress_score": {
+          "anomaly_pressure": 0.01,
+          "base_action_risk": 0.064,
+          "cancel_gap": 0.001,
+          "confidence_gap": 0.01,
+          "evidence_gap": 0.008,
+          "impact_scope": 0.04,
+          "profile_multiplier": 1.0,
+          "rollback_latency": 0.004,
+          "total": 0.137
+        },
+        "reversible_capacity_score": {
+          "cancel_reliability": 0.157,
+          "containment_strength": 0.226,
+          "evidence_validity": 0.094,
+          "profile_multiplier": 1.0,
+          "reversibility": 0.294,
+          "rollback_speed": 0.182,
+          "total": 0.953
+        },
+        "risk_adjusted_authorization_score": {
+          "confidence_score": 0.281,
+          "profile_multiplier": 1.0,
+          "recoverability_margin": 0.202,
+          "reversible_capacity": 0.429,
+          "total": 0.912
+        }
+      },
+      "threshold_trace": [
+        {
+          "details": {
+            "capacity": 0.953,
+            "capacity_rule": "< 0.42",
+            "confidence": 0.935,
+            "confidence_rule": "< 0.48"
+          },
+          "observed": 0.191,
+          "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+          "threshold": ">= 0.78",
+          "triggered": false
+        },
+        {
+          "details": {
+            "exposure": 0.191,
+            "exposure_rule": ">= 0.62"
+          },
+          "observed": 0.98,
+          "rule": "deny_by_unreliable_cancel_and_high_exposure",
+          "threshold": "< 0.3",
+          "triggered": false
+        },
+        {
+          "details": {
+            "external_side_effect": true,
+            "sensitive_data": false
+          },
+          "observed": 0.137,
+          "rule": "escalate_by_operational_stress",
+          "threshold": ">= 0.7",
+          "triggered": false
+        },
+        {
+          "details": {
+            "capacity": 0.953,
+            "confidence": 0.935
+          },
+          "observed": 0.935,
+          "rule": "freeze_by_low_confidence_or_capacity",
+          "threshold": "confidence < 0.45 or capacity < 0.36",
+          "triggered": false
+        },
+        {
+          "details": {
+            "exposure": 0.191,
+            "external_side_effect": true,
+            "profile_allows_external_side_effect_release": false
+          },
+          "observed": 0.912,
+          "rule": "throttle_by_authorization_exposure_or_side_effect",
+          "threshold": "authorization < 0.62 or exposure >= 0.45",
+          "triggered": true
+        }
+      ]
+    },
+    "domain_profile": {
+      "label": "General automated action",
+      "notes": [],
+      "profile_id": "general"
+    },
+    "enforcement_state": "constrain",
+    "language_version": "smerc.decision.v1",
+    "plain_english_summary": "Action 'prod-release-canary-4301' received THROTTLE. Irreversible exposure is 0.191, reversible capacity is 0.953, and authorization score is 0.912. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+    "policy": {
+      "evidence_ceiling": "LIMITED_ENFORCE",
+      "mode": "ENFORCE",
+      "policy_hash": "00192af901a8427eaec15d64539ac3ecd4681163e545a23f4e0cb0f0e30367b3",
+      "policy_id": "complete-lifecycle-proof-policy",
+      "policy_revision": "1.0.0",
+      "tenant_id": "alpha"
+    },
+    "posture": "THROTTLE",
+    "reason_codes": [
+      "EXTERNAL_SIDE_EFFECT"
+    ],
+    "reasons": [
+      {
+        "code": "EXTERNAL_SIDE_EFFECT",
+        "title": "Action has an external side effect"
+      }
+    ],
+    "replay": {
+      "action_hash": "e341aee27b23b43dcc18a4644a37cb3883e7ce539c80ddc858d13fbbc53a4b50",
+      "action_type": "promote_canary",
+      "actor": "agent-release-writer",
+      "context": {
+        "change_ticket": "CHG-4301",
+        "parent_replay": "prod-release-wide-4301",
+        "smerc_language": {
+          "action_hash": "e341aee27b23b43dcc18a4644a37cb3883e7ce539c80ddc858d13fbbc53a4b50",
+          "authority_basis": "Recovery Authority Gate approval with verified rollback and bounded canary scope",
+          "rollback_method": "Restore prior signed image and route canary traffic to zero.",
+          "target": {
+            "environment": "production",
+            "resource": "payments-service/canary"
+          },
+          "version": "smerc.action.v1"
+        },
+        "workflow": "production-five-percent-canary"
+      },
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "rate_limit_external_side_effect"
+      ],
+      "decision_trace": {
+        "profile": {
+          "label": "General automated action",
+          "notes": [],
+          "profile_id": "general"
+        },
+        "score_contributions": {
+          "confidence_score": {
+            "anomaly_resistance": 0.171,
+            "authorization_confidence": 0.313,
+            "containment_strength": 0.075,
+            "evidence_validity": 0.376,
+            "profile_multiplier": 1.0,
+            "total": 0.935
+          },
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.058,
+            "containment_gap": 0.008,
+            "external_side_effect": 0.08,
+            "impact_scope": 0.026,
+            "irreversibility": 0.012,
+            "profile_multiplier": 1.0,
+            "rollback_latency": 0.007,
+            "sensitive_data": 0.0,
+            "total": 0.191
+          },
+          "operational_stress_score": {
+            "anomaly_pressure": 0.01,
+            "base_action_risk": 0.064,
+            "cancel_gap": 0.001,
+            "confidence_gap": 0.01,
+            "evidence_gap": 0.008,
+            "impact_scope": 0.04,
+            "profile_multiplier": 1.0,
+            "rollback_latency": 0.004,
+            "total": 0.137
+          },
+          "reversible_capacity_score": {
+            "cancel_reliability": 0.157,
+            "containment_strength": 0.226,
+            "evidence_validity": 0.094,
+            "profile_multiplier": 1.0,
+            "reversibility": 0.294,
+            "rollback_speed": 0.182,
+            "total": 0.953
+          },
+          "risk_adjusted_authorization_score": {
+            "confidence_score": 0.281,
+            "profile_multiplier": 1.0,
+            "recoverability_margin": 0.202,
+            "reversible_capacity": 0.429,
+            "total": 0.912
+          }
+        },
+        "threshold_trace": [
+          {
+            "details": {
+              "capacity": 0.953,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.935,
+              "confidence_rule": "< 0.48"
+            },
+            "observed": 0.191,
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "threshold": ">= 0.78",
+            "triggered": false
+          },
+          {
+            "details": {
+              "exposure": 0.191,
+              "exposure_rule": ">= 0.62"
+            },
+            "observed": 0.98,
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "threshold": "< 0.3",
+            "triggered": false
+          },
+          {
+            "details": {
+              "external_side_effect": true,
+              "sensitive_data": false
+            },
+            "observed": 0.137,
+            "rule": "escalate_by_operational_stress",
+            "threshold": ">= 0.7",
+            "triggered": false
+          },
+          {
+            "details": {
+              "capacity": 0.953,
+              "confidence": 0.935
+            },
+            "observed": 0.935,
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": false
+          },
+          {
+            "details": {
+              "exposure": 0.191,
+              "external_side_effect": true,
+              "profile_allows_external_side_effect_release": false
+            },
+            "observed": 0.912,
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": true
+          }
+        ]
+      },
+      "domain_profile": {
+        "label": "General automated action",
+        "notes": [],
+        "profile_id": "general"
+      },
+      "enforcement_state": "constrain",
+      "evaluated_at": "2026-08-29T15:16:41.625074+00:00",
+      "language_version": "smerc.decision.v1",
+      "policy": {
+        "evidence_ceiling": "LIMITED_ENFORCE",
+        "mode": "ENFORCE",
+        "policy_hash": "00192af901a8427eaec15d64539ac3ecd4681163e545a23f4e0cb0f0e30367b3",
+        "policy_id": "complete-lifecycle-proof-policy",
+        "policy_revision": "1.0.0",
+        "tenant_id": "alpha"
+      },
+      "posture": "THROTTLE",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_prod-release-canary-4301_1788016601625_5d560d1c94e6",
+      "scores": {
+        "cancel_reliability_score": 0.98,
+        "confidence_score": 0.935,
+        "irreversible_exposure_score": 0.191,
+        "operational_stress_score": 0.137,
+        "reversible_capacity_score": 0.953,
+        "risk_adjusted_authorization_score": 0.912
+      },
+      "tool": "deployment-api",
+      "transition": {
+        "conditions": [
+          {
+            "code": "IMPACT_SCOPE_REDUCED",
+            "description": "Reduce impact scope to 0.45 or lower.",
+            "field": "signals.impact_scope",
+            "operator": "lte",
+            "value": 0.45
+          },
+          {
+            "code": "PREVIEW_APPROVED",
+            "description": "Approve an execution preview.",
+            "field": "evidence.preview_approved",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "code": "EXTERNAL_RATE_LIMIT_SET",
+            "description": "Set an external-effect rate limit.",
+            "field": "controls.external_rate_limit",
+            "operator": "present",
+            "value": true
+          }
+        ],
+        "eligible_target_posture": "ALLOW",
+        "mode": "conditional",
+        "requires_new_request": false
+      },
+      "transition_guidance": {
+        "blocking_factors": [],
+        "control_improvements": [
+          "limit_scope",
+          "preview_before_execution",
+          "rate limit or stage external side effect",
+          "rate_limit_external_side_effect",
+          "record_replay"
+        ],
+        "current_posture": "THROTTLE",
+        "evidence_needed": [],
+        "release_conditions": {
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "irreversible_exposure_below": 0.45,
+          "reversible_capacity_target": 0.6
+        },
+        "target_posture": "THROTTLE"
+      }
+    },
+    "replay_id": "replay_prod-release-canary-4301_1788016601625_5d560d1c94e6",
+    "scores": {
+      "cancel_reliability_score": 0.98,
+      "confidence_score": 0.935,
+      "irreversible_exposure_score": 0.191,
+      "operational_stress_score": 0.137,
+      "reversible_capacity_score": 0.953,
+      "risk_adjusted_authorization_score": 0.912
+    },
+    "structured_controls": [
+      {
+        "code": "limit_scope",
+        "title": "Limit action scope"
+      },
+      {
+        "code": "preview_before_execution",
+        "title": "Preview before execution"
+      },
+      {
+        "code": "record_replay",
+        "title": "Record a replayable decision"
+      },
+      {
+        "code": "rate_limit_external_side_effect",
+        "title": "Rate-limit external effects"
+      }
+    ],
+    "tenant_id": "alpha",
+    "transition": {
+      "conditions": [
+        {
+          "code": "IMPACT_SCOPE_REDUCED",
+          "description": "Reduce impact scope to 0.45 or lower.",
+          "field": "signals.impact_scope",
+          "operator": "lte",
+          "value": 0.45
+        },
+        {
+          "code": "PREVIEW_APPROVED",
+          "description": "Approve an execution preview.",
+          "field": "evidence.preview_approved",
+          "operator": "eq",
+          "value": true
+        },
+        {
+          "code": "EXTERNAL_RATE_LIMIT_SET",
+          "description": "Set an external-effect rate limit.",
+          "field": "controls.external_rate_limit",
+          "operator": "present",
+          "value": true
+        }
+      ],
+      "eligible_target_posture": "ALLOW",
+      "mode": "conditional",
+      "requires_new_request": false
+    },
+    "transition_guidance": {
+      "blocking_factors": [],
+      "control_improvements": [
+        "limit_scope",
+        "preview_before_execution",
+        "rate limit or stage external side effect",
+        "rate_limit_external_side_effect",
+        "record_replay"
+      ],
+      "current_posture": "THROTTLE",
+      "evidence_needed": [],
+      "release_conditions": {
+        "authorization_score_at_or_above": 0.62,
+        "confidence_score_target": 0.7,
+        "irreversible_exposure_below": 0.45,
+        "reversible_capacity_target": 0.6
+      },
+      "target_posture": "THROTTLE"
+    }
+  },
+  "continuation_sparta_route": {
+    "applied_controls": [
+      "checkpoint_before_execution",
+      "limit_scope",
+      "preserve_replay",
+      "preview_before_execution",
+      "record_execution_report",
+      "require_rollback_plan"
+    ],
+    "blocked_controls": [],
+    "decision_digest": "008a1a8004b5cc1bd0847aaa7d2b51758cb6970a80e990e29f63a0dd861d9b06",
+    "decision_replay_id": "replay_prod-release-canary-4301_1788016601625_5d560d1c94e6",
+    "effective_scope_units": 5,
+    "executable": true,
+    "plain_english_summary": "SPARTa converted the throttled SMERC posture into a constrained execution route with smaller scope and recovery controls.",
+    "plan_id": "prod-canary-deploy",
+    "reason_codes": [
+      "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
+    ],
+    "recommended_next_action": "Execute only through an adapter that enforces the listed controls and records control evidence.",
+    "route_id": "sparta_prod-canary-deploy_671e694d938d",
+    "route_state": "CONSTRAINED_EXECUTE",
+    "routed_at": "2026-08-29T15:16:41+00:00",
+    "source_posture": "THROTTLE",
+    "tool_plan": {
+      "action": "deploy_canary",
+      "max_scope_units": 100,
+      "metadata": {
+        "environment": "production",
+        "scope": "five-percent-canary",
+        "service": "payments-service",
+        "workflow": "deploy.yml"
+      },
+      "plan_id": "prod-canary-deploy",
+      "requested_capability": "deployment",
+      "requested_scope_units": 5,
+      "side_effect_level": "external",
+      "supports_checkpoint": true,
+      "supports_dry_run": true,
+      "supports_human_approval": true,
+      "supports_rollback": true,
+      "supports_scope_limit": true,
+      "tool": "github_actions",
+      "version": "smerc.sparta-plan.v1"
+    },
+    "version": "smerc.sparta-route.v1"
+  },
+  "decision_lifecycle_ledger": {
+    "decision_id": "complete-lifecycle:complete-lifecycle-prod-deploy-001",
+    "head_record_hash": "76a2b75bbfd1c7a173bce68f6686733d9ecf3c77aac9accbacda3b7d96ab7263",
+    "record_count": 7,
+    "records": [
+      {
+        "actor": "agent-release-writer",
+        "decision_id": "complete-lifecycle:complete-lifecycle-prod-deploy-001",
+        "event_type": "REQUEST",
+        "payload": {
+          "environment": "production",
+          "initiated_by": "agent-release-writer",
+          "requested_operation": "wide_production_deploy",
+          "risk_profile": {
+            "action_id": "prod-release-wide-4301",
+            "admission_decision": "ADMIT",
+            "target": {
+              "environment": "production",
+              "resource": "payments-service/all-regions"
+            }
+          }
+        },
+        "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "record_hash": "a907c2fc60248a5692c59a8bb8a891249b0e313cf112c231eef26116b4470568",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-29T15:16:41+00:00",
+        "sequence": 1,
+        "tenant_id": "alpha"
+      },
+      {
+        "actor": "smerc.runtime_admission_gate",
+        "decision_id": "complete-lifecycle:complete-lifecycle-prod-deploy-001",
+        "event_type": "EVIDENCE",
+        "payload": {
+          "available_evidence": [
+            "identity_valid",
+            "session_scope_valid",
+            "permit_valid",
+            "typed_contract_valid",
+            "attestation_valid",
+            "least_privilege_confirmed",
+            "object_shape_expected",
+            "required_evidence_present"
+          ],
+          "confidence_score": 0.424,
+          "external_dependencies": [
+            "deployment-api",
+            "github_actions"
+          ],
+          "missing_evidence": [],
+          "model_version": "deterministic_reference_engine",
+          "policy_version": "smerc.complete-lifecycle-proof.v1"
+        },
+        "previous_record_hash": "a907c2fc60248a5692c59a8bb8a891249b0e313cf112c231eef26116b4470568",
+        "record_hash": "df54c969475cca0c285277adcb17309941746e49d35ad3af46089b466ca5033f",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-29T15:16:41+00:00",
+        "sequence": 2,
+        "tenant_id": "alpha"
+      },
+      {
+        "actor": "smerc.complete_lifecycle_proof",
+        "decision_id": "complete-lifecycle:complete-lifecycle-prod-deploy-001",
+        "event_type": "EVALUATION",
+        "payload": {
+          "authorization_recommendation": "FREEZE",
+          "entropy_indicators": [
+            "IRREVERSIBLE_EXPOSURE_ELEVATED",
+            "RECOVERY_CAPACITY_LOW",
+            "ROLLBACK_LATENCY_HIGH",
+            "CONTAINMENT_WEAK",
+            "EVIDENCE_VALIDITY_LOW",
+            "IMPACT_SCOPE_WIDE",
+            "EXTERNAL_SIDE_EFFECT"
+          ],
+          "reason_codes": [
+            "IRREVERSIBLE_EXPOSURE_ELEVATED",
+            "RECOVERY_CAPACITY_LOW",
+            "ROLLBACK_LATENCY_HIGH",
+            "CONTAINMENT_WEAK",
+            "EVIDENCE_VALIDITY_LOW",
+            "IMPACT_SCOPE_WIDE",
+            "EXTERNAL_SIDE_EFFECT"
+          ],
+          "recommended_safeguards": [
+            "pause_execution",
+            "collect_more_evidence",
+            "snapshot_current_state",
+            "preserve_replay"
+          ],
+          "recoverability_score": 0.33,
+          "structural_state": "ADMIT->PAUSE->UNLOCK"
+        },
+        "previous_record_hash": "df54c969475cca0c285277adcb17309941746e49d35ad3af46089b466ca5033f",
+        "record_hash": "08d1b85eb1b0a16a085553f3c443507fc77c9f5d8b8d10e5b2979fc1c2a07b29",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-29T15:16:41+00:00",
+        "sequence": 3,
+        "tenant_id": "alpha"
+      },
+      {
+        "actor": "smerc.recovery_authority_gate",
+        "decision_id": "complete-lifecycle:complete-lifecycle-prod-deploy-001",
+        "event_type": "HUMAN_INTERACTION",
+        "payload": {
+          "final_recommendation": "THROTTLE",
+          "interaction": "modified",
+          "original_recommendation": "FREEZE",
+          "rationale": "Recovery Authority Gate returned UNLOCK.",
+          "reviewer_id": "security-reviewer-primary"
+        },
+        "previous_record_hash": "08d1b85eb1b0a16a085553f3c443507fc77c9f5d8b8d10e5b2979fc1c2a07b29",
+        "record_hash": "e38a5b9e02b7bcc8595fec710804906b195e8dd3dc432bc42bad67218d6726aa",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-29T15:16:41+00:00",
+        "sequence": 4,
+        "tenant_id": "alpha"
+      },
+      {
+        "actor": "smerc.execution_adapter.synthetic",
+        "decision_id": "complete-lifecycle:complete-lifecycle-prod-deploy-001",
+        "event_type": "EXECUTION",
+        "payload": {
+          "duration_ms": 37,
+          "executed_operation": "deploy_canary",
+          "execution_status": "succeeded",
+          "rollback_performed": false,
+          "rollback_success": null,
+          "started_at": "2026-08-29T15:16:41+00:00"
+        },
+        "previous_record_hash": "e38a5b9e02b7bcc8595fec710804906b195e8dd3dc432bc42bad67218d6726aa",
+        "record_hash": "9df7656645ab6b876ca569d524dfc9a59344f204cf193466e4df508f8ac2f219",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-29T15:16:41+00:00",
+        "sequence": 5,
+        "tenant_id": "alpha"
+      },
+      {
+        "actor": "smerc.complete_lifecycle_proof",
+        "decision_id": "complete-lifecycle:complete-lifecycle-prod-deploy-001",
+        "event_type": "OUTCOME",
+        "payload": {
+          "controls_sufficient": true,
+          "cost_incurred": 0.0,
+          "customer_impact": "none_synthetic",
+          "financial_impact": "none_synthetic",
+          "judged_correct": true,
+          "security_impact": "paused_then_verified_unlock",
+          "time_to_recover_minutes": 0.0,
+          "unexpected_consequences": false
+        },
+        "previous_record_hash": "9df7656645ab6b876ca569d524dfc9a59344f204cf193466e4df508f8ac2f219",
+        "record_hash": "226d0f2314188302046589f03dc4e1b14335a7ba59f2312f1db569b10f62b336",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-29T15:16:41+00:00",
+        "sequence": 6,
+        "tenant_id": "alpha"
+      },
+      {
+        "actor": "smerc.dll",
+        "decision_id": "complete-lifecycle:complete-lifecycle-prod-deploy-001",
+        "event_type": "LEARNING_RECOMMENDATION",
+        "payload": {
+          "activation_status": "requires_review",
+          "actual_outcome": "unlock=UNLOCK; execution=succeeded",
+          "confidence_calibration_changes": [
+            "Collect real reviewer labels before changing thresholds."
+          ],
+          "expected_outcome": "paused action continues only through separate unlock authority",
+          "human_override_effectiveness": "requires_real_reviewer_labels",
+          "prediction_error": "not_measured_synthetic",
+          "recommended_policy_updates": [
+            "Require Recovery Authority Gate before permitting paused actions."
+          ],
+          "suggested_rule_modifications": [
+            "Keep self-unlock attempts as DENY_UNLOCK."
+          ]
+        },
+        "previous_record_hash": "226d0f2314188302046589f03dc4e1b14335a7ba59f2312f1db569b10f62b336",
+        "record_hash": "76a2b75bbfd1c7a173bce68f6686733d9ecf3c77aac9accbacda3b7d96ab7263",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-08-29T15:16:41+00:00",
+        "sequence": 7,
+        "tenant_id": "alpha"
+      }
+    ],
+    "summary": {
+      "decision_id": "complete-lifecycle:complete-lifecycle-prod-deploy-001",
+      "event_counts": {
+        "EVALUATION": 1,
+        "EVIDENCE": 1,
+        "EXECUTION": 1,
+        "HUMAN_INTERACTION": 1,
+        "LEARNING_RECOMMENDATION": 1,
+        "OUTCOME": 1,
+        "REQUEST": 1
+      },
+      "final_event_type": "LEARNING_RECOMMENDATION",
+      "judged_correct": true,
+      "override_count": 0,
+      "pending_learning_recommendations": 1,
+      "record_count": 7,
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "alpha"
+    },
+    "tenant_id": "alpha",
+    "verification": {
+      "errors": [],
+      "head_record_hash": "76a2b75bbfd1c7a173bce68f6686733d9ecf3c77aac9accbacda3b7d96ab7263",
+      "record_count": 7,
+      "valid": true
+    },
+    "version": "smerc.decision-lifecycle-ledger.v1"
+  },
+  "execution_result": {
+    "duration_ms": 37,
+    "executed_operation": "deploy_canary",
+    "execution_status": "succeeded",
+    "notes": "Synthetic execution result for lifecycle proof only.",
+    "permit_id": "permit_e0c332b23d454add8340d521eaea42db",
+    "rollback_performed": false,
+    "rollback_success": null,
+    "started_at": "2026-08-29T15:16:41+00:00"
+  },
+  "generated_at": "2026-08-29T15:16:41+00:00",
+  "initial_decision": {
+    "action_hash": "5a5986b2affb8925148294340856604816783a020c7910fa4768c62c7f059eaa",
+    "action_id": "prod-release-wide-4301",
+    "action_language_version": "smerc.action.v1",
+    "controls": [
+      "pause_execution",
+      "collect_more_evidence",
+      "snapshot_current_state",
+      "preserve_replay"
+    ],
+    "decision_trace": {
+      "profile": {
+        "label": "General automated action",
+        "notes": [],
+        "profile_id": "general"
+      },
+      "score_contributions": {
+        "confidence_score": {
+          "anomaly_resistance": 0.104,
+          "authorization_confidence": 0.177,
+          "containment_strength": 0.022,
+          "evidence_validity": 0.12,
+          "profile_multiplier": 1.0,
+          "total": 0.424
+        },
+        "irreversible_exposure_score": {
+          "base_action_risk": 0.126,
+          "containment_gap": 0.094,
+          "external_side_effect": 0.08,
+          "impact_scope": 0.086,
+          "irreversibility": 0.156,
+          "profile_multiplier": 1.0,
+          "rollback_latency": 0.128,
+          "sensitive_data": 0.0,
+          "total": 0.669
+        },
+        "operational_stress_score": {
+          "anomaly_pressure": 0.084,
+          "base_action_risk": 0.14,
+          "cancel_gap": 0.031,
+          "confidence_gap": 0.058,
+          "evidence_gap": 0.098,
+          "impact_scope": 0.13,
+          "profile_multiplier": 1.0,
+          "rollback_latency": 0.075,
+          "total": 0.615
+        },
+        "reversible_capacity_score": {
+          "cancel_reliability": 0.077,
+          "containment_strength": 0.067,
+          "evidence_validity": 0.03,
+          "profile_multiplier": 1.0,
+          "reversibility": 0.108,
+          "rollback_speed": 0.048,
+          "total": 0.33
+        },
+        "risk_adjusted_authorization_score": {
+          "confidence_score": 0.127,
+          "profile_multiplier": 1.0,
+          "recoverability_margin": 0.083,
+          "reversible_capacity": 0.149,
+          "total": 0.358
+        }
+      },
+      "threshold_trace": [
+        {
+          "details": {
+            "capacity": 0.33,
+            "capacity_rule": "< 0.42",
+            "confidence": 0.424,
+            "confidence_rule": "< 0.48"
+          },
+          "observed": 0.669,
+          "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+          "threshold": ">= 0.78",
+          "triggered": false
+        },
+        {
+          "details": {
+            "exposure": 0.669,
+            "exposure_rule": ">= 0.62"
+          },
+          "observed": 0.48,
+          "rule": "deny_by_unreliable_cancel_and_high_exposure",
+          "threshold": "< 0.3",
+          "triggered": false
+        },
+        {
+          "details": {
+            "external_side_effect": true,
+            "sensitive_data": false
+          },
+          "observed": 0.615,
+          "rule": "escalate_by_operational_stress",
+          "threshold": ">= 0.7",
+          "triggered": false
+        },
+        {
+          "details": {
+            "capacity": 0.33,
+            "confidence": 0.424
+          },
+          "observed": 0.33,
+          "rule": "freeze_by_low_confidence_or_capacity",
+          "threshold": "confidence < 0.45 or capacity < 0.36",
+          "triggered": true
+        },
+        {
+          "details": {
+            "exposure": 0.669,
+            "external_side_effect": true,
+            "profile_allows_external_side_effect_release": false
+          },
+          "observed": 0.358,
+          "rule": "throttle_by_authorization_exposure_or_side_effect",
+          "threshold": "authorization < 0.62 or exposure >= 0.45",
+          "triggered": true
+        }
+      ]
+    },
+    "domain_profile": {
+      "label": "General automated action",
+      "notes": [],
+      "profile_id": "general"
+    },
+    "enforcement_state": "pause",
+    "language_version": "smerc.decision.v1",
+    "plain_english_summary": "Action 'prod-release-wide-4301' received FREEZE. Irreversible exposure is 0.669, reversible capacity is 0.330, and authorization score is 0.358. Controls: pause_execution, collect_more_evidence, snapshot_current_state, preserve_replay.",
+    "policy": {
+      "evidence_ceiling": "LIMITED_ENFORCE",
+      "mode": "ENFORCE",
+      "policy_hash": "00192af901a8427eaec15d64539ac3ecd4681163e545a23f4e0cb0f0e30367b3",
+      "policy_id": "complete-lifecycle-proof-policy",
+      "policy_revision": "1.0.0",
+      "tenant_id": "alpha"
+    },
+    "posture": "FREEZE",
+    "reason_codes": [
+      "IRREVERSIBLE_EXPOSURE_ELEVATED",
+      "RECOVERY_CAPACITY_LOW",
+      "ROLLBACK_LATENCY_HIGH",
+      "CONTAINMENT_WEAK",
+      "EVIDENCE_VALIDITY_LOW",
+      "IMPACT_SCOPE_WIDE",
+      "EXTERNAL_SIDE_EFFECT"
+    ],
+    "reasons": [
+      {
+        "code": "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "title": "Irreversible exposure is elevated"
+      },
+      {
+        "code": "RECOVERY_CAPACITY_LOW",
+        "title": "Recovery capacity is low"
+      },
+      {
+        "code": "ROLLBACK_LATENCY_HIGH",
+        "title": "Rollback latency is high"
+      },
+      {
+        "code": "CONTAINMENT_WEAK",
+        "title": "Containment is weak"
+      },
+      {
+        "code": "EVIDENCE_VALIDITY_LOW",
+        "title": "Evidence validity is low"
+      },
+      {
+        "code": "IMPACT_SCOPE_WIDE",
+        "title": "Impact scope is wide"
+      },
+      {
+        "code": "EXTERNAL_SIDE_EFFECT",
+        "title": "Action has an external side effect"
+      }
+    ],
+    "replay": {
+      "action_hash": "5a5986b2affb8925148294340856604816783a020c7910fa4768c62c7f059eaa",
+      "action_type": "wide_production_deploy",
+      "actor": "agent-release-writer",
+      "context": {
+        "change_ticket": "CHG-4301",
+        "reason_for_proof": "Show that a risky action freezes before execution and cannot unlock itself.",
+        "smerc_language": {
+          "action_hash": "5a5986b2affb8925148294340856604816783a020c7910fa4768c62c7f059eaa",
+          "authority_basis": "approved deployment ticket with missing rollback proof",
+          "rollback_method": "Rollback workflow exists but has not been verified for the current artifact.",
+          "target": {
+            "environment": "production",
+            "resource": "payments-service/all-regions"
+          },
+          "version": "smerc.action.v1"
+        },
+        "workflow": "production-wide-deploy"
+      },
+      "controls": [
+        "pause_execution",
+        "collect_more_evidence",
+        "snapshot_current_state",
+        "preserve_replay"
+      ],
+      "decision_trace": {
+        "profile": {
+          "label": "General automated action",
+          "notes": [],
+          "profile_id": "general"
+        },
+        "score_contributions": {
+          "confidence_score": {
+            "anomaly_resistance": 0.104,
+            "authorization_confidence": 0.177,
+            "containment_strength": 0.022,
+            "evidence_validity": 0.12,
+            "profile_multiplier": 1.0,
+            "total": 0.424
+          },
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.126,
+            "containment_gap": 0.094,
+            "external_side_effect": 0.08,
+            "impact_scope": 0.086,
+            "irreversibility": 0.156,
+            "profile_multiplier": 1.0,
+            "rollback_latency": 0.128,
+            "sensitive_data": 0.0,
+            "total": 0.669
+          },
+          "operational_stress_score": {
+            "anomaly_pressure": 0.084,
+            "base_action_risk": 0.14,
+            "cancel_gap": 0.031,
+            "confidence_gap": 0.058,
+            "evidence_gap": 0.098,
+            "impact_scope": 0.13,
+            "profile_multiplier": 1.0,
+            "rollback_latency": 0.075,
+            "total": 0.615
+          },
+          "reversible_capacity_score": {
+            "cancel_reliability": 0.077,
+            "containment_strength": 0.067,
+            "evidence_validity": 0.03,
+            "profile_multiplier": 1.0,
+            "reversibility": 0.108,
+            "rollback_speed": 0.048,
+            "total": 0.33
+          },
+          "risk_adjusted_authorization_score": {
+            "confidence_score": 0.127,
+            "profile_multiplier": 1.0,
+            "recoverability_margin": 0.083,
+            "reversible_capacity": 0.149,
+            "total": 0.358
+          }
+        },
+        "threshold_trace": [
+          {
+            "details": {
+              "capacity": 0.33,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.424,
+              "confidence_rule": "< 0.48"
+            },
+            "observed": 0.669,
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "threshold": ">= 0.78",
+            "triggered": false
+          },
+          {
+            "details": {
+              "exposure": 0.669,
+              "exposure_rule": ">= 0.62"
+            },
+            "observed": 0.48,
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "threshold": "< 0.3",
+            "triggered": false
+          },
+          {
+            "details": {
+              "external_side_effect": true,
+              "sensitive_data": false
+            },
+            "observed": 0.615,
+            "rule": "escalate_by_operational_stress",
+            "threshold": ">= 0.7",
+            "triggered": false
+          },
+          {
+            "details": {
+              "capacity": 0.33,
+              "confidence": 0.424
+            },
+            "observed": 0.33,
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": true
+          },
+          {
+            "details": {
+              "exposure": 0.669,
+              "external_side_effect": true,
+              "profile_allows_external_side_effect_release": false
+            },
+            "observed": 0.358,
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": true
+          }
+        ]
+      },
+      "domain_profile": {
+        "label": "General automated action",
+        "notes": [],
+        "profile_id": "general"
+      },
+      "enforcement_state": "pause",
+      "evaluated_at": "2026-08-29T15:16:41.625074+00:00",
+      "language_version": "smerc.decision.v1",
+      "policy": {
+        "evidence_ceiling": "LIMITED_ENFORCE",
+        "mode": "ENFORCE",
+        "policy_hash": "00192af901a8427eaec15d64539ac3ecd4681163e545a23f4e0cb0f0e30367b3",
+        "policy_id": "complete-lifecycle-proof-policy",
+        "policy_revision": "1.0.0",
+        "tenant_id": "alpha"
+      },
+      "posture": "FREEZE",
+      "reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "RECOVERY_CAPACITY_LOW",
+        "ROLLBACK_LATENCY_HIGH",
+        "CONTAINMENT_WEAK",
+        "EVIDENCE_VALIDITY_LOW",
+        "IMPACT_SCOPE_WIDE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_prod-release-wide-4301_1788016601625_0a9ed21538d6",
+      "scores": {
+        "cancel_reliability_score": 0.48,
+        "confidence_score": 0.424,
+        "irreversible_exposure_score": 0.669,
+        "operational_stress_score": 0.615,
+        "reversible_capacity_score": 0.33,
+        "risk_adjusted_authorization_score": 0.358
+      },
+      "tool": "deployment-api",
+      "transition": {
+        "conditions": [
+          {
+            "code": "EVIDENCE_VALIDITY_RESTORED",
+            "description": "Raise evidence validity to at least 0.65.",
+            "field": "signals.evidence_validity",
+            "operator": "gte",
+            "value": 0.65
+          },
+          {
+            "code": "STATE_SNAPSHOT_CREATED",
+            "description": "Create a current-state snapshot.",
+            "field": "evidence.state_snapshot_created",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eligible_target_posture": "THROTTLE",
+        "mode": "conditional",
+        "requires_new_request": false
+      },
+      "transition_guidance": {
+        "blocking_factors": [
+          "confidence_below_release_target",
+          "irreversible_exposure_above_release_threshold",
+          "reversible_capacity_incomplete"
+        ],
+        "control_improvements": [
+          "collect_more_evidence",
+          "increase_containment",
+          "narrow_impact_scope",
+          "pause_execution",
+          "preserve_replay",
+          "prove_rollback_path",
+          "rate limit or stage external side effect",
+          "reliable cancellation handle",
+          "snapshot_current_state"
+        ],
+        "current_posture": "FREEZE",
+        "evidence_needed": [
+          "rollback test or recovery evidence",
+          "stronger authorization and evidence validity"
+        ],
+        "release_conditions": {
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "irreversible_exposure_below": 0.45,
+          "reversible_capacity_target": 0.6
+        },
+        "target_posture": "THROTTLE"
+      }
+    },
+    "replay_id": "replay_prod-release-wide-4301_1788016601625_0a9ed21538d6",
+    "scores": {
+      "cancel_reliability_score": 0.48,
+      "confidence_score": 0.424,
+      "irreversible_exposure_score": 0.669,
+      "operational_stress_score": 0.615,
+      "reversible_capacity_score": 0.33,
+      "risk_adjusted_authorization_score": 0.358
+    },
+    "structured_controls": [
+      {
+        "code": "pause_execution",
+        "title": "Pause execution"
+      },
+      {
+        "code": "collect_more_evidence",
+        "title": "Collect additional evidence"
+      },
+      {
+        "code": "snapshot_current_state",
+        "title": "Snapshot current state"
+      },
+      {
+        "code": "preserve_replay",
+        "title": "Preserve the decision replay"
+      }
+    ],
+    "tenant_id": "alpha",
+    "transition": {
+      "conditions": [
+        {
+          "code": "EVIDENCE_VALIDITY_RESTORED",
+          "description": "Raise evidence validity to at least 0.65.",
+          "field": "signals.evidence_validity",
+          "operator": "gte",
+          "value": 0.65
+        },
+        {
+          "code": "STATE_SNAPSHOT_CREATED",
+          "description": "Create a current-state snapshot.",
+          "field": "evidence.state_snapshot_created",
+          "operator": "eq",
+          "value": true
+        }
+      ],
+      "eligible_target_posture": "THROTTLE",
+      "mode": "conditional",
+      "requires_new_request": false
+    },
+    "transition_guidance": {
+      "blocking_factors": [
+        "confidence_below_release_target",
+        "irreversible_exposure_above_release_threshold",
+        "reversible_capacity_incomplete"
+      ],
+      "control_improvements": [
+        "collect_more_evidence",
+        "increase_containment",
+        "narrow_impact_scope",
+        "pause_execution",
+        "preserve_replay",
+        "prove_rollback_path",
+        "rate limit or stage external side effect",
+        "reliable cancellation handle",
+        "snapshot_current_state"
+      ],
+      "current_posture": "FREEZE",
+      "evidence_needed": [
+        "rollback test or recovery evidence",
+        "stronger authorization and evidence validity"
+      ],
+      "release_conditions": {
+        "authorization_score_at_or_above": 0.62,
+        "confidence_score_target": 0.7,
+        "irreversible_exposure_below": 0.45,
+        "reversible_capacity_target": 0.6
+      },
+      "target_posture": "THROTTLE"
+    }
+  },
+  "initial_sparta_route": {
+    "applied_controls": [
+      "pause_execution",
+      "preserve_replay",
+      "snapshot_current_state",
+      "checkpoint_before_execution"
+    ],
+    "blocked_controls": [
+      "execute"
+    ],
+    "decision_digest": "346e4c8a1ae8eb0ffd5a8a50974b0d93feead2285355e2c16cfcac13276b0f85",
+    "decision_replay_id": "replay_prod-release-wide-4301_1788016601625_0a9ed21538d6",
+    "effective_scope_units": 0,
+    "executable": false,
+    "plain_english_summary": "SPARTa paused execution because SMERC returned FREEZE, indicating instability or unacceptable deployment risk.",
+    "plan_id": "prod-wide-deploy",
+    "reason_codes": [
+      "SPARTA_FREEZE_PAUSES_AUTOMATION"
+    ],
+    "recommended_next_action": "Preserve the replay, snapshot current state, and require accountable review before a new request.",
+    "route_id": "sparta_prod-wide-deploy_48381f842087",
+    "route_state": "PAUSE",
+    "routed_at": "2026-08-29T15:16:41+00:00",
+    "source_posture": "FREEZE",
+    "tool_plan": {
+      "action": "deploy_all_regions",
+      "max_scope_units": 100,
+      "metadata": {
+        "environment": "production",
+        "service": "payments-service",
+        "workflow": "deploy.yml"
+      },
+      "plan_id": "prod-wide-deploy",
+      "requested_capability": "deployment",
+      "requested_scope_units": 95,
+      "side_effect_level": "external",
+      "supports_checkpoint": true,
+      "supports_dry_run": true,
+      "supports_human_approval": true,
+      "supports_rollback": true,
+      "supports_scope_limit": true,
+      "tool": "github_actions",
+      "version": "smerc.sparta-plan.v1"
+    },
+    "version": "smerc.sparta-route.v1"
+  },
+  "markdown_report": "# SMERC Complete Lifecycle Proof Report\n\nGenerated: `2026-08-29T15:16:41+00:00`\nTenant: `alpha`\n\n## Work / Result / Impact\n\nWork: run one proposed automated action through runtime admission, recoverability scoring, SPARTa routing, Recovery Authority Gate, action-bound permit issuance, execution simulation, and Decision Lifecycle Ledger evidence.\n\nResult: `COMPLETE` with initial posture `FREEZE`, unlock state `UNLOCK`, continuation posture `THROTTLE`, and ledger validity `True`.\n\nImpact: reviewers can inspect SMERC as a connected lifecycle instead of scattered modules. The proof shows that a paused action cannot unlock itself; continuation requires separate authority, fresh recovery evidence, a bounded route, a short-lived permit, and a replayable ledger.\n\n## Lifecycle\n\n| Stage | State |\n| --- | --- |\n| Runtime admission | `ADMIT` |\n| Initial SMERC posture | `FREEZE` |\n| Initial SPARTa route | `PAUSE` |\n| Recovery Authority Gate | `UNLOCK` |\n| Continuation SMERC posture | `THROTTLE` |\n| Continuation SPARTa route | `CONSTRAINED_EXECUTE` |\n| Permit issued | `True` |\n| Permit verified | `True` |\n| Execution status | `succeeded` |\n| Ledger valid | `True` |\n\n## Reason Codes\n\n- `CONTAINMENT_WEAK`\n- `EVIDENCE_VALIDITY_LOW`\n- `EXTERNAL_SIDE_EFFECT`\n- `IMPACT_SCOPE_WIDE`\n- `IRREVERSIBLE_EXPOSURE_ELEVATED`\n- `RECOVERY_CAPACITY_LOW`\n- `ROLLBACK_LATENCY_HIGH`\n- `RUNTIME_ADMISSION_ADMIT`\n- `SPARTA_FREEZE_PAUSES_AUTOMATION`\n- `SPARTA_THROTTLE_WITH_NATIVE_CONTROLS`\n\n## Controls\n\n- `checkpoint_before_execution`\n- `collect_more_evidence`\n- `continue_to_recoverability_scoring`\n- `limit_scope`\n- `pause_execution`\n- `preserve_replay`\n- `preview_before_execution`\n- `rate_limit_external_side_effect`\n- `record_execution_report`\n- `record_replay`\n- `require_rollback_plan`\n- `snapshot_current_state`\n\n## Boundary\n\nThis is a deterministic, metadata-only lifecycle proof. It does not execute production commands, prove production safety, certify compliance, validate customer demand, or prove incident reduction.\n",
+  "recovery_authority_gate": {
+    "case_id": "COMPLETE-LIFECYCLE-UNLOCK-001",
+    "generated_at": "2026-08-29T15:16:41+00:00",
+    "paused_decision": {
+      "action_hash": "5a5986b2affb8925148294340856604816783a020c7910fa4768c62c7f059eaa",
+      "drivers": [],
+      "posture": "FREEZE",
+      "proposing_actor_id": "agent-release-writer",
+      "replay_id": "replay_prod-release-wide-4301_1788016601625_0a9ed21538d6",
+      "state": "PAUSED_DECISION_VALID"
+    },
+    "plain_english_summary": "The recovery authority state is UNLOCK for paused posture FREEZE. The unlock actor is UNLOCK_ACTOR_VALID, evidence is UNLOCK_EVIDENCE_SUFFICIENT, and recovery path is RECOVERY_PATH_READY.",
+    "recovery_authority": {
+      "drivers": [],
+      "required_next_step": "Issue a short-lived action-bound permit, append DLL evidence, and continue with post-unlock monitoring.",
+      "state": "UNLOCK"
+    },
+    "recovery_path": {
+      "drivers": [],
+      "state": "RECOVERY_PATH_READY"
+    },
+    "unlock_actor": {
+      "actor_id": "security-reviewer-primary",
+      "drivers": [],
+      "role": "security_reviewer",
+      "state": "UNLOCK_ACTOR_VALID"
+    },
+    "unlock_evidence": {
+      "drivers": [],
+      "score": 1.0,
+      "state": "UNLOCK_EVIDENCE_SUFFICIENT"
+    },
+    "version": "smerc.recovery-authority-gate.v1"
+  },
+  "runtime_admission": {
+    "admissible_for_recoverability_scoring": true,
+    "checks": {
+      "attestation_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "identity_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "least_privilege_confirmed": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "object_shape_expected": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "permit_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "required_evidence_present": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "session_scope_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "typed_contract_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      }
+    },
+    "claim_boundary": "The runtime admission gate is a deterministic pre-scoring check. It does not authenticate a remote system by itself, prove compliance, or replace IAM, OPA, API validation, endpoint type checking, or customer-specific policy.",
+    "decision": "ADMIT",
+    "drivers": [],
+    "failed_required_checks": [],
+    "generated_at": "2026-08-29T15:16:41+00:00",
+    "max_recommended_posture": "ALLOW",
+    "missing_required_checks": [],
+    "plain_english_summary": "The request passed deterministic runtime admission checks and may proceed to recoverability scoring.",
+    "reason_codes": [
+      "RUNTIME_ADMISSION_ADMIT"
+    ],
+    "request_id": "complete-lifecycle-prod-deploy-001",
+    "required_controls": [
+      "continue_to_recoverability_scoring"
+    ],
+    "version": "smerc.runtime-admission-gate.v1"
+  },
+  "summary": {
+    "admission_skipped_scoring": false,
+    "continuation_posture": "THROTTLE",
+    "continuation_route": "CONSTRAINED_EXECUTE",
+    "controls": [
+      "checkpoint_before_execution",
+      "collect_more_evidence",
+      "continue_to_recoverability_scoring",
+      "limit_scope",
+      "pause_execution",
+      "preserve_replay",
+      "preview_before_execution",
+      "rate_limit_external_side_effect",
+      "record_execution_report",
+      "record_replay",
+      "require_rollback_plan",
+      "snapshot_current_state"
+    ],
+    "execution_status": "succeeded",
+    "initial_posture": "FREEZE",
+    "initial_route": "PAUSE",
+    "ledger_valid": true,
+    "overall_status": "COMPLETE",
+    "permit_issued": true,
+    "permit_verified": true,
+    "reason_codes": [
+      "CONTAINMENT_WEAK",
+      "EVIDENCE_VALIDITY_LOW",
+      "EXTERNAL_SIDE_EFFECT",
+      "IMPACT_SCOPE_WIDE",
+      "IRREVERSIBLE_EXPOSURE_ELEVATED",
+      "RECOVERY_CAPACITY_LOW",
+      "ROLLBACK_LATENCY_HIGH",
+      "RUNTIME_ADMISSION_ADMIT",
+      "SPARTA_FREEZE_PAUSES_AUTOMATION",
+      "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
+    ],
+    "runtime_admission": "ADMIT",
+    "unlock_state": "UNLOCK"
+  },
+  "tenant_id": "alpha",
+  "version": "smerc.complete-lifecycle-proof.v1"
+}

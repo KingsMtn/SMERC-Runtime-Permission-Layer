@@ -38,6 +38,7 @@ The repository contains working pilot-grade artifacts:
 - Decision Lifecycle Ledger
 - DLL intelligence reports
 - Recovery Authority Gate for governed unlock after pause
+- complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence
 - GitHub Actions pilot package
 - GitHub PR Guardian
 - MCP governance gateway
@@ -64,6 +65,8 @@ Current evidence proves that SMERC can run metadata-only action examples through
 7. generate reviewable reports
 8. compare SMERC output with simple allow/deny patterns
 
+The complete lifecycle proof shows the connected product path: `ADMIT -> FREEZE -> PAUSE -> UNLOCK -> THROTTLE -> CONSTRAINED_EXECUTE -> permit verified -> execution succeeded -> ledger valid`.
+
 The public benchmark currently shows that SMERC creates middle-state governance behavior across MCP tool calls, coding agents, cloud administration, financial runtime actions, execution tickets, and security approval workflows.
 
 ## What It Does Not Prove
@@ -83,11 +86,12 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 ## Review Sequence
 
 1. Read `docs/Public_Review_Snapshot.md`.
-2. Read `docs/External_Signal_And_Competitive_Review.md`.
-3. Inspect `reports/Public_Action_Governance_Benchmark.md`.
-4. Run `python -m reference_engine.pilot_in_a_box --pretty`.
-5. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
-6. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+2. Run `python -m reference_engine.complete_lifecycle_proof`.
+3. Read `docs/External_Signal_And_Competitive_Review.md`.
+4. Inspect `reports/Public_Action_Governance_Benchmark.md`.
+5. Run `python -m reference_engine.pilot_in_a_box --pretty`.
+6. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
+7. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 

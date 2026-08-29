@@ -17,6 +17,7 @@ Fast reviewer paths:
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
 - AI/search reviewer: `docs/AI_Readable_Reviewer_Bundle.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
+- Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
 - Skeptical competitive review: `docs/External_Signal_And_Competitive_Review.md`
 - Accelerator/adjacent company map: `docs/Accelerator_And_Adjacent_Company_Map.md`
 - Public scenario benchmark: `docs/Public_Action_Governance_Benchmark.md`
@@ -153,6 +154,22 @@ This produces a JSON evidence bundle and Markdown report showing:
 
 Read `docs/Customer_Proof_Loop.md` for the proof boundary and customer-use notes.
 
+## Complete End-To-End Lifecycle Proof
+
+Run one synthetic action through the assembled SMERC governance loop:
+
+```bash
+python -m reference_engine.complete_lifecycle_proof
+```
+
+Work: runtime admission, recoverability scoring, SPARTa routing, Recovery Authority Gate, action-bound permit verification, synthetic execution result, and Decision Lifecycle Ledger evidence.
+
+Result: the reference case returns `COMPLETE`: `ADMIT -> FREEZE -> PAUSE -> UNLOCK -> THROTTLE -> CONSTRAINED_EXECUTE -> permit verified -> execution succeeded -> ledger valid`.
+
+Impact: reviewers can see the product as one lifecycle. A risky action pauses before execution, cannot unlock itself, and can continue only after separate authority, fresh recovery evidence, bounded routing, permit gating, and replayable ledger evidence.
+
+Read `docs/Complete_Lifecycle_Proof.md` and `reports/complete_lifecycle/Complete_Lifecycle_Proof_Report.md`.
+
 ## Pilot-In-A-Box
 
 Run the multi-pack pilot preview when a reviewer wants to see SMERC operate across several workflow families before replacing examples with company-owned metadata:
@@ -226,6 +243,7 @@ The current build includes:
 - Constraint Eligibility Layer that preserves hard denies before recoverability can modify a runtime decision
 - Timing Evidence reports for decision latency, route latency, workflow overhead, cancellation, rollback, and unavailable evaluations
 - one-command Customer Proof Loop that runs runtime admission, recoverability scoring, SPARTa routing, and Decision Lifecycle Ledger evidence into one reviewable report
+- complete lifecycle proof connecting runtime admission, recoverability scoring, SPARTa routing, Recovery Authority Gate, action-bound permit verification, synthetic execution result, and Decision Lifecycle Ledger evidence
 - self-contained GitHub Actions pilot package generator that assembles signal intake, eligibility, SMERC decision, execution route, DLL, DLL Intelligence, and timing evidence
 - scoring-invariant verification for recoverability and executor fitness math
 - Self-Governance Sandbox that scores proposed SMERC policy, threshold, adapter, and scoring changes before they can affect SMERC itself
