@@ -103,6 +103,22 @@ This produces a JSON evidence bundle and Markdown report showing:
 
 Read `docs/Customer_Proof_Loop.md` for the proof boundary and customer-use notes.
 
+## Pilot-In-A-Box
+
+Run the multi-pack pilot preview when a reviewer wants to see SMERC operate across several workflow families before replacing examples with company-owned metadata:
+
+```bash
+python -m reference_engine.pilot_in_a_box --pretty
+```
+
+This writes `reports/pilot_in_a_box/Pilot_In_A_Box_Report.md` plus JSON evidence for general AI-agent actions, cloud-admin actions, financial-runtime actions, and one single-action proof loop. See `docs/Pilot_In_A_Box.md`.
+
+Work: hard evidence gates, recoverability scoring, SPARTa routes, Decision Lifecycle Ledger evidence, autonomy impact, and pilot-fit signals.
+
+Result: a company receives a concrete reviewer package instead of a slide-only explanation.
+
+Impact: reviewers can decide whether a bounded shadow-mode pilot is worth time before sharing sensitive data or granting execution authority.
+
 ## Public Language
 
 SMERC should lead with familiar category language, not internal layer names.

@@ -1,0 +1,263 @@
+{
+  "evaluation_results": [
+    {
+      "json_report": "reports/pilot_in_a_box/general_ai_agent/customer_evaluation_report.json",
+      "markdown_report": "reports/pilot_in_a_box/general_ai_agent/Customer_Evaluation_Report.md",
+      "name": "general_ai_agent",
+      "pilot_fit": {
+        "fit": "strong",
+        "reason": "The evaluation includes multiple side-effecting actions, at least one constrained path, and hard-stop cases worth reviewer labeling."
+      },
+      "recommended_next_action": "Use these results in a review call and ask the prospect to replace samples with 10 to 25 metadata-only actions from one real workflow.",
+      "source": "examples/customer_eval_actions.json",
+      "summary": {
+        "autonomy_state": "SUSPEND_AUTONOMY",
+        "highest_exposure_actions": [
+          {
+            "action_id": "EXAMPLECO_MCP_DELETE_RECORDS_003",
+            "irreversible_exposure_score": 0.906,
+            "posture": "DENY",
+            "route_state": "BLOCK"
+          },
+          {
+            "action_id": "EXAMPLECO_FINANCE_TRANSFER_005",
+            "irreversible_exposure_score": 0.896,
+            "posture": "DENY",
+            "route_state": "BLOCK"
+          },
+          {
+            "action_id": "EXAMPLECO_CLOUD_IAM_004",
+            "irreversible_exposure_score": 0.749,
+            "posture": "DENY",
+            "route_state": "BLOCK"
+          },
+          {
+            "action_id": "EXAMPLECO_PROD_CANARY_002",
+            "irreversible_exposure_score": 0.447,
+            "posture": "THROTTLE",
+            "route_state": "CONSTRAINED_EXECUTE"
+          },
+          {
+            "action_id": "EXAMPLECO_GHA_TESTS_001",
+            "irreversible_exposure_score": 0.059,
+            "posture": "ALLOW",
+            "route_state": "EXECUTE"
+          }
+        ],
+        "identity_gate_counts": {
+          "WATCH": 5
+        },
+        "non_executable_routes": 3,
+        "posture_counts": {
+          "ALLOW": 1,
+          "DENY": 3,
+          "THROTTLE": 1
+        },
+        "ref_gate_counts": {
+          "fail": 2,
+          "pass": 3
+        },
+        "route_state_counts": {
+          "BLOCK": 3,
+          "CONSTRAINED_EXECUTE": 1,
+          "EXECUTE": 1
+        },
+        "total_actions": 5,
+        "valid_ledgers": 5
+      }
+    },
+    {
+      "json_report": "reports/pilot_in_a_box/cloud_admin/customer_evaluation_report.json",
+      "markdown_report": "reports/pilot_in_a_box/cloud_admin/Customer_Evaluation_Report.md",
+      "name": "cloud_admin",
+      "pilot_fit": {
+        "fit": "strong",
+        "reason": "The evaluation includes multiple side-effecting actions, at least one constrained path, and hard-stop cases worth reviewer labeling."
+      },
+      "recommended_next_action": "Use these results in a review call and ask the prospect to replace samples with 10 to 25 metadata-only actions from one real workflow.",
+      "source": "examples/cloud_admin_customer_eval_actions.json",
+      "summary": {
+        "autonomy_state": "SUSPEND_AUTONOMY",
+        "highest_exposure_actions": [
+          {
+            "action_id": "CLOUDCO_DATABASE_DELETE_003",
+            "irreversible_exposure_score": 0.957,
+            "posture": "DENY",
+            "route_state": "BLOCK"
+          },
+          {
+            "action_id": "CLOUDCO_BACKUP_RETENTION_008",
+            "irreversible_exposure_score": 0.807,
+            "posture": "DENY",
+            "route_state": "BLOCK"
+          },
+          {
+            "action_id": "CLOUDCO_IAM_EXPANSION_001",
+            "irreversible_exposure_score": 0.78,
+            "posture": "DENY",
+            "route_state": "BLOCK"
+          },
+          {
+            "action_id": "CLOUDCO_SECURITY_GROUP_002",
+            "irreversible_exposure_score": 0.727,
+            "posture": "THROTTLE",
+            "route_state": "CONSTRAINED_EXECUTE"
+          },
+          {
+            "action_id": "CLOUDCO_DNS_CUTOVER_005",
+            "irreversible_exposure_score": 0.631,
+            "posture": "THROTTLE",
+            "route_state": "CONSTRAINED_EXECUTE"
+          }
+        ],
+        "identity_gate_counts": {
+          "WATCH": 8
+        },
+        "non_executable_routes": 3,
+        "posture_counts": {
+          "DENY": 3,
+          "THROTTLE": 5
+        },
+        "ref_gate_counts": {
+          "fail": 3,
+          "pass": 5
+        },
+        "route_state_counts": {
+          "BLOCK": 3,
+          "CONSTRAINED_EXECUTE": 5
+        },
+        "total_actions": 8,
+        "valid_ledgers": 8
+      }
+    },
+    {
+      "json_report": "reports/pilot_in_a_box/financial_runtime/customer_evaluation_report.json",
+      "markdown_report": "reports/pilot_in_a_box/financial_runtime/Customer_Evaluation_Report.md",
+      "name": "financial_runtime",
+      "pilot_fit": {
+        "fit": "strong",
+        "reason": "The evaluation includes multiple side-effecting actions, at least one constrained path, and hard-stop cases worth reviewer labeling."
+      },
+      "recommended_next_action": "Use these results in a review call and ask the prospect to replace samples with 10 to 25 metadata-only actions from one real workflow.",
+      "source": "examples/smerc_f_customer_eval_actions.json",
+      "summary": {
+        "autonomy_state": "SUSPEND_AUTONOMY",
+        "highest_exposure_actions": [
+          {
+            "action_id": "SMERCF_STABLECOIN_BRIDGE_003",
+            "irreversible_exposure_score": 0.942,
+            "posture": "DENY",
+            "route_state": "BLOCK"
+          },
+          {
+            "action_id": "SMERCF_WALLET_POLICY_005",
+            "irreversible_exposure_score": 0.796,
+            "posture": "DENY",
+            "route_state": "BLOCK"
+          },
+          {
+            "action_id": "SMERCF_PAYMENT_RETRY_004",
+            "irreversible_exposure_score": 0.756,
+            "posture": "THROTTLE",
+            "route_state": "CONSTRAINED_EXECUTE"
+          },
+          {
+            "action_id": "SMERCF_COLLATERAL_MOVE_006",
+            "irreversible_exposure_score": 0.727,
+            "posture": "THROTTLE",
+            "route_state": "CONSTRAINED_EXECUTE"
+          },
+          {
+            "action_id": "SMERCF_RESERVE_REPORT_008",
+            "irreversible_exposure_score": 0.697,
+            "posture": "DENY",
+            "route_state": "BLOCK"
+          }
+        ],
+        "identity_gate_counts": {
+          "WATCH": 8
+        },
+        "non_executable_routes": 3,
+        "posture_counts": {
+          "ALLOW": 1,
+          "DENY": 3,
+          "THROTTLE": 4
+        },
+        "ref_gate_counts": {
+          "fail": 2,
+          "pass": 6
+        },
+        "route_state_counts": {
+          "BLOCK": 3,
+          "CONSTRAINED_EXECUTE": 4,
+          "EXECUTE": 1
+        },
+        "total_actions": 8,
+        "valid_ledgers": 8
+      }
+    }
+  ],
+  "evidence_boundary": "This package uses synthetic or reviewer-supplied metadata only. It demonstrates runtime coherence, report generation, recoverability postures, SPARTa routes, Decision Lifecycle Ledger evidence, and pilot-fit signals. It does not prove production safety, compliance, incident reduction, customer demand, or enforce-mode readiness.",
+  "generated_at": "2026-08-29T00:19:23+00:00",
+  "manifest_paths": {
+    "json": "reports/pilot_in_a_box/pilot_in_a_box_manifest.json",
+    "markdown": "reports/pilot_in_a_box/Pilot_In_A_Box_Report.md"
+  },
+  "purpose": "One-command, metadata-only SMERC pilot preview for company reviewers.",
+  "recommended_reviewer_flow": [
+    "Read Pilot_In_A_Box_Report.md.",
+    "Open the strongest-fit evaluation report.",
+    "Replace one example pack with 5 to 25 metadata-only actions from one owned workflow.",
+    "Compare SMERC posture against current reviewer judgment.",
+    "Move to shadow mode only if reviewers find a useful difference."
+  ],
+  "single_action_proof_loop": {
+    "json_report": "reports/pilot_in_a_box/single_action_proof_loop/customer_proof_loop.json",
+    "markdown_report": "reports/pilot_in_a_box/single_action_proof_loop/Customer_Proof_Loop_Report.md",
+    "source": "examples/customer_proof_action.json",
+    "summary": {
+      "controls": [
+        "checkpoint_before_execution",
+        "continue_to_recoverability_scoring",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "rate_limit_external_side_effect",
+        "record_execution_report",
+        "record_replay",
+        "require_rollback_plan"
+      ],
+      "hard_gates_passed": true,
+      "ledger_valid": true,
+      "overall_status": "PASS",
+      "plain_english_summary": "Runtime admission returned ADMIT. SMERC posture is THROTTLE. SPARTa route is CONSTRAINED_EXECUTE. The lifecycle ledger is valid: True.",
+      "reason_codes": [
+        "EXTERNAL_SIDE_EFFECT",
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "RUNTIME_ADMISSION_ADMIT",
+        "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
+      ],
+      "recoverability_permits_progression": true,
+      "route_executable": true
+    }
+  },
+  "summary": {
+    "evaluation_pack_count": 3,
+    "moderate_pilot_fit_packs": 0,
+    "non_executable_routes": 9,
+    "posture_counts": {
+      "ALLOW": 2,
+      "DENY": 9,
+      "THROTTLE": 10
+    },
+    "route_state_counts": {
+      "BLOCK": 9,
+      "CONSTRAINED_EXECUTE": 10,
+      "EXECUTE": 2
+    },
+    "strong_pilot_fit_packs": 3,
+    "total_actions": 21,
+    "valid_ledgers": 21
+  },
+  "version": "smerc.pilot-in-a-box.v1"
+}
