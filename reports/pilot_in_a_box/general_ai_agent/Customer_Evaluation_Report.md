@@ -1,7 +1,7 @@
 # ExampleCo SMERC Customer Evaluation Report
 
 Version: `smerc.customer-evaluation.v1`
-Generated: `2026-08-29T00:19:23+00:00`
+Generated: `2026-08-29T00:35:32+00:00`
 Contact role: `security_architect`
 
 ## Evidence Boundary

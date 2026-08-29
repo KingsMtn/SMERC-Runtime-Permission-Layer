@@ -90,6 +90,7 @@ def build_pilot_in_a_box(
 
 def render_markdown(manifest: Mapping[str, Any]) -> str:
     summary = manifest["summary"]
+    comparison = summary["binary_policy_comparison"]
     lines = [
         "# SMERC Pilot-In-A-Box Report",
         "",
@@ -116,6 +117,24 @@ def render_markdown(manifest: Mapping[str, Any]) -> str:
         f"- Moderate pilot-fit packs: `{summary['moderate_pilot_fit_packs']}`",
         f"- Posture counts: `{summary['posture_counts']}`",
         f"- Route state counts: `{summary['route_state_counts']}`",
+        f"- Actions constrained instead of simply allowed or blocked: `{comparison['constrained_actions']}`",
+        f"- Binary-equivalent allow count: `{comparison['binary_equivalent_allow']}`",
+        f"- Binary-equivalent block/review count: `{comparison['binary_equivalent_block_or_review']}`",
+        "",
+        "## SMERC Versus Binary Allow/Block",
+        "",
+        (
+            "A traditional binary control usually has to choose between allowing useful automation and blocking it. "
+            "SMERC adds middle states when an action is technically possible but needs scope limits, checkpoints, "
+            "rollback evidence, or human review before execution."
+        ),
+        "",
+        "| Signal | Count | Why It Matters |",
+        "| --- | ---: | --- |",
+        f"| `ALLOW` | {comparison['allow_actions']} | Low-risk actions can keep moving. |",
+        f"| `THROTTLE` | {comparison['constrained_actions']} | Useful actions are constrained instead of treated as all-or-nothing. |",
+        f"| `FREEZE/ESCALATE/DENY` | {comparison['blocked_or_held_actions']} | Poorly recoverable or poorly evidenced actions stop before execution. |",
+        f"| `DLL_VALID` | {summary['valid_ledgers']} | Decisions produce replayable governance evidence. |",
         "",
         "## Evaluation Packs",
         "",
@@ -201,6 +220,25 @@ def _summarize(evaluation_results: Iterable[Mapping[str, Any]]) -> Dict[str, Any
         fit = result["pilot_fit"]["fit"]
         strong += int(fit == "strong")
         moderate += int(fit == "moderate")
+    binary_comparison = {
+        "allow_actions": posture_counts.get("ALLOW", 0),
+        "constrained_actions": posture_counts.get("THROTTLE", 0),
+        "blocked_or_held_actions": (
+            posture_counts.get("FREEZE", 0)
+            + posture_counts.get("DENY", 0)
+            + posture_counts.get("ESCALATE", 0)
+        ),
+        "binary_equivalent_allow": posture_counts.get("ALLOW", 0) + posture_counts.get("THROTTLE", 0),
+        "binary_equivalent_block_or_review": (
+            posture_counts.get("FREEZE", 0)
+            + posture_counts.get("DENY", 0)
+            + posture_counts.get("ESCALATE", 0)
+        ),
+        "interpretation": (
+            "THROTTLE is the visible delta: these actions are not simply allowed or blocked; "
+            "they proceed only with controls such as scope limits, checkpoints, rollback plans, or review routing."
+        ),
+    }
     return {
         "evaluation_pack_count": len(results),
         "total_actions": total_actions,
@@ -210,6 +248,7 @@ def _summarize(evaluation_results: Iterable[Mapping[str, Any]]) -> Dict[str, Any
         "moderate_pilot_fit_packs": moderate,
         "posture_counts": dict(sorted(posture_counts.items())),
         "route_state_counts": dict(sorted(route_counts.items())),
+        "binary_policy_comparison": binary_comparison,
     }
 
 

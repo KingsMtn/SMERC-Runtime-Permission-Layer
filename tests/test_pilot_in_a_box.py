@@ -25,6 +25,12 @@ class PilotInABoxTests(unittest.TestCase):
             manifest["summary"]["valid_ledgers"],
             manifest["summary"]["total_actions"],
         )
+        comparison = manifest["summary"]["binary_policy_comparison"]
+        self.assertGreaterEqual(comparison["constrained_actions"], 1)
+        self.assertEqual(
+            comparison["binary_equivalent_allow"],
+            comparison["allow_actions"] + comparison["constrained_actions"],
+        )
         self.assertIn("single_action_proof_loop", manifest)
         self.assertIn("manifest_paths", manifest)
         self.assertTrue((ROOT / manifest["manifest_paths"]["json"]).exists())
@@ -35,6 +41,8 @@ class PilotInABoxTests(unittest.TestCase):
         markdown = render_markdown(manifest)
 
         self.assertIn("Work, Result, Impact", markdown)
+        self.assertIn("SMERC Versus Binary Allow/Block", markdown)
+        self.assertIn("Actions constrained instead of simply allowed or blocked", markdown)
         self.assertIn("metadata-only", markdown)
         self.assertIn("shadow-mode pilot", markdown)
         self.assertIn("does not prove production safety", markdown)

@@ -47,7 +47,7 @@
     "decision": "ADMIT",
     "drivers": [],
     "failed_required_checks": [],
-    "generated_at": "2026-08-29T00:19:23+00:00",
+    "generated_at": "2026-08-29T00:35:33+00:00",
     "max_recommended_posture": "ALLOW",
     "missing_required_checks": [],
     "plain_english_summary": "The request passed deterministic runtime admission checks and may proceed to recoverability scoring.",
@@ -62,7 +62,7 @@
   },
   "decision_lifecycle_ledger": {
     "decision_id": "customer-proof:customer-proof-github-actions-001",
-    "head_record_hash": "c946bb6f0abb8ffaff8f9b1c5323dd0db20c8ee24b86db73edd454d097ca91f7",
+    "head_record_hash": "fc607692a71d03b5dc922846be2ede3172dc28ab0e53a6e4cbb7c23b3868e1a5",
     "record_count": 4,
     "records": [
       {
@@ -81,9 +81,9 @@
           }
         },
         "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-        "record_hash": "e5c78c433656760d97f090ad7b574d11a1c7bf8e9a957302861e03183f2751d7",
+        "record_hash": "ecf1e680c4f7915c47d1b9a4ea10f6f6b469253122b85ad8fb1fbf556d08b487",
         "record_version": "smerc.dll-record.v1",
-        "recorded_at": "2026-08-29T00:19:23+00:00",
+        "recorded_at": "2026-08-29T00:35:33+00:00",
         "sequence": 1,
         "tenant_id": "customer-proof-demo"
       },
@@ -111,10 +111,10 @@
           "model_version": "deterministic_reference_engine",
           "policy_version": "smerc.runtime-admission-gate.v1"
         },
-        "previous_record_hash": "e5c78c433656760d97f090ad7b574d11a1c7bf8e9a957302861e03183f2751d7",
-        "record_hash": "a70119d83bfad47ab19622b485b53cc7474e8c41dd48f8e6dd35c6b6405965a0",
+        "previous_record_hash": "ecf1e680c4f7915c47d1b9a4ea10f6f6b469253122b85ad8fb1fbf556d08b487",
+        "record_hash": "f97ed4401ecff1ba46727587f565b40b93c320517463cf08738b145638555c1a",
         "record_version": "smerc.dll-record.v1",
-        "recorded_at": "2026-08-29T00:19:23+00:00",
+        "recorded_at": "2026-08-29T00:35:33+00:00",
         "sequence": 2,
         "tenant_id": "customer-proof-demo"
       },
@@ -143,10 +143,10 @@
           "recoverability_score": 0.588,
           "structural_state": "runtime_admitted"
         },
-        "previous_record_hash": "a70119d83bfad47ab19622b485b53cc7474e8c41dd48f8e6dd35c6b6405965a0",
-        "record_hash": "37ee4221c666ce256d2556c96278169bfa41f3b3b31716745ff02c77dcf9cdb2",
+        "previous_record_hash": "f97ed4401ecff1ba46727587f565b40b93c320517463cf08738b145638555c1a",
+        "record_hash": "f14ecc97530b2818d33ecb9aee6eb54a81654a8d153d86bb6320daf142983915",
         "record_version": "smerc.dll-record.v1",
-        "recorded_at": "2026-08-29T00:19:23+00:00",
+        "recorded_at": "2026-08-29T00:35:33+00:00",
         "sequence": 3,
         "tenant_id": "customer-proof-demo"
       },
@@ -160,12 +160,12 @@
           "execution_status": "not_executed",
           "rollback_performed": false,
           "rollback_success": null,
-          "started_at": "2026-08-29T00:19:23+00:00"
+          "started_at": "2026-08-29T00:35:33+00:00"
         },
-        "previous_record_hash": "37ee4221c666ce256d2556c96278169bfa41f3b3b31716745ff02c77dcf9cdb2",
-        "record_hash": "c946bb6f0abb8ffaff8f9b1c5323dd0db20c8ee24b86db73edd454d097ca91f7",
+        "previous_record_hash": "f14ecc97530b2818d33ecb9aee6eb54a81654a8d153d86bb6320daf142983915",
+        "record_hash": "fc607692a71d03b5dc922846be2ede3172dc28ab0e53a6e4cbb7c23b3868e1a5",
         "record_version": "smerc.dll-record.v1",
-        "recorded_at": "2026-08-29T00:19:23+00:00",
+        "recorded_at": "2026-08-29T00:35:33+00:00",
         "sequence": 4,
         "tenant_id": "customer-proof-demo"
       }
@@ -193,14 +193,14 @@
     "tenant_id": "customer-proof-demo",
     "verification": {
       "errors": [],
-      "head_record_hash": "c946bb6f0abb8ffaff8f9b1c5323dd0db20c8ee24b86db73edd454d097ca91f7",
+      "head_record_hash": "fc607692a71d03b5dc922846be2ede3172dc28ab0e53a6e4cbb7c23b3868e1a5",
       "record_count": 4,
       "valid": true
     },
     "version": "smerc.decision-lifecycle-ledger.v1"
   },
-  "generated_at": "2026-08-29T00:19:23+00:00",
-  "markdown_report": "# SMERC Customer Proof Loop Report\n\nGenerated: `2026-08-29T00:19:23+00:00`\nTenant: `customer-proof-demo`\n\n## Result\n\n- Overall status: **PASS**\n- Runtime admission: **ADMIT**\n- Recoverability posture: **THROTTLE**\n- SPARTa route: **CONSTRAINED_EXECUTE**\n- Ledger valid: **True**\n\n## Pass/Fail Checks\n\n| Check | Result |\n| --- | --- |\n| Hard runtime gates passed | `True` |\n| Recoverability permits progression | `True` |\n| Route executable | `True` |\n| Ledger valid | `True` |\n\n## Reason Codes\n\n- `EXTERNAL_SIDE_EFFECT`\n- `IRREVERSIBLE_EXPOSURE_ELEVATED`\n- `RUNTIME_ADMISSION_ADMIT`\n- `SPARTA_THROTTLE_WITH_NATIVE_CONTROLS`\n\n## Controls\n\n- `checkpoint_before_execution`\n- `continue_to_recoverability_scoring`\n- `limit_scope`\n- `preserve_replay`\n- `preview_before_execution`\n- `rate_limit_external_side_effect`\n- `record_execution_report`\n- `record_replay`\n- `require_rollback_plan`\n\n## Plain English\n\nRuntime admission returned ADMIT. SMERC posture is THROTTLE. SPARTa route is CONSTRAINED_EXECUTE. The lifecycle ledger is valid: True.\n\n## Evidence Artifacts\n\n- Full JSON evidence bundle: `customer_proof_loop.json`\n- Replayable lifecycle chain: `decision_lifecycle_ledger` inside the JSON bundle\n",
+  "generated_at": "2026-08-29T00:35:33+00:00",
+  "markdown_report": "# SMERC Customer Proof Loop Report\n\nGenerated: `2026-08-29T00:35:33+00:00`\nTenant: `customer-proof-demo`\n\n## Result\n\n- Overall status: **PASS**\n- Runtime admission: **ADMIT**\n- Recoverability posture: **THROTTLE**\n- SPARTa route: **CONSTRAINED_EXECUTE**\n- Ledger valid: **True**\n\n## Pass/Fail Checks\n\n| Check | Result |\n| --- | --- |\n| Hard runtime gates passed | `True` |\n| Recoverability permits progression | `True` |\n| Route executable | `True` |\n| Ledger valid | `True` |\n\n## Reason Codes\n\n- `EXTERNAL_SIDE_EFFECT`\n- `IRREVERSIBLE_EXPOSURE_ELEVATED`\n- `RUNTIME_ADMISSION_ADMIT`\n- `SPARTA_THROTTLE_WITH_NATIVE_CONTROLS`\n\n## Controls\n\n- `checkpoint_before_execution`\n- `continue_to_recoverability_scoring`\n- `limit_scope`\n- `preserve_replay`\n- `preview_before_execution`\n- `rate_limit_external_side_effect`\n- `record_execution_report`\n- `record_replay`\n- `require_rollback_plan`\n\n## Plain English\n\nRuntime admission returned ADMIT. SMERC posture is THROTTLE. SPARTa route is CONSTRAINED_EXECUTE. The lifecycle ledger is valid: True.\n\n## Evidence Artifacts\n\n- Full JSON evidence bundle: `customer_proof_loop.json`\n- Replayable lifecycle chain: `decision_lifecycle_ledger` inside the JSON bundle\n",
   "recoverability_decision": {
     "action_id": "AGENT_DEPLOY_PROD_CONFIG",
     "controls": [
@@ -473,7 +473,7 @@
         "profile_id": "general"
       },
       "enforcement_state": "constrain",
-      "evaluated_at": "2026-08-29T00:19:23.368635+00:00",
+      "evaluated_at": "2026-08-29T00:35:33.000800+00:00",
       "policy": {
         "evidence_ceiling": "OBSERVE",
         "mode": "OBSERVE",
@@ -487,7 +487,7 @@
         "IRREVERSIBLE_EXPOSURE_ELEVATED",
         "EXTERNAL_SIDE_EFFECT"
       ],
-      "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1787962763368_f1e9965a0e8a",
+      "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1787963733000_2ebc47087b3a",
       "scores": {
         "cancel_reliability_score": 0.67,
         "confidence_score": 0.686,
@@ -530,7 +530,7 @@
         "target_posture": "THROTTLE"
       }
     },
-    "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1787962763368_f1e9965a0e8a",
+    "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1787963733000_2ebc47087b3a",
     "scores": {
       "cancel_reliability_score": 0.67,
       "confidence_score": 0.686,
@@ -586,8 +586,8 @@
       "require_rollback_plan"
     ],
     "blocked_controls": [],
-    "decision_digest": "9b33e40766a480dfa561009b1284bdc0e5659944c16ae0f982f5190a7724cf83",
-    "decision_replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1787962763368_f1e9965a0e8a",
+    "decision_digest": "1c9019f1fe730eb85e013c4b13f263035788fbe2da72b2d5f8104c1b44597deb",
+    "decision_replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1787963733000_2ebc47087b3a",
     "effective_scope_units": 25,
     "executable": true,
     "plain_english_summary": "SPARTa converted the throttled SMERC posture into a constrained execution route with smaller scope and recovery controls.",
@@ -596,9 +596,9 @@
       "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
     ],
     "recommended_next_action": "Execute only through an adapter that enforces the listed controls and records control evidence.",
-    "route_id": "sparta_github-prod-canary-deploy_be187ced9e2a",
+    "route_id": "sparta_github-prod-canary-deploy_70aa8ead9a87",
     "route_state": "CONSTRAINED_EXECUTE",
-    "routed_at": "2026-08-29T00:19:23+00:00",
+    "routed_at": "2026-08-29T00:35:33+00:00",
     "source_posture": "THROTTLE",
     "tool_plan": {
       "action": "deploy_canary",

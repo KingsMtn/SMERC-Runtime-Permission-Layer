@@ -42,6 +42,16 @@ Result: reviewers get posture counts, route states, high-exposure action lists, 
 
 Impact: a company can decide whether to replace the example packs with 5 to 25 metadata-only actions from one real workflow before committing time to a shadow-mode pilot.
 
+## Binary Policy Comparison
+
+The report also includes a basic binary-policy comparison:
+
+- `ALLOW` means the action was low-risk enough to continue.
+- `THROTTLE` means the action is useful but should proceed only with constraints.
+- `FREEZE`, `DENY`, and `ESCALATE` mean the action should be held, blocked, or reviewed before execution.
+
+The important commercial signal is the `THROTTLE` count. Those are actions where a plain allow/block model is too blunt: blocking may create friction, but allowing without controls may expand blast radius.
+
 ## Boundary
 
 This is a metadata-only pilot preview. It does not execute customer workflows, inspect production logs, handle secrets, prove compliance, reduce incidents, or certify enforce-mode readiness.

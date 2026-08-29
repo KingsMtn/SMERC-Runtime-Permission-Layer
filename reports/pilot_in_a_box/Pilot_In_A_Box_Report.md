@@ -1,6 +1,6 @@
 # SMERC Pilot-In-A-Box Report
 
-Generated: `2026-08-29T00:19:23+00:00`
+Generated: `2026-08-29T00:35:32+00:00`
 
 ## What This Is
 
@@ -20,6 +20,20 @@ This package uses synthetic or reviewer-supplied metadata only. It demonstrates 
 - Moderate pilot-fit packs: `0`
 - Posture counts: `{'ALLOW': 2, 'DENY': 9, 'THROTTLE': 10}`
 - Route state counts: `{'BLOCK': 9, 'CONSTRAINED_EXECUTE': 10, 'EXECUTE': 2}`
+- Actions constrained instead of simply allowed or blocked: `10`
+- Binary-equivalent allow count: `12`
+- Binary-equivalent block/review count: `9`
+
+## SMERC Versus Binary Allow/Block
+
+A traditional binary control usually has to choose between allowing useful automation and blocking it. SMERC adds middle states when an action is technically possible but needs scope limits, checkpoints, rollback evidence, or human review before execution.
+
+| Signal | Count | Why It Matters |
+| --- | ---: | --- |
+| `ALLOW` | 2 | Low-risk actions can keep moving. |
+| `THROTTLE` | 10 | Useful actions are constrained instead of treated as all-or-nothing. |
+| `FREEZE/ESCALATE/DENY` | 9 | Poorly recoverable or poorly evidenced actions stop before execution. |
+| `DLL_VALID` | 21 | Decisions produce replayable governance evidence. |
 
 ## Evaluation Packs
 
