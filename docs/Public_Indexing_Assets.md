@@ -14,6 +14,11 @@ The SMERC public Netlify site includes lightweight discovery files and status pa
 - AI-readable summary: `https://admirable-sorbet-9986d5.netlify.app/llms.txt`
 - Human-readable project card: `https://admirable-sorbet-9986d5.netlify.app/humans.txt`
 - Structured project profile: `https://admirable-sorbet-9986d5.netlify.app/project.json`
+- AI reviewer bundle: `https://admirable-sorbet-9986d5.netlify.app/ai-review.json`
+- Self-service pilot runbook: `https://admirable-sorbet-9986d5.netlify.app/pilot-runbook.json`
+- OpenAPI contract: `https://admirable-sorbet-9986d5.netlify.app/openapi.json`
+- SMERC Beacon: `https://admirable-sorbet-9986d5.netlify.app/smerc-beacon.json`
+- Well-known beacon: `https://admirable-sorbet-9986d5.netlify.app/.well-known/smerc.json`
 
 ## Intended Summary
 
@@ -59,3 +64,13 @@ It includes:
 - non-claims
 - reviewer profiles
 - canonical links
+
+## AI Reviewer Bundle
+
+`ai-review.json` is the most direct machine-readable review bundle for AI assistants, search tools, and technical reviewers. It points to the public site, GitHub repository, implemented proof surfaces, non-claims, suggested evaluation sequence, and the safest first pilot path.
+
+`pilot-runbook.json` gives a narrower operator path for a metadata-only self-service pilot. It is designed to help a company test SMERC without sharing secrets, production credentials, customer data, or live execution authority.
+
+`openapi.json` exposes the pilot API contract for reviewers who want to inspect the runtime shape instead of reading narrative docs first.
+
+Impact: these assets make SMERC easier to summarize, compare, and test without relying on founder explanation. They do not create search ranking by themselves; they give search engines, AI crawlers, and human reviewers cleaner source material when they do find the site.

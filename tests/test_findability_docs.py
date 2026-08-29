@@ -23,6 +23,11 @@ class FindabilityDocsTests(unittest.TestCase):
 
         self.assertIn("ai-agent-governance.html", text)
         self.assertIn("Findability_And_AI_Discovery.md", text)
+        self.assertIn("ai-review.json", text)
+        self.assertIn("pilot-runbook.json", text)
+        self.assertIn("openapi.json", text)
+        self.assertIn("AI Reviewer Bundle", text)
+        self.assertIn("without relying on founder explanation", text)
 
     def test_naming_guide_preserves_brand_category_problem_order(self):
         text = (ROOT / "docs" / "Naming_And_Search_Style_Guide.md").read_text(encoding="utf-8")
