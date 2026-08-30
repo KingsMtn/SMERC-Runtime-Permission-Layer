@@ -233,6 +233,7 @@ The current build includes:
 - Financial Runtime Customer Evaluation pack, internally called SMERC-F, with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
 - Cloud Admin Customer Evaluation pack with metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions for infrastructure review
 - Cloud Admin Proof Pack that expands the cloud-admin sample into 24 scenarios with cloud-specific reason codes, Work / Result / Impact explanations, SPARTa route evidence, autonomy-budget impact, and DLL validity
+- Cloud Metadata Connector that converts read-only IAM, Terraform, CloudTrail-style, Kubernetes, DNS, and backup-policy export summaries into strict SMERC customer-evaluation metadata without live cloud credentials
 - repository-native Runtime Customer Evaluations GitHub Actions workflow that runs the general, cloud-admin, financial runtime, or company-template evaluation packs from the Actions tab and uploads review artifacts
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
 - cloud automation guardrails positioning for infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions
@@ -335,6 +336,7 @@ Start here before reading the code:
 - `docs/Company_Test_Package.md` gives companies a practical first test: copy `examples/customer_metadata_template.json`, replace it with 5 to 25 metadata-only actions from one workflow, run the evaluation, and decide whether a 30-day shadow-mode pilot is justified.
 - `docs/Cloud_Admin_Customer_Evaluation.md` gives cloud security, SRE, platform, and infrastructure reviewers a runnable metadata-only evaluation pack for IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions.
 - `docs/Cloud_Admin_Proof_Pack.md` gives cloud, SRE, DevOps, CI/CD, and AI-agent platform reviewers a 24-scenario proof pack with cloud reason codes for IAM expansion, network widening, data-plane destructive action, DNS cutover, rollback uncertainty, evidence gaps, production blast radius, and autonomy scope pressure.
+- `docs/Cloud_Metadata_Connector.md` shows how read-only cloud-change exports can be normalized into SMERC customer-evaluation actions before any live AWS, Azure, Google Cloud, Cloudflare, Kubernetes, Terraform, DNS, database, or secrets-manager integration.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
 - `docs/Credibility_Partner_Review_Packet.md` gives external reviewers a 30-minute packet for deciding whether metadata-only shadow-mode testing is worth discussing.
 - `docs/Credibility_Partner_Outreach.md` gives a short, bounded outreach message for asking credibility partners to review SMERC without overclaiming readiness.
@@ -1140,6 +1142,14 @@ python -m reference_engine.cloud_admin_proof_pack --pretty
 ```
 
 The Cloud Admin Proof Pack expands the eight cloud-admin examples into 24 metadata-only scenarios and reports cloud-specific reason codes, posture counts, SPARTa routes, valid DLL ledgers, autonomy-budget impact, and Work / Result / Impact examples. It is designed for infrastructure reviewers evaluating whether SMERC could help govern AI/devops agents before cloud actions change IAM, network boundaries, Kubernetes workloads, DNS, databases, secrets, capacity, or backup policy.
+
+Run the Cloud Metadata Connector:
+
+```bash
+python -m reference_engine.cloud_metadata_connector examples/cloud_admin_source_exports.json --pretty
+```
+
+The Cloud Metadata Connector is the safer bridge from public proof to company evaluation. It converts read-only export summaries from IAM, Terraform, CloudTrail-style event summaries, Kubernetes rollout plans, DNS change requests, and backup-policy changes into strict SMERC customer-evaluation metadata. It does not call live cloud APIs, require credentials, read private infrastructure, or execute changes.
 
 ## GitHub Actions Modes
 

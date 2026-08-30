@@ -46,6 +46,7 @@ The repository contains working pilot-grade artifacts:
 - MCP proxy runner
 - cloud-admin customer evaluation
 - cloud-admin proof pack with cloud reason codes
+- cloud metadata connector for read-only change exports
 - financial runtime evaluation profile
 - public scenario benchmark
 - OpenAPI pilot contract

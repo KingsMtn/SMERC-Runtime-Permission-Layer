@@ -43,11 +43,14 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `pilot_package/First_Pilot_Path.md`
 - `docs/GitHub_Actions_Pilot_Operator_Quickstart.md`
 - `docs/Cloud_Admin_Proof_Pack.md`
+- `docs/Cloud_Metadata_Connector.md`
 - `reference_engine/github_actions_pilot_readiness.py`
 - `reference_engine/cloud_admin_proof_pack.py`
+- `reference_engine/cloud_metadata_connector.py`
 - `integrations/github_actions/`
 - `reports/GitHub_Actions_Pilot_Readiness.md`
 - `reports/cloud_admin_proof_pack/Cloud_Admin_Proof_Pack.md`
+- `reports/Cloud_Metadata_Connector_Report.md`
 
 ## MCP / Tool-Call Governance
 
