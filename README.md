@@ -236,6 +236,7 @@ The current build includes:
 - Cloud Admin Proof Pack that expands the cloud-admin sample into 24 scenarios with cloud-specific reason codes, Work / Result / Impact explanations, SPARTa route evidence, autonomy-budget impact, and DLL validity
 - Cloud Metadata Connector that converts read-only IAM, Terraform, CloudTrail-style, Kubernetes, DNS, and backup-policy export summaries into strict SMERC customer-evaluation metadata without live cloud credentials
 - Public Benchmark Ingestion Pack that maps representative public agent-governance, MCP-security, action-boundary, consequence, cloud, and financial benchmark shapes into SMERC customer-evaluation actions without claiming official benchmark scores
+- Serious Report Performance harness that measures local p50, p95, and maximum latency for major proof paths without making production SLA claims
 - repository-native Runtime Customer Evaluations GitHub Actions workflow that runs the general, cloud-admin, financial runtime, or company-template evaluation packs from the Actions tab and uploads review artifacts
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
 - cloud automation guardrails positioning for infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions
@@ -342,6 +343,7 @@ Start here before reading the code:
 - `docs/Cloud_Metadata_Connector.md` shows how read-only cloud-change exports can be normalized into SMERC customer-evaluation actions before any live AWS, Azure, Google Cloud, Cloudflare, Kubernetes, Terraform, DNS, database, or secrets-manager integration.
 - `docs/Public_Benchmark_Ingestion.md` shows how public agent-governance, MCP-security, action-boundary, consequence, cloud, and financial benchmark shapes can be translated into SMERC runtime-evaluation metadata without claiming official upstream benchmark scores.
 - `docs/Postcondition_Evidence.md` shows how to verify whether SPARTa-required controls actually happened after a route decision.
+- `docs/Serious_Report_Performance.md` shows how to measure local p50, p95, and maximum latency for serious proof paths while preserving the boundary that local report timing is not production SLA evidence.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
 - `docs/Credibility_Partner_Review_Packet.md` gives external reviewers a 30-minute packet for deciding whether metadata-only shadow-mode testing is worth discussing.
 - `docs/Credibility_Partner_Outreach.md` gives a short, bounded outreach message for asking credibility partners to review SMERC without overclaiming readiness.
@@ -1175,6 +1177,14 @@ python -m reference_engine.postcondition_evidence \
 ```
 
 Postcondition Evidence compares SPARTa-required controls against observed control, execution, hold, and rollback evidence. It shows whether controls were actually observed after a route instead of only recommended before execution.
+
+Run the Serious Report Performance harness:
+
+```bash
+python -m reference_engine.serious_report_performance --iterations 5 --pretty
+```
+
+Serious Report Performance measures local p50, p95, and maximum latency for major proof builders. It helps reviewers inspect evaluation cost, but it does not prove production latency, hosted API performance, throughput, SLA, customer workflow overhead, or reviewer burden.
 
 ## GitHub Actions Modes
 

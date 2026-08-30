@@ -49,6 +49,7 @@ The repository contains working pilot-grade artifacts:
 - cloud-admin proof pack with cloud reason codes
 - cloud metadata connector for read-only change exports
 - public benchmark ingestion pack for agent-governance, MCP-security, action-boundary, consequence, cloud, and financial benchmark-shaped examples
+- serious report performance evidence for local p50, p95, and maximum proof-path latency
 - financial runtime evaluation profile
 - public scenario benchmark
 - OpenAPI pilot contract
@@ -77,6 +78,8 @@ The public benchmark ingestion pack shows how public benchmark categories can be
 
 The postcondition evidence report shows whether SPARTa-required controls were observed after routing, which helps separate "SMERC recommended a control" from "the adapter supplied evidence that the control happened."
 
+The serious report performance harness shows local p50, p95, and maximum timing for major proof paths while preserving the boundary that local report timing is not production SLA evidence.
+
 ## What It Does Not Prove
 
 SMERC does not yet prove:
@@ -100,10 +103,11 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 5. Inspect `reports/Public_Action_Governance_Benchmark.md`.
 6. Run `python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_ingestion_examples.json --pretty`.
 7. Run `python -m reference_engine.postcondition_evidence --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json --observations examples/postcondition_observations.json --pretty`.
-8. Run `python -m reference_engine.pilot_in_a_box --pretty`.
-9. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
-10. For financial-services review, run `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty`.
-11. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+8. Run `python -m reference_engine.serious_report_performance --iterations 5 --pretty`.
+9. Run `python -m reference_engine.pilot_in_a_box --pretty`.
+10. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
+11. For financial-services review, run `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty`.
+12. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 

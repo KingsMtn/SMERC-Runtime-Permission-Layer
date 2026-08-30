@@ -1,5 +1,4 @@
 import json
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -56,12 +55,14 @@ class TimingEvidenceTests(unittest.TestCase):
     def test_writes_json_and_markdown(self):
         payload = json.loads(TIMING.read_text(encoding="utf-8"))
         report = build_timing_report(payload, latency_slo_ms=250)
-        with tempfile.TemporaryDirectory() as directory:
-            json_path = Path(directory) / "timing.json"
-            markdown_path = Path(directory) / "timing.md"
-            write_outputs(report, json_path=json_path, markdown_path=markdown_path)
-            parsed = json.loads(json_path.read_text(encoding="utf-8"))
-            markdown = markdown_path.read_text(encoding="utf-8")
+        scratch = ROOT / "tests" / "_tmp" / "timing_evidence"
+        json_path = scratch / "timing.json"
+        markdown_path = scratch / "timing.md"
+
+        write_outputs(report, json_path=json_path, markdown_path=markdown_path)
+        parsed = json.loads(json_path.read_text(encoding="utf-8"))
+        markdown = markdown_path.read_text(encoding="utf-8")
+
         self.assertEqual(parsed["version"], TIMING_REPORT_VERSION)
         self.assertIn("# SMERC Timing Evidence Report", markdown)
         self.assertIn("Evidence Boundary", render_markdown(report))
