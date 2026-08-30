@@ -76,6 +76,8 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `docs/Control_Mapping_Library.md`
 - `docs/Action_Bound_Permit_Operations.md`
 - `docs/Control_Evidence_Operations.md`
+- `docs/Postcondition_Evidence.md`
+- `reference_engine/postcondition_evidence.py`
 
 ## Decision Memory And Audit
 
@@ -85,6 +87,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `docs/Governance_Report_Generator.md`
 - `docs/Pilot_Ledger_Intake.md`
 - `docs/Pilot_Ledger_Metrics.md`
+- `reports/Postcondition_Evidence_Report.md`
 
 ## Complete Lifecycle Proof
 

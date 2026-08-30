@@ -25,6 +25,7 @@
     "DLL intelligence reports",
     "Recovery Authority Gate for governed unlock after pause",
     "complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence",
+    "postcondition evidence comparing SPARTa-required controls with observed control, execution, hold, and rollback evidence",
     "GitHub Actions pilot package",
     "GitHub PR Guardian",
     "MCP governance gateway",
@@ -50,6 +51,8 @@
     "technical_diligence_index": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Technical_Diligence_Index.md",
     "complete_lifecycle_proof": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Complete_Lifecycle_Proof.md",
     "complete_lifecycle_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/complete_lifecycle/Complete_Lifecycle_Proof_Report.md",
+    "postcondition_evidence": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Postcondition_Evidence.md",
+    "postcondition_evidence_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Postcondition_Evidence_Report.md",
     "cloud_admin_proof_pack": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Cloud_Admin_Proof_Pack.md",
     "cloud_admin_proof_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/cloud_admin_proof_pack/Cloud_Admin_Proof_Pack.md",
     "cloud_metadata_connector": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Cloud_Metadata_Connector.md",
@@ -88,30 +91,36 @@
     },
     {
       "step": 5,
+      "name": "Run the postcondition evidence report",
+      "command": "python -m reference_engine.postcondition_evidence --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json --observations examples/postcondition_observations.json --pretty",
+      "result": "Reviewer sees whether SPARTa-required controls were actually observed after routing, including pass, gap, violation, and unobserved statuses."
+    },
+    {
+      "step": 6,
       "name": "Run the public benchmark ingestion pack",
       "command": "python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_ingestion_examples.json --pretty",
       "result": "Reviewer sees how representative public agent-governance, MCP, action-boundary, consequence, cloud, and financial benchmark-shaped examples map into SMERC posture, SPARTa routes, and DLL evidence without claiming official benchmark scores."
     },
     {
-      "step": 6,
+      "step": 7,
       "name": "Run the pilot-in-a-box path",
       "command": "python -m reference_engine.pilot_in_a_box --pretty",
       "result": "Reviewer receives a local proof package across general AI-agent, cloud-admin, financial-runtime, and single-action examples."
     },
     {
-      "step": 7,
+      "step": 8,
       "name": "Replace examples with 5 to 25 safe company-owned metadata records",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/customer_eval/README.md",
       "result": "Reviewer can test whether SMERC changes judgment on actions that resemble their own workflows without sharing secrets or production authority."
     },
     {
-      "step": 8,
+      "step": 9,
       "name": "Run the Financial Runtime evaluation when the workflow is financial",
       "command": "python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty",
       "result": "Financial-services reviewers can test metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions."
     },
     {
-      "step": 9,
+      "step": 10,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."

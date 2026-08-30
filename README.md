@@ -256,6 +256,7 @@ The current build includes:
 - Fallback Policy Layer that deterministically fails safe when scanners, policy bundles, metadata, adapters, review queues, rollback plans, or SMERC runtime dependencies are unavailable, stale, incomplete, conflicting, or timed out
 - Constraint Eligibility Layer that preserves hard denies before recoverability can modify a runtime decision
 - Timing Evidence reports for decision latency, route latency, workflow overhead, cancellation, rollback, and unavailable evaluations
+- Postcondition Evidence report that compares SPARTa-required controls with observed control, execution, hold, and rollback evidence
 - one-command Customer Proof Loop that runs runtime admission, recoverability scoring, SPARTa routing, and Decision Lifecycle Ledger evidence into one reviewable report
 - complete lifecycle proof connecting runtime admission, recoverability scoring, SPARTa routing, Recovery Authority Gate, action-bound permit verification, synthetic execution result, and Decision Lifecycle Ledger evidence
 - self-contained GitHub Actions pilot package generator that assembles signal intake, eligibility, SMERC decision, execution route, DLL, DLL Intelligence, and timing evidence
@@ -340,6 +341,7 @@ Start here before reading the code:
 - `docs/Cloud_Admin_Proof_Pack.md` gives cloud, SRE, DevOps, CI/CD, and AI-agent platform reviewers a 24-scenario proof pack with cloud reason codes for IAM expansion, network widening, data-plane destructive action, DNS cutover, rollback uncertainty, evidence gaps, production blast radius, and autonomy scope pressure.
 - `docs/Cloud_Metadata_Connector.md` shows how read-only cloud-change exports can be normalized into SMERC customer-evaluation actions before any live AWS, Azure, Google Cloud, Cloudflare, Kubernetes, Terraform, DNS, database, or secrets-manager integration.
 - `docs/Public_Benchmark_Ingestion.md` shows how public agent-governance, MCP-security, action-boundary, consequence, cloud, and financial benchmark shapes can be translated into SMERC runtime-evaluation metadata without claiming official upstream benchmark scores.
+- `docs/Postcondition_Evidence.md` shows how to verify whether SPARTa-required controls actually happened after a route decision.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
 - `docs/Credibility_Partner_Review_Packet.md` gives external reviewers a 30-minute packet for deciding whether metadata-only shadow-mode testing is worth discussing.
 - `docs/Credibility_Partner_Outreach.md` gives a short, bounded outreach message for asking credibility partners to review SMERC without overclaiming readiness.
@@ -1162,6 +1164,17 @@ python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_
 ```
 
 The Public Benchmark Ingestion Pack maps representative public benchmark-shaped examples into SMERC's customer-evaluation contract, then reports posture counts, SPARTa routes, Decision Lifecycle Ledger validity, and baseline-versus-SMERC deltas. It is adapter-ready proof for public governance benchmark categories; it is not an official score for any upstream benchmark until license-compatible datasets and documented runners are used.
+
+Run the Postcondition Evidence report:
+
+```bash
+python -m reference_engine.postcondition_evidence \
+  --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json \
+  --observations examples/postcondition_observations.json \
+  --pretty
+```
+
+Postcondition Evidence compares SPARTa-required controls against observed control, execution, hold, and rollback evidence. It shows whether controls were actually observed after a route instead of only recommended before execution.
 
 ## GitHub Actions Modes
 
