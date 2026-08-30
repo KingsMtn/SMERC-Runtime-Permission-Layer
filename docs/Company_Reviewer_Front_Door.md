@@ -14,6 +14,7 @@ Pick one path:
 | --- | --- | --- |
 | General AI-agent or automation reviewer | General customer evaluation | `python -m reference_engine.customer_evaluation examples/customer_eval_actions.json --pretty` |
 | Cloud, SRE, platform, or infrastructure reviewer | Cloud-admin customer evaluation | `python -m reference_engine.customer_evaluation examples/cloud_admin_customer_eval_actions.json --pretty` |
+| Cloud, SRE, platform, or infrastructure reviewer who wants the strongest proof artifact | Cloud Admin Proof Pack | `python -m reference_engine.cloud_admin_proof_pack --pretty` |
 | Financial-services, treasury, stablecoin, payment, or tokenized-finance reviewer | Financial Runtime customer evaluation, internally called SMERC-F | `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty` |
 | Reviewer who wants to see the full assembled loop | Complete lifecycle proof | `python -m reference_engine.complete_lifecycle_proof` |
 
@@ -72,6 +73,8 @@ Useful result:
 - SMERC identifies a constrained path that is better than simply allowing or blocking.
 - SMERC hard-stops at least one action when evidence is missing or untrusted.
 - Reviewers can label whether the posture is useful, too strict, too permissive, or unclear.
+
+For cloud, SRE, platform, DevOps, CI/CD, or AI-agent infrastructure teams, `docs/Cloud_Admin_Proof_Pack.md` is the strongest proof path. It expands the cloud-admin sample into 24 scenarios and adds cloud reason codes plus Work / Result / Impact evidence.
 
 Weak result:
 

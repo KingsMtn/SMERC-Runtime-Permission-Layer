@@ -18,6 +18,7 @@ Fast reviewer paths:
 - Company reviewer front door: `docs/Company_Reviewer_Front_Door.md`
 - AI/search reviewer: `docs/AI_Readable_Reviewer_Bundle.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
+- Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
 - Skeptical competitive review: `docs/External_Signal_And_Competitive_Review.md`
 - Accelerator/adjacent company map: `docs/Accelerator_And_Adjacent_Company_Map.md`
@@ -231,6 +232,7 @@ The current build includes:
 - Customer Evaluation runner that accepts 5 to 25 metadata-only customer actions and returns Ref-gate results, SMERC postures, SPARTa routes, DLL evidence, autonomy budget impact, and a pilot-fit recommendation
 - Financial Runtime Customer Evaluation pack, internally called SMERC-F, with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
 - Cloud Admin Customer Evaluation pack with metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions for infrastructure review
+- Cloud Admin Proof Pack that expands the cloud-admin sample into 24 scenarios with cloud-specific reason codes, Work / Result / Impact explanations, SPARTa route evidence, autonomy-budget impact, and DLL validity
 - repository-native Runtime Customer Evaluations GitHub Actions workflow that runs the general, cloud-admin, financial runtime, or company-template evaluation packs from the Actions tab and uploads review artifacts
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
 - cloud automation guardrails positioning for infrastructure-as-code, IAM, Kubernetes, database, deployment, and destructive cloud-resource actions
@@ -332,6 +334,7 @@ Start here before reading the code:
 - `docs/Run_Customer_Evaluation_From_GitHub.md` gives non-local reviewers a click-by-click path for running the public customer-evaluation workflow from GitHub Actions and downloading the report artifact.
 - `docs/Company_Test_Package.md` gives companies a practical first test: copy `examples/customer_metadata_template.json`, replace it with 5 to 25 metadata-only actions from one workflow, run the evaluation, and decide whether a 30-day shadow-mode pilot is justified.
 - `docs/Cloud_Admin_Customer_Evaluation.md` gives cloud security, SRE, platform, and infrastructure reviewers a runnable metadata-only evaluation pack for IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions.
+- `docs/Cloud_Admin_Proof_Pack.md` gives cloud, SRE, DevOps, CI/CD, and AI-agent platform reviewers a 24-scenario proof pack with cloud reason codes for IAM expansion, network widening, data-plane destructive action, DNS cutover, rollback uncertainty, evidence gaps, production blast radius, and autonomy scope pressure.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
 - `docs/Credibility_Partner_Review_Packet.md` gives external reviewers a 30-minute packet for deciding whether metadata-only shadow-mode testing is worth discussing.
 - `docs/Credibility_Partner_Outreach.md` gives a short, bounded outreach message for asking credibility partners to review SMERC without overclaiming readiness.
@@ -1129,6 +1132,14 @@ python -m reference_engine.customer_evaluation \
 ```
 
 The Cloud Admin Customer Evaluation path reuses the general customer-evaluation runner with cloud-specific metadata-only actions. It is intended to help cloud security, SRE, platform, and infrastructure reviewers decide whether a bounded shadow-mode review is justified before any live cloud integration.
+
+Run the Cloud Admin Proof Pack:
+
+```bash
+python -m reference_engine.cloud_admin_proof_pack --pretty
+```
+
+The Cloud Admin Proof Pack expands the eight cloud-admin examples into 24 metadata-only scenarios and reports cloud-specific reason codes, posture counts, SPARTa routes, valid DLL ledgers, autonomy-budget impact, and Work / Result / Impact examples. It is designed for infrastructure reviewers evaluating whether SMERC could help govern AI/devops agents before cloud actions change IAM, network boundaries, Kubernetes workloads, DNS, databases, secrets, capacity, or backup policy.
 
 ## GitHub Actions Modes
 
