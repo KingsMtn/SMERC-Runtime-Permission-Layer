@@ -41,6 +41,7 @@ The repository contains working pilot-grade artifacts:
 - complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence
 - postcondition evidence that checks whether required SPARTa controls were actually observed after routing
 - customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata
+- external reviewer metadata response assessment for deciding whether supplied metadata is ready, limited, or unsafe
 - GitHub Actions pilot package
 - GitHub PR Guardian
 - MCP governance gateway
@@ -83,6 +84,8 @@ The serious report performance harness shows local p50, p95, and maximum timing 
 
 The customer-owned metadata request gives reviewers a safe next ask: replace public examples with 5 to 25 metadata-only actions from one real workflow, then judge whether SMERC changes review behavior enough to justify shadow-mode testing.
 
+The external reviewer metadata response assessment prevents vague interest or unsafe data sharing from being treated as pilot proof.
+
 ## What It Does Not Prove
 
 SMERC does not yet prove:
@@ -108,10 +111,11 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 7. Run `python -m reference_engine.postcondition_evidence --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json --observations examples/postcondition_observations.json --pretty`.
 8. Run `python -m reference_engine.serious_report_performance --iterations 5 --pretty`.
 9. Run `python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty`.
-10. Run `python -m reference_engine.pilot_in_a_box --pretty`.
-11. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
-12. For financial-services review, run `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty`.
-13. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+10. Run `python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty`.
+11. Run `python -m reference_engine.pilot_in_a_box --pretty`.
+12. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
+13. For financial-services review, run `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty`.
+14. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 

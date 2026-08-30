@@ -27,6 +27,7 @@
     "complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence",
     "postcondition evidence comparing SPARTa-required controls with observed control, execution, hold, and rollback evidence",
     "customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata",
+    "external reviewer metadata response assessment for deciding whether supplied metadata is ready, limited, or unsafe",
     "GitHub Actions pilot package",
     "GitHub PR Guardian",
     "MCP governance gateway",
@@ -65,6 +66,8 @@
     "serious_report_performance_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Serious_Report_Performance.md",
     "customer_owned_metadata_request": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Customer_Owned_Metadata_Request.md",
     "customer_owned_metadata_request_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Customer_Owned_Metadata_Request.md",
+    "external_reviewer_metadata_response": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/External_Reviewer_Metadata_Response.md",
+    "external_reviewer_metadata_response_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/External_Reviewer_Metadata_Response_Assessment.md",
     "financial_runtime_reason_codes": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/SMERC_F_Financial_Reason_Codes.md",
     "financial_runtime_public_data_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/SMERC_F_Public_Data_Replay_Report.md",
     "latest_ci_status": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions",
@@ -127,18 +130,24 @@
     },
     {
       "step": 10,
+      "name": "Assess the external reviewer metadata response",
+      "command": "python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty",
+      "result": "Reviewer-supplied metadata is classified as ready, limited, or unsafe before being treated as pilot evidence."
+    },
+    {
+      "step": 11,
       "name": "Replace examples with 5 to 25 safe company-owned metadata records",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/customer_eval/README.md",
       "result": "Reviewer can test whether SMERC changes judgment on actions that resemble their own workflows without sharing secrets or production authority."
     },
     {
-      "step": 11,
+      "step": 12,
       "name": "Run the Financial Runtime evaluation when the workflow is financial",
       "command": "python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty",
       "result": "Financial-services reviewers can test metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions."
     },
     {
-      "step": 12,
+      "step": 13,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."
