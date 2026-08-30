@@ -32,9 +32,11 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `docs/External_Signal_And_Competitive_Review.md`
 - `docs/Accelerator_And_Adjacent_Company_Map.md`
 - `docs/Public_Action_Governance_Benchmark.md`
+- `docs/Public_Benchmark_Ingestion.md`
 - `docs/Competitive_Gaps_And_Build_Priorities.md`
 - `reports/Competitive_Proof_Parity_Report.md`
 - `reports/Public_Action_Governance_Benchmark.md`
+- `reports/Public_Benchmark_Ingestion_Report.md`
 - `reports/Runtime_Governance_Benchmark.md`
 
 ## Primary Pilot Path
@@ -44,13 +46,16 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `docs/GitHub_Actions_Pilot_Operator_Quickstart.md`
 - `docs/Cloud_Admin_Proof_Pack.md`
 - `docs/Cloud_Metadata_Connector.md`
+- `docs/Public_Benchmark_Ingestion.md`
 - `reference_engine/github_actions_pilot_readiness.py`
 - `reference_engine/cloud_admin_proof_pack.py`
 - `reference_engine/cloud_metadata_connector.py`
+- `reference_engine/public_benchmark_ingestion.py`
 - `integrations/github_actions/`
 - `reports/GitHub_Actions_Pilot_Readiness.md`
 - `reports/cloud_admin_proof_pack/Cloud_Admin_Proof_Pack.md`
 - `reports/Cloud_Metadata_Connector_Report.md`
+- `reports/Public_Benchmark_Ingestion_Report.md`
 
 ## MCP / Tool-Call Governance
 

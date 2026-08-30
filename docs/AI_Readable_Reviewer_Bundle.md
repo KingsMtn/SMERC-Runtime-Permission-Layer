@@ -47,6 +47,7 @@ The repository contains working pilot-grade artifacts:
 - cloud-admin customer evaluation
 - cloud-admin proof pack with cloud reason codes
 - cloud metadata connector for read-only change exports
+- public benchmark ingestion pack for agent-governance, MCP-security, action-boundary, consequence, cloud, and financial benchmark-shaped examples
 - financial runtime evaluation profile
 - public scenario benchmark
 - OpenAPI pilot contract
@@ -71,6 +72,8 @@ The complete lifecycle proof shows the connected product path: `ADMIT -> FREEZE 
 
 The public benchmark currently shows that SMERC creates middle-state governance behavior across MCP tool calls, coding agents, cloud administration, financial runtime actions, execution tickets, and security approval workflows.
 
+The public benchmark ingestion pack shows how public benchmark categories can be converted into SMERC's customer-evaluation contract while preserving the boundary that representative examples are not official upstream benchmark scores.
+
 ## What It Does Not Prove
 
 SMERC does not yet prove:
@@ -92,10 +95,11 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 3. Run `python -m reference_engine.complete_lifecycle_proof`.
 4. Read `docs/External_Signal_And_Competitive_Review.md`.
 5. Inspect `reports/Public_Action_Governance_Benchmark.md`.
-6. Run `python -m reference_engine.pilot_in_a_box --pretty`.
-7. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
-8. For financial-services review, run `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty`.
-9. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+6. Run `python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_ingestion_examples.json --pretty`.
+7. Run `python -m reference_engine.pilot_in_a_box --pretty`.
+8. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
+9. For financial-services review, run `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty`.
+10. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 

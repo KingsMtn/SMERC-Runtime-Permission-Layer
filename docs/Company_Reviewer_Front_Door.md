@@ -16,6 +16,7 @@ Pick one path:
 | Cloud, SRE, platform, or infrastructure reviewer | Cloud-admin customer evaluation | `python -m reference_engine.customer_evaluation examples/cloud_admin_customer_eval_actions.json --pretty` |
 | Cloud, SRE, platform, or infrastructure reviewer who wants the strongest proof artifact | Cloud Admin Proof Pack | `python -m reference_engine.cloud_admin_proof_pack --pretty` |
 | Cloud reviewer with exported change summaries | Cloud Metadata Connector | `python -m reference_engine.cloud_metadata_connector examples/cloud_admin_source_exports.json --pretty` |
+| Reviewer comparing SMERC against public agent-governance, MCP, action-boundary, consequence, cloud, or financial benchmark categories | Public Benchmark Ingestion Pack | `python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_ingestion_examples.json --pretty` |
 | Financial-services, treasury, stablecoin, payment, or tokenized-finance reviewer | Financial Runtime customer evaluation, internally called SMERC-F | `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty` |
 | Reviewer who wants to see the full assembled loop | Complete lifecycle proof | `python -m reference_engine.complete_lifecycle_proof` |
 
@@ -78,6 +79,8 @@ Useful result:
 For cloud, SRE, platform, DevOps, CI/CD, or AI-agent infrastructure teams, `docs/Cloud_Admin_Proof_Pack.md` is the strongest proof path. It expands the cloud-admin sample into 24 scenarios and adds cloud reason codes plus Work / Result / Impact evidence.
 
 If a cloud reviewer asks how their own environment would enter SMERC safely, start with `docs/Cloud_Metadata_Connector.md`. It normalizes read-only exported change summaries into SMERC metadata without cloud credentials or live infrastructure access.
+
+If a reviewer asks how SMERC relates to public agent-governance, MCP-security, action-boundary, consequence, cloud, or financial runtime benchmarks, start with `docs/Public_Benchmark_Ingestion.md`. It maps representative public benchmark-shaped examples into SMERC metadata and states the boundary before any official benchmark claim is made.
 
 Weak result:
 
