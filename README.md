@@ -21,6 +21,7 @@ Fast reviewer paths:
 - Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
 - Skeptical competitive review: `docs/External_Signal_And_Competitive_Review.md`
+- Market signal to proof map: `docs/Market_Signal_To_Proof_Map.md`
 - Accelerator/adjacent company map: `docs/Accelerator_And_Adjacent_Company_Map.md`
 - Public scenario benchmark: `docs/Public_Action_Governance_Benchmark.md`
 - Pilot reviewer: `docs/Pilot_Intake_Template.md`
@@ -370,6 +371,7 @@ Start here before reading the code:
 - `docs/Competitive_Gaps_And_Build_Priorities.md` states what adjacent products do better today and what SMERC should build next.
 - `docs/Competitive_Proof_Data_Map.md` maps the proof categories used by adjacent MCP gateway, AI gateway, policy, and runtime governance products to SMERC-compatible public evidence.
 - `docs/Competitive_Proof_Parity_Harness.md` explains the one-command report that runs SMERC across those same proof categories.
+- `docs/Market_Signal_To_Proof_Map.md` connects public pain language, available benchmark/data shapes, current SMERC proof, and the next evidence work without treating public signal as customer validation.
 - `examples/runtime_contract_index.json` gives agents, adapters, SDKs, and reviewers the canonical contract handoff map.
 - `docs/Maturity_Model.md` defines the evidence-based maturity scale used for SMERC claims.
 - `docs/CISO_30_Minute_Review_Package.md` gives CISOs a timed review path for deciding whether a shadow-mode pilot is justified.
