@@ -231,6 +231,7 @@ The current build includes:
 - MCP Governance Gateway that evaluates registry-defined MCP tool-call sessions with loop pressure, scope pressure, session-budget metering, proxy actions, SPARTa routes, DLL evidence, and SMERC-F financial tool-family support
 - deterministic ref-gate-style metadata checks for typed contract validity, attestation validity, least-privilege confirmation, and expected object shape before recoverability scoring is allowed to influence high-impact MCP tool calls
 - Customer Evaluation runner that accepts 5 to 25 metadata-only customer actions and returns Ref-gate results, SMERC postures, SPARTa routes, DLL evidence, autonomy budget impact, and a pilot-fit recommendation
+- Customer-Owned Metadata Request generator that gives external reviewers a safe ask for replacing public examples with 5 to 25 metadata-only actions from one real workflow
 - Financial Runtime Customer Evaluation pack, internally called SMERC-F, with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
 - Cloud Admin Customer Evaluation pack with metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions for infrastructure review
 - Cloud Admin Proof Pack that expands the cloud-admin sample into 24 scenarios with cloud-specific reason codes, Work / Result / Impact explanations, SPARTa route evidence, autonomy-budget impact, and DLL validity
@@ -338,6 +339,7 @@ Start here before reading the code:
 - `docs/Customer_Evaluation.md` gives prospective design partners a one-command metadata-only evaluation path for testing 5 to 25 of their own AI-agent or automation actions before a pilot discussion.
 - `docs/Run_Customer_Evaluation_From_GitHub.md` gives non-local reviewers a click-by-click path for running the public customer-evaluation workflow from GitHub Actions and downloading the report artifact.
 - `docs/Company_Test_Package.md` gives companies a practical first test: copy `examples/customer_metadata_template.json`, replace it with 5 to 25 metadata-only actions from one workflow, run the evaluation, and decide whether a 30-day shadow-mode pilot is justified.
+- `docs/Customer_Owned_Metadata_Request.md` gives reviewers the clean external ask: replace public examples with 5 to 25 safe metadata-only actions from one workflow, then pair the result with performance and postcondition evidence.
 - `docs/Cloud_Admin_Customer_Evaluation.md` gives cloud security, SRE, platform, and infrastructure reviewers a runnable metadata-only evaluation pack for IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions.
 - `docs/Cloud_Admin_Proof_Pack.md` gives cloud, SRE, DevOps, CI/CD, and AI-agent platform reviewers a 24-scenario proof pack with cloud reason codes for IAM expansion, network widening, data-plane destructive action, DNS cutover, rollback uncertainty, evidence gaps, production blast radius, and autonomy scope pressure.
 - `docs/Cloud_Metadata_Connector.md` shows how read-only cloud-change exports can be normalized into SMERC customer-evaluation actions before any live AWS, Azure, Google Cloud, Cloudflare, Kubernetes, Terraform, DNS, database, or secrets-manager integration.
@@ -1185,6 +1187,14 @@ python -m reference_engine.serious_report_performance --iterations 5 --pretty
 ```
 
 Serious Report Performance measures local p50, p95, and maximum latency for major proof builders. It helps reviewers inspect evaluation cost, but it does not prove production latency, hosted API performance, throughput, SLA, customer workflow overhead, or reviewer burden.
+
+Generate the Customer-Owned Metadata Request:
+
+```bash
+python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty
+```
+
+This creates a safe request packet for external reviewers to replace public examples with 5 to 25 metadata-only actions from one real workflow. It is the next evidence step after public proof, benchmark ingestion, postcondition evidence, and local performance metrics.
 
 ## GitHub Actions Modes
 

@@ -26,6 +26,7 @@
     "Recovery Authority Gate for governed unlock after pause",
     "complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence",
     "postcondition evidence comparing SPARTa-required controls with observed control, execution, hold, and rollback evidence",
+    "customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata",
     "GitHub Actions pilot package",
     "GitHub PR Guardian",
     "MCP governance gateway",
@@ -62,6 +63,8 @@
     "public_benchmark_ingestion_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Public_Benchmark_Ingestion_Report.md",
     "serious_report_performance": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Serious_Report_Performance.md",
     "serious_report_performance_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Serious_Report_Performance.md",
+    "customer_owned_metadata_request": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Customer_Owned_Metadata_Request.md",
+    "customer_owned_metadata_request_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Customer_Owned_Metadata_Request.md",
     "financial_runtime_reason_codes": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/SMERC_F_Financial_Reason_Codes.md",
     "financial_runtime_public_data_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/SMERC_F_Public_Data_Replay_Report.md",
     "latest_ci_status": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions",
@@ -112,24 +115,30 @@
     },
     {
       "step": 8,
+      "name": "Generate the customer-owned metadata request",
+      "command": "python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty",
+      "result": "Reviewer receives a safe ask for replacing public examples with 5 to 25 metadata-only actions from one real workflow."
+    },
+    {
+      "step": 9,
       "name": "Run the pilot-in-a-box path",
       "command": "python -m reference_engine.pilot_in_a_box --pretty",
       "result": "Reviewer receives a local proof package across general AI-agent, cloud-admin, financial-runtime, and single-action examples."
     },
     {
-      "step": 9,
+      "step": 10,
       "name": "Replace examples with 5 to 25 safe company-owned metadata records",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/customer_eval/README.md",
       "result": "Reviewer can test whether SMERC changes judgment on actions that resemble their own workflows without sharing secrets or production authority."
     },
     {
-      "step": 10,
+      "step": 11,
       "name": "Run the Financial Runtime evaluation when the workflow is financial",
       "command": "python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty",
       "result": "Financial-services reviewers can test metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions."
     },
     {
-      "step": 11,
+      "step": 12,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."
