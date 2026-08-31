@@ -16,6 +16,7 @@ Fast reviewer paths:
 
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
 - Company reviewer front door: `docs/Company_Reviewer_Front_Door.md`
+- Serious reviewer bundle: `docs/Serious_Reviewer_Bundle.md`
 - AI/search reviewer: `docs/AI_Readable_Reviewer_Bundle.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
@@ -115,6 +116,14 @@ That kit gives a 20-minute metadata-only path:
 Public page: https://admirable-sorbet-9986d5.netlify.app/customer-evaluation.html
 
 This self-service path is designed to reduce founder explanation. It still requires customer-owned reviewer judgment before any pilot or enforcement discussion.
+
+For the shortest complete reviewer package, run:
+
+```bash
+python -m reference_engine.serious_reviewer_bundle --workflow-family general --requested-actions 10 --pretty
+```
+
+This writes `reports/serious_reviewer_bundle/Serious_Reviewer_Bundle.md` plus the customer evaluation, postcondition evidence, performance, customer-owned metadata request, and external reviewer response assessment reports. See `docs/Serious_Reviewer_Bundle.md`.
 
 Financial-services reviewers should use the Financial Runtime path, internally called SMERC-F:
 

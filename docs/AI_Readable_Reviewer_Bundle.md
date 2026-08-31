@@ -39,6 +39,7 @@ The repository contains working pilot-grade artifacts:
 - DLL intelligence reports
 - Recovery Authority Gate for governed unlock after pause
 - complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence
+- serious reviewer bundle that assembles customer evaluation, postcondition evidence, performance metrics, metadata request, and response assessment in one command
 - postcondition evidence that checks whether required SPARTa controls were actually observed after routing
 - customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata
 - external reviewer metadata response assessment for deciding whether supplied metadata is ready, limited, or unsafe
@@ -74,6 +75,8 @@ Current evidence proves that SMERC can run metadata-only action examples through
 
 The complete lifecycle proof shows the connected product path: `ADMIT -> FREEZE -> PAUSE -> UNLOCK -> THROTTLE -> CONSTRAINED_EXECUTE -> permit verified -> execution succeeded -> ledger valid`.
 
+The serious reviewer bundle packages the current company-review path into one local run. It produces customer evaluation, postcondition evidence, performance, customer-owned metadata request, and external reviewer response assessment outputs together, so a reviewer does not need to assemble separate reports by hand.
+
 The public benchmark currently shows that SMERC creates middle-state governance behavior across MCP tool calls, coding agents, cloud administration, financial runtime actions, execution tickets, and security approval workflows.
 
 The public benchmark ingestion pack shows how public benchmark categories can be converted into SMERC's customer-evaluation contract while preserving the boundary that representative examples are not official upstream benchmark scores.
@@ -104,18 +107,19 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 
 1. Read `docs/Public_Review_Snapshot.md`.
 2. Read `docs/Company_Reviewer_Front_Door.md`.
-3. Run `python -m reference_engine.complete_lifecycle_proof`.
-4. Read `docs/External_Signal_And_Competitive_Review.md`.
-5. Inspect `reports/Public_Action_Governance_Benchmark.md`.
-6. Run `python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_ingestion_examples.json --pretty`.
-7. Run `python -m reference_engine.postcondition_evidence --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json --observations examples/postcondition_observations.json --pretty`.
-8. Run `python -m reference_engine.serious_report_performance --iterations 5 --pretty`.
-9. Run `python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty`.
-10. Run `python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty`.
-11. Run `python -m reference_engine.pilot_in_a_box --pretty`.
-12. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
-13. For financial-services review, run `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty`.
-14. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+3. Run `python -m reference_engine.serious_reviewer_bundle --workflow-family general --requested-actions 10 --pretty`.
+4. Run `python -m reference_engine.complete_lifecycle_proof`.
+5. Read `docs/External_Signal_And_Competitive_Review.md`.
+6. Inspect `reports/Public_Action_Governance_Benchmark.md`.
+7. Run `python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_ingestion_examples.json --pretty`.
+8. Run `python -m reference_engine.postcondition_evidence --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json --observations examples/postcondition_observations.json --pretty`.
+9. Run `python -m reference_engine.serious_report_performance --iterations 5 --pretty`.
+10. Run `python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty`.
+11. Run `python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty`.
+12. Run `python -m reference_engine.pilot_in_a_box --pretty`.
+13. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
+14. For financial-services review, run `python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty`.
+15. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 
