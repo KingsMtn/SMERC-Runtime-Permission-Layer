@@ -1,10 +1,10 @@
-# Runtime Permission Layer for AI Agents and MCP Tool Calls
+# Pre-Execution Recoverability Control for AI Agents and MCP Tool Calls
 
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
 ## External Technical Review Edition
 
-SMERC is recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, and high-impact workflows.
+SMERC is a pre-execution recoverability control layer for AI agents, MCP tool calls, GitHub Actions, cloud automation, financial actions, and other high-impact workflows. The reference implementation is runtime permission infrastructure.
 
 Mission: SMERC helps intelligent systems make safer decisions before irreversible actions occur, so people and organizations can trust the technology shaping their lives.
 
@@ -60,9 +60,9 @@ Current status: pilot-ready for shadow-mode technical review. Not production-cer
 
 SMERC is not the only project working near agent runtime governance. OPA, AI gateways, sandboxed agent runtimes, MCP security tools, approval workflows, and signed audit systems already solve adjacent pieces of the problem.
 
-The narrow SMERC wedge is recoverability before execution:
+The narrow SMERC wedge is pre-execution recoverability control:
 
-> Existing systems ask whether an agent or workflow is authorized. SMERC asks whether the proposed action is recoverable enough to execute now, and preserves why that decision was made.
+> Existing systems ask whether an agent or workflow is authorized. SMERC asks whether the proposed action is recoverable, bounded, and evidenced enough to execute now, and preserves why that decision was made.
 
 Read `docs/External_Signal_And_Competitive_Review.md` for the skeptical comparison, public signal review, overlap risks, and current non-claims.
 
@@ -212,7 +212,11 @@ SMERC should lead with familiar category language, not internal layer names.
 
 Preferred public phrase:
 
-> Recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, and high-impact workflows.
+> Pre-execution recoverability control for AI agents, MCP tool calls, GitHub Actions, cloud automation, financial actions, and high-impact workflows.
+
+Secondary technical category:
+
+> Recoverability-aware runtime permission infrastructure.
 
 Internal names come after the flow is understood: signal and evidence intake, recoverability decision, execution routing and controls, and decision lifecycle evidence. In the reference implementation those layers are called SPARK, SMERC, SPARTa, and DLL. See `docs/Public_Language_And_Naming.md`.
 
@@ -382,7 +386,8 @@ Start here before reading the code:
 - `docs/Public_Review_Snapshot.md` gives a compact current-status snapshot for reviewers who need the fastest honest orientation.
 - `docs/Release_Notes_v0_14_Public_Review.md` gives a compact release-style summary for public review, validation, and pilot discussion.
 - `docs/Plain_English_Product_Overview.md` explains what SMERC does, what exists now, and what is not proven yet.
-- `docs/Public_Language_And_Naming.md` explains how public surfaces should lead with familiar category language before internal layer names such as SPARK, SPARTa, and DLL.
+- `docs/Public_Language_And_Naming.md` explains how public surfaces should lead with pre-execution recoverability control before internal layer names such as SPARK, SPARTa, and DLL.
+- `docs/Category_Positioning.md` defines the sharper category position: SMERC is a pre-execution recoverability control layer, implemented as runtime permission infrastructure.
 - `docs/CISO_5_Minute_Proof_Package.md` gives security executives the fastest proof path from claim to pilot ask without production-readiness claims.
 - `docs/GitHub_PR_Guardian.md` explains the developer-facing PR review surface for AI-assisted code and deployment changes.
 - `docs/End_To_End_PR_Guardian_Demo.md` shows the current modules working as one synthetic review loop from AI-assisted pull request to DLL Intelligence.
@@ -1303,7 +1308,7 @@ See `docs/Product_Build_Map.md` and `docs/API_Deployment_Guide.md` for the curre
 
 ## Pilot Question
 
-> Does recoverability-aware runtime scoring change reviewer judgment in a useful and repeatable way before AI-agent actions create side effects?
+> Does pre-execution recoverability control change reviewer judgment in a useful and repeatable way before AI-agent actions create side effects?
 
 SMERC should be adopted only if a controlled pilot produces evidence that the answer is yes.
 

@@ -4,7 +4,9 @@
 
 This page is the first stop for people evaluating SMERC from the public GitHub repository.
 
-SMERC is runtime permission infrastructure for AI-agent and automation actions. It evaluates a proposed action before execution and returns a replayable posture:
+SMERC is a pre-execution recoverability control layer for AI-agent and automation actions. It is implemented as runtime permission infrastructure: after identity, policy, detection, or authorization says an action may be possible, SMERC checks whether that action is recoverable, bounded, and evidenced enough to execute now.
+
+It evaluates a proposed action before execution and returns a replayable posture:
 
 - `ALLOW`
 - `THROTTLE`

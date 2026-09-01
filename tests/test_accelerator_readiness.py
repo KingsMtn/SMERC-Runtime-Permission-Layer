@@ -9,7 +9,7 @@ class AcceleratorReadinessDocsTests(unittest.TestCase):
     def test_accelerator_track_has_evidence_first_boundary(self):
         text = (ROOT / "docs" / "Accelerator_Readiness_Track.md").read_text()
 
-        self.assertIn("Recoverability-aware runtime permission infrastructure", text)
+        self.assertIn("pre-execution recoverability control", text)
         self.assertIn("technical review and shadow-mode pilot discussion", text)
         self.assertIn("customer-proven risk reduction", text)
         self.assertIn("Do not claim", text)

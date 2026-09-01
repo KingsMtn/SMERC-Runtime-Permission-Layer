@@ -6,6 +6,8 @@ This page is the shortest company-review path for SMERC.
 
 It is for a security, platform, AI governance, cloud, or financial-services reviewer who wants to understand whether SMERC is worth testing without scheduling a sales call, sharing secrets, or connecting production systems.
 
+SMERC should be read as a pre-execution recoverability control layer: after existing systems indicate an action may be authorized, SMERC asks whether that action is recoverable, bounded, and evidenced enough to execute now.
+
 ## What To Do First
 
 Pick one path:
@@ -124,4 +126,4 @@ This front door is not product-market validation. It is not production certifica
 
 It is a low-risk way to answer the first serious question:
 
-> Does recoverability-aware runtime permissioning change reviewer judgment enough to justify a bounded shadow-mode pilot?
+> Does pre-execution recoverability control change reviewer judgment enough to justify a bounded shadow-mode pilot?

@@ -2,7 +2,7 @@
 
 ## Position
 
-SMERC is recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, financial-action workflows, and other high-impact automated systems.
+SMERC is a pre-execution recoverability control layer for AI agents, MCP tool calls, GitHub Actions, cloud automation, financial-action workflows, and other high-impact automated systems. The reference implementation is recoverability-aware runtime permission infrastructure.
 
 The strategic claim is narrow:
 

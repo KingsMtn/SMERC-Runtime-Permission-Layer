@@ -14,7 +14,7 @@ The immediate goal is not to apply everywhere. The goal is to make the project c
 
 ## Current Position
 
-SMERC is runtime permission infrastructure for AI-agent actions. The first wedge is GitHub Actions and AI-assisted pull request governance.
+SMERC is pre-execution recoverability control for AI-agent actions. The reference implementation is recoverability-aware runtime permission infrastructure. The first wedge is GitHub Actions and AI-assisted pull request governance.
 
 The current repository can demonstrate:
 
@@ -40,7 +40,7 @@ The strongest accelerator lane is cybersecurity and enterprise infrastructure, n
 
 SMERC should be positioned as:
 
-> Recoverability-aware runtime permission infrastructure for AI-agent actions.
+> Pre-execution recoverability control for AI-agent actions, implemented as recoverability-aware runtime permission infrastructure.
 
 The most relevant accelerator target is a cybersecurity-focused program such as MACH37 because the first buyer is likely a CISO, security architect, or platform security leader reviewing AI-agent blast-radius risk.
 

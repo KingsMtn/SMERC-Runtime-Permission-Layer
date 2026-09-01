@@ -61,12 +61,12 @@ class PublicDiscoveryAuditTests(unittest.TestCase):
 
     def _write_valid_site(self, site: Path) -> None:
         (site / ".well-known").mkdir()
-        title = "SMERC | Runtime Permission Infrastructure for AI Agents"
+        title = "SMERC | Pre-Execution Recoverability Control"
         home = (
             f"<html><head><title>{title}</title>"
-            '<meta property="og:title" content="SMERC | Runtime Permission Infrastructure for AI Agents" />'
+            '<meta property="og:title" content="SMERC | Pre-Execution Recoverability Control" />'
             "</head><body>Structural Momentum Entropy Range Confidence. "
-            "AI agent governance. recoverability scoring. runtime permission layer.</body></html>"
+            "AI agent governance. pre-execution recoverability control. recoverability scoring. runtime permission layer.</body></html>"
         )
         (site / "index.html").write_text(home, encoding="utf-8")
         (site / "ai-agent-governance.html").write_text(
@@ -74,7 +74,7 @@ class PublicDiscoveryAuditTests(unittest.TestCase):
             encoding="utf-8",
         )
         (site / "llms.txt").write_text(
-            "SMERC Structural Momentum Entropy Range Confidence AI agent governance runtime permission layer recoverability scoring",
+            "SMERC Structural Momentum Entropy Range Confidence AI agent governance pre-execution recoverability control runtime permission layer recoverability scoring",
             encoding="utf-8",
         )
         (site / "sitemap.xml").write_text(
@@ -84,13 +84,13 @@ class PublicDiscoveryAuditTests(unittest.TestCase):
         profile = {
             "full_name": title,
             "acronym_expansion": "Structural Momentum Entropy Range Confidence",
-            "standard_tagline": "Recoverability scoring before automated actions execute.",
-            "one_line_summary": "SMERC is runtime permission infrastructure for AI agents.",
+            "standard_tagline": "Pre-execution recoverability control before automated actions execute.",
+            "one_line_summary": "SMERC is a pre-execution recoverability control layer implemented as runtime permission infrastructure for AI agents.",
         }
         beacon = {
             "name": title,
             "acronym_expansion": "Structural Momentum Entropy Range Confidence",
-            "standard_tagline": "Recoverability scoring before automated actions execute.",
+            "standard_tagline": "Pre-execution recoverability control before automated actions execute.",
             "search_categories": ["AI agent governance", "runtime permission layer"],
         }
         (site / "project.json").write_text(json.dumps(profile), encoding="utf-8")

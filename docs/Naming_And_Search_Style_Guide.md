@@ -14,15 +14,16 @@ This keeps SMERC memorable while still making the product legible to search engi
 | --- | --- | --- |
 | Brand | `SMERC` | Short, memorable product name. |
 | Expansion | `Structural Momentum Entropy Range Confidence` | Acronym context and unique long-tail search phrase. |
-| Category | `Runtime permission infrastructure for AI agents` | The market/category label. |
-| Problem phrase | `Recoverability scoring before automated actions execute` | The buyer problem and search phrase. |
+| Category | `Pre-execution recoverability control for AI agents` | The specific control category. |
+| Technical layer | `Runtime permission infrastructure` | The implementation category. |
+| Problem phrase | `Can this authorized action recover before it executes?` | The buyer problem and search phrase. |
 | First use case | `GitHub Actions shadow-mode pilot for AI-assisted deployment workflows` | The first concrete wedge. |
 
 ## Preferred Public Title Pattern
 
 Use:
 
-> `SMERC | Runtime Permission Infrastructure for AI Agents`
+> `SMERC | Pre-Execution Recoverability Control`
 
 For specific pages:
 
@@ -38,7 +39,7 @@ This mirrors patterns such as `Google Cloud | Application Integration`, `Microso
 
 Use this on high-signal pages:
 
-> SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI-agent actions.
+> SMERC, short for Structural Momentum Entropy Range Confidence, is a pre-execution recoverability control layer for AI-agent actions.
 
 Then immediately explain the action:
 
@@ -49,6 +50,7 @@ Then immediately explain the action:
 Use these terms consistently:
 
 - AI agent governance
+- pre-execution recoverability control
 - runtime permission infrastructure
 - runtime permission layer
 - recoverability scoring
@@ -77,11 +79,11 @@ The full expansion should support the brand. It should not carry the page by its
 
 Use:
 
-> SMERC is runtime permission infrastructure for AI agents, evaluating whether technically authorized actions are recoverable enough to execute before side effects occur.
+> SMERC is pre-execution recoverability control for AI agents, evaluating whether technically authorized actions are recoverable enough to execute before side effects occur.
 
 Expanded version:
 
-> SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI agents, evaluating whether technically authorized actions are recoverable enough to execute before side effects occur.
+> SMERC, short for Structural Momentum Entropy Range Confidence, is a pre-execution recoverability control layer, implemented as runtime permission infrastructure for AI agents and high-impact automation.
 
 ## Standard Tagline
 

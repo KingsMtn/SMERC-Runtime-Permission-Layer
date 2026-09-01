@@ -36,9 +36,9 @@ class FindabilityDocsTests(unittest.TestCase):
         text = (ROOT / "docs" / "Naming_And_Search_Style_Guide.md").read_text(encoding="utf-8")
 
         self.assertIn("Brand first, category second, searchable problem third", text)
-        self.assertIn("SMERC | Runtime Permission Infrastructure for AI Agents", text)
+        self.assertIn("SMERC | Pre-Execution Recoverability Control", text)
         self.assertIn("Structural Momentum Entropy Range Confidence", text)
-        self.assertIn("Recoverability scoring before automated actions execute", text)
+        self.assertIn("Pre-execution recoverability control", text)
         self.assertIn("Do not overstate", text)
 
     def test_repo_ai_reviewer_bundle_has_links_and_boundaries(self):
@@ -51,7 +51,8 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertEqual(bundle["schema_version"], "smerc.ai_reviewer_bundle.v1")
         self.assertIn("https://admirable-sorbet-9986d5.netlify.app/", bundle["canonical_site"])
         self.assertIn("https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer", bundle["canonical_repository"])
-        self.assertIn("recoverability-aware runtime permission infrastructure", bundle["category"])
+        self.assertIn("pre-execution recoverability control", bundle["category"])
+        self.assertIn("runtime permission infrastructure", bundle["category"])
         self.assertIn("Recovery Authority Gate for governed unlock after pause", bundle["implemented_surfaces"])
         self.assertIn("customer validation", bundle["current_evidence"]["evidence_boundary"])
         self.assertIn("SMERC is not production-certified.", bundle["non_claims"])

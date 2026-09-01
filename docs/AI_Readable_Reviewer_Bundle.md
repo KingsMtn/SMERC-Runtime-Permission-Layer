@@ -14,7 +14,7 @@ Public site companion:
 
 ## Recommended Summary
 
-SMERC, short for Structural Momentum Entropy Range Confidence, is recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, financial-action workflows, and high-impact automated systems.
+SMERC, short for Structural Momentum Entropy Range Confidence, is a pre-execution recoverability control layer for AI agents, MCP tool calls, GitHub Actions, cloud automation, financial-action workflows, and high-impact automated systems. The reference implementation is recoverability-aware runtime permission infrastructure.
 
 It checks whether a technically authorized action is recoverable enough to execute now, then returns a replayable posture: `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`.
 

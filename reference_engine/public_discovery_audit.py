@@ -20,12 +20,13 @@ REQUIRED_FILES = [
 REQUIRED_TERMS = [
     "SMERC",
     "Structural Momentum Entropy Range Confidence",
+    "pre-execution recoverability control",
     "runtime permission",
     "AI agent governance",
     "recoverability scoring",
 ]
-EXPECTED_HOME_TITLE = "SMERC | Runtime Permission Infrastructure for AI Agents"
-EXPECTED_TAGLINE = "Recoverability scoring before automated actions execute."
+EXPECTED_HOME_TITLE = "SMERC | Pre-Execution Recoverability Control"
+EXPECTED_TAGLINE = "Pre-execution recoverability control before automated actions execute."
 
 
 def audit_site(site_dir: Path) -> Dict[str, Any]:
@@ -98,7 +99,7 @@ def _check_title(texts: Mapping[str, str], findings: List[Dict[str, str]]) -> No
                 severity="warning",
             )
         )
-    if 'property="og:title" content="SMERC | Runtime Permission Infrastructure for AI Agents"' not in home:
+    if 'property="og:title" content="SMERC | Pre-Execution Recoverability Control"' not in home:
         findings.append(_finding("home_og_title", "index.html", "Home page Open Graph title should use brand | category."))
 
 

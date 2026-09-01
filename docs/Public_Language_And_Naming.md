@@ -8,7 +8,8 @@ Do not use internal layer names as the public front door.
 
 Use these phrases first:
 
-- recoverability-aware runtime permission infrastructure
+- pre-execution recoverability control
+- pre-execution recoverability control for AI agents and automation
 - recoverability-aware permission checks before automated actions execute
 - cloud automation guardrails
 - MCP tool-call governance
@@ -37,7 +38,19 @@ Then name the reference layers:
 
 ## Preferred One-Liner
 
-SMERC is recoverability-aware runtime permission infrastructure for AI agents, MCP tool calls, GitHub Actions, cloud automation, and high-impact workflows.
+SMERC is a pre-execution recoverability control layer for AI agents, MCP tool calls, GitHub Actions, cloud automation, financial actions, and high-impact workflows.
+
+Secondary technical category:
+
+SMERC is recoverability-aware runtime permission infrastructure.
+
+## Category Position
+
+Lead with the specific control moment:
+
+> Before an authorized automated action executes, SMERC checks whether it can be recovered, constrained, paused, escalated, or blocked.
+
+Use `runtime permission infrastructure` after that, when explaining where the control is implemented.
 
 ## Avoid As First-Touch Language
 
