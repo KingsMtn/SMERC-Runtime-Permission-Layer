@@ -53,7 +53,7 @@ class BenchmarkLedgerBuilderTests(unittest.TestCase):
             markdown_path = Path(directory) / "bundle.md"
             write_outputs(bundle, json_path, markdown_path)
             parsed = json.loads(json_path.read_text(encoding="utf-8"))
-            self.assertEqual(parsed["summary"]["ledger_count"], 84)
+            self.assertEqual(parsed["summary"]["ledger_count"], bundle["summary"]["ledger_count"])
             self.assertIn("# SMERC Benchmark Decision-Time Ledger Bundle", markdown_path.read_text(encoding="utf-8"))
 
 

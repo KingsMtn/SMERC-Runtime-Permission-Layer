@@ -8,7 +8,7 @@ It does not copy competitor data, private telemetry, customer claims, screenshot
 
 ## Executive Summary
 
-The adjacent market proves value with six recurring evidence types:
+The adjacent market proves value with recurring evidence types:
 
 1. **Catalog evidence**: inventory tools, agents, permissions, risk annotations, and missing metadata.
 2. **Runtime decision evidence**: show policy or governance decisions before tool execution.
@@ -16,6 +16,8 @@ The adjacent market proves value with six recurring evidence types:
 4. **Audit evidence**: preserve logs, decision records, traces, approvals, overrides, and replay artifacts.
 5. **Benchmark evidence**: run public or synthetic scenarios through deterministic tests.
 6. **Operational evidence**: show latency, throughput, reliability, integration paths, and deployment instructions.
+7. **Rollback/replay evidence**: show whether high-impact actions can be undone, replayed, or compared against prior decisions.
+8. **Autonomy and budget evidence**: show how much independence, spend, tool scope, and delegation an agent can use before additional review.
 
 SMERC can reproduce parts of all six with public data and synthetic metadata. SMERC cannot legitimately reproduce competitor customer telemetry, production adoption claims, internal incident outcomes, or non-public benchmark data.
 
@@ -31,6 +33,9 @@ SMERC can reproduce parts of all six with public data and synthetic metadata. SM
 | Enterprise access-control systems | Identity, roles, scopes, tokens, audit events, access decisions | Static pilot principals, scoped sessions, GitHub OIDC metadata | `docs/Scoped_Workload_Identity.md`, `docs/GitHub_Actions_OIDC.md`, `docs/API_Deployment_Guide.md` |
 | Security approval workflows | Ticket payloads, human approval states, override logs, escalation records | Synthetic human-review requests and response evidence | `integrations/human_review/README.md`, `docs/Pilot_Ledger_Intake.md`, `docs/Decision_Lifecycle_Ledger.md` |
 | Risk / GRC platforms | Reports, control mapping, audit packages, evidence exports | Synthetic control evidence, benchmark ledger bundles, decision certificates | `docs/Control_Mapping_Library.md`, `docs/Governance_Report_Generator.md`, `docs/Decision_Certificate.md` |
+| Developer-agent runtime firewalls | Concrete blocked commands, local enforcement, hold/block/pass decisions, no-LLM critical path | Synthetic shell, git, database, Kubernetes, and Terraform action metadata | `examples/proxy_incident_replay_scenarios.json`, `reports/Runtime_Governance_Benchmark.md` |
+| Agent observability and replay platforms | Historical replay, changed-decision counts, regression checks, traces, cost and latency evidence | Synthetic replay/regression rows and timing evidence | `docs/Benchmark_Decision_Time_Ledgers.md`, `docs/Serious_Report_Performance.md` |
+| Agent control planes | Agent inventory, agent identity, token spend, delegation, budget limits, and fleet visibility | Synthetic identity, unregistered-agent, agent-spawn, and cost-pressure metadata | `docs/Autonomy_Budgeting_Framework.md`, `docs/Earned_Autonomy_Framework.md`, `docs/Runtime_Health_Metrics.md` |
 
 ## What SMERC Should Use Immediately
 
@@ -87,8 +92,33 @@ Current implementation:
 
 - `docs/ILION_Bench_Replay.md`
 - `reference_engine/ilion_replay.py`
+- `examples/proxy_incident_replay_scenarios.json`
+- `reference_engine/runtime_benchmark_suite.py`
 
-### 4. Public Incident Writeups
+### 4. Competitor-Inspired Synthetic Action Patterns
+
+Use public product-positioning patterns without copying private data, screenshots, customer telemetry, or proprietary benchmark inputs.
+
+The current benchmark now includes metadata-only scenarios shaped around common public examples:
+
+- destructive developer-agent commands such as infrastructure teardown
+- harmless developer-agent PR creation after passing validation
+- prompt-injection-driven external data transfer
+- token spend, agent spawning, loop, and autonomy-budget pressure
+- approval-memory reuse after material conditions changed
+- model or policy replay regression before release
+- unregistered agent identity and inventory gaps
+- MCP tool calls with valid tool names but overbroad arguments
+
+SMERC should measure:
+
+- whether recoverability creates a useful middle posture before execution
+- whether a traditional allow/block decision misses rollback, evidence, or scope problems
+- whether replay and prior approvals are safe to reuse under changed conditions
+- whether budget, delegation, and identity pressure should reduce autonomy
+- whether a registered tool is still unsafe because arguments or object scope changed
+
+### 5. Public Incident Writeups
 
 Use public incident reports only for source facts. Analyst-assigned SMERC signals must be clearly labeled as assumptions.
 
@@ -104,7 +134,7 @@ Current implementation:
 - `docs/Real_Public_Incident_Replay.md`
 - `reference_engine/real_incident_replay.py`
 
-### 5. Synthetic Production-Like Workflow Data
+### 6. Synthetic Production-Like Workflow Data
 
 Use fake-customer environments to prove product mechanics without pretending to have customer validation.
 
@@ -165,6 +195,6 @@ The useful sales line is not "SMERC is better than all competitors."
 
 The useful sales line is:
 
-> Existing systems can prove authorization, routing, policy, and logging. SMERC adds a recoverability proof layer: before an agent tool executes, SMERC estimates irreversible exposure, reversible capacity, required controls, and replay evidence.
+> Existing systems can prove authorization, routing, policy, and logging. SMERC adds a recoverability proof layer: before an agent tool executes, SMERC estimates irreversible exposure, reversible capacity, required controls, replay evidence, and whether prior approvals or rollback assumptions still apply.
 
 That is the lane to validate.

@@ -1,7 +1,7 @@
 # SMERC Ref-Gated Runtime Proof Loop
 
 Version: `smerc.ref-gated-runtime-proof.v1`
-Generated: `2026-08-24T21:53:41+00:00`
+Generated: `2026-09-01T14:25:42+00:00`
 Mode: `shadow`
 Session: `mcp_gateway_reference_session_001`
 

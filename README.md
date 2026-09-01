@@ -496,7 +496,7 @@ Start here before reading the code:
 - `reports/Pilot_Level_5_Readiness_Assessment.md` shows the generated readiness assessment and unresolved gaps.
 - `specification/SMERC_SPL_v0.md` introduces a starter policy-language profile that compiles to the strict runtime policy contract.
 - `reports/Proxy_Incident_Replay_Benchmark.md` shows proxy incident-replay evidence comparing simple allow/deny policy with SMERC recoverability-weighted posture decisions.
-- `reports/Runtime_Governance_Benchmark.md` shows an expanded deterministic benchmark comparing SMERC postures against a simple allow/deny baseline across 84 scenarios.
+- `reports/Runtime_Governance_Benchmark.md` shows an expanded deterministic benchmark comparing SMERC postures against a simple allow/deny baseline across 132 scenarios, including public-pattern synthetic examples for developer-agent runtime controls, MCP argument risk, data exfiltration pressure, approval-memory reuse, replay regression, agent identity gaps, and autonomy-budget pressure.
 - `reports/Governance_Pattern_Atlas.md` summarizes five governance-pattern benchmarks, 40 scenarios, and the unified evidence boundary for credibility-partner review.
 - `reports/Credibility_Partner_Review_Packet.md` packages the public links, atlas summary, review questions, pilot-fit questions, and evidence boundaries for external credibility review.
 - `reports/Runtime_Benchmark_DLL_Bundle.md` converts those benchmark decisions into hash-chained decision-time ledgers without fabricating live execution or outcome evidence.

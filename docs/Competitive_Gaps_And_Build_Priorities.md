@@ -12,6 +12,9 @@ SMERC should not pretend competitors are weak. Several adjacent products are str
 | Agent governance platforms | Agent inventory, tool-call monitoring, policy UI, workflow dashboards, SaaS deployment. | SMERC is still more technical artifact than polished enterprise product. |
 | Security approval workflows | Human approval chains, ticketing, audit familiarity, established escalation paths. | Buyers may prefer extending ServiceNow, Jira, Slack, Teams, or existing GRC workflows. |
 | SIEM/GRC platforms | Long-term retention, reporting, compliance workflows, alert triage, enterprise integrations. | SMERC must not claim to replace compliance or evidence-retention systems. |
+| Developer-agent runtime firewalls | Concrete examples that instantly make sense: destructive shell commands, database changes, git edits, infrastructure teardown, pass/hold/block decisions. | SMERC must show specific actions before abstract scoring language. |
+| Agent observability and replay platforms | Replay historical decisions, show changed outcomes, measure regressions, and package proof as an operational report. | SMERC should make replay evidence and decision deltas visible in every serious proof path. |
+| Agent control planes | Agent inventory, identity, budget controls, token spend, delegation tracing, and fleet-level visibility. | SMERC should consume these signals and show how they change recoverability and autonomy posture. |
 
 ## Where SMERC Has A Real Lane
 
@@ -59,6 +62,11 @@ recoverability-aware decision
    - Synthetic benchmarks are useful for demonstration.
    - Customer-context shadow-mode records are required before making risk-reduction claims.
 
+7. **Concrete competitor-pattern scenarios**
+   - Keep examples specific: `terraform destroy`, bulk customer email, data export, payment transfer, unregistered agent write, approval reuse, model-policy replay regression, and MCP overbroad arguments.
+   - Use these as public-pattern synthetic metadata, not copied competitor data.
+   - Make each scenario show work, result, impact, and boundary.
+
 ## Recommended Positioning
 
 SMERC should position as:
@@ -74,3 +82,5 @@ It should not position as:
 - a production-certified security platform
 
 The near-term product goal is not to beat every governance product. It is to make one painful wedge concrete: AI-assisted actions can be technically allowed but operationally unrecoverable.
+
+The practical homepage and README lesson is also clear: lead with the dangerous action, then the SMERC difference. Reviewers should not have to decode the acronym before they understand the risk.

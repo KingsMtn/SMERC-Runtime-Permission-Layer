@@ -1,7 +1,7 @@
 # SMERC CISO Evidence Walkthrough Seed Report
 
 Version: `smerc.ciso-review-seed.v1`
-Generated at: `2026-08-24T21:53:41+00:00`
+Generated at: `2026-09-01T14:25:42+00:00`
 Tenant: `pilot-team`
 Audit database: `./smerc_reviewer_quickstart.sqlite3`
 

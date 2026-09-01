@@ -1,7 +1,7 @@
 # SMERC Reviewer Quickstart Report
 
 Version: `smerc.reviewer-quickstart.v1`
-Generated at: `2026-08-24T21:53:41+00:00`
+Generated at: `2026-09-01T14:25:42+00:00`
 
 ## Review Question
 
@@ -23,15 +23,15 @@ python -m reference_engine.reviewer_quickstart --pretty
 ## Proof Highlights
 
 - PR Guardian posture: `ESCALATE`
-- PR Guardian replay ID: `replay_AI_AUTH_MIDDLEWARE_PR_1787608420912`
+- PR Guardian replay ID: `replay_AI_AUTH_MIDDLEWARE_PR_1788272742369`
 - SPARTa route state: `REVIEW_REQUIRED`
 - SPARTa executable: `False`
 - DLL record count: `7`
 - DLL verification valid: `True`
 - CISO seeded decisions: `5`
 - CISO stored ledgers: `5`
-- Benchmark scenarios: `84`
-- Benchmark decision difference rate: `0.786`
+- Benchmark scenarios: `132`
+- Benchmark decision difference rate: `0.803`
 - Ref-gated requests: `4`
 - Ref-gate failures: `1`
 - Ref-gated scoring capped: `1`

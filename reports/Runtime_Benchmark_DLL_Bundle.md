@@ -1,21 +1,21 @@
 # SMERC Benchmark Decision-Time Ledger Bundle
 
-Generated: `2026-07-13T03:55:16+00:00`
+Generated: `2026-09-01T14:25:42+00:00`
 Source benchmark: `smerc.runtime-benchmark-suite.v1`
 Tenant: `benchmark-suite`
 
 ## Executive Summary
 
-This bundle creates `84` hash-chained Decision Lifecycle Ledger records from the runtime governance benchmark suite.
+This bundle creates `132` hash-chained Decision Lifecycle Ledger records from the runtime governance benchmark suite.
 
 The ledgers intentionally stop at request, evidence, and evaluation. They do not claim live execution, customer outcome, human review, or incident-reduction evidence.
 
 ## Metrics
 
-- Valid ledgers: `84`
+- Valid ledgers: `132`
 - Invalid ledgers: `0`
-- Decision-time only ledgers: `84`
-- Posture counts: `{'ALLOW': 18, 'DENY': 16, 'ESCALATE': 5, 'FREEZE': 14, 'THROTTLE': 31}`
+- Decision-time only ledgers: `132`
+- Posture counts: `{'ALLOW': 24, 'DENY': 34, 'ESCALATE': 11, 'FREEZE': 22, 'THROTTLE': 41}`
 
 ## Evidence Boundary
 

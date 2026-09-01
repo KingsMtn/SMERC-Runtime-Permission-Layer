@@ -93,7 +93,7 @@
         "source": "examples/autonomy/agent_history.json",
         "subject_id": "treasury_agent"
       },
-      "generated_at": "2026-08-24T21:53:41+00:00",
+      "generated_at": "2026-09-01T14:25:42+00:00",
       "initial_state": "HEALTHY",
       "plain_english_summary": "Autonomy should be suspended for this session because the action stream exhausted or violated the current autonomy budget. Human review should requalify the agent or tool family before more autonomous execution is allowed.",
       "remaining": {
@@ -129,18 +129,18 @@
       "observe_and_forward_tool_call": 4
     }
   },
-  "generated_at": "2026-08-24T21:53:41+00:00",
+  "generated_at": "2026-09-01T14:25:42+00:00",
   "mode": "shadow",
   "proof_items": [
     {
       "agent_id": "research_agent",
       "dll_stage": {
         "decision_id": "ref-proof:MCP_SEARCH_DOCS_001",
-        "latest_record_hash": "20f7ef5d5490dcb1704900dc60b399a8ec11294ea969ed14d8ae60f67be0a6d8",
+        "latest_record_hash": "bff5ccf5fcbc59b76484f3c1ae9d68df26ac2fe70eb10ecc9fbe07a5530c6c52",
         "record_count": 5,
         "verification": {
           "errors": [],
-          "head_record_hash": "20f7ef5d5490dcb1704900dc60b399a8ec11294ea969ed14d8ae60f67be0a6d8",
+          "head_record_hash": "bff5ccf5fcbc59b76484f3c1ae9d68df26ac2fe70eb10ecc9fbe07a5530c6c52",
           "record_count": 5,
           "valid": true
         }
@@ -158,6 +158,67 @@
         "RECOVERABILITY_ACCEPTABLE"
       ],
       "ref_gate": {
+        "admission_gate": {
+          "admissible_for_recoverability_scoring": true,
+          "checks": {
+            "attestation_valid": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "identity_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "least_privilege_confirmed": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "object_shape_expected": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "permit_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "required_evidence_present": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "session_scope_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "typed_contract_valid": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            }
+          },
+          "claim_boundary": "The runtime admission gate is a deterministic pre-scoring check. It does not authenticate a remote system by itself, prove compliance, or replace IAM, OPA, API validation, endpoint type checking, or customer-specific policy.",
+          "decision": "ADMIT",
+          "drivers": [],
+          "failed_required_checks": [],
+          "generated_at": "2026-09-01T14:25:42+00:00",
+          "max_recommended_posture": "ALLOW",
+          "missing_required_checks": [],
+          "plain_english_summary": "The request passed deterministic runtime admission checks and may proceed to recoverability scoring.",
+          "reason_codes": [
+            "RUNTIME_ADMISSION_ADMIT"
+          ],
+          "request_id": "unknown-request",
+          "required_controls": [
+            "continue_to_recoverability_scoring"
+          ],
+          "version": "smerc.runtime-admission-gate.v1"
+        },
         "checks": {
           "attestation_valid": {
             "source": "explicit",
@@ -192,7 +253,7 @@
         "reason_codes": [
           "RECOVERABILITY_ACCEPTABLE"
         ],
-        "replay_id": "replay_MCP_MCP_SEARCH_DOCS_001_1787608421039_f582b731a9e3"
+        "replay_id": "replay_MCP_MCP_SEARCH_DOCS_001_1788272742437_27f2e8242b9e"
       },
       "sparta_stage": {
         "controls": [
@@ -210,11 +271,11 @@
       "agent_id": "support_resolution_agent",
       "dll_stage": {
         "decision_id": "ref-proof:MCP_DELETE_CUSTOMER_RECORDS_002",
-        "latest_record_hash": "6b2495b6c9cfc212161e223a0eb0227ed0bd5292ceb566d2b69e819b5d69e6b3",
+        "latest_record_hash": "30d69b1a998771b5b91d0e3ea66fcfcba51dbaedc054a1b987544ecbae767930",
         "record_count": 5,
         "verification": {
           "errors": [],
-          "head_record_hash": "6b2495b6c9cfc212161e223a0eb0227ed0bd5292ceb566d2b69e819b5d69e6b3",
+          "head_record_hash": "30d69b1a998771b5b91d0e3ea66fcfcba51dbaedc054a1b987544ecbae767930",
           "record_count": 5,
           "valid": true
         }
@@ -243,6 +304,67 @@
         "SENSITIVE_DATA"
       ],
       "ref_gate": {
+        "admission_gate": {
+          "admissible_for_recoverability_scoring": true,
+          "checks": {
+            "attestation_valid": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "identity_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "least_privilege_confirmed": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "object_shape_expected": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "permit_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "required_evidence_present": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "session_scope_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "typed_contract_valid": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            }
+          },
+          "claim_boundary": "The runtime admission gate is a deterministic pre-scoring check. It does not authenticate a remote system by itself, prove compliance, or replace IAM, OPA, API validation, endpoint type checking, or customer-specific policy.",
+          "decision": "ADMIT",
+          "drivers": [],
+          "failed_required_checks": [],
+          "generated_at": "2026-09-01T14:25:42+00:00",
+          "max_recommended_posture": "ALLOW",
+          "missing_required_checks": [],
+          "plain_english_summary": "The request passed deterministic runtime admission checks and may proceed to recoverability scoring.",
+          "reason_codes": [
+            "RUNTIME_ADMISSION_ADMIT"
+          ],
+          "request_id": "unknown-request",
+          "required_controls": [
+            "continue_to_recoverability_scoring"
+          ],
+          "version": "smerc.runtime-admission-gate.v1"
+        },
         "checks": {
           "attestation_valid": {
             "source": "explicit",
@@ -285,7 +407,7 @@
           "EXTERNAL_SIDE_EFFECT",
           "SENSITIVE_DATA"
         ],
-        "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_002_1787608421039_80fb82355872"
+        "replay_id": "replay_MCP_MCP_DELETE_CUSTOMER_RECORDS_002_1788272742437_2a59a30af7b5"
       },
       "sparta_stage": {
         "controls": [
@@ -304,11 +426,11 @@
       "agent_id": "treasury_agent",
       "dll_stage": {
         "decision_id": "ref-proof:MCP_STABLECOIN_TRANSFER_003",
-        "latest_record_hash": "8e322387d2a1ab1349f3abb67c7554652733119e2d5fe6cd2ad32ad13d4821b7",
+        "latest_record_hash": "b89e4628f613ae44ddfcb66c54ee1fc33c1aef05e8bebeb47185d4b710c5f996",
         "record_count": 5,
         "verification": {
           "errors": [],
-          "head_record_hash": "8e322387d2a1ab1349f3abb67c7554652733119e2d5fe6cd2ad32ad13d4821b7",
+          "head_record_hash": "b89e4628f613ae44ddfcb66c54ee1fc33c1aef05e8bebeb47185d4b710c5f996",
           "record_count": 5,
           "valid": true
         }
@@ -335,6 +457,67 @@
         "SENSITIVE_DATA"
       ],
       "ref_gate": {
+        "admission_gate": {
+          "admissible_for_recoverability_scoring": true,
+          "checks": {
+            "attestation_valid": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "identity_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "least_privilege_confirmed": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "object_shape_expected": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "permit_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "required_evidence_present": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "session_scope_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "typed_contract_valid": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            }
+          },
+          "claim_boundary": "The runtime admission gate is a deterministic pre-scoring check. It does not authenticate a remote system by itself, prove compliance, or replace IAM, OPA, API validation, endpoint type checking, or customer-specific policy.",
+          "decision": "ADMIT",
+          "drivers": [],
+          "failed_required_checks": [],
+          "generated_at": "2026-09-01T14:25:42+00:00",
+          "max_recommended_posture": "ALLOW",
+          "missing_required_checks": [],
+          "plain_english_summary": "The request passed deterministic runtime admission checks and may proceed to recoverability scoring.",
+          "reason_codes": [
+            "RUNTIME_ADMISSION_ADMIT"
+          ],
+          "request_id": "unknown-request",
+          "required_controls": [
+            "continue_to_recoverability_scoring"
+          ],
+          "version": "smerc.runtime-admission-gate.v1"
+        },
         "checks": {
           "attestation_valid": {
             "source": "explicit",
@@ -375,7 +558,7 @@
           "EXTERNAL_SIDE_EFFECT",
           "SENSITIVE_DATA"
         ],
-        "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_003_1787608421045_a3d46131ac98"
+        "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_003_1788272742437_94fb0101ae02"
       },
       "sparta_stage": {
         "controls": [
@@ -394,11 +577,11 @@
       "agent_id": "treasury_agent",
       "dll_stage": {
         "decision_id": "ref-proof:MCP_STABLECOIN_TRANSFER_004",
-        "latest_record_hash": "d7dd665bca5bdfed4c1c947358e45a249d8ef036f58e46aaa599f744da219627",
+        "latest_record_hash": "f1581c85ddffa4aed574c0c12609e223bb835c246b8a2dd67a8ec8a1579ab45b",
         "record_count": 5,
         "verification": {
           "errors": [],
-          "head_record_hash": "d7dd665bca5bdfed4c1c947358e45a249d8ef036f58e46aaa599f744da219627",
+          "head_record_hash": "f1581c85ddffa4aed574c0c12609e223bb835c246b8a2dd67a8ec8a1579ab45b",
           "record_count": 5,
           "valid": true
         }
@@ -431,6 +614,74 @@
         "SENSITIVE_DATA"
       ],
       "ref_gate": {
+        "admission_gate": {
+          "admissible_for_recoverability_scoring": false,
+          "checks": {
+            "attestation_valid": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "identity_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "least_privilege_confirmed": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            },
+            "object_shape_expected": {
+              "required": true,
+              "source": "explicit",
+              "value": false
+            },
+            "permit_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "required_evidence_present": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "session_scope_valid": {
+              "required": false,
+              "source": "missing",
+              "value": true
+            },
+            "typed_contract_valid": {
+              "required": true,
+              "source": "explicit",
+              "value": true
+            }
+          },
+          "claim_boundary": "The runtime admission gate is a deterministic pre-scoring check. It does not authenticate a remote system by itself, prove compliance, or replace IAM, OPA, API validation, endpoint type checking, or customer-specific policy.",
+          "decision": "REJECT",
+          "drivers": [
+            "object_shape_unexpected"
+          ],
+          "failed_required_checks": [
+            "object_shape_expected"
+          ],
+          "generated_at": "2026-09-01T14:25:42+00:00",
+          "max_recommended_posture": "DENY",
+          "missing_required_checks": [],
+          "plain_english_summary": "The request failed required runtime admission checks. It must not be rescued by recoverability scoring; reject or hold it before execution.",
+          "reason_codes": [
+            "RUNTIME_ADMISSION_REJECT",
+            "OBJECT_SHAPE_UNEXPECTED"
+          ],
+          "request_id": "unknown-request",
+          "required_controls": [
+            "do_not_use_recoverability_to_rescue_failed_admission",
+            "reject_before_scoring",
+            "collect_valid_runtime_admission_evidence"
+          ],
+          "version": "smerc.runtime-admission-gate.v1"
+        },
         "checks": {
           "attestation_valid": {
             "source": "explicit",
@@ -477,7 +728,7 @@
           "EXTERNAL_SIDE_EFFECT",
           "SENSITIVE_DATA"
         ],
-        "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_004_1787608421045_b08c5ddc1c79"
+        "replay_id": "replay_MCP_MCP_STABLECOIN_TRANSFER_004_1788272742437_7d8b367a172e"
       },
       "sparta_stage": {
         "controls": [

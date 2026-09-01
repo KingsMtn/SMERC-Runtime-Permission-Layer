@@ -1,6 +1,6 @@
 # SMERC Competitive Proof Parity Report
 
-Generated: `2026-08-17T02:26:59+00:00`
+Generated: `2026-09-01T14:25:42+00:00`
 
 ## Executive Summary
 
@@ -11,11 +11,11 @@ It shows proof-category parity and recoverability-specific decision evidence. It
 ## Top Metrics
 
 - Proof categories covered: `7`
-- Total records evaluated across sections: `107`
-- Aggregated posture counts: `{'ALLOW': 22, 'DENY': 20, 'ESCALATE': 7, 'FREEZE': 15, 'THROTTLE': 39, 'UNAVAILABLE': 0}`
-- Average irreversible exposure across scored sections: `0.527`
-- Average reversible capacity across scored sections: `0.57`
-- Runtime benchmark decision difference rate: `0.786`
+- Total records evaluated across sections: `155`
+- Aggregated posture counts: `{'ALLOW': 28, 'DENY': 38, 'ESCALATE': 13, 'FREEZE': 23, 'THROTTLE': 49, 'UNAVAILABLE': 0}`
+- Average irreversible exposure across scored sections: `0.542`
+- Average reversible capacity across scored sections: `0.554`
+- Runtime benchmark decision difference rate: `0.803`
 - Real public incident replay difference rate: `1.0`
 - Fake-customer valid DLL chains: `5`
 - Timing operational status: `ready`
@@ -27,7 +27,7 @@ It shows proof-category parity and recoverability-specific decision evidence. It
 | Catalog evidence | Tool inventory, risk annotations, missing metadata, and dangerous-tool review. | Scanned 3 MCP-style tool definitions and identified 1 deny-class and 1 throttle-class tools. | Synthetic MCP-style tool definitions; no private MCP registry or customer tool catalog. |
 | Runtime decision evidence | Pre-execution policy or governance decisions before a tool call runs. | Evaluated 2 MCP-style tool calls before execution with replayable posture and route evidence. | Metadata-only MCP tool-call examples; no live MCP server or production agent runtime. |
 | Proxy/enforcement evidence | Gateway/proxy monitor mode, enforce mode, forwarding decisions, and audit trail. | Ran 4 proxy samples across shadow, enforce, and JSON-RPC-shaped transport behavior. | Local reference proxy samples; no network proxy, OAuth broker, sandbox, or native tool execution. |
-| Benchmark evidence | Scenario benchmark showing decision distribution and comparison to baseline policy. | Evaluated 84 expanded proxy scenarios with a 0.786 difference rate from simple allow/deny. | Deterministic scenario expansion from seed proxy scenarios; not production validation or customer incident evidence. |
+| Benchmark evidence | Scenario benchmark showing decision distribution and comparison to baseline policy. | Evaluated 132 expanded proxy scenarios with a 0.803 difference rate from simple allow/deny. | Deterministic scenario expansion from seed proxy scenarios; not production validation or customer incident evidence. |
 | Public incident replay evidence | Incident-pattern replay or narrative evidence showing governance behavior on known failure modes. | Replayed 6 public incident patterns from 4 sources with a 1.0 difference rate. | Public incident facts with analyst-assigned SMERC replay inputs; not customer telemetry, not reconstructed source-system state, and not proof of prevention. |
 | Production-like simulation evidence | End-to-end demo path showing workflow decisions, routes, evidence records, and review artifacts. | Ran 5 fake-customer scenarios with 5 valid DLL chains. | Fake customer simulation; not customer proof or production certification. |
 | Operational evidence | Latency, overhead, unavailable-evaluation, cancellation, and rollback metrics. | Summarized 3 timing records with operational status ready. | Synthetic timing evidence for local pilot review; not customer production latency or SLA evidence. |
@@ -69,15 +69,15 @@ It shows proof-category parity and recoverability-specific decision evidence. It
 
 ### Benchmark evidence
 
-- Records: `84`
-- Result: Evaluated 84 expanded proxy scenarios with a 0.786 difference rate from simple allow/deny.
+- Records: `132`
+- Result: Evaluated 132 expanded proxy scenarios with a 0.803 difference rate from simple allow/deny.
 - Boundary: Deterministic scenario expansion from seed proxy scenarios; not production validation or customer incident evidence.
 
-- decision_difference_rate: `0.786`
-- constrained_instead_of_allowed_count: `42`
-- traditional_denies_with_non_deny_smerc_count: `11`
-- average_irreversible_exposure_score: `0.482`
-- average_reversible_capacity_score: `0.61`
+- decision_difference_rate: `0.803`
+- constrained_instead_of_allowed_count: `62`
+- traditional_denies_with_non_deny_smerc_count: `16`
+- average_irreversible_exposure_score: `0.543`
+- average_reversible_capacity_score: `0.545`
 
 ### Public incident replay evidence
 
