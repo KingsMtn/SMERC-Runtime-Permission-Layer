@@ -12,6 +12,10 @@ It sits between automated systems and consequential actions. Before an AI agent,
 
 Public reviewer site: https://admirable-sorbet-9986d5.netlify.app/
 
+Category definition: https://admirable-sorbet-9986d5.netlify.app/pre-execution-recoverability-control.html
+
+Glossary: https://admirable-sorbet-9986d5.netlify.app/glossary.html
+
 Fast reviewer paths:
 
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`

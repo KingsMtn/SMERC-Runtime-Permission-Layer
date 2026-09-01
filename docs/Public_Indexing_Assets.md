@@ -5,6 +5,8 @@ The SMERC public Netlify site includes lightweight discovery files and status pa
 ## Live Assets
 
 - Public site: `https://admirable-sorbet-9986d5.netlify.app/`
+- Category definition: `https://admirable-sorbet-9986d5.netlify.app/pre-execution-recoverability-control.html`
+- Glossary: `https://admirable-sorbet-9986d5.netlify.app/glossary.html`
 - AI agent governance explainer: `https://admirable-sorbet-9986d5.netlify.app/ai-agent-governance.html`
 - Public review: `https://admirable-sorbet-9986d5.netlify.app/community.html`
 - Submission kit: `https://admirable-sorbet-9986d5.netlify.app/submit.html`
@@ -19,12 +21,14 @@ The SMERC public Netlify site includes lightweight discovery files and status pa
 - OpenAPI contract: `https://admirable-sorbet-9986d5.netlify.app/openapi.json`
 - SMERC Beacon: `https://admirable-sorbet-9986d5.netlify.app/smerc-beacon.json`
 - Well-known beacon: `https://admirable-sorbet-9986d5.netlify.app/.well-known/smerc.json`
+- AI discovery manifest: `https://admirable-sorbet-9986d5.netlify.app/.well-known/ai-discovery.json`
+- AI readme manifest: `https://admirable-sorbet-9986d5.netlify.app/.well-known/ai-readme.json`
 
 ## Intended Summary
 
 Preferred one-line public summary:
 
-> SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI agents, evaluating whether technically authorized actions are recoverable enough to execute before they create side effects.
+> SMERC, short for Structural Momentum Entropy Range Confidence, is pre-execution recoverability control for AI agents, evaluating whether technically authorized actions are recoverable enough to execute before they create side effects.
 
 ## Claims Boundary
 
@@ -75,6 +79,12 @@ The repository companion files are:
 - `examples/ai_reviewer_bundle.json`
 
 These files make the same story inspectable inside GitHub, where technical reviewers and code-aware AI systems are more likely to begin.
+
+The category definition page and glossary give search engines, AI assistants, and first-time reviewers clearer language before they encounter the SMERC acronym. They define the work/result/impact frame:
+
+- Work: score recoverability before high-impact AI-agent or automation actions execute.
+- Result: return ALLOW, THROTTLE, FREEZE, DENY, or ESCALATE with evidence and replay material.
+- Impact: reduce irreversible automation failures without treating every action as a manual approval.
 
 `pilot-runbook.json` gives a narrower operator path for a metadata-only self-service pilot. It is designed to help a company test SMERC without sharing secrets, production credentials, customer data, or live execution authority.
 

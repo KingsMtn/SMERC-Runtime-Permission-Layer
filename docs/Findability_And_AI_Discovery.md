@@ -13,6 +13,8 @@ That means discoverability should be treated as an operating requirement, not a 
 ## Current Canonical Links
 
 - Public site: `https://admirable-sorbet-9986d5.netlify.app/`
+- Category definition: `https://admirable-sorbet-9986d5.netlify.app/pre-execution-recoverability-control.html`
+- Glossary: `https://admirable-sorbet-9986d5.netlify.app/glossary.html`
 - AI agent governance explainer: `https://admirable-sorbet-9986d5.netlify.app/ai-agent-governance.html`
 - CISO overview: `https://admirable-sorbet-9986d5.netlify.app/ciso.html`
 - GitHub Actions pilot: `https://admirable-sorbet-9986d5.netlify.app/github-action.html`
@@ -21,6 +23,8 @@ That means discoverability should be treated as an operating requirement, not a 
 - Structured project profile: `https://admirable-sorbet-9986d5.netlify.app/project.json`
 - SMERC Beacon: `https://admirable-sorbet-9986d5.netlify.app/smerc-beacon.json`
 - Well-known beacon: `https://admirable-sorbet-9986d5.netlify.app/.well-known/smerc.json`
+- AI discovery manifest: `https://admirable-sorbet-9986d5.netlify.app/.well-known/ai-discovery.json`
+- AI readme manifest: `https://admirable-sorbet-9986d5.netlify.app/.well-known/ai-readme.json`
 
 ## Preferred Search Language
 
@@ -30,6 +34,7 @@ Use these terms consistently in public titles, descriptions, documentation, and 
 
 - SMERC
 - Structural Momentum Entropy Range Confidence
+- pre-execution recoverability control
 - runtime permission infrastructure
 - runtime permission layer
 - AI agent governance
@@ -47,11 +52,11 @@ Use these terms consistently in public titles, descriptions, documentation, and 
 
 SMERC should be described as:
 
-> Recoverability-aware runtime permission infrastructure for AI agents and high-impact automation workflows.
+> Pre-execution recoverability control for AI agents and high-impact automation workflows.
 
 When expanding the name for search and AI summaries, use:
 
-> SMERC, short for Structural Momentum Entropy Range Confidence, is recoverability-aware runtime permission infrastructure for AI agents and high-impact automation workflows.
+> SMERC, short for Structural Momentum Entropy Range Confidence, is an implementation of pre-execution recoverability control for AI agents and high-impact automation workflows.
 
 SMERC should not be described only as:
 
@@ -72,6 +77,10 @@ The public site should maintain:
 - `/project.json`
 - `/smerc-beacon.json`
 - `/.well-known/smerc.json`
+- `/.well-known/ai-discovery.json`
+- `/.well-known/ai-readme.json`
+- `/pre-execution-recoverability-control.html`
+- `/glossary.html`
 - repository reviewer bundle at `docs/AI_Readable_Reviewer_Bundle.md`
 - repository machine-readable reviewer bundle at `examples/ai_reviewer_bundle.json`
 - canonical links and descriptions on key HTML pages
@@ -107,11 +116,11 @@ Recommended GitHub repository topics:
 
 The README should keep the first paragraph direct:
 
-> SMERC is runtime permission infrastructure for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture.
+> SMERC is pre-execution recoverability control for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture.
 
 Expanded version for pages that need acronym context:
 
-> SMERC, short for Structural Momentum Entropy Range Confidence, is runtime permission infrastructure for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture.
+> SMERC, short for Structural Momentum Entropy Range Confidence, is an implementation of pre-execution recoverability control for AI-agent actions. It evaluates a proposed action before execution and returns a replayable posture.
 
 ## Distribution Checklist
 
@@ -134,10 +143,14 @@ Before assuming SMERC is discoverable, complete:
 Repeat these searches periodically:
 
 - `SMERC Runtime Permission Layer`
+- `pre-execution recoverability control AI agents`
+- `SMERC pre-execution recoverability control`
 - `Structural Momentum Entropy Range Confidence`
 - `SMERC AI agent governance`
 - `SMERC recoverability scoring`
 - `SMERC runtime permission infrastructure`
+- `SMERC MCP governance`
+- `SMERC Financial Runtime governance`
 - `SMERC GitHub Actions governance`
 - `site:github.com/KingsMtn SMERC`
 - `site:admirable-sorbet-9986d5.netlify.app SMERC`

@@ -11,11 +11,15 @@ VERSION = "smerc.public-discovery-audit.v1"
 REQUIRED_FILES = [
     "index.html",
     "ai-agent-governance.html",
+    "pre-execution-recoverability-control.html",
+    "glossary.html",
     "llms.txt",
     "sitemap.xml",
     "project.json",
     "smerc-beacon.json",
     ".well-known/smerc.json",
+    ".well-known/ai-readme.json",
+    ".well-known/ai-discovery.json",
 ]
 REQUIRED_TERMS = [
     "SMERC",
@@ -71,7 +75,13 @@ def _read(path: Path) -> str:
 
 def _load_json_payloads(root: Path, findings: List[Dict[str, str]]) -> Dict[str, Mapping[str, Any]]:
     payloads: Dict[str, Mapping[str, Any]] = {}
-    for relative in ["project.json", "smerc-beacon.json", ".well-known/smerc.json"]:
+    for relative in [
+        "project.json",
+        "smerc-beacon.json",
+        ".well-known/smerc.json",
+        ".well-known/ai-readme.json",
+        ".well-known/ai-discovery.json",
+    ]:
         path = root / relative
         if not path.exists():
             continue
@@ -115,7 +125,17 @@ def _check_terms(texts: Mapping[str, str], findings: List[Dict[str, str]]) -> No
 
 
 def _check_sitemap(sitemap: str, findings: List[Dict[str, str]]) -> None:
-    for path in ["/", "/ai-agent-governance.html", "/llms.txt", "/project.json", "/smerc-beacon.json"]:
+    for path in [
+        "/",
+        "/ai-agent-governance.html",
+        "/pre-execution-recoverability-control.html",
+        "/glossary.html",
+        "/llms.txt",
+        "/project.json",
+        "/smerc-beacon.json",
+        "/.well-known/ai-readme.json",
+        "/.well-known/ai-discovery.json",
+    ]:
         if path not in sitemap:
             findings.append(_finding("sitemap_missing_url", "sitemap.xml", f"Sitemap should include `{path}`.", severity="blocking"))
 
@@ -131,6 +151,9 @@ def _check_project_json(payload: Mapping[str, Any] | None, findings: List[Dict[s
         findings.append(_finding("project_tagline", "project.json", "Missing standard tagline.", severity="blocking"))
     if "one_line_summary" not in payload or "runtime permission infrastructure" not in str(payload["one_line_summary"]):
         findings.append(_finding("project_summary", "project.json", "one_line_summary should explain the runtime permission category."))
+    links = payload.get("links")
+    if not isinstance(links, dict) or not links.get("category_definition") or not links.get("glossary"):
+        findings.append(_finding("project_links", "project.json", "Project profile should link to the category definition and glossary."))
 
 
 def _check_beacon(relative: str, payload: Mapping[str, Any] | None, findings: List[Dict[str, str]]) -> None:
@@ -143,6 +166,9 @@ def _check_beacon(relative: str, payload: Mapping[str, Any] | None, findings: Li
     categories = payload.get("search_categories")
     if not isinstance(categories, list) or "AI agent governance" not in categories:
         findings.append(_finding("beacon_search_categories", relative, "Beacon should include search_categories."))
+    endpoints = payload.get("discovery_endpoints")
+    if not isinstance(endpoints, dict) or not endpoints.get("ai_discovery") or not endpoints.get("ai_readme"):
+        findings.append(_finding("beacon_ai_discovery", relative, "Beacon should expose AI discovery/readme endpoints."))
 
 
 def _title(html: str) -> str:

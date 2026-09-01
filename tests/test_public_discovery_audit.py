@@ -73,12 +73,26 @@ class PublicDiscoveryAuditTests(unittest.TestCase):
             "<html><body>SMERC AI agent governance recoverability scoring runtime permission.</body></html>",
             encoding="utf-8",
         )
+        (site / "pre-execution-recoverability-control.html").write_text(
+            "<html><body>SMERC pre-execution recoverability control for AI agent governance. "
+            "Runtime permission infrastructure uses recoverability scoring before irreversible action.</body></html>",
+            encoding="utf-8",
+        )
+        (site / "glossary.html").write_text(
+            "<html><body>SMERC glossary: Structural Momentum Entropy Range Confidence, "
+            "pre-execution recoverability control, runtime permission, AI agent governance, "
+            "recoverability scoring, Decision Lifecycle Ledger.</body></html>",
+            encoding="utf-8",
+        )
         (site / "llms.txt").write_text(
             "SMERC Structural Momentum Entropy Range Confidence AI agent governance pre-execution recoverability control runtime permission layer recoverability scoring",
             encoding="utf-8",
         )
         (site / "sitemap.xml").write_text(
-            "<urlset><loc>/</loc><loc>/ai-agent-governance.html</loc><loc>/llms.txt</loc><loc>/project.json</loc><loc>/smerc-beacon.json</loc></urlset>",
+            "<urlset><loc>/</loc><loc>/ai-agent-governance.html</loc>"
+            "<loc>/pre-execution-recoverability-control.html</loc><loc>/glossary.html</loc>"
+            "<loc>/llms.txt</loc><loc>/project.json</loc><loc>/smerc-beacon.json</loc>"
+            "<loc>/.well-known/ai-readme.json</loc><loc>/.well-known/ai-discovery.json</loc></urlset>",
             encoding="utf-8",
         )
         profile = {
@@ -86,16 +100,38 @@ class PublicDiscoveryAuditTests(unittest.TestCase):
             "acronym_expansion": "Structural Momentum Entropy Range Confidence",
             "standard_tagline": "Pre-execution recoverability control before automated actions execute.",
             "one_line_summary": "SMERC is a pre-execution recoverability control layer implemented as runtime permission infrastructure for AI agents.",
+            "links": {
+                "category_definition": "https://admirable-sorbet-9986d5.netlify.app/pre-execution-recoverability-control.html",
+                "glossary": "https://admirable-sorbet-9986d5.netlify.app/glossary.html",
+            },
         }
         beacon = {
             "name": title,
             "acronym_expansion": "Structural Momentum Entropy Range Confidence",
             "standard_tagline": "Pre-execution recoverability control before automated actions execute.",
             "search_categories": ["AI agent governance", "runtime permission layer"],
+            "discovery_endpoints": {
+                "ai_discovery": "https://admirable-sorbet-9986d5.netlify.app/.well-known/ai-discovery.json",
+                "ai_readme": "https://admirable-sorbet-9986d5.netlify.app/.well-known/ai-readme.json",
+            },
+        }
+        ai_readme = {
+            "schema": "smerc.ai_readme.v1",
+            "name": title,
+            "category": "pre-execution recoverability control",
+        }
+        ai_discovery = {
+            "schema": "smerc.ai_discovery.v1",
+            "name": title,
+            "machine_readable": {
+                "ai_readme": "https://admirable-sorbet-9986d5.netlify.app/.well-known/ai-readme.json",
+            },
         }
         (site / "project.json").write_text(json.dumps(profile), encoding="utf-8")
         (site / "smerc-beacon.json").write_text(json.dumps(beacon), encoding="utf-8")
         (site / ".well-known" / "smerc.json").write_text(json.dumps(beacon), encoding="utf-8")
+        (site / ".well-known" / "ai-readme.json").write_text(json.dumps(ai_readme), encoding="utf-8")
+        (site / ".well-known" / "ai-discovery.json").write_text(json.dumps(ai_discovery), encoding="utf-8")
 
 
 if __name__ == "__main__":
