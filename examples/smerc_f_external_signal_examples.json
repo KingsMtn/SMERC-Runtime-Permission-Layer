@@ -1,0 +1,178 @@
+[
+  {
+    "action_id": "SMERCF_EXT_STABLECOIN_REDEMPTION_001",
+    "description": "Stablecoin operations agent proposes a large institutional redemption during elevated reserve-liquidity pressure.",
+    "action_type": "stablecoin_redemption",
+    "actor": "stablecoin_ops_agent",
+    "asset": "USDC",
+    "amount_usd": 22500000,
+    "existing_control": "ALLOW",
+    "settlement_finality": 0.88,
+    "liquidity_pressure": 0.74,
+    "market_stress": 0.56,
+    "automation_velocity": 0.62,
+    "source_quality": 0.84,
+    "signal_age_minutes": 7,
+    "external_signals": [
+      {
+        "provider": "stablecoin_reserve_monitor",
+        "risk_score": 0.81,
+        "confidence": 0.86,
+        "signal": "redemption pressure above normal operating band"
+      },
+      {
+        "provider": "transaction_monitoring",
+        "risk_score": 0.22,
+        "confidence": 0.91,
+        "signal": "no suspicious transaction pattern"
+      }
+    ]
+  },
+  {
+    "action_id": "SMERCF_EXT_WALLET_POLICY_002",
+    "description": "Custody automation proposes expanding withdrawal permissions for a service wallet after repeated manual overrides.",
+    "action_type": "wallet_permission_update",
+    "actor": "custody_ops_agent",
+    "asset": "BTC",
+    "amount_usd": 0,
+    "existing_control": "REVIEW",
+    "reversibility": 0.42,
+    "source_quality": 0.73,
+    "signal_age_minutes": 18,
+    "external_signals": [
+      {
+        "provider": "wallet_screening",
+        "risk_score": 0.66,
+        "confidence": 0.78,
+        "signal": "wallet policy would expand withdrawal authority"
+      },
+      {
+        "provider": "fraud_engine",
+        "risk_score": 0.58,
+        "confidence": 0.70,
+        "signal": "manual override frequency elevated"
+      }
+    ]
+  },
+  {
+    "action_id": "SMERCF_EXT_ROUTINE_TREASURY_003",
+    "description": "Treasury agent proposes a small internal liquidity rebalance between approved reserve accounts.",
+    "action_type": "treasury_rebalance",
+    "actor": "treasury_agent",
+    "asset": "USD",
+    "amount_usd": 180000,
+    "existing_control": "ALLOW",
+    "settlement_finality": 0.28,
+    "liquidity_pressure": 0.16,
+    "market_stress": 0.12,
+    "automation_velocity": 0.20,
+    "source_quality": 0.94,
+    "signal_age_minutes": 2,
+    "external_signals": [
+      {
+        "provider": "treasury_risk",
+        "risk_score": 0.18,
+        "confidence": 0.92,
+        "signal": "routine internal movement"
+      },
+      {
+        "provider": "fraud_engine",
+        "risk_score": 0.10,
+        "confidence": 0.87,
+        "signal": "no abnormal approval behavior"
+      }
+    ]
+  },
+  {
+    "action_id": "SMERCF_EXT_BRIDGE_TRANSFER_004",
+    "description": "Autonomous treasury workflow proposes a cross-chain stablecoin bridge transfer to restore liquidity on another venue.",
+    "action_type": "stablecoin_bridge_transfer",
+    "actor": "treasury_agent",
+    "asset": "USDT",
+    "amount_usd": 6200000,
+    "existing_control": "ALLOW",
+    "settlement_finality": 0.93,
+    "liquidity_pressure": 0.61,
+    "counterparty_concentration": 0.68,
+    "market_stress": 0.44,
+    "automation_velocity": 0.75,
+    "source_quality": 0.78,
+    "signal_age_minutes": 5,
+    "external_signals": [
+      {
+        "provider": "blockchain_analytics",
+        "risk_score": 0.49,
+        "confidence": 0.74,
+        "signal": "venue exposure concentration elevated"
+      },
+      {
+        "provider": "smart_contract_risk",
+        "risk_score": 0.64,
+        "confidence": 0.69,
+        "signal": "bridge contract risk elevated"
+      },
+      {
+        "provider": "transaction_monitoring",
+        "risk_score": 0.31,
+        "confidence": 0.82,
+        "signal": "transaction pattern not suspicious"
+      }
+    ]
+  },
+  {
+    "action_id": "SMERCF_EXT_SMART_CONTRACT_ADMIN_005",
+    "description": "Protocol automation proposes changing a stablecoin reserve oracle parameter after a delayed data source.",
+    "action_type": "smart_contract_admin_change",
+    "actor": "protocol_ops_agent",
+    "asset": "USDC",
+    "amount_usd": 0,
+    "existing_control": "ALERT",
+    "settlement_finality": 0.96,
+    "market_stress": 0.52,
+    "collateral_stress": 0.64,
+    "source_quality": 0.61,
+    "signal_age_minutes": 34,
+    "external_signals": [
+      {
+        "provider": "smart_contract_risk",
+        "risk_score": 0.87,
+        "confidence": 0.76,
+        "signal": "admin parameter change affects downstream settlement assumptions"
+      },
+      {
+        "provider": "stablecoin_reserve_monitor",
+        "risk_score": 0.69,
+        "confidence": 0.66,
+        "signal": "reserve data source delayed"
+      }
+    ]
+  },
+  {
+    "action_id": "SMERCF_EXT_PAYMENT_RELEASE_006",
+    "description": "Payment automation proposes releasing a high-value payout after Travel Rule status is incomplete.",
+    "action_type": "payment_release",
+    "actor": "payment_ops_agent",
+    "asset": "USDC",
+    "amount_usd": 980000,
+    "existing_control": "REVIEW",
+    "settlement_finality": 0.82,
+    "counterparty_concentration": 0.54,
+    "automation_velocity": 0.47,
+    "source_quality": 0.70,
+    "signal_age_minutes": 11,
+    "external_signals": [
+      {
+        "provider": "travel_rule",
+        "risk_score": 0.62,
+        "confidence": 0.72,
+        "signal": "beneficiary information incomplete"
+      },
+      {
+        "provider": "wallet_screening",
+        "risk_score": 0.24,
+        "confidence": 0.83,
+        "signal": "destination wallet not high risk"
+      }
+    ]
+  }
+]

@@ -77,6 +77,9 @@ jobs:
       - name: Run financial replay smoke test
         run: python -m reference_engine.financial_replay examples/financial_replay_scenarios.json
 
+      - name: Run financial external-signal smoke test
+        run: python -m reference_engine.smerc_f_external_signals examples/smerc_f_external_signal_examples.json
+
       - name: Run policy comparison smoke test
         run: python -m reference_engine.financial_policy_comparison examples/financial_action_requests.json
 

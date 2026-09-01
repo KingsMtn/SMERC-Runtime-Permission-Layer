@@ -131,7 +131,7 @@ Financial-services reviewers should use the Financial Runtime path, internally c
 python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty
 ```
 
-SMERC-F covers metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions. The public-data replay also adds a financial reason-code layer for low settlement reversibility, weak evidence, liquidity fragility, redemption pressure, collateral exposure, counterparty concentration, and automation velocity. It is not AML compliance, sanctions screening, fraud detection, custody, settlement, trading, payment execution, legal advice, or production financial-control certification.
+SMERC-F covers metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions. The public-data replay also adds a financial reason-code layer for low settlement reversibility, weak evidence, liquidity fragility, redemption pressure, collateral exposure, counterparty concentration, and automation velocity. The external financial signal adapter can consume AML/KYT-, wallet-screening-, fraud-, Travel Rule-, treasury-risk-, reserve-monitoring-, blockchain-analytics-, and smart-contract-risk-style outputs as evidence before recoverability scoring. It is not AML compliance, sanctions screening, fraud detection, custody, settlement, trading, payment execution, legal advice, or production financial-control certification.
 
 ## Start Here: Pilot Intake Report
 
@@ -243,6 +243,7 @@ The current build includes:
 - Customer-Owned Metadata Request generator that gives external reviewers a safe ask for replacing public examples with 5 to 25 metadata-only actions from one real workflow
 - External Reviewer Metadata Response assessor that classifies reviewer-supplied metadata as ready, limited, or not ready before customer-specific evaluation
 - Financial Runtime Customer Evaluation pack, internally called SMERC-F, with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
+- SMERC-F External Financial Signal Adapter that normalizes AML/KYT-, wallet-screening-, fraud-, Travel Rule-, treasury-risk-, reserve-monitoring-, blockchain-analytics-, and smart-contract-risk-style outputs into recoverability scoring evidence without claiming to replace those systems
 - Cloud Admin Customer Evaluation pack with metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions for infrastructure review
 - Cloud Admin Proof Pack that expands the cloud-admin sample into 24 scenarios with cloud-specific reason codes, Work / Result / Impact explanations, SPARTa route evidence, autonomy-budget impact, and DLL validity
 - Cloud Metadata Connector that converts read-only IAM, Terraform, CloudTrail-style, Kubernetes, DNS, and backup-policy export summaries into strict SMERC customer-evaluation metadata without live cloud credentials
@@ -451,6 +452,7 @@ Start here before reading the code:
 - `docs/SMERC_F_Fortune_500_Financial_Services_Review.md` gives Fortune 500 financial-services reviewers a safe metadata-only evaluation path for automated financial actions.
 - `docs/SMERC_F_Metadata_Intake_Contract.md` defines the first safe SMERC-F customer intake boundary: metadata-only, shadow-mode, one workflow family, no live fund movement, and no production enforcement.
 - `docs/SMERC_F_Financial_Source_Ingestion.md` explains how exported financial, stablecoin, blockchain, and incident metadata can be normalized into SMERC-F replay inputs.
+- `docs/SMERC_F_External_Financial_Signals.md` explains how SMERC-F consumes external financial-risk signals as evidence while leaving AML/KYT, wallet screening, fraud, Travel Rule, treasury risk, reserve monitoring, blockchain analytics, and smart-contract risk systems as the source systems.
 - `docs/SMERC_F_Regulatory_Context_Profile.md` explains how legislation-inspired operational context can inform SMERC-F scoring without making legal or compliance claims.
 - `docs/SMERC_F_Financial_Public_Data_Replay.md` explains how public-data-shaped stablecoin, blockchain, and incident records are converted into SMERC-F replay scenarios.
 - `docs/SMERC_F_Financial_Reason_Codes.md` explains the financial reason-code layer that turns public-data replay results into reviewer-readable work, result, and impact evidence.
@@ -1115,6 +1117,16 @@ python -m reference_engine.smerc_f_source_ingestion \
 ```
 
 The source ingestion adapter accepts Dune-, BigQuery-, Chainabuse-, DefiLlama-, and Elliptic-shaped exported metadata, normalizes it into SMERC-F replay rows, and regenerates the replay report. It does not call live vendor APIs, enrich addresses, determine illicit activity, move funds, or certify financial controls.
+
+Run the financial runtime external signal adapter:
+
+```bash
+python -m reference_engine.smerc_f_external_signals \
+  examples/smerc_f_external_signal_examples.json \
+  --pretty
+```
+
+The external signal adapter accepts AML/KYT-, wallet-screening-, fraud-, Travel Rule-, treasury-risk-, reserve-monitoring-, blockchain-analytics-, transaction-monitoring-, and smart-contract-risk-style outputs, normalizes them into SMERC-F recoverability fields, and reports where an existing `ALLOW`, `REVIEW`, or `ALERT` outcome should become `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`. It does not call vendor APIs, perform AML or KYT screening, determine sanctions status, perform address attribution, satisfy Travel Rule obligations, move funds, execute transactions, or certify financial controls.
 
 Run the financial runtime regulatory context overlay:
 

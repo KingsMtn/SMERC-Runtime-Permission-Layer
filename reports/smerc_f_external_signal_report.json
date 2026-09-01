@@ -1,0 +1,613 @@
+{
+  "action_type_counts": {
+    "payment_release": 1,
+    "smart_contract_admin_change": 1,
+    "stablecoin_bridge_transfer": 1,
+    "stablecoin_redemption": 1,
+    "treasury_rebalance": 1,
+    "wallet_permission_update": 1
+  },
+  "authorized_restraint_count": 2,
+  "authorized_restraint_rate": 0.333,
+  "evidence_boundary": "External signal adapter only. SMERC-F consumes vendor-style AML/KYT, wallet, travel-rule, fraud, treasury, reserve, and smart-contract risk outputs as pre-execution evidence. It does not perform AML compliance, sanctions screening, address attribution, Travel Rule compliance, custody, settlement, transaction execution, legal determination, or production certification.",
+  "generated_at": "2026-09-01T00:41:00+00:00",
+  "highest_exposure_records": [
+    {
+      "action_id": "SMERCF_EXT_BRIDGE_TRANSFER_004",
+      "action_type": "stablecoin_bridge_transfer",
+      "confidence": 0.712,
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "decision_hash": "cfdce0d059fbde89f612f9cd4a3d39539033c085001ce4b16a6cc8068a658baa",
+      "drivers": [
+        "AGENT_VELOCITY",
+        "COUNTERPARTY_CONCENTRATION",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "ALLOW",
+      "irreversible_exposure": 0.718,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_BRIDGE_TRANSFER_004",
+        "action_type": "stablecoin_bridge_transfer",
+        "actor": "treasury_agent",
+        "agent_velocity": 0.75,
+        "authorization_support": 0.717,
+        "collateral_stress": 0.39,
+        "counterparty_concentration": 0.68,
+        "description": "Autonomous treasury workflow proposes a cross-chain stablecoin bridge transfer to restore liquidity on another venue.",
+        "evidence_validity": 0.755,
+        "liquidity_concentration": 0.61,
+        "market_instability": 0.44,
+        "model_disagreement": 0.38,
+        "reversibility": 0.02,
+        "settlement_anomaly": 0.657,
+        "stablecoin_imbalance": 0.522
+      },
+      "providers": [
+        "blockchain_analytics",
+        "smart_contract_risk",
+        "transaction_monitoring"
+      ],
+      "reversible_capacity": 0.308,
+      "smerc_f_state": "FREEZE",
+      "work_result_impact": {
+        "impact": "This is the target proof: existing systems allowed the action, but recoverability evidence supports restraint before execution.",
+        "result": "Existing control was `ALLOW`; SMERC-F returned `FREEZE` with exposure 0.718 and capacity 0.308.",
+        "work": "Normalize `stablecoin_bridge_transfer` with external signals from blockchain_analytics, smart_contract_risk, transaction_monitoring into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_STABLECOIN_REDEMPTION_001",
+      "action_type": "stablecoin_redemption",
+      "confidence": 0.757,
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "decision_hash": "984951685651742706f8ab0e05665d887562866e5e65d1a85667b0bda1c220ac",
+      "drivers": [
+        "STABLECOIN_IMBALANCE",
+        "LIQUIDITY_CONCENTRATION",
+        "SETTLEMENT_ANOMALY",
+        "AGENT_VELOCITY",
+        "MARKET_INSTABILITY",
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "ALLOW",
+      "irreversible_exposure": 0.694,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_STABLECOIN_REDEMPTION_001",
+        "action_type": "stablecoin_redemption",
+        "actor": "stablecoin_ops_agent",
+        "agent_velocity": 0.62,
+        "authorization_support": 0.73,
+        "collateral_stress": 0.157,
+        "counterparty_concentration": 0.0,
+        "description": "Stablecoin operations agent proposes a large institutional redemption during elevated reserve-liquidity pressure.",
+        "evidence_validity": 0.868,
+        "liquidity_concentration": 0.776,
+        "market_instability": 0.56,
+        "model_disagreement": 0.479,
+        "reversibility": 0.02,
+        "settlement_anomaly": 0.68,
+        "stablecoin_imbalance": 0.898
+      },
+      "providers": [
+        "stablecoin_reserve_monitor",
+        "transaction_monitoring"
+      ],
+      "reversible_capacity": 0.337,
+      "smerc_f_state": "FREEZE",
+      "work_result_impact": {
+        "impact": "This is the target proof: existing systems allowed the action, but recoverability evidence supports restraint before execution.",
+        "result": "Existing control was `ALLOW`; SMERC-F returned `FREEZE` with exposure 0.694 and capacity 0.337.",
+        "work": "Normalize `stablecoin_redemption` with external signals from stablecoin_reserve_monitor, transaction_monitoring into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_SMART_CONTRACT_ADMIN_005",
+      "action_type": "smart_contract_admin_change",
+      "confidence": 0.625,
+      "controls": [
+        "route_to_accountable_reviewer",
+        "require_explicit_approval",
+        "preserve_replay"
+      ],
+      "decision_hash": "8e319428eed9818a3685a268c11d17bbda737471a700e800bb752cd3ca3c033f",
+      "drivers": [
+        "COLLATERAL_STRESS",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "ALERT",
+      "irreversible_exposure": 0.636,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_SMART_CONTRACT_ADMIN_005",
+        "action_type": "smart_contract_admin_change",
+        "actor": "protocol_ops_agent",
+        "agent_velocity": 0.0,
+        "authorization_support": 0.472,
+        "collateral_stress": 1.0,
+        "counterparty_concentration": 0.0,
+        "description": "Protocol automation proposes changing a stablecoin reserve oracle parameter after a delayed data source.",
+        "evidence_validity": 0.658,
+        "liquidity_concentration": 0.62,
+        "market_instability": 0.52,
+        "model_disagreement": 0.446,
+        "reversibility": 0.02,
+        "settlement_anomaly": 0.667,
+        "stablecoin_imbalance": 0.0
+      },
+      "providers": [
+        "smart_contract_risk",
+        "stablecoin_reserve_monitor"
+      ],
+      "reversible_capacity": 0.245,
+      "smerc_f_state": "ESCALATE",
+      "work_result_impact": {
+        "impact": "SMERC-F converts review or alert evidence into a concrete pre-execution route and retained decision proof.",
+        "result": "Existing control was `ALERT`; SMERC-F returned `ESCALATE` with exposure 0.636 and capacity 0.245.",
+        "work": "Normalize `smart_contract_admin_change` with external signals from smart_contract_risk, stablecoin_reserve_monitor into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_PAYMENT_RELEASE_006",
+      "action_type": "payment_release",
+      "confidence": 0.691,
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "cf57ba8cbbbe85ab6a9190e72f7cee74f34df5a641fbf99ec5e30a7d11cba344",
+      "drivers": [
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "REVIEW",
+      "irreversible_exposure": 0.479,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_PAYMENT_RELEASE_006",
+        "action_type": "payment_release",
+        "actor": "payment_ops_agent",
+        "agent_velocity": 0.47,
+        "authorization_support": 0.668,
+        "collateral_stress": 0.0,
+        "counterparty_concentration": 0.54,
+        "description": "Payment automation proposes releasing a high-value payout after Travel Rule status is incomplete.",
+        "evidence_validity": 0.746,
+        "liquidity_concentration": 0.0,
+        "market_instability": 0.0,
+        "model_disagreement": 0.426,
+        "reversibility": 0.126,
+        "settlement_anomaly": 0.523,
+        "stablecoin_imbalance": 0.0
+      },
+      "providers": [
+        "travel_rule",
+        "wallet_screening"
+      ],
+      "reversible_capacity": 0.362,
+      "smerc_f_state": "ALLOW",
+      "work_result_impact": {
+        "impact": "SMERC-F preserves evidence while allowing a bounded action to proceed.",
+        "result": "Existing control was `REVIEW`; SMERC-F returned `ALLOW` with exposure 0.479 and capacity 0.362.",
+        "work": "Normalize `payment_release` with external signals from travel_rule, wallet_screening into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_WALLET_POLICY_002",
+      "action_type": "wallet_permission_update",
+      "confidence": 0.709,
+      "controls": [
+        "route_to_accountable_reviewer",
+        "require_explicit_approval",
+        "preserve_replay"
+      ],
+      "decision_hash": "761a69343ee34563c66bc8d9269dfb0f70cc59250f8d74480a910274f8da67fe",
+      "drivers": [
+        "COUNTERPARTY_CONCENTRATION",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "REVIEW",
+      "irreversible_exposure": 0.389,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_WALLET_POLICY_002",
+        "action_type": "wallet_permission_update",
+        "actor": "custody_ops_agent",
+        "agent_velocity": 0.38,
+        "authorization_support": 0.588,
+        "collateral_stress": 0.0,
+        "counterparty_concentration": 0.616,
+        "description": "Custody automation proposes expanding withdrawal permissions for a service wallet after repeated manual overrides.",
+        "evidence_validity": 0.725,
+        "liquidity_concentration": 0.0,
+        "market_instability": 0.0,
+        "model_disagreement": 0.324,
+        "reversibility": 0.319,
+        "settlement_anomaly": 0.412,
+        "stablecoin_imbalance": 0.0
+      },
+      "providers": [
+        "fraud_engine",
+        "wallet_screening"
+      ],
+      "reversible_capacity": 0.459,
+      "smerc_f_state": "ESCALATE",
+      "work_result_impact": {
+        "impact": "SMERC-F converts review or alert evidence into a concrete pre-execution route and retained decision proof.",
+        "result": "Existing control was `REVIEW`; SMERC-F returned `ESCALATE` with exposure 0.389 and capacity 0.459.",
+        "work": "Normalize `wallet_permission_update` with external signals from fraud_engine, wallet_screening into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_ROUTINE_TREASURY_003",
+      "action_type": "treasury_rebalance",
+      "confidence": 0.897,
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "a2902831ce70c05c36b7694c0ebad66c5b2a80d710038bf3d42f0623ff04bfbb",
+      "drivers": [
+        "LOW_STRESS_REPLAYABLE_ACTION"
+      ],
+      "existing_control": "ALLOW",
+      "irreversible_exposure": 0.236,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_ROUTINE_TREASURY_003",
+        "action_type": "treasury_rebalance",
+        "actor": "treasury_agent",
+        "agent_velocity": 0.2,
+        "authorization_support": 0.848,
+        "collateral_stress": 0.049,
+        "counterparty_concentration": 0.0,
+        "description": "Treasury agent proposes a small internal liquidity rebalance between approved reserve accounts.",
+        "evidence_validity": 0.906,
+        "liquidity_concentration": 0.16,
+        "market_instability": 0.176,
+        "model_disagreement": 0.123,
+        "reversibility": 0.557,
+        "settlement_anomaly": 0.166,
+        "stablecoin_imbalance": 0.0
+      },
+      "providers": [
+        "fraud_engine",
+        "treasury_risk"
+      ],
+      "reversible_capacity": 0.687,
+      "smerc_f_state": "ALLOW",
+      "work_result_impact": {
+        "impact": "SMERC-F preserves evidence while allowing a bounded action to proceed.",
+        "result": "Existing control was `ALLOW`; SMERC-F returned `ALLOW` with exposure 0.236 and capacity 0.687.",
+        "work": "Normalize `treasury_rebalance` with external signals from fraud_engine, treasury_risk into SMERC-F recoverability fields."
+      }
+    }
+  ],
+  "input_action_count": 6,
+  "policy": "balanced",
+  "provider_counts": {
+    "blockchain_analytics": 1,
+    "fraud_engine": 2,
+    "smart_contract_risk": 2,
+    "stablecoin_reserve_monitor": 2,
+    "transaction_monitoring": 2,
+    "travel_rule": 1,
+    "treasury_risk": 1,
+    "wallet_screening": 2
+  },
+  "records": [
+    {
+      "action_id": "SMERCF_EXT_STABLECOIN_REDEMPTION_001",
+      "action_type": "stablecoin_redemption",
+      "confidence": 0.757,
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "decision_hash": "984951685651742706f8ab0e05665d887562866e5e65d1a85667b0bda1c220ac",
+      "drivers": [
+        "STABLECOIN_IMBALANCE",
+        "LIQUIDITY_CONCENTRATION",
+        "SETTLEMENT_ANOMALY",
+        "AGENT_VELOCITY",
+        "MARKET_INSTABILITY",
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "ALLOW",
+      "irreversible_exposure": 0.694,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_STABLECOIN_REDEMPTION_001",
+        "action_type": "stablecoin_redemption",
+        "actor": "stablecoin_ops_agent",
+        "agent_velocity": 0.62,
+        "authorization_support": 0.73,
+        "collateral_stress": 0.157,
+        "counterparty_concentration": 0.0,
+        "description": "Stablecoin operations agent proposes a large institutional redemption during elevated reserve-liquidity pressure.",
+        "evidence_validity": 0.868,
+        "liquidity_concentration": 0.776,
+        "market_instability": 0.56,
+        "model_disagreement": 0.479,
+        "reversibility": 0.02,
+        "settlement_anomaly": 0.68,
+        "stablecoin_imbalance": 0.898
+      },
+      "providers": [
+        "stablecoin_reserve_monitor",
+        "transaction_monitoring"
+      ],
+      "reversible_capacity": 0.337,
+      "smerc_f_state": "FREEZE",
+      "work_result_impact": {
+        "impact": "This is the target proof: existing systems allowed the action, but recoverability evidence supports restraint before execution.",
+        "result": "Existing control was `ALLOW`; SMERC-F returned `FREEZE` with exposure 0.694 and capacity 0.337.",
+        "work": "Normalize `stablecoin_redemption` with external signals from stablecoin_reserve_monitor, transaction_monitoring into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_WALLET_POLICY_002",
+      "action_type": "wallet_permission_update",
+      "confidence": 0.709,
+      "controls": [
+        "route_to_accountable_reviewer",
+        "require_explicit_approval",
+        "preserve_replay"
+      ],
+      "decision_hash": "761a69343ee34563c66bc8d9269dfb0f70cc59250f8d74480a910274f8da67fe",
+      "drivers": [
+        "COUNTERPARTY_CONCENTRATION",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "REVIEW",
+      "irreversible_exposure": 0.389,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_WALLET_POLICY_002",
+        "action_type": "wallet_permission_update",
+        "actor": "custody_ops_agent",
+        "agent_velocity": 0.38,
+        "authorization_support": 0.588,
+        "collateral_stress": 0.0,
+        "counterparty_concentration": 0.616,
+        "description": "Custody automation proposes expanding withdrawal permissions for a service wallet after repeated manual overrides.",
+        "evidence_validity": 0.725,
+        "liquidity_concentration": 0.0,
+        "market_instability": 0.0,
+        "model_disagreement": 0.324,
+        "reversibility": 0.319,
+        "settlement_anomaly": 0.412,
+        "stablecoin_imbalance": 0.0
+      },
+      "providers": [
+        "fraud_engine",
+        "wallet_screening"
+      ],
+      "reversible_capacity": 0.459,
+      "smerc_f_state": "ESCALATE",
+      "work_result_impact": {
+        "impact": "SMERC-F converts review or alert evidence into a concrete pre-execution route and retained decision proof.",
+        "result": "Existing control was `REVIEW`; SMERC-F returned `ESCALATE` with exposure 0.389 and capacity 0.459.",
+        "work": "Normalize `wallet_permission_update` with external signals from fraud_engine, wallet_screening into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_ROUTINE_TREASURY_003",
+      "action_type": "treasury_rebalance",
+      "confidence": 0.897,
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "a2902831ce70c05c36b7694c0ebad66c5b2a80d710038bf3d42f0623ff04bfbb",
+      "drivers": [
+        "LOW_STRESS_REPLAYABLE_ACTION"
+      ],
+      "existing_control": "ALLOW",
+      "irreversible_exposure": 0.236,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_ROUTINE_TREASURY_003",
+        "action_type": "treasury_rebalance",
+        "actor": "treasury_agent",
+        "agent_velocity": 0.2,
+        "authorization_support": 0.848,
+        "collateral_stress": 0.049,
+        "counterparty_concentration": 0.0,
+        "description": "Treasury agent proposes a small internal liquidity rebalance between approved reserve accounts.",
+        "evidence_validity": 0.906,
+        "liquidity_concentration": 0.16,
+        "market_instability": 0.176,
+        "model_disagreement": 0.123,
+        "reversibility": 0.557,
+        "settlement_anomaly": 0.166,
+        "stablecoin_imbalance": 0.0
+      },
+      "providers": [
+        "fraud_engine",
+        "treasury_risk"
+      ],
+      "reversible_capacity": 0.687,
+      "smerc_f_state": "ALLOW",
+      "work_result_impact": {
+        "impact": "SMERC-F preserves evidence while allowing a bounded action to proceed.",
+        "result": "Existing control was `ALLOW`; SMERC-F returned `ALLOW` with exposure 0.236 and capacity 0.687.",
+        "work": "Normalize `treasury_rebalance` with external signals from fraud_engine, treasury_risk into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_BRIDGE_TRANSFER_004",
+      "action_type": "stablecoin_bridge_transfer",
+      "confidence": 0.712,
+      "controls": [
+        "pause_automation",
+        "preserve_state",
+        "secondary_validation",
+        "supervisor_review"
+      ],
+      "decision_hash": "cfdce0d059fbde89f612f9cd4a3d39539033c085001ce4b16a6cc8068a658baa",
+      "drivers": [
+        "AGENT_VELOCITY",
+        "COUNTERPARTY_CONCENTRATION",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "ALLOW",
+      "irreversible_exposure": 0.718,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_BRIDGE_TRANSFER_004",
+        "action_type": "stablecoin_bridge_transfer",
+        "actor": "treasury_agent",
+        "agent_velocity": 0.75,
+        "authorization_support": 0.717,
+        "collateral_stress": 0.39,
+        "counterparty_concentration": 0.68,
+        "description": "Autonomous treasury workflow proposes a cross-chain stablecoin bridge transfer to restore liquidity on another venue.",
+        "evidence_validity": 0.755,
+        "liquidity_concentration": 0.61,
+        "market_instability": 0.44,
+        "model_disagreement": 0.38,
+        "reversibility": 0.02,
+        "settlement_anomaly": 0.657,
+        "stablecoin_imbalance": 0.522
+      },
+      "providers": [
+        "blockchain_analytics",
+        "smart_contract_risk",
+        "transaction_monitoring"
+      ],
+      "reversible_capacity": 0.308,
+      "smerc_f_state": "FREEZE",
+      "work_result_impact": {
+        "impact": "This is the target proof: existing systems allowed the action, but recoverability evidence supports restraint before execution.",
+        "result": "Existing control was `ALLOW`; SMERC-F returned `FREEZE` with exposure 0.718 and capacity 0.308.",
+        "work": "Normalize `stablecoin_bridge_transfer` with external signals from blockchain_analytics, smart_contract_risk, transaction_monitoring into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_SMART_CONTRACT_ADMIN_005",
+      "action_type": "smart_contract_admin_change",
+      "confidence": 0.625,
+      "controls": [
+        "route_to_accountable_reviewer",
+        "require_explicit_approval",
+        "preserve_replay"
+      ],
+      "decision_hash": "8e319428eed9818a3685a268c11d17bbda737471a700e800bb752cd3ca3c033f",
+      "drivers": [
+        "COLLATERAL_STRESS",
+        "SETTLEMENT_ANOMALY",
+        "LIQUIDITY_CONCENTRATION",
+        "AUTHORIZATION_SUPPORT_WEAK",
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "ALERT",
+      "irreversible_exposure": 0.636,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_SMART_CONTRACT_ADMIN_005",
+        "action_type": "smart_contract_admin_change",
+        "actor": "protocol_ops_agent",
+        "agent_velocity": 0.0,
+        "authorization_support": 0.472,
+        "collateral_stress": 1.0,
+        "counterparty_concentration": 0.0,
+        "description": "Protocol automation proposes changing a stablecoin reserve oracle parameter after a delayed data source.",
+        "evidence_validity": 0.658,
+        "liquidity_concentration": 0.62,
+        "market_instability": 0.52,
+        "model_disagreement": 0.446,
+        "reversibility": 0.02,
+        "settlement_anomaly": 0.667,
+        "stablecoin_imbalance": 0.0
+      },
+      "providers": [
+        "smart_contract_risk",
+        "stablecoin_reserve_monitor"
+      ],
+      "reversible_capacity": 0.245,
+      "smerc_f_state": "ESCALATE",
+      "work_result_impact": {
+        "impact": "SMERC-F converts review or alert evidence into a concrete pre-execution route and retained decision proof.",
+        "result": "Existing control was `ALERT`; SMERC-F returned `ESCALATE` with exposure 0.636 and capacity 0.245.",
+        "work": "Normalize `smart_contract_admin_change` with external signals from smart_contract_risk, stablecoin_reserve_monitor into SMERC-F recoverability fields."
+      }
+    },
+    {
+      "action_id": "SMERCF_EXT_PAYMENT_RELEASE_006",
+      "action_type": "payment_release",
+      "confidence": 0.691,
+      "controls": [
+        "execute",
+        "retain_reversal_path",
+        "log_replay"
+      ],
+      "decision_hash": "cf57ba8cbbbe85ab6a9190e72f7cee74f34df5a641fbf99ec5e30a7d11cba344",
+      "drivers": [
+        "LOW_REVERSIBILITY"
+      ],
+      "existing_control": "REVIEW",
+      "irreversible_exposure": 0.479,
+      "normalized_action": {
+        "action_id": "SMERCF_EXT_PAYMENT_RELEASE_006",
+        "action_type": "payment_release",
+        "actor": "payment_ops_agent",
+        "agent_velocity": 0.47,
+        "authorization_support": 0.668,
+        "collateral_stress": 0.0,
+        "counterparty_concentration": 0.54,
+        "description": "Payment automation proposes releasing a high-value payout after Travel Rule status is incomplete.",
+        "evidence_validity": 0.746,
+        "liquidity_concentration": 0.0,
+        "market_instability": 0.0,
+        "model_disagreement": 0.426,
+        "reversibility": 0.126,
+        "settlement_anomaly": 0.523,
+        "stablecoin_imbalance": 0.0
+      },
+      "providers": [
+        "travel_rule",
+        "wallet_screening"
+      ],
+      "reversible_capacity": 0.362,
+      "smerc_f_state": "ALLOW",
+      "work_result_impact": {
+        "impact": "SMERC-F preserves evidence while allowing a bounded action to proceed.",
+        "result": "Existing control was `REVIEW`; SMERC-F returned `ALLOW` with exposure 0.479 and capacity 0.362.",
+        "work": "Normalize `payment_release` with external signals from travel_rule, wallet_screening into SMERC-F recoverability fields."
+      }
+    }
+  ],
+  "smerc_f_state_counts": {
+    "ALLOW": 2,
+    "DENY": 0,
+    "ESCALATE": 2,
+    "FREEZE": 2,
+    "THROTTLE": 0
+  },
+  "supported_signal_providers": [
+    "blockchain_analytics",
+    "fraud_engine",
+    "smart_contract_risk",
+    "stablecoin_reserve_monitor",
+    "transaction_monitoring",
+    "travel_rule",
+    "treasury_risk",
+    "wallet_screening"
+  ],
+  "taxonomy_action_count": 13,
+  "version": "smerc-f.external-signals.v1"
+}
