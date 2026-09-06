@@ -364,6 +364,7 @@ Start here before reading the code:
 - `docs/Cloud_Admin_Proof_Pack.md` gives cloud, SRE, DevOps, CI/CD, and AI-agent platform reviewers a 24-scenario proof pack with cloud reason codes for IAM expansion, network widening, data-plane destructive action, DNS cutover, rollback uncertainty, evidence gaps, production blast radius, and autonomy scope pressure.
 - `docs/Cloud_Metadata_Connector.md` shows how read-only cloud-change exports can be normalized into SMERC customer-evaluation actions before any live AWS, Azure, Google Cloud, Cloudflare, Kubernetes, Terraform, DNS, database, or secrets-manager integration.
 - `docs/Public_Benchmark_Ingestion.md` shows how public agent-governance, MCP-security, action-boundary, consequence, cloud, and financial benchmark shapes can be translated into SMERC runtime-evaluation metadata without claiming official upstream benchmark scores.
+- `docs/Runtime_Data_Source_Map.md` identifies current external runtime data sources SMERC should use next, including Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, and Blackstable, with license and evidence boundaries.
 - `docs/Postcondition_Evidence.md` shows how to verify whether SPARTa-required controls actually happened after a route decision.
 - `docs/Serious_Report_Performance.md` shows how to measure local p50, p95, and maximum latency for serious proof paths while preserving the boundary that local report timing is not production SLA evidence.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
@@ -1201,6 +1202,8 @@ python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_
 ```
 
 The Public Benchmark Ingestion Pack maps representative public benchmark-shaped examples into SMERC's customer-evaluation contract, then reports posture counts, SPARTa routes, Decision Lifecycle Ledger validity, and baseline-versus-SMERC deltas. It is adapter-ready proof for public governance benchmark categories; it is not an official score for any upstream benchmark until license-compatible datasets and documented runners are used.
+
+`docs/Runtime_Data_Source_Map.md` tracks the strongest named public runtime data sources to use next: Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, and Blackstable. The purpose is to move from representative examples toward license-compatible external replay while preserving source versions, skipped-row reasons, performance metrics, and non-claims.
 
 Run the Postcondition Evidence report:
 

@@ -74,7 +74,9 @@ The public benchmark ingestion pack makes that difference visible against catego
 
 ## Next Useful Step
 
-The next stronger proof is to add a license-compatible upstream dataset fixture and a reproducible runner that records:
+The next stronger proof is to add a license-compatible upstream dataset fixture and a reproducible runner. Use `docs/Runtime_Data_Source_Map.md` to select the source and preserve the boundary.
+
+The runner should record:
 
 - upstream benchmark source and version
 - row count and inclusion criteria
@@ -85,3 +87,16 @@ The next stronger proof is to add a license-compatible upstream dataset fixture 
 - failures, skipped rows, and unsupported fields
 
 That would move this from adapter-ready proof toward benchmark evidence.
+
+## Current External Runtime Data Priorities
+
+SMERC should prioritize these source families:
+
+- Agent Security Benchmark for tool-access attack prompts and tool-call transcripts
+- CrossMCP-Bench for authorization-conditioned MCP scenarios
+- AgentShield-Bench for trusted/untrusted tool-calling and MCP scenarios
+- SyFI TraceLab for real coding-agent traces, tool-call volume, latency, and human-wait metadata
+- Toolathlon for long-horizon agent tool-use trajectories
+- Blackstable for public stablecoin freeze/unfreeze financial-action evidence
+
+See `docs/Runtime_Data_Source_Map.md`.

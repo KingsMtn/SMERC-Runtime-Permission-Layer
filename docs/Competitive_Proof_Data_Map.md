@@ -80,6 +80,8 @@ Current implementation:
 
 Use public benchmark datasets only when their license and terms permit local replay. If raw data cannot be committed, download it on demand into an ignored folder and keep only SMERC-generated summary reports in the repository.
 
+Current priority sources are tracked in `docs/Runtime_Data_Source_Map.md`: Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, and Blackstable.
+
 SMERC should measure:
 
 - difference between binary labels and SMERC posture

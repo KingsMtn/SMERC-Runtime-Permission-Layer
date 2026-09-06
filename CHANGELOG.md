@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Runtime Data Source Map identifying current external agent, MCP, trace, long-horizon tool-use, and stablecoin datasets that can strengthen SMERC proof while preserving license and evidence boundaries.
 - Updated public-facing naming so the execution-routing layer leads with `Governance Routing Workbench` before the internal SPARTa name.
 - Clarified SPARTa as a governance orchestration workbench with staged admission, action classification, recoverability scoring, route cards, adapter routing, and Decision Lifecycle Ledger handoff.
 - Added a one-command Customer Proof Loop that runs runtime admission, recoverability scoring, SPARTa routing, Decision Lifecycle Ledger evidence, generated reports, and pass/fail checks for customer review.

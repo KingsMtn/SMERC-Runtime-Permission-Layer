@@ -19,6 +19,7 @@ Pick one path:
 | Cloud, SRE, platform, or infrastructure reviewer who wants the strongest proof artifact | Cloud Admin Proof Pack | `python -m reference_engine.cloud_admin_proof_pack --pretty` |
 | Cloud reviewer with exported change summaries | Cloud Metadata Connector | `python -m reference_engine.cloud_metadata_connector examples/cloud_admin_source_exports.json --pretty` |
 | Reviewer comparing SMERC against public agent-governance, MCP, action-boundary, consequence, cloud, or financial benchmark categories | Public Benchmark Ingestion Pack | `python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_ingestion_examples.json --pretty` |
+| Reviewer asking what external runtime data SMERC should use next | Runtime Data Source Map | `docs/Runtime_Data_Source_Map.md` |
 | Financial-services, treasury, stablecoin, payment, or tokenized-finance reviewer | Financial Runtime customer evaluation, internally called SMERC-F | `python -m reference_engine.customer_evaluation examples/smerc_f_customer_eval_actions.json --pretty` |
 | Reviewer who wants to see the full assembled loop | Complete lifecycle proof | `python -m reference_engine.complete_lifecycle_proof` |
 
@@ -84,6 +85,8 @@ If a cloud reviewer asks how their own environment would enter SMERC safely, sta
 
 If a reviewer asks how SMERC relates to public agent-governance, MCP-security, action-boundary, consequence, cloud, or financial runtime benchmarks, start with `docs/Public_Benchmark_Ingestion.md`. It maps representative public benchmark-shaped examples into SMERC metadata and states the boundary before any official benchmark claim is made.
 
+If a reviewer asks which current external datasets can strengthen SMERC, start with `docs/Runtime_Data_Source_Map.md`. It prioritizes Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, and Blackstable while keeping license, version, and non-claim boundaries explicit.
+
 Weak result:
 
 - Reviewers see no useful difference from existing IAM, OPA, CI/CD approval, ticketing, SIEM, GRC, AI gateway, or human-review controls.
@@ -114,7 +117,7 @@ For public-data-shaped financial replay, read `docs/SMERC_F_Financial_Public_Dat
 
 ## Work / Result / Impact
 
-Work: run safe metadata-only action examples through hard gates, recoverability scoring, SPARTa routing, ledger evidence, and pilot-fit reporting.
+Work: run safe metadata-only action examples through hard gates, recoverability scoring, Governance Routing Workbench routing, ledger evidence, and pilot-fit reporting.
 
 Result: a reviewer gets a concrete report showing where SMERC agrees with, constrains, freezes, denies, or escalates actions compared with current judgment.
 

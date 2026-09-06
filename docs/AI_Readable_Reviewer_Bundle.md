@@ -52,6 +52,7 @@ The repository contains working pilot-grade artifacts:
 - cloud-admin proof pack with cloud reason codes
 - cloud metadata connector for read-only change exports
 - public benchmark ingestion pack for agent-governance, MCP-security, action-boundary, consequence, cloud, and financial benchmark-shaped examples
+- runtime data source map for selecting Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, or Blackstable as the next public-data replay source
 - serious report performance evidence for local p50, p95, and maximum proof-path latency
 - financial runtime evaluation profile
 - public scenario benchmark
@@ -112,12 +113,13 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 5. Read `docs/External_Signal_And_Competitive_Review.md`.
 6. Inspect `reports/Public_Action_Governance_Benchmark.md`.
 7. Run `python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_ingestion_examples.json --pretty`.
-8. Run `python -m reference_engine.postcondition_evidence --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json --observations examples/postcondition_observations.json --pretty`.
-9. Run `python -m reference_engine.serious_report_performance --iterations 5 --pretty`.
-10. Run `python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty`.
-11. Run `python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty`.
-12. Run `python -m reference_engine.pilot_in_a_box --pretty`.
-13. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
+8. Read `docs/Runtime_Data_Source_Map.md` before selecting any named upstream dataset.
+9. Run `python -m reference_engine.postcondition_evidence --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json --observations examples/postcondition_observations.json --pretty`.
+10. Run `python -m reference_engine.serious_report_performance --iterations 5 --pretty`.
+11. Run `python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty`.
+12. Run `python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty`.
+13. Run `python -m reference_engine.pilot_in_a_box --pretty`.
+14. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
 14. For financial-services review, run `python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty`.
 15. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
