@@ -1,18 +1,18 @@
 {
   "summary": {
-    "generated_at": "2026-07-03T04:22:15.042078+00:00",
-    "total_actions": 5,
+    "generated_at": "2026-09-06T02:05:07.384395+00:00",
+    "total_actions": 7,
     "posture_counts": {
       "ALLOW": 1,
-      "THROTTLE": 2,
-      "FREEZE": 1,
+      "THROTTLE": 3,
+      "FREEZE": 2,
       "DENY": 1,
       "ESCALATE": 0
     },
-    "average_irreversible_exposure": 0.562,
-    "average_reversible_capacity": 0.516,
-    "average_authorization_score": 0.532,
-    "non_release_rate": 0.8
+    "average_irreversible_exposure": 0.459,
+    "average_reversible_capacity": 0.617,
+    "average_authorization_score": 0.625,
+    "non_release_rate": 0.857
   },
   "records": [
     {
@@ -35,6 +35,138 @@
         "record_replay",
         "retain_cancel_handle"
       ],
+      "domain_profile": {
+        "profile_id": "general",
+        "label": "General automated action",
+        "notes": []
+      },
+      "decision_trace": {
+        "profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "score_contributions": {
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.022,
+            "irreversibility": 0.014,
+            "rollback_latency": 0.009,
+            "containment_gap": 0.016,
+            "impact_scope": 0.017,
+            "external_side_effect": 0.0,
+            "sensitive_data": 0.0,
+            "profile_multiplier": 1.0,
+            "total": 0.077
+          },
+          "reversible_capacity_score": {
+            "reversibility": 0.291,
+            "containment_strength": 0.211,
+            "rollback_speed": 0.18,
+            "cancel_reliability": 0.144,
+            "evidence_validity": 0.091,
+            "profile_multiplier": 1.0,
+            "total": 0.918
+          },
+          "confidence_score": {
+            "evidence_validity": 0.364,
+            "authorization_confidence": 0.313,
+            "anomaly_resistance": 0.162,
+            "containment_strength": 0.07,
+            "profile_multiplier": 1.0,
+            "total": 0.909
+          },
+          "operational_stress_score": {
+            "base_action_risk": 0.024,
+            "anomaly_pressure": 0.02,
+            "impact_scope": 0.025,
+            "evidence_gap": 0.013,
+            "confidence_gap": 0.01,
+            "rollback_latency": 0.005,
+            "cancel_gap": 0.006,
+            "profile_multiplier": 1.0,
+            "total": 0.102
+          },
+          "risk_adjusted_authorization_score": {
+            "reversible_capacity": 0.413,
+            "confidence_score": 0.273,
+            "recoverability_margin": 0.231,
+            "profile_multiplier": 1.0,
+            "total": 0.917
+          }
+        },
+        "threshold_trace": [
+          {
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "observed": 0.077,
+            "threshold": ">= 0.78",
+            "triggered": false,
+            "details": {
+              "capacity": 0.918,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.909,
+              "confidence_rule": "< 0.48"
+            }
+          },
+          {
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "observed": 0.9,
+            "threshold": "< 0.3",
+            "triggered": false,
+            "details": {
+              "exposure": 0.077,
+              "exposure_rule": ">= 0.62"
+            }
+          },
+          {
+            "rule": "escalate_by_operational_stress",
+            "observed": 0.102,
+            "threshold": ">= 0.7",
+            "triggered": false,
+            "details": {
+              "external_side_effect": false,
+              "sensitive_data": false
+            }
+          },
+          {
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "observed": 0.909,
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": false,
+            "details": {
+              "confidence": 0.909,
+              "capacity": 0.918
+            }
+          },
+          {
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "observed": 0.917,
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": false,
+            "details": {
+              "exposure": 0.077,
+              "external_side_effect": false,
+              "profile_allows_external_side_effect_release": false
+            }
+          }
+        ]
+      },
+      "transition_guidance": {
+        "current_posture": "ALLOW",
+        "target_posture": "ALLOW",
+        "release_conditions": {
+          "irreversible_exposure_below": 0.45,
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "reversible_capacity_target": 0.6
+        },
+        "blocking_factors": [],
+        "evidence_needed": [],
+        "control_improvements": [
+          "execute",
+          "record_replay",
+          "retain_cancel_handle"
+        ]
+      },
       "plain_english_summary": "Action 'AGENT_RUN_TESTS' received ALLOW. Irreversible exposure is 0.077, reversible capacity is 0.918, and authorization score is 0.917. Controls: execute, record_replay, retain_cancel_handle.",
       "policy": {
         "tenant_id": "*",
@@ -44,10 +176,10 @@
         "mode": "OBSERVE",
         "evidence_ceiling": "OBSERVE"
       },
-      "replay_id": "replay_AGENT_RUN_TESTS_1783052535042_3d2ae15e01c2",
+      "replay_id": "replay_AGENT_RUN_TESTS_1788660307384_edcd341719c6",
       "replay": {
-        "replay_id": "replay_AGENT_RUN_TESTS_1783052535042_3d2ae15e01c2",
-        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
+        "replay_id": "replay_AGENT_RUN_TESTS_1788660307384_edcd341719c6",
+        "evaluated_at": "2026-09-06T02:05:07.384395+00:00",
         "actor": "coding_agent",
         "tool": "github_actions.test",
         "action_type": "ci_test",
@@ -69,6 +201,138 @@
           "record_replay",
           "retain_cancel_handle"
         ],
+        "domain_profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "decision_trace": {
+          "profile": {
+            "profile_id": "general",
+            "label": "General automated action",
+            "notes": []
+          },
+          "score_contributions": {
+            "irreversible_exposure_score": {
+              "base_action_risk": 0.022,
+              "irreversibility": 0.014,
+              "rollback_latency": 0.009,
+              "containment_gap": 0.016,
+              "impact_scope": 0.017,
+              "external_side_effect": 0.0,
+              "sensitive_data": 0.0,
+              "profile_multiplier": 1.0,
+              "total": 0.077
+            },
+            "reversible_capacity_score": {
+              "reversibility": 0.291,
+              "containment_strength": 0.211,
+              "rollback_speed": 0.18,
+              "cancel_reliability": 0.144,
+              "evidence_validity": 0.091,
+              "profile_multiplier": 1.0,
+              "total": 0.918
+            },
+            "confidence_score": {
+              "evidence_validity": 0.364,
+              "authorization_confidence": 0.313,
+              "anomaly_resistance": 0.162,
+              "containment_strength": 0.07,
+              "profile_multiplier": 1.0,
+              "total": 0.909
+            },
+            "operational_stress_score": {
+              "base_action_risk": 0.024,
+              "anomaly_pressure": 0.02,
+              "impact_scope": 0.025,
+              "evidence_gap": 0.013,
+              "confidence_gap": 0.01,
+              "rollback_latency": 0.005,
+              "cancel_gap": 0.006,
+              "profile_multiplier": 1.0,
+              "total": 0.102
+            },
+            "risk_adjusted_authorization_score": {
+              "reversible_capacity": 0.413,
+              "confidence_score": 0.273,
+              "recoverability_margin": 0.231,
+              "profile_multiplier": 1.0,
+              "total": 0.917
+            }
+          },
+          "threshold_trace": [
+            {
+              "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+              "observed": 0.077,
+              "threshold": ">= 0.78",
+              "triggered": false,
+              "details": {
+                "capacity": 0.918,
+                "capacity_rule": "< 0.42",
+                "confidence": 0.909,
+                "confidence_rule": "< 0.48"
+              }
+            },
+            {
+              "rule": "deny_by_unreliable_cancel_and_high_exposure",
+              "observed": 0.9,
+              "threshold": "< 0.3",
+              "triggered": false,
+              "details": {
+                "exposure": 0.077,
+                "exposure_rule": ">= 0.62"
+              }
+            },
+            {
+              "rule": "escalate_by_operational_stress",
+              "observed": 0.102,
+              "threshold": ">= 0.7",
+              "triggered": false,
+              "details": {
+                "external_side_effect": false,
+                "sensitive_data": false
+              }
+            },
+            {
+              "rule": "freeze_by_low_confidence_or_capacity",
+              "observed": 0.909,
+              "threshold": "confidence < 0.45 or capacity < 0.36",
+              "triggered": false,
+              "details": {
+                "confidence": 0.909,
+                "capacity": 0.918
+              }
+            },
+            {
+              "rule": "throttle_by_authorization_exposure_or_side_effect",
+              "observed": 0.917,
+              "threshold": "authorization < 0.62 or exposure >= 0.45",
+              "triggered": false,
+              "details": {
+                "exposure": 0.077,
+                "external_side_effect": false,
+                "profile_allows_external_side_effect_release": false
+              }
+            }
+          ]
+        },
+        "transition_guidance": {
+          "current_posture": "ALLOW",
+          "target_posture": "ALLOW",
+          "release_conditions": {
+            "irreversible_exposure_below": 0.45,
+            "authorization_score_at_or_above": 0.62,
+            "confidence_score_target": 0.7,
+            "reversible_capacity_target": 0.6
+          },
+          "blocking_factors": [],
+          "evidence_needed": [],
+          "control_improvements": [
+            "execute",
+            "record_replay",
+            "retain_cancel_handle"
+          ]
+        },
         "policy": {
           "tenant_id": "*",
           "policy_id": "smerc-reference-recoverability",
@@ -107,6 +371,153 @@
         "rate_limit_external_side_effect",
         "checkpoint_before_execution"
       ],
+      "domain_profile": {
+        "profile_id": "general",
+        "label": "General automated action",
+        "notes": []
+      },
+      "decision_trace": {
+        "profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "score_contributions": {
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.112,
+            "irreversibility": 0.101,
+            "rollback_latency": 0.082,
+            "containment_gap": 0.058,
+            "impact_scope": 0.07,
+            "external_side_effect": 0.08,
+            "sensitive_data": 0.0,
+            "profile_multiplier": 1.0,
+            "total": 0.502
+          },
+          "reversible_capacity_score": {
+            "reversibility": 0.18,
+            "containment_strength": 0.132,
+            "rollback_speed": 0.099,
+            "cancel_reliability": 0.107,
+            "evidence_validity": 0.07,
+            "profile_multiplier": 1.0,
+            "total": 0.588
+          },
+          "confidence_score": {
+            "evidence_validity": 0.28,
+            "authorization_confidence": 0.241,
+            "anomaly_resistance": 0.121,
+            "containment_strength": 0.044,
+            "profile_multiplier": 1.0,
+            "total": 0.686
+          },
+          "operational_stress_score": {
+            "base_action_risk": 0.124,
+            "anomaly_pressure": 0.066,
+            "impact_scope": 0.104,
+            "evidence_gap": 0.042,
+            "confidence_gap": 0.035,
+            "rollback_latency": 0.048,
+            "cancel_gap": 0.02,
+            "profile_multiplier": 1.0,
+            "total": 0.439
+          },
+          "risk_adjusted_authorization_score": {
+            "reversible_capacity": 0.265,
+            "confidence_score": 0.206,
+            "recoverability_margin": 0.124,
+            "profile_multiplier": 1.0,
+            "total": 0.595
+          }
+        },
+        "threshold_trace": [
+          {
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "observed": 0.502,
+            "threshold": ">= 0.78",
+            "triggered": false,
+            "details": {
+              "capacity": 0.588,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.686,
+              "confidence_rule": "< 0.48"
+            }
+          },
+          {
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "observed": 0.67,
+            "threshold": "< 0.3",
+            "triggered": false,
+            "details": {
+              "exposure": 0.502,
+              "exposure_rule": ">= 0.62"
+            }
+          },
+          {
+            "rule": "escalate_by_operational_stress",
+            "observed": 0.439,
+            "threshold": ">= 0.7",
+            "triggered": false,
+            "details": {
+              "external_side_effect": true,
+              "sensitive_data": false
+            }
+          },
+          {
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "observed": 0.588,
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": false,
+            "details": {
+              "confidence": 0.686,
+              "capacity": 0.588
+            }
+          },
+          {
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "observed": 0.595,
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": true,
+            "details": {
+              "exposure": 0.502,
+              "external_side_effect": true,
+              "profile_allows_external_side_effect_release": false
+            }
+          }
+        ]
+      },
+      "transition_guidance": {
+        "current_posture": "THROTTLE",
+        "target_posture": "THROTTLE",
+        "release_conditions": {
+          "irreversible_exposure_below": 0.45,
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "reversible_capacity_target": 0.6
+        },
+        "blocking_factors": [
+          "confidence_below_release_target",
+          "irreversible_exposure_above_release_threshold",
+          "reversible_capacity_incomplete"
+        ],
+        "evidence_needed": [
+          "rollback test or recovery evidence",
+          "stronger authorization and evidence validity"
+        ],
+        "control_improvements": [
+          "checkpoint_before_execution",
+          "increase_containment",
+          "limit_scope",
+          "narrow_impact_scope",
+          "preview_before_execution",
+          "prove_rollback_path",
+          "rate limit or stage external side effect",
+          "rate_limit_external_side_effect",
+          "record_replay",
+          "reliable cancellation handle",
+          "require_rollback_plan"
+        ]
+      },
       "plain_english_summary": "Action 'AGENT_DEPLOY_PROD_CONFIG' received THROTTLE. Irreversible exposure is 0.502, reversible capacity is 0.588, and authorization score is 0.595. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
       "policy": {
         "tenant_id": "*",
@@ -116,10 +527,10 @@
         "mode": "OBSERVE",
         "evidence_ceiling": "OBSERVE"
       },
-      "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1783052535042_77b0df7adfb6",
+      "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1788660307384_a99ef1e124aa",
       "replay": {
-        "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1783052535042_77b0df7adfb6",
-        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
+        "replay_id": "replay_AGENT_DEPLOY_PROD_CONFIG_1788660307384_a99ef1e124aa",
+        "evaluated_at": "2026-09-06T02:05:07.384395+00:00",
         "actor": "deployment_agent",
         "tool": "github_actions.deploy",
         "action_type": "production_deploy",
@@ -145,6 +556,153 @@
           "rate_limit_external_side_effect",
           "checkpoint_before_execution"
         ],
+        "domain_profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "decision_trace": {
+          "profile": {
+            "profile_id": "general",
+            "label": "General automated action",
+            "notes": []
+          },
+          "score_contributions": {
+            "irreversible_exposure_score": {
+              "base_action_risk": 0.112,
+              "irreversibility": 0.101,
+              "rollback_latency": 0.082,
+              "containment_gap": 0.058,
+              "impact_scope": 0.07,
+              "external_side_effect": 0.08,
+              "sensitive_data": 0.0,
+              "profile_multiplier": 1.0,
+              "total": 0.502
+            },
+            "reversible_capacity_score": {
+              "reversibility": 0.18,
+              "containment_strength": 0.132,
+              "rollback_speed": 0.099,
+              "cancel_reliability": 0.107,
+              "evidence_validity": 0.07,
+              "profile_multiplier": 1.0,
+              "total": 0.588
+            },
+            "confidence_score": {
+              "evidence_validity": 0.28,
+              "authorization_confidence": 0.241,
+              "anomaly_resistance": 0.121,
+              "containment_strength": 0.044,
+              "profile_multiplier": 1.0,
+              "total": 0.686
+            },
+            "operational_stress_score": {
+              "base_action_risk": 0.124,
+              "anomaly_pressure": 0.066,
+              "impact_scope": 0.104,
+              "evidence_gap": 0.042,
+              "confidence_gap": 0.035,
+              "rollback_latency": 0.048,
+              "cancel_gap": 0.02,
+              "profile_multiplier": 1.0,
+              "total": 0.439
+            },
+            "risk_adjusted_authorization_score": {
+              "reversible_capacity": 0.265,
+              "confidence_score": 0.206,
+              "recoverability_margin": 0.124,
+              "profile_multiplier": 1.0,
+              "total": 0.595
+            }
+          },
+          "threshold_trace": [
+            {
+              "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+              "observed": 0.502,
+              "threshold": ">= 0.78",
+              "triggered": false,
+              "details": {
+                "capacity": 0.588,
+                "capacity_rule": "< 0.42",
+                "confidence": 0.686,
+                "confidence_rule": "< 0.48"
+              }
+            },
+            {
+              "rule": "deny_by_unreliable_cancel_and_high_exposure",
+              "observed": 0.67,
+              "threshold": "< 0.3",
+              "triggered": false,
+              "details": {
+                "exposure": 0.502,
+                "exposure_rule": ">= 0.62"
+              }
+            },
+            {
+              "rule": "escalate_by_operational_stress",
+              "observed": 0.439,
+              "threshold": ">= 0.7",
+              "triggered": false,
+              "details": {
+                "external_side_effect": true,
+                "sensitive_data": false
+              }
+            },
+            {
+              "rule": "freeze_by_low_confidence_or_capacity",
+              "observed": 0.588,
+              "threshold": "confidence < 0.45 or capacity < 0.36",
+              "triggered": false,
+              "details": {
+                "confidence": 0.686,
+                "capacity": 0.588
+              }
+            },
+            {
+              "rule": "throttle_by_authorization_exposure_or_side_effect",
+              "observed": 0.595,
+              "threshold": "authorization < 0.62 or exposure >= 0.45",
+              "triggered": true,
+              "details": {
+                "exposure": 0.502,
+                "external_side_effect": true,
+                "profile_allows_external_side_effect_release": false
+              }
+            }
+          ]
+        },
+        "transition_guidance": {
+          "current_posture": "THROTTLE",
+          "target_posture": "THROTTLE",
+          "release_conditions": {
+            "irreversible_exposure_below": 0.45,
+            "authorization_score_at_or_above": 0.62,
+            "confidence_score_target": 0.7,
+            "reversible_capacity_target": 0.6
+          },
+          "blocking_factors": [
+            "confidence_below_release_target",
+            "irreversible_exposure_above_release_threshold",
+            "reversible_capacity_incomplete"
+          ],
+          "evidence_needed": [
+            "rollback test or recovery evidence",
+            "stronger authorization and evidence validity"
+          ],
+          "control_improvements": [
+            "checkpoint_before_execution",
+            "increase_containment",
+            "limit_scope",
+            "narrow_impact_scope",
+            "preview_before_execution",
+            "prove_rollback_path",
+            "rate limit or stage external side effect",
+            "rate_limit_external_side_effect",
+            "record_replay",
+            "reliable cancellation handle",
+            "require_rollback_plan"
+          ]
+        },
         "policy": {
           "tenant_id": "*",
           "policy_id": "smerc-reference-recoverability",
@@ -186,6 +744,151 @@
         "snapshot_current_state",
         "preserve_replay"
       ],
+      "domain_profile": {
+        "profile_id": "general",
+        "label": "General automated action",
+        "notes": []
+      },
+      "decision_trace": {
+        "profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "score_contributions": {
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.137,
+            "irreversibility": 0.197,
+            "rollback_latency": 0.139,
+            "containment_gap": 0.088,
+            "impact_scope": 0.076,
+            "external_side_effect": 0.08,
+            "sensitive_data": 0.0,
+            "profile_multiplier": 1.0,
+            "total": 0.717
+          },
+          "reversible_capacity_score": {
+            "reversibility": 0.056,
+            "containment_strength": 0.077,
+            "rollback_speed": 0.034,
+            "cancel_reliability": 0.082,
+            "evidence_validity": 0.044,
+            "profile_multiplier": 1.0,
+            "total": 0.292
+          },
+          "confidence_score": {
+            "evidence_validity": 0.176,
+            "authorization_confidence": 0.163,
+            "anomaly_resistance": 0.083,
+            "containment_strength": 0.026,
+            "profile_multiplier": 1.0,
+            "total": 0.448
+          },
+          "operational_stress_score": {
+            "base_action_risk": 0.152,
+            "anomaly_pressure": 0.108,
+            "impact_scope": 0.113,
+            "evidence_gap": 0.078,
+            "confidence_gap": 0.062,
+            "rollback_latency": 0.082,
+            "cancel_gap": 0.029,
+            "profile_multiplier": 1.0,
+            "total": 0.626
+          },
+          "risk_adjusted_authorization_score": {
+            "reversible_capacity": 0.132,
+            "confidence_score": 0.134,
+            "recoverability_margin": 0.071,
+            "profile_multiplier": 1.0,
+            "total": 0.337
+          }
+        },
+        "threshold_trace": [
+          {
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "observed": 0.717,
+            "threshold": ">= 0.78",
+            "triggered": false,
+            "details": {
+              "capacity": 0.292,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.448,
+              "confidence_rule": "< 0.48"
+            }
+          },
+          {
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "observed": 0.51,
+            "threshold": "< 0.3",
+            "triggered": false,
+            "details": {
+              "exposure": 0.717,
+              "exposure_rule": ">= 0.62"
+            }
+          },
+          {
+            "rule": "escalate_by_operational_stress",
+            "observed": 0.626,
+            "threshold": ">= 0.7",
+            "triggered": false,
+            "details": {
+              "external_side_effect": true,
+              "sensitive_data": false
+            }
+          },
+          {
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "observed": 0.292,
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": true,
+            "details": {
+              "confidence": 0.448,
+              "capacity": 0.292
+            }
+          },
+          {
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "observed": 0.337,
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": true,
+            "details": {
+              "exposure": 0.717,
+              "external_side_effect": true,
+              "profile_allows_external_side_effect_release": false
+            }
+          }
+        ]
+      },
+      "transition_guidance": {
+        "current_posture": "FREEZE",
+        "target_posture": "THROTTLE",
+        "release_conditions": {
+          "irreversible_exposure_below": 0.45,
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "reversible_capacity_target": 0.6
+        },
+        "blocking_factors": [
+          "confidence_below_release_target",
+          "irreversible_exposure_above_release_threshold",
+          "reversible_capacity_incomplete"
+        ],
+        "evidence_needed": [
+          "rollback test or recovery evidence",
+          "stronger authorization and evidence validity"
+        ],
+        "control_improvements": [
+          "collect_more_evidence",
+          "increase_containment",
+          "narrow_impact_scope",
+          "pause_execution",
+          "preserve_replay",
+          "prove_rollback_path",
+          "rate limit or stage external side effect",
+          "reliable cancellation handle",
+          "snapshot_current_state"
+        ]
+      },
       "plain_english_summary": "Action 'AGENT_DELETE_AUDIT_LOGS' received FREEZE. Irreversible exposure is 0.717, reversible capacity is 0.292, and authorization score is 0.337. Controls: pause_execution, collect_more_evidence, snapshot_current_state, preserve_replay.",
       "policy": {
         "tenant_id": "*",
@@ -195,10 +898,10 @@
         "mode": "OBSERVE",
         "evidence_ceiling": "OBSERVE"
       },
-      "replay_id": "replay_AGENT_DELETE_AUDIT_LOGS_1783052535042_407f424624b6",
+      "replay_id": "replay_AGENT_DELETE_AUDIT_LOGS_1788660307384_ec339ca9e789",
       "replay": {
-        "replay_id": "replay_AGENT_DELETE_AUDIT_LOGS_1783052535042_407f424624b6",
-        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
+        "replay_id": "replay_AGENT_DELETE_AUDIT_LOGS_1788660307384_ec339ca9e789",
+        "evaluated_at": "2026-09-06T02:05:07.384395+00:00",
         "actor": "maintenance_agent",
         "tool": "github_actions.cleanup",
         "action_type": "audit_log_delete",
@@ -227,6 +930,151 @@
           "snapshot_current_state",
           "preserve_replay"
         ],
+        "domain_profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "decision_trace": {
+          "profile": {
+            "profile_id": "general",
+            "label": "General automated action",
+            "notes": []
+          },
+          "score_contributions": {
+            "irreversible_exposure_score": {
+              "base_action_risk": 0.137,
+              "irreversibility": 0.197,
+              "rollback_latency": 0.139,
+              "containment_gap": 0.088,
+              "impact_scope": 0.076,
+              "external_side_effect": 0.08,
+              "sensitive_data": 0.0,
+              "profile_multiplier": 1.0,
+              "total": 0.717
+            },
+            "reversible_capacity_score": {
+              "reversibility": 0.056,
+              "containment_strength": 0.077,
+              "rollback_speed": 0.034,
+              "cancel_reliability": 0.082,
+              "evidence_validity": 0.044,
+              "profile_multiplier": 1.0,
+              "total": 0.292
+            },
+            "confidence_score": {
+              "evidence_validity": 0.176,
+              "authorization_confidence": 0.163,
+              "anomaly_resistance": 0.083,
+              "containment_strength": 0.026,
+              "profile_multiplier": 1.0,
+              "total": 0.448
+            },
+            "operational_stress_score": {
+              "base_action_risk": 0.152,
+              "anomaly_pressure": 0.108,
+              "impact_scope": 0.113,
+              "evidence_gap": 0.078,
+              "confidence_gap": 0.062,
+              "rollback_latency": 0.082,
+              "cancel_gap": 0.029,
+              "profile_multiplier": 1.0,
+              "total": 0.626
+            },
+            "risk_adjusted_authorization_score": {
+              "reversible_capacity": 0.132,
+              "confidence_score": 0.134,
+              "recoverability_margin": 0.071,
+              "profile_multiplier": 1.0,
+              "total": 0.337
+            }
+          },
+          "threshold_trace": [
+            {
+              "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+              "observed": 0.717,
+              "threshold": ">= 0.78",
+              "triggered": false,
+              "details": {
+                "capacity": 0.292,
+                "capacity_rule": "< 0.42",
+                "confidence": 0.448,
+                "confidence_rule": "< 0.48"
+              }
+            },
+            {
+              "rule": "deny_by_unreliable_cancel_and_high_exposure",
+              "observed": 0.51,
+              "threshold": "< 0.3",
+              "triggered": false,
+              "details": {
+                "exposure": 0.717,
+                "exposure_rule": ">= 0.62"
+              }
+            },
+            {
+              "rule": "escalate_by_operational_stress",
+              "observed": 0.626,
+              "threshold": ">= 0.7",
+              "triggered": false,
+              "details": {
+                "external_side_effect": true,
+                "sensitive_data": false
+              }
+            },
+            {
+              "rule": "freeze_by_low_confidence_or_capacity",
+              "observed": 0.292,
+              "threshold": "confidence < 0.45 or capacity < 0.36",
+              "triggered": true,
+              "details": {
+                "confidence": 0.448,
+                "capacity": 0.292
+              }
+            },
+            {
+              "rule": "throttle_by_authorization_exposure_or_side_effect",
+              "observed": 0.337,
+              "threshold": "authorization < 0.62 or exposure >= 0.45",
+              "triggered": true,
+              "details": {
+                "exposure": 0.717,
+                "external_side_effect": true,
+                "profile_allows_external_side_effect_release": false
+              }
+            }
+          ]
+        },
+        "transition_guidance": {
+          "current_posture": "FREEZE",
+          "target_posture": "THROTTLE",
+          "release_conditions": {
+            "irreversible_exposure_below": 0.45,
+            "authorization_score_at_or_above": 0.62,
+            "confidence_score_target": 0.7,
+            "reversible_capacity_target": 0.6
+          },
+          "blocking_factors": [
+            "confidence_below_release_target",
+            "irreversible_exposure_above_release_threshold",
+            "reversible_capacity_incomplete"
+          ],
+          "evidence_needed": [
+            "rollback test or recovery evidence",
+            "stronger authorization and evidence validity"
+          ],
+          "control_improvements": [
+            "collect_more_evidence",
+            "increase_containment",
+            "narrow_impact_scope",
+            "pause_execution",
+            "preserve_replay",
+            "prove_rollback_path",
+            "rate limit or stage external side effect",
+            "reliable cancellation handle",
+            "snapshot_current_state"
+          ]
+        },
         "policy": {
           "tenant_id": "*",
           "policy_id": "smerc-reference-recoverability",
@@ -271,6 +1119,152 @@
         "preserve_replay",
         "require_new_request"
       ],
+      "domain_profile": {
+        "profile_id": "general",
+        "label": "General automated action",
+        "notes": []
+      },
+      "decision_trace": {
+        "profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "score_contributions": {
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.148,
+            "irreversibility": 0.216,
+            "rollback_latency": 0.155,
+            "containment_gap": 0.092,
+            "impact_scope": 0.103,
+            "external_side_effect": 0.08,
+            "sensitive_data": 0.08,
+            "profile_multiplier": 1.0,
+            "total": 0.874
+          },
+          "reversible_capacity_score": {
+            "reversibility": 0.031,
+            "containment_strength": 0.07,
+            "rollback_speed": 0.017,
+            "cancel_reliability": 0.061,
+            "evidence_validity": 0.052,
+            "profile_multiplier": 1.0,
+            "total": 0.23
+          },
+          "confidence_score": {
+            "evidence_validity": 0.208,
+            "authorization_confidence": 0.146,
+            "anomaly_resistance": 0.052,
+            "containment_strength": 0.023,
+            "profile_multiplier": 1.0,
+            "total": 0.43
+          },
+          "operational_stress_score": {
+            "base_action_risk": 0.164,
+            "anomaly_pressure": 0.142,
+            "impact_scope": 0.155,
+            "evidence_gap": 0.067,
+            "confidence_gap": 0.068,
+            "rollback_latency": 0.091,
+            "cancel_gap": 0.037,
+            "profile_multiplier": 1.0,
+            "total": 0.725
+          },
+          "risk_adjusted_authorization_score": {
+            "reversible_capacity": 0.104,
+            "confidence_score": 0.129,
+            "recoverability_margin": 0.032,
+            "profile_multiplier": 1.0,
+            "total": 0.264
+          }
+        },
+        "threshold_trace": [
+          {
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "observed": 0.874,
+            "threshold": ">= 0.78",
+            "triggered": true,
+            "details": {
+              "capacity": 0.23,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.43,
+              "confidence_rule": "< 0.48"
+            }
+          },
+          {
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "observed": 0.38,
+            "threshold": "< 0.3",
+            "triggered": false,
+            "details": {
+              "exposure": 0.874,
+              "exposure_rule": ">= 0.62"
+            }
+          },
+          {
+            "rule": "escalate_by_operational_stress",
+            "observed": 0.725,
+            "threshold": ">= 0.7",
+            "triggered": true,
+            "details": {
+              "external_side_effect": true,
+              "sensitive_data": true
+            }
+          },
+          {
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "observed": 0.23,
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": true,
+            "details": {
+              "confidence": 0.43,
+              "capacity": 0.23
+            }
+          },
+          {
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "observed": 0.264,
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": true,
+            "details": {
+              "exposure": 0.874,
+              "external_side_effect": true,
+              "profile_allows_external_side_effect_release": false
+            }
+          }
+        ]
+      },
+      "transition_guidance": {
+        "current_posture": "DENY",
+        "target_posture": "THROTTLE",
+        "release_conditions": {
+          "irreversible_exposure_below": 0.45,
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "reversible_capacity_target": 0.6
+        },
+        "blocking_factors": [
+          "confidence_below_release_target",
+          "irreversible_exposure_above_release_threshold",
+          "reversible_capacity_incomplete"
+        ],
+        "evidence_needed": [
+          "rollback test or recovery evidence",
+          "stronger authorization and evidence validity"
+        ],
+        "control_improvements": [
+          "block_execution",
+          "data minimization or scoped export proof",
+          "explain_denial",
+          "increase_containment",
+          "narrow_impact_scope",
+          "preserve_replay",
+          "prove_rollback_path",
+          "rate limit or stage external side effect",
+          "reliable cancellation handle",
+          "require_new_request"
+        ]
+      },
       "plain_english_summary": "Action 'AGENT_EXPORT_CUSTOMER_DATA' received DENY. Irreversible exposure is 0.874, reversible capacity is 0.230, and authorization score is 0.264. Controls: block_execution, explain_denial, preserve_replay, require_new_request.",
       "policy": {
         "tenant_id": "*",
@@ -280,10 +1274,10 @@
         "mode": "OBSERVE",
         "evidence_ceiling": "OBSERVE"
       },
-      "replay_id": "replay_AGENT_EXPORT_CUSTOMER_DATA_1783052535042_b90663d3cc49",
+      "replay_id": "replay_AGENT_EXPORT_CUSTOMER_DATA_1788660307384_1dfb8b0efe12",
       "replay": {
-        "replay_id": "replay_AGENT_EXPORT_CUSTOMER_DATA_1783052535042_b90663d3cc49",
-        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
+        "replay_id": "replay_AGENT_EXPORT_CUSTOMER_DATA_1788660307384_1dfb8b0efe12",
+        "evaluated_at": "2026-09-06T02:05:07.384395+00:00",
         "actor": "support_agent",
         "tool": "support.export",
         "action_type": "data_export",
@@ -315,6 +1309,152 @@
           "preserve_replay",
           "require_new_request"
         ],
+        "domain_profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "decision_trace": {
+          "profile": {
+            "profile_id": "general",
+            "label": "General automated action",
+            "notes": []
+          },
+          "score_contributions": {
+            "irreversible_exposure_score": {
+              "base_action_risk": 0.148,
+              "irreversibility": 0.216,
+              "rollback_latency": 0.155,
+              "containment_gap": 0.092,
+              "impact_scope": 0.103,
+              "external_side_effect": 0.08,
+              "sensitive_data": 0.08,
+              "profile_multiplier": 1.0,
+              "total": 0.874
+            },
+            "reversible_capacity_score": {
+              "reversibility": 0.031,
+              "containment_strength": 0.07,
+              "rollback_speed": 0.017,
+              "cancel_reliability": 0.061,
+              "evidence_validity": 0.052,
+              "profile_multiplier": 1.0,
+              "total": 0.23
+            },
+            "confidence_score": {
+              "evidence_validity": 0.208,
+              "authorization_confidence": 0.146,
+              "anomaly_resistance": 0.052,
+              "containment_strength": 0.023,
+              "profile_multiplier": 1.0,
+              "total": 0.43
+            },
+            "operational_stress_score": {
+              "base_action_risk": 0.164,
+              "anomaly_pressure": 0.142,
+              "impact_scope": 0.155,
+              "evidence_gap": 0.067,
+              "confidence_gap": 0.068,
+              "rollback_latency": 0.091,
+              "cancel_gap": 0.037,
+              "profile_multiplier": 1.0,
+              "total": 0.725
+            },
+            "risk_adjusted_authorization_score": {
+              "reversible_capacity": 0.104,
+              "confidence_score": 0.129,
+              "recoverability_margin": 0.032,
+              "profile_multiplier": 1.0,
+              "total": 0.264
+            }
+          },
+          "threshold_trace": [
+            {
+              "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+              "observed": 0.874,
+              "threshold": ">= 0.78",
+              "triggered": true,
+              "details": {
+                "capacity": 0.23,
+                "capacity_rule": "< 0.42",
+                "confidence": 0.43,
+                "confidence_rule": "< 0.48"
+              }
+            },
+            {
+              "rule": "deny_by_unreliable_cancel_and_high_exposure",
+              "observed": 0.38,
+              "threshold": "< 0.3",
+              "triggered": false,
+              "details": {
+                "exposure": 0.874,
+                "exposure_rule": ">= 0.62"
+              }
+            },
+            {
+              "rule": "escalate_by_operational_stress",
+              "observed": 0.725,
+              "threshold": ">= 0.7",
+              "triggered": true,
+              "details": {
+                "external_side_effect": true,
+                "sensitive_data": true
+              }
+            },
+            {
+              "rule": "freeze_by_low_confidence_or_capacity",
+              "observed": 0.23,
+              "threshold": "confidence < 0.45 or capacity < 0.36",
+              "triggered": true,
+              "details": {
+                "confidence": 0.43,
+                "capacity": 0.23
+              }
+            },
+            {
+              "rule": "throttle_by_authorization_exposure_or_side_effect",
+              "observed": 0.264,
+              "threshold": "authorization < 0.62 or exposure >= 0.45",
+              "triggered": true,
+              "details": {
+                "exposure": 0.874,
+                "external_side_effect": true,
+                "profile_allows_external_side_effect_release": false
+              }
+            }
+          ]
+        },
+        "transition_guidance": {
+          "current_posture": "DENY",
+          "target_posture": "THROTTLE",
+          "release_conditions": {
+            "irreversible_exposure_below": 0.45,
+            "authorization_score_at_or_above": 0.62,
+            "confidence_score_target": 0.7,
+            "reversible_capacity_target": 0.6
+          },
+          "blocking_factors": [
+            "confidence_below_release_target",
+            "irreversible_exposure_above_release_threshold",
+            "reversible_capacity_incomplete"
+          ],
+          "evidence_needed": [
+            "rollback test or recovery evidence",
+            "stronger authorization and evidence validity"
+          ],
+          "control_improvements": [
+            "block_execution",
+            "data minimization or scoped export proof",
+            "explain_denial",
+            "increase_containment",
+            "narrow_impact_scope",
+            "preserve_replay",
+            "prove_rollback_path",
+            "rate limit or stage external side effect",
+            "reliable cancellation handle",
+            "require_new_request"
+          ]
+        },
         "policy": {
           "tenant_id": "*",
           "policy_id": "smerc-reference-recoverability",
@@ -355,6 +1495,154 @@
         "rate_limit_external_side_effect",
         "checkpoint_before_execution"
       ],
+      "domain_profile": {
+        "profile_id": "general",
+        "label": "General automated action",
+        "notes": []
+      },
+      "decision_trace": {
+        "profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "score_contributions": {
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.122,
+            "irreversibility": 0.13,
+            "rollback_latency": 0.092,
+            "containment_gap": 0.049,
+            "impact_scope": 0.085,
+            "external_side_effect": 0.08,
+            "sensitive_data": 0.08,
+            "profile_multiplier": 1.0,
+            "total": 0.638
+          },
+          "reversible_capacity_score": {
+            "reversibility": 0.143,
+            "containment_strength": 0.149,
+            "rollback_speed": 0.087,
+            "cancel_reliability": 0.102,
+            "evidence_validity": 0.073,
+            "profile_multiplier": 1.0,
+            "total": 0.554
+          },
+          "confidence_score": {
+            "evidence_validity": 0.292,
+            "authorization_confidence": 0.238,
+            "anomaly_resistance": 0.11,
+            "containment_strength": 0.05,
+            "profile_multiplier": 1.0,
+            "total": 0.689
+          },
+          "operational_stress_score": {
+            "base_action_risk": 0.136,
+            "anomaly_pressure": 0.078,
+            "impact_scope": 0.128,
+            "evidence_gap": 0.038,
+            "confidence_gap": 0.036,
+            "rollback_latency": 0.054,
+            "cancel_gap": 0.022,
+            "profile_multiplier": 1.0,
+            "total": 0.491
+          },
+          "risk_adjusted_authorization_score": {
+            "reversible_capacity": 0.249,
+            "confidence_score": 0.207,
+            "recoverability_margin": 0.09,
+            "profile_multiplier": 1.0,
+            "total": 0.547
+          }
+        },
+        "threshold_trace": [
+          {
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "observed": 0.638,
+            "threshold": ">= 0.78",
+            "triggered": false,
+            "details": {
+              "capacity": 0.554,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.689,
+              "confidence_rule": "< 0.48"
+            }
+          },
+          {
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "observed": 0.64,
+            "threshold": "< 0.3",
+            "triggered": false,
+            "details": {
+              "exposure": 0.638,
+              "exposure_rule": ">= 0.62"
+            }
+          },
+          {
+            "rule": "escalate_by_operational_stress",
+            "observed": 0.491,
+            "threshold": ">= 0.7",
+            "triggered": false,
+            "details": {
+              "external_side_effect": true,
+              "sensitive_data": true
+            }
+          },
+          {
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "observed": 0.554,
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": false,
+            "details": {
+              "confidence": 0.689,
+              "capacity": 0.554
+            }
+          },
+          {
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "observed": 0.547,
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": true,
+            "details": {
+              "exposure": 0.638,
+              "external_side_effect": true,
+              "profile_allows_external_side_effect_release": false
+            }
+          }
+        ]
+      },
+      "transition_guidance": {
+        "current_posture": "THROTTLE",
+        "target_posture": "THROTTLE",
+        "release_conditions": {
+          "irreversible_exposure_below": 0.45,
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "reversible_capacity_target": 0.6
+        },
+        "blocking_factors": [
+          "confidence_below_release_target",
+          "irreversible_exposure_above_release_threshold",
+          "reversible_capacity_incomplete"
+        ],
+        "evidence_needed": [
+          "rollback test or recovery evidence",
+          "stronger authorization and evidence validity"
+        ],
+        "control_improvements": [
+          "checkpoint_before_execution",
+          "data minimization or scoped export proof",
+          "increase_containment",
+          "limit_scope",
+          "narrow_impact_scope",
+          "preview_before_execution",
+          "prove_rollback_path",
+          "rate limit or stage external side effect",
+          "rate_limit_external_side_effect",
+          "record_replay",
+          "reliable cancellation handle",
+          "require_rollback_plan"
+        ]
+      },
       "plain_english_summary": "Action 'AGENT_ROTATE_SECRET' received THROTTLE. Irreversible exposure is 0.638, reversible capacity is 0.554, and authorization score is 0.547. Controls: limit_scope, preview_before_execution, record_replay, require_rollback_plan, rate_limit_external_side_effect, checkpoint_before_execution.",
       "policy": {
         "tenant_id": "*",
@@ -364,10 +1652,10 @@
         "mode": "OBSERVE",
         "evidence_ceiling": "OBSERVE"
       },
-      "replay_id": "replay_AGENT_ROTATE_SECRET_1783052535042_049f5f4d8ffc",
+      "replay_id": "replay_AGENT_ROTATE_SECRET_1788660307384_cef0eff587aa",
       "replay": {
-        "replay_id": "replay_AGENT_ROTATE_SECRET_1783052535042_049f5f4d8ffc",
-        "evaluated_at": "2026-07-03T04:22:15.042078+00:00",
+        "replay_id": "replay_AGENT_ROTATE_SECRET_1788660307384_cef0eff587aa",
+        "evaluated_at": "2026-09-06T02:05:07.384395+00:00",
         "actor": "ops_agent",
         "tool": "secrets.rotate",
         "action_type": "secret_rotation",
@@ -395,6 +1683,154 @@
           "rate_limit_external_side_effect",
           "checkpoint_before_execution"
         ],
+        "domain_profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "decision_trace": {
+          "profile": {
+            "profile_id": "general",
+            "label": "General automated action",
+            "notes": []
+          },
+          "score_contributions": {
+            "irreversible_exposure_score": {
+              "base_action_risk": 0.122,
+              "irreversibility": 0.13,
+              "rollback_latency": 0.092,
+              "containment_gap": 0.049,
+              "impact_scope": 0.085,
+              "external_side_effect": 0.08,
+              "sensitive_data": 0.08,
+              "profile_multiplier": 1.0,
+              "total": 0.638
+            },
+            "reversible_capacity_score": {
+              "reversibility": 0.143,
+              "containment_strength": 0.149,
+              "rollback_speed": 0.087,
+              "cancel_reliability": 0.102,
+              "evidence_validity": 0.073,
+              "profile_multiplier": 1.0,
+              "total": 0.554
+            },
+            "confidence_score": {
+              "evidence_validity": 0.292,
+              "authorization_confidence": 0.238,
+              "anomaly_resistance": 0.11,
+              "containment_strength": 0.05,
+              "profile_multiplier": 1.0,
+              "total": 0.689
+            },
+            "operational_stress_score": {
+              "base_action_risk": 0.136,
+              "anomaly_pressure": 0.078,
+              "impact_scope": 0.128,
+              "evidence_gap": 0.038,
+              "confidence_gap": 0.036,
+              "rollback_latency": 0.054,
+              "cancel_gap": 0.022,
+              "profile_multiplier": 1.0,
+              "total": 0.491
+            },
+            "risk_adjusted_authorization_score": {
+              "reversible_capacity": 0.249,
+              "confidence_score": 0.207,
+              "recoverability_margin": 0.09,
+              "profile_multiplier": 1.0,
+              "total": 0.547
+            }
+          },
+          "threshold_trace": [
+            {
+              "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+              "observed": 0.638,
+              "threshold": ">= 0.78",
+              "triggered": false,
+              "details": {
+                "capacity": 0.554,
+                "capacity_rule": "< 0.42",
+                "confidence": 0.689,
+                "confidence_rule": "< 0.48"
+              }
+            },
+            {
+              "rule": "deny_by_unreliable_cancel_and_high_exposure",
+              "observed": 0.64,
+              "threshold": "< 0.3",
+              "triggered": false,
+              "details": {
+                "exposure": 0.638,
+                "exposure_rule": ">= 0.62"
+              }
+            },
+            {
+              "rule": "escalate_by_operational_stress",
+              "observed": 0.491,
+              "threshold": ">= 0.7",
+              "triggered": false,
+              "details": {
+                "external_side_effect": true,
+                "sensitive_data": true
+              }
+            },
+            {
+              "rule": "freeze_by_low_confidence_or_capacity",
+              "observed": 0.554,
+              "threshold": "confidence < 0.45 or capacity < 0.36",
+              "triggered": false,
+              "details": {
+                "confidence": 0.689,
+                "capacity": 0.554
+              }
+            },
+            {
+              "rule": "throttle_by_authorization_exposure_or_side_effect",
+              "observed": 0.547,
+              "threshold": "authorization < 0.62 or exposure >= 0.45",
+              "triggered": true,
+              "details": {
+                "exposure": 0.638,
+                "external_side_effect": true,
+                "profile_allows_external_side_effect_release": false
+              }
+            }
+          ]
+        },
+        "transition_guidance": {
+          "current_posture": "THROTTLE",
+          "target_posture": "THROTTLE",
+          "release_conditions": {
+            "irreversible_exposure_below": 0.45,
+            "authorization_score_at_or_above": 0.62,
+            "confidence_score_target": 0.7,
+            "reversible_capacity_target": 0.6
+          },
+          "blocking_factors": [
+            "confidence_below_release_target",
+            "irreversible_exposure_above_release_threshold",
+            "reversible_capacity_incomplete"
+          ],
+          "evidence_needed": [
+            "rollback test or recovery evidence",
+            "stronger authorization and evidence validity"
+          ],
+          "control_improvements": [
+            "checkpoint_before_execution",
+            "data minimization or scoped export proof",
+            "increase_containment",
+            "limit_scope",
+            "narrow_impact_scope",
+            "preview_before_execution",
+            "prove_rollback_path",
+            "rate limit or stage external side effect",
+            "rate_limit_external_side_effect",
+            "record_replay",
+            "reliable cancellation handle",
+            "require_rollback_plan"
+          ]
+        },
         "policy": {
           "tenant_id": "*",
           "policy_id": "smerc-reference-recoverability",
@@ -406,6 +1842,699 @@
         "context": {
           "workflow": "secret_rotation",
           "expected_outcome": "ESCALATE"
+        }
+      }
+    },
+    {
+      "action_id": "AGENT_LOW_RISK_MISSING_CANCEL_EVIDENCE",
+      "posture": "THROTTLE",
+      "enforcement_state": "constrain",
+      "scores": {
+        "irreversible_exposure_score": 0.114,
+        "reversible_capacity_score": 0.879,
+        "confidence_score": 0.876,
+        "operational_stress_score": 0.134,
+        "risk_adjusted_authorization_score": 0.88,
+        "cancel_reliability_score": 0.9
+      },
+      "reason_codes": [
+        "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
+        "CANCEL_RELIABILITY_UNAVAILABLE"
+      ],
+      "controls": [
+        "limit_scope",
+        "preview_before_execution",
+        "record_replay",
+        "collect_unavailable_recoverability_evidence"
+      ],
+      "domain_profile": {
+        "profile_id": "general",
+        "label": "General automated action",
+        "notes": []
+      },
+      "decision_trace": {
+        "profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "score_contributions": {
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.029,
+            "irreversibility": 0.029,
+            "rollback_latency": 0.014,
+            "containment_gap": 0.021,
+            "impact_scope": 0.022,
+            "external_side_effect": 0.0,
+            "sensitive_data": 0.0,
+            "profile_multiplier": 1.0,
+            "total": 0.114
+          },
+          "reversible_capacity_score": {
+            "reversibility": 0.273,
+            "containment_strength": 0.202,
+            "rollback_speed": 0.175,
+            "cancel_reliability": 0.144,
+            "evidence_validity": 0.086,
+            "profile_multiplier": 1.0,
+            "total": 0.879
+          },
+          "confidence_score": {
+            "evidence_validity": 0.344,
+            "authorization_confidence": 0.306,
+            "anomaly_resistance": 0.158,
+            "containment_strength": 0.067,
+            "profile_multiplier": 1.0,
+            "total": 0.876
+          },
+          "operational_stress_score": {
+            "base_action_risk": 0.032,
+            "anomaly_pressure": 0.024,
+            "impact_scope": 0.032,
+            "evidence_gap": 0.02,
+            "confidence_gap": 0.012,
+            "rollback_latency": 0.008,
+            "cancel_gap": 0.006,
+            "profile_multiplier": 1.0,
+            "total": 0.134
+          },
+          "risk_adjusted_authorization_score": {
+            "reversible_capacity": 0.396,
+            "confidence_score": 0.263,
+            "recoverability_margin": 0.222,
+            "profile_multiplier": 1.0,
+            "total": 0.88
+          }
+        },
+        "threshold_trace": [
+          {
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "observed": 0.114,
+            "threshold": ">= 0.78",
+            "triggered": false,
+            "details": {
+              "capacity": 0.879,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.876,
+              "confidence_rule": "< 0.48"
+            }
+          },
+          {
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "observed": 0.9,
+            "threshold": "< 0.3",
+            "triggered": false,
+            "details": {
+              "exposure": 0.114,
+              "exposure_rule": ">= 0.62"
+            }
+          },
+          {
+            "rule": "escalate_by_operational_stress",
+            "observed": 0.134,
+            "threshold": ">= 0.7",
+            "triggered": false,
+            "details": {
+              "external_side_effect": false,
+              "sensitive_data": false
+            }
+          },
+          {
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "observed": 0.876,
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": false,
+            "details": {
+              "confidence": 0.876,
+              "capacity": 0.879
+            }
+          },
+          {
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "observed": 0.88,
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": false,
+            "details": {
+              "exposure": 0.114,
+              "external_side_effect": false,
+              "profile_allows_external_side_effect_release": false
+            }
+          }
+        ]
+      },
+      "transition_guidance": {
+        "current_posture": "THROTTLE",
+        "target_posture": "THROTTLE",
+        "release_conditions": {
+          "irreversible_exposure_below": 0.45,
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "reversible_capacity_target": 0.6
+        },
+        "blocking_factors": [],
+        "evidence_needed": [],
+        "control_improvements": [
+          "collect_unavailable_recoverability_evidence",
+          "limit_scope",
+          "preview_before_execution",
+          "record_replay"
+        ]
+      },
+      "plain_english_summary": "Action 'AGENT_LOW_RISK_MISSING_CANCEL_EVIDENCE' received THROTTLE. Irreversible exposure is 0.114, reversible capacity is 0.879, and authorization score is 0.880. Controls: limit_scope, preview_before_execution, record_replay, collect_unavailable_recoverability_evidence.",
+      "policy": {
+        "tenant_id": "*",
+        "policy_id": "smerc-reference-recoverability",
+        "policy_revision": "1.0.0",
+        "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+        "mode": "OBSERVE",
+        "evidence_ceiling": "OBSERVE"
+      },
+      "replay_id": "replay_AGENT_LOW_RISK_MISSING_CANCEL_EVIDENCE_1788660307384_2df5c7bd7c75",
+      "replay": {
+        "replay_id": "replay_AGENT_LOW_RISK_MISSING_CANCEL_EVIDENCE_1788660307384_2df5c7bd7c75",
+        "evaluated_at": "2026-09-06T02:05:07.384395+00:00",
+        "actor": "coding_agent",
+        "tool": "cache.refresh",
+        "action_type": "cache_refresh",
+        "posture": "THROTTLE",
+        "enforcement_state": "constrain",
+        "scores": {
+          "irreversible_exposure_score": 0.114,
+          "reversible_capacity_score": 0.879,
+          "confidence_score": 0.876,
+          "operational_stress_score": 0.134,
+          "risk_adjusted_authorization_score": 0.88,
+          "cancel_reliability_score": 0.9
+        },
+        "reason_codes": [
+          "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
+          "CANCEL_RELIABILITY_UNAVAILABLE"
+        ],
+        "controls": [
+          "limit_scope",
+          "preview_before_execution",
+          "record_replay",
+          "collect_unavailable_recoverability_evidence"
+        ],
+        "domain_profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "decision_trace": {
+          "profile": {
+            "profile_id": "general",
+            "label": "General automated action",
+            "notes": []
+          },
+          "score_contributions": {
+            "irreversible_exposure_score": {
+              "base_action_risk": 0.029,
+              "irreversibility": 0.029,
+              "rollback_latency": 0.014,
+              "containment_gap": 0.021,
+              "impact_scope": 0.022,
+              "external_side_effect": 0.0,
+              "sensitive_data": 0.0,
+              "profile_multiplier": 1.0,
+              "total": 0.114
+            },
+            "reversible_capacity_score": {
+              "reversibility": 0.273,
+              "containment_strength": 0.202,
+              "rollback_speed": 0.175,
+              "cancel_reliability": 0.144,
+              "evidence_validity": 0.086,
+              "profile_multiplier": 1.0,
+              "total": 0.879
+            },
+            "confidence_score": {
+              "evidence_validity": 0.344,
+              "authorization_confidence": 0.306,
+              "anomaly_resistance": 0.158,
+              "containment_strength": 0.067,
+              "profile_multiplier": 1.0,
+              "total": 0.876
+            },
+            "operational_stress_score": {
+              "base_action_risk": 0.032,
+              "anomaly_pressure": 0.024,
+              "impact_scope": 0.032,
+              "evidence_gap": 0.02,
+              "confidence_gap": 0.012,
+              "rollback_latency": 0.008,
+              "cancel_gap": 0.006,
+              "profile_multiplier": 1.0,
+              "total": 0.134
+            },
+            "risk_adjusted_authorization_score": {
+              "reversible_capacity": 0.396,
+              "confidence_score": 0.263,
+              "recoverability_margin": 0.222,
+              "profile_multiplier": 1.0,
+              "total": 0.88
+            }
+          },
+          "threshold_trace": [
+            {
+              "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+              "observed": 0.114,
+              "threshold": ">= 0.78",
+              "triggered": false,
+              "details": {
+                "capacity": 0.879,
+                "capacity_rule": "< 0.42",
+                "confidence": 0.876,
+                "confidence_rule": "< 0.48"
+              }
+            },
+            {
+              "rule": "deny_by_unreliable_cancel_and_high_exposure",
+              "observed": 0.9,
+              "threshold": "< 0.3",
+              "triggered": false,
+              "details": {
+                "exposure": 0.114,
+                "exposure_rule": ">= 0.62"
+              }
+            },
+            {
+              "rule": "escalate_by_operational_stress",
+              "observed": 0.134,
+              "threshold": ">= 0.7",
+              "triggered": false,
+              "details": {
+                "external_side_effect": false,
+                "sensitive_data": false
+              }
+            },
+            {
+              "rule": "freeze_by_low_confidence_or_capacity",
+              "observed": 0.876,
+              "threshold": "confidence < 0.45 or capacity < 0.36",
+              "triggered": false,
+              "details": {
+                "confidence": 0.876,
+                "capacity": 0.879
+              }
+            },
+            {
+              "rule": "throttle_by_authorization_exposure_or_side_effect",
+              "observed": 0.88,
+              "threshold": "authorization < 0.62 or exposure >= 0.45",
+              "triggered": false,
+              "details": {
+                "exposure": 0.114,
+                "external_side_effect": false,
+                "profile_allows_external_side_effect_release": false
+              }
+            }
+          ]
+        },
+        "transition_guidance": {
+          "current_posture": "THROTTLE",
+          "target_posture": "THROTTLE",
+          "release_conditions": {
+            "irreversible_exposure_below": 0.45,
+            "authorization_score_at_or_above": 0.62,
+            "confidence_score_target": 0.7,
+            "reversible_capacity_target": 0.6
+          },
+          "blocking_factors": [],
+          "evidence_needed": [],
+          "control_improvements": [
+            "collect_unavailable_recoverability_evidence",
+            "limit_scope",
+            "preview_before_execution",
+            "record_replay"
+          ]
+        },
+        "policy": {
+          "tenant_id": "*",
+          "policy_id": "smerc-reference-recoverability",
+          "policy_revision": "1.0.0",
+          "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+          "mode": "OBSERVE",
+          "evidence_ceiling": "OBSERVE"
+        },
+        "context": {
+          "workflow": "maintenance",
+          "expected_outcome": "THROTTLE",
+          "unavailable_recoverability_signals": [
+            "cancel_reliability"
+          ]
+        }
+      }
+    },
+    {
+      "action_id": "AGENT_PROD_DEPLOY_MISSING_ROLLBACK_EVIDENCE",
+      "posture": "FREEZE",
+      "enforcement_state": "pause",
+      "scores": {
+        "irreversible_exposure_score": 0.288,
+        "reversible_capacity_score": 0.861,
+        "confidence_score": 0.89,
+        "operational_stress_score": 0.242,
+        "risk_adjusted_authorization_score": 0.832,
+        "cancel_reliability_score": 0.88
+      },
+      "reason_codes": [
+        "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
+        "EVIDENCE_VALIDITY_UNAVAILABLE",
+        "ROLLBACK_LATENCY_UNAVAILABLE",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "controls": [
+        "pause_execution",
+        "collect_more_evidence",
+        "snapshot_current_state",
+        "preserve_replay",
+        "treat_unavailable_recoverability_as_uncertainty"
+      ],
+      "domain_profile": {
+        "profile_id": "general",
+        "label": "General automated action",
+        "notes": []
+      },
+      "decision_trace": {
+        "profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "score_contributions": {
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.076,
+            "irreversibility": 0.034,
+            "rollback_latency": 0.02,
+            "containment_gap": 0.023,
+            "impact_scope": 0.055,
+            "external_side_effect": 0.08,
+            "sensitive_data": 0.0,
+            "profile_multiplier": 1.0,
+            "total": 0.288
+          },
+          "reversible_capacity_score": {
+            "reversibility": 0.267,
+            "containment_strength": 0.197,
+            "rollback_speed": 0.167,
+            "cancel_reliability": 0.141,
+            "evidence_validity": 0.09,
+            "profile_multiplier": 1.0,
+            "total": 0.861
+          },
+          "confidence_score": {
+            "evidence_validity": 0.36,
+            "authorization_confidence": 0.313,
+            "anomaly_resistance": 0.151,
+            "containment_strength": 0.066,
+            "profile_multiplier": 1.0,
+            "total": 0.89
+          },
+          "operational_stress_score": {
+            "base_action_risk": 0.084,
+            "anomaly_pressure": 0.032,
+            "impact_scope": 0.083,
+            "evidence_gap": 0.014,
+            "confidence_gap": 0.01,
+            "rollback_latency": 0.012,
+            "cancel_gap": 0.007,
+            "profile_multiplier": 1.0,
+            "total": 0.242
+          },
+          "risk_adjusted_authorization_score": {
+            "reversible_capacity": 0.388,
+            "confidence_score": 0.267,
+            "recoverability_margin": 0.178,
+            "profile_multiplier": 1.0,
+            "total": 0.832
+          }
+        },
+        "threshold_trace": [
+          {
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "observed": 0.288,
+            "threshold": ">= 0.78",
+            "triggered": false,
+            "details": {
+              "capacity": 0.861,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.89,
+              "confidence_rule": "< 0.48"
+            }
+          },
+          {
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "observed": 0.88,
+            "threshold": "< 0.3",
+            "triggered": false,
+            "details": {
+              "exposure": 0.288,
+              "exposure_rule": ">= 0.62"
+            }
+          },
+          {
+            "rule": "escalate_by_operational_stress",
+            "observed": 0.242,
+            "threshold": ">= 0.7",
+            "triggered": false,
+            "details": {
+              "external_side_effect": true,
+              "sensitive_data": false
+            }
+          },
+          {
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "observed": 0.861,
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": false,
+            "details": {
+              "confidence": 0.89,
+              "capacity": 0.861
+            }
+          },
+          {
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "observed": 0.832,
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": true,
+            "details": {
+              "exposure": 0.288,
+              "external_side_effect": true,
+              "profile_allows_external_side_effect_release": false
+            }
+          }
+        ]
+      },
+      "transition_guidance": {
+        "current_posture": "FREEZE",
+        "target_posture": "THROTTLE",
+        "release_conditions": {
+          "irreversible_exposure_below": 0.45,
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "reversible_capacity_target": 0.6
+        },
+        "blocking_factors": [],
+        "evidence_needed": [],
+        "control_improvements": [
+          "collect_more_evidence",
+          "pause_execution",
+          "preserve_replay",
+          "rate limit or stage external side effect",
+          "snapshot_current_state",
+          "treat_unavailable_recoverability_as_uncertainty"
+        ]
+      },
+      "plain_english_summary": "Action 'AGENT_PROD_DEPLOY_MISSING_ROLLBACK_EVIDENCE' received FREEZE. Irreversible exposure is 0.288, reversible capacity is 0.861, and authorization score is 0.832. Controls: pause_execution, collect_more_evidence, snapshot_current_state, preserve_replay, treat_unavailable_recoverability_as_uncertainty.",
+      "policy": {
+        "tenant_id": "*",
+        "policy_id": "smerc-reference-recoverability",
+        "policy_revision": "1.0.0",
+        "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+        "mode": "OBSERVE",
+        "evidence_ceiling": "OBSERVE"
+      },
+      "replay_id": "replay_AGENT_PROD_DEPLOY_MISSING_ROLLBACK_EVIDENCE_1788660307384_6a15d579c958",
+      "replay": {
+        "replay_id": "replay_AGENT_PROD_DEPLOY_MISSING_ROLLBACK_EVIDENCE_1788660307384_6a15d579c958",
+        "evaluated_at": "2026-09-06T02:05:07.384395+00:00",
+        "actor": "deployment_agent",
+        "tool": "github_actions.deploy",
+        "action_type": "production_deploy",
+        "posture": "FREEZE",
+        "enforcement_state": "pause",
+        "scores": {
+          "irreversible_exposure_score": 0.288,
+          "reversible_capacity_score": 0.861,
+          "confidence_score": 0.89,
+          "operational_stress_score": 0.242,
+          "risk_adjusted_authorization_score": 0.832,
+          "cancel_reliability_score": 0.88
+        },
+        "reason_codes": [
+          "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
+          "EVIDENCE_VALIDITY_UNAVAILABLE",
+          "ROLLBACK_LATENCY_UNAVAILABLE",
+          "EXTERNAL_SIDE_EFFECT"
+        ],
+        "controls": [
+          "pause_execution",
+          "collect_more_evidence",
+          "snapshot_current_state",
+          "preserve_replay",
+          "treat_unavailable_recoverability_as_uncertainty"
+        ],
+        "domain_profile": {
+          "profile_id": "general",
+          "label": "General automated action",
+          "notes": []
+        },
+        "decision_trace": {
+          "profile": {
+            "profile_id": "general",
+            "label": "General automated action",
+            "notes": []
+          },
+          "score_contributions": {
+            "irreversible_exposure_score": {
+              "base_action_risk": 0.076,
+              "irreversibility": 0.034,
+              "rollback_latency": 0.02,
+              "containment_gap": 0.023,
+              "impact_scope": 0.055,
+              "external_side_effect": 0.08,
+              "sensitive_data": 0.0,
+              "profile_multiplier": 1.0,
+              "total": 0.288
+            },
+            "reversible_capacity_score": {
+              "reversibility": 0.267,
+              "containment_strength": 0.197,
+              "rollback_speed": 0.167,
+              "cancel_reliability": 0.141,
+              "evidence_validity": 0.09,
+              "profile_multiplier": 1.0,
+              "total": 0.861
+            },
+            "confidence_score": {
+              "evidence_validity": 0.36,
+              "authorization_confidence": 0.313,
+              "anomaly_resistance": 0.151,
+              "containment_strength": 0.066,
+              "profile_multiplier": 1.0,
+              "total": 0.89
+            },
+            "operational_stress_score": {
+              "base_action_risk": 0.084,
+              "anomaly_pressure": 0.032,
+              "impact_scope": 0.083,
+              "evidence_gap": 0.014,
+              "confidence_gap": 0.01,
+              "rollback_latency": 0.012,
+              "cancel_gap": 0.007,
+              "profile_multiplier": 1.0,
+              "total": 0.242
+            },
+            "risk_adjusted_authorization_score": {
+              "reversible_capacity": 0.388,
+              "confidence_score": 0.267,
+              "recoverability_margin": 0.178,
+              "profile_multiplier": 1.0,
+              "total": 0.832
+            }
+          },
+          "threshold_trace": [
+            {
+              "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+              "observed": 0.288,
+              "threshold": ">= 0.78",
+              "triggered": false,
+              "details": {
+                "capacity": 0.861,
+                "capacity_rule": "< 0.42",
+                "confidence": 0.89,
+                "confidence_rule": "< 0.48"
+              }
+            },
+            {
+              "rule": "deny_by_unreliable_cancel_and_high_exposure",
+              "observed": 0.88,
+              "threshold": "< 0.3",
+              "triggered": false,
+              "details": {
+                "exposure": 0.288,
+                "exposure_rule": ">= 0.62"
+              }
+            },
+            {
+              "rule": "escalate_by_operational_stress",
+              "observed": 0.242,
+              "threshold": ">= 0.7",
+              "triggered": false,
+              "details": {
+                "external_side_effect": true,
+                "sensitive_data": false
+              }
+            },
+            {
+              "rule": "freeze_by_low_confidence_or_capacity",
+              "observed": 0.861,
+              "threshold": "confidence < 0.45 or capacity < 0.36",
+              "triggered": false,
+              "details": {
+                "confidence": 0.89,
+                "capacity": 0.861
+              }
+            },
+            {
+              "rule": "throttle_by_authorization_exposure_or_side_effect",
+              "observed": 0.832,
+              "threshold": "authorization < 0.62 or exposure >= 0.45",
+              "triggered": true,
+              "details": {
+                "exposure": 0.288,
+                "external_side_effect": true,
+                "profile_allows_external_side_effect_release": false
+              }
+            }
+          ]
+        },
+        "transition_guidance": {
+          "current_posture": "FREEZE",
+          "target_posture": "THROTTLE",
+          "release_conditions": {
+            "irreversible_exposure_below": 0.45,
+            "authorization_score_at_or_above": 0.62,
+            "confidence_score_target": 0.7,
+            "reversible_capacity_target": 0.6
+          },
+          "blocking_factors": [],
+          "evidence_needed": [],
+          "control_improvements": [
+            "collect_more_evidence",
+            "pause_execution",
+            "preserve_replay",
+            "rate limit or stage external side effect",
+            "snapshot_current_state",
+            "treat_unavailable_recoverability_as_uncertainty"
+          ]
+        },
+        "policy": {
+          "tenant_id": "*",
+          "policy_id": "smerc-reference-recoverability",
+          "policy_revision": "1.0.0",
+          "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+          "mode": "OBSERVE",
+          "evidence_ceiling": "OBSERVE"
+        },
+        "context": {
+          "workflow": "deployment",
+          "expected_outcome": "FREEZE",
+          "unavailable_recoverability_signals": [
+            "rollback_latency",
+            "evidence_validity"
+          ]
         }
       }
     }

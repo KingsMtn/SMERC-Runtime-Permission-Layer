@@ -111,6 +111,31 @@ class RecoverabilityEngineTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown field"):
             DomainProfile.from_dict(payload)
 
+    def test_missing_low_risk_recoverability_signal_does_not_allow(self):
+        result = self.engine.evaluate(self.by_id("AGENT_LOW_RISK_MISSING_CANCEL_EVIDENCE"))
+
+        self.assertEqual(result["posture"], "THROTTLE")
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", result["reason_codes"])
+        self.assertIn("CANCEL_RELIABILITY_UNAVAILABLE", result["reason_codes"])
+        self.assertIn("collect_unavailable_recoverability_evidence", result["controls"])
+
+    def test_missing_high_impact_recoverability_signal_freezes(self):
+        result = self.engine.evaluate(self.by_id("AGENT_PROD_DEPLOY_MISSING_ROLLBACK_EVIDENCE"))
+
+        self.assertEqual(result["posture"], "FREEZE")
+        self.assertEqual(result["enforcement_state"], "pause")
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", result["reason_codes"])
+        self.assertIn("ROLLBACK_LATENCY_UNAVAILABLE", result["reason_codes"])
+        self.assertIn("EVIDENCE_VALIDITY_UNAVAILABLE", result["reason_codes"])
+        self.assertIn("treat_unavailable_recoverability_as_uncertainty", result["controls"])
+
+    def test_unavailable_recoverability_signal_list_is_validated(self):
+        action = dict(self.by_id("AGENT_RUN_TESTS"))
+        action["context"] = {"unavailable_recoverability_signals": ["unknown_signal"]}
+
+        with self.assertRaisesRegex(ValueError, "unsupported signal"):
+            self.engine.evaluate(action)
+
 
 if __name__ == "__main__":
     unittest.main()

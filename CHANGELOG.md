@@ -5,6 +5,7 @@
 - Added a one-command Customer Proof Loop that runs runtime admission, recoverability scoring, SPARTa routing, Decision Lifecycle Ledger evidence, generated reports, and pass/fail checks for customer review.
 - Added authenticated `/v1/admission/evaluate` API support, SDK helpers, OpenAPI coverage, and a curl-ready admission example so pilots can test hard gates before recoverability scoring.
 - Added a reusable Runtime Admission Gate module and tests so hard identity, scope, permit, typed-contract, attestation, least-privilege, object-shape, and evidence checks can reject or escalate requests before recoverability scoring.
+- Added fail-closed handling for unavailable recoverability evidence so missing rollback, reversibility, evidence-validity, blast-radius, containment, or cancellation signals constrain or freeze instead of silently allowing execution.
 - Added an OpenSSF feedback alignment note clarifying that typed contracts, attestation, least privilege, and object-shape checks must run before recoverability scoring can support execution.
 - Added a Cloud Admin Customer Evaluation pack and GitHub Actions workflow option for metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy review.
 - Added a company test package and runnable metadata template so a prospect can evaluate one workflow without sharing sensitive data or production access.

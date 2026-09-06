@@ -92,7 +92,7 @@ def markdown(records: List[Dict[str, Any]], summary: Dict[str, Any]) -> str:
             "",
             "## Product Interpretation",
             "",
-            "This report demonstrates SMERC as a recoverability-aware pre-execution decision layer. In a real pilot, each non-release decision should be compared against human reviewer judgment, existing policy outcomes, overrides, and operational latency.",
+            "This report demonstrates SMERC as a recoverability-aware pre-execution decision layer. Missing recoverability evidence is treated as uncertainty, not permission: unavailable rollback, reversibility, evidence-validity, blast-radius, containment, or cancellation signals cap release behavior before execution. In a real pilot, each non-release decision should be compared against human reviewer judgment, existing policy outcomes, overrides, and operational latency.",
         ]
     )
     return "\n".join(lines) + "\n"

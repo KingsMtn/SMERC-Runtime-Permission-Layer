@@ -13,6 +13,14 @@ from reference_engine.policy import DEFAULT_POLICY, RuntimePolicy, load_policy
 
 
 DOMAIN_PROFILE_VERSION = "smerc.domain_profile.v1"
+UNAVAILABLE_RECOVERABILITY_SIGNALS = {
+    "reversibility",
+    "containment_strength",
+    "rollback_latency",
+    "evidence_validity",
+    "impact_scope",
+    "cancel_reliability",
+}
 
 
 class RuntimePosture(str, Enum):
@@ -175,6 +183,27 @@ class RecoverabilityAction:
     sensitive_data: bool
     context: Dict[str, Any] = field(default_factory=dict)
 
+    def unavailable_recoverability_signals(self) -> List[str]:
+        raw = self.context.get("unavailable_recoverability_signals", [])
+        if raw is None:
+            return []
+        if not isinstance(raw, list):
+            raise TypeError("context.unavailable_recoverability_signals must be a list when provided")
+        signals = []
+        for index, item in enumerate(raw):
+            if not isinstance(item, str) or not item.strip():
+                raise TypeError(f"context.unavailable_recoverability_signals[{index}] must be a non-empty string")
+            signal = item.strip()
+            if signal not in UNAVAILABLE_RECOVERABILITY_SIGNALS:
+                raise ValueError(
+                    "context.unavailable_recoverability_signals contains unsupported signal: "
+                    f"{signal}"
+                )
+            signals.append(signal)
+        if len(set(signals)) != len(signals):
+            raise ValueError("context.unavailable_recoverability_signals must not contain duplicates")
+        return sorted(signals)
+
     @classmethod
     def from_dict(cls, payload: Dict[str, Any]) -> "RecoverabilityAction":
         required = [
@@ -271,6 +300,7 @@ class RecoverabilityEngine:
         scores = trace["scores"]
         reason_codes = self._reason_codes(action, scores)
         posture, threshold_trace = self._posture(action, scores, profile)
+        posture = self._apply_unavailable_signal_floor(action, posture)
         enforcement_state = self._enforcement_state(posture)
         controls = self._controls(action, posture, scores)
         transition_guidance = self._transition_guidance(action, posture, scores, controls)
@@ -417,6 +447,10 @@ class RecoverabilityEngine:
     @staticmethod
     def _reason_codes(action: RecoverabilityAction, scores: Dict[str, float]) -> List[str]:
         reasons: List[str] = []
+        unavailable_signals = action.unavailable_recoverability_signals()
+        if unavailable_signals:
+            reasons.append("RECOVERABILITY_EVIDENCE_UNAVAILABLE")
+            reasons.extend(f"{signal.upper()}_UNAVAILABLE" for signal in unavailable_signals)
         if scores["irreversible_exposure_score"] >= 0.68:
             reasons.append("IRREVERSIBLE_EXPOSURE_HIGH")
         elif scores["irreversible_exposure_score"] >= 0.48:
@@ -442,6 +476,29 @@ class RecoverabilityEngine:
         if action.sensitive_data:
             reasons.append("SENSITIVE_DATA")
         return reasons or ["RECOVERABILITY_ACCEPTABLE"]
+
+    @staticmethod
+    def _apply_unavailable_signal_floor(
+        action: RecoverabilityAction,
+        posture: RuntimePosture,
+    ) -> RuntimePosture:
+        unavailable_signals = action.unavailable_recoverability_signals()
+        if not unavailable_signals or posture in {RuntimePosture.FREEZE, RuntimePosture.DENY, RuntimePosture.ESCALATE}:
+            return posture
+        high_impact_context = (
+            action.base_action_risk >= 0.70
+            or action.impact_scope >= 0.70
+            or action.external_side_effect
+            or action.sensitive_data
+        )
+        if high_impact_context and {
+            "reversibility",
+            "rollback_latency",
+            "evidence_validity",
+            "impact_scope",
+        } & set(unavailable_signals):
+            return RuntimePosture.FREEZE
+        return RuntimePosture.THROTTLE
 
     def _posture(
         self,
@@ -530,10 +587,13 @@ class RecoverabilityEngine:
 
     @staticmethod
     def _controls(action: RecoverabilityAction, posture: RuntimePosture, scores: Dict[str, float]) -> List[str]:
+        unavailable_signals = action.unavailable_recoverability_signals()
         if posture == RuntimePosture.ALLOW:
             return ["execute", "record_replay", "retain_cancel_handle"]
         if posture == RuntimePosture.THROTTLE:
             controls = ["limit_scope", "preview_before_execution", "record_replay"]
+            if unavailable_signals:
+                controls.append("collect_unavailable_recoverability_evidence")
             if action.rollback_latency >= 0.45:
                 controls.append("require_rollback_plan")
             if action.external_side_effect:
@@ -542,7 +602,10 @@ class RecoverabilityEngine:
                 controls.append("checkpoint_before_execution")
             return controls
         if posture == RuntimePosture.FREEZE:
-            return ["pause_execution", "collect_more_evidence", "snapshot_current_state", "preserve_replay"]
+            controls = ["pause_execution", "collect_more_evidence", "snapshot_current_state", "preserve_replay"]
+            if unavailable_signals:
+                controls.append("treat_unavailable_recoverability_as_uncertainty")
+            return controls
         if posture == RuntimePosture.DENY:
             return ["block_execution", "explain_denial", "preserve_replay", "require_new_request"]
         return ["route_to_accountable_reviewer", "require_explicit_approval", "preserve_replay", "document_override_if_approved"]

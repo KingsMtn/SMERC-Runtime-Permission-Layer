@@ -1,31 +1,35 @@
 # OpenSSF Issue #50 Response Draft
 
-Thanks. This is useful and I agree with the direction.
+Thanks. This is useful feedback, especially the point about unavailable inputs. I agree that recoverability should not be bundled into one opaque score or used to rescue weak authority.
 
-My current view is that recoverability should not replace hard pre-execution gates. The runtime order should be:
+I am now thinking about the order as separate layers:
 
 ```text
-scoped authority / typed contract / attestation / least privilege / expected object shape
--> recoverability-aware SMERC posture
+static action / tool classification
+-> scoped authority / typed contract / attestation / least privilege / expected object shape
+-> runtime evidence and recoverability checks
+-> posture
 -> SPARTa route / controls
--> replayable decision evidence
+-> replayable lifecycle evidence
 ```
 
-I added a Ref-gated runtime proof loop to make that boundary explicit. The Ref gate is mechanical: typed contract valid, attestation valid, least privilege confirmed, and object shape expected. If that gate fails, SMERC scoring is capped and the action is forced toward hold/block/review behavior rather than allowing recoverability to justify normal execution.
+Your comment also exposed a concrete failure mode worth testing: unavailable evidence should not quietly become `ALLOW`.
 
-The useful framing I take from your comment is:
+I added explicit examples and tests for that:
 
-- no recoverability scoring should rescue bad authority or bad shape
-- the Ref should not be an AI agent
-- scoped access and typed endpoints belong before governance scoring
-- SMERC should govern runtime posture after mechanical evidence is admitted
+- a low-impact action with a missing recoverability signal is capped from `ALLOW` to `THROTTLE`
+- a production/external-side-effect action with missing rollback/evidence validity is capped from `ALLOW` to `FREEZE`
+- the engine records `RECOVERABILITY_EVIDENCE_UNAVAILABLE` and signal-specific reason codes such as `ROLLBACK_LATENCY_UNAVAILABLE`
 
-The current proof loop is here:
+That keeps the rule explicit: missing recoverability evidence is uncertainty, not permission.
 
-https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Ref_Gated_Runtime_Proof_Loop.md
+Relevant docs:
 
-And the generated report is here:
+- https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Runtime_Evidence_Trust_Gate.md
+- https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Ref_Gated_Runtime_Proof_Loop.md
 
-https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Ref_Gated_Runtime_Proof.md
+Tests:
 
-This is still pilot-grade and local. It does not claim complete endpoint type safety, prompt-injection defense, production MCP transport, or production certification. The goal is to show the order of operations clearly: hard gates first, scoring second, route/evidence third.
+- `tests/test_recoverability_engine.py`
+
+This is still pilot-grade and local. It does not claim production MCP enforcement, endpoint type safety, incident reduction, or compliance. The goal is narrower: make the boundary testable so missing rollback/recoverability evidence cannot be mistaken for permission to proceed.

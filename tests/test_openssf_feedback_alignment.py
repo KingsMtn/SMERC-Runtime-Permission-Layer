@@ -18,7 +18,9 @@ class OpenSSFFeedbackAlignmentTests(unittest.TestCase):
             "attested runtime evidence",
             "least-privilege boundary",
             "expected object-shape check",
-            "SMERC recoverability posture",
+            "static action/tool classification",
+            "SMERC posture",
+            "unavailable recoverability evidence is uncertainty, not permission",
         ]:
             self.assertIn(phrase, text)
 
@@ -27,12 +29,15 @@ class OpenSSFFeedbackAlignmentTests(unittest.TestCase):
 
         for phrase in [
             "reference_engine.ref_gated_runtime_proof",
+            "reference_engine.recoverability_engine",
             "reference_engine.customer_evaluation",
             "reference_engine.mcp_governance_gateway",
+            "examples/recoverability_action_requests.json",
             "examples/cloud_admin_customer_eval_actions.json",
             "This does not prove",
             "production MCP security",
             "reduction in customer incidents",
+            "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
         ]:
             self.assertIn(phrase, text)
 

@@ -85,11 +85,22 @@ This gate answers one of the most important critiques of the public build:
 
 The gate makes that rule operational.
 
+It also makes the fail-closed boundary explicit:
+
+> missing recoverability evidence is treated as uncertainty, not permission.
+
 If metadata is fresh, signed, authenticated, and independently observed, SMERC can use it for normal shadow-mode decision evidence.
 
 If metadata is mixed, SMERC can still produce a constrained recommendation but should cap the posture below unrestricted `ALLOW`.
 
 If high-impact fields are self-reported by the agent, SMERC should freeze, deny, or require replacement evidence from a proxy, adapter, OIDC claim, audit event, ticket, or reviewer.
+
+If a recoverability signal is unavailable rather than merely low, the core engine records `RECOVERABILITY_EVIDENCE_UNAVAILABLE` and caps an otherwise releasable decision:
+
+- low-impact actions move from `ALLOW` to `THROTTLE`
+- high-impact or externally side-effecting actions move from `ALLOW` to `FREEZE`
+
+This keeps unknown rollback, reversibility, evidence validity, blast radius, containment, or cancellation data from silently resolving to normal execution.
 
 ## Evidence Boundary
 
@@ -98,4 +109,3 @@ This is a pilot-grade metadata trust screen. It does not prove action safety, pr
 Its job is narrower and commercially important:
 
 > prevent SMERC from becoming dependent on untrusted agent-supplied context.
-

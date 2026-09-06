@@ -10,6 +10,10 @@ The key correction is simple:
 
 SMERC should evaluate recoverability only after basic execution facts are mechanically admitted.
 
+A second correction from the same thread is now treated as an engine invariant:
+
+> unavailable recoverability evidence is uncertainty, not permission.
+
 ## What Changed
 
 Before the feedback, SMERC already emphasized recoverability-aware runtime posture. The risk was that reviewers could read the system as:
@@ -28,7 +32,9 @@ identity and scoped workload session
 -> attested runtime evidence
 -> least-privilege boundary
 -> expected object-shape check
--> SMERC recoverability posture
+-> static action/tool classification
+-> runtime evidence and recoverability checks
+-> SMERC posture
 -> execution routing and controls
 -> Decision Lifecycle Ledger evidence
 ```
@@ -46,12 +52,16 @@ The current reference checks are:
 
 If one of those checks fails, the action is capped or rejected before recoverability can justify normal execution.
 
+After admission, the recoverability engine also records unavailable runtime signals explicitly. Missing rollback, reversibility, evidence-validity, blast-radius, containment, or cancellation evidence cannot silently resolve to `ALLOW`.
+
 That means:
 
 - a reversible action can still be denied if authority is wrong
 - a low-risk action can still be held if the object shape is unexpected
 - a confident agent can still be blocked if attestation is missing
 - a recoverable action can still require review when least privilege is not proven
+- a low-impact action with missing recoverability evidence is constrained instead of released
+- a high-impact or externally side-effecting action with missing rollback/evidence validity is frozen instead of released
 
 ## Where This Exists In The Repository
 
@@ -59,6 +69,7 @@ Implemented or demonstrated artifacts:
 
 - `reference_engine.ref_gated_runtime_proof`
 - `reference_engine.runtime_admission_gate`
+- `reference_engine.recoverability_engine`
 - `reference_engine.customer_evaluation`
 - `reference_engine.mcp_governance_gateway`
 - `docs/Ref_Gated_Runtime_Proof_Loop.md`
@@ -66,6 +77,7 @@ Implemented or demonstrated artifacts:
 - `docs/Runtime_Evidence_Trust_Gate.md`
 - `docs/Runtime_Admission_Gate.md`
 - `examples/customer_eval_actions.json`
+- `examples/recoverability_action_requests.json`
 - `examples/cloud_admin_customer_eval_actions.json`
 - `examples/smerc_f_customer_eval_actions.json`
 
@@ -94,8 +106,10 @@ This does not prove:
 
 It proves a clearer runtime design boundary in the public reference implementation: hard mechanical evidence gates first, recoverability scoring second, route and audit evidence third.
 
+It also proves the narrower fail-closed behavior reviewers asked about: unavailable recoverability signals generate `RECOVERABILITY_EVIDENCE_UNAVAILABLE` reason codes and cap release behavior.
+
 ## Recommended Reviewer Question
 
 The next useful external review question is:
 
-> Are typed endpoint contracts, state-transition evidence, and pre-execution object-shape checks useful security guidance for AI-agent and MCP tool calls before recoverability scoring is added?
+> Does the split between static tool/action classification, hard admission gates, and runtime recoverability evidence match how this working group would expect agent/tool governance controls to be structured?

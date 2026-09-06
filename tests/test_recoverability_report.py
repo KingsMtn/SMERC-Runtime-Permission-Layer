@@ -16,9 +16,12 @@ class RecoverabilityReportTests(unittest.TestCase):
         records = evaluate_batch(load_actions(EXAMPLES))
         summary = summarize(records)
         report = markdown(records, summary)
-        self.assertEqual(summary["total_actions"], 5)
+        self.assertEqual(summary["total_actions"], 7)
         self.assertIn("# SMERC Recoverability Engine Report", report)
         self.assertIn("AGENT_EXPORT_CUSTOMER_DATA", report)
+        self.assertIn("AGENT_PROD_DEPLOY_MISSING_ROLLBACK_EVIDENCE", report)
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", report)
+        self.assertIn("Missing recoverability evidence is treated as uncertainty, not permission", report)
 
     def test_write_bundle_outputs_json_and_markdown(self):
         TEST_DIR.mkdir(exist_ok=True)
