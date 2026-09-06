@@ -51,6 +51,8 @@ Create a small registry of external source profiles:
 
 This gives reviewers a clear answer before any external row is ingested.
 
+The first implemented source-specific replay is `docs/Agent_Security_Benchmark_Replay.md`.
+
 ### 2. Metadata-Only Normalizers
 
 Build source-specific normalizers that output `smerc.customer-evaluation.v1` actions or MCP Governance Gateway inputs.
@@ -101,4 +103,3 @@ Impact: SMERC becomes easier to evaluate as a serious pre-execution recoverabili
 This map is not benchmark certification, customer validation, production readiness, incident-reduction evidence, or proof that a named company needs SMERC.
 
 It is an evidence roadmap. Named public datasets should be replayed only when license-compatible, versioned, and reported with clear inclusion criteria.
-

@@ -100,3 +100,5 @@ SMERC should prioritize these source families:
 - Blackstable for public stablecoin freeze/unfreeze financial-action evidence
 
 See `docs/Runtime_Data_Source_Map.md`.
+
+The first source-specific external replay is `docs/Agent_Security_Benchmark_Replay.md`, which maps Agent Security Benchmark-shaped tool-use attack metadata into SMERC without committing raw upstream prompts or claiming an official benchmark score.

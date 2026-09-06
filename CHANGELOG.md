@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an Agent Security Benchmark replay normalizer, metadata-only example set, documentation, and report path for testing SMERC against external AI-agent tool-use attack categories without claiming an official upstream score.
 - Added a Runtime Data Source Map identifying current external agent, MCP, trace, long-horizon tool-use, and stablecoin datasets that can strengthen SMERC proof while preserving license and evidence boundaries.
 - Updated public-facing naming so the execution-routing layer leads with `Governance Routing Workbench` before the internal SPARTa name.
 - Clarified SPARTa as a governance orchestration workbench with staged admission, action classification, recoverability scoring, route cards, adapter routing, and Decision Lifecycle Ledger handoff.
