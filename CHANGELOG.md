@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Clarified SPARTa as a governance orchestration workbench with staged admission, action classification, recoverability scoring, route cards, adapter routing, and Decision Lifecycle Ledger handoff.
 - Added a one-command Customer Proof Loop that runs runtime admission, recoverability scoring, SPARTa routing, Decision Lifecycle Ledger evidence, generated reports, and pass/fail checks for customer review.
 - Added authenticated `/v1/admission/evaluate` API support, SDK helpers, OpenAPI coverage, and a curl-ready admission example so pilots can test hard gates before recoverability scoring.
 - Added a reusable Runtime Admission Gate module and tests so hard identity, scope, permit, typed-contract, attestation, least-privilege, object-shape, and evidence checks can reject or escalate requests before recoverability scoring.

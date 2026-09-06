@@ -4,6 +4,8 @@
 
 SPARTa, short for **Stateful Posture-Aware Routing and Tooling Adapter**, turns a SMERC decision into a practical execution route.
 
+Operationally, SPARTa is SMERC's **governance orchestration workbench**. It does not scan networks or replace execution tools. It organizes the action, posture, adapter, required controls, unavailable controls, and evidence into one route card that a platform team can execute, hold, review, or replay.
+
 Before this layer, SMERC could say `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`. SPARTa answers the next operational question:
 
 > Given that posture, what should the execution system do with this specific tool plan?
@@ -23,6 +25,39 @@ Example:
 5. If the plan cannot enforce the constraints, SPARTa returns `REVIEW_REQUIRED`.
 
 This makes the difference between a policy opinion and an executable governance route.
+
+## Workbench Pattern
+
+SPARTa borrows the useful operating pattern from security workbenches: centralize the task, the available tools, the selected route, and the evidence trail so the operator does not have to assemble context manually.
+
+For SMERC, the staged workbench flow is:
+
+1. **Admit facts** from identity, permit, typed contract, attestation, least privilege, expected object shape, and evidence freshness checks.
+2. **Classify action and tool** separately from recoverability so static risk labels do not become hidden permission.
+3. **Score recoverability** using rollback, containment, blast radius, cancellation, latency, evidence validity, and confidence signals.
+4. **Route posture** through the SPARTa adapter registry into `EXECUTE`, `CONSTRAINED_EXECUTE`, `PAUSE`, `BLOCK`, `REVIEW_REQUIRED`, or `BLOCKED_ESCALATION_UNAVAILABLE`.
+5. **Execute or hold** through the declared adapter only when the route state permits it.
+6. **Record DLL evidence** so the Decision Lifecycle Ledger can compare recommended controls with observed controls after the route.
+
+The route card should keep these fields visible together:
+
+- request identity
+- source posture
+- route state
+- adapter and tool plan
+- required controls
+- applied controls
+- blocked or unavailable controls
+- missing recoverability evidence
+- execution state
+- produced evidence and ledger handoff
+- recommended next action
+
+This is the point of SPARTa: turn a judgment into operational routing that can be inspected and replayed.
+
+## Boundary From Network SPARTA
+
+This SPARTa is not a network scanning tool and is not connected to the older SPARTA or Legion network security projects. The useful lesson is the workbench model: make expert workflow faster by centralizing task context, tool capability, staged execution, output, and replay evidence.
 
 ## Local Run
 

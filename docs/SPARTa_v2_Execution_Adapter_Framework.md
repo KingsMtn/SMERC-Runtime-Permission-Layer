@@ -6,6 +6,8 @@ SPARTa means **Stateful Posture-Aware Routing and Tooling Adapter**.
 
 SMERC decides whether an action is structurally defensible. SPARTa determines how the execution environment should respond.
 
+SPARTa is the governance orchestration workbench between a posture decision and a real tool. It should make the route visible as a route card: what action was requested, which adapter can handle it, which controls are required, which controls are unavailable, whether the route may execute, and what evidence must return to the Decision Lifecycle Ledger.
+
 In product terms:
 
 ```text
@@ -13,6 +15,20 @@ agent proposes action -> SMERC scores posture -> SPARTa routes tool behavior -> 
 ```
 
 SPARTa v1 proves the core routing idea. SPARTa v2 should make the adapter layer explicit enough for real integrations.
+
+## Design Influence Boundary
+
+The SPARTa name here refers to SMERC's Stateful Posture-Aware Routing and Tooling Adapter. It is not a network scanning tool and is not connected to network-security SPARTA or Legion.
+
+The useful lesson from those workbench-style tools is the operating pattern:
+
+- centralize the task context
+- expose what tools and adapters can actually do
+- move through staged execution instead of one opaque action
+- preserve output and evidence automatically
+- make custom adapter registration predictable
+
+For SMERC, that translates into a recoverability-aware route workbench, not a pentest scanner.
 
 ## Machine Vocabulary
 
@@ -59,6 +75,11 @@ The goal is to provide one consistent contract:
 
 Every SPARTa adapter should follow this lifecycle:
 
+0. **Admit Facts**
+   - bind the action to identity, authority, typed contract, attestation, least privilege, expected object shape, and evidence freshness
+   - reject or escalate hard-gate failures before recoverability scoring is treated as execution support
+   - record unavailable evidence as uncertainty rather than permission
+
 1. **Declare**
    - tool identity
    - supported actions
@@ -99,6 +120,26 @@ Every SPARTa adapter should follow this lifecycle:
 7. **Return To Ledger**
    - append execution and control evidence to the Decision Lifecycle Ledger
    - preserve outcome and learning recommendations separately from active policy
+
+## Route Card Contract
+
+Every serious adapter should be able to show a compact route card for operator review and machine replay:
+
+- request identity and action family
+- static action and tool classification
+- source posture and reason codes
+- adapter ID and declared tool plan
+- route state and executable true/false
+- required controls from SMERC
+- applied controls the adapter can enforce
+- blocked or unavailable controls
+- missing recoverability evidence
+- execution or hold state
+- control-evidence receipt
+- ledger append status
+- recommended next action
+
+The route card is not marketing copy. It is the operational object that lets a reviewer see whether SPARTa converted SMERC's judgment into executable controls, a pause, a block, or accountable review.
 
 ## Standard Adapter Types
 
