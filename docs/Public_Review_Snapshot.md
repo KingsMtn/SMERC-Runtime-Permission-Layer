@@ -34,10 +34,10 @@ The repository contains working product artifacts, not only concept documents:
 - GitHub Actions shadow-mode integration
 - action-bound permits
 - Recovery Authority Gate for governed unlock after `FREEZE`, `ESCALATE`, or `DENY`
-- complete lifecycle proof connecting admission, recoverability scoring, SPARTa, Recovery Authority Gate, permit verification, synthetic execution, and DLL evidence
+- complete lifecycle proof connecting admission, recoverability scoring, Governance Routing Workbench / SPARTa, Recovery Authority Gate, permit verification, synthetic execution, and DLL evidence
 - signed control evidence
 - GitHub deployment adapter with cancellation, rollback attempt, and non-secret execution reports
-- SPARTa posture-aware routing
+- Governance Routing Workbench / SPARTa posture-aware routing
 - control mapping library
 - governance report generator
 - Decision Lifecycle Ledger

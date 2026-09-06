@@ -222,7 +222,7 @@ Secondary technical category:
 
 > Recoverability-aware runtime permission infrastructure.
 
-Internal names come after the flow is understood: signal and evidence intake, recoverability decision, execution routing and controls, and decision lifecycle evidence. In the reference implementation those layers are called SPARK, SMERC, SPARTa, and DLL. See `docs/Public_Language_And_Naming.md`.
+Internal names come after the flow is understood: signal and evidence intake, recoverability decision, Governance Routing Workbench, and decision lifecycle evidence. In the reference implementation those layers are called SPARK, SMERC, SPARTa, and DLL. See `docs/Public_Language_And_Naming.md`.
 
 ## What Exists Now
 
@@ -235,7 +235,7 @@ The current build includes:
 - agent identity gate that checks actor authority, tool-family permission, autonomy level, credential scope, and recent behavior before action execution
 - signed, action-bound, single-use authorization permits
 - signed, action-bound control-evidence receipts for configured execution adapters
-- execution-routing layer that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes; internally this layer is called SPARTa
+- Governance Routing Workbench that converts SMERC decisions into executable, constrained, paused, blocked, or review-required tool routes; internally this layer is called SPARTa
 - machine-readable execution-routing vocabulary for lifecycle verbs, route states, control verbs, evidence events, and fail-closed adapter interpretation
 - execution adapter registry and authenticated API route endpoint for stored SMERC decisions
 - optional HMAC-signed route reports for pilot-grade tamper detection
@@ -441,8 +441,8 @@ Start here before reading the code:
 - `docs/AI_Assisted_Build_And_Red_Team_Strategy.md` explains how outside AI tools can help with engineering critique and agent simulation without replacing human validation.
 - `docs/Scoring_Invariants_And_Calibration.md` explains the declared scoring invariants, what passes today, and what still requires design-partner calibration.
 - `docs/Self_Governance_Sandbox.md` explains how proposed changes to SMERC itself are capped to test-only, reviewed, benchmarked, and recorded before activation.
-- `docs/SPARTa_Router_Operations.md` explains how SMERC postures become execution routes for declared tool plans.
-- `docs/SPARTa_v2_Execution_Adapter_Framework.md` explains how SPARTa can mature into the execution-adapter layer for GitHub Actions, ticketing, review, cloud, and financial workflows.
+- `docs/SPARTa_Router_Operations.md` explains how the Governance Routing Workbench turns SMERC postures into execution routes for declared tool plans.
+- `docs/SPARTa_v2_Execution_Adapter_Framework.md` explains how the Governance Routing Workbench, internally called SPARTa, can mature into the execution-adapter layer for GitHub Actions, ticketing, review, cloud, and financial workflows.
 - `specification/SMERC_SPARTa_Vocabulary_v1.md` defines the machine-readable `smerc.sparta-vocabulary.v1` terms that agents and adapters should use instead of inventing route meanings.
 - `docs/SPARTa_Adapter_Conformance.md` explains how the static adapter conformance harness checks declared SPARTa capabilities before pilot use.
 - `docs/GitHub_Deployment_Adapter_Operations.md` explains how a supplied SPARTa route artifact can be bound to a one-time permit before GitHub deployment execution.
@@ -713,7 +713,7 @@ The token is not exposed by the GitHub Action because it is a bearer capability.
 
 ## SPARTa Router
 
-`smerc.sparta-route.v1` turns a stored SMERC decision and a declared tool plan into a concrete route: execute, constrained execute, pause, block, require review, or block because escalation is unavailable. This is the first SPARTa component and sits between the decision engine and execution adapters.
+`smerc.sparta-route.v1` is the Governance Routing Workbench contract. It turns a stored SMERC decision and a declared tool plan into a concrete route: execute, constrained execute, pause, block, require review, or block because escalation is unavailable. This is the first SPARTa component and sits between the decision engine and execution adapters.
 
 ```bash
 python -m reference_engine.sparta_router \

@@ -37,7 +37,7 @@ The repository contains working product artifacts, not only concept documents:
 - Python and JavaScript SDK helpers
 - GitHub Actions observe-mode integration
 - GitHub deployment adapter with permit reservation, control evidence, timeout, cancellation, rollback, and non-secret reports
-- SPARTa posture-aware routing layer
+- Governance Routing Workbench, internally called SPARTa, for posture-aware routing
 - control mapping library
 - replayable governance report generator
 - synthetic/proxy benchmark and evidence reports

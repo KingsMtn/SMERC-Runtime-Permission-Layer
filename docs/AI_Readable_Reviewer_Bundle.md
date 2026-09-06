@@ -34,7 +34,7 @@ The repository contains working pilot-grade artifacts:
 - fallback policy layer
 - agent identity gate
 - model and agent fitness routing
-- SPARTa execution routing and control translation
+- Governance Routing Workbench, internally called SPARTa, for execution routing and control translation
 - Decision Lifecycle Ledger
 - DLL intelligence reports
 - Recovery Authority Gate for governed unlock after pause
@@ -67,7 +67,7 @@ Current evidence proves that SMERC can run metadata-only action examples through
 1. admit or reject the action facts
 2. score recoverability and risk
 3. return a posture and reason codes
-4. route controls through SPARTa
+4. route controls through the Governance Routing Workbench, internally called SPARTa
 5. evaluate who or what may safely unlock a paused action
 6. preserve Decision Lifecycle Ledger evidence
 7. generate reviewable reports
@@ -81,7 +81,7 @@ The public benchmark currently shows that SMERC creates middle-state governance 
 
 The public benchmark ingestion pack shows how public benchmark categories can be converted into SMERC's customer-evaluation contract while preserving the boundary that representative examples are not official upstream benchmark scores.
 
-The postcondition evidence report shows whether SPARTa-required controls were observed after routing, which helps separate "SMERC recommended a control" from "the adapter supplied evidence that the control happened."
+The postcondition evidence report shows whether Governance Routing Workbench controls, internally called SPARTa-required controls, were observed after routing. This helps separate "SMERC recommended a control" from "the adapter supplied evidence that the control happened."
 
 The serious report performance harness shows local p50, p95, and maximum timing for major proof paths while preserving the boundary that local report timing is not production SLA evidence.
 

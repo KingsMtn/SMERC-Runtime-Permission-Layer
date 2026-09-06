@@ -15,6 +15,7 @@ Use these phrases first:
 - MCP tool-call governance
 - GitHub Actions shadow-mode pilot
 - AI agent action governance
+- governance routing workbench
 - blast-radius reduction for automated actions
 - replayable decision evidence
 
@@ -33,7 +34,7 @@ Then name the reference layers:
 
 - SPARK is the signal and evidence intake path.
 - SMERC is the recoverability decision engine.
-- SPARTa is the execution-routing and control-translation path.
+- Governance Routing Workbench is the execution-routing and control-translation path; internally this layer is called SPARTa.
 - DLL is the Decision Lifecycle Ledger.
 
 ## Preferred One-Liner
@@ -76,7 +77,7 @@ Instead of:
 
 Use:
 
-> The execution-routing layer maps a posture into tool behavior. In the reference implementation, that layer is called SPARTa.
+> The Governance Routing Workbench maps a posture into tool behavior. In the reference implementation, that layer is called SPARTa.
 
 Instead of:
 
