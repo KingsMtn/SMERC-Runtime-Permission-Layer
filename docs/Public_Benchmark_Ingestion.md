@@ -102,3 +102,5 @@ SMERC should prioritize these source families:
 See `docs/Runtime_Data_Source_Map.md`.
 
 The first source-specific external replay is `docs/Agent_Security_Benchmark_Replay.md`, which maps Agent Security Benchmark-shaped tool-use attack metadata into SMERC without committing raw upstream prompts or claiming an official benchmark score.
+
+The first MCP adversarial metadata replay is `docs/MCP_Adversarial_Metadata_Replay.md`, which tests public MCP security pain points such as nested schema poisoning, server instructions injection, schema drift, dangerous arguments, encoded instruction evasion, and unavailable recoverability evidence without committing operational exploit content.

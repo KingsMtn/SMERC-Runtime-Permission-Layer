@@ -53,6 +53,8 @@ This gives reviewers a clear answer before any external row is ingested.
 
 The first implemented source-specific replay is `docs/Agent_Security_Benchmark_Replay.md`.
 
+The first implemented MCP adversarial replay is `docs/MCP_Adversarial_Metadata_Replay.md`, which converts public MCP security pain points into safe metadata-only records for tool metadata, schema, server-instruction, cache, argument, encoded-instruction, and missing-evidence failure shapes.
+
 ### 2. Metadata-Only Normalizers
 
 Build source-specific normalizers that output `smerc.customer-evaluation.v1` actions or MCP Governance Gateway inputs.

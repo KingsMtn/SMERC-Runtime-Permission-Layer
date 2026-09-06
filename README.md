@@ -256,6 +256,7 @@ The current build includes:
 - Cloud Admin Proof Pack that expands the cloud-admin sample into 24 scenarios with cloud-specific reason codes, Work / Result / Impact explanations, SPARTa route evidence, autonomy-budget impact, and DLL validity
 - Cloud Metadata Connector that converts read-only IAM, Terraform, CloudTrail-style, Kubernetes, DNS, and backup-policy export summaries into strict SMERC customer-evaluation metadata without live cloud credentials
 - Public Benchmark Ingestion Pack that maps representative public agent-governance, MCP-security, action-boundary, consequence, cloud, and financial benchmark shapes into SMERC customer-evaluation actions without claiming official benchmark scores
+- MCP Adversarial Metadata Replay Pack that tests tool-description poisoning, nested schema poisoning, server instructions injection, public cache poisoning, schema drift, dangerous arguments, encoded instruction evasion, and missing recoverability evidence
 - Serious Report Performance harness that measures local p50, p95, and maximum latency for major proof paths without making production SLA claims
 - repository-native Runtime Customer Evaluations GitHub Actions workflow that runs the general, cloud-admin, financial runtime, or company-template evaluation packs from the Actions tab and uploads review artifacts
 - Self-Service Pilot Connector that turns mixed GitHub Actions/action-language and MCP transport examples into a compact pilot-fit decision package
@@ -366,6 +367,7 @@ Start here before reading the code:
 - `docs/Public_Benchmark_Ingestion.md` shows how public agent-governance, MCP-security, action-boundary, consequence, cloud, and financial benchmark shapes can be translated into SMERC runtime-evaluation metadata without claiming official upstream benchmark scores.
 - `docs/Runtime_Data_Source_Map.md` identifies current external runtime data sources SMERC should use next, including Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, and Blackstable, with license and evidence boundaries.
 - `docs/Agent_Security_Benchmark_Replay.md` maps Agent Security Benchmark-shaped tool-use attack metadata into SMERC posture, Governance Routing Workbench route behavior, autonomy-budget impact, and DLL evidence without claiming an official upstream score.
+- `docs/MCP_Adversarial_Metadata_Replay.md` maps public MCP security pain points into safe metadata-only replay records so reviewers can test whether SMERC treats untrusted metadata, schema drift, dangerous arguments, encoded instructions, and missing evidence as pre-execution risk.
 - `docs/Postcondition_Evidence.md` shows how to verify whether SPARTa-required controls actually happened after a route decision.
 - `docs/Serious_Report_Performance.md` shows how to measure local p50, p95, and maximum latency for serious proof paths while preserving the boundary that local report timing is not production SLA evidence.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.
@@ -1205,6 +1207,14 @@ python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_
 The Public Benchmark Ingestion Pack maps representative public benchmark-shaped examples into SMERC's customer-evaluation contract, then reports posture counts, SPARTa routes, Decision Lifecycle Ledger validity, and baseline-versus-SMERC deltas. It is adapter-ready proof for public governance benchmark categories; it is not an official score for any upstream benchmark until license-compatible datasets and documented runners are used.
 
 `docs/Runtime_Data_Source_Map.md` tracks the strongest named public runtime data sources to use next: Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, and Blackstable. The purpose is to move from representative examples toward license-compatible external replay while preserving source versions, skipped-row reasons, performance metrics, and non-claims.
+
+Run the MCP Adversarial Metadata Replay Pack:
+
+```bash
+python -m reference_engine.mcp_adversarial_metadata_replay examples/mcp_adversarial_metadata.json --pretty
+```
+
+The MCP Adversarial Metadata Replay Pack maps public MCP security pain points into safe metadata-only action records. It tests whether SMERC fails closed around untrusted tool metadata, nested schema instructions, server instructions, public cache poisoning, schema drift after approval, dangerous arguments on approved tools, encoded instruction evasion, and unavailable recoverability evidence.
 
 Run the Postcondition Evidence report:
 
