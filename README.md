@@ -25,6 +25,7 @@ Fast reviewer paths:
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
+- Balanced runtime judgment replay: `docs/Balanced_Runtime_Judgment_Replay.md`
 - Skeptical competitive review: `docs/External_Signal_And_Competitive_Review.md`
 - Market signal to proof map: `docs/Market_Signal_To_Proof_Map.md`
 - Accelerator/adjacent company map: `docs/Accelerator_And_Adjacent_Company_Map.md`
@@ -104,6 +105,20 @@ Work: realistic metadata-only action scenarios.
 Result: SMERC posture distribution and decision differences versus simple allow/deny.
 
 Impact: reviewers can see whether recoverability creates useful middle states before a company shares private data or grants execution authority.
+
+## Balanced Runtime Judgment Replay
+
+Run the balanced posture replay when a reviewer asks whether SMERC only blocks actions or can distinguish the right level of control:
+
+```bash
+python -m reference_engine.balanced_runtime_judgment_replay examples/balanced_runtime_judgment_actions.json --pretty
+```
+
+Work: five metadata-only actions exercise safe, bounded, uncertain, harmful, and urgent action patterns.
+
+Result: SMERC returns one `ALLOW`, one `THROTTLE`, one `FREEZE`, one `DENY`, and one `ESCALATE`, with Governance Routing Workbench routes and valid Decision Lifecycle Ledger evidence.
+
+Impact: reviewers can see SMERC as a judgment layer for recoverability-aware action control, not a single hard-stop firewall.
 
 ## Start Here: Self-Service Company Evaluation
 

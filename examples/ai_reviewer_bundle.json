@@ -41,6 +41,7 @@
     "runtime data source map for selecting Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, or Blackstable as the next public-data replay source",
     "Agent Security Benchmark replay for metadata-only AI-agent tool-use attack categories",
     "MCP Adversarial Metadata Replay Pack for tool metadata, nested schema, server-instruction, cache, schema-drift, dangerous-argument, encoded-instruction, and missing-evidence failure shapes",
+    "Balanced Runtime Judgment Replay proving ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE behavior on metadata-only examples",
     "serious report performance evidence for local p50, p95, and maximum proof-path latency",
     "financial runtime evaluation profile",
     "financial runtime reason-code replay",
@@ -70,6 +71,8 @@
     "runtime_data_source_map": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Runtime_Data_Source_Map.md",
     "agent_security_benchmark_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Agent_Security_Benchmark_Replay.md",
     "mcp_adversarial_metadata_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/MCP_Adversarial_Metadata_Replay.md",
+    "balanced_runtime_judgment_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Balanced_Runtime_Judgment_Replay.md",
+    "balanced_runtime_judgment_replay_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Balanced_Runtime_Judgment_Replay_Report.md",
     "public_benchmark_ingestion_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Public_Benchmark_Ingestion_Report.md",
     "serious_report_performance": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Serious_Report_Performance.md",
     "serious_report_performance_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Serious_Report_Performance.md",
@@ -133,42 +136,48 @@
     },
     {
       "step": 9,
+      "name": "Run the balanced runtime judgment replay",
+      "command": "python -m reference_engine.balanced_runtime_judgment_replay examples/balanced_runtime_judgment_actions.json --pretty",
+      "result": "Reviewer sees one ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE result with Governance Routing Workbench routes and Decision Lifecycle Ledger evidence."
+    },
+    {
+      "step": 10,
       "name": "Run the serious report performance harness",
       "command": "python -m reference_engine.serious_report_performance --iterations 5 --pretty",
       "result": "Reviewer sees local proof-path p50, p95, and maximum timing for serious reports without treating local timing as production SLA evidence."
     },
     {
-      "step": 10,
+      "step": 11,
       "name": "Generate the customer-owned metadata request",
       "command": "python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty",
       "result": "Reviewer receives a safe ask for replacing public examples with 5 to 25 metadata-only actions from one real workflow."
     },
     {
-      "step": 11,
+      "step": 12,
       "name": "Run the pilot-in-a-box path",
       "command": "python -m reference_engine.pilot_in_a_box --pretty",
       "result": "Reviewer receives a local proof package across general AI-agent, cloud-admin, financial-runtime, and single-action examples."
     },
     {
-      "step": 12,
+      "step": 13,
       "name": "Assess the external reviewer metadata response",
       "command": "python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty",
       "result": "Reviewer-supplied metadata is classified as ready, limited, or unsafe before being treated as pilot evidence."
     },
     {
-      "step": 13,
+      "step": 14,
       "name": "Replace examples with 5 to 25 safe company-owned metadata records",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/customer_eval/README.md",
       "result": "Reviewer can test whether SMERC changes judgment on actions that resemble their own workflows without sharing secrets or production authority."
     },
     {
-      "step": 14,
+      "step": 15,
       "name": "Run the Financial Runtime evaluation when the workflow is financial",
       "command": "python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty",
       "result": "Financial-services reviewers can test metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions with the full proof package."
     },
     {
-      "step": 15,
+      "step": 16,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."
