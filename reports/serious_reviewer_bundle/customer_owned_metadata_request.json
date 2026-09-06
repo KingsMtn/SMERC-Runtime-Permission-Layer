@@ -1,9 +1,9 @@
 {
   "acceptable_action_types": [
-    "payment retry or refund action",
-    "treasury or liquidity movement",
-    "stablecoin or tokenized-collateral action",
-    "wallet-policy, transaction-limit, or reserve-status action"
+    "AI-assisted code or deployment action",
+    "MCP tool call",
+    "support automation action",
+    "security-response automation action"
   ],
   "commands": {
     "general_customer_evaluation": "python -m reference_engine.customer_evaluation customer_working/customer_actions.json --json-output reports/customer_working/customer_evaluation_report.json --markdown-output reports/customer_working/Customer_Evaluation_Report.md --pretty",
@@ -18,9 +18,9 @@
     "production logs, incident details, account numbers, or confidential infrastructure diagrams",
     "live credentials or authorization to execute production actions"
   ],
-  "generated_at": "2026-08-31T01:25:29+00:00",
-  "request": "Please replace the public examples with 12 metadata-only actions from one financial workflow family.",
-  "requested_action_count": 12,
+  "generated_at": "2026-09-06T22:24:17+00:00",
+  "request": "Please replace the public examples with 10 metadata-only actions from one general workflow family.",
+  "requested_action_count": 10,
   "required_fields": [
     "action_id",
     "action_description",
@@ -56,5 +56,5 @@
     "result": "SMERC can compare customer-owned action metadata against its public examples, posture logic, SPARTa routes, postcondition evidence expectations, and local performance metrics.",
     "work": "Ask an external reviewer to supply safe metadata-only actions from one real workflow."
   },
-  "workflow_family": "financial"
+  "workflow_family": "general"
 }

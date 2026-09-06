@@ -142,7 +142,7 @@ For the shortest complete reviewer package, run:
 python -m reference_engine.serious_reviewer_bundle --workflow-family general --requested-actions 10 --pretty
 ```
 
-This writes `reports/serious_reviewer_bundle/Serious_Reviewer_Bundle.md` plus the customer evaluation, postcondition evidence, performance, customer-owned metadata request, and external reviewer response assessment reports. See `docs/Serious_Reviewer_Bundle.md`.
+This writes `reports/serious_reviewer_bundle/Serious_Reviewer_Bundle.md` plus the customer evaluation, postcondition evidence, performance, balanced runtime judgment, customer-owned metadata request, and external reviewer response assessment reports. See `docs/Serious_Reviewer_Bundle.md`.
 
 Financial-services reviewers should use the Financial Runtime path, internally called SMERC-F:
 

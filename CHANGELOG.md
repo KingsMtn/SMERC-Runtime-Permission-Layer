@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Added a Balanced Runtime Judgment Replay proving one `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, and `ESCALATE` result on metadata-only examples with Governance Routing Workbench routes and valid Decision Lifecycle Ledger evidence.
+- Added the Balanced Runtime Judgment Replay to the Serious Reviewer Bundle so the one-command company review path now includes posture-ladder proof.
 - Added an MCP Adversarial Metadata Replay Pack for safe metadata-only testing of MCP tool-description poisoning, nested schema poisoning, server instructions injection, cache poisoning, schema drift, dangerous arguments, encoded instruction evasion, and missing recoverability evidence.
 - Added an Agent Security Benchmark replay normalizer, metadata-only example set, documentation, and report path for testing SMERC against external AI-agent tool-use attack categories without claiming an official upstream score.
 - Added a Runtime Data Source Map identifying current external agent, MCP, trace, long-horizon tool-use, and stablecoin datasets that can strengthen SMERC proof while preserving license and evidence boundaries.

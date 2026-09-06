@@ -30,6 +30,7 @@ reports/serious_reviewer_bundle/serious_reviewer_bundle.json
 reports/serious_reviewer_bundle/Customer_Evaluation_Report.md
 reports/serious_reviewer_bundle/Postcondition_Evidence_Report.md
 reports/serious_reviewer_bundle/Serious_Report_Performance.md
+reports/serious_reviewer_bundle/Balanced_Runtime_Judgment_Replay_Report.md
 reports/serious_reviewer_bundle/Customer_Owned_Metadata_Request.md
 reports/serious_reviewer_bundle/External_Reviewer_Metadata_Response_Assessment.md
 ```
@@ -39,15 +40,16 @@ reports/serious_reviewer_bundle/External_Reviewer_Metadata_Response_Assessment.m
 - Customer evaluation for one workflow family: general, cloud, or financial.
 - Postcondition evidence comparing SPARTa-required controls with observed control and execution evidence.
 - Serious report performance metrics for local p50, p95, and maximum proof-path timing.
+- Balanced runtime judgment replay showing one `ALLOW`, one `THROTTLE`, one `FREEZE`, one `DENY`, and one `ESCALATE` result.
 - Customer-owned metadata request for 5 to 25 safe action examples.
 - External reviewer metadata response assessment.
 - A bundle readiness status and recommended next action.
 
 ## Work / Result / Impact
 
-Work: assemble customer evaluation, postcondition evidence, performance metrics, metadata request, and reviewer-response assessment into one local package.
+Work: assemble customer evaluation, postcondition evidence, performance metrics, balanced runtime judgment, metadata request, and reviewer-response assessment into one local package.
 
-Result: the reviewer receives one report that summarizes pilot fit, postcondition gaps or violations, local p95 timing, metadata safety, and next action.
+Result: the reviewer receives one report that summarizes pilot fit, postcondition gaps or violations, local p95 timing, posture-ladder behavior, metadata safety, and next action.
 
 Impact: SMERC becomes easier for a real company to test without founder-led explanation or unsafe data sharing.
 

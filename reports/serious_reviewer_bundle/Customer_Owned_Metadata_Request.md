@@ -1,20 +1,20 @@
 # Customer-Owned Metadata Request
 
-Generated: `2026-08-31T01:25:29+00:00`
+Generated: `2026-09-06T22:24:17+00:00`
 Version: `smerc.customer-owned-metadata-request.v1`
-Workflow family: `financial`
-Requested actions: `12`
+Workflow family: `general`
+Requested actions: `10`
 
 ## Request
 
-Please replace the public examples with 12 metadata-only actions from one financial workflow family.
+Please replace the public examples with 10 metadata-only actions from one general workflow family.
 
 ## Acceptable Action Types
 
-- payment retry or refund action
-- treasury or liquidity movement
-- stablecoin or tokenized-collateral action
-- wallet-policy, transaction-limit, or reserve-status action
+- AI-assisted code or deployment action
+- MCP tool call
+- support automation action
+- security-response automation action
 
 ## Required Metadata Fields
 

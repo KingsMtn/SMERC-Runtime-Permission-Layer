@@ -39,7 +39,7 @@ The repository contains working pilot-grade artifacts:
 - DLL intelligence reports
 - Recovery Authority Gate for governed unlock after pause
 - complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence
-- serious reviewer bundle that assembles customer evaluation, postcondition evidence, performance metrics, metadata request, and response assessment in one command
+- serious reviewer bundle that assembles customer evaluation, postcondition evidence, performance metrics, balanced runtime judgment, metadata request, and response assessment in one command
 - postcondition evidence that checks whether required SPARTa controls were actually observed after routing
 - customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata
 - external reviewer metadata response assessment for deciding whether supplied metadata is ready, limited, or unsafe
@@ -79,7 +79,7 @@ Current evidence proves that SMERC can run metadata-only action examples through
 
 The complete lifecycle proof shows the connected product path: `ADMIT -> FREEZE -> PAUSE -> UNLOCK -> THROTTLE -> CONSTRAINED_EXECUTE -> permit verified -> execution succeeded -> ledger valid`.
 
-The serious reviewer bundle packages the current company-review path into one local run. It produces customer evaluation, postcondition evidence, performance, customer-owned metadata request, and external reviewer response assessment outputs together, so a reviewer does not need to assemble separate reports by hand.
+The serious reviewer bundle packages the current company-review path into one local run. It produces customer evaluation, postcondition evidence, performance, balanced runtime judgment, customer-owned metadata request, and external reviewer response assessment outputs together, so a reviewer does not need to assemble separate reports by hand.
 
 The public benchmark currently shows that SMERC creates middle-state governance behavior across MCP tool calls, coding agents, cloud administration, financial runtime actions, execution tickets, and security approval workflows.
 

@@ -28,8 +28,10 @@ class SeriousReviewerBundleTests(unittest.TestCase):
         self.assertIn("customer_evaluation", bundle["reports"])
         self.assertIn("postcondition_evidence", bundle["reports"])
         self.assertIn("performance", bundle["reports"])
+        self.assertIn("balanced_runtime_judgment", bundle["reports"])
         self.assertIn("customer_owned_metadata_request", bundle["reports"])
         self.assertIn("external_reviewer_metadata_response_assessment", bundle["reports"])
+        self.assertEqual(bundle["reports"]["balanced_runtime_judgment"]["delta_counts"], {"MATCH": 5})
         self.assertEqual(
             bundle["reports"]["external_reviewer_metadata_response_assessment"]["disposition"],
             "ready_for_customer_metadata_evaluation",
@@ -62,6 +64,7 @@ class SeriousReviewerBundleTests(unittest.TestCase):
         self.assertIn("Work / Result / Impact", markdown)
         self.assertIn("Included Reports", markdown)
         self.assertIn("Next Action", markdown)
+        self.assertIn("Balanced runtime judgment", markdown)
         self.assertIn("production SLA", markdown)
 
     def test_writes_bundle_outputs(self):
@@ -78,6 +81,7 @@ class SeriousReviewerBundleTests(unittest.TestCase):
         self.assertTrue((scratch / "Customer_Evaluation_Report.md").exists())
         self.assertTrue((scratch / "Postcondition_Evidence_Report.md").exists())
         self.assertTrue((scratch / "Serious_Report_Performance.md").exists())
+        self.assertTrue((scratch / "Balanced_Runtime_Judgment_Replay_Report.md").exists())
         self.assertTrue((scratch / "Customer_Owned_Metadata_Request.md").exists())
         self.assertTrue((scratch / "External_Reviewer_Metadata_Response_Assessment.md").exists())
 

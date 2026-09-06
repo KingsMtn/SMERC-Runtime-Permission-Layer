@@ -11,6 +11,10 @@ from reference_engine.customer_evaluation import (
     load_payload as load_customer_payload,
     render_markdown as render_customer_evaluation_markdown,
 )
+from reference_engine.balanced_runtime_judgment_replay import (
+    build_report as build_balanced_judgment_report,
+    render_markdown as render_balanced_judgment_markdown,
+)
 from reference_engine.customer_owned_metadata_request import (
     build_request_report,
     render_markdown as render_metadata_request_markdown,
@@ -61,6 +65,9 @@ def build_serious_reviewer_bundle(
         load_observations(base / "examples/postcondition_observations.json"),
     )
     performance = build_performance_report(root=base, iterations=performance_iterations)
+    balanced_judgment = build_balanced_judgment_report(
+        load_customer_payload(base / "examples/balanced_runtime_judgment_actions.json")
+    )
     metadata_request = build_request_report(
         workflow_family=workflow_family,
         requested_actions=requested_actions,
@@ -88,7 +95,8 @@ def build_serious_reviewer_bundle(
                 f"Generated a {workflow_family} reviewer bundle with customer evaluation fit "
                 f"`{customer_evaluation['pilot_fit']['fit']}`, postcondition counts "
                 f"`{postcondition_evidence['postcondition_status_counts']}`, slowest p95 "
-                f"`{performance['slowest_p95_ms']}` ms, and response disposition "
+                f"`{performance['slowest_p95_ms']}` ms, balanced judgment deltas "
+                f"`{balanced_judgment['delta_counts']}`, and response disposition "
                 f"`{response_assessment['disposition']}`."
             ),
             "impact": (
@@ -101,6 +109,7 @@ def build_serious_reviewer_bundle(
             "customer_evaluation": customer_evaluation,
             "postcondition_evidence": postcondition_evidence,
             "performance": performance,
+            "balanced_runtime_judgment": balanced_judgment,
             "customer_owned_metadata_request": metadata_request,
             "external_reviewer_metadata_response_assessment": response_assessment,
         },
@@ -163,6 +172,11 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
                 f"slowest_p95_ms=`{reports['performance']['slowest_p95_ms']}` |"
             ),
             (
+                f"| Balanced runtime judgment | postures="
+                f"`{reports['balanced_runtime_judgment']['smerc_posture_counts']}`, "
+                f"deltas=`{reports['balanced_runtime_judgment']['delta_counts']}` |"
+            ),
+            (
                 f"| Customer-owned metadata request | requested_actions="
                 f"`{reports['customer_owned_metadata_request']['requested_action_count']}` |"
             ),
@@ -204,6 +218,11 @@ def write_outputs(bundle: Mapping[str, Any], *, output_dir: str | Path) -> None:
     _write_json(out / "serious_report_performance.json", reports["performance"])
     (out / "Serious_Report_Performance.md").write_text(
         render_performance_markdown(reports["performance"]),
+        encoding="utf-8",
+    )
+    _write_json(out / "balanced_runtime_judgment_replay_report.json", reports["balanced_runtime_judgment"])
+    (out / "Balanced_Runtime_Judgment_Replay_Report.md").write_text(
+        render_balanced_judgment_markdown(reports["balanced_runtime_judgment"]),
         encoding="utf-8",
     )
     _write_json(out / "customer_owned_metadata_request.json", reports["customer_owned_metadata_request"])
@@ -263,6 +282,7 @@ def _readiness(
 
     takeaways = [
         "One command now assembles the core customer-review evidence path.",
+        "Balanced runtime judgment shows ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE behavior without requiring production access.",
         "Performance is included as local operational-overhead evidence, not a production SLA.",
         "Customer-owned metadata is requested without secrets, raw records, production logs, or live access.",
         "Postconditions show whether route controls were observed, missing, violated, or unobserved.",
