@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an AWS Cloud Action Replay Pack with AWS-style metadata-only AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost-velocity, Secrets Manager, and cross-account delegation examples, plus AWS reason codes and Work / Result / Impact reporting.
 - Replaced the repository MIT License with the SMERC Public Review License v1.0 and added `COMMERCIAL_USE.md` so public review remains available while production, hosted, embedded, resale, and revenue-generating use require a separate written agreement.
 - Added a Balanced Runtime Judgment Replay proving one `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, and `ESCALATE` result on metadata-only examples with Governance Routing Workbench routes and valid Decision Lifecycle Ledger evidence.
 - Added the Balanced Runtime Judgment Replay to the Serious Reviewer Bundle so the one-command company review path now includes posture-ladder proof.

@@ -59,6 +59,7 @@ The repository contains working pilot-grade artifacts:
 - serious report performance evidence for local p50, p95, and maximum proof-path latency
 - financial runtime evaluation profile
 - public scenario benchmark
+- AWS Cloud Action Replay Pack for AgentCore-style runtime/gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style capacity, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation
 - OpenAPI pilot contract
 - Python SDK
 - JavaScript SDK
@@ -127,7 +128,8 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 16. Run `python -m reference_engine.pilot_in_a_box --pretty`.
 17. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
 18. For financial-services review, run `python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty`.
-19. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+19. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
+20. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 
