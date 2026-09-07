@@ -1348,4 +1348,14 @@ SMERC should be adopted only if a controlled pilot produces evidence that the an
 
 ## License
 
-See `LICENSE`.
+SMERC is no longer distributed under the MIT License in this repository.
+
+The public repository is available for review, research, non-production
+evaluation, and metadata-only pilot testing under the `SMERC Public Review
+License v1.0` in `LICENSE`.
+
+Production deployment, commercial embedding, resale, hosted use,
+revenue-generating use, or integration into an enterprise product or workflow
+requires a separate written commercial license or agreement.
+
+See `COMMERCIAL_USE.md` for the plain-English commercial-use boundary.

@@ -79,6 +79,16 @@ python -m reference_engine.proxy_evidence_benchmark \
 - No secrets, private customer data, or private legal strategy are included.
 - Generated reports are reproducible from committed examples.
 
+## Contribution License
+
+By submitting an issue, pull request, scenario, benchmark observation, or other
+contribution, you agree that the project owner may use it to improve SMERC under
+the repository's current license and future commercial offerings unless a
+separate written agreement says otherwise.
+
+Do not submit customer-confidential data, production secrets, regulated
+payloads, or proprietary material you do not have permission to share.
+
 ## Security Issues
 
 Do not open public issues for sensitive vulnerabilities. Follow `SECURITY.md`.
