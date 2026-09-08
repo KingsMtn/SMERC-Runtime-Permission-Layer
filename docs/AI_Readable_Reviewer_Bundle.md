@@ -42,6 +42,7 @@ The repository contains working pilot-grade artifacts:
 - serious reviewer bundle that assembles customer evaluation, postcondition evidence, performance metrics, balanced runtime judgment, metadata request, and response assessment in one command
 - postcondition evidence that checks whether required SPARTa controls were actually observed after routing
 - customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata
+- AWS customer-owned metadata request mode for asking AWS-style platform reviewers for safe action summaries and postcondition observation summaries
 - external reviewer metadata response assessment for deciding whether supplied metadata is ready, limited, or unsafe
 - GitHub Actions pilot package
 - GitHub PR Guardian
@@ -97,6 +98,8 @@ The serious report performance harness shows local p50, p95, and maximum timing 
 
 The customer-owned metadata request gives reviewers a safe next ask: replace public examples with 5 to 25 metadata-only actions from one real workflow, then judge whether SMERC changes review behavior enough to justify shadow-mode testing.
 
+The AWS customer-owned metadata request narrows that ask to AWS-style platform review: 5 to 25 safe action summaries and matching postcondition observation summaries from one workflow, with no account IDs, ARNs, raw logs, credentials, production commands, or live AWS access.
+
 The external reviewer metadata response assessment prevents vague interest or unsafe data sharing from being treated as pilot proof.
 
 ## What It Does Not Prove
@@ -136,8 +139,9 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 19. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
 20. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
 21. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
-22. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
-23. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+22. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
+23. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
+24. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 

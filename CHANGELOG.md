@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an AWS customer-owned metadata request mode so AWS-style platform reviewers can supply safe action summaries and postcondition observation summaries without account IDs, ARNs, raw logs, credentials, production commands, or live AWS access.
 - Added AWS Postcondition Evidence for safe AWS-style observation metadata modeled on AgentCore Gateway CloudTrail data/management events, AgentCore CloudWatch logs/metrics/spans, one-second runtime usage logs, tool-result metadata streams, MCP gateway logs, and native AWS change records.
 - Added an AWS Metadata Intake Contract and non-executing adapter stub for safe AWS-style exported summaries, accepted/skipped row reporting, customer-evaluation normalization, and no-live-AWS review.
 - Added an AWS Deployable Bot Readiness Path defining the process for hardening SMERC toward an AWS-style governed action bot while preserving non-claim and commercial-use boundaries.

@@ -14,6 +14,17 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CustomerOwnedMetadataRequestTests(unittest.TestCase):
+    def test_builds_aws_request_with_aws_specific_commands_and_boundaries(self):
+        report = build_request_report(workflow_family="aws", requested_actions=12)
+
+        self.assertEqual(report["workflow_family"], "aws")
+        self.assertIn("AgentCore Runtime", " ".join(report["acceptable_action_types"]))
+        self.assertIn("aws_metadata_adapter", report["commands"])
+        self.assertIn("aws_postcondition_evidence", report["commands"])
+        self.assertIn("cloudtrail_data_event_expected", report["aws_recommended_fields"])
+        self.assertIn("AWS account IDs", " ".join(report["excluded_data"]))
+        self.assertIn("AWS shadow-mode pilot", " ".join(report["aws_reviewer_questions"]))
+
     def test_builds_financial_request_without_sensitive_data(self):
         report = build_request_report(workflow_family="financial", requested_actions=12)
 
@@ -37,6 +48,11 @@ class CustomerOwnedMetadataRequestTests(unittest.TestCase):
         self.assertIn("serious_report_performance", markdown)
         self.assertIn("Do Not Provide", markdown)
         self.assertIn("Reviewer Question", markdown)
+
+        aws_markdown = render_markdown(build_request_report(workflow_family="aws", requested_actions=12))
+        self.assertIn("AWS Recommended Metadata Fields", aws_markdown)
+        self.assertIn("aws_postcondition_evidence", aws_markdown)
+        self.assertIn("AWS Reviewer Questions", aws_markdown)
 
     def test_writes_outputs(self):
         scratch = ROOT / "tests" / "_tmp" / "customer_owned_metadata_request"

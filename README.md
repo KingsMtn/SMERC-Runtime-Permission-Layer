@@ -27,6 +27,7 @@ Fast reviewer paths:
 - AWS deployable bot path: `docs/AWS_Deployable_Bot_Readiness_Path.md`
 - AWS metadata adapter reviewer: `docs/AWS_Metadata_Intake_Contract.md`
 - AWS postcondition evidence: `docs/AWS_Postcondition_Evidence.md`
+- AWS customer-owned metadata request: `reports/AWS_Customer_Owned_Metadata_Request.md`
 - Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
 - Balanced runtime judgment replay: `docs/Balanced_Runtime_Judgment_Replay.md`
@@ -268,6 +269,7 @@ The current build includes:
 - deterministic ref-gate-style metadata checks for typed contract validity, attestation validity, least-privilege confirmation, and expected object shape before recoverability scoring is allowed to influence high-impact MCP tool calls
 - Customer Evaluation runner that accepts 5 to 25 metadata-only customer actions and returns Ref-gate results, SMERC postures, SPARTa routes, DLL evidence, autonomy budget impact, and a pilot-fit recommendation
 - Customer-Owned Metadata Request generator that gives external reviewers a safe ask for replacing public examples with 5 to 25 metadata-only actions from one real workflow
+- AWS customer-owned metadata request mode for asking AWS-style platform reviewers for safe action summaries and matching postcondition observation summaries without account IDs, ARNs, raw logs, credentials, production commands, or live AWS access
 - External Reviewer Metadata Response assessor that classifies reviewer-supplied metadata as ready, limited, or not ready before customer-specific evaluation
 - Financial Runtime Customer Evaluation pack, internally called SMERC-F, with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
 - SMERC-F External Financial Signal Adapter that normalizes AML/KYT-, wallet-screening-, fraud-, Travel Rule-, treasury-risk-, reserve-monitoring-, blockchain-analytics-, and smart-contract-risk-style outputs into recoverability scoring evidence without claiming to replace those systems

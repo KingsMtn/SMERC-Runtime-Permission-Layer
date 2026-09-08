@@ -73,6 +73,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `reports/Cloud_Metadata_Connector_Report.md`
 - `reports/Public_Benchmark_Ingestion_Report.md`
 - `reports/aws_postcondition_evidence/AWS_Postcondition_Evidence_Report.md`
+- `reports/AWS_Customer_Owned_Metadata_Request.md`
 - `reports/Serious_Report_Performance.md`
 - `reports/Customer_Owned_Metadata_Request.md`
 - `reports/External_Reviewer_Metadata_Response_Assessment.md`
