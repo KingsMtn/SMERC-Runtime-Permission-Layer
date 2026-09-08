@@ -52,6 +52,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `docs/GitHub_Actions_Pilot_Operator_Quickstart.md`
 - `docs/Cloud_Admin_Proof_Pack.md`
 - `docs/Cloud_Metadata_Connector.md`
+- `docs/AWS_Metadata_Intake_Contract.md`
 - `docs/Public_Benchmark_Ingestion.md`
 - `docs/Serious_Report_Performance.md`
 - `docs/Customer_Owned_Metadata_Request.md`
@@ -59,6 +60,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `reference_engine/github_actions_pilot_readiness.py`
 - `reference_engine/cloud_admin_proof_pack.py`
 - `reference_engine/cloud_metadata_connector.py`
+- `reference_engine/aws_metadata_adapter.py`
 - `reference_engine/public_benchmark_ingestion.py`
 - `reference_engine/serious_report_performance.py`
 - `reference_engine/customer_owned_metadata_request.py`

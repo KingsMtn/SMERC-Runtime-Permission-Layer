@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an AWS Metadata Intake Contract and non-executing adapter stub for safe AWS-style exported summaries, accepted/skipped row reporting, customer-evaluation normalization, and no-live-AWS review.
 - Added an AWS Deployable Bot Readiness Path defining the process for hardening SMERC toward an AWS-style governed action bot while preserving non-claim and commercial-use boundaries.
 - Added an AWS Cloud Action Replay Pack with AWS-style metadata-only AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost-velocity, Secrets Manager, and cross-account delegation examples, plus AWS reason codes and Work / Result / Impact reporting.
 - Replaced the repository MIT License with the SMERC Public Review License v1.0 and added `COMMERCIAL_USE.md` so public review remains available while production, hosted, embedded, resale, and revenue-generating use require a separate written agreement.

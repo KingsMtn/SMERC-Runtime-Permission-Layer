@@ -61,6 +61,7 @@ The repository contains working pilot-grade artifacts:
 - public scenario benchmark
 - AWS Cloud Action Replay Pack for AgentCore-style runtime/gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style capacity, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation
 - AWS Deployable Bot Readiness Path for evaluating what SMERC must prove before an AWS-style platform team could consider it as a governed action bot
+- AWS Metadata Intake Contract and non-executing adapter stub for accepting safe AWS-style exported summaries, skipping unsafe rows, and normalizing accepted rows into SMERC customer evaluation
 - OpenAPI pilot contract
 - Python SDK
 - JavaScript SDK
@@ -130,8 +131,9 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 17. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
 18. For financial-services review, run `python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty`.
 19. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
-20. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
-21. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+20. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
+21. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
+22. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 

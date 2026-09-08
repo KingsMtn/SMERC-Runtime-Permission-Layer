@@ -66,9 +66,21 @@ This proves AWS-style metadata can move through the SMERC customer-evaluation co
 
 ### 2. AWS Metadata Intake Contract
 
-Next build.
+Status: implemented as a metadata-only contract.
 
-Create a strict metadata contract for AWS-style evidence:
+Current artifact:
+
+```bash
+python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty
+```
+
+Contract:
+
+- `docs/AWS_Metadata_Intake_Contract.md`
+- `examples/aws_metadata_adapter_source_exports.json`
+- `reference_engine/aws_metadata_adapter.py`
+
+The contract accepts AWS-style evidence:
 
 - agent runtime target
 - gateway or direct-runtime path
@@ -89,7 +101,7 @@ No live AWS credentials, account IDs, ARNs, secrets, private topology, productio
 
 ### 3. AWS Adapter Stub
 
-Build a non-executing adapter that accepts read-only exported summaries and normalizes them into SMERC actions.
+Status: implemented as a non-executing adapter stub.
 
 It should not call AWS APIs by default.
 
@@ -101,6 +113,8 @@ It should produce:
 - SMERC action metadata
 - source version
 - evidence boundary
+
+The current adapter accepts safe rows, skips unsafe rows, records skipped reasons, normalizes accepted rows into `smerc.customer-evaluation.v1`, and produces a customer-evaluation report.
 
 ### 4. Postcondition Evidence For Cloud Controls
 
