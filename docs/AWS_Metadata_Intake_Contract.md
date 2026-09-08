@@ -88,6 +88,27 @@ Ratio fields use `0.0` to `1.0`.
 - `ALERT`
 - `BLOCK`
 
+## Recommended AWS/MCP Session Fields
+
+These fields are optional, but they make AWS-style review stronger because they capture how the tool call moved through the gateway and policy session:
+
+- `gateway_only_path`
+- `gateway_bypass_detected`
+- `delegated_on_behalf_of`
+- `principal_type`
+- `session_mode`
+- `server_initiated_elicitation`
+- `server_initiated_sampling`
+- `tool_discovery_method`
+- `approval_mode`
+- `temporal_policy_context`
+- `progress_notification_observed`
+- `message_notification_observed`
+
+SMERC stores these values in the normalized tool-plan metadata as `session_and_delegated_approval_context`.
+
+Gateway bypass and `approval_mode` of `never` on side-effecting actions also increase base action risk in the AWS metadata adapter. This helps reflect a practical AWS/MCP governance question: did the action flow through the governed gateway and did the session carry enough approval context for the requested side effect?
+
 ## Prohibited Inputs
 
 The first AWS-style pilot should not include:

@@ -37,6 +37,26 @@ class AWSMetadataAdapterTests(unittest.TestCase):
             self.assertEqual(action["tool_plan"]["metadata"]["cloud_provider"], "aws")
             self.assertEqual(action["tool_plan"]["metadata"]["adapter_mode"], "non_executing")
             self.assertIn("postcondition_evidence_expected", action["tool_plan"]["metadata"])
+            self.assertIn("session_and_delegated_approval_context", action["tool_plan"]["metadata"])
+
+    def test_preserves_session_and_delegated_approval_context(self):
+        payload = normalize_source_exports(load_source_exports(INPUTS))
+        by_record = {
+            action["tool_plan"]["metadata"]["source_record_id"]: action
+            for action in payload["actions"]
+        }
+
+        gateway_action = by_record["aws-meta-001"]["tool_plan"]["metadata"]["session_and_delegated_approval_context"]
+        self.assertTrue(gateway_action["gateway_only_path"])
+        self.assertTrue(gateway_action["delegated_on_behalf_of"])
+        self.assertEqual(gateway_action["tool_discovery_method"], "role_filtered_tools_list")
+        self.assertEqual(gateway_action["approval_mode"], "required_for_side_effect")
+
+        bypass_action = by_record["aws-meta-004"]
+        bypass_context = bypass_action["tool_plan"]["metadata"]["session_and_delegated_approval_context"]
+        self.assertTrue(bypass_context["gateway_bypass_detected"])
+        self.assertEqual(bypass_context["approval_mode"], "never")
+        self.assertGreaterEqual(bypass_action["base_action_risk"], 0.62)
 
     def test_builds_adapter_report_and_customer_evaluation(self):
         report = build_adapter_report(load_source_exports(INPUTS))
@@ -48,6 +68,8 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertNotIn("adapter_summary", report["normalized_customer_evaluation"])
         self.assertIn("does not call AWS APIs", report["evidence_boundary"])
         self.assertIn("iam_policy_change_summary", report["accepted_source_format_counts"])
+        self.assertEqual(report["session_and_delegated_approval_summary"]["boolean_counts"]["gateway_bypass_detected"], 1)
+        self.assertEqual(report["session_and_delegated_approval_summary"]["approval_mode_counts"]["never"], 1)
 
     def test_markdown_explains_work_result_impact_and_boundary(self):
         markdown = render_markdown(build_adapter_report(load_source_exports(INPUTS)))
@@ -55,6 +77,7 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertIn("AWS Metadata Adapter Report", markdown)
         self.assertIn("Work / Result / Impact", markdown)
         self.assertIn("non-executing", markdown)
+        self.assertIn("Session and delegated approval summary", markdown)
         self.assertIn("Reviewer Question", markdown)
 
     def test_writes_adapter_outputs(self):

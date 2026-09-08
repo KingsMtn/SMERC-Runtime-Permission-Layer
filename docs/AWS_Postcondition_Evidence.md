@@ -23,6 +23,7 @@ The checked-in example is metadata-only. It is modeled on public AWS documentati
 - AgentCore tool result metadata stream entries
 - AgentCore Gateway MCP logging notifications
 - native AWS change records such as IAM, CloudFormation, S3, Secrets Manager, and cost anomaly summaries
+- gateway/session context such as gateway-only path, bypass detection, delegated on-behalf-of authority, temporal policy context, server-initiated elicitation, and MCP progress/message notifications
 
 It does not read live AWS accounts, call AWS APIs, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement.
 

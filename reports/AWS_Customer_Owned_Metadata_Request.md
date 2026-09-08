@@ -1,6 +1,6 @@
 # Customer-Owned Metadata Request
 
-Generated: `2026-09-08T01:01:05+00:00`
+Generated: `2026-09-08T01:12:13+00:00`
 Version: `smerc.customer-owned-metadata-request.v1`
 Workflow family: `aws`
 Requested actions: `12`
@@ -55,6 +55,18 @@ Please replace the public examples with 12 metadata-only actions from one AWS-st
 - `rollback_plan_available`
 - `gateway_path_enforced`
 - `direct_runtime_path_blocked`
+- `gateway_only_path`
+- `gateway_bypass_detected`
+- `delegated_on_behalf_of`
+- `principal_type`
+- `session_mode`
+- `server_initiated_elicitation`
+- `server_initiated_sampling`
+- `tool_discovery_method`
+- `approval_mode`
+- `temporal_policy_context`
+- `progress_notification_observed`
+- `message_notification_observed`
 - `cloudtrail_management_event_expected`
 - `cloudtrail_data_event_expected`
 - `cloudwatch_metric_or_log_expected`

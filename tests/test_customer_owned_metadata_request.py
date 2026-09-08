@@ -22,6 +22,8 @@ class CustomerOwnedMetadataRequestTests(unittest.TestCase):
         self.assertIn("aws_metadata_adapter", report["commands"])
         self.assertIn("aws_postcondition_evidence", report["commands"])
         self.assertIn("cloudtrail_data_event_expected", report["aws_recommended_fields"])
+        self.assertIn("gateway_bypass_detected", report["aws_recommended_fields"])
+        self.assertIn("server_initiated_elicitation", report["aws_recommended_fields"])
         self.assertIn("AWS account IDs", " ".join(report["excluded_data"]))
         self.assertIn("AWS shadow-mode pilot", " ".join(report["aws_reviewer_questions"]))
 

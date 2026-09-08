@@ -46,6 +46,21 @@ PROHIBITED_FIELDS = {
     "session_token",
 }
 
+SESSION_CONTEXT_FIELDS = [
+    "gateway_only_path",
+    "gateway_bypass_detected",
+    "delegated_on_behalf_of",
+    "principal_type",
+    "session_mode",
+    "server_initiated_elicitation",
+    "server_initiated_sampling",
+    "tool_discovery_method",
+    "approval_mode",
+    "temporal_policy_context",
+    "progress_notification_observed",
+    "message_notification_observed",
+]
+
 
 def load_source_exports(path: str | Path) -> list[Dict[str, Any]]:
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -108,6 +123,7 @@ def build_adapter_report(rows: list[Mapping[str, Any]]) -> Dict[str, Any]:
     accepted_source_counts = Counter(
         action["context"]["source_format"] for action in payload["actions"]
     )
+    session_summary = _session_summary(payload["actions"])
     skipped_reasons = Counter(item["reason"] for item in payload["adapter_summary"]["skipped"])
     return {
         "version": VERSION,
@@ -117,6 +133,7 @@ def build_adapter_report(rows: list[Mapping[str, Any]]) -> Dict[str, Any]:
         "skipped_rows": payload["adapter_summary"]["skipped_rows"],
         "skipped": payload["adapter_summary"]["skipped"],
         "accepted_source_format_counts": dict(sorted(accepted_source_counts.items())),
+        "session_and_delegated_approval_summary": session_summary,
         "skipped_reason_counts": dict(sorted(skipped_reasons.items())),
         "normalized_customer_evaluation": customer_payload,
         "customer_evaluation": evaluation,
@@ -169,6 +186,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Accepted rows: `{report['accepted_rows']}`",
         f"- Skipped rows: `{report['skipped_rows']}`",
         f"- Accepted source formats: `{report['accepted_source_format_counts']}`",
+        f"- Session and delegated approval summary: `{report['session_and_delegated_approval_summary']}`",
         f"- Skipped reason counts: `{report['skipped_reason_counts']}`",
         "",
         "## Skipped Rows",
@@ -303,6 +321,7 @@ def _to_customer_action(row: Mapping[str, Any], index: int) -> Dict[str, Any]:
                 "source_format": source_format,
                 "source_record_id": _text(row.get("record_id"), "record_id"),
                 "gateway_path": _optional_text(row.get("gateway_path")),
+                "session_and_delegated_approval_context": _session_context(row),
                 "cost_velocity_multiplier": _optional_ratio(row.get("cost_velocity_multiplier")),
                 "postcondition_evidence_expected": _boolean(
                     row.get("postcondition_evidence_expected"),
@@ -406,6 +425,10 @@ def _risk(row: Mapping[str, Any], action_type: str) -> float:
     risk = impact * 0.35 + reversibility_gap * 0.28 + anomaly * 0.22 + evidence_gap * 0.15
     if "delete" in action_type or _side_effect(row) in {"destructive", "financial"}:
         risk += 0.12
+    if _optional_boolean(row.get("gateway_bypass_detected")):
+        risk += 0.08
+    if _optional_text(row.get("approval_mode")) == "never" and _side_effect(row) in {"external", "destructive", "financial"}:
+        risk += 0.05
     return round(min(1.0, risk), 3)
 
 
@@ -433,6 +456,64 @@ def _optional_ratio(value: Any) -> float | None:
     if value is None:
         return None
     return _ratio(value, "optional ratio")
+
+
+def _optional_boolean(value: Any) -> bool | None:
+    if value is None:
+        return None
+    return _boolean(value, "optional boolean")
+
+
+def _session_context(row: Mapping[str, Any]) -> Dict[str, Any]:
+    return {
+        "gateway_only_path": _optional_boolean(row.get("gateway_only_path")),
+        "gateway_bypass_detected": _optional_boolean(row.get("gateway_bypass_detected")),
+        "delegated_on_behalf_of": _optional_boolean(row.get("delegated_on_behalf_of")),
+        "principal_type": _optional_text(row.get("principal_type")),
+        "session_mode": _optional_text(row.get("session_mode")),
+        "server_initiated_elicitation": _optional_boolean(row.get("server_initiated_elicitation")),
+        "server_initiated_sampling": _optional_boolean(row.get("server_initiated_sampling")),
+        "tool_discovery_method": _optional_text(row.get("tool_discovery_method")),
+        "approval_mode": _optional_text(row.get("approval_mode")),
+        "temporal_policy_context": _optional_text(row.get("temporal_policy_context")),
+        "progress_notification_observed": _optional_boolean(row.get("progress_notification_observed")),
+        "message_notification_observed": _optional_boolean(row.get("message_notification_observed")),
+    }
+
+
+def _session_summary(actions: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
+    counters: Counter[str] = Counter()
+    principal_types: Counter[str] = Counter()
+    session_modes: Counter[str] = Counter()
+    approval_modes: Counter[str] = Counter()
+    for action in actions:
+        context = action["tool_plan"]["metadata"]["session_and_delegated_approval_context"]
+        if context["gateway_only_path"] is True:
+            counters["gateway_only_path"] += 1
+        if context["gateway_bypass_detected"] is True:
+            counters["gateway_bypass_detected"] += 1
+        if context["delegated_on_behalf_of"] is True:
+            counters["delegated_on_behalf_of"] += 1
+        if context["server_initiated_elicitation"] is True:
+            counters["server_initiated_elicitation"] += 1
+        if context["server_initiated_sampling"] is True:
+            counters["server_initiated_sampling"] += 1
+        if context["progress_notification_observed"] is True:
+            counters["progress_notification_observed"] += 1
+        if context["message_notification_observed"] is True:
+            counters["message_notification_observed"] += 1
+        if context["principal_type"]:
+            principal_types[context["principal_type"]] += 1
+        if context["session_mode"]:
+            session_modes[context["session_mode"]] += 1
+        if context["approval_mode"]:
+            approval_modes[context["approval_mode"]] += 1
+    return {
+        "boolean_counts": dict(sorted(counters.items())),
+        "principal_type_counts": dict(sorted(principal_types.items())),
+        "session_mode_counts": dict(sorted(session_modes.items())),
+        "approval_mode_counts": dict(sorted(approval_modes.items())),
+    }
 
 
 def _text(value: Any, path: str) -> str:

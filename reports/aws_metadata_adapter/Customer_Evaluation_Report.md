@@ -1,7 +1,7 @@
 # AWS Metadata Adapter Review SMERC Customer Evaluation Report
 
 Version: `smerc.customer-evaluation.v1`
-Generated: `2026-09-07T18:00:02+00:00`
+Generated: `2026-09-08T01:12:12+00:00`
 Contact role: `aws_platform_security_reviewer`
 
 ## Evidence Boundary
@@ -105,7 +105,7 @@ Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC c
 - Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
 - Scoring admission: `admitted_with_agent_identity_watch`
 - SMERC posture: `THROTTLE`
-- Scores: `{'irreversible_exposure_score': 0.555, 'reversible_capacity_score': 0.572, 'confidence_score': 0.534, 'operational_stress_score': 0.607, 'risk_adjusted_authorization_score': 0.529, 'cancel_reliability_score': 0.67}`
+- Scores: `{'irreversible_exposure_score': 0.581, 'reversible_capacity_score': 0.572, 'confidence_score': 0.534, 'operational_stress_score': 0.635, 'risk_adjusted_authorization_score': 0.522, 'cancel_reliability_score': 0.67}`
 - Reason codes: `['IRREVERSIBLE_EXPOSURE_ELEVATED', 'ANOMALY_PRESSURE_HIGH', 'IMPACT_SCOPE_WIDE', 'EXTERNAL_SIDE_EFFECT']`
 - SPARTa route: `CONSTRAINED_EXECUTE`
 - Executable: `True`
@@ -147,7 +147,7 @@ Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC c
 ## Autonomy Budget
 
 - State: `SUSPEND_AUTONOMY`
-- Spent: `{'actions': 6, 'scope_units': 431.0, 'risk_spend': 2.948, 'ref_gate_failures': 1, 'blocked_or_held_attempts': 1}`
+- Spent: `{'actions': 6, 'scope_units': 431.0, 'risk_spend': 2.96, 'ref_gate_failures': 1, 'blocked_or_held_attempts': 1}`
 - Review triggers: `['ref_gate_failure', 'autonomy_removed_until_review']`
 
 ## Recommended Next Action

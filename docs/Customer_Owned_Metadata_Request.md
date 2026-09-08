@@ -63,6 +63,8 @@ For AWS-style workflows, reviewers can also provide safe summary fields such as:
 - permission-boundary presence
 - dry-run, preview, change-set, checkpoint, and rollback-plan availability
 - gateway-path enforcement and direct-runtime-path block status
+- gateway-only path, gateway bypass, delegated on-behalf-of authority, principal type, session mode, tool discovery method, approval mode, and temporal policy context
+- server-initiated elicitation, server-initiated sampling, progress notification, and message notification summaries
 - expected CloudTrail, CloudWatch, AgentCore trace, runtime usage log, and tool-result metadata evidence
 - cost-velocity and cost-anomaly signal summaries
 

@@ -1,6 +1,6 @@
 # AWS Metadata Adapter Report
 
-Generated: `2026-09-07T18:00:02+00:00`
+Generated: `2026-09-08T01:12:12+00:00`
 Version: `smerc.aws-metadata-adapter.v1`
 
 ## Purpose
@@ -25,6 +25,7 @@ The adapter is a non-executing stub. It does not call AWS APIs, assume roles, in
 - Accepted rows: `6`
 - Skipped rows: `2`
 - Accepted source formats: `{'agentcore_gateway_tool_call_summary': 1, 'cloudformation_changeset_summary': 1, 'cost_anomaly_action_summary': 1, 'iam_policy_change_summary': 1, 's3_policy_change_summary': 1, 'secrets_rotation_summary': 1}`
+- Session and delegated approval summary: `{'boolean_counts': {'delegated_on_behalf_of': 2, 'gateway_bypass_detected': 1, 'gateway_only_path': 5, 'message_notification_observed': 5, 'progress_notification_observed': 4, 'server_initiated_elicitation': 3}, 'principal_type_counts': {'iam_entity': 4, 'oauth_user': 2}, 'session_mode_counts': {'stateful_gateway_session': 2, 'stateless_request': 4}, 'approval_mode_counts': {'never': 1, 'required_for_data_access_change': 1, 'required_for_permission_boundary_change': 1, 'required_for_secret_rotation': 1, 'required_for_side_effect': 1, 'required_for_stateful_replacement': 1}}`
 - Skipped reason counts: `{'prohibited field present: raw_log': 1, 'unsupported source_format': 1}`
 
 ## Skipped Rows

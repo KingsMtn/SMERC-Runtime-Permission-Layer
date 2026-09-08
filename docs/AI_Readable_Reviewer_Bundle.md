@@ -63,6 +63,7 @@ The repository contains working pilot-grade artifacts:
 - AWS Cloud Action Replay Pack for AgentCore-style runtime/gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style capacity, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation
 - AWS Deployable Bot Readiness Path for evaluating what SMERC must prove before an AWS-style platform team could consider it as a governed action bot
 - AWS Metadata Intake Contract and non-executing adapter stub for accepting safe AWS-style exported summaries, skipping unsafe rows, and normalizing accepted rows into SMERC customer evaluation
+- AWS/MCP session and delegated approval context in the AWS metadata adapter, including gateway-only path, bypass detection, on-behalf-of authority, session mode, tool discovery, approval mode, temporal policy context, elicitation/sampling, and progress/message notifications
 - AWS Postcondition Evidence for checking whether AWS-style route controls were actually observed after routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata
 - OpenAPI pilot contract
 - Python SDK
@@ -91,6 +92,8 @@ The public benchmark currently shows that SMERC creates middle-state governance 
 The public benchmark ingestion pack shows how public benchmark categories can be converted into SMERC's customer-evaluation contract while preserving the boundary that representative examples are not official upstream benchmark scores.
 
 The postcondition evidence report shows whether Governance Routing Workbench controls, internally called SPARTa-required controls, were observed after routing. This helps separate "SMERC recommended a control" from "the adapter supplied evidence that the control happened."
+
+The AWS metadata adapter now also preserves AWS/MCP session and delegated approval context so reviewers can see whether an action stayed on a governed gateway path, whether bypass was detected, who the action was delegated on behalf of, how the session was shaped, and whether approval, temporal policy, elicitation, sampling, progress, and message-notification signals were present.
 
 The AWS postcondition evidence report applies that same loop to AWS-style agentic cloud automation. It models safe observation metadata from AgentCore Gateway CloudTrail events, AgentCore Runtime and Gateway CloudWatch telemetry, runtime usage logs, tool result metadata streams, MCP gateway logs, and native AWS change records without claiming live AWS access or AWS endorsement.
 
