@@ -26,6 +26,7 @@ Fast reviewer paths:
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
 - AWS deployable bot path: `docs/AWS_Deployable_Bot_Readiness_Path.md`
 - AWS metadata adapter reviewer: `docs/AWS_Metadata_Intake_Contract.md`
+- AWS postcondition evidence: `docs/AWS_Postcondition_Evidence.md`
 - Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
 - Balanced runtime judgment replay: `docs/Balanced_Runtime_Judgment_Replay.md`
@@ -273,6 +274,7 @@ The current build includes:
 - AWS Cloud Action Replay Pack with AWS-style metadata-only AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost-velocity, Secrets Manager, and cross-account delegation actions
 - AWS Deployable Bot Readiness Path that defines the milestones needed for SMERC to be evaluated as an AWS-style governed action bot without claiming AWS endorsement, certification, or production integration
 - AWS Metadata Intake Contract and non-executing adapter stub that accepts safe AWS-style exported summaries, skips unsafe rows, normalizes accepted rows into customer evaluation, and preserves an explicit no-live-AWS boundary
+- AWS Postcondition Evidence that checks whether AWS-style route controls were actually observed after routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata
 - Cloud Admin Customer Evaluation pack with metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions for infrastructure review
 - Cloud Admin Proof Pack that expands the cloud-admin sample into 24 scenarios with cloud-specific reason codes, Work / Result / Impact explanations, SPARTa route evidence, autonomy-budget impact, and DLL validity
 - Cloud Metadata Connector that converts read-only IAM, Terraform, CloudTrail-style, Kubernetes, DNS, and backup-policy export summaries into strict SMERC customer-evaluation metadata without live cloud credentials

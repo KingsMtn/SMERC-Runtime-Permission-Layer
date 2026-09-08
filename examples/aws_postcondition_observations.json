@@ -1,0 +1,349 @@
+[
+  {
+    "action_id": "AWS_ADAPTER_001_invoke_lambda_backed_customer_configuration_tool_through_governed_gatewa",
+    "aws_surface": "agentcore_gateway_tool_call_summary",
+    "expected_aws_evidence_sources": [
+      "agentcore_gateway_cloudtrail_data_event",
+      "agentcore_gateway_mcp_log",
+      "agentcore_runtime_trace_span",
+      "cloudwatch_metric_or_log",
+      "tool_result_metadata_stream"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "agentcore-runtime-checkpoint-observation",
+        "evidence_ref": "aws-postcondition://adapter/001/checkpoint",
+        "observed_at": "2026-09-07T18:30:00Z",
+        "aws_evidence_sources": ["agentcore_runtime_trace_span"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "gateway-target-scope-observation",
+        "evidence_ref": "aws-postcondition://adapter/001/scope",
+        "observed_at": "2026-09-07T18:30:01Z",
+        "aws_evidence_sources": ["agentcore_gateway_cloudtrail_data_event", "agentcore_gateway_mcp_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-and-gateway-log-observation",
+        "evidence_ref": "aws-postcondition://adapter/001/replay",
+        "observed_at": "2026-09-07T18:30:02Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log", "tool_result_metadata_stream"]
+      },
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "tool-result-preview-metadata",
+        "evidence_ref": "aws-postcondition://adapter/001/preview",
+        "observed_at": "2026-09-07T18:30:03Z",
+        "aws_evidence_sources": ["tool_result_metadata_stream"]
+      },
+      {
+        "control_id": "record_execution_report",
+        "outcome": "applied",
+        "mechanism": "adapter-execution-summary",
+        "evidence_ref": "aws-postcondition://adapter/001/report",
+        "observed_at": "2026-09-07T18:30:04Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "require_rollback_plan",
+        "outcome": "applied",
+        "mechanism": "gateway-target-rollback-reference",
+        "evidence_ref": "aws-postcondition://adapter/001/rollback-plan",
+        "observed_at": "2026-09-07T18:30:05Z",
+        "aws_evidence_sources": ["agentcore_gateway_mcp_log"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Constrained gateway tool call includes preview, scope, checkpoint, rollback reference, execution report, and replay evidence."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_002_expand_execution_role_from_service_update_scope_to_broad_infrastructure_",
+    "aws_surface": "iam_policy_change_summary",
+    "expected_aws_evidence_sources": [
+      "cloudtrail_management_event",
+      "iam_access_analyzer_or_policy_record"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "iam-change-deny-observation",
+        "evidence_ref": "aws-postcondition://adapter/002/block",
+        "observed_at": "2026-09-07T18:31:00Z",
+        "aws_evidence_sources": ["cloudtrail_management_event", "iam_access_analyzer_or_policy_record"]
+      },
+      {
+        "control_id": "explain_denial",
+        "outcome": "applied",
+        "mechanism": "operator-visible-denial-reason",
+        "evidence_ref": "aws-postcondition://adapter/002/explain",
+        "observed_at": "2026-09-07T18:31:01Z",
+        "aws_evidence_sources": ["iam_access_analyzer_or_policy_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-record",
+        "evidence_ref": "aws-postcondition://adapter/002/replay",
+        "observed_at": "2026-09-07T18:31:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Denied broad IAM expansion retained management-event-shaped and policy-analysis-shaped evidence."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_003_execute_change_set_that_replaces_stateful_resources",
+    "aws_surface": "cloudformation_changeset_summary",
+    "expected_aws_evidence_sources": [
+      "cloudformation_change_set_record",
+      "cloudtrail_management_event",
+      "cloudwatch_metric_or_log"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "state-snapshot-reference",
+        "evidence_ref": "aws-postcondition://adapter/003/checkpoint",
+        "observed_at": "2026-09-07T18:32:00Z",
+        "aws_evidence_sources": ["cloudformation_change_set_record"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "change-set-resource-scope",
+        "evidence_ref": "aws-postcondition://adapter/003/scope",
+        "observed_at": "2026-09-07T18:32:01Z",
+        "aws_evidence_sources": ["cloudformation_change_set_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "change-set-replay-summary",
+        "evidence_ref": "aws-postcondition://adapter/003/replay",
+        "observed_at": "2026-09-07T18:32:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      },
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "change-set-preview",
+        "evidence_ref": "aws-postcondition://adapter/003/preview",
+        "observed_at": "2026-09-07T18:32:03Z",
+        "aws_evidence_sources": ["cloudformation_change_set_record"]
+      },
+      {
+        "control_id": "record_execution_report",
+        "outcome": "applied",
+        "mechanism": "adapter-execution-summary",
+        "evidence_ref": "aws-postcondition://adapter/003/report",
+        "observed_at": "2026-09-07T18:32:04Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "The route controls are present, but CloudWatch-style postcondition evidence is intentionally absent to show source-gap detection."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_004_increase_regional_compute_capacity_while_completion_certainty_is_low",
+    "aws_surface": "cost_anomaly_action_summary",
+    "expected_aws_evidence_sources": [
+      "agentcore_runtime_usage_log",
+      "cloudwatch_metric_or_log",
+      "cost_anomaly_signal"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "capacity-state-checkpoint",
+        "evidence_ref": "aws-postcondition://adapter/004/checkpoint",
+        "observed_at": "2026-09-07T18:33:00Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "regional-capacity-bound",
+        "evidence_ref": "aws-postcondition://adapter/004/scope",
+        "observed_at": "2026-09-07T18:33:01Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-record",
+        "evidence_ref": "aws-postcondition://adapter/004/replay",
+        "observed_at": "2026-09-07T18:33:02Z",
+        "aws_evidence_sources": ["agentcore_runtime_usage_log"]
+      },
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "capacity-impact-preview",
+        "evidence_ref": "aws-postcondition://adapter/004/preview",
+        "observed_at": "2026-09-07T18:33:03Z",
+        "aws_evidence_sources": ["cost_anomaly_signal"]
+      },
+      {
+        "control_id": "record_execution_report",
+        "outcome": "applied",
+        "mechanism": "adapter-execution-summary",
+        "evidence_ref": "aws-postcondition://adapter/004/report",
+        "observed_at": "2026-09-07T18:33:04Z",
+        "aws_evidence_sources": ["agentcore_runtime_usage_log", "cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "require_rollback_plan",
+        "outcome": "applied",
+        "mechanism": "capacity-scale-down-plan",
+        "evidence_ref": "aws-postcondition://adapter/004/rollback-plan",
+        "observed_at": "2026-09-07T18:33:05Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Cost-velocity-sensitive capacity action includes usage, metric, anomaly, replay, and rollback-plan-shaped evidence."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_005_widen_bucket_object_access_during_failed_data_export",
+    "aws_surface": "s3_policy_change_summary",
+    "expected_aws_evidence_sources": [
+      "cloudtrail_management_event",
+      "s3_policy_audit_record"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "bucket-policy-snapshot",
+        "evidence_ref": "aws-postcondition://adapter/005/checkpoint",
+        "observed_at": "2026-09-07T18:34:00Z",
+        "aws_evidence_sources": ["s3_policy_audit_record"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "prefix-and-principal-scope-bound",
+        "evidence_ref": "aws-postcondition://adapter/005/scope",
+        "observed_at": "2026-09-07T18:34:01Z",
+        "aws_evidence_sources": ["s3_policy_audit_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-record",
+        "evidence_ref": "aws-postcondition://adapter/005/replay",
+        "observed_at": "2026-09-07T18:34:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      },
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "policy-diff-preview",
+        "evidence_ref": "aws-postcondition://adapter/005/preview",
+        "observed_at": "2026-09-07T18:34:03Z",
+        "aws_evidence_sources": ["s3_policy_audit_record"]
+      },
+      {
+        "control_id": "record_execution_report",
+        "outcome": "applied",
+        "mechanism": "adapter-execution-summary",
+        "evidence_ref": "aws-postcondition://adapter/005/report",
+        "observed_at": "2026-09-07T18:34:04Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Rollback-plan evidence is intentionally absent so reviewers can see route-control gap detection on an S3 policy action."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_006_rotate_shared_service_credential_before_dependency_readiness_is_confirme",
+    "aws_surface": "secrets_rotation_summary",
+    "expected_aws_evidence_sources": [
+      "cloudtrail_management_event",
+      "secrets_rotation_record"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "secret-version-checkpoint",
+        "evidence_ref": "aws-postcondition://adapter/006/checkpoint",
+        "observed_at": "2026-09-07T18:35:00Z",
+        "aws_evidence_sources": ["secrets_rotation_record"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "single-service-rotation-scope",
+        "evidence_ref": "aws-postcondition://adapter/006/scope",
+        "observed_at": "2026-09-07T18:35:01Z",
+        "aws_evidence_sources": ["secrets_rotation_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-record",
+        "evidence_ref": "aws-postcondition://adapter/006/replay",
+        "observed_at": "2026-09-07T18:35:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      },
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "dependency-readiness-preview",
+        "evidence_ref": "aws-postcondition://adapter/006/preview",
+        "observed_at": "2026-09-07T18:35:03Z",
+        "aws_evidence_sources": ["secrets_rotation_record"]
+      },
+      {
+        "control_id": "record_execution_report",
+        "outcome": "applied",
+        "mechanism": "adapter-execution-summary",
+        "evidence_ref": "aws-postcondition://adapter/006/report",
+        "observed_at": "2026-09-07T18:35:04Z",
+        "aws_evidence_sources": ["cloudtrail_management_event", "secrets_rotation_record"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Credential rotation proof uses safe rotation-status and management-event-shaped evidence without exposing secret material."
+    }
+  }
+]

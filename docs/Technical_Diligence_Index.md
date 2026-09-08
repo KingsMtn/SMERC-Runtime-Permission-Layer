@@ -53,6 +53,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `docs/Cloud_Admin_Proof_Pack.md`
 - `docs/Cloud_Metadata_Connector.md`
 - `docs/AWS_Metadata_Intake_Contract.md`
+- `docs/AWS_Postcondition_Evidence.md`
 - `docs/Public_Benchmark_Ingestion.md`
 - `docs/Serious_Report_Performance.md`
 - `docs/Customer_Owned_Metadata_Request.md`
@@ -61,6 +62,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `reference_engine/cloud_admin_proof_pack.py`
 - `reference_engine/cloud_metadata_connector.py`
 - `reference_engine/aws_metadata_adapter.py`
+- `reference_engine/aws_postcondition_evidence.py`
 - `reference_engine/public_benchmark_ingestion.py`
 - `reference_engine/serious_report_performance.py`
 - `reference_engine/customer_owned_metadata_request.py`
@@ -70,6 +72,7 @@ This index is for strategic reviewers, platform teams, security architects, and 
 - `reports/cloud_admin_proof_pack/Cloud_Admin_Proof_Pack.md`
 - `reports/Cloud_Metadata_Connector_Report.md`
 - `reports/Public_Benchmark_Ingestion_Report.md`
+- `reports/aws_postcondition_evidence/AWS_Postcondition_Evidence_Report.md`
 - `reports/Serious_Report_Performance.md`
 - `reports/Customer_Owned_Metadata_Request.md`
 - `reports/External_Reviewer_Metadata_Response_Assessment.md`

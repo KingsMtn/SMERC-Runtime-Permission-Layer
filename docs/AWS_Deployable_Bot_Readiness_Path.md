@@ -132,6 +132,18 @@ Extend postcondition evidence to AWS-style controls:
 
 This matters because reviewers need to see whether SMERC only recommended a control or whether an adapter supplied evidence that the control happened.
 
+Current proof path:
+
+```bash
+python -m reference_engine.aws_postcondition_evidence --pretty
+```
+
+Work: compare SMERC/SPARTa route controls for AWS-style actions against safe postcondition observations modeled on CloudTrail, CloudWatch, AgentCore Gateway, AgentCore Runtime, MCP gateway logs, and native AWS change records.
+
+Result: `reports/aws_postcondition_evidence/AWS_Postcondition_Evidence_Report.md` shows 6 AWS-style routed actions, observed controls, expected AWS evidence sources, missing sources, and route-control gaps.
+
+Impact: SMERC can now show how an AWS-style governed action bot would prove that controls were actually applied after a decision, not only that recoverability scoring recommended them.
+
 ### 5. Performance And Overhead Report
 
 Add AWS replay timing to serious performance reports.

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added AWS Postcondition Evidence for safe AWS-style observation metadata modeled on AgentCore Gateway CloudTrail data/management events, AgentCore CloudWatch logs/metrics/spans, one-second runtime usage logs, tool-result metadata streams, MCP gateway logs, and native AWS change records.
 - Added an AWS Metadata Intake Contract and non-executing adapter stub for safe AWS-style exported summaries, accepted/skipped row reporting, customer-evaluation normalization, and no-live-AWS review.
 - Added an AWS Deployable Bot Readiness Path defining the process for hardening SMERC toward an AWS-style governed action bot while preserving non-claim and commercial-use boundaries.
 - Added an AWS Cloud Action Replay Pack with AWS-style metadata-only AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost-velocity, Secrets Manager, and cross-account delegation examples, plus AWS reason codes and Work / Result / Impact reporting.

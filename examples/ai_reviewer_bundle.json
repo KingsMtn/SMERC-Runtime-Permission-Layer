@@ -35,6 +35,7 @@
     "MCP tool risk scanner",
     "MCP proxy runner",
     "AWS Cloud Action Replay Pack for AWS-style AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost velocity, Secrets Manager, and cross-account delegation actions",
+    "AWS Postcondition Evidence for checking whether AWS-style route controls were actually observed after routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata",
     "cloud-admin customer evaluation",
     "cloud-admin proof pack with cloud reason codes",
     "cloud metadata connector for read-only change exports",
@@ -66,6 +67,8 @@
     "postcondition_evidence_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Postcondition_Evidence_Report.md",
     "aws_cloud_action_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Cloud_Action_Replay.md",
     "aws_cloud_action_replay_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/aws_cloud_action_replay/AWS_Cloud_Action_Replay.md",
+    "aws_postcondition_evidence": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Postcondition_Evidence.md",
+    "aws_postcondition_evidence_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/aws_postcondition_evidence/AWS_Postcondition_Evidence_Report.md",
     "cloud_admin_proof_pack": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Cloud_Admin_Proof_Pack.md",
     "cloud_admin_proof_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/cloud_admin_proof_pack/Cloud_Admin_Proof_Pack.md",
     "cloud_metadata_connector": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Cloud_Metadata_Connector.md",
@@ -187,6 +190,12 @@
     },
     {
       "step": 17,
+      "name": "Run the AWS Postcondition Evidence path",
+      "command": "python -m reference_engine.aws_postcondition_evidence --pretty",
+      "result": "Reviewer sees whether AWS-style controls were actually observed after SMERC routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata."
+    },
+    {
+      "step": 18,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."
@@ -221,6 +230,11 @@
     "AWS CloudFormation recoverability",
     "drift-aware change set recoverability",
     "AWS cost automation governance",
+    "AWS postcondition evidence",
+    "AWS CloudTrail postcondition evidence",
+    "AWS CloudWatch postcondition evidence",
+    "AgentCore runtime usage logs",
+    "AgentCore tool result metadata",
     "cloud metadata connector",
     "cloud change metadata",
     "AI devops agent governance",
