@@ -1,0 +1,260 @@
+[
+  {
+    "action_id": "AWS_CHAIN_SAFE_CONFIG_UPDATE_001",
+    "aws_surface": "systems_manager_execution_summary",
+    "expected_aws_evidence_sources": [
+      "agentcore_gateway_cloudtrail_data_event",
+      "agentcore_gateway_mcp_log",
+      "cloudtrail_management_event",
+      "cloudwatch_metric_or_log",
+      "tool_result_metadata_stream"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "ssm-automation-checkpoint-summary",
+        "evidence_ref": "aws-chain-postcondition://safe-config/checkpoint",
+        "observed_at": "2026-09-09T01:05:00Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "systems-manager-target-scope-bound",
+        "evidence_ref": "aws-chain-postcondition://safe-config/scope",
+        "observed_at": "2026-09-09T01:05:01Z",
+        "aws_evidence_sources": ["agentcore_gateway_cloudtrail_data_event", "agentcore_gateway_mcp_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "smerc-ledger-and-gateway-log-reference",
+        "evidence_ref": "aws-chain-postcondition://safe-config/replay",
+        "observed_at": "2026-09-09T01:05:02Z",
+        "aws_evidence_sources": ["tool_result_metadata_stream"]
+      },
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "configuration-change-preview-summary",
+        "evidence_ref": "aws-chain-postcondition://safe-config/preview",
+        "observed_at": "2026-09-09T01:05:03Z",
+        "aws_evidence_sources": ["tool_result_metadata_stream"]
+      },
+      {
+        "control_id": "record_execution_report",
+        "outcome": "applied",
+        "mechanism": "systems-manager-execution-summary",
+        "evidence_ref": "aws-chain-postcondition://safe-config/report",
+        "observed_at": "2026-09-09T01:05:04Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "require_rollback_plan",
+        "outcome": "applied",
+        "mechanism": "configuration-rollback-reference",
+        "evidence_ref": "aws-chain-postcondition://safe-config/rollback",
+        "observed_at": "2026-09-09T01:05:05Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Constrained Systems Manager-style action includes preview, scope, checkpoint, rollback plan, execution report, and replay evidence."
+    }
+  },
+  {
+    "action_id": "AWS_CHAIN_GUARDRAIL_PASS_IAM_WIDE_002",
+    "aws_surface": "iam_policy_change_summary",
+    "expected_aws_evidence_sources": [
+      "cloudtrail_management_event",
+      "iam_access_analyzer_or_policy_record"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "iam-change-blocked-before-apply",
+        "evidence_ref": "aws-chain-postcondition://iam-wide/block",
+        "observed_at": "2026-09-09T01:06:00Z",
+        "aws_evidence_sources": ["cloudtrail_management_event", "iam_access_analyzer_or_policy_record"]
+      },
+      {
+        "control_id": "explain_denial",
+        "outcome": "applied",
+        "mechanism": "operator-visible-iam-denial-summary",
+        "evidence_ref": "aws-chain-postcondition://iam-wide/explain",
+        "observed_at": "2026-09-09T01:06:01Z",
+        "aws_evidence_sources": ["iam_access_analyzer_or_policy_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "smerc-decision-ledger-record",
+        "evidence_ref": "aws-chain-postcondition://iam-wide/replay",
+        "observed_at": "2026-09-09T01:06:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Denied IAM widening retained block, denial explanation, and replay evidence."
+    }
+  },
+  {
+    "action_id": "AWS_CHAIN_CLOUDFORMATION_REPLACE_003",
+    "aws_surface": "cloudformation_changeset_summary",
+    "expected_aws_evidence_sources": [
+      "cloudformation_change_set_record",
+      "cloudtrail_management_event",
+      "cloudwatch_metric_or_log"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "cloudformation-change-set-held-before-apply",
+        "evidence_ref": "aws-chain-postcondition://cfn-replace/block",
+        "observed_at": "2026-09-09T01:07:00Z",
+        "aws_evidence_sources": ["cloudformation_change_set_record"]
+      },
+      {
+        "control_id": "explain_denial",
+        "outcome": "applied",
+        "mechanism": "resource-replacement-denial-summary",
+        "evidence_ref": "aws-chain-postcondition://cfn-replace/explain",
+        "observed_at": "2026-09-09T01:07:01Z",
+        "aws_evidence_sources": ["cloudformation_change_set_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "smerc-ledger-and-change-set-reference",
+        "evidence_ref": "aws-chain-postcondition://cfn-replace/replay",
+        "observed_at": "2026-09-09T01:07:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "CloudFormation replacement was blocked; CloudWatch-style postcondition evidence is intentionally missing to show source-gap detection."
+    }
+  },
+  {
+    "action_id": "AWS_CHAIN_CLOUDWATCH_REMEDIATION_004",
+    "aws_surface": "cloudwatch_remediation_summary",
+    "expected_aws_evidence_sources": [
+      "cloudtrail_management_event",
+      "cloudwatch_metric_or_log"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "remediation-blocked-before-service-restart",
+        "evidence_ref": "aws-chain-postcondition://cloudwatch-remediation/block",
+        "observed_at": "2026-09-09T01:08:00Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "explain_denial",
+        "outcome": "applied",
+        "mechanism": "dependency-evidence-gap-explanation",
+        "evidence_ref": "aws-chain-postcondition://cloudwatch-remediation/explain",
+        "observed_at": "2026-09-09T01:08:01Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-remediation-record",
+        "evidence_ref": "aws-chain-postcondition://cloudwatch-remediation/replay",
+        "observed_at": "2026-09-09T01:08:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Service restart was blocked because dependency evidence and object-shape evidence were incomplete."
+    }
+  },
+  {
+    "action_id": "AWS_CHAIN_COST_SCALE_SPIKE_005",
+    "aws_surface": "cost_velocity_action_summary",
+    "expected_aws_evidence_sources": [
+      "agentcore_runtime_usage_log",
+      "cloudwatch_metric_or_log",
+      "cost_anomaly_signal"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "capacity-state-checkpoint-summary",
+        "evidence_ref": "aws-chain-postcondition://cost-scale/checkpoint",
+        "observed_at": "2026-09-09T01:09:00Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "capacity-increase-scope-bound",
+        "evidence_ref": "aws-chain-postcondition://cost-scale/scope",
+        "observed_at": "2026-09-09T01:09:01Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "smerc-ledger-and-cost-action-reference",
+        "evidence_ref": "aws-chain-postcondition://cost-scale/replay",
+        "observed_at": "2026-09-09T01:09:02Z",
+        "aws_evidence_sources": ["agentcore_runtime_usage_log"]
+      },
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "cost-velocity-preview-summary",
+        "evidence_ref": "aws-chain-postcondition://cost-scale/preview",
+        "observed_at": "2026-09-09T01:09:03Z",
+        "aws_evidence_sources": ["cost_anomaly_signal"]
+      },
+      {
+        "control_id": "record_execution_report",
+        "outcome": "applied",
+        "mechanism": "capacity-action-execution-summary",
+        "evidence_ref": "aws-chain-postcondition://cost-scale/report",
+        "observed_at": "2026-09-09T01:09:04Z",
+        "aws_evidence_sources": ["agentcore_runtime_usage_log", "cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "require_rollback_plan",
+        "outcome": "applied",
+        "mechanism": "capacity-scale-down-plan-reference",
+        "evidence_ref": "aws-chain-postcondition://cost-scale/rollback",
+        "observed_at": "2026-09-09T01:09:05Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Cost-velocity-sensitive scaling action includes checkpoint, scope, preview, execution report, replay, and rollback-plan-shaped evidence."
+    }
+  }
+]

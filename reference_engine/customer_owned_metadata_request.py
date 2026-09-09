@@ -84,6 +84,13 @@ AWS_RECOMMENDED_FIELDS = [
     "tool_discovery_method",
     "approval_mode",
     "temporal_policy_context",
+    "bedrock_guardrail_status",
+    "guardrail_decision_summary_available",
+    "iam_authorized",
+    "dynamic_iam_policy_state",
+    "rollback_checkpoint_state",
+    "expected_action_chain_evidence",
+    "actual_outcome_summary",
     "progress_notification_observed",
     "message_notification_observed",
     "cloudtrail_management_event_expected",
@@ -151,6 +158,13 @@ def build_request_report(*, workflow_family: str = "general", requested_actions:
                 "--observations customer_working/aws_postcondition_observations.json "
                 "--json-output reports/customer_working/aws_postcondition_evidence_report.json "
                 "--markdown-output reports/customer_working/AWS_Postcondition_Evidence_Report.md --pretty"
+            ),
+            "aws_agent_action_chain_postcondition": (
+                "python -m reference_engine.aws_agent_action_chain_postcondition "
+                "--actions customer_working/aws_agent_action_chain.json "
+                "--observations customer_working/aws_agent_action_chain_observations.json "
+                "--json-output reports/customer_working/aws_agent_action_chain_postcondition.json "
+                "--markdown-output reports/customer_working/AWS_Agent_Action_Chain_Postcondition_Evidence.md --pretty"
             ),
             "validate_customer_metadata": (
                 "python -m reference_engine.customer_metadata_validator "
@@ -286,6 +300,7 @@ def _aws_reviewer_questions() -> list[str]:
     return [
         "Can these AWS-style actions be reviewed without account IDs, ARNs, raw logs, secrets, or live access?",
         "Which action should be constrained instead of allowed or blocked outright?",
+        "Which Bedrock-style guardrail pass still needed a SMERC recoverability check before IAM, Systems Manager, CloudFormation, CloudWatch, or cost-sensitive execution?",
         "Which postcondition evidence source would prove the required control happened?",
         "Which control is hardest to prove: preview, scope limit, checkpoint, rollback plan, gateway enforcement, block, replay, or cost-velocity bound?",
         "Would these results justify a bounded AWS shadow-mode pilot where existing AWS/customer controls remain authoritative?",

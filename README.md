@@ -26,6 +26,7 @@ Fast reviewer paths:
 - AI/search reviewer: `docs/AI_Readable_Reviewer_Bundle.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - AWS agent action chain: `docs/AWS_Agent_Action_Chain.md`
+- AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
 - AWS deployable bot path: `docs/AWS_Deployable_Bot_Readiness_Path.md`
 - AWS metadata adapter reviewer: `docs/AWS_Metadata_Intake_Contract.md`
@@ -390,6 +391,7 @@ Start here before reading the code:
 - `docs/Customer_Owned_Metadata_Request.md` gives reviewers the clean external ask: replace public examples with 5 to 25 safe metadata-only actions from one workflow, then pair the result with performance and postcondition evidence.
 - `docs/External_Reviewer_Metadata_Response.md` checks whether a reviewer response is usable, too limited, or unsafe before treating customer-owned metadata as pilot evidence.
 - `docs/AWS_Agent_Action_Chain.md` shows the clean AWS-style placement: AI Agent Action -> Bedrock-style Guardrail -> SMERC Recoverability Gate -> Dynamic IAM / Systems Manager / Cloud Execution -> Postcondition Evidence.
+- `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md` checks whether AWS-style action-chain observation metadata proves that SMERC-required controls actually happened after the recoverability route.
 - `docs/AWS_Cloud_Action_Replay.md` gives AWS-style platform, cloud-security, SRE, FinOps, and AI-agent reviewers a runnable metadata-only replay across AgentCore-style runtime and gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style scaling, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation.
 - `docs/AWS_Deployable_Bot_Readiness_Path.md` defines the process for hardening SMERC toward an AWS-style deployable governed action bot: metadata intake, adapter stubs, postcondition evidence, performance metrics, customer-owned metadata, and shadow-mode pilot criteria.
 - `docs/AWS_Metadata_Intake_Contract.md` defines the strict AWS-style metadata contract and non-executing adapter path for exported summaries, AWS/MCP session and delegated approval context, accepted/skipped rows, normalized customer-evaluation actions, and safe no-credential review.
@@ -1229,6 +1231,14 @@ python -m reference_engine.aws_agent_action_chain --pretty
 ```
 
 The AWS Agent Action Chain proof runs five metadata-only AWS-style chains through SMERC after a Bedrock-style guardrail result and before Dynamic IAM, Systems Manager, CloudFormation, CloudWatch remediation, cost-sensitive scaling, or cloud execution. It is designed to show that content/model approval and IAM authorization do not answer the same question as recoverability before execution.
+
+Run the AWS Agent Action Chain Postcondition Evidence proof:
+
+```bash
+python -m reference_engine.aws_agent_action_chain_postcondition --pretty
+```
+
+The AWS Agent Action Chain Postcondition Evidence proof compares the SMERC route controls from the chain proof with safe observation metadata modeled on guardrail, IAM, Systems Manager, CloudFormation, CloudWatch, cost, CloudTrail, runtime, and tool-result evidence. It shows whether constrained and blocked actions actually followed the required route.
 
 Run the AWS Cloud Action Replay Pack:
 

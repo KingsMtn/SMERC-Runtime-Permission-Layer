@@ -1,6 +1,6 @@
 # Customer-Owned Metadata Request
 
-Generated: `2026-09-08T01:12:13+00:00`
+Generated: `2026-09-09T01:09:51+00:00`
 Version: `smerc.customer-owned-metadata-request.v1`
 Workflow family: `aws`
 Requested actions: `12`
@@ -65,6 +65,13 @@ Please replace the public examples with 12 metadata-only actions from one AWS-st
 - `tool_discovery_method`
 - `approval_mode`
 - `temporal_policy_context`
+- `bedrock_guardrail_status`
+- `guardrail_decision_summary_available`
+- `iam_authorized`
+- `dynamic_iam_policy_state`
+- `rollback_checkpoint_state`
+- `expected_action_chain_evidence`
+- `actual_outcome_summary`
 - `progress_notification_observed`
 - `message_notification_observed`
 - `cloudtrail_management_event_expected`
@@ -114,6 +121,7 @@ python -m reference_engine.serious_report_performance --iterations 5 --pretty
 
 - Can these AWS-style actions be reviewed without account IDs, ARNs, raw logs, secrets, or live access?
 - Which action should be constrained instead of allowed or blocked outright?
+- Which Bedrock-style guardrail pass still needed a SMERC recoverability check before IAM, Systems Manager, CloudFormation, CloudWatch, or cost-sensitive execution?
 - Which postcondition evidence source would prove the required control happened?
 - Which control is hardest to prove: preview, scope limit, checkpoint, rollback plan, gateway enforcement, block, replay, or cost-velocity bound?
 - Would these results justify a bounded AWS shadow-mode pilot where existing AWS/customer controls remain authoritative?

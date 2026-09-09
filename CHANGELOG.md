@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added AWS Agent Action Chain Postcondition Evidence so AWS-style reviewers can compare SMERC route controls with safe observation metadata and see pass/gap evidence after routing.
 - Added an AWS Agent Action Chain proof showing where SMERC fits after Bedrock-style content/model guardrails and before Dynamic IAM, Systems Manager, CloudFormation, CloudWatch remediation, cost-sensitive scaling, or cloud execution.
 - Recorded the SMERC vision statement for public and AI-readable review: intelligent-system power should be governed by consent, accountability, and protection from irreversible harm.
 - Added AWS/MCP session and delegated approval context to the AWS metadata adapter, including gateway-only path, gateway bypass detection, on-behalf-of authority, session mode, tool discovery, approval mode, temporal policy context, server-initiated elicitation/sampling, and progress/message notification evidence.

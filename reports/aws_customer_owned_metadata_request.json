@@ -30,6 +30,13 @@
     "tool_discovery_method",
     "approval_mode",
     "temporal_policy_context",
+    "bedrock_guardrail_status",
+    "guardrail_decision_summary_available",
+    "iam_authorized",
+    "dynamic_iam_policy_state",
+    "rollback_checkpoint_state",
+    "expected_action_chain_evidence",
+    "actual_outcome_summary",
     "progress_notification_observed",
     "message_notification_observed",
     "cloudtrail_management_event_expected",
@@ -44,11 +51,13 @@
   "aws_reviewer_questions": [
     "Can these AWS-style actions be reviewed without account IDs, ARNs, raw logs, secrets, or live access?",
     "Which action should be constrained instead of allowed or blocked outright?",
+    "Which Bedrock-style guardrail pass still needed a SMERC recoverability check before IAM, Systems Manager, CloudFormation, CloudWatch, or cost-sensitive execution?",
     "Which postcondition evidence source would prove the required control happened?",
     "Which control is hardest to prove: preview, scope limit, checkpoint, rollback plan, gateway enforcement, block, replay, or cost-velocity bound?",
     "Would these results justify a bounded AWS shadow-mode pilot where existing AWS/customer controls remain authoritative?"
   ],
   "commands": {
+    "aws_agent_action_chain_postcondition": "python -m reference_engine.aws_agent_action_chain_postcondition --actions customer_working/aws_agent_action_chain.json --observations customer_working/aws_agent_action_chain_observations.json --json-output reports/customer_working/aws_agent_action_chain_postcondition.json --markdown-output reports/customer_working/AWS_Agent_Action_Chain_Postcondition_Evidence.md --pretty",
     "aws_metadata_adapter": "python -m reference_engine.aws_metadata_adapter customer_working/aws_source_exports.json --normalized-output reports/customer_working/aws_normalized_customer_actions.json --json-output reports/customer_working/aws_metadata_adapter_report.json --markdown-output reports/customer_working/AWS_Metadata_Adapter_Report.md --customer-json-output reports/customer_working/aws_customer_evaluation_report.json --customer-markdown-output reports/customer_working/AWS_Customer_Evaluation_Report.md --pretty",
     "aws_postcondition_evidence": "python -m reference_engine.aws_postcondition_evidence --evaluation reports/customer_working/aws_customer_evaluation_report.json --observations customer_working/aws_postcondition_observations.json --json-output reports/customer_working/aws_postcondition_evidence_report.json --markdown-output reports/customer_working/AWS_Postcondition_Evidence_Report.md --pretty",
     "general_customer_evaluation": "python -m reference_engine.customer_evaluation customer_working/customer_actions.json --json-output reports/customer_working/customer_evaluation_report.json --markdown-output reports/customer_working/Customer_Evaluation_Report.md --pretty",
@@ -67,7 +76,7 @@
     "customer records, regulated payloads, private prompts, proprietary policy bodies, or incident-sensitive details",
     "permission to assume roles, inspect live accounts, execute change sets, modify IAM, access S3, rotate secrets, or change cross-account trust"
   ],
-  "generated_at": "2026-09-08T01:12:13+00:00",
+  "generated_at": "2026-09-09T01:09:51+00:00",
   "request": "Please replace the public examples with 12 metadata-only actions from one AWS-style cloud automation workflow family.",
   "requested_action_count": 12,
   "required_fields": [
