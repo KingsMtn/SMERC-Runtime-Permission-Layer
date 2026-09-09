@@ -13,11 +13,14 @@ class AWSAgentActionChainTests(unittest.TestCase):
         report = build_report(load_payload(SAMPLE))
 
         self.assertEqual(report["version"], "smerc.aws-agent-action-chain.v1")
-        self.assertEqual(report["scenario_count"], 5)
-        self.assertEqual(report["summary"]["valid_ledgers"], 5)
+        self.assertEqual(report["scenario_count"], 8)
+        self.assertEqual(report["summary"]["valid_ledgers"], 8)
         self.assertIn("pass", report["summary"]["bedrock_guardrail_counts"])
         self.assertIn("iam", report["summary"]["aws_surface_counts"])
         self.assertIn("cloudformation", report["summary"]["aws_surface_counts"])
+        self.assertIn("s3_policy", report["summary"]["aws_surface_counts"])
+        self.assertIn("cross_account_delegation", report["summary"]["aws_surface_counts"])
+        self.assertIn("agent_runtime_retry_loop", report["summary"]["aws_surface_counts"])
 
     def test_records_show_chain_context(self):
         report = build_report(load_payload(SAMPLE))
@@ -28,6 +31,10 @@ class AWSAgentActionChainTests(unittest.TestCase):
         self.assertEqual(iam_record["rollback_checkpoint_state"], "missing")
         self.assertEqual(iam_record["ref_gate_status"], "fail")
         self.assertIn(iam_record["smerc_posture"], {"DENY", "FREEZE", "ESCALATE"})
+
+        retry_record = next(record for record in report["records"] if record["action_id"] == "AWS_CHAIN_AGENT_RETRY_LOOP_008")
+        self.assertEqual(retry_record["aws_surface"], "agent_runtime_retry_loop")
+        self.assertEqual(retry_record["smerc_posture"], "THROTTLE")
 
     def test_markdown_is_bounded_and_positioned(self):
         markdown = render_markdown(build_report(load_payload(SAMPLE)))

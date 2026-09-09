@@ -61,7 +61,7 @@ The repository contains working pilot-grade artifacts:
 - serious report performance evidence for local p50, p95, and maximum proof-path latency
 - financial runtime evaluation profile
 - public scenario benchmark
-- AWS Agent Action Chain proof for showing where SMERC fits after Bedrock-style guardrails and before Dynamic IAM, Systems Manager, CloudFormation, CloudWatch remediation, cost-sensitive scaling, or cloud execution
+- AWS Agent Action Chain proof for showing where SMERC fits after Bedrock-style guardrails and before Dynamic IAM, Systems Manager, CloudFormation, CloudWatch remediation, S3 policy changes, cross-account delegation, retry loops, cost-sensitive scaling, or cloud execution
 - AWS Agent Action Chain Postcondition Evidence for checking whether AWS-style observation metadata proves that SMERC-required route controls actually happened after routing
 - AWS Cloud Action Replay Pack for AgentCore-style runtime/gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style capacity, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation
 - AWS Deployable Bot Readiness Path for evaluating what SMERC must prove before an AWS-style platform team could consider it as a governed action bot

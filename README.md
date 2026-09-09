@@ -1239,7 +1239,7 @@ Run the AWS Agent Action Chain proof:
 python -m reference_engine.aws_agent_action_chain --pretty
 ```
 
-The AWS Agent Action Chain proof runs five metadata-only AWS-style chains through SMERC after a Bedrock-style guardrail result and before Dynamic IAM, Systems Manager, CloudFormation, CloudWatch remediation, cost-sensitive scaling, or cloud execution. It is designed to show that content/model approval and IAM authorization do not answer the same question as recoverability before execution.
+The AWS Agent Action Chain proof runs eight metadata-only AWS-style chains through SMERC after a Bedrock-style guardrail result and before Dynamic IAM, Systems Manager, CloudFormation, CloudWatch remediation, S3 policy changes, cross-account delegation, retry loops, cost-sensitive scaling, or cloud execution. It is designed to show that content/model approval and IAM authorization do not answer the same question as recoverability before execution.
 
 Run the AWS Agent Action Chain Postcondition Evidence proof:
 

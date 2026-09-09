@@ -16,9 +16,9 @@ class AWSAgentActionChainPostconditionTests(unittest.TestCase):
 
         self.assertEqual(report["version"], "smerc.aws-agent-action-chain-postcondition.v1")
         self.assertEqual(report["source_chain_version"], "smerc.aws-agent-action-chain.v1")
-        self.assertEqual(report["evaluated_actions"], 5)
-        self.assertEqual(report["observed_actions"], 5)
-        self.assertGreaterEqual(report["aws_postcondition_status_counts"].get("pass", 0), 4)
+        self.assertEqual(report["evaluated_actions"], 8)
+        self.assertEqual(report["observed_actions"], 8)
+        self.assertGreaterEqual(report["aws_postcondition_status_counts"].get("pass", 0), 7)
         self.assertGreaterEqual(report["aws_postcondition_status_counts"].get("gap", 0), 1)
 
     def test_detects_missing_chain_evidence_source(self):
@@ -28,6 +28,10 @@ class AWSAgentActionChainPostconditionTests(unittest.TestCase):
         change_set = by_id["AWS_CHAIN_CLOUDFORMATION_REPLACE_003"]
         self.assertEqual(change_set["aws_postcondition_status"], "gap")
         self.assertIn("cloudwatch_metric_or_log", change_set["missing_aws_evidence_sources"])
+
+        retry_loop = by_id["AWS_CHAIN_AGENT_RETRY_LOOP_008"]
+        self.assertEqual(retry_loop["aws_postcondition_status"], "pass")
+        self.assertIn("cost_anomaly_signal", retry_loop["observed_aws_evidence_sources"])
 
     def test_markdown_and_outputs_are_reviewer_readable(self):
         report = build_report(load_payload(ACTIONS), OBSERVATIONS)

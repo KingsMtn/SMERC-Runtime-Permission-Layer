@@ -256,5 +256,153 @@
       "rollback_success": null,
       "notes": "Cost-velocity-sensitive scaling action includes checkpoint, scope, preview, execution report, replay, and rollback-plan-shaped evidence."
     }
+  },
+  {
+    "action_id": "AWS_CHAIN_S3_DATA_EXPOSURE_006",
+    "aws_surface": "s3_policy_change_summary",
+    "expected_aws_evidence_sources": [
+      "cloudtrail_management_event",
+      "s3_policy_audit_record"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "s3-policy-change-blocked-before-apply",
+        "evidence_ref": "aws-chain-postcondition://s3-data-exposure/block",
+        "observed_at": "2026-09-09T01:10:00Z",
+        "aws_evidence_sources": ["cloudtrail_management_event", "s3_policy_audit_record"]
+      },
+      {
+        "control_id": "explain_denial",
+        "outcome": "applied",
+        "mechanism": "sensitive-data-exposure-denial-summary",
+        "evidence_ref": "aws-chain-postcondition://s3-data-exposure/explain",
+        "observed_at": "2026-09-09T01:10:01Z",
+        "aws_evidence_sources": ["s3_policy_audit_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "smerc-ledger-and-policy-diff-reference",
+        "evidence_ref": "aws-chain-postcondition://s3-data-exposure/replay",
+        "observed_at": "2026-09-09T01:10:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Sensitive S3 policy widening was blocked after guardrail and IAM allowed the request shape."
+    }
+  },
+  {
+    "action_id": "AWS_CHAIN_CROSS_ACCOUNT_DELEGATION_007",
+    "aws_surface": "cross_account_trust_summary",
+    "expected_aws_evidence_sources": [
+      "cloudtrail_management_event",
+      "iam_access_analyzer_or_policy_record"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "cross-account-trust-change-blocked-before-apply",
+        "evidence_ref": "aws-chain-postcondition://cross-account-delegation/block",
+        "observed_at": "2026-09-09T01:11:00Z",
+        "aws_evidence_sources": ["cloudtrail_management_event", "iam_access_analyzer_or_policy_record"]
+      },
+      {
+        "control_id": "explain_denial",
+        "outcome": "applied",
+        "mechanism": "delegated-authority-gap-summary",
+        "evidence_ref": "aws-chain-postcondition://cross-account-delegation/explain",
+        "observed_at": "2026-09-09T01:11:01Z",
+        "aws_evidence_sources": ["iam_access_analyzer_or_policy_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "smerc-decision-ledger-record",
+        "evidence_ref": "aws-chain-postcondition://cross-account-delegation/replay",
+        "observed_at": "2026-09-09T01:11:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Cross-account delegation was blocked because authority provenance and rollback checkpoint evidence were incomplete."
+    }
+  },
+  {
+    "action_id": "AWS_CHAIN_AGENT_RETRY_LOOP_008",
+    "aws_surface": "agent_runtime_retry_loop_summary",
+    "expected_aws_evidence_sources": [
+      "agentcore_runtime_usage_log",
+      "cloudwatch_metric_or_log",
+      "cost_anomaly_signal"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "runtime-loop-state-checkpoint-summary",
+        "evidence_ref": "aws-chain-postcondition://retry-loop/checkpoint",
+        "observed_at": "2026-09-09T01:12:00Z",
+        "aws_evidence_sources": ["agentcore_runtime_usage_log"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "retry-loop-scope-and-attempt-bound",
+        "evidence_ref": "aws-chain-postcondition://retry-loop/scope",
+        "observed_at": "2026-09-09T01:12:01Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "smerc-ledger-and-runtime-loop-reference",
+        "evidence_ref": "aws-chain-postcondition://retry-loop/replay",
+        "observed_at": "2026-09-09T01:12:02Z",
+        "aws_evidence_sources": ["agentcore_runtime_usage_log"]
+      },
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "retry-and-cost-velocity-preview-summary",
+        "evidence_ref": "aws-chain-postcondition://retry-loop/preview",
+        "observed_at": "2026-09-09T01:12:03Z",
+        "aws_evidence_sources": ["cost_anomaly_signal"]
+      },
+      {
+        "control_id": "record_execution_report",
+        "outcome": "applied",
+        "mechanism": "runtime-loop-throttle-execution-summary",
+        "evidence_ref": "aws-chain-postcondition://retry-loop/report",
+        "observed_at": "2026-09-09T01:12:04Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log", "agentcore_runtime_usage_log"]
+      },
+      {
+        "control_id": "require_rollback_plan",
+        "outcome": "applied",
+        "mechanism": "retry-loop-stop-and-scale-down-plan",
+        "evidence_ref": "aws-chain-postcondition://retry-loop/rollback",
+        "observed_at": "2026-09-09T01:12:05Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "held_for_review",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Retry loop was constrained and held for review after repeated uncertain outcomes and cost velocity pressure."
+    }
   }
 ]

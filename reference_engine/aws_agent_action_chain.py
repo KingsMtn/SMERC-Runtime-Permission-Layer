@@ -153,7 +153,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         "",
         "## Work / Result / Impact",
         "",
-        "Work: run five metadata-only AWS-style agent action chains through SMERC after a Bedrock-style guardrail result and before IAM, Systems Manager, CloudFormation, CloudWatch, cost-scaling, or cloud execution.",
+        f"Work: run `{report['scenario_count']}` metadata-only AWS-style agent action chains through SMERC after a Bedrock-style guardrail result and before IAM, Systems Manager, CloudFormation, CloudWatch, S3 policy changes, cross-account delegation, retry loops, cost-scaling, or cloud execution.",
         "",
         f"Result: `{report['scenario_count']}` chains evaluated with posture counts `{report['summary']['posture_counts']}`, route counts `{report['summary']['route_state_counts']}`, and `{report['summary']['valid_ledgers']}` valid ledgers.",
         "",
