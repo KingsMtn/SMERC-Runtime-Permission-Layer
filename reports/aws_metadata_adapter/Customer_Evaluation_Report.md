@@ -1,7 +1,7 @@
 # AWS Metadata Adapter Review SMERC Customer Evaluation Report
 
 Version: `smerc.customer-evaluation.v1`
-Generated: `2026-09-08T01:12:12+00:00`
+Generated: `2026-09-09T10:56:16+00:00`
 Contact role: `aws_platform_security_reviewer`
 
 ## Evidence Boundary

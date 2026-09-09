@@ -35,9 +35,29 @@
         "max_scope_units": 100,
         "metadata": {
           "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": "lambda",
+            "inline_tool_permissions_present": true,
+            "parameter_constraints_present": true,
+            "policy_analysis_result": "bounded_policy",
+            "policy_engine_decision": "allow_with_constraints",
+            "policy_language": "cedar",
+            "policy_schema_validated": true,
+            "target_registered": true
+          },
           "aws_surface": "bedrock_agentcore_gateway",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.24,
+          "derived_output_governance": {
+            "access_control_composition": "intersect_access_controls",
+            "derived_output_contains_restricted_summary": true,
+            "input_sensitivity_level": "customer_data",
+            "output_sensitivity_level": "customer_data",
+            "regulatory_tags": [
+              "privacy",
+              "customer-data"
+            ]
+          },
           "environment": "production",
           "gateway_path": "governed_gateway",
           "postcondition_evidence_expected": true,
@@ -107,9 +127,29 @@
         "max_scope_units": 100,
         "metadata": {
           "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": "smithy_model",
+            "inline_tool_permissions_present": true,
+            "parameter_constraints_present": true,
+            "policy_analysis_result": "overbroad_permission_boundary",
+            "policy_engine_decision": "deny",
+            "policy_language": "cedar",
+            "policy_schema_validated": true,
+            "target_registered": true
+          },
           "aws_surface": "iam",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.2,
+          "derived_output_governance": {
+            "access_control_composition": "max_sensitivity_union_tags",
+            "derived_output_contains_restricted_summary": false,
+            "input_sensitivity_level": "privileged_infrastructure",
+            "output_sensitivity_level": "privileged_infrastructure",
+            "regulatory_tags": [
+              "sox",
+              "privileged-access"
+            ]
+          },
           "environment": "production",
           "gateway_path": "change_management_queue",
           "postcondition_evidence_expected": true,
@@ -179,9 +219,29 @@
         "max_scope_units": 100,
         "metadata": {
           "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": "openapi",
+            "inline_tool_permissions_present": true,
+            "parameter_constraints_present": true,
+            "policy_analysis_result": "stateful_replacement_requires_review",
+            "policy_engine_decision": "allow_with_constraints",
+            "policy_language": "cedar",
+            "policy_schema_validated": true,
+            "target_registered": true
+          },
           "aws_surface": "cloudformation",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.46,
+          "derived_output_governance": {
+            "access_control_composition": "preserve_highest_sensitivity",
+            "derived_output_contains_restricted_summary": false,
+            "input_sensitivity_level": "service_state",
+            "output_sensitivity_level": "service_state",
+            "regulatory_tags": [
+              "resilience",
+              "change-management"
+            ]
+          },
           "environment": "production",
           "gateway_path": "deployment_change_set",
           "postcondition_evidence_expected": true,
@@ -251,9 +311,29 @@
         "max_scope_units": 100,
         "metadata": {
           "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": "lambda",
+            "inline_tool_permissions_present": false,
+            "parameter_constraints_present": false,
+            "policy_analysis_result": "missing_cost_velocity_constraint",
+            "policy_engine_decision": "allow",
+            "policy_language": "cedar",
+            "policy_schema_validated": true,
+            "target_registered": true
+          },
           "aws_surface": "cost_management",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.88,
+          "derived_output_governance": {
+            "access_control_composition": "union_cost_and_runtime_tags",
+            "derived_output_contains_restricted_summary": false,
+            "input_sensitivity_level": "operational_cost",
+            "output_sensitivity_level": "operational_cost",
+            "regulatory_tags": [
+              "finops",
+              "runtime-cost"
+            ]
+          },
           "environment": "production",
           "gateway_path": "autoscaling_policy",
           "postcondition_evidence_expected": true,
@@ -323,9 +403,29 @@
         "max_scope_units": 100,
         "metadata": {
           "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": "openapi",
+            "inline_tool_permissions_present": true,
+            "parameter_constraints_present": true,
+            "policy_analysis_result": "data_access_requires_scope_bound",
+            "policy_engine_decision": "allow_with_constraints",
+            "policy_language": "cedar",
+            "policy_schema_validated": true,
+            "target_registered": true
+          },
           "aws_surface": "s3",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.12,
+          "derived_output_governance": {
+            "access_control_composition": "max_sensitivity_intersect_access",
+            "derived_output_contains_restricted_summary": true,
+            "input_sensitivity_level": "restricted_data",
+            "output_sensitivity_level": "restricted_data",
+            "regulatory_tags": [
+              "privacy",
+              "data-access"
+            ]
+          },
           "environment": "production",
           "gateway_path": "data_access_change_queue",
           "postcondition_evidence_expected": true,
@@ -395,9 +495,29 @@
         "max_scope_units": 100,
         "metadata": {
           "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": "lambda",
+            "inline_tool_permissions_present": true,
+            "parameter_constraints_present": true,
+            "policy_analysis_result": "dependency_readiness_required",
+            "policy_engine_decision": "allow_with_constraints",
+            "policy_language": "cedar",
+            "policy_schema_validated": true,
+            "target_registered": true
+          },
           "aws_surface": "secrets_manager",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.18,
+          "derived_output_governance": {
+            "access_control_composition": "preserve_secret_boundary",
+            "derived_output_contains_restricted_summary": true,
+            "input_sensitivity_level": "secret_reference",
+            "output_sensitivity_level": "secret_reference",
+            "regulatory_tags": [
+              "secret-management",
+              "service-auth"
+            ]
+          },
           "environment": "production",
           "gateway_path": "service_auth_change_queue",
           "postcondition_evidence_expected": true,
@@ -435,7 +555,7 @@
   ],
   "contact_role": "aws_platform_security_reviewer",
   "data_boundary": "AWS metadata adapter evaluation. Inputs are exported summaries only. No AWS credentials, account IDs, ARNs, raw logs, private topology, customer records, secrets, production commands, or live AWS access are included.",
-  "evaluation_date": "2026-09-08",
+  "evaluation_date": "2026-09-09",
   "initial_autonomy_state": "HEALTHY",
   "organization": "AWS Metadata Adapter Review",
   "tenant_id": "aws-metadata-adapter-review",

@@ -1263,7 +1263,7 @@ Run the AWS Metadata Adapter stub:
 python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty
 ```
 
-The AWS Metadata Adapter is a non-executing proof that accepts safe exported summaries, captures gateway-only path, gateway bypass, on-behalf-of authority, session mode, approval mode, temporal policy context, and MCP-style progress/message notification context, rejects unsafe rows containing prohibited fields, normalizes accepted rows into the SMERC customer-evaluation contract, and reports posture counts, skipped reasons, route states, session summaries, and evidence boundaries. It does not call AWS APIs, assume roles, inspect live accounts, read CloudTrail, execute CloudFormation, modify IAM, access S3, change RDS, trigger remediation, rotate secrets, or change cross-account trust.
+The AWS Metadata Adapter is a non-executing proof that accepts safe exported summaries, captures gateway-only path, gateway bypass, on-behalf-of authority, session mode, approval mode, temporal policy context, AgentCore/Cedar-style policy context, derived-output governance context, and MCP-style progress/message notification context, rejects unsafe rows containing prohibited fields, normalizes accepted rows into the SMERC customer-evaluation contract, and reports posture counts, skipped reasons, route states, session summaries, policy summaries, derived-output summaries, and evidence boundaries. It does not call AWS APIs, assume roles, inspect live accounts, read CloudTrail, execute CloudFormation, modify IAM, access S3, change RDS, trigger remediation, rotate secrets, or change cross-account trust.
 
 Run the Cloud Metadata Connector:
 

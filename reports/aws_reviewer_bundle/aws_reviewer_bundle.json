@@ -7,7 +7,7 @@
   ],
   "bundle_status": "ready_for_limited_aws_review",
   "evidence_boundary": "This is a local, metadata-only AWS-style review package. It does not connect to AWS, invoke Amazon Bedrock, call IAM, run Systems Manager, apply CloudFormation, read CloudTrail or CloudWatch, modify infrastructure, prove AWS endorsement, prove AWS certification, or establish production safety.",
-  "generated_at": "2026-09-09T07:58:12+00:00",
+  "generated_at": "2026-09-09T10:56:16+00:00",
   "readiness": {
     "aws_postcondition_gaps": 2,
     "aws_postcondition_violations": 0,
@@ -15,7 +15,7 @@
     "chain_postcondition_gaps": 1,
     "chain_postcondition_violations": 0,
     "next_action": "Use the gaps as reviewer questions and ask for 5 to 25 safe AWS-style action and observation summaries.",
-    "slowest_p95_ms": 7.333,
+    "slowest_p95_ms": 13.863,
     "status": "ready_for_limited_aws_review",
     "takeaways": [
       "The AWS path is now one command instead of separate documents.",
@@ -161,7 +161,7 @@
             }
           ],
           "earned_autonomy": {},
-          "generated_at": "2026-09-09T07:58:12+00:00",
+          "generated_at": "2026-09-09T10:56:16+00:00",
           "initial_state": "HEALTHY",
           "plain_english_summary": "Autonomy should be suspended for this session because the action stream exhausted or violated the current autonomy budget. Human review should requalify the agent or tool family before more autonomous execution is allowed.",
           "remaining": {
@@ -189,7 +189,7 @@
         "data_boundary": "AWS-style metadata-only evaluation. No AWS account identifiers, ARNs, secrets, credentials, raw logs, private topology, customer data, source code, production commands, or live AWS access are included.",
         "evaluation_date": "2026-09-09",
         "evidence_boundary": "This is a metadata-only customer evaluation. It proves local runtime coherence on supplied action metadata; it does not prove production safety, compliance, incident reduction, customer demand, or readiness to enforce in a live environment.",
-        "generated_at": "2026-09-09T07:58:12+00:00",
+        "generated_at": "2026-09-09T10:56:16+00:00",
         "organization": "AWS-Style Agent Action Chain Review",
         "pilot_fit": {
           "fit": "strong",
@@ -473,7 +473,7 @@
                   "profile_id": "cloud_admin"
                 },
                 "enforcement_state": "constrain",
-                "evaluated_at": "2026-09-09T07:58:12.736419+00:00",
+                "evaluated_at": "2026-09-09T10:56:16.408406+00:00",
                 "policy": {
                   "evidence_ceiling": "OBSERVE",
                   "mode": "OBSERVE",
@@ -486,7 +486,7 @@
                 "reason_codes": [
                   "EXTERNAL_SIDE_EFFECT"
                 ],
-                "replay_id": "replay_AWS_CHAIN_SAFE_CONFIG_UPDATE_001_1788940692736_c19a0a263d08",
+                "replay_id": "replay_AWS_CHAIN_SAFE_CONFIG_UPDATE_001_1788951376408_dff46a81de55",
                 "scores": {
                   "cancel_reliability_score": 0.81,
                   "confidence_score": 0.829,
@@ -516,7 +516,7 @@
                   "target_posture": "THROTTLE"
                 }
               },
-              "replay_id": "replay_AWS_CHAIN_SAFE_CONFIG_UPDATE_001_1788940692736_c19a0a263d08",
+              "replay_id": "replay_AWS_CHAIN_SAFE_CONFIG_UPDATE_001_1788951376408_dff46a81de55",
               "scores": {
                 "cancel_reliability_score": 0.81,
                 "confidence_score": 0.829,
@@ -547,7 +547,7 @@
             },
             "decision_lifecycle_ledger": {
               "decision_id": "customer_eval_AWS_CHAIN_SAFE_CONFIG_UPDATE_001",
-              "head_record_hash": "bfc50e3a5aa70958a22bf5395a3d36efb704e320518585224b2dae43725c5f21",
+              "head_record_hash": "ff8cad6f71218cccb64a52b2d65e456a955cc9aaf8c6563e62b14e0e2f9ca393",
               "record_count": 5,
               "records": [
                 {
@@ -561,9 +561,9 @@
                     "risk_profile": "cloud_admin"
                   },
                   "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-                  "record_hash": "f672b2a038b44803cbffaeef3acb01a15edd021e21003fc05f4b30055695f359",
+                  "record_hash": "9e2e92a7fee1aaa4d9a869720da96d1a5f059f1e5af291b38f66ecd255df8a3c",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 1,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -586,10 +586,10 @@
                     "model_version": "customer-supplied-agent-metadata",
                     "policy_version": "smerc-reference-recoverability"
                   },
-                  "previous_record_hash": "f672b2a038b44803cbffaeef3acb01a15edd021e21003fc05f4b30055695f359",
-                  "record_hash": "b76643721cae1d57ced7d8969ebff1403dfbbdc7e13debb9106d1eac6e25b884",
+                  "previous_record_hash": "9e2e92a7fee1aaa4d9a869720da96d1a5f059f1e5af291b38f66ecd255df8a3c",
+                  "record_hash": "30171089d74132c5af89399a45a837be8a8127e16f719bead0fd810e8601b1fc",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 2,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -616,10 +616,10 @@
                     "recoverability_score": 0.76,
                     "structural_state": "ref_gate=pass; scoring=admitted_with_agent_identity_watch; route=CONSTRAINED_EXECUTE"
                   },
-                  "previous_record_hash": "b76643721cae1d57ced7d8969ebff1403dfbbdc7e13debb9106d1eac6e25b884",
-                  "record_hash": "339d03dbd3ea4afa6e1cb7e68c6cf9bcb13caaaee6be6c1d1f38dadd7d279381",
+                  "previous_record_hash": "30171089d74132c5af89399a45a837be8a8127e16f719bead0fd810e8601b1fc",
+                  "record_hash": "5b3d5075618144d7c5e370b15b01440291c0117bba014d0f9a6f9994867eb792",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 3,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -633,12 +633,12 @@
                     "execution_status": "succeeded",
                     "rollback_performed": false,
                     "rollback_success": null,
-                    "started_at": "2026-09-09T07:58:12+00:00"
+                    "started_at": "2026-09-09T10:56:16+00:00"
                   },
-                  "previous_record_hash": "339d03dbd3ea4afa6e1cb7e68c6cf9bcb13caaaee6be6c1d1f38dadd7d279381",
-                  "record_hash": "cdeb65f52ec90b108c1abbad15d52432538329742a8b6327b06fefc8ad514b03",
+                  "previous_record_hash": "5b3d5075618144d7c5e370b15b01440291c0117bba014d0f9a6f9994867eb792",
+                  "record_hash": "3b536d6d26ba2ef7303f5c4951fc33e5e127ebb4e557073ea609cc6549f43ef9",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 4,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -656,10 +656,10 @@
                     "time_to_recover_minutes": 0.0,
                     "unexpected_consequences": false
                   },
-                  "previous_record_hash": "cdeb65f52ec90b108c1abbad15d52432538329742a8b6327b06fefc8ad514b03",
-                  "record_hash": "bfc50e3a5aa70958a22bf5395a3d36efb704e320518585224b2dae43725c5f21",
+                  "previous_record_hash": "3b536d6d26ba2ef7303f5c4951fc33e5e127ebb4e557073ea609cc6549f43ef9",
+                  "record_hash": "ff8cad6f71218cccb64a52b2d65e456a955cc9aaf8c6563e62b14e0e2f9ca393",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 5,
                   "tenant_id": "aws-agent-action-chain-review"
                 }
@@ -687,7 +687,7 @@
               "tenant_id": "aws-agent-action-chain-review",
               "verification": {
                 "errors": [],
-                "head_record_hash": "bfc50e3a5aa70958a22bf5395a3d36efb704e320518585224b2dae43725c5f21",
+                "head_record_hash": "ff8cad6f71218cccb64a52b2d65e456a955cc9aaf8c6563e62b14e0e2f9ca393",
                 "record_count": 5,
                 "valid": true
               },
@@ -726,8 +726,8 @@
                 "require_rollback_plan"
               ],
               "blocked_controls": [],
-              "decision_digest": "526971e1c2f1a9f8eec1b1a571bf87ea2b4bc8677276a8b15d257a3e56cd5c15",
-              "decision_replay_id": "replay_AWS_CHAIN_SAFE_CONFIG_UPDATE_001_1788940692736_c19a0a263d08",
+              "decision_digest": "099c842f57e059643b5a95104223a42353f4f5aee37fb2dd8c0d7ca8d33f3dc6",
+              "decision_replay_id": "replay_AWS_CHAIN_SAFE_CONFIG_UPDATE_001_1788951376408_dff46a81de55",
               "effective_scope_units": 18,
               "executable": true,
               "plain_english_summary": "SPARTa converted the throttled SMERC posture into a constrained execution route with smaller scope and recovery controls.",
@@ -736,9 +736,9 @@
                 "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
               ],
               "recommended_next_action": "Execute only through an adapter that enforces the listed controls and records control evidence.",
-              "route_id": "sparta_plan_aws_chain_safe_config_update_001_eea30e79a97e",
+              "route_id": "sparta_plan_aws_chain_safe_config_update_001_0e4676cff829",
               "route_state": "CONSTRAINED_EXECUTE",
-              "routed_at": "2026-09-09T07:58:12+00:00",
+              "routed_at": "2026-09-09T10:56:16+00:00",
               "source_posture": "THROTTLE",
               "tool_plan": {
                 "action": "ssm_scoped_config_update",
@@ -1057,7 +1057,7 @@
                   "profile_id": "cloud_admin"
                 },
                 "enforcement_state": "constrain",
-                "evaluated_at": "2026-09-09T07:58:12.740181+00:00",
+                "evaluated_at": "2026-09-09T10:56:16.408406+00:00",
                 "policy": {
                   "evidence_ceiling": "OBSERVE",
                   "mode": "OBSERVE",
@@ -1074,7 +1074,7 @@
                   "EXTERNAL_SIDE_EFFECT",
                   "SENSITIVE_DATA"
                 ],
-                "replay_id": "replay_AWS_CHAIN_GUARDRAIL_PASS_IAM_WIDE_002_1788940692740_984a9fa463d7",
+                "replay_id": "replay_AWS_CHAIN_GUARDRAIL_PASS_IAM_WIDE_002_1788951376408_ac2b42a53f81",
                 "scores": {
                   "cancel_reliability_score": 0.49,
                   "confidence_score": 0.643,
@@ -1118,7 +1118,7 @@
                   "target_posture": "THROTTLE"
                 }
               },
-              "replay_id": "replay_AWS_CHAIN_GUARDRAIL_PASS_IAM_WIDE_002_1788940692740_984a9fa463d7",
+              "replay_id": "replay_AWS_CHAIN_GUARDRAIL_PASS_IAM_WIDE_002_1788951376408_ac2b42a53f81",
               "scores": {
                 "cancel_reliability_score": 0.49,
                 "confidence_score": 0.643,
@@ -1163,7 +1163,7 @@
             },
             "decision_lifecycle_ledger": {
               "decision_id": "customer_eval_AWS_CHAIN_GUARDRAIL_PASS_IAM_WIDE_002",
-              "head_record_hash": "16509641f7873024ed3047a426e533201c3bb42058cc2528bdcd3ea6c067b0c9",
+              "head_record_hash": "d601a5dfa33846354ab72283a47d0bffeede13152c479ec78cf8b5f9e0335e96",
               "record_count": 5,
               "records": [
                 {
@@ -1177,9 +1177,9 @@
                     "risk_profile": "cloud_admin"
                   },
                   "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-                  "record_hash": "55877256eed2d09c74b4b156a4e0170405a2dc054ac4875514085507e1b1c507",
+                  "record_hash": "964a191147a719cc9d385400eccc4dafc8fbda15f737cc2cfb202bb28fecfa78",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 1,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -1204,10 +1204,10 @@
                     "model_version": "customer-supplied-agent-metadata",
                     "policy_version": "smerc-reference-recoverability"
                   },
-                  "previous_record_hash": "55877256eed2d09c74b4b156a4e0170405a2dc054ac4875514085507e1b1c507",
-                  "record_hash": "ba8605befc6a2e46d23b581876077c5409d92b7a4602f514f3c2c875a89d7664",
+                  "previous_record_hash": "964a191147a719cc9d385400eccc4dafc8fbda15f737cc2cfb202bb28fecfa78",
+                  "record_hash": "20a177fe64b855f30c1097465cdd0d18a7e0c4e338c7ea6e883da3a1e5e833e9",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 2,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -1244,10 +1244,10 @@
                     "recoverability_score": 0.428,
                     "structural_state": "ref_gate=fail; scoring=capped_by_ref_gate; route=BLOCK"
                   },
-                  "previous_record_hash": "ba8605befc6a2e46d23b581876077c5409d92b7a4602f514f3c2c875a89d7664",
-                  "record_hash": "781dca75d2e703f80cc91d1da1d4a6bc7f3c46dbbe3dd1e38337bcbcb30ece49",
+                  "previous_record_hash": "20a177fe64b855f30c1097465cdd0d18a7e0c4e338c7ea6e883da3a1e5e833e9",
+                  "record_hash": "6f2159f70619f493825215a3a4c29a4bfc90862699123b08755ac85f00823aa6",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 3,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -1261,12 +1261,12 @@
                     "execution_status": "not_executed",
                     "rollback_performed": false,
                     "rollback_success": null,
-                    "started_at": "2026-09-09T07:58:12+00:00"
+                    "started_at": "2026-09-09T10:56:16+00:00"
                   },
-                  "previous_record_hash": "781dca75d2e703f80cc91d1da1d4a6bc7f3c46dbbe3dd1e38337bcbcb30ece49",
-                  "record_hash": "361b4c2d779c26b5fbb4b9aaa4451af47de90a7c3fd78668bf96c2ba36331eb7",
+                  "previous_record_hash": "6f2159f70619f493825215a3a4c29a4bfc90862699123b08755ac85f00823aa6",
+                  "record_hash": "56ff13aa7acd7dd296b4d8051afa16e254cee57ed37b874f38a1719fa8108317",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 4,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -1284,10 +1284,10 @@
                     "time_to_recover_minutes": 0.0,
                     "unexpected_consequences": false
                   },
-                  "previous_record_hash": "361b4c2d779c26b5fbb4b9aaa4451af47de90a7c3fd78668bf96c2ba36331eb7",
-                  "record_hash": "16509641f7873024ed3047a426e533201c3bb42058cc2528bdcd3ea6c067b0c9",
+                  "previous_record_hash": "56ff13aa7acd7dd296b4d8051afa16e254cee57ed37b874f38a1719fa8108317",
+                  "record_hash": "d601a5dfa33846354ab72283a47d0bffeede13152c479ec78cf8b5f9e0335e96",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 5,
                   "tenant_id": "aws-agent-action-chain-review"
                 }
@@ -1315,7 +1315,7 @@
               "tenant_id": "aws-agent-action-chain-review",
               "verification": {
                 "errors": [],
-                "head_record_hash": "16509641f7873024ed3047a426e533201c3bb42058cc2528bdcd3ea6c067b0c9",
+                "head_record_hash": "d601a5dfa33846354ab72283a47d0bffeede13152c479ec78cf8b5f9e0335e96",
                 "record_count": 5,
                 "valid": true
               },
@@ -1355,8 +1355,8 @@
               "blocked_controls": [
                 "execute"
               ],
-              "decision_digest": "a86f247f108211f07d7933de8490e5383f352b8f2f3eb8d5f813d6dba0365071",
-              "decision_replay_id": "replay_AWS_CHAIN_GUARDRAIL_PASS_IAM_WIDE_002_1788940692740_984a9fa463d7",
+              "decision_digest": "93c70c947e0b8f8a5ddf8779cae2f70b0f4a916eddd0738fc9de291dca6025d5",
+              "decision_replay_id": "replay_AWS_CHAIN_GUARDRAIL_PASS_IAM_WIDE_002_1788951376408_ac2b42a53f81",
               "effective_scope_units": 0,
               "executable": false,
               "plain_english_summary": "SPARTa blocked execution because SMERC determined the action is not structurally defensible.",
@@ -1365,9 +1365,9 @@
                 "SPARTA_DENY_BLOCKS_EXECUTION"
               ],
               "recommended_next_action": "Do not execute this plan. Submit a materially safer action with stronger evidence or reduced impact.",
-              "route_id": "sparta_plan_aws_chain_guardrail_pass_iam_wide_002_cf0882af538d",
+              "route_id": "sparta_plan_aws_chain_guardrail_pass_iam_wide_002_a9b62cbc249c",
               "route_state": "BLOCK",
-              "routed_at": "2026-09-09T07:58:12+00:00",
+              "routed_at": "2026-09-09T10:56:16+00:00",
               "source_posture": "DENY",
               "tool_plan": {
                 "action": "iam_execution_role_expansion",
@@ -1686,7 +1686,7 @@
                   "profile_id": "cloud_admin"
                 },
                 "enforcement_state": "block",
-                "evaluated_at": "2026-09-09T07:58:12.740181+00:00",
+                "evaluated_at": "2026-09-09T10:56:16.408406+00:00",
                 "policy": {
                   "evidence_ceiling": "OBSERVE",
                   "mode": "OBSERVE",
@@ -1706,7 +1706,7 @@
                   "EXTERNAL_SIDE_EFFECT",
                   "SENSITIVE_DATA"
                 ],
-                "replay_id": "replay_AWS_CHAIN_CLOUDFORMATION_REPLACE_003_1788940692740_ad78215fdcb6",
+                "replay_id": "replay_AWS_CHAIN_CLOUDFORMATION_REPLACE_003_1788951376408_609ed543a6b1",
                 "scores": {
                   "cancel_reliability_score": 0.39,
                   "confidence_score": 0.598,
@@ -1748,7 +1748,7 @@
                   "target_posture": "THROTTLE"
                 }
               },
-              "replay_id": "replay_AWS_CHAIN_CLOUDFORMATION_REPLACE_003_1788940692740_ad78215fdcb6",
+              "replay_id": "replay_AWS_CHAIN_CLOUDFORMATION_REPLACE_003_1788951376408_609ed543a6b1",
               "scores": {
                 "cancel_reliability_score": 0.39,
                 "confidence_score": 0.598,
@@ -1791,7 +1791,7 @@
             },
             "decision_lifecycle_ledger": {
               "decision_id": "customer_eval_AWS_CHAIN_CLOUDFORMATION_REPLACE_003",
-              "head_record_hash": "7fd415425da053672760d27fe1c616c45e898c91277e71c2f95f877ffb8eaf6f",
+              "head_record_hash": "34e15f0e7e31618a7040d54b522a504d33aabe0433ffb83b11af2336fc034d86",
               "record_count": 5,
               "records": [
                 {
@@ -1805,9 +1805,9 @@
                     "risk_profile": "cloud_admin"
                   },
                   "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-                  "record_hash": "67b6437dbfd77697924238db2a6cd0aa41f9b549ed646c1f24ab23b3b6ad76a4",
+                  "record_hash": "916b59f2fc949079a7f1284fa86b2b3f05d1f91c46763777844bc482544402d4",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 1,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -1830,10 +1830,10 @@
                     "model_version": "customer-supplied-agent-metadata",
                     "policy_version": "smerc-reference-recoverability"
                   },
-                  "previous_record_hash": "67b6437dbfd77697924238db2a6cd0aa41f9b549ed646c1f24ab23b3b6ad76a4",
-                  "record_hash": "f78c0bc9ffd06b3534e2b38425dc5ef33b94bb4334faeef4af144e436da5de1f",
+                  "previous_record_hash": "916b59f2fc949079a7f1284fa86b2b3f05d1f91c46763777844bc482544402d4",
+                  "record_hash": "227e20c93c6bb6aaed5e3de649dbe12ed2d05732d87894af7332a52c3c62ef46",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 2,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -1874,10 +1874,10 @@
                     "recoverability_score": 0.355,
                     "structural_state": "ref_gate=pass; scoring=admitted_with_agent_identity_watch; route=BLOCK"
                   },
-                  "previous_record_hash": "f78c0bc9ffd06b3534e2b38425dc5ef33b94bb4334faeef4af144e436da5de1f",
-                  "record_hash": "086136a99778f9b654d927839052c8b8aa6bc0dc14217fc2c2d6cb64fb8ea474",
+                  "previous_record_hash": "227e20c93c6bb6aaed5e3de649dbe12ed2d05732d87894af7332a52c3c62ef46",
+                  "record_hash": "d6cb79187c1a59af65aa4d06c5bf48ee4221a3112d510f01fb054703b78705a8",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 3,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -1891,12 +1891,12 @@
                     "execution_status": "not_executed",
                     "rollback_performed": false,
                     "rollback_success": null,
-                    "started_at": "2026-09-09T07:58:12+00:00"
+                    "started_at": "2026-09-09T10:56:16+00:00"
                   },
-                  "previous_record_hash": "086136a99778f9b654d927839052c8b8aa6bc0dc14217fc2c2d6cb64fb8ea474",
-                  "record_hash": "67d55c74b8efa4dc8e1392dea6301b5bce3057875efb820463cd87c45ed827e8",
+                  "previous_record_hash": "d6cb79187c1a59af65aa4d06c5bf48ee4221a3112d510f01fb054703b78705a8",
+                  "record_hash": "50b29ddb0f62733e7147a288956d0ea577dac2c61655a5d77e35c5b0e2993d7e",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 4,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -1914,10 +1914,10 @@
                     "time_to_recover_minutes": 0.0,
                     "unexpected_consequences": false
                   },
-                  "previous_record_hash": "67d55c74b8efa4dc8e1392dea6301b5bce3057875efb820463cd87c45ed827e8",
-                  "record_hash": "7fd415425da053672760d27fe1c616c45e898c91277e71c2f95f877ffb8eaf6f",
+                  "previous_record_hash": "50b29ddb0f62733e7147a288956d0ea577dac2c61655a5d77e35c5b0e2993d7e",
+                  "record_hash": "34e15f0e7e31618a7040d54b522a504d33aabe0433ffb83b11af2336fc034d86",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 5,
                   "tenant_id": "aws-agent-action-chain-review"
                 }
@@ -1945,7 +1945,7 @@
               "tenant_id": "aws-agent-action-chain-review",
               "verification": {
                 "errors": [],
-                "head_record_hash": "7fd415425da053672760d27fe1c616c45e898c91277e71c2f95f877ffb8eaf6f",
+                "head_record_hash": "34e15f0e7e31618a7040d54b522a504d33aabe0433ffb83b11af2336fc034d86",
                 "record_count": 5,
                 "valid": true
               },
@@ -1983,8 +1983,8 @@
               "blocked_controls": [
                 "execute"
               ],
-              "decision_digest": "8d676351cc72e30b10061ad5b22cf4c67d7823644749ff163e49cb8afe3b3e2a",
-              "decision_replay_id": "replay_AWS_CHAIN_CLOUDFORMATION_REPLACE_003_1788940692740_ad78215fdcb6",
+              "decision_digest": "7d8483264237fddcaeae5e2213a89e0cd508d806ea89c14c60a203d1d38c5e1f",
+              "decision_replay_id": "replay_AWS_CHAIN_CLOUDFORMATION_REPLACE_003_1788951376408_609ed543a6b1",
               "effective_scope_units": 0,
               "executable": false,
               "plain_english_summary": "SPARTa blocked execution because SMERC determined the action is not structurally defensible.",
@@ -1993,9 +1993,9 @@
                 "SPARTA_DENY_BLOCKS_EXECUTION"
               ],
               "recommended_next_action": "Do not execute this plan. Submit a materially safer action with stronger evidence or reduced impact.",
-              "route_id": "sparta_plan_aws_chain_cloudformation_replace_003_9ab16fa1d320",
+              "route_id": "sparta_plan_aws_chain_cloudformation_replace_003_787181acef77",
               "route_state": "BLOCK",
-              "routed_at": "2026-09-09T07:58:12+00:00",
+              "routed_at": "2026-09-09T10:56:16+00:00",
               "source_posture": "DENY",
               "tool_plan": {
                 "action": "cloudformation_apply_replacement_changeset",
@@ -2313,7 +2313,7 @@
                   "profile_id": "cloud_admin"
                 },
                 "enforcement_state": "constrain",
-                "evaluated_at": "2026-09-09T07:58:12.740181+00:00",
+                "evaluated_at": "2026-09-09T10:56:16.413170+00:00",
                 "policy": {
                   "evidence_ceiling": "OBSERVE",
                   "mode": "OBSERVE",
@@ -2329,7 +2329,7 @@
                   "ANOMALY_PRESSURE_HIGH",
                   "EXTERNAL_SIDE_EFFECT"
                 ],
-                "replay_id": "replay_AWS_CHAIN_CLOUDWATCH_REMEDIATION_004_1788940692740_0fbd1d151322",
+                "replay_id": "replay_AWS_CHAIN_CLOUDWATCH_REMEDIATION_004_1788951376413_c0cd60222c0b",
                 "scores": {
                   "cancel_reliability_score": 0.57,
                   "confidence_score": 0.519,
@@ -2372,7 +2372,7 @@
                   "target_posture": "THROTTLE"
                 }
               },
-              "replay_id": "replay_AWS_CHAIN_CLOUDWATCH_REMEDIATION_004_1788940692740_0fbd1d151322",
+              "replay_id": "replay_AWS_CHAIN_CLOUDWATCH_REMEDIATION_004_1788951376413_c0cd60222c0b",
               "scores": {
                 "cancel_reliability_score": 0.57,
                 "confidence_score": 0.519,
@@ -2416,7 +2416,7 @@
             },
             "decision_lifecycle_ledger": {
               "decision_id": "customer_eval_AWS_CHAIN_CLOUDWATCH_REMEDIATION_004",
-              "head_record_hash": "888baaabba3bbd601ae3f23521c682421ebf17235c6925d056982ffa4d9a6b25",
+              "head_record_hash": "270d01401635610a3148e4ec9be9170bc9150b36034beb779f349644ff80e508",
               "record_count": 5,
               "records": [
                 {
@@ -2430,9 +2430,9 @@
                     "risk_profile": "cloud_admin"
                   },
                   "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-                  "record_hash": "7d840ec5e4846a083e70dcf01cb68e13c9c80db08e2248606543c40fc60434ad",
+                  "record_hash": "90367b928a172197ac8139acdfff4319c88ef4afe76c1fbff89432aa2f94cd70",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 1,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -2457,10 +2457,10 @@
                     "model_version": "customer-supplied-agent-metadata",
                     "policy_version": "smerc-reference-recoverability"
                   },
-                  "previous_record_hash": "7d840ec5e4846a083e70dcf01cb68e13c9c80db08e2248606543c40fc60434ad",
-                  "record_hash": "9f218394a32caa4b1b0def8a28dea433d47fee0b84692dd73d723f495772fdcc",
+                  "previous_record_hash": "90367b928a172197ac8139acdfff4319c88ef4afe76c1fbff89432aa2f94cd70",
+                  "record_hash": "9df00e4e5315dd309b09d98afda22a5529e0704494505c63f7a1a66c6f337271",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 2,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -2495,10 +2495,10 @@
                     "recoverability_score": 0.555,
                     "structural_state": "ref_gate=fail; scoring=capped_by_ref_gate; route=BLOCK"
                   },
-                  "previous_record_hash": "9f218394a32caa4b1b0def8a28dea433d47fee0b84692dd73d723f495772fdcc",
-                  "record_hash": "0f833d0d548d5a2663a7099e4c47280162957713681b76766a7afef26ae6586a",
+                  "previous_record_hash": "9df00e4e5315dd309b09d98afda22a5529e0704494505c63f7a1a66c6f337271",
+                  "record_hash": "c1bba9593449c4b109d8c51a64530e695d71eb5940db1446b54e4a0a17ab3aed",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 3,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -2512,12 +2512,12 @@
                     "execution_status": "not_executed",
                     "rollback_performed": false,
                     "rollback_success": null,
-                    "started_at": "2026-09-09T07:58:12+00:00"
+                    "started_at": "2026-09-09T10:56:16+00:00"
                   },
-                  "previous_record_hash": "0f833d0d548d5a2663a7099e4c47280162957713681b76766a7afef26ae6586a",
-                  "record_hash": "58d6abce23af1e0396ecdc542a2144febdf6f8175fb85f716b66003d470a8bcb",
+                  "previous_record_hash": "c1bba9593449c4b109d8c51a64530e695d71eb5940db1446b54e4a0a17ab3aed",
+                  "record_hash": "60da7df64b8a2fa610652658fa0166b5ef933ff3dbcf28a57f83f54bd4e1987a",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 4,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -2535,10 +2535,10 @@
                     "time_to_recover_minutes": 0.0,
                     "unexpected_consequences": false
                   },
-                  "previous_record_hash": "58d6abce23af1e0396ecdc542a2144febdf6f8175fb85f716b66003d470a8bcb",
-                  "record_hash": "888baaabba3bbd601ae3f23521c682421ebf17235c6925d056982ffa4d9a6b25",
+                  "previous_record_hash": "60da7df64b8a2fa610652658fa0166b5ef933ff3dbcf28a57f83f54bd4e1987a",
+                  "record_hash": "270d01401635610a3148e4ec9be9170bc9150b36034beb779f349644ff80e508",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 5,
                   "tenant_id": "aws-agent-action-chain-review"
                 }
@@ -2566,7 +2566,7 @@
               "tenant_id": "aws-agent-action-chain-review",
               "verification": {
                 "errors": [],
-                "head_record_hash": "888baaabba3bbd601ae3f23521c682421ebf17235c6925d056982ffa4d9a6b25",
+                "head_record_hash": "270d01401635610a3148e4ec9be9170bc9150b36034beb779f349644ff80e508",
                 "record_count": 5,
                 "valid": true
               },
@@ -2606,8 +2606,8 @@
               "blocked_controls": [
                 "execute"
               ],
-              "decision_digest": "ad7721a1978308845fcce69d1014a8173af18d2a2d4550e39137ce5b3c50c16d",
-              "decision_replay_id": "replay_AWS_CHAIN_CLOUDWATCH_REMEDIATION_004_1788940692740_0fbd1d151322",
+              "decision_digest": "88b2d4108b211e7495e1290a699cd998e808c783fe77085603dae4d5aa62b182",
+              "decision_replay_id": "replay_AWS_CHAIN_CLOUDWATCH_REMEDIATION_004_1788951376413_c0cd60222c0b",
               "effective_scope_units": 0,
               "executable": false,
               "plain_english_summary": "SPARTa blocked execution because SMERC determined the action is not structurally defensible.",
@@ -2616,9 +2616,9 @@
                 "SPARTA_DENY_BLOCKS_EXECUTION"
               ],
               "recommended_next_action": "Do not execute this plan. Submit a materially safer action with stronger evidence or reduced impact.",
-              "route_id": "sparta_plan_aws_chain_cloudwatch_remediation_004_47c237cb09c6",
+              "route_id": "sparta_plan_aws_chain_cloudwatch_remediation_004_98833fed97f3",
               "route_state": "BLOCK",
-              "routed_at": "2026-09-09T07:58:12+00:00",
+              "routed_at": "2026-09-09T10:56:16+00:00",
               "source_posture": "DENY",
               "tool_plan": {
                 "action": "cloudwatch_restart_service",
@@ -2938,7 +2938,7 @@
                   "profile_id": "cloud_admin"
                 },
                 "enforcement_state": "constrain",
-                "evaluated_at": "2026-09-09T07:58:12.743227+00:00",
+                "evaluated_at": "2026-09-09T10:56:16.413170+00:00",
                 "policy": {
                   "evidence_ceiling": "OBSERVE",
                   "mode": "OBSERVE",
@@ -2955,7 +2955,7 @@
                   "IMPACT_SCOPE_WIDE",
                   "EXTERNAL_SIDE_EFFECT"
                 ],
-                "replay_id": "replay_AWS_CHAIN_COST_SCALE_SPIKE_005_1788940692743_4cdaa7b17138",
+                "replay_id": "replay_AWS_CHAIN_COST_SCALE_SPIKE_005_1788951376413_1946a970fc97",
                 "scores": {
                   "cancel_reliability_score": 0.55,
                   "confidence_score": 0.6,
@@ -2998,7 +2998,7 @@
                   "target_posture": "THROTTLE"
                 }
               },
-              "replay_id": "replay_AWS_CHAIN_COST_SCALE_SPIKE_005_1788940692743_4cdaa7b17138",
+              "replay_id": "replay_AWS_CHAIN_COST_SCALE_SPIKE_005_1788951376413_1946a970fc97",
               "scores": {
                 "cancel_reliability_score": 0.55,
                 "confidence_score": 0.6,
@@ -3042,7 +3042,7 @@
             },
             "decision_lifecycle_ledger": {
               "decision_id": "customer_eval_AWS_CHAIN_COST_SCALE_SPIKE_005",
-              "head_record_hash": "becf5b8cb75d6b39b106ea85cbb1c400a62842a6a25b7d936a1287fbd393434b",
+              "head_record_hash": "5a0fe7266ea77f83ca26f8afd5726f08d6df7a71229fcc654f529ff536e04dd0",
               "record_count": 5,
               "records": [
                 {
@@ -3056,9 +3056,9 @@
                     "risk_profile": "cloud_admin"
                   },
                   "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-                  "record_hash": "ed40eac4ac23f43db55559fe2fe801aee301c010f3230804243557f924e53b72",
+                  "record_hash": "ad799934a5b1a4949d0835918248e532d25e4dcbcfd6d1965b3e0c82c41cac19",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 1,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -3081,10 +3081,10 @@
                     "model_version": "customer-supplied-agent-metadata",
                     "policy_version": "smerc-reference-recoverability"
                   },
-                  "previous_record_hash": "ed40eac4ac23f43db55559fe2fe801aee301c010f3230804243557f924e53b72",
-                  "record_hash": "ee795311e4c289c54a98a57218d93a670592d43af138a588a971cea921b0087c",
+                  "previous_record_hash": "ad799934a5b1a4949d0835918248e532d25e4dcbcfd6d1965b3e0c82c41cac19",
+                  "record_hash": "2de0e79e8494d1508ae454b4a765202111eff6b4cc19eaf6dd4682ef3f7705ae",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 2,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -3121,10 +3121,10 @@
                     "recoverability_score": 0.497,
                     "structural_state": "ref_gate=pass; scoring=admitted_with_agent_identity_watch; route=CONSTRAINED_EXECUTE"
                   },
-                  "previous_record_hash": "ee795311e4c289c54a98a57218d93a670592d43af138a588a971cea921b0087c",
-                  "record_hash": "c54ac9829212618eb162ebe3511c95bff1dbf72b8e360c770a97aabb31e34105",
+                  "previous_record_hash": "2de0e79e8494d1508ae454b4a765202111eff6b4cc19eaf6dd4682ef3f7705ae",
+                  "record_hash": "1aec04f6625f51f4b3c1dfe6b721d0e62d0a66560b6a0c5f42c1082e2b937712",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 3,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -3138,12 +3138,12 @@
                     "execution_status": "succeeded",
                     "rollback_performed": false,
                     "rollback_success": null,
-                    "started_at": "2026-09-09T07:58:12+00:00"
+                    "started_at": "2026-09-09T10:56:16+00:00"
                   },
-                  "previous_record_hash": "c54ac9829212618eb162ebe3511c95bff1dbf72b8e360c770a97aabb31e34105",
-                  "record_hash": "5a02572aa99df9d49e779760617dded8cb3f22e1c2221d43067c4a72a503283d",
+                  "previous_record_hash": "1aec04f6625f51f4b3c1dfe6b721d0e62d0a66560b6a0c5f42c1082e2b937712",
+                  "record_hash": "72db6bff3842d66cb7a10d1af60c29668a63f5d9262576d8a8548f9f2f2d859c",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 4,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -3161,10 +3161,10 @@
                     "time_to_recover_minutes": 0.0,
                     "unexpected_consequences": false
                   },
-                  "previous_record_hash": "5a02572aa99df9d49e779760617dded8cb3f22e1c2221d43067c4a72a503283d",
-                  "record_hash": "becf5b8cb75d6b39b106ea85cbb1c400a62842a6a25b7d936a1287fbd393434b",
+                  "previous_record_hash": "72db6bff3842d66cb7a10d1af60c29668a63f5d9262576d8a8548f9f2f2d859c",
+                  "record_hash": "5a0fe7266ea77f83ca26f8afd5726f08d6df7a71229fcc654f529ff536e04dd0",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 5,
                   "tenant_id": "aws-agent-action-chain-review"
                 }
@@ -3192,7 +3192,7 @@
               "tenant_id": "aws-agent-action-chain-review",
               "verification": {
                 "errors": [],
-                "head_record_hash": "becf5b8cb75d6b39b106ea85cbb1c400a62842a6a25b7d936a1287fbd393434b",
+                "head_record_hash": "5a0fe7266ea77f83ca26f8afd5726f08d6df7a71229fcc654f529ff536e04dd0",
                 "record_count": 5,
                 "valid": true
               },
@@ -3231,8 +3231,8 @@
                 "require_rollback_plan"
               ],
               "blocked_controls": [],
-              "decision_digest": "032005457a46d716064b3f2531a0ca2ca3c4069f7a9ea3704e347d709341ee4a",
-              "decision_replay_id": "replay_AWS_CHAIN_COST_SCALE_SPIKE_005_1788940692743_4cdaa7b17138",
+              "decision_digest": "51c9aa45a4cdd73243d5f33d0196845bd86989f4d1c22b76d6579a19fe49f7b6",
+              "decision_replay_id": "replay_AWS_CHAIN_COST_SCALE_SPIKE_005_1788951376413_1946a970fc97",
               "effective_scope_units": 25,
               "executable": true,
               "plain_english_summary": "SPARTa converted the throttled SMERC posture into a constrained execution route with smaller scope and recovery controls.",
@@ -3241,9 +3241,9 @@
                 "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
               ],
               "recommended_next_action": "Execute only through an adapter that enforces the listed controls and records control evidence.",
-              "route_id": "sparta_plan_aws_chain_cost_scale_spike_005_67d3629e5492",
+              "route_id": "sparta_plan_aws_chain_cost_scale_spike_005_d7d81f87eada",
               "route_state": "CONSTRAINED_EXECUTE",
-              "routed_at": "2026-09-09T07:58:12+00:00",
+              "routed_at": "2026-09-09T10:56:16+00:00",
               "source_posture": "THROTTLE",
               "tool_plan": {
                 "action": "autoscaling_capacity_surge",
@@ -3567,7 +3567,7 @@
                   "profile_id": "cloud_admin"
                 },
                 "enforcement_state": "block",
-                "evaluated_at": "2026-09-09T07:58:12.743227+00:00",
+                "evaluated_at": "2026-09-09T10:56:16.413170+00:00",
                 "policy": {
                   "evidence_ceiling": "OBSERVE",
                   "mode": "OBSERVE",
@@ -3586,7 +3586,7 @@
                   "EXTERNAL_SIDE_EFFECT",
                   "SENSITIVE_DATA"
                 ],
-                "replay_id": "replay_AWS_CHAIN_S3_DATA_EXPOSURE_006_1788940692743_ef90121c6ed9",
+                "replay_id": "replay_AWS_CHAIN_S3_DATA_EXPOSURE_006_1788951376413_b59a1dd571ec",
                 "scores": {
                   "cancel_reliability_score": 0.43,
                   "confidence_score": 0.552,
@@ -3628,7 +3628,7 @@
                   "target_posture": "THROTTLE"
                 }
               },
-              "replay_id": "replay_AWS_CHAIN_S3_DATA_EXPOSURE_006_1788940692743_ef90121c6ed9",
+              "replay_id": "replay_AWS_CHAIN_S3_DATA_EXPOSURE_006_1788951376413_b59a1dd571ec",
               "scores": {
                 "cancel_reliability_score": 0.43,
                 "confidence_score": 0.552,
@@ -3671,7 +3671,7 @@
             },
             "decision_lifecycle_ledger": {
               "decision_id": "customer_eval_AWS_CHAIN_S3_DATA_EXPOSURE_006",
-              "head_record_hash": "d0615b01e5fb8dc0583ca970d6431cba1b18f7142a55459904e0c3fb94a7dad3",
+              "head_record_hash": "65f398c5f6fe683fccfbb439a93c9f1e5d756a5bf8302f80806f5b389d93f423",
               "record_count": 5,
               "records": [
                 {
@@ -3685,9 +3685,9 @@
                     "risk_profile": "cloud_admin"
                   },
                   "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-                  "record_hash": "c5b35957946181956853e8e94539c5df8e06dc8304c35cc447b5d2f61ab78d64",
+                  "record_hash": "d4dd384fd2862e279adda3afbdc8afbe69807e0eac61aa4756c223a1f4fca5b9",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 1,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -3712,10 +3712,10 @@
                     "model_version": "customer-supplied-agent-metadata",
                     "policy_version": "smerc-reference-recoverability"
                   },
-                  "previous_record_hash": "c5b35957946181956853e8e94539c5df8e06dc8304c35cc447b5d2f61ab78d64",
-                  "record_hash": "e7e40e2a2083e21766aa641eb327545d92a8f1d9be2863c43b23c635a47ad50f",
+                  "previous_record_hash": "d4dd384fd2862e279adda3afbdc8afbe69807e0eac61aa4756c223a1f4fca5b9",
+                  "record_hash": "51626237ffd1eee56a7c3e7129ecd5f0fd1c570adc1d9ed55db873eeadd4cf07",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 2,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -3756,10 +3756,10 @@
                     "recoverability_score": 0.367,
                     "structural_state": "ref_gate=fail; scoring=capped_by_ref_gate; route=BLOCK"
                   },
-                  "previous_record_hash": "e7e40e2a2083e21766aa641eb327545d92a8f1d9be2863c43b23c635a47ad50f",
-                  "record_hash": "8217571698183d53b00da7b0f96817fa1b9604b3292ba0f608eb796ca2545460",
+                  "previous_record_hash": "51626237ffd1eee56a7c3e7129ecd5f0fd1c570adc1d9ed55db873eeadd4cf07",
+                  "record_hash": "e1b70fb758c573ca89c5416af56a00928481784406b3f65219dd1648a53cc5f3",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 3,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -3773,12 +3773,12 @@
                     "execution_status": "not_executed",
                     "rollback_performed": false,
                     "rollback_success": null,
-                    "started_at": "2026-09-09T07:58:12+00:00"
+                    "started_at": "2026-09-09T10:56:16+00:00"
                   },
-                  "previous_record_hash": "8217571698183d53b00da7b0f96817fa1b9604b3292ba0f608eb796ca2545460",
-                  "record_hash": "8756c60dde4f423603aad6048c76d69e95f4a431a486b617885e4b03cecbb6ff",
+                  "previous_record_hash": "e1b70fb758c573ca89c5416af56a00928481784406b3f65219dd1648a53cc5f3",
+                  "record_hash": "12b2860de6c7de879d4f3dd3688fdcba80b40aad1eba770880df7651b868b289",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 4,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -3796,10 +3796,10 @@
                     "time_to_recover_minutes": 0.0,
                     "unexpected_consequences": false
                   },
-                  "previous_record_hash": "8756c60dde4f423603aad6048c76d69e95f4a431a486b617885e4b03cecbb6ff",
-                  "record_hash": "d0615b01e5fb8dc0583ca970d6431cba1b18f7142a55459904e0c3fb94a7dad3",
+                  "previous_record_hash": "12b2860de6c7de879d4f3dd3688fdcba80b40aad1eba770880df7651b868b289",
+                  "record_hash": "65f398c5f6fe683fccfbb439a93c9f1e5d756a5bf8302f80806f5b389d93f423",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 5,
                   "tenant_id": "aws-agent-action-chain-review"
                 }
@@ -3827,7 +3827,7 @@
               "tenant_id": "aws-agent-action-chain-review",
               "verification": {
                 "errors": [],
-                "head_record_hash": "d0615b01e5fb8dc0583ca970d6431cba1b18f7142a55459904e0c3fb94a7dad3",
+                "head_record_hash": "65f398c5f6fe683fccfbb439a93c9f1e5d756a5bf8302f80806f5b389d93f423",
                 "record_count": 5,
                 "valid": true
               },
@@ -3867,8 +3867,8 @@
               "blocked_controls": [
                 "execute"
               ],
-              "decision_digest": "3dd7884bc016d0f5060115fdd6a54594fcb7528389dd7810f348a4e939ffe2e7",
-              "decision_replay_id": "replay_AWS_CHAIN_S3_DATA_EXPOSURE_006_1788940692743_ef90121c6ed9",
+              "decision_digest": "701a05c8efffafef58d02d0cd100277850ea64c5a8e6333dcc6c62191f65ecf2",
+              "decision_replay_id": "replay_AWS_CHAIN_S3_DATA_EXPOSURE_006_1788951376413_b59a1dd571ec",
               "effective_scope_units": 0,
               "executable": false,
               "plain_english_summary": "SPARTa blocked execution because SMERC determined the action is not structurally defensible.",
@@ -3877,9 +3877,9 @@
                 "SPARTA_DENY_BLOCKS_EXECUTION"
               ],
               "recommended_next_action": "Do not execute this plan. Submit a materially safer action with stronger evidence or reduced impact.",
-              "route_id": "sparta_plan_aws_chain_s3_data_exposure_006_f42dd7d754e6",
+              "route_id": "sparta_plan_aws_chain_s3_data_exposure_006_682ba3df4810",
               "route_state": "BLOCK",
-              "routed_at": "2026-09-09T07:58:12+00:00",
+              "routed_at": "2026-09-09T10:56:16+00:00",
               "source_posture": "DENY",
               "tool_plan": {
                 "action": "s3_policy_access_widening",
@@ -4198,7 +4198,7 @@
                   "profile_id": "cloud_admin"
                 },
                 "enforcement_state": "block",
-                "evaluated_at": "2026-09-09T07:58:12.743227+00:00",
+                "evaluated_at": "2026-09-09T10:56:16.415963+00:00",
                 "policy": {
                   "evidence_ceiling": "OBSERVE",
                   "mode": "OBSERVE",
@@ -4216,7 +4216,7 @@
                   "EXTERNAL_SIDE_EFFECT",
                   "SENSITIVE_DATA"
                 ],
-                "replay_id": "replay_AWS_CHAIN_CROSS_ACCOUNT_DELEGATION_007_1788940692743_91a0d7a662a6",
+                "replay_id": "replay_AWS_CHAIN_CROSS_ACCOUNT_DELEGATION_007_1788951376415_b0627d77f214",
                 "scores": {
                   "cancel_reliability_score": 0.46,
                   "confidence_score": 0.556,
@@ -4258,7 +4258,7 @@
                   "target_posture": "THROTTLE"
                 }
               },
-              "replay_id": "replay_AWS_CHAIN_CROSS_ACCOUNT_DELEGATION_007_1788940692743_91a0d7a662a6",
+              "replay_id": "replay_AWS_CHAIN_CROSS_ACCOUNT_DELEGATION_007_1788951376415_b0627d77f214",
               "scores": {
                 "cancel_reliability_score": 0.46,
                 "confidence_score": 0.556,
@@ -4301,7 +4301,7 @@
             },
             "decision_lifecycle_ledger": {
               "decision_id": "customer_eval_AWS_CHAIN_CROSS_ACCOUNT_DELEGATION_007",
-              "head_record_hash": "752b5d431b1d6f611a7645509dda6b0702e1a20ec9f430dd7e4fa02bda437a87",
+              "head_record_hash": "e335013f0fd986fccdd20e04bcc2e7870489dc89a169f4d3a0ab0b1f1556182f",
               "record_count": 5,
               "records": [
                 {
@@ -4315,9 +4315,9 @@
                     "risk_profile": "cloud_admin"
                   },
                   "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-                  "record_hash": "ab518d44f6658be71ce46ed3f4e433f8cf01330655629d5211346f515071468b",
+                  "record_hash": "6d6a76ea1544d3688d19c852dea8101b97b2300000f65e591187646e8d125417",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 1,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -4343,10 +4343,10 @@
                     "model_version": "customer-supplied-agent-metadata",
                     "policy_version": "smerc-reference-recoverability"
                   },
-                  "previous_record_hash": "ab518d44f6658be71ce46ed3f4e433f8cf01330655629d5211346f515071468b",
-                  "record_hash": "20d4da6fc67538c5147139e1401ace2bd2ae4756c4468535c9739bab8482c41e",
+                  "previous_record_hash": "6d6a76ea1544d3688d19c852dea8101b97b2300000f65e591187646e8d125417",
+                  "record_hash": "c6f218760259096a80d3e1bc782e71e19455fcc97af49b4f89dbbe1ad22f2e6a",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 2,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -4387,10 +4387,10 @@
                     "recoverability_score": 0.391,
                     "structural_state": "ref_gate=fail; scoring=capped_by_ref_gate; route=BLOCK"
                   },
-                  "previous_record_hash": "20d4da6fc67538c5147139e1401ace2bd2ae4756c4468535c9739bab8482c41e",
-                  "record_hash": "4f273c83425f0b8d6382eae88706dd6100131762c75ab13caa17c6d6520cbf62",
+                  "previous_record_hash": "c6f218760259096a80d3e1bc782e71e19455fcc97af49b4f89dbbe1ad22f2e6a",
+                  "record_hash": "811104221fda6e6c3221245bd1c710e26cbf5d82a0e9faa180c0171b6e63c5ab",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 3,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -4404,12 +4404,12 @@
                     "execution_status": "not_executed",
                     "rollback_performed": false,
                     "rollback_success": null,
-                    "started_at": "2026-09-09T07:58:12+00:00"
+                    "started_at": "2026-09-09T10:56:16+00:00"
                   },
-                  "previous_record_hash": "4f273c83425f0b8d6382eae88706dd6100131762c75ab13caa17c6d6520cbf62",
-                  "record_hash": "d5ac05880f318ce35a091a59bca8b87c7ee0cb95f9036339ea4aba691f592f71",
+                  "previous_record_hash": "811104221fda6e6c3221245bd1c710e26cbf5d82a0e9faa180c0171b6e63c5ab",
+                  "record_hash": "de45188fdd4f899cdea7f967b9772981730012d652076776da2386f23ce7eef6",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 4,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -4427,10 +4427,10 @@
                     "time_to_recover_minutes": 0.0,
                     "unexpected_consequences": false
                   },
-                  "previous_record_hash": "d5ac05880f318ce35a091a59bca8b87c7ee0cb95f9036339ea4aba691f592f71",
-                  "record_hash": "752b5d431b1d6f611a7645509dda6b0702e1a20ec9f430dd7e4fa02bda437a87",
+                  "previous_record_hash": "de45188fdd4f899cdea7f967b9772981730012d652076776da2386f23ce7eef6",
+                  "record_hash": "e335013f0fd986fccdd20e04bcc2e7870489dc89a169f4d3a0ab0b1f1556182f",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 5,
                   "tenant_id": "aws-agent-action-chain-review"
                 }
@@ -4458,7 +4458,7 @@
               "tenant_id": "aws-agent-action-chain-review",
               "verification": {
                 "errors": [],
-                "head_record_hash": "752b5d431b1d6f611a7645509dda6b0702e1a20ec9f430dd7e4fa02bda437a87",
+                "head_record_hash": "e335013f0fd986fccdd20e04bcc2e7870489dc89a169f4d3a0ab0b1f1556182f",
                 "record_count": 5,
                 "valid": true
               },
@@ -4499,8 +4499,8 @@
               "blocked_controls": [
                 "execute"
               ],
-              "decision_digest": "b060e2caeedebb1ad2d2f6721b642ed889ae4ee8c812accf7a7a07ea7c7bda58",
-              "decision_replay_id": "replay_AWS_CHAIN_CROSS_ACCOUNT_DELEGATION_007_1788940692743_91a0d7a662a6",
+              "decision_digest": "4da8e16d58a59f8d7666f2db2a4d37353677d92600f307703d6b9fe0fed3ff49",
+              "decision_replay_id": "replay_AWS_CHAIN_CROSS_ACCOUNT_DELEGATION_007_1788951376415_b0627d77f214",
               "effective_scope_units": 0,
               "executable": false,
               "plain_english_summary": "SPARTa blocked execution because SMERC determined the action is not structurally defensible.",
@@ -4509,9 +4509,9 @@
                 "SPARTA_DENY_BLOCKS_EXECUTION"
               ],
               "recommended_next_action": "Do not execute this plan. Submit a materially safer action with stronger evidence or reduced impact.",
-              "route_id": "sparta_plan_aws_chain_cross_account_delegation_007_6b20211b720d",
+              "route_id": "sparta_plan_aws_chain_cross_account_delegation_007_9179abb9cd03",
               "route_state": "BLOCK",
-              "routed_at": "2026-09-09T07:58:12+00:00",
+              "routed_at": "2026-09-09T10:56:16+00:00",
               "source_posture": "DENY",
               "tool_plan": {
                 "action": "cross_account_delegation_update",
@@ -4833,7 +4833,7 @@
                   "profile_id": "cloud_admin"
                 },
                 "enforcement_state": "constrain",
-                "evaluated_at": "2026-09-09T07:58:12.743227+00:00",
+                "evaluated_at": "2026-09-09T10:56:16.415963+00:00",
                 "policy": {
                   "evidence_ceiling": "OBSERVE",
                   "mode": "OBSERVE",
@@ -4851,7 +4851,7 @@
                   "IMPACT_SCOPE_WIDE",
                   "EXTERNAL_SIDE_EFFECT"
                 ],
-                "replay_id": "replay_AWS_CHAIN_AGENT_RETRY_LOOP_008_1788940692743_ec55b2e872e8",
+                "replay_id": "replay_AWS_CHAIN_AGENT_RETRY_LOOP_008_1788951376415_9b69401dada6",
                 "scores": {
                   "cancel_reliability_score": 0.48,
                   "confidence_score": 0.492,
@@ -4894,7 +4894,7 @@
                   "target_posture": "THROTTLE"
                 }
               },
-              "replay_id": "replay_AWS_CHAIN_AGENT_RETRY_LOOP_008_1788940692743_ec55b2e872e8",
+              "replay_id": "replay_AWS_CHAIN_AGENT_RETRY_LOOP_008_1788951376415_9b69401dada6",
               "scores": {
                 "cancel_reliability_score": 0.48,
                 "confidence_score": 0.492,
@@ -4938,7 +4938,7 @@
             },
             "decision_lifecycle_ledger": {
               "decision_id": "customer_eval_AWS_CHAIN_AGENT_RETRY_LOOP_008",
-              "head_record_hash": "4fe5301d81f6b6b86a47fa6c1da6c653307d3f73a7324f947cd36550dd1e0209",
+              "head_record_hash": "ebf407bf299675b5122e69241f01f2d5d69a4a0c5121f6afc2358cfffa2b740e",
               "record_count": 5,
               "records": [
                 {
@@ -4952,9 +4952,9 @@
                     "risk_profile": "cloud_admin"
                   },
                   "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-                  "record_hash": "97ea5da60d778b5d2dcda6c81a855bb61b36f4b02863d1db88f599f5f90f8e27",
+                  "record_hash": "29a5ef8033d6a768c3c946511f8fc5c172b546544accee0eadfa7df0c8893082",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 1,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -4977,10 +4977,10 @@
                     "model_version": "customer-supplied-agent-metadata",
                     "policy_version": "smerc-reference-recoverability"
                   },
-                  "previous_record_hash": "97ea5da60d778b5d2dcda6c81a855bb61b36f4b02863d1db88f599f5f90f8e27",
-                  "record_hash": "194cb6c7aff024ca7fb5271eac873ec88182c09d3e6382f86afbc1e19a374586",
+                  "previous_record_hash": "29a5ef8033d6a768c3c946511f8fc5c172b546544accee0eadfa7df0c8893082",
+                  "record_hash": "4e5c607a1f217e21106c10cb8c5f8b63248f5c049e4eae30f7fc24321f1602b1",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 2,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -5019,10 +5019,10 @@
                     "recoverability_score": 0.448,
                     "structural_state": "ref_gate=pass; scoring=admitted_with_agent_identity_watch; route=CONSTRAINED_EXECUTE"
                   },
-                  "previous_record_hash": "194cb6c7aff024ca7fb5271eac873ec88182c09d3e6382f86afbc1e19a374586",
-                  "record_hash": "e22b53ce8558163ed6bc42a677522ae6e5af0c1f0d5fb304de9dea58b6181714",
+                  "previous_record_hash": "4e5c607a1f217e21106c10cb8c5f8b63248f5c049e4eae30f7fc24321f1602b1",
+                  "record_hash": "42ab1b87c753cb439e4dbbcb8f4d357f2cc53a67118f445cf5db9ccb498b7aaa",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 3,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -5036,12 +5036,12 @@
                     "execution_status": "succeeded",
                     "rollback_performed": false,
                     "rollback_success": null,
-                    "started_at": "2026-09-09T07:58:12+00:00"
+                    "started_at": "2026-09-09T10:56:16+00:00"
                   },
-                  "previous_record_hash": "e22b53ce8558163ed6bc42a677522ae6e5af0c1f0d5fb304de9dea58b6181714",
-                  "record_hash": "70cada2c111c80e4e14d92227ecb1de30d923d141a122e4ad5ea5819b0774ed1",
+                  "previous_record_hash": "42ab1b87c753cb439e4dbbcb8f4d357f2cc53a67118f445cf5db9ccb498b7aaa",
+                  "record_hash": "5e84121c0dd9987dfaadb3cafc13eb98ee9b94e469bf7ab29e1922ce6d603a12",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 4,
                   "tenant_id": "aws-agent-action-chain-review"
                 },
@@ -5059,10 +5059,10 @@
                     "time_to_recover_minutes": 0.0,
                     "unexpected_consequences": false
                   },
-                  "previous_record_hash": "70cada2c111c80e4e14d92227ecb1de30d923d141a122e4ad5ea5819b0774ed1",
-                  "record_hash": "4fe5301d81f6b6b86a47fa6c1da6c653307d3f73a7324f947cd36550dd1e0209",
+                  "previous_record_hash": "5e84121c0dd9987dfaadb3cafc13eb98ee9b94e469bf7ab29e1922ce6d603a12",
+                  "record_hash": "ebf407bf299675b5122e69241f01f2d5d69a4a0c5121f6afc2358cfffa2b740e",
                   "record_version": "smerc.dll-record.v1",
-                  "recorded_at": "2026-09-09T07:58:12+00:00",
+                  "recorded_at": "2026-09-09T10:56:16+00:00",
                   "sequence": 5,
                   "tenant_id": "aws-agent-action-chain-review"
                 }
@@ -5090,7 +5090,7 @@
               "tenant_id": "aws-agent-action-chain-review",
               "verification": {
                 "errors": [],
-                "head_record_hash": "4fe5301d81f6b6b86a47fa6c1da6c653307d3f73a7324f947cd36550dd1e0209",
+                "head_record_hash": "ebf407bf299675b5122e69241f01f2d5d69a4a0c5121f6afc2358cfffa2b740e",
                 "record_count": 5,
                 "valid": true
               },
@@ -5129,8 +5129,8 @@
                 "require_rollback_plan"
               ],
               "blocked_controls": [],
-              "decision_digest": "a643929a5c3c5b11f8ff60254223f437fd22c8ff65571d2d41221d1e8cbd5da8",
-              "decision_replay_id": "replay_AWS_CHAIN_AGENT_RETRY_LOOP_008_1788940692743_ec55b2e872e8",
+              "decision_digest": "b280c18ea5dbe1469cbe8c81e79fb5af58e4b3794472382e89040a72b1aa33e0",
+              "decision_replay_id": "replay_AWS_CHAIN_AGENT_RETRY_LOOP_008_1788951376415_9b69401dada6",
               "effective_scope_units": 25,
               "executable": true,
               "plain_english_summary": "SPARTa converted the throttled SMERC posture into a constrained execution route with smaller scope and recovery controls.",
@@ -5139,9 +5139,9 @@
                 "SPARTA_THROTTLE_WITH_NATIVE_CONTROLS"
               ],
               "recommended_next_action": "Execute only through an adapter that enforces the listed controls and records control evidence.",
-              "route_id": "sparta_plan_aws_chain_agent_retry_loop_008_f6d9568f5d63",
+              "route_id": "sparta_plan_aws_chain_agent_retry_loop_008_26e39d1090de",
               "route_state": "CONSTRAINED_EXECUTE",
-              "routed_at": "2026-09-09T07:58:12+00:00",
+              "routed_at": "2026-09-09T10:56:16+00:00",
               "source_posture": "THROTTLE",
               "tool_plan": {
                 "action": "repeat_capacity_and_remediation_attempt",
@@ -5242,7 +5242,7 @@
         "workflow_context": "Eight representative AWS-style agent action chains for testing where SMERC fits after Bedrock-style content/model guardrails and before IAM, Systems Manager, CloudFormation, CloudWatch remediation, cost-scaling, data-access, cross-account delegation, retry-loop, or cloud execution."
       },
       "evidence_boundary": "AWS Agent Action Chain is metadata-only AWS-style proof. It does not connect to AWS, invoke Amazon Bedrock, modify Bedrock Guardrails, call IAM, run Systems Manager, apply CloudFormation, read CloudTrail, read CloudWatch, create infrastructure, change permissions, or prove AWS endorsement. It shows where SMERC could sit as a recoverability gate after content/model guardrails and before cloud execution.",
-      "generated_at": "2026-09-09T07:58:12+00:00",
+      "generated_at": "2026-09-09T10:56:16+00:00",
       "positioning": {
         "not_claimed": [
           "native AWS integration",
@@ -5568,7 +5568,7 @@
       },
       "evaluated_actions": 8,
       "evidence_boundary": "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement. It shows what safe observation fields a customer or AWS-style reviewer could export to prove that SMERC-required controls happened after routing.",
-      "generated_at": "2026-09-09T07:58:12+00:00",
+      "generated_at": "2026-09-09T10:56:16+00:00",
       "missing_aws_evidence_source_counts": {
         "cloudwatch_metric_or_log": 1
       },
@@ -5992,7 +5992,7 @@
         "customer records, regulated payloads, private prompts, proprietary policy bodies, or incident-sensitive details",
         "permission to assume roles, inspect live accounts, execute change sets, modify IAM, access S3, rotate secrets, or change cross-account trust"
       ],
-      "generated_at": "2026-09-09T07:58:12+00:00",
+      "generated_at": "2026-09-09T10:56:16+00:00",
       "request": "Please replace the public examples with 12 metadata-only actions from one AWS-style cloud automation workflow family.",
       "requested_action_count": 12,
       "required_fields": [
@@ -6062,7 +6062,7 @@
       },
       "evaluated_actions": 6,
       "evidence_boundary": "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement. It shows what safe observation fields a customer or AWS-style reviewer could export to prove that SMERC-required controls happened after routing.",
-      "generated_at": "2026-09-09T07:58:12+00:00",
+      "generated_at": "2026-09-09T10:56:16+00:00",
       "missing_aws_evidence_source_counts": {
         "cloudwatch_metric_or_log": 1
       },
@@ -6341,17 +6341,17 @@
     },
     "performance": {
       "evidence_boundary": "This is local reference performance evidence for report builders. It does not prove production latency, hosted API performance, customer workflow overhead, reviewer burden, throughput, SLA, or enforcement-path performance.",
-      "generated_at": "2026-09-09T07:58:12+00:00",
+      "generated_at": "2026-09-09T10:56:16+00:00",
       "iterations_per_workload": 1,
       "records": [
         {
           "description": "General metadata-only customer evaluation.",
           "latency_ms": {
-            "average_ms": 5.437,
-            "maximum_ms": 5.437,
-            "minimum_ms": 5.437,
-            "p50_ms": 5.437,
-            "p95_ms": 5.437,
+            "average_ms": 9.119,
+            "maximum_ms": 9.119,
+            "minimum_ms": 9.119,
+            "p50_ms": 9.119,
+            "p95_ms": 9.119,
             "sample_count": 1
           },
           "result_facts": {
@@ -6368,11 +6368,11 @@
         {
           "description": "Read-only cloud metadata connector plus customer evaluation.",
           "latency_ms": {
-            "average_ms": 7.333,
-            "maximum_ms": 7.333,
-            "minimum_ms": 7.333,
-            "p50_ms": 7.333,
-            "p95_ms": 7.333,
+            "average_ms": 10.355,
+            "maximum_ms": 10.355,
+            "minimum_ms": 10.355,
+            "p50_ms": 10.355,
+            "p95_ms": 10.355,
             "sample_count": 1
           },
           "result_facts": {
@@ -6388,11 +6388,11 @@
         {
           "description": "Public benchmark-shaped ingestion plus customer evaluation.",
           "latency_ms": {
-            "average_ms": 6.671,
-            "maximum_ms": 6.671,
-            "minimum_ms": 6.671,
-            "p50_ms": 6.671,
-            "p95_ms": 6.671,
+            "average_ms": 13.863,
+            "maximum_ms": 13.863,
+            "minimum_ms": 13.863,
+            "p50_ms": 13.863,
+            "p95_ms": 13.863,
             "sample_count": 1
           },
           "result_facts": {
@@ -6409,11 +6409,11 @@
         {
           "description": "Postcondition comparison of SPARTa route controls and observation metadata.",
           "latency_ms": {
-            "average_ms": 6.195,
-            "maximum_ms": 6.195,
-            "minimum_ms": 6.195,
-            "p50_ms": 6.195,
-            "p95_ms": 6.195,
+            "average_ms": 11.557,
+            "maximum_ms": 11.557,
+            "minimum_ms": 11.557,
+            "p50_ms": 11.557,
+            "p95_ms": 11.557,
             "sample_count": 1
           },
           "result_facts": {
@@ -6428,12 +6428,12 @@
           "workload_id": "postcondition_evidence"
         }
       ],
-      "slowest_p95_ms": 7.333,
+      "slowest_p95_ms": 13.863,
       "status": "ready_for_local_review",
       "version": "smerc.serious-report-performance.v1",
       "work_result_impact": {
         "impact": "Reviewers can see whether proof generation is lightweight enough for local evaluation, while customer pilots still measure production p50, p95, workflow overhead, and reviewer impact.",
-        "result": "Measured 4 proof workloads across 1 iteration(s) each with slowest p95 of 7.333 ms.",
+        "result": "Measured 4 proof workloads across 1 iteration(s) each with slowest p95 of 13.863 ms.",
         "work": "Run serious SMERC proof paths repeatedly and summarize local execution latency."
       },
       "workload_count": 4
@@ -6443,7 +6443,7 @@
   "version": "smerc.aws-reviewer-bundle.v1",
   "work_result_impact": {
     "impact": "An AWS-style platform reviewer can inspect where SMERC fits, what it decides, what evidence would prove the route, and what safe customer-owned metadata is needed next without granting live AWS access.",
-    "result": "Generated an AWS reviewer bundle with 8 action-chain examples, chain postcondition statuses {'gap': 1, 'pass': 7}, AWS postcondition statuses {'gap': 2, 'pass': 4}, and slowest local p95 7.333 ms.",
+    "result": "Generated an AWS reviewer bundle with 8 action-chain examples, chain postcondition statuses {'gap': 1, 'pass': 7}, AWS postcondition statuses {'gap': 2, 'pass': 4}, and slowest local p95 13.863 ms.",
     "work": "Assemble the AWS-style reviewer path into one local package: action-chain proof, route-control postcondition evidence, AWS postcondition evidence, performance metrics, and customer-owned AWS metadata request."
   }
 }

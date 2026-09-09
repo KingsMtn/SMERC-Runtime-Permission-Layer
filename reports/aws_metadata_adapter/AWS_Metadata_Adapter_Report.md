@@ -1,6 +1,6 @@
 # AWS Metadata Adapter Report
 
-Generated: `2026-09-08T01:12:12+00:00`
+Generated: `2026-09-09T10:56:16+00:00`
 Version: `smerc.aws-metadata-adapter.v1`
 
 ## Purpose
@@ -26,6 +26,8 @@ The adapter is a non-executing stub. It does not call AWS APIs, assume roles, in
 - Skipped rows: `2`
 - Accepted source formats: `{'agentcore_gateway_tool_call_summary': 1, 'cloudformation_changeset_summary': 1, 'cost_anomaly_action_summary': 1, 'iam_policy_change_summary': 1, 's3_policy_change_summary': 1, 'secrets_rotation_summary': 1}`
 - Session and delegated approval summary: `{'boolean_counts': {'delegated_on_behalf_of': 2, 'gateway_bypass_detected': 1, 'gateway_only_path': 5, 'message_notification_observed': 5, 'progress_notification_observed': 4, 'server_initiated_elicitation': 3}, 'principal_type_counts': {'iam_entity': 4, 'oauth_user': 2}, 'session_mode_counts': {'stateful_gateway_session': 2, 'stateless_request': 4}, 'approval_mode_counts': {'never': 1, 'required_for_data_access_change': 1, 'required_for_permission_boundary_change': 1, 'required_for_secret_rotation': 1, 'required_for_side_effect': 1, 'required_for_stateful_replacement': 1}}`
+- Policy engine summary: `{'boolean_counts': {'inline_tool_permissions_present': 5, 'parameter_constraints_present': 5, 'policy_schema_validated': 6, 'target_registered': 6}, 'policy_engine_decision_counts': {'allow': 1, 'allow_with_constraints': 4, 'deny': 1}, 'policy_language_counts': {'cedar': 6}, 'gateway_target_type_counts': {'lambda': 3, 'openapi': 2, 'smithy_model': 1}, 'policy_analysis_result_counts': {'bounded_policy': 1, 'data_access_requires_scope_bound': 1, 'dependency_readiness_required': 1, 'missing_cost_velocity_constraint': 1, 'overbroad_permission_boundary': 1, 'stateful_replacement_requires_review': 1}}`
+- Derived output governance summary: `{'boolean_counts': {'restricted_summary_outputs': 3}, 'input_sensitivity_counts': {'customer_data': 1, 'operational_cost': 1, 'privileged_infrastructure': 1, 'restricted_data': 1, 'secret_reference': 1, 'service_state': 1}, 'output_sensitivity_counts': {'customer_data': 1, 'operational_cost': 1, 'privileged_infrastructure': 1, 'restricted_data': 1, 'secret_reference': 1, 'service_state': 1}, 'access_control_composition_counts': {'intersect_access_controls': 1, 'max_sensitivity_intersect_access': 1, 'max_sensitivity_union_tags': 1, 'preserve_highest_sensitivity': 1, 'preserve_secret_boundary': 1, 'union_cost_and_runtime_tags': 1}, 'regulatory_tag_counts': {'change-management': 1, 'customer-data': 1, 'data-access': 1, 'finops': 1, 'privacy': 2, 'privileged-access': 1, 'resilience': 1, 'runtime-cost': 1, 'secret-management': 1, 'service-auth': 1, 'sox': 1}}`
 - Skipped reason counts: `{'prohibited field present: raw_log': 1, 'unsupported source_format': 1}`
 
 ## Skipped Rows

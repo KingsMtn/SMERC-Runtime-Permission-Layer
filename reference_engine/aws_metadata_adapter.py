@@ -61,6 +61,25 @@ SESSION_CONTEXT_FIELDS = [
     "message_notification_observed",
 ]
 
+POLICY_CONTEXT_FIELDS = [
+    "gateway_target_type",
+    "target_registered",
+    "policy_language",
+    "policy_engine_decision",
+    "policy_schema_validated",
+    "policy_analysis_result",
+    "inline_tool_permissions_present",
+    "parameter_constraints_present",
+]
+
+DERIVED_OUTPUT_FIELDS = [
+    "input_sensitivity_level",
+    "output_sensitivity_level",
+    "access_control_composition",
+    "regulatory_tags",
+    "derived_output_contains_restricted_summary",
+]
+
 
 def load_source_exports(path: str | Path) -> list[Dict[str, Any]]:
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -134,6 +153,8 @@ def build_adapter_report(rows: list[Mapping[str, Any]]) -> Dict[str, Any]:
         "skipped": payload["adapter_summary"]["skipped"],
         "accepted_source_format_counts": dict(sorted(accepted_source_counts.items())),
         "session_and_delegated_approval_summary": session_summary,
+        "policy_engine_summary": _policy_summary(payload["actions"]),
+        "derived_output_governance_summary": _derived_output_summary(payload["actions"]),
         "skipped_reason_counts": dict(sorted(skipped_reasons.items())),
         "normalized_customer_evaluation": customer_payload,
         "customer_evaluation": evaluation,
@@ -187,6 +208,8 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Skipped rows: `{report['skipped_rows']}`",
         f"- Accepted source formats: `{report['accepted_source_format_counts']}`",
         f"- Session and delegated approval summary: `{report['session_and_delegated_approval_summary']}`",
+        f"- Policy engine summary: `{report['policy_engine_summary']}`",
+        f"- Derived output governance summary: `{report['derived_output_governance_summary']}`",
         f"- Skipped reason counts: `{report['skipped_reason_counts']}`",
         "",
         "## Skipped Rows",
@@ -322,6 +345,8 @@ def _to_customer_action(row: Mapping[str, Any], index: int) -> Dict[str, Any]:
                 "source_record_id": _text(row.get("record_id"), "record_id"),
                 "gateway_path": _optional_text(row.get("gateway_path")),
                 "session_and_delegated_approval_context": _session_context(row),
+                "agentcore_policy_context": _policy_context(row),
+                "derived_output_governance": _derived_output_context(row),
                 "cost_velocity_multiplier": _optional_ratio(row.get("cost_velocity_multiplier")),
                 "postcondition_evidence_expected": _boolean(
                     row.get("postcondition_evidence_expected"),
@@ -464,6 +489,14 @@ def _optional_boolean(value: Any) -> bool | None:
     return _boolean(value, "optional boolean")
 
 
+def _optional_text_list(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if not isinstance(value, list):
+        raise TypeError("optional text list must be a list")
+    return [_text(item, "optional text list item") for item in value]
+
+
 def _session_context(row: Mapping[str, Any]) -> Dict[str, Any]:
     return {
         "gateway_only_path": _optional_boolean(row.get("gateway_only_path")),
@@ -478,6 +511,31 @@ def _session_context(row: Mapping[str, Any]) -> Dict[str, Any]:
         "temporal_policy_context": _optional_text(row.get("temporal_policy_context")),
         "progress_notification_observed": _optional_boolean(row.get("progress_notification_observed")),
         "message_notification_observed": _optional_boolean(row.get("message_notification_observed")),
+    }
+
+
+def _policy_context(row: Mapping[str, Any]) -> Dict[str, Any]:
+    return {
+        "gateway_target_type": _optional_text(row.get("gateway_target_type")),
+        "target_registered": _optional_boolean(row.get("target_registered")),
+        "policy_language": _optional_text(row.get("policy_language")),
+        "policy_engine_decision": _optional_text(row.get("policy_engine_decision")),
+        "policy_schema_validated": _optional_boolean(row.get("policy_schema_validated")),
+        "policy_analysis_result": _optional_text(row.get("policy_analysis_result")),
+        "inline_tool_permissions_present": _optional_boolean(row.get("inline_tool_permissions_present")),
+        "parameter_constraints_present": _optional_boolean(row.get("parameter_constraints_present")),
+    }
+
+
+def _derived_output_context(row: Mapping[str, Any]) -> Dict[str, Any]:
+    return {
+        "input_sensitivity_level": _optional_text(row.get("input_sensitivity_level")),
+        "output_sensitivity_level": _optional_text(row.get("output_sensitivity_level")),
+        "access_control_composition": _optional_text(row.get("access_control_composition")),
+        "regulatory_tags": _optional_text_list(row.get("regulatory_tags")),
+        "derived_output_contains_restricted_summary": _optional_boolean(
+            row.get("derived_output_contains_restricted_summary")
+        ),
     }
 
 
@@ -513,6 +571,66 @@ def _session_summary(actions: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
         "principal_type_counts": dict(sorted(principal_types.items())),
         "session_mode_counts": dict(sorted(session_modes.items())),
         "approval_mode_counts": dict(sorted(approval_modes.items())),
+    }
+
+
+def _policy_summary(actions: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
+    counters: Counter[str] = Counter()
+    decisions: Counter[str] = Counter()
+    languages: Counter[str] = Counter()
+    target_types: Counter[str] = Counter()
+    analysis_results: Counter[str] = Counter()
+    for action in actions:
+        context = action["tool_plan"]["metadata"]["agentcore_policy_context"]
+        if context["target_registered"] is True:
+            counters["target_registered"] += 1
+        if context["policy_schema_validated"] is True:
+            counters["policy_schema_validated"] += 1
+        if context["inline_tool_permissions_present"] is True:
+            counters["inline_tool_permissions_present"] += 1
+        if context["parameter_constraints_present"] is True:
+            counters["parameter_constraints_present"] += 1
+        if context["policy_engine_decision"]:
+            decisions[context["policy_engine_decision"]] += 1
+        if context["policy_language"]:
+            languages[context["policy_language"]] += 1
+        if context["gateway_target_type"]:
+            target_types[context["gateway_target_type"]] += 1
+        if context["policy_analysis_result"]:
+            analysis_results[context["policy_analysis_result"]] += 1
+    return {
+        "boolean_counts": dict(sorted(counters.items())),
+        "policy_engine_decision_counts": dict(sorted(decisions.items())),
+        "policy_language_counts": dict(sorted(languages.items())),
+        "gateway_target_type_counts": dict(sorted(target_types.items())),
+        "policy_analysis_result_counts": dict(sorted(analysis_results.items())),
+    }
+
+
+def _derived_output_summary(actions: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
+    counters: Counter[str] = Counter()
+    input_sensitivity: Counter[str] = Counter()
+    output_sensitivity: Counter[str] = Counter()
+    compositions: Counter[str] = Counter()
+    regulatory_tags: Counter[str] = Counter()
+    for action in actions:
+        context = action["tool_plan"]["metadata"]["derived_output_governance"]
+        if context["derived_output_contains_restricted_summary"] is True:
+            counters["restricted_summary_outputs"] += 1
+        if context["input_sensitivity_level"]:
+            input_sensitivity[context["input_sensitivity_level"]] += 1
+        if context["output_sensitivity_level"]:
+            output_sensitivity[context["output_sensitivity_level"]] += 1
+        if context["access_control_composition"]:
+            compositions[context["access_control_composition"]] += 1
+        for tag in context["regulatory_tags"]:
+            regulatory_tags[tag] += 1
+    return {
+        "boolean_counts": dict(sorted(counters.items())),
+        "input_sensitivity_counts": dict(sorted(input_sensitivity.items())),
+        "output_sensitivity_counts": dict(sorted(output_sensitivity.items())),
+        "access_control_composition_counts": dict(sorted(compositions.items())),
+        "regulatory_tag_counts": dict(sorted(regulatory_tags.items())),
     }
 
 

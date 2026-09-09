@@ -38,6 +38,8 @@ class AWSMetadataAdapterTests(unittest.TestCase):
             self.assertEqual(action["tool_plan"]["metadata"]["adapter_mode"], "non_executing")
             self.assertIn("postcondition_evidence_expected", action["tool_plan"]["metadata"])
             self.assertIn("session_and_delegated_approval_context", action["tool_plan"]["metadata"])
+            self.assertIn("agentcore_policy_context", action["tool_plan"]["metadata"])
+            self.assertIn("derived_output_governance", action["tool_plan"]["metadata"])
 
     def test_preserves_session_and_delegated_approval_context(self):
         payload = normalize_source_exports(load_source_exports(INPUTS))
@@ -58,6 +60,16 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertEqual(bypass_context["approval_mode"], "never")
         self.assertGreaterEqual(bypass_action["base_action_risk"], 0.62)
 
+        policy_context = by_record["aws-meta-001"]["tool_plan"]["metadata"]["agentcore_policy_context"]
+        self.assertEqual(policy_context["policy_language"], "cedar")
+        self.assertEqual(policy_context["policy_engine_decision"], "allow_with_constraints")
+        self.assertTrue(policy_context["parameter_constraints_present"])
+
+        derived_context = by_record["aws-meta-005"]["tool_plan"]["metadata"]["derived_output_governance"]
+        self.assertEqual(derived_context["input_sensitivity_level"], "restricted_data")
+        self.assertIn("data-access", derived_context["regulatory_tags"])
+        self.assertTrue(derived_context["derived_output_contains_restricted_summary"])
+
     def test_builds_adapter_report_and_customer_evaluation(self):
         report = build_adapter_report(load_source_exports(INPUTS))
 
@@ -70,6 +82,10 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertIn("iam_policy_change_summary", report["accepted_source_format_counts"])
         self.assertEqual(report["session_and_delegated_approval_summary"]["boolean_counts"]["gateway_bypass_detected"], 1)
         self.assertEqual(report["session_and_delegated_approval_summary"]["approval_mode_counts"]["never"], 1)
+        self.assertEqual(report["policy_engine_summary"]["policy_language_counts"]["cedar"], 6)
+        self.assertEqual(report["policy_engine_summary"]["policy_engine_decision_counts"]["allow_with_constraints"], 4)
+        self.assertEqual(report["derived_output_governance_summary"]["boolean_counts"]["restricted_summary_outputs"], 3)
+        self.assertIn("privacy", report["derived_output_governance_summary"]["regulatory_tag_counts"])
 
     def test_markdown_explains_work_result_impact_and_boundary(self):
         markdown = render_markdown(build_adapter_report(load_source_exports(INPUTS)))
@@ -78,6 +94,8 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertIn("Work / Result / Impact", markdown)
         self.assertIn("non-executing", markdown)
         self.assertIn("Session and delegated approval summary", markdown)
+        self.assertIn("Policy engine summary", markdown)
+        self.assertIn("Derived output governance summary", markdown)
         self.assertIn("Reviewer Question", markdown)
 
     def test_writes_adapter_outputs(self):
@@ -111,6 +129,8 @@ class AWSMetadataAdapterTests(unittest.TestCase):
 
         self.assertIn("metadata-only", docs)
         self.assertIn("Prohibited Inputs", docs)
+        self.assertIn("Recommended AWS Policy Engine Fields", docs)
+        self.assertIn("Recommended Derived Output Governance Fields", docs)
         self.assertIn("python -m reference_engine.aws_metadata_adapter", docs)
         self.assertIn("docs/AWS_Metadata_Intake_Contract.md", readiness)
         self.assertIn("docs/AWS_Metadata_Intake_Contract.md", readme)

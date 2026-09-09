@@ -109,6 +109,37 @@ SMERC stores these values in the normalized tool-plan metadata as `session_and_d
 
 Gateway bypass and `approval_mode` of `never` on side-effecting actions also increase base action risk in the AWS metadata adapter. This helps reflect a practical AWS/MCP governance question: did the action flow through the governed gateway and did the session carry enough approval context for the requested side effect?
 
+## Recommended AWS Policy Engine Fields
+
+These fields are optional, but they help AWS-style reviewers map SMERC beside AgentCore Gateway, Gateway Target, Cedar policy, inline tool permissions, and parameter constraints:
+
+- `gateway_target_type`
+- `target_registered`
+- `policy_language`
+- `policy_engine_decision`
+- `policy_schema_validated`
+- `policy_analysis_result`
+- `inline_tool_permissions_present`
+- `parameter_constraints_present`
+
+SMERC stores these values in the normalized tool-plan metadata as `agentcore_policy_context`.
+
+Use these fields to show the difference between authorization and recoverability. A policy engine may allow a tool call while SMERC still throttles, freezes, denies, or escalates the action because rollback, blast radius, evidence, or cost velocity is not acceptable.
+
+## Recommended Derived Output Governance Fields
+
+These fields are optional, but they address the MCP governance question of what happens after an authorized tool call produces derived output:
+
+- `input_sensitivity_level`
+- `output_sensitivity_level`
+- `access_control_composition`
+- `regulatory_tags`
+- `derived_output_contains_restricted_summary`
+
+SMERC stores these values in the normalized tool-plan metadata as `derived_output_governance`.
+
+Use these fields when a tool result, report, summary, or agent-to-agent handoff may inherit sensitivity from its inputs. The first safe rule is conservative: preserve the highest sensitivity, intersect access controls when multiple sources are combined, and union regulatory or operational tags for downstream review.
+
 ## Prohibited Inputs
 
 The first AWS-style pilot should not include:

@@ -1,6 +1,6 @@
 # AWS-Style Reviewer Bundle
 
-Generated: `2026-09-09T07:58:12+00:00`
+Generated: `2026-09-09T10:56:16+00:00`
 Version: `smerc.aws-reviewer-bundle.v1`
 Bundle status: `ready_for_limited_aws_review`
 
@@ -18,13 +18,13 @@ Guardrails check content. IAM checks authority. SMERC checks recoverability. Pos
 ## Work / Result / Impact
 
 - Work: Assemble the AWS-style reviewer path into one local package: action-chain proof, route-control postcondition evidence, AWS postcondition evidence, performance metrics, and customer-owned AWS metadata request.
-- Result: Generated an AWS reviewer bundle with 8 action-chain examples, chain postcondition statuses {'gap': 1, 'pass': 7}, AWS postcondition statuses {'gap': 2, 'pass': 4}, and slowest local p95 7.333 ms.
+- Result: Generated an AWS reviewer bundle with 8 action-chain examples, chain postcondition statuses {'gap': 1, 'pass': 7}, AWS postcondition statuses {'gap': 2, 'pass': 4}, and slowest local p95 13.863 ms.
 - Impact: An AWS-style platform reviewer can inspect where SMERC fits, what it decides, what evidence would prove the route, and what safe customer-owned metadata is needed next without granting live AWS access.
 
 ## Readiness
 
 - Status: `ready_for_limited_aws_review`
-- Slowest local p95 ms: `7.333`
+- Slowest local p95 ms: `13.863`
 - Chain postcondition gaps: `1`
 - Chain postcondition violations: `0`
 - AWS postcondition gaps: `2`
@@ -45,7 +45,7 @@ Guardrails check content. IAM checks authority. SMERC checks recoverability. Pos
 | AWS agent action chain | scenarios=`8`, postures=`{'DENY': 5, 'THROTTLE': 3}` |
 | AWS chain postcondition evidence | statuses=`{'gap': 1, 'pass': 7}` |
 | AWS postcondition evidence | statuses=`{'gap': 2, 'pass': 4}` |
-| Performance | status=`ready_for_local_review`, slowest_p95_ms=`7.333` |
+| Performance | status=`ready_for_local_review`, slowest_p95_ms=`13.863` |
 | AWS customer-owned metadata request | requested_actions=`12` |
 
 ## Evidence Boundary
