@@ -40,6 +40,7 @@ The repository contains working pilot-grade artifacts:
 - Recovery Authority Gate for governed unlock after pause
 - complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence
 - serious reviewer bundle that assembles customer evaluation, postcondition evidence, performance metrics, balanced runtime judgment, metadata request, and response assessment in one command
+- AWS-style reviewer bundle that assembles AWS action-chain proof, route-control postcondition evidence, AWS postcondition evidence, performance metrics, and AWS customer-owned metadata request in one command
 - postcondition evidence that checks whether required SPARTa controls were actually observed after routing
 - customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata
 - AWS customer-owned metadata request mode for asking AWS-style platform reviewers for safe action summaries and postcondition observation summaries
@@ -88,6 +89,8 @@ Current evidence proves that SMERC can run metadata-only action examples through
 The complete lifecycle proof shows the connected product path: `ADMIT -> FREEZE -> PAUSE -> UNLOCK -> THROTTLE -> CONSTRAINED_EXECUTE -> permit verified -> execution succeeded -> ledger valid`.
 
 The serious reviewer bundle packages the current company-review path into one local run. It produces customer evaluation, postcondition evidence, performance, balanced runtime judgment, customer-owned metadata request, and external reviewer response assessment outputs together, so a reviewer does not need to assemble separate reports by hand.
+
+The AWS-style reviewer bundle packages the AWS platform-review path into one local run. It frames the distinction clearly: guardrails check content, IAM and change systems check authority, SMERC checks recoverability, and postcondition evidence checks whether the required route control actually happened.
 
 The public benchmark currently shows that SMERC creates middle-state governance behavior across MCP tool calls, coding agents, cloud administration, financial runtime actions, execution tickets, and security approval workflows.
 
@@ -143,12 +146,13 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 18. For financial-services review, run `python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty`.
 19. For AWS-style agent action chain review, run `python -m reference_engine.aws_agent_action_chain --pretty`.
 20. For AWS-style agent action chain postcondition review, run `python -m reference_engine.aws_agent_action_chain_postcondition --pretty`.
-21. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
-22. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
-23. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
-24. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
-25. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
-26. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+21. For the one-command AWS-style reviewer bundle, run `python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty`.
+22. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
+23. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
+24. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
+25. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
+26. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
+27. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 

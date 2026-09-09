@@ -27,6 +27,7 @@ Fast reviewer paths:
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - AWS agent action chain: `docs/AWS_Agent_Action_Chain.md`
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
+- AWS-style reviewer bundle: `docs/AWS_Reviewer_Bundle.md`
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
 - AWS deployable bot path: `docs/AWS_Deployable_Bot_Readiness_Path.md`
 - AWS metadata adapter reviewer: `docs/AWS_Metadata_Intake_Contract.md`
@@ -152,6 +153,14 @@ python -m reference_engine.serious_reviewer_bundle --workflow-family general --r
 ```
 
 This writes `reports/serious_reviewer_bundle/Serious_Reviewer_Bundle.md` plus the customer evaluation, postcondition evidence, performance, balanced runtime judgment, customer-owned metadata request, and external reviewer response assessment reports. See `docs/Serious_Reviewer_Bundle.md`.
+
+For AWS-style platform review, use the focused AWS reviewer bundle:
+
+```bash
+python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty
+```
+
+This writes `reports/aws_reviewer_bundle/AWS_Reviewer_Bundle.md` plus the AWS action-chain proof, chain postcondition evidence, AWS postcondition evidence, performance metrics, and AWS customer-owned metadata request. It frames the reviewer path as: guardrails check content, IAM checks authority, SMERC checks recoverability, and postcondition evidence checks whether the route happened.
 
 Financial-services reviewers should use the Financial Runtime path, internally called SMERC-F:
 

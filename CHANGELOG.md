@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a one-command AWS-Style Reviewer Bundle that assembles AWS action-chain proof, route-control postcondition evidence, AWS postcondition evidence, performance metrics, and AWS customer-owned metadata request.
 - Added AWS Agent Action Chain Postcondition Evidence so AWS-style reviewers can compare SMERC route controls with safe observation metadata and see pass/gap evidence after routing.
 - Added an AWS Agent Action Chain proof showing where SMERC fits after Bedrock-style content/model guardrails and before Dynamic IAM, Systems Manager, CloudFormation, CloudWatch remediation, cost-sensitive scaling, or cloud execution.
 - Recorded the SMERC vision statement for public and AI-readable review: intelligent-system power should be governed by consent, accountability, and protection from irreversible harm.
