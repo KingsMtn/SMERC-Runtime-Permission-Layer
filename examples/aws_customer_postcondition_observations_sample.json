@@ -1,0 +1,192 @@
+[
+  {
+    "action_id": "AWS_ADAPTER_001_invoke_action_group_update_config",
+    "aws_surface": "agentcore_gateway_tool_call_summary",
+    "expected_aws_evidence_sources": [
+      "agentcore_gateway_mcp_log",
+      "cloudwatch_metric_or_log",
+      "tool_result_metadata_stream"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "tool-result-preview-metadata",
+        "evidence_ref": "internal-export://sample/action-group-001/preview",
+        "observed_at": "2026-09-09T00:00:00Z",
+        "aws_evidence_sources": ["tool_result_metadata_stream"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "gateway-target-scope-observation",
+        "evidence_ref": "internal-export://sample/action-group-001/scope",
+        "observed_at": "2026-09-09T00:00:01Z",
+        "aws_evidence_sources": ["agentcore_gateway_mcp_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-reference",
+        "evidence_ref": "internal-export://sample/action-group-001/replay",
+        "observed_at": "2026-09-09T00:00:02Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Safe sample summary only."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_002_expand_execution_role_permissions",
+    "aws_surface": "iam_policy_change_summary",
+    "expected_aws_evidence_sources": [
+      "cloudtrail_management_event",
+      "iam_access_analyzer_or_policy_record"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "policy-change-deny-observation",
+        "evidence_ref": "internal-export://sample/iam-002/block",
+        "observed_at": "2026-09-09T00:01:00Z",
+        "aws_evidence_sources": ["cloudtrail_management_event", "iam_access_analyzer_or_policy_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-reference",
+        "evidence_ref": "internal-export://sample/iam-002/replay",
+        "observed_at": "2026-09-09T00:01:01Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Safe sample summary only."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_003_execute_stateful_change_set",
+    "aws_surface": "cloudformation_changeset_summary",
+    "expected_aws_evidence_sources": [
+      "cloudformation_change_set_record",
+      "cloudtrail_management_event"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "change-set-preview-summary",
+        "evidence_ref": "internal-export://sample/cfn-003/preview",
+        "observed_at": "2026-09-09T00:02:00Z",
+        "aws_evidence_sources": ["cloudformation_change_set_record"]
+      },
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "state-snapshot-reference",
+        "evidence_ref": "internal-export://sample/cfn-003/checkpoint",
+        "observed_at": "2026-09-09T00:02:01Z",
+        "aws_evidence_sources": ["cloudformation_change_set_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "change-set-replay-summary",
+        "evidence_ref": "internal-export://sample/cfn-003/replay",
+        "observed_at": "2026-09-09T00:02:02Z",
+        "aws_evidence_sources": ["cloudtrail_management_event"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "held_for_review",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Safe sample summary only."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_004_widen_bucket_policy_access",
+    "aws_surface": "s3_policy_change_summary",
+    "expected_aws_evidence_sources": [
+      "agentcore_gateway_cloudtrail_data_event",
+      "s3_policy_audit_record"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "data-access-change-block",
+        "evidence_ref": "internal-export://sample/s3-004/block",
+        "observed_at": "2026-09-09T00:03:00Z",
+        "aws_evidence_sources": ["agentcore_gateway_cloudtrail_data_event", "s3_policy_audit_record"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-reference",
+        "evidence_ref": "internal-export://sample/s3-004/replay",
+        "observed_at": "2026-09-09T00:03:01Z",
+        "aws_evidence_sources": ["agentcore_gateway_cloudtrail_data_event"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Safe sample summary only."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_005_increase_compute_capacity_during_retry_loop",
+    "aws_surface": "cost_anomaly_action_summary",
+    "expected_aws_evidence_sources": [
+      "cost_anomaly_signal",
+      "cloudwatch_metric_or_log"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "cost-velocity-block",
+        "evidence_ref": "internal-export://sample/cost-005/block",
+        "observed_at": "2026-09-09T00:04:00Z",
+        "aws_evidence_sources": ["cost_anomaly_signal"]
+      },
+      {
+        "control_id": "explain_denial",
+        "outcome": "applied",
+        "mechanism": "operator-visible-cost-velocity-denial",
+        "evidence_ref": "internal-export://sample/cost-005/explain",
+        "observed_at": "2026-09-09T00:04:01Z",
+        "aws_evidence_sources": ["cost_anomaly_signal"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-reference",
+        "evidence_ref": "internal-export://sample/cost-005/replay",
+        "observed_at": "2026-09-09T00:04:02Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Safe sample summary only."
+    }
+  }
+]

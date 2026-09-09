@@ -14,6 +14,11 @@ from reference_engine.aws_agent_action_chain_postcondition import (
     build_report as build_chain_postcondition_report,
     render_markdown as render_chain_postcondition_markdown,
 )
+from reference_engine.aws_metadata_adapter import (
+    build_adapter_report,
+    load_source_exports,
+    render_markdown as render_aws_metadata_adapter_markdown,
+)
 from reference_engine.aws_postcondition_evidence import (
     build_aws_postcondition_report,
     load_aws_observations,
@@ -34,7 +39,14 @@ from reference_engine.serious_report_performance import (
 VERSION = "smerc.aws-reviewer-bundle.v1"
 
 
-def build_aws_reviewer_bundle(*, root: str | Path = ".", requested_actions: int = 12, iterations: int = 5) -> Dict[str, Any]:
+def build_aws_reviewer_bundle(
+    *,
+    root: str | Path = ".",
+    requested_actions: int = 12,
+    iterations: int = 5,
+    customer_aws_source_exports: str | Path | None = None,
+    customer_aws_observations: str | Path | None = None,
+) -> Dict[str, Any]:
     base = Path(root)
     chain_report = build_chain_report(load_payload(base / "examples/aws_agent_action_chain.json"))
     chain_postcondition = build_chain_postcondition_report(
@@ -47,10 +59,21 @@ def build_aws_reviewer_bundle(*, root: str | Path = ".", requested_actions: int 
     )
     performance = build_performance_report(root=base, iterations=iterations)
     metadata_request = build_request_report(workflow_family="aws", requested_actions=requested_actions)
+    customer_metadata_review = None
+    customer_postcondition = None
+    if customer_aws_source_exports:
+        customer_metadata_review = build_adapter_report(load_source_exports(_resolve_path(base, customer_aws_source_exports)))
+        if customer_aws_observations:
+            customer_postcondition = build_aws_postcondition_report(
+                customer_metadata_review["customer_evaluation"],
+                load_aws_observations(_resolve_path(base, customer_aws_observations)),
+            )
     readiness = _readiness(
         chain_postcondition=chain_postcondition,
         aws_postcondition=aws_postcondition,
         performance=performance,
+        customer_metadata_review=customer_metadata_review,
+        customer_postcondition=customer_postcondition,
     )
     return {
         "version": VERSION,
@@ -87,11 +110,13 @@ def build_aws_reviewer_bundle(*, root: str | Path = ".", requested_actions: int 
             "aws_postcondition_evidence": aws_postcondition,
             "performance": performance,
             "aws_customer_owned_metadata_request": metadata_request,
+            "customer_aws_metadata_review": customer_metadata_review,
+            "customer_aws_postcondition_evidence": customer_postcondition,
         },
         "evidence_boundary": (
             "This is a local, metadata-only AWS-style review package. It does not connect to AWS, invoke Amazon "
             "Bedrock, call IAM, run Systems Manager, apply CloudFormation, read CloudTrail or CloudWatch, modify "
-            "infrastructure, prove AWS endorsement, prove AWS certification, or establish production safety."
+            "infrastructure, process secrets, prove AWS endorsement, prove AWS certification, or establish production safety."
         ),
     }
 
@@ -164,6 +189,22 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
                 f"| AWS customer-owned metadata request | requested_actions="
                 f"`{reports['aws_customer_owned_metadata_request']['requested_action_count']}` |"
             ),
+        ]
+    )
+    if reports.get("customer_aws_metadata_review"):
+        customer = reports["customer_aws_metadata_review"]
+        lines.append(
+            f"| Customer AWS metadata review | accepted_rows=`{customer['accepted_rows']}`, "
+            f"skipped_rows=`{customer['skipped_rows']}` |"
+        )
+    if reports.get("customer_aws_postcondition_evidence"):
+        customer_postcondition = reports["customer_aws_postcondition_evidence"]
+        lines.append(
+            f"| Customer AWS postcondition evidence | statuses="
+            f"`{customer_postcondition['aws_postcondition_status_counts']}` |"
+        )
+    lines.extend(
+        [
             "",
             "## Evidence Boundary",
             "",
@@ -210,6 +251,23 @@ def write_outputs(bundle: Mapping[str, Any], *, output_dir: str | Path) -> None:
         render_metadata_request_markdown(reports["aws_customer_owned_metadata_request"]),
         encoding="utf-8",
     )
+    if reports.get("customer_aws_metadata_review"):
+        customer = reports["customer_aws_metadata_review"]
+        _write_json(out / "customer_aws_metadata_adapter_report.json", customer)
+        (out / "Customer_AWS_Metadata_Adapter_Report.md").write_text(
+            render_aws_metadata_adapter_markdown(customer),
+            encoding="utf-8",
+        )
+        _write_json(out / "customer_aws_normalized_customer_actions.json", customer["normalized_customer_evaluation"])
+        if customer["customer_evaluation"]:
+            _write_json(out / "customer_aws_customer_evaluation_report.json", customer["customer_evaluation"])
+    if reports.get("customer_aws_postcondition_evidence"):
+        customer_postcondition = reports["customer_aws_postcondition_evidence"]
+        _write_json(out / "customer_aws_postcondition_evidence_report.json", customer_postcondition)
+        (out / "Customer_AWS_Postcondition_Evidence_Report.md").write_text(
+            render_aws_postcondition_markdown(customer_postcondition),
+            encoding="utf-8",
+        )
 
 
 def _readiness(
@@ -217,6 +275,8 @@ def _readiness(
     chain_postcondition: Mapping[str, Any],
     aws_postcondition: Mapping[str, Any],
     performance: Mapping[str, Any],
+    customer_metadata_review: Mapping[str, Any] | None = None,
+    customer_postcondition: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     chain_counts = chain_postcondition["aws_postcondition_status_counts"]
     aws_counts = aws_postcondition["aws_postcondition_status_counts"]
@@ -239,6 +299,10 @@ def _readiness(
         warnings.append("AWS postcondition evidence includes expected evidence gaps")
     if slowest_p95 >= 250:
         warnings.append("local proof-path p95 should be remeasured in the reviewer environment")
+    if customer_metadata_review is not None and int(customer_metadata_review["accepted_rows"]) < 5:
+        warnings.append("customer AWS metadata review has fewer than 5 accepted rows")
+    if customer_postcondition is not None and int(customer_postcondition["aws_postcondition_status_counts"].get("violation", 0)):
+        blockers.append("customer AWS postcondition evidence includes a route violation")
 
     if blockers:
         status = "not_ready_for_aws_reviewer"
@@ -256,6 +320,15 @@ def _readiness(
         "The proof remains metadata-only and does not need live AWS access.",
         "The next real proof is reviewer-owned AWS-style metadata from one workflow.",
     ]
+    if customer_metadata_review is not None:
+        takeaways.append(
+            f"Customer AWS metadata supplied: {customer_metadata_review['accepted_rows']} accepted rows and "
+            f"{customer_metadata_review['skipped_rows']} skipped rows."
+        )
+    if customer_postcondition is not None:
+        takeaways.append(
+            f"Customer AWS postcondition statuses: {customer_postcondition['aws_postcondition_status_counts']}."
+        )
     if warnings:
         takeaways.append(f"Warnings: {', '.join(warnings)}.")
     if blockers:
@@ -279,6 +352,11 @@ def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def _resolve_path(root: Path, value: str | Path) -> Path:
+    path = Path(value)
+    return path if path.is_absolute() else root / path
+
+
 def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
@@ -288,6 +366,8 @@ def main() -> int:
     parser.add_argument("--root", default=".")
     parser.add_argument("--requested-actions", type=int, default=12)
     parser.add_argument("--iterations", type=int, default=5)
+    parser.add_argument("--customer-aws-source-exports")
+    parser.add_argument("--customer-aws-observations")
     parser.add_argument("--output-dir", default="reports/aws_reviewer_bundle")
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args()
@@ -296,6 +376,8 @@ def main() -> int:
         root=args.root,
         requested_actions=args.requested_actions,
         iterations=args.iterations,
+        customer_aws_source_exports=args.customer_aws_source_exports,
+        customer_aws_observations=args.customer_aws_observations,
     )
     write_outputs(bundle, output_dir=args.output_dir)
     print(json.dumps(bundle, indent=2 if args.pretty else None, sort_keys=True))

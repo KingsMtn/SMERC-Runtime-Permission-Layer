@@ -1,0 +1,50 @@
+[
+  {
+    "action_id": "replace-with-generated-or-supplied-action-id",
+    "aws_surface": "replace_with_source_format_or_aws_surface",
+    "expected_aws_evidence_sources": [
+      "cloudtrail_management_event",
+      "cloudwatch_metric_or_log",
+      "tool_result_metadata_stream"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "safe-summary-of-preview-or-dry-run",
+        "evidence_ref": "internal-export://replace-with-safe-evidence-reference",
+        "observed_at": "2026-09-09T00:00:00Z",
+        "aws_evidence_sources": [
+          "tool_result_metadata_stream"
+        ]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "safe-summary-of-scope-bound",
+        "evidence_ref": "internal-export://replace-with-safe-evidence-reference",
+        "observed_at": "2026-09-09T00:00:01Z",
+        "aws_evidence_sources": [
+          "cloudtrail_management_event"
+        ]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "safe-summary-of-replay-or-ledger-record",
+        "evidence_ref": "internal-export://replace-with-safe-evidence-reference",
+        "observed_at": "2026-09-09T00:00:02Z",
+        "aws_evidence_sources": [
+          "cloudwatch_metric_or_log"
+        ]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded_or_not_executed_or_blocked",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Safe summary only. Do not include account IDs, ARNs, raw logs, secrets, customer records, or production commands."
+    }
+  }
+]

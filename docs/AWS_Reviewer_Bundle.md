@@ -36,6 +36,7 @@ reports/aws_reviewer_bundle/AWS_Customer_Owned_Metadata_Request.md
 
 - AWS Agent Action Chain proof.
 - Lambda-shaped Bedrock Agent Action Group decision-handler pattern at `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`.
+- AWS Customer Metadata Mini-Pack at `docs/AWS_Customer_Metadata_Mini_Pack.md`.
 - AWS Agent Action Chain Postcondition Evidence.
 - AWS Security Ecosystem Evidence Path at `docs/AWS_Security_Ecosystem_Evidence_Path.md`.
 - AWS Postcondition Evidence using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata.
@@ -67,3 +68,14 @@ This is a local, metadata-only AWS-style review package. It does not connect to 
 The next real proof is external: a reviewer replaces the examples with 10 to 25 safe AWS-style metadata actions and matching observation summaries from one owned workflow, then decides whether recoverability before execution changes their review judgment enough to justify shadow-mode testing.
 
 Use `examples/aws_customer_metadata_template.json` as the starting shape for that replacement.
+
+For a runnable sample of that handoff, use:
+
+```bash
+python -m reference_engine.aws_reviewer_bundle \
+  --customer-aws-source-exports examples/aws_customer_metadata_filled_sample.json \
+  --customer-aws-observations examples/aws_customer_postcondition_observations_sample.json \
+  --output-dir reports/aws_customer_mini_pack \
+  --iterations 1 \
+  --pretty
+```

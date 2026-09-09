@@ -29,6 +29,7 @@ Fast reviewer paths:
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
 - AWS-style reviewer bundle: `docs/AWS_Reviewer_Bundle.md`
 - AWS reviewer quickstart: `docs/AWS_Reviewer_Quickstart.md`
+- AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
 - AWS deployable bot path: `docs/AWS_Deployable_Bot_Readiness_Path.md`
@@ -181,6 +182,19 @@ PY
 ```
 
 This handler is not a native AWS integration. It is a reviewer-friendly proof that SMERC can return posture, route controls, ledger evidence, and an explicit no-live-AWS boundary from an AWS Lambda-compatible entry point.
+
+To test the AWS customer-owned metadata handoff with the bundled sample:
+
+```bash
+python -m reference_engine.aws_reviewer_bundle \
+  --customer-aws-source-exports examples/aws_customer_metadata_filled_sample.json \
+  --customer-aws-observations examples/aws_customer_postcondition_observations_sample.json \
+  --output-dir reports/aws_customer_mini_pack \
+  --iterations 1 \
+  --pretty
+```
+
+Read `docs/AWS_Customer_Metadata_Mini_Pack.md` for the reviewer-safe templates and the no-secrets boundary.
 
 Financial-services reviewers should use the Financial Runtime path, internally called SMERC-F:
 

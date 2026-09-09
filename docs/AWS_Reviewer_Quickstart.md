@@ -31,6 +31,17 @@ print(json.dumps(lambda_handler(event), indent=2, sort_keys=True))
 PY
 ```
 
+To test the customer-owned metadata handoff with the bundled safe sample:
+
+```bash
+python -m reference_engine.aws_reviewer_bundle \
+  --customer-aws-source-exports examples/aws_customer_metadata_filled_sample.json \
+  --customer-aws-observations examples/aws_customer_postcondition_observations_sample.json \
+  --output-dir reports/aws_customer_mini_pack \
+  --iterations 1 \
+  --pretty
+```
+
 ## Inspect These Three Outputs
 
 1. `reports/aws_reviewer_bundle/AWS_Reviewer_Bundle.md`
@@ -48,6 +59,7 @@ PY
 Also inspect:
 
 - `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
+- `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - `docs/AWS_Security_Ecosystem_Evidence_Path.md`
 - `docs/AWS_Marketplace_Validation_Path.md`
 - `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
