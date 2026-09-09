@@ -8,6 +8,8 @@ SMERC is a pre-execution recoverability control layer for AI agents, MCP tool ca
 
 Mission: SMERC helps intelligent systems make safer decisions before irreversible actions occur, so people and organizations can trust the technology shaping their lives.
 
+Vision: A future where the power of intelligent systems is governed by consent, accountability, and the right of people to remain protected from irreversible harm.
+
 It sits between automated systems and consequential actions. Before an AI agent, workflow bot, MCP tool, or deployment process sends data, changes infrastructure, deploys code, modifies permissions, moves money, or calls a high-impact API, SMERC evaluates whether the action is recoverable enough to proceed.
 
 Public reviewer site: https://admirable-sorbet-9986d5.netlify.app/
