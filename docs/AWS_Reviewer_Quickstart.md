@@ -8,12 +8,27 @@ It answers one question:
 
 If Bedrock-style guardrails approve the content and IAM permits the actor, can SMERC still decide whether the action is recoverable enough to execute before side effects occur?
 
+Put differently: can SMERC reduce systemic liability and operational downtime risk for autonomous cloud execution by checking recoverability before the agent or tool call acts?
+
 ## Run The Proof
 
 From the repository root:
 
 ```bash
 python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty
+```
+
+To inspect the Lambda-shaped action-gate proof directly:
+
+```bash
+python - <<'PY'
+import json
+from pathlib import Path
+from reference_engine.aws_lambda_decision_handler import lambda_handler
+
+event = json.loads(Path("examples/aws_lambda_decision_event.json").read_text())
+print(json.dumps(lambda_handler(event), indent=2, sort_keys=True))
+PY
 ```
 
 ## Inspect These Three Outputs
@@ -29,6 +44,13 @@ python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty
 3. `reports/aws_metadata_adapter/AWS_Metadata_Adapter_Report.md`
 
    Review the safe metadata intake path. It shows how SMERC can preserve AgentCore/Cedar-style policy context, gateway-session context, derived-output governance context, and route evidence without live AWS access.
+
+Also inspect:
+
+- `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
+- `docs/AWS_Security_Ecosystem_Evidence_Path.md`
+- `docs/AWS_Marketplace_Validation_Path.md`
+- `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
 
 ## Sample Reviewer Interpretation
 
@@ -59,6 +81,7 @@ python -m reference_engine.aws_metadata_adapter customer_working/aws_source_expo
 ## What This Proves
 
 - SMERC can evaluate AWS-style action metadata before execution.
+- SMERC can be exposed through a Lambda-compatible handler shape for Bedrock-style Action Group or gateway review.
 - SMERC can distinguish content approval, authority approval, recoverability posture, and postcondition evidence.
 - SMERC can produce a reviewer-ready report without account IDs, ARNs, raw logs, credentials, production commands, or live AWS access.
 
@@ -68,6 +91,7 @@ python -m reference_engine.aws_metadata_adapter customer_working/aws_source_expo
 - AWS certification
 - native AWS integration
 - live Bedrock or AgentCore interception
+- AWS Marketplace listing
 - production enforcement
 - customer-validated incident reduction
 - compliance attestation

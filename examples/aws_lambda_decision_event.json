@@ -1,0 +1,55 @@
+{
+  "tenant_id": "aws-style-local-review",
+  "organization": "AWS-Style Local Review",
+  "contact_role": "aws_platform_reviewer",
+  "workflow_context": "Bedrock Agent Action Group proposes a Lambda-backed tool call that can update production configuration.",
+  "action": {
+    "action_id": "AWS_BEDROCK_ACTION_GROUP_LAMBDA_001",
+    "description": "Bedrock-style agent proposes invoking a Lambda-backed action group that can update customer-facing production configuration.",
+    "actor": "bedrock_agent_runtime",
+    "tool": "aws.lambda_action_group",
+    "action_type": "bedrock_action_group_lambda_invoke",
+    "base_action_risk": 0.68,
+    "reversibility": 0.54,
+    "containment_strength": 0.58,
+    "rollback_latency": 0.46,
+    "evidence_validity": 0.69,
+    "anomaly_pressure": 0.38,
+    "impact_scope": 0.66,
+    "cancel_reliability": 0.63,
+    "authorization_confidence": 0.75,
+    "external_side_effect": true,
+    "sensitive_data": true,
+    "context": {
+      "domain_profile": "cloud_admin",
+      "workflow": "bedrock_agent_action_group"
+    },
+    "ref_gate": {
+      "typed_contract_valid": true,
+      "attestation_valid": true,
+      "least_privilege_confirmed": true,
+      "object_shape_expected": true
+    },
+    "tool_plan": {
+      "version": "smerc.sparta-plan.v1",
+      "plan_id": "plan_aws_bedrock_action_group_lambda_001",
+      "tool": "aws.lambda_action_group",
+      "action": "bedrock_action_group_lambda_invoke",
+      "requested_capability": "invoke_side_effecting_action_group",
+      "supports_dry_run": true,
+      "supports_scope_limit": true,
+      "supports_checkpoint": true,
+      "supports_rollback": true,
+      "supports_human_approval": true,
+      "max_scope_units": 100,
+      "requested_scope_units": 55,
+      "side_effect_level": "external",
+      "metadata": {
+        "cloud_provider": "aws",
+        "aws_surface": "bedrock_agent_action_group",
+        "environment": "production",
+        "change_family": "agent_tool_execution"
+      }
+    }
+  }
+}

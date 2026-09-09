@@ -64,6 +64,27 @@ python -m reference_engine.aws_cloud_action_replay --pretty
 
 This proves AWS-style metadata can move through the SMERC customer-evaluation contract with reason codes, posture counts, route evidence, autonomy budget impact, and DLL validity.
 
+### 1A. Lambda-Shaped Decision Handler
+
+Status: implemented as a local metadata-only handler.
+
+Current artifact:
+
+```bash
+python - <<'PY'
+import json
+from pathlib import Path
+from reference_engine.aws_lambda_decision_handler import lambda_handler
+
+event = json.loads(Path("examples/aws_lambda_decision_event.json").read_text())
+print(json.dumps(lambda_handler(event), indent=2, sort_keys=True))
+PY
+```
+
+The handler accepts a single AWS-style action event or a full `smerc.customer-evaluation.v1` payload and returns posture, route state, required controls, scores, ledger verification, and an explicit no-live-AWS evidence boundary.
+
+This is the cleanest local proof for the Bedrock Agent Action Group / Lambda action-governor idea. It is not native Bedrock interception or production enforcement.
+
 ### 2. AWS Metadata Intake Contract
 
 Status: implemented as a metadata-only contract.
@@ -191,6 +212,26 @@ If metadata review is useful, the next stage is shadow mode:
 - SMERC records the posture it would have returned.
 - Reviewers label whether the posture was useful, too strict, too loose, or irrelevant.
 - No production enforcement happens without a separate written agreement.
+
+### 8. AWS Security Evidence Export Shape
+
+Status: documented as an evidence-design path.
+
+Current artifact:
+
+- `docs/AWS_Security_Ecosystem_Evidence_Path.md`
+
+This path explains how SMERC posture and route facts could be shaped for Security Lake-style normalized evidence, EventBridge-style decision events, Macie-style exposure findings, CloudTrail-style action summaries, CloudWatch-style metrics, Security Hub-style findings, and AWS Config-style change context.
+
+### 9. Marketplace Validation Path
+
+Status: parked as later packaging.
+
+Current artifact:
+
+- `docs/AWS_Marketplace_Validation_Path.md`
+
+Marketplace or CloudFormation/Terraform packaging should come after local proof, customer-owned metadata review, and shadow-mode validation.
 
 ## Success Criteria
 

@@ -8,6 +8,8 @@ It answers a practical question:
 
 > If guardrails approve the content and IAM permits the actor, can SMERC still prove whether the action is recoverable enough to execute and whether the required route control happened afterward?
 
+For AWS-style platform teams, the commercial translation is sharper: can SMERC reduce systemic liability and downtime risk for autonomous cloud execution without slowing every authorized action into manual review?
+
 ## Run
 
 From the repository root:
@@ -33,16 +35,20 @@ reports/aws_reviewer_bundle/AWS_Customer_Owned_Metadata_Request.md
 ## What It Includes
 
 - AWS Agent Action Chain proof.
+- Lambda-shaped Bedrock Agent Action Group decision-handler pattern at `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`.
 - AWS Agent Action Chain Postcondition Evidence.
+- AWS Security Ecosystem Evidence Path at `docs/AWS_Security_Ecosystem_Evidence_Path.md`.
 - AWS Postcondition Evidence using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata.
 - Serious report performance metrics.
 - AWS customer-owned metadata request for 5 to 25 safe action and observation summaries.
 - Customer-owned AWS metadata template at `examples/aws_customer_metadata_template.json`.
+- AWS Marketplace Validation Path at `docs/AWS_Marketplace_Validation_Path.md`.
+- Defensible Moat and Commercial Boundary at `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`.
 - Readiness status and recommended next action.
 
 ## Reviewer Frame
 
-Guardrails check content. IAM checks authority. SMERC checks recoverability. Postcondition evidence checks whether the route happened.
+Guardrails check content. IAM checks authority. SMERC checks recoverability. Postcondition evidence checks whether the route happened. AWS security evidence systems can receive posture and route facts after the decision, but they do not replace the pre-execution recoverability question.
 
 ## Work / Result / Impact
 
@@ -54,7 +60,7 @@ Impact: SMERC becomes easier for an AWS-style platform team to evaluate without 
 
 ## Evidence Boundary
 
-This is a local, metadata-only AWS-style review package. It does not connect to AWS, invoke Amazon Bedrock, call IAM, run Systems Manager, apply CloudFormation, read CloudTrail or CloudWatch, modify infrastructure, prove AWS endorsement, prove AWS certification, or establish production safety.
+This is a local, metadata-only AWS-style review package. It does not connect to AWS, invoke Amazon Bedrock, call IAM, run Systems Manager, apply CloudFormation, read CloudTrail or CloudWatch, publish to Security Lake, create EventBridge rules, list on AWS Marketplace, modify infrastructure, prove AWS endorsement, prove AWS certification, or establish production safety.
 
 ## Next Proof
 

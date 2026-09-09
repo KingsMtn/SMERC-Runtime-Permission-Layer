@@ -29,11 +29,15 @@ Fast reviewer paths:
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
 - AWS-style reviewer bundle: `docs/AWS_Reviewer_Bundle.md`
 - AWS reviewer quickstart: `docs/AWS_Reviewer_Quickstart.md`
+- AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
 - AWS deployable bot path: `docs/AWS_Deployable_Bot_Readiness_Path.md`
 - AWS metadata adapter reviewer: `docs/AWS_Metadata_Intake_Contract.md`
+- AWS security evidence path: `docs/AWS_Security_Ecosystem_Evidence_Path.md`
+- AWS marketplace validation path: `docs/AWS_Marketplace_Validation_Path.md`
 - AWS postcondition evidence: `docs/AWS_Postcondition_Evidence.md`
 - AWS customer-owned metadata request: `reports/AWS_Customer_Owned_Metadata_Request.md`
+- Defensible moat and commercial boundary: `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
 - Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
 - Balanced runtime judgment replay: `docs/Balanced_Runtime_Judgment_Replay.md`
@@ -44,7 +48,7 @@ Fast reviewer paths:
 - Pilot reviewer: `docs/Pilot_Intake_Template.md`
 - Strategic/platform reviewer: `docs/Why_SMERC_Fits_Strategic_Platforms.md`
 
-SMERC is short for Structural Momentum Entropy Range Confidence. It evaluates a proposed action before execution and returns a replayable posture:
+SMERC is short for Structural Momentum Entropy Range Confidence. For cloud and platform teams, it is best read as recoverability-aware risk control for autonomous cloud execution: it evaluates a proposed action before execution and returns a replayable posture:
 
 - `ALLOW`
 - `THROTTLE`
@@ -162,6 +166,21 @@ python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty
 ```
 
 This writes `reports/aws_reviewer_bundle/AWS_Reviewer_Bundle.md` plus the AWS action-chain proof, chain postcondition evidence, AWS postcondition evidence, performance metrics, and AWS customer-owned metadata request. It frames the reviewer path as: guardrails check content, IAM checks authority, SMERC checks recoverability, and postcondition evidence checks whether the route happened.
+
+To inspect the Lambda-shaped AWS proof path directly, run the local handler against a metadata-only Bedrock-style Action Group example:
+
+```bash
+python - <<'PY'
+import json
+from pathlib import Path
+from reference_engine.aws_lambda_decision_handler import lambda_handler
+
+event = json.loads(Path("examples/aws_lambda_decision_event.json").read_text())
+print(json.dumps(lambda_handler(event), indent=2, sort_keys=True))
+PY
+```
+
+This handler is not a native AWS integration. It is a reviewer-friendly proof that SMERC can return posture, route controls, ledger evidence, and an explicit no-live-AWS boundary from an AWS Lambda-compatible entry point.
 
 Financial-services reviewers should use the Financial Runtime path, internally called SMERC-F:
 
