@@ -16,6 +16,8 @@ From the repository root:
 python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty
 ```
 
+For the shortest reviewer path, start with `docs/AWS_Reviewer_Quickstart.md`.
+
 Generated files:
 
 ```text
@@ -35,6 +37,7 @@ reports/aws_reviewer_bundle/AWS_Customer_Owned_Metadata_Request.md
 - AWS Postcondition Evidence using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata.
 - Serious report performance metrics.
 - AWS customer-owned metadata request for 5 to 25 safe action and observation summaries.
+- Customer-owned AWS metadata template at `examples/aws_customer_metadata_template.json`.
 - Readiness status and recommended next action.
 
 ## Reviewer Frame
@@ -56,3 +59,5 @@ This is a local, metadata-only AWS-style review package. It does not connect to 
 ## Next Proof
 
 The next real proof is external: a reviewer replaces the examples with 10 to 25 safe AWS-style metadata actions and matching observation summaries from one owned workflow, then decides whether recoverability before execution changes their review judgment enough to justify shadow-mode testing.
+
+Use `examples/aws_customer_metadata_template.json` as the starting shape for that replacement.
