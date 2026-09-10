@@ -1,0 +1,58 @@
+{
+  "decision_count": 5,
+  "evidence_boundary": "This conformance check validates the portable SMERC decision-language shape. It does not prove the underlying risk scores, production enforcement, customer calibration, or that route controls actually happened.",
+  "posture_counts": {
+    "ALLOW": 1,
+    "DENY": 1,
+    "ESCALATE": 1,
+    "FREEZE": 1,
+    "THROTTLE": 1
+  },
+  "records": [
+    {
+      "errors": [],
+      "findings": [],
+      "posture": "ALLOW",
+      "source": "examples\\decision_language\\allow_decision.json",
+      "status": "pass"
+    },
+    {
+      "errors": [],
+      "findings": [],
+      "posture": "THROTTLE",
+      "source": "examples\\decision_language\\throttle_decision.json",
+      "status": "pass"
+    },
+    {
+      "errors": [],
+      "findings": [],
+      "posture": "FREEZE",
+      "source": "examples\\decision_language\\freeze_decision.json",
+      "status": "pass"
+    },
+    {
+      "errors": [],
+      "findings": [],
+      "posture": "DENY",
+      "source": "examples\\decision_language\\deny_decision.json",
+      "status": "pass"
+    },
+    {
+      "errors": [],
+      "findings": [],
+      "posture": "ESCALATE",
+      "source": "examples\\decision_language\\escalate_decision.json",
+      "status": "pass"
+    }
+  ],
+  "status": "pass",
+  "status_counts": {
+    "pass": 5
+  },
+  "version": "smerc.decision-language-conformance.v1",
+  "work_result_impact": {
+    "impact": "Frameworks can adopt the SMERC posture vocabulary and evidence fields without adopting the full reference engine, while reviewers can still detect malformed or incomplete decisions.",
+    "result": "Checked 5 decision artifact(s) with 0 failure(s).",
+    "work": "Check emitted decision JSON against the SMERC decision-language contract."
+  }
+}

@@ -511,6 +511,7 @@ Start here before reading the code:
 - `docs/Model_Agent_Fitness_Layer.md` explains how SMERC selects the qualified model, agent, or automation executor for a specific task.
 - `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.
 - `docs/SMERC_Decision_Language.md` defines the portable machine-readable posture contract other agent, tool, cloud, MCP, or workflow systems can adopt without adopting the full SMERC engine.
+- `docs/SMERC_Decision_Language_Conformance.md` explains how an outside framework can check whether its emitted decisions speak the SMERC posture, route, evidence, and replay contract.
 - `docs/Agent_Handshake_Protocol.md` explains how an agent discovers SMERC, declares itself, proposes an action, receives a posture, and preserves a replay record.
 - `docs/MCP_Tool_Governance.md` explains how SMERC can score MCP-style tool calls before execution and map them through SPARTa without replacing MCP, OAuth, IAM, or prompt defenses.
 - `docs/MCP_Tool_Risk_Scanner.md` explains how to scan MCP tool definitions for recoverability and autonomy risk before those tools are granted to agents.
@@ -771,6 +772,7 @@ This is the practical meaning of Macro Language Model in the current product: SM
 
 ```bash
 python -m reference_engine.action_language examples/action_language/production_database_change.json
+python -m reference_engine.decision_language_conformance examples/decision_language/*.json --pretty
 ```
 
 Schemas, posture examples, and full semantics are in `schemas/`, `examples/decision_language/`, `docs/SMERC_Decision_Language.md`, and `specification/SMERC_Action_Language_v1.md`.
