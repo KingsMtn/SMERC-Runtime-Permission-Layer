@@ -28,7 +28,7 @@
   },
   "evaluated_actions": 6,
   "evidence_boundary": "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement. It shows what safe observation fields a customer or AWS-style reviewer could export to prove that SMERC-required controls happened after routing.",
-  "generated_at": "2026-09-09T10:56:16+00:00",
+  "generated_at": "2026-09-10T21:51:53+00:00",
   "missing_aws_evidence_source_counts": {
     "cloudwatch_metric_or_log": 1
   },
@@ -36,9 +36,18 @@
   "records": [
     {
       "action_id": "AWS_ADAPTER_001_invoke_lambda_backed_customer_configuration_tool_through_governed_gatewa",
+      "applied_required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report",
+        "require_rollback_plan"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "agentcore_gateway_tool_call_summary",
       "coverage": "observed",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
       "expected_aws_evidence_sources": [
@@ -49,6 +58,7 @@
         "tool_result_metadata_stream"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
         "Observed evidence satisfies required route controls for this metadata-only proof."
       ],
@@ -78,6 +88,7 @@
         "record_execution_report",
         "require_rollback_plan"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": true,
       "route_state": "CONSTRAINED_EXECUTE",
       "source_posture": "THROTTLE",
@@ -85,9 +96,15 @@
     },
     {
       "action_id": "AWS_ADAPTER_002_expand_execution_role_from_service_update_scope_to_broad_infrastructure_",
+      "applied_required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "iam_policy_change_summary",
       "coverage": "observed",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": false,
       "execution_status": "not_executed",
       "expected_aws_evidence_sources": [
@@ -95,6 +112,7 @@
         "iam_access_analyzer_or_policy_record"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
         "Observed evidence satisfies required route controls for this metadata-only proof."
       ],
@@ -115,6 +133,7 @@
         "explain_denial",
         "preserve_replay"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": false,
       "route_state": "BLOCK",
       "source_posture": "DENY",
@@ -122,9 +141,17 @@
     },
     {
       "action_id": "AWS_ADAPTER_003_execute_change_set_that_replaces_stateful_resources",
+      "applied_required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report"
+      ],
       "aws_postcondition_status": "gap",
       "aws_surface": "cloudformation_changeset_summary",
       "coverage": "observed",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
       "expected_aws_evidence_sources": [
@@ -133,6 +160,7 @@
         "cloudwatch_metric_or_log"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
         "Observed evidence satisfies required route controls for this metadata-only proof.",
         "Missing expected AWS evidence source: cloudwatch_metric_or_log."
@@ -160,6 +188,7 @@
         "preview_before_execution",
         "record_execution_report"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": true,
       "route_state": "CONSTRAINED_EXECUTE",
       "source_posture": "THROTTLE",
@@ -167,9 +196,18 @@
     },
     {
       "action_id": "AWS_ADAPTER_004_increase_regional_compute_capacity_while_completion_certainty_is_low",
+      "applied_required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report",
+        "require_rollback_plan"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "cost_anomaly_action_summary",
       "coverage": "observed",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
       "expected_aws_evidence_sources": [
@@ -178,6 +216,7 @@
         "cost_anomaly_signal"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
         "Observed evidence satisfies required route controls for this metadata-only proof."
       ],
@@ -205,6 +244,7 @@
         "record_execution_report",
         "require_rollback_plan"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": true,
       "route_state": "CONSTRAINED_EXECUTE",
       "source_posture": "THROTTLE",
@@ -212,9 +252,17 @@
     },
     {
       "action_id": "AWS_ADAPTER_005_widen_bucket_object_access_during_failed_data_export",
+      "applied_required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report"
+      ],
       "aws_postcondition_status": "gap",
       "aws_surface": "s3_policy_change_summary",
       "coverage": "observed",
+      "evidence_depth": "partial_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
       "expected_aws_evidence_sources": [
@@ -222,6 +270,7 @@
         "s3_policy_audit_record"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
         "Missing required control evidence: require_rollback_plan."
       ],
@@ -249,6 +298,7 @@
         "record_execution_report",
         "require_rollback_plan"
       ],
+      "route_control_evidence_ratio": 0.8333,
       "route_executable": true,
       "route_state": "CONSTRAINED_EXECUTE",
       "source_posture": "THROTTLE",
@@ -256,9 +306,17 @@
     },
     {
       "action_id": "AWS_ADAPTER_006_rotate_shared_service_credential_before_dependency_readiness_is_confirme",
+      "applied_required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "secrets_rotation_summary",
       "coverage": "observed",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
       "expected_aws_evidence_sources": [
@@ -266,6 +324,7 @@
         "secrets_rotation_record"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
         "Observed evidence satisfies required route controls for this metadata-only proof."
       ],
@@ -290,18 +349,26 @@
         "preview_before_execution",
         "record_execution_report"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": true,
       "route_state": "CONSTRAINED_EXECUTE",
       "source_posture": "THROTTLE",
       "unexpected_controls": []
     }
   ],
+  "route_control_evidence": {
+    "applied_required_control_count": 30,
+    "failed_required_control_count": 0,
+    "missing_required_control_count": 1,
+    "required_control_count": 31,
+    "route_control_evidence_ratio": 0.9677
+  },
   "source_evaluation_version": "smerc.customer-evaluation.v1",
   "source_organization": "AWS Metadata Adapter Review",
   "version": "smerc.aws-postcondition-evidence.v1",
   "work_result_impact": {
     "impact": "SMERC can now show how an AWS-style governed action bot would prove that controls were actually applied after a decision, not only that recoverability scoring recommended them.",
-    "result": "Assessed 6 AWS-style routed actions, observed 6, and found AWS postcondition statuses {'gap': 2, 'pass': 4}.",
+    "result": "Assessed 6 AWS-style routed actions, observed 6, found AWS postcondition statuses {'gap': 2, 'pass': 4}, and covered 96.77% of required route controls.",
     "work": "Compare SMERC/SPARTa route controls for AWS-style actions against safe postcondition observations modeled on CloudTrail, CloudWatch, AgentCore Gateway, AgentCore Runtime, MCP gateway logs, and native AWS change records."
   }
 }

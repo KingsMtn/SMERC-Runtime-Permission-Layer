@@ -46,6 +46,15 @@ Result: the report identifies pass, gap, violation, and unobserved statuses for 
 
 Impact: SMERC can show whether controls were actually observed after a route, not only whether it recommended them.
 
+The report also calculates route-control evidence depth:
+
+- required route-control count
+- applied required-control count
+- missing required-control count
+- failed required-control count
+- per-action evidence ratio
+- overall route-control evidence ratio
+
 ## Why This Matters
 
 Many governance systems stop at approval, policy decision, ticket, or log.
@@ -57,7 +66,8 @@ Postcondition evidence moves SMERC one step further:
 3. SPARTa routed the action.
 4. Required controls were named.
 5. Observed controls were compared against the route.
-6. Gaps or violations were preserved for review.
+6. Evidence coverage was calculated.
+7. Gaps or violations were preserved for review.
 
 That is important for CISOs, platform teams, SREs, financial operators, and AI-agent teams because a control that was recommended but never applied is not operational safety.
 

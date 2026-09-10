@@ -1,16 +1,16 @@
 {
   "evidence_boundary": "This is local reference performance evidence for report builders. It does not prove production latency, hosted API performance, customer workflow overhead, reviewer burden, throughput, SLA, or enforcement-path performance.",
-  "generated_at": "2026-09-09T10:56:16+00:00",
+  "generated_at": "2026-09-10T21:51:53+00:00",
   "iterations_per_workload": 1,
   "records": [
     {
       "description": "General metadata-only customer evaluation.",
       "latency_ms": {
-        "average_ms": 9.119,
-        "maximum_ms": 9.119,
-        "minimum_ms": 9.119,
-        "p50_ms": 9.119,
-        "p95_ms": 9.119,
+        "average_ms": 2.527,
+        "maximum_ms": 2.527,
+        "minimum_ms": 2.527,
+        "p50_ms": 2.527,
+        "p95_ms": 2.527,
         "sample_count": 1
       },
       "result_facts": {
@@ -27,11 +27,11 @@
     {
       "description": "Read-only cloud metadata connector plus customer evaluation.",
       "latency_ms": {
-        "average_ms": 10.355,
-        "maximum_ms": 10.355,
-        "minimum_ms": 10.355,
-        "p50_ms": 10.355,
-        "p95_ms": 10.355,
+        "average_ms": 2.745,
+        "maximum_ms": 2.745,
+        "minimum_ms": 2.745,
+        "p50_ms": 2.745,
+        "p95_ms": 2.745,
         "sample_count": 1
       },
       "result_facts": {
@@ -47,11 +47,11 @@
     {
       "description": "Public benchmark-shaped ingestion plus customer evaluation.",
       "latency_ms": {
-        "average_ms": 13.863,
-        "maximum_ms": 13.863,
-        "minimum_ms": 13.863,
-        "p50_ms": 13.863,
-        "p95_ms": 13.863,
+        "average_ms": 4.078,
+        "maximum_ms": 4.078,
+        "minimum_ms": 4.078,
+        "p50_ms": 4.078,
+        "p95_ms": 4.078,
         "sample_count": 1
       },
       "result_facts": {
@@ -68,11 +68,11 @@
     {
       "description": "Postcondition comparison of SPARTa route controls and observation metadata.",
       "latency_ms": {
-        "average_ms": 11.557,
-        "maximum_ms": 11.557,
-        "minimum_ms": 11.557,
-        "p50_ms": 11.557,
-        "p95_ms": 11.557,
+        "average_ms": 2.086,
+        "maximum_ms": 2.086,
+        "minimum_ms": 2.086,
+        "p50_ms": 2.086,
+        "p95_ms": 2.086,
         "sample_count": 1
       },
       "result_facts": {
@@ -87,12 +87,12 @@
       "workload_id": "postcondition_evidence"
     }
   ],
-  "slowest_p95_ms": 13.863,
+  "slowest_p95_ms": 4.078,
   "status": "ready_for_local_review",
   "version": "smerc.serious-report-performance.v1",
   "work_result_impact": {
     "impact": "Reviewers can see whether proof generation is lightweight enough for local evaluation, while customer pilots still measure production p50, p95, workflow overhead, and reviewer impact.",
-    "result": "Measured 4 proof workloads across 1 iteration(s) each with slowest p95 of 13.863 ms.",
+    "result": "Measured 4 proof workloads across 1 iteration(s) each with slowest p95 of 4.078 ms.",
     "work": "Run serious SMERC proof paths repeatedly and summarize local execution latency."
   },
   "workload_count": 4

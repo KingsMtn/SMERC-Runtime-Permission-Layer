@@ -46,6 +46,7 @@ def build_postcondition_report(evaluation: Mapping[str, Any], observations: Iter
     assessed = []
     status_counts: Counter[str] = Counter()
     coverage_counts: Counter[str] = Counter()
+    control_totals: Counter[str] = Counter()
     for record in records:
         action_id = _text(record.get("action_id"), "record.action_id")
         route = record.get("sparta_route")
@@ -56,6 +57,11 @@ def build_postcondition_report(evaluation: Mapping[str, Any], observations: Iter
         assessed.append(item)
         status_counts[item["postcondition_status"]] += 1
         coverage_counts[item["coverage"]] += 1
+        control_totals["required"] += len(item["required_controls"])
+        control_totals["applied_required"] += len(item["applied_required_controls"])
+        control_totals["missing"] += len(item["missing_controls"])
+        control_totals["failed_required"] += len(item["failed_required_controls"])
+    route_control_evidence_ratio = _ratio(control_totals["applied_required"], control_totals["required"])
 
     return {
         "version": VERSION,
@@ -66,6 +72,13 @@ def build_postcondition_report(evaluation: Mapping[str, Any], observations: Iter
         "observed_actions": sum(1 for item in assessed if item["coverage"] == "observed"),
         "coverage_counts": dict(sorted(coverage_counts.items())),
         "postcondition_status_counts": dict(sorted(status_counts.items())),
+        "route_control_evidence": {
+            "required_control_count": control_totals["required"],
+            "applied_required_control_count": control_totals["applied_required"],
+            "missing_required_control_count": control_totals["missing"],
+            "failed_required_control_count": control_totals["failed_required"],
+            "route_control_evidence_ratio": route_control_evidence_ratio,
+        },
         "records": assessed,
         "evidence_boundary": (
             "This report compares declared SMERC/SPARTa route controls with supplied observation metadata. "
@@ -77,7 +90,8 @@ def build_postcondition_report(evaluation: Mapping[str, Any], observations: Iter
             "result": (
                 f"Assessed {len(assessed)} routed actions, found "
                 f"{status_counts.get('pass', 0)} pass, {status_counts.get('gap', 0)} gap, "
-                f"{status_counts.get('violation', 0)} violation, and {status_counts.get('unobserved', 0)} unobserved statuses."
+                f"{status_counts.get('violation', 0)} violation, and {status_counts.get('unobserved', 0)} unobserved statuses. "
+                f"Observed evidence covered {route_control_evidence_ratio:.2%} of required route controls."
             ),
             "impact": (
                 "SMERC can now show whether controls were actually observed after a route, not only whether it recommended them."
@@ -114,16 +128,18 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Observed actions: `{report['observed_actions']}`",
         f"- Coverage counts: `{report['coverage_counts']}`",
         f"- Postcondition status counts: `{report['postcondition_status_counts']}`",
+        f"- Route control evidence: `{report['route_control_evidence']}`",
         "",
         "## Action Checks",
         "",
-        "| Action | Route | Executable | Execution | Missing controls | Failed controls | Status |",
-        "| --- | --- | --- | --- | --- | --- | --- |",
+        "| Action | Route | Executable | Execution | Evidence ratio | Missing controls | Failed controls | Status |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for item in report["records"]:
         lines.append(
             f"| `{item['action_id']}` | `{item['route_state']}` | `{item['route_executable']}` | "
-            f"`{item['execution_status']}` | `{item['missing_controls']}` | `{item['failed_controls']}` | "
+            f"`{item['execution_status']}` | `{item['route_control_evidence_ratio']}` | "
+            f"`{item['missing_controls']}` | `{item['failed_controls']}` | "
             f"`{item['postcondition_status']}` |"
         )
     lines.extend(
@@ -162,10 +178,14 @@ def _assess_record(
             "source_posture": str(record.get("decision", {}).get("posture", "unknown")),
             "coverage": "unobserved",
             "required_controls": required,
+            "applied_required_controls": [],
+            "failed_required_controls": [],
             "observed_controls": [],
             "missing_controls": required,
             "failed_controls": [],
             "unexpected_controls": [],
+            "route_control_evidence_ratio": 0.0,
+            "evidence_depth": "unobserved",
             "execution_attempted": None,
             "execution_status": "unobserved",
             "postcondition_status": "unobserved",
@@ -176,8 +196,11 @@ def _assess_record(
     applied = sorted(item["control_id"] for item in observed_results if item["outcome"] == "applied")
     failed = sorted(item["control_id"] for item in observed_results if item["outcome"] == "failed")
     observed_ids = sorted(set(item["control_id"] for item in observed_results))
+    applied_required = sorted(set(required) & set(applied))
+    failed_required = sorted(set(required) & set(failed))
     missing = sorted(set(required) - set(applied))
     unexpected = sorted(set(observed_ids) - set(required))
+    route_control_evidence_ratio = _ratio(len(applied_required), len(required))
     execution = observation["execution"]
     attempted = bool(execution["attempted"])
     execution_status = str(execution["status"])
@@ -211,10 +234,14 @@ def _assess_record(
         "source_posture": str(record.get("decision", {}).get("posture", "unknown")),
         "coverage": "observed",
         "required_controls": required,
+        "applied_required_controls": applied_required,
+        "failed_required_controls": failed_required,
         "observed_controls": observed_ids,
         "missing_controls": missing,
         "failed_controls": failed,
         "unexpected_controls": unexpected,
+        "route_control_evidence_ratio": route_control_evidence_ratio,
+        "evidence_depth": _evidence_depth(route_control_evidence_ratio, missing, failed),
         "execution_attempted": attempted,
         "execution_status": execution_status,
         "postcondition_status": status,
@@ -288,6 +315,22 @@ def _boolean(value: Any, path: str) -> bool:
     if not isinstance(value, bool):
         raise TypeError(f"{path} must be a boolean")
     return value
+
+
+def _ratio(numerator: int, denominator: int) -> float:
+    if denominator <= 0:
+        return 1.0
+    return round(numerator / denominator, 4)
+
+
+def _evidence_depth(ratio: float, missing: list[str], failed: list[str]) -> str:
+    if failed:
+        return "failed_control_evidence"
+    if ratio >= 1 and not missing:
+        return "complete_required_control_evidence"
+    if ratio > 0:
+        return "partial_required_control_evidence"
+    return "no_required_control_evidence"
 
 
 def _now() -> str:

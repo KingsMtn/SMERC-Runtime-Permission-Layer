@@ -144,6 +144,7 @@ def build_aws_postcondition_report(
         "source_organization": generic_report["source_organization"],
         "evaluated_actions": generic_report["evaluated_actions"],
         "observed_actions": observed,
+        "route_control_evidence": dict(generic_report["route_control_evidence"]),
         "aws_evidence_source_counts": dict(sorted(source_counts.items())),
         "missing_aws_evidence_source_counts": dict(sorted(missing_source_counts.items())),
         "aws_postcondition_status_counts": dict(sorted(status_counts.items())),
@@ -163,7 +164,8 @@ def build_aws_postcondition_report(
             ),
             "result": (
                 f"Assessed {generic_report['evaluated_actions']} AWS-style routed actions, observed {observed}, "
-                f"and found AWS postcondition statuses {dict(sorted(status_counts.items()))}."
+                f"found AWS postcondition statuses {dict(sorted(status_counts.items()))}, and covered "
+                f"{generic_report['route_control_evidence']['route_control_evidence_ratio']:.2%} of required route controls."
             ),
             "impact": (
                 "SMERC can now show how an AWS-style governed action bot would prove that controls were actually "
@@ -206,20 +208,21 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             "",
             f"- Evaluated actions: `{report['evaluated_actions']}`",
             f"- Observed actions: `{report['observed_actions']}`",
+            f"- Route control evidence: `{report['route_control_evidence']}`",
             f"- AWS postcondition status counts: `{report['aws_postcondition_status_counts']}`",
             f"- Observed AWS evidence sources: `{report['aws_evidence_source_counts']}`",
             f"- Missing AWS evidence sources: `{report['missing_aws_evidence_source_counts']}`",
             "",
             "## Action Checks",
             "",
-            "| Action | AWS surface | Route | Execution | Missing route controls | Missing AWS sources | Status |",
-            "| --- | --- | --- | --- | --- | --- | --- |",
+            "| Action | AWS surface | Route | Execution | Evidence ratio | Missing route controls | Missing AWS sources | Status |",
+            "| --- | --- | --- | --- | --- | --- | --- | --- |",
         ]
     )
     for item in report["records"]:
         lines.append(
             f"| `{item['action_id']}` | `{item['aws_surface']}` | `{item['route_state']}` | "
-            f"`{item['execution_status']}` | `{item['missing_controls']}` | "
+            f"`{item['execution_status']}` | `{item['route_control_evidence_ratio']}` | `{item['missing_controls']}` | "
             f"`{item['missing_aws_evidence_sources']}` | `{item['aws_postcondition_status']}` |"
         )
     lines.extend(

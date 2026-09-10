@@ -24,6 +24,8 @@ class AWSPostconditionEvidenceTests(unittest.TestCase):
         self.assertEqual(report["observed_actions"], 6)
         self.assertGreaterEqual(report["aws_postcondition_status_counts"].get("pass", 0), 4)
         self.assertGreaterEqual(report["aws_postcondition_status_counts"].get("gap", 0), 1)
+        self.assertGreater(report["route_control_evidence"]["required_control_count"], 0)
+        self.assertGreater(report["route_control_evidence"]["route_control_evidence_ratio"], 0.9)
         self.assertIn("AgentCore Runtime", " ".join(report["aws_official_signal_surfaces_used_as_model"]))
         self.assertIn("metadata-only", report["evidence_boundary"])
 
@@ -38,6 +40,8 @@ class AWSPostconditionEvidenceTests(unittest.TestCase):
         s3_action = by_id["AWS_ADAPTER_005_widen_bucket_object_access_during_failed_data_export"]
         self.assertEqual(s3_action["aws_postcondition_status"], "gap")
         self.assertIn("require_rollback_plan", s3_action["missing_controls"])
+        self.assertEqual(s3_action["evidence_depth"], "partial_required_control_evidence")
+        self.assertLess(s3_action["route_control_evidence_ratio"], 1)
 
     def test_rejects_secret_bearing_observations(self):
         payload = [
@@ -70,6 +74,8 @@ class AWSPostconditionEvidenceTests(unittest.TestCase):
         self.assertIn("AWS Postcondition Evidence Report", markdown)
         self.assertIn("Work / Result / Impact", markdown)
         self.assertIn("AWS Signal Surfaces Modeled", markdown)
+        self.assertIn("Route control evidence", markdown)
+        self.assertIn("Evidence ratio", markdown)
 
         scratch = ROOT / "tests" / "_tmp" / "aws_postcondition"
         json_path = scratch / "report.json"

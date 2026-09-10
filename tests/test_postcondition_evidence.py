@@ -26,6 +26,9 @@ class PostconditionEvidenceTests(unittest.TestCase):
         self.assertEqual(report["coverage_counts"]["unobserved"], 5)
         self.assertGreaterEqual(report["postcondition_status_counts"].get("pass", 0), 3)
         self.assertGreaterEqual(report["postcondition_status_counts"].get("gap", 0), 1)
+        self.assertGreater(report["route_control_evidence"]["required_control_count"], 0)
+        self.assertGreater(report["route_control_evidence"]["applied_required_control_count"], 0)
+        self.assertLess(report["route_control_evidence"]["route_control_evidence_ratio"], 1)
         self.assertIn("not live cloud", report["evidence_boundary"])
 
     def test_detects_missing_required_control_for_constrained_route(self):
@@ -35,6 +38,10 @@ class PostconditionEvidenceTests(unittest.TestCase):
         constrained = by_id["PUBLIC_BENCH_009_apply_production_network_and_role_change"]
         self.assertEqual(constrained["postcondition_status"], "gap")
         self.assertIn("require_rollback_plan", constrained["missing_controls"])
+        self.assertIn("limit_scope", constrained["applied_required_controls"])
+        self.assertEqual(constrained["evidence_depth"], "partial_required_control_evidence")
+        self.assertGreater(constrained["route_control_evidence_ratio"], 0)
+        self.assertLess(constrained["route_control_evidence_ratio"], 1)
         self.assertIn("Missing required control evidence", " ".join(constrained["findings"]))
 
     def test_markdown_explains_work_result_impact_and_reviewer_question(self):
@@ -43,6 +50,8 @@ class PostconditionEvidenceTests(unittest.TestCase):
         self.assertIn("SMERC Postcondition Evidence Report", markdown)
         self.assertIn("Work / Result / Impact", markdown)
         self.assertIn("Observed actions", markdown)
+        self.assertIn("Route control evidence", markdown)
+        self.assertIn("Evidence ratio", markdown)
         self.assertIn("Reviewer Question", markdown)
 
     def test_writes_outputs(self):
