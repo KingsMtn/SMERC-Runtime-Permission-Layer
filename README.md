@@ -29,6 +29,7 @@ Fast reviewer paths:
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
 - AWS-style reviewer bundle: `docs/AWS_Reviewer_Bundle.md`
 - AWS reviewer quickstart: `docs/AWS_Reviewer_Quickstart.md`
+- AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
