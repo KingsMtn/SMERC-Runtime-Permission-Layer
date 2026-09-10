@@ -1,0 +1,63 @@
+{
+  "language_version": "smerc.decision.v1",
+  "action_language_version": "smerc.action.v1",
+  "action_hash": "5555555555555555555555555555555555555555555555555555555555555555",
+  "action_id": "decision-language-escalate-001",
+  "posture": "ESCALATE",
+  "enforcement_state": "review",
+  "route_state": "REVIEW_REQUIRED",
+  "required_controls": [
+    "route_to_accountable_reviewer",
+    "require_explicit_approval",
+    "document_override_if_approved",
+    "preserve_replay"
+  ],
+  "recoverability": {
+    "rollback_ready": true,
+    "blast_radius_bounded": false,
+    "evidence_sufficient": true,
+    "containment_strength": 0.52
+  },
+  "scores": {
+    "irreversible_exposure": 0.69,
+    "reversible_capacity": 0.61,
+    "authorization_confidence": 0.77
+  },
+  "reasons": [
+    {"code": "IMPACT_SCOPE_WIDE", "title": "Impact scope is wide"},
+    {"code": "CONTAINMENT_WEAK", "title": "Containment is weak"}
+  ],
+  "structured_controls": [
+    {"code": "route_to_accountable_reviewer", "title": "Route to an accountable reviewer"},
+    {"code": "require_explicit_approval", "title": "Require explicit approval"},
+    {"code": "document_override_if_approved", "title": "Document any approved override"}
+  ],
+  "evidence_expectation": {
+    "pre_execution": ["route_to_accountable_reviewer", "require_explicit_approval"],
+    "postcondition": ["preserve_replay"],
+    "review": ["document_override_if_approved"]
+  },
+  "postcondition_expectation": {
+    "must_preserve_replay": true,
+    "must_record_execution": false,
+    "must_report_missing_controls": true
+  },
+  "transition": {
+    "mode": "conditional",
+    "eligible_target_posture": "THROTTLE",
+    "requires_new_request": false,
+    "conditions": [
+      {
+        "code": "APPROVAL_RECORDED",
+        "field": "review.explicit_approval",
+        "operator": "eq",
+        "value": true,
+        "description": "Record explicit approval before constrained execution."
+      }
+    ]
+  },
+  "replay_id": "decision-language-escalate-001-replay",
+  "replay": {
+    "summary": "Action requires accountable review before any constrained execution."
+  }
+}

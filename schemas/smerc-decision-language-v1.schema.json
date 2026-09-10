@@ -11,9 +11,46 @@
     "action_id": {"type": "string", "minLength": 1},
     "posture": {"enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"]},
     "enforcement_state": {"enum": ["release", "constrain", "pause", "block", "review"]},
+    "route_state": {
+      "enum": ["EXECUTE", "CONSTRAINED_EXECUTE", "PAUSE", "BLOCK", "REVIEW_REQUIRED"]
+    },
+    "required_controls": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 1
+    },
+    "recoverability": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "rollback_ready": {"type": "boolean"},
+        "blast_radius_bounded": {"type": "boolean"},
+        "evidence_sufficient": {"type": "boolean"},
+        "containment_strength": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
     "scores": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}},
     "reasons": {"$ref": "#/$defs/terms"},
     "structured_controls": {"$ref": "#/$defs/terms"},
+    "evidence_expectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pre_execution", "postcondition", "review"],
+      "properties": {
+        "pre_execution": {"$ref": "#/$defs/string_terms"},
+        "postcondition": {"$ref": "#/$defs/string_terms"},
+        "review": {"$ref": "#/$defs/string_terms"}
+      }
+    },
+    "postcondition_expectation": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "must_preserve_replay": {"type": "boolean"},
+        "must_record_execution": {"type": "boolean"},
+        "must_report_missing_controls": {"type": "boolean"}
+      }
+    },
     "transition": {
       "type": "object", "additionalProperties": false,
       "required": ["mode", "eligible_target_posture", "requires_new_request", "conditions"],
@@ -35,6 +72,10 @@
         "required": ["code", "title"],
         "properties": {"code": {"type": "string", "minLength": 1}, "title": {"type": "string", "minLength": 1}}
       }
+    },
+    "string_terms": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
     }
   }
 }

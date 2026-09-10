@@ -1,0 +1,49 @@
+{
+  "language_version": "smerc.decision.v1",
+  "action_language_version": "smerc.action.v1",
+  "action_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+  "action_id": "decision-language-allow-001",
+  "posture": "ALLOW",
+  "enforcement_state": "release",
+  "route_state": "EXECUTE",
+  "required_controls": ["execute", "record_execution_report", "preserve_replay"],
+  "recoverability": {
+    "rollback_ready": true,
+    "blast_radius_bounded": true,
+    "evidence_sufficient": true,
+    "containment_strength": 0.94
+  },
+  "scores": {
+    "irreversible_exposure": 0.12,
+    "reversible_capacity": 0.93,
+    "authorization_confidence": 0.97
+  },
+  "reasons": [
+    {"code": "RECOVERABILITY_ACCEPTABLE", "title": "Recoverability is acceptable"}
+  ],
+  "structured_controls": [
+    {"code": "execute", "title": "Execute the action"},
+    {"code": "record_execution_report", "title": "Record an execution report"},
+    {"code": "preserve_replay", "title": "Preserve the decision replay"}
+  ],
+  "evidence_expectation": {
+    "pre_execution": [],
+    "postcondition": ["record_execution_report", "preserve_replay"],
+    "review": []
+  },
+  "postcondition_expectation": {
+    "must_preserve_replay": true,
+    "must_record_execution": true,
+    "must_report_missing_controls": true
+  },
+  "transition": {
+    "mode": "maintain",
+    "eligible_target_posture": "ALLOW",
+    "requires_new_request": false,
+    "conditions": []
+  },
+  "replay_id": "decision-language-allow-001-replay",
+  "replay": {
+    "summary": "Low-risk contained action may execute with replay preservation."
+  }
+}

@@ -42,6 +42,16 @@ class BeaconTests(unittest.TestCase):
         self.assertIn("data_sensitivity", fitness["input_signals"])
         self.assertIn("recommended_executor", fitness["output_fields"])
 
+    def test_decision_language_discovery_is_validated_when_present(self):
+        result = validate_beacon(self.beacon)
+        self.assertTrue(result["valid"])
+        self.assertEqual(self.beacon["decision_language"]["version"], "smerc.decision.v1")
+        broken = dict(self.beacon)
+        broken["decision_language"] = dict(self.beacon["decision_language"])
+        broken["decision_language"]["postures"] = ["ALLOW"]
+        with self.assertRaises(ValueError):
+            validate_beacon(broken)
+
 
 if __name__ == "__main__":
     unittest.main()

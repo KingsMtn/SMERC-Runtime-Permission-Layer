@@ -1,0 +1,65 @@
+{
+  "language_version": "smerc.decision.v1",
+  "action_language_version": "smerc.action.v1",
+  "action_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+  "action_id": "decision-language-throttle-001",
+  "posture": "THROTTLE",
+  "enforcement_state": "constrain",
+  "route_state": "CONSTRAINED_EXECUTE",
+  "required_controls": [
+    "limit_scope",
+    "preview_before_execution",
+    "checkpoint_before_execution",
+    "require_rollback_plan",
+    "record_execution_report",
+    "preserve_replay"
+  ],
+  "recoverability": {
+    "rollback_ready": true,
+    "blast_radius_bounded": true,
+    "evidence_sufficient": false,
+    "containment_strength": 0.74
+  },
+  "scores": {
+    "irreversible_exposure": 0.51,
+    "reversible_capacity": 0.73,
+    "authorization_confidence": 0.82
+  },
+  "reasons": [
+    {"code": "EXTERNAL_SIDE_EFFECT", "title": "Action has an external side effect"},
+    {"code": "IMPACT_SCOPE_WIDE", "title": "Impact scope is wide"}
+  ],
+  "structured_controls": [
+    {"code": "limit_scope", "title": "Limit action scope"},
+    {"code": "preview_before_execution", "title": "Preview before execution"},
+    {"code": "require_rollback_plan", "title": "Require a tested rollback plan"}
+  ],
+  "evidence_expectation": {
+    "pre_execution": ["preview_before_execution", "checkpoint_before_execution", "require_rollback_plan"],
+    "postcondition": ["record_execution_report", "preserve_replay"],
+    "review": []
+  },
+  "postcondition_expectation": {
+    "must_preserve_replay": true,
+    "must_record_execution": true,
+    "must_report_missing_controls": true
+  },
+  "transition": {
+    "mode": "conditional",
+    "eligible_target_posture": "ALLOW",
+    "requires_new_request": false,
+    "conditions": [
+      {
+        "code": "ROLLBACK_PLAN_VERIFIED",
+        "field": "evidence.rollback_plan_verified",
+        "operator": "eq",
+        "value": true,
+        "description": "Verify rollback before release."
+      }
+    ]
+  },
+  "replay_id": "decision-language-throttle-001-replay",
+  "replay": {
+    "summary": "Action may proceed only as bounded constrained execution."
+  }
+}

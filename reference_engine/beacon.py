@@ -81,6 +81,20 @@ def validate_beacon(payload: Dict[str, Any]) -> Dict[str, Any]:
     _require_string_list(fitness["input_signals"], "model_agent_fitness.input_signals", min_items=5)
     _require_string_list(fitness["output_fields"], "model_agent_fitness.output_fields", min_items=5)
 
+    if "decision_language" in payload:
+        decision_language = payload["decision_language"]
+        if not isinstance(decision_language, dict):
+            raise TypeError("decision_language must be an object")
+        for key in ["version", "schema", "examples", "postures"]:
+            if key not in decision_language:
+                raise ValueError(f"decision_language missing {key}")
+        if decision_language["version"] != "smerc.decision.v1":
+            raise ValueError("decision_language.version must be smerc.decision.v1")
+        _require_https_url(decision_language["schema"], "decision_language.schema")
+        _require_https_url(decision_language["examples"], "decision_language.examples")
+        if not isinstance(decision_language["postures"], list) or set(decision_language["postures"]) != REQUIRED_POSTURES:
+            raise ValueError("decision_language.postures must contain ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE")
+
     review_paths = payload["review_paths"]
     if not isinstance(review_paths, dict) or not review_paths:
         raise TypeError("review_paths must be a non-empty object")

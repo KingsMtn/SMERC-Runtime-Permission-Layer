@@ -27,6 +27,7 @@ It includes:
 
 - canonical website and repository
 - posture vocabulary
+- Decision Language schema and posture examples
 - core governance questions
 - implemented governance surfaces
 - discovery endpoints
@@ -62,3 +63,5 @@ python -m unittest tests.test_beacon -v
 ```
 
 The validator checks required fields, HTTPS public links, posture vocabulary, discovery endpoints, Model and Agent Fitness fields, review paths, and disallowed overclaim language.
+
+The portable beacon schema is `schemas/smerc-beacon-v1.schema.json`.

@@ -1,0 +1,63 @@
+{
+  "language_version": "smerc.decision.v1",
+  "action_language_version": "smerc.action.v1",
+  "action_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+  "action_id": "decision-language-freeze-001",
+  "posture": "FREEZE",
+  "enforcement_state": "pause",
+  "route_state": "PAUSE",
+  "required_controls": [
+    "pause_execution",
+    "collect_more_evidence",
+    "snapshot_current_state",
+    "preserve_replay"
+  ],
+  "recoverability": {
+    "rollback_ready": false,
+    "blast_radius_bounded": true,
+    "evidence_sufficient": false,
+    "containment_strength": 0.58
+  },
+  "scores": {
+    "irreversible_exposure": 0.48,
+    "reversible_capacity": 0.39,
+    "authorization_confidence": 0.62
+  },
+  "reasons": [
+    {"code": "RECOVERY_CAPACITY_LOW", "title": "Recovery capacity is low"},
+    {"code": "EVIDENCE_VALIDITY_LOW", "title": "Evidence validity is low"}
+  ],
+  "structured_controls": [
+    {"code": "pause_execution", "title": "Pause execution"},
+    {"code": "collect_more_evidence", "title": "Collect additional evidence"},
+    {"code": "snapshot_current_state", "title": "Snapshot current state"}
+  ],
+  "evidence_expectation": {
+    "pre_execution": ["collect_more_evidence", "snapshot_current_state"],
+    "postcondition": ["preserve_replay"],
+    "review": []
+  },
+  "postcondition_expectation": {
+    "must_preserve_replay": true,
+    "must_record_execution": false,
+    "must_report_missing_controls": true
+  },
+  "transition": {
+    "mode": "conditional",
+    "eligible_target_posture": "THROTTLE",
+    "requires_new_request": false,
+    "conditions": [
+      {
+        "code": "EVIDENCE_VALIDITY_RESTORED",
+        "field": "signals.evidence_validity",
+        "operator": "gte",
+        "value": 0.65,
+        "description": "Restore evidence quality before constrained execution."
+      }
+    ]
+  },
+  "replay_id": "decision-language-freeze-001-replay",
+  "replay": {
+    "summary": "Execution is paused until evidence and recovery state improve."
+  }
+}

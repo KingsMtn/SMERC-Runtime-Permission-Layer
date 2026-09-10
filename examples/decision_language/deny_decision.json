@@ -1,0 +1,63 @@
+{
+  "language_version": "smerc.decision.v1",
+  "action_language_version": "smerc.action.v1",
+  "action_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+  "action_id": "decision-language-deny-001",
+  "posture": "DENY",
+  "enforcement_state": "block",
+  "route_state": "BLOCK",
+  "required_controls": [
+    "block_execution",
+    "explain_denial",
+    "preserve_replay",
+    "require_new_request"
+  ],
+  "recoverability": {
+    "rollback_ready": false,
+    "blast_radius_bounded": false,
+    "evidence_sufficient": false,
+    "containment_strength": 0.18
+  },
+  "scores": {
+    "irreversible_exposure": 0.91,
+    "reversible_capacity": 0.16,
+    "authorization_confidence": 0.34
+  },
+  "reasons": [
+    {"code": "IRREVERSIBLE_EXPOSURE_HIGH", "title": "Irreversible exposure is high"},
+    {"code": "AUTHORIZATION_CONFIDENCE_LOW", "title": "Authority confidence is low"}
+  ],
+  "structured_controls": [
+    {"code": "block_execution", "title": "Block execution"},
+    {"code": "explain_denial", "title": "Explain the denial"},
+    {"code": "require_new_request", "title": "Require a materially new request"}
+  ],
+  "evidence_expectation": {
+    "pre_execution": [],
+    "postcondition": ["preserve_replay"],
+    "review": ["explain_denial"]
+  },
+  "postcondition_expectation": {
+    "must_preserve_replay": true,
+    "must_record_execution": false,
+    "must_report_missing_controls": true
+  },
+  "transition": {
+    "mode": "conditional",
+    "eligible_target_posture": null,
+    "requires_new_request": true,
+    "conditions": [
+      {
+        "code": "MATERIAL_NEW_REQUEST_REQUIRED",
+        "field": "request.action_hash",
+        "operator": "changed",
+        "value": true,
+        "description": "Submit a materially new action request."
+      }
+    ]
+  },
+  "replay_id": "decision-language-deny-001-replay",
+  "replay": {
+    "summary": "Action is blocked because exposure is high and recoverability is weak."
+  }
+}

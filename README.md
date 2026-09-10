@@ -303,6 +303,7 @@ Internal names come after the flow is understood: signal and evidence intake, re
 The current build includes:
 
 - versioned SMERC Action Language and Decision Language contracts
+- a portable SMERC Decision Language schema, beacon schema, and posture examples for `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, and `ESCALATE`
 - machine-readable runtime contract index showing how the decision engine, execution routing, permits, control evidence, DLL, and DLL Intelligence fit together
 - evidence and unknowns registry with deployment-limiting falsification rules
 - tenant-scoped policy calibration and evidence provenance admission
@@ -509,6 +510,7 @@ Start here before reading the code:
 - `docs/Engine_Profile_And_Trace.md` explains domain profiles, score contributions, threshold trace, and transition guidance.
 - `docs/Model_Agent_Fitness_Layer.md` explains how SMERC selects the qualified model, agent, or automation executor for a specific task.
 - `docs/SMERC_Beacon.md` explains the machine-readable beacon that helps agents, tools, and reviewers discover SMERC governance boundaries.
+- `docs/SMERC_Decision_Language.md` defines the portable machine-readable posture contract other agent, tool, cloud, MCP, or workflow systems can adopt without adopting the full SMERC engine.
 - `docs/Agent_Handshake_Protocol.md` explains how an agent discovers SMERC, declares itself, proposes an action, receives a posture, and preserves a replay record.
 - `docs/MCP_Tool_Governance.md` explains how SMERC can score MCP-style tool calls before execution and map them through SPARTa without replacing MCP, OAuth, IAM, or prompt defenses.
 - `docs/MCP_Tool_Risk_Scanner.md` explains how to scan MCP tool definitions for recoverability and autonomy risk before those tools are granted to agents.
@@ -771,7 +773,9 @@ This is the practical meaning of Macro Language Model in the current product: SM
 python -m reference_engine.action_language examples/action_language/production_database_change.json
 ```
 
-Schemas and full semantics are in `schemas/` and `specification/SMERC_Action_Language_v1.md`.
+Schemas, posture examples, and full semantics are in `schemas/`, `examples/decision_language/`, `docs/SMERC_Decision_Language.md`, and `specification/SMERC_Action_Language_v1.md`.
+
+The ecosystem hook is intentionally small: another framework can emit a SMERC-compatible posture, route state, required controls, recoverability fields, evidence expectations, and replay ID without adopting the full reference engine.
 
 ## SMERC Policy Language
 
