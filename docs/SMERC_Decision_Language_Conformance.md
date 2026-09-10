@@ -34,13 +34,13 @@ The larger ecosystem value is that other systems can emit decisions in the same 
 ## Run
 
 ```bash
-python -m reference_engine.decision_language_conformance examples/decision_language/*.json --pretty
+python -m reference_engine.decision_language_conformance examples/decision_language/*_decision.json --pretty
 ```
 
 Write a report:
 
 ```bash
-python -m reference_engine.decision_language_conformance examples/decision_language/*.json \
+python -m reference_engine.decision_language_conformance examples/decision_language/*_decision.json \
   --json-output reports/decision_language_conformance.json \
   --markdown-output reports/Decision_Language_Conformance_Report.md
 ```
@@ -62,4 +62,3 @@ It does not prove:
 The useful claim is:
 
 > This decision artifact is shaped so another system can understand and inspect the SMERC-compatible posture, route, controls, evidence expectations, and replay boundary.
-

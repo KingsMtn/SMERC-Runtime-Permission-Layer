@@ -1,0 +1,22 @@
+{
+  "framework": "example-agent-orchestrator",
+  "action_id": "external-framework-cloud-change-001",
+  "summary": "Agent proposes increasing regional compute capacity while task completion certainty is low.",
+  "risk": {
+    "irreversible_exposure": 0.58,
+    "reversible_capacity": 0.71,
+    "authorization_confidence": 0.82
+  },
+  "recoverability": {
+    "rollback_ready": true,
+    "blast_radius_bounded": true,
+    "evidence_sufficient": false,
+    "containment_strength": 0.76
+  },
+  "evidence": {
+    "pre_execution": ["preview_before_execution", "checkpoint_before_execution", "require_rollback_plan"],
+    "postcondition": ["record_execution_report", "preserve_replay"],
+    "review": []
+  }
+}
+

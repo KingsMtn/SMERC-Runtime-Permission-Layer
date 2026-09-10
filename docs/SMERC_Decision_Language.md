@@ -41,6 +41,7 @@ This makes SMERC a reusable decision contract rather than only a local runtime.
 - Beacon schema: `schemas/smerc-beacon-v1.schema.json`
 - Beacon example: `examples/smerc_beacon.json`
 - Posture examples: `examples/decision_language/`
+- Implementer quickstart: `docs/SMERC_Decision_Language_Implementer_Quickstart.md`
 - Conformance guide: `docs/SMERC_Decision_Language_Conformance.md`
 - Runtime action contract: `specification/SMERC_Action_Language_v1.md`
 
@@ -115,6 +116,7 @@ Run:
 
 ```bash
 python -m unittest tests.test_decision_language_contract -v
+python -m unittest tests.test_decision_language_emitter -v
 python -m unittest tests.test_decision_language_conformance -v
 python -m unittest tests.test_action_language tests.test_beacon -v
 ```
