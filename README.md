@@ -18,6 +18,12 @@ Category definition: https://admirable-sorbet-9986d5.netlify.app/pre-execution-r
 
 Glossary: https://admirable-sorbet-9986d5.netlify.app/glossary.html
 
+AWS metadata pilot CTA:
+
+- Open the AWS pilot front door: `docs/AWS_PILOT_REQUEST.md`
+- Submit a safe metadata-only AWS pilot request: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/issues/new?template=aws_metadata_pilot_request.md
+- Do not send account IDs, ARNs, raw logs, credentials, customer records, production commands, or live AWS access.
+
 Fast reviewer paths:
 
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
