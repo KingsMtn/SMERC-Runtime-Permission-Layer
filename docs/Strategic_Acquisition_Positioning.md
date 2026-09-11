@@ -41,6 +41,17 @@ SMERC's value is not in one standalone app. The value is the control pattern and
 4. **Autonomy governance** through health, budget, earned autonomy, and right-to-continue checks.
 5. **MCP, GitHub Actions, cloud, and financial-action profiles** that show the same permission model across multiple action surfaces.
 
+## Two-Tier Valuation Path
+
+SMERC's strongest strategic story has two layers:
+
+1. Public decision language and review standard: `smerc.decision.v1`, posture vocabulary, conformance checks, safe metadata examples, reviewer quickstarts, and AI-readable proof assets.
+2. Enterprise cloud action governance package: AWS-style metadata intake, Bedrock/Lambda-shaped decision handling, cloud action-chain replay, postcondition evidence, timing metrics, Decision Lifecycle Ledger records, customer-owned metadata evaluation, and shadow-mode pilot packaging.
+
+The first layer creates credibility, discoverability, and ecosystem vocabulary. The second layer creates acquisition-relevant value because it shows how SMERC can become a governed action bot or runtime control surface inside real platform workflows.
+
+See `docs/Two_Tier_Valuation_Path.md` for the concrete evidence gates.
+
 ## Best Strategic Framing
 
 Use this language:

@@ -72,6 +72,28 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("MACH37", text)
         self.assertIn("not a competitive legal opinion", text)
 
+    def test_two_tier_valuation_path_is_linked_and_bounded(self):
+        text = (ROOT / "docs" / "Two_Tier_Valuation_Path.md").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        strategic = (ROOT / "docs" / "Strategic_Acquisition_Positioning.md").read_text(
+            encoding="utf-8"
+        )
+        aws = (ROOT / "docs" / "AWS_Deployable_Bot_Readiness_Path.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("Tier 1: Public Decision Language And Review Standard", text)
+        self.assertIn("Tier 2: Enterprise Cloud Action Governance Package", text)
+        self.assertIn("smerc.decision.v1", text)
+        self.assertIn("AWS-style metadata adapter", text)
+        self.assertIn("postcondition evidence", text)
+        self.assertIn("customer-owned metadata", text)
+        self.assertIn("Avoid this", text)
+        self.assertIn("SMERC is already worth millions", text)
+        self.assertIn("docs/Two_Tier_Valuation_Path.md", readme)
+        self.assertIn("Two-Tier Valuation Path", strategic)
+        self.assertIn("Tier 2 proof path", aws)
+
 
 if __name__ == "__main__":
     unittest.main()

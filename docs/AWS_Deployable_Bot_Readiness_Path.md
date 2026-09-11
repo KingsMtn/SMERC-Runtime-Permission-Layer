@@ -50,6 +50,23 @@ Impact:
 
 The project becomes easier to evaluate as infrastructure that could complement cloud identity, gateway, guardrail, logging, monitoring, change-management, and approval systems rather than a loose security idea.
 
+## Valuation Link
+
+The AWS deployable bot path is the Tier 2 proof path in `docs/Two_Tier_Valuation_Path.md`.
+
+Tier 1 makes SMERC visible and reusable through public decision-language contracts. Tier 2 makes SMERC strategically interesting by showing how those contracts become enterprise cloud-action governance with metadata intake, recoverability posture, route controls, postcondition evidence, timing metrics, and customer-owned shadow-mode review.
+
+This path should therefore prioritize evidence that an AWS-style platform reviewer can inspect without live credentials:
+
+- safe metadata input
+- `smerc.decision.v1` posture output
+- required controls
+- route state
+- postcondition observations
+- performance overhead
+- commercial-use boundary
+- customer-owned metadata replacement path
+
 ## Readiness Milestones
 
 ### 1. Public AWS-Style Replay

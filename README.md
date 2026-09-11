@@ -46,6 +46,7 @@ Fast reviewer paths:
 - AWS postcondition evidence: `docs/AWS_Postcondition_Evidence.md`
 - AWS customer-owned metadata request: `reports/AWS_Customer_Owned_Metadata_Request.md`
 - Defensible moat and commercial boundary: `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
+- Two-tier valuation path: `docs/Two_Tier_Valuation_Path.md`
 - Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
 - Balanced runtime judgment replay: `docs/Balanced_Runtime_Judgment_Replay.md`
@@ -411,6 +412,7 @@ If you are evaluating SMERC as a potential platform feature, strategic partnersh
 
 - `docs/Strategic_Acquisition_Positioning.md` explains the acquisition-relevant thesis and what evidence is still missing.
 - `docs/Strategic_Buyer_Map.md` maps the platform categories where SMERC may matter.
+- `docs/Two_Tier_Valuation_Path.md` separates the public decision-language value layer from the enterprise cloud-action governance package.
 - `docs/Why_SMERC_Fits_Strategic_Platforms.md` compares SMERC's runtime checkpoint to IAM, policy engines, AI gateways, approvals, and audit logs.
 - `docs/IP_Asset_Map.md` maps the strongest technical mechanisms and weaker broad claims to avoid.
 - `docs/Technical_Diligence_Index.md` gives a short inspection path through the implementation.
