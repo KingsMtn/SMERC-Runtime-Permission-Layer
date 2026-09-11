@@ -104,15 +104,41 @@ class AWSShadowMirrorAdapterTests(unittest.TestCase):
 
     def test_docs_and_readme_reference_shadow_mirror_path(self):
         docs = (ROOT / "docs" / "AWS_Shadow_Mirror_Metadata_Path.md").read_text(encoding="utf-8")
+        request = (ROOT / "docs" / "AWS_Shadow_Mirror_Customer_Metadata_Request.md").read_text(
+            encoding="utf-8"
+        )
         readiness = (ROOT / "docs" / "AWS_Deployable_Bot_Readiness_Path.md").read_text(encoding="utf-8")
+        quickstart = (ROOT / "docs" / "AWS_Reviewer_Quickstart.md").read_text(encoding="utf-8")
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        issue_template = (
+            ROOT / ".github" / "ISSUE_TEMPLATE" / "aws_shadow_mirror_metadata_request.md"
+        ).read_text(encoding="utf-8")
 
         self.assertIn("metadata-only", docs)
         self.assertIn("VPC Traffic Mirroring", docs)
         self.assertIn("Gateway Load Balancer", docs)
         self.assertIn("python -m reference_engine.aws_shadow_mirror_adapter", docs)
+        self.assertIn("docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md", docs)
+        self.assertIn("examples/aws_shadow_mirror_customer_template.json", docs)
         self.assertIn("docs/AWS_Shadow_Mirror_Metadata_Path.md", readiness)
         self.assertIn("docs/AWS_Shadow_Mirror_Metadata_Path.md", readme)
+        self.assertIn("docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md", readme)
+        self.assertIn("5 to 25 sanitized mirror-derived summaries", request)
+        self.assertIn("packet payloads", request)
+        self.assertIn("examples/aws_shadow_mirror_customer_template.json", quickstart)
+        self.assertIn("AWS shadow mirror metadata request", issue_template)
+
+    def test_customer_template_is_adapter_compatible_and_payload_free(self):
+        template = ROOT / "examples" / "aws_shadow_mirror_customer_template.json"
+        rows = load_source_exports(template)
+        payload = normalize_source_exports(rows)
+
+        self.assertEqual(payload["adapter_summary"]["accepted_rows"], 1)
+        self.assertEqual(payload["adapter_summary"]["skipped_rows"], 0)
+        metadata = payload["actions"][0]["tool_plan"]["metadata"]
+        self.assertFalse(metadata["payload_boundary"]["payload_inspected"])
+        self.assertFalse(metadata["payload_boundary"]["payload_retained"])
+        self.assertTrue(metadata["payload_boundary"]["derived_metadata_only"])
 
 
 if __name__ == "__main__":

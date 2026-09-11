@@ -93,6 +93,16 @@ reports/aws_shadow_mirror/Customer_Evaluation_Report.md
 reports/aws_shadow_mirror/customer_evaluation_report.json
 ```
 
+## Customer-Owned Metadata Request
+
+When a reviewer is ready to use their own data, use:
+
+- `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md`
+- `examples/aws_shadow_mirror_customer_template.json`
+- `.github/ISSUE_TEMPLATE/aws_shadow_mirror_metadata_request.md`
+
+The request stays narrow: 5 to 25 sanitized mirror-derived summaries from one workflow, no payloads, no raw logs, no identifiers, no credentials, and no live AWS access.
+
 ## Reviewer Question
 
 Can one AWS workflow export 5 to 25 sanitized mirror-derived summaries without payloads?

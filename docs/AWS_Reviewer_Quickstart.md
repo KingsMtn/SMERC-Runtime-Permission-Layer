@@ -60,6 +60,8 @@ Also inspect:
 
 - `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
 - `docs/AWS_Customer_Metadata_Mini_Pack.md`
+- `docs/AWS_Shadow_Mirror_Metadata_Path.md`
+- `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md`
 - `docs/AWS_Security_Ecosystem_Evidence_Path.md`
 - `docs/AWS_Marketplace_Validation_Path.md`
 - `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
@@ -88,6 +90,18 @@ Copy the shape into `customer_working/aws_source_exports.json`, replace placehol
 
 ```bash
 python -m reference_engine.aws_metadata_adapter customer_working/aws_source_exports.json --normalized-output reports/customer_working/aws_normalized_customer_actions.json --json-output reports/customer_working/aws_metadata_adapter_report.json --markdown-output reports/customer_working/AWS_Metadata_Adapter_Report.md --customer-json-output reports/customer_working/aws_customer_evaluation_report.json --customer-markdown-output reports/customer_working/AWS_Customer_Evaluation_Report.md --pretty
+```
+
+For mirror-derived operational summaries, use:
+
+```text
+examples/aws_shadow_mirror_customer_template.json
+```
+
+Copy the shape into `customer_working/aws_shadow_mirror_rows.json`, replace placeholder values with 5 to 25 sanitized mirror-derived rows from one workflow, then run:
+
+```bash
+python -m reference_engine.aws_shadow_mirror_adapter customer_working/aws_shadow_mirror_rows.json --normalized-output reports/customer_working/aws_shadow_mirror_normalized_customer_actions.json --json-output reports/customer_working/aws_shadow_mirror_adapter_report.json --markdown-output reports/customer_working/AWS_Shadow_Mirror_Adapter_Report.md --customer-json-output reports/customer_working/aws_shadow_mirror_customer_evaluation_report.json --customer-markdown-output reports/customer_working/AWS_Shadow_Mirror_Customer_Evaluation_Report.md --pretty
 ```
 
 ## What This Proves

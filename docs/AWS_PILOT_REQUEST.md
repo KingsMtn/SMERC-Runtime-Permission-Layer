@@ -20,6 +20,7 @@ Useful workflow lanes include:
 - FinOps / cost-velocity automation
 - S3 / data-access policy change
 - cross-account delegation
+- sanitized VPC Traffic Mirroring / NLB fan-out / Gateway Load Balancer endpoint summaries
 
 For each action, include:
 
