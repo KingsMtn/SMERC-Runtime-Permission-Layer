@@ -1,6 +1,6 @@
 # SMERC Serious Report Performance
 
-Generated: `2026-09-10T21:51:53+00:00`
+Generated: `2026-09-11T23:45:48+00:00`
 Version: `smerc.serious-report-performance.v1`
 Iterations per workload: `1`
 Status: `ready_for_local_review`
@@ -8,7 +8,7 @@ Status: `ready_for_local_review`
 ## Work / Result / Impact
 
 - Work: Run serious SMERC proof paths repeatedly and summarize local execution latency.
-- Result: Measured 4 proof workloads across 1 iteration(s) each with slowest p95 of 4.078 ms.
+- Result: Measured 4 proof workloads across 1 iteration(s) each with slowest p95 of 6.962 ms.
 - Impact: Reviewers can see whether proof generation is lightweight enough for local evaluation, while customer pilots still measure production p50, p95, workflow overhead, and reviewer impact.
 
 ## Evidence Boundary
@@ -19,10 +19,10 @@ This is local reference performance evidence for report builders. It does not pr
 
 | Workload | Runs | p50 ms | p95 ms | Max ms | Result facts |
 | --- | ---: | ---: | ---: | ---: | --- |
-| `customer_evaluation_general` | 1 | 2.527 | 2.527 | 2.527 | actions=5, valid_ledgers=5, postures={'ALLOW': 1, 'DENY': 3, 'THROTTLE': 1} |
-| `cloud_metadata_connector` | 1 | 2.745 | 2.745 | 2.745 | actions=6, valid_ledgers=6, postures={'DENY': 3, 'THROTTLE': 3} |
-| `public_benchmark_ingestion` | 1 | 4.078 | 4.078 | 4.078 | actions=10, valid_ledgers=10, postures={'ALLOW': 2, 'DENY': 6, 'THROTTLE': 2} |
-| `postcondition_evidence` | 1 | 2.086 | 2.086 | 2.086 | actions=10, observed=5, statuses={'gap': 1, 'pass': 4, 'unobserved': 5} |
+| `customer_evaluation_general` | 1 | 3.257 | 3.257 | 3.257 | actions=5, valid_ledgers=5, postures={'ALLOW': 1, 'DENY': 3, 'THROTTLE': 1} |
+| `cloud_metadata_connector` | 1 | 3.745 | 3.745 | 3.745 | actions=6, valid_ledgers=6, postures={'DENY': 3, 'THROTTLE': 3} |
+| `public_benchmark_ingestion` | 1 | 6.962 | 6.962 | 6.962 | actions=10, valid_ledgers=10, postures={'ALLOW': 2, 'DENY': 6, 'THROTTLE': 2} |
+| `postcondition_evidence` | 1 | 5.383 | 5.383 | 5.383 | actions=10, observed=5, statuses={'gap': 1, 'pass': 4, 'unobserved': 5} |
 
 ## Reviewer Question
 

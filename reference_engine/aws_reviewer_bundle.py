@@ -25,6 +25,11 @@ from reference_engine.aws_postcondition_evidence import (
     load_json_object,
     render_markdown as render_aws_postcondition_markdown,
 )
+from reference_engine.aws_shadow_mirror_adapter import (
+    build_adapter_report as build_shadow_mirror_report,
+    load_source_exports as load_shadow_mirror_exports,
+    render_markdown as render_shadow_mirror_markdown,
+)
 from reference_engine.customer_evaluation import load_payload
 from reference_engine.customer_owned_metadata_request import (
     build_request_report,
@@ -46,6 +51,7 @@ def build_aws_reviewer_bundle(
     iterations: int = 5,
     customer_aws_source_exports: str | Path | None = None,
     customer_aws_observations: str | Path | None = None,
+    customer_aws_shadow_mirror_exports: str | Path | None = None,
 ) -> Dict[str, Any]:
     base = Path(root)
     chain_report = build_chain_report(load_payload(base / "examples/aws_agent_action_chain.json"))
@@ -57,10 +63,14 @@ def build_aws_reviewer_bundle(
         load_json_object(base / "reports/aws_metadata_adapter/customer_evaluation_report.json"),
         load_aws_observations(base / "examples/aws_postcondition_observations.json"),
     )
+    shadow_mirror = build_shadow_mirror_report(
+        load_shadow_mirror_exports(base / "examples/aws_shadow_mirror_source_exports.json")
+    )
     performance = build_performance_report(root=base, iterations=iterations)
     metadata_request = build_request_report(workflow_family="aws", requested_actions=requested_actions)
     customer_metadata_review = None
     customer_postcondition = None
+    customer_shadow_mirror_review = None
     if customer_aws_source_exports:
         customer_metadata_review = build_adapter_report(load_source_exports(_resolve_path(base, customer_aws_source_exports)))
         if customer_aws_observations:
@@ -68,12 +78,18 @@ def build_aws_reviewer_bundle(
                 customer_metadata_review["customer_evaluation"],
                 load_aws_observations(_resolve_path(base, customer_aws_observations)),
             )
+    if customer_aws_shadow_mirror_exports:
+        customer_shadow_mirror_review = build_shadow_mirror_report(
+            load_shadow_mirror_exports(_resolve_path(base, customer_aws_shadow_mirror_exports))
+        )
     readiness = _readiness(
         chain_postcondition=chain_postcondition,
         aws_postcondition=aws_postcondition,
+        shadow_mirror=shadow_mirror,
         performance=performance,
         customer_metadata_review=customer_metadata_review,
         customer_postcondition=customer_postcondition,
+        customer_shadow_mirror_review=customer_shadow_mirror_review,
     )
     return {
         "version": VERSION,
@@ -84,19 +100,21 @@ def build_aws_reviewer_bundle(
             "Bedrock-style guardrails check content and model behavior.",
             "IAM and change systems check identity, authority, session, and allowed path.",
             "SMERC checks recoverability, blast radius, rollback, cost velocity, fallback, and evidence before execution.",
+            "Shadow mirror metadata can test operational flow behavior without packet payloads or live AWS access.",
             "Postcondition evidence checks whether the required route controls actually happened after the decision.",
         ],
         "work_result_impact": {
             "work": (
                 "Assemble the AWS-style reviewer path into one local package: action-chain proof, route-control "
-                "postcondition evidence, AWS postcondition evidence, performance metrics, and customer-owned "
-                "AWS metadata request."
+                "postcondition evidence, AWS postcondition evidence, shadow mirror metadata evidence, performance "
+                "metrics, and customer-owned AWS metadata request."
             ),
             "result": (
                 f"Generated an AWS reviewer bundle with {chain_report['scenario_count']} action-chain examples, "
                 f"chain postcondition statuses {chain_postcondition['aws_postcondition_status_counts']}, "
                 f"AWS postcondition statuses {aws_postcondition['aws_postcondition_status_counts']}, and slowest "
-                f"local p95 {performance['slowest_p95_ms']} ms."
+                f"local p95 {performance['slowest_p95_ms']} ms. The shadow mirror path accepted "
+                f"{shadow_mirror['accepted_rows']} safe rows and skipped {shadow_mirror['skipped_rows']} unsafe rows."
             ),
             "impact": (
                 "An AWS-style platform reviewer can inspect where SMERC fits, what it decides, what evidence would "
@@ -108,15 +126,18 @@ def build_aws_reviewer_bundle(
             "aws_agent_action_chain": chain_report,
             "aws_agent_action_chain_postcondition": chain_postcondition,
             "aws_postcondition_evidence": aws_postcondition,
+            "aws_shadow_mirror": shadow_mirror,
             "performance": performance,
             "aws_customer_owned_metadata_request": metadata_request,
             "customer_aws_metadata_review": customer_metadata_review,
             "customer_aws_postcondition_evidence": customer_postcondition,
+            "customer_aws_shadow_mirror_review": customer_shadow_mirror_review,
         },
         "evidence_boundary": (
             "This is a local, metadata-only AWS-style review package. It does not connect to AWS, invoke Amazon "
             "Bedrock, call IAM, run Systems Manager, apply CloudFormation, read CloudTrail or CloudWatch, modify "
-            "infrastructure, process secrets, prove AWS endorsement, prove AWS certification, or establish production safety."
+            "infrastructure, configure VPC Traffic Mirroring, inspect packet payloads, process secrets, prove AWS "
+            "endorsement, prove AWS certification, or establish production safety."
         ),
     }
 
@@ -133,7 +154,7 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
         "",
         "## One-Line Reviewer Frame",
         "",
-        "Guardrails check content. IAM checks authority. SMERC checks recoverability. Postcondition evidence checks whether the route happened.",
+        "Guardrails check content. IAM checks authority. SMERC checks recoverability. Shadow mirror metadata tests operational behavior. Postcondition evidence checks whether the route happened.",
         "",
         "## AWS Reviewer Path",
         "",
@@ -182,6 +203,11 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
                 f"`{reports['aws_postcondition_evidence']['aws_postcondition_status_counts']}` |"
             ),
             (
+                f"| AWS shadow mirror metadata | accepted_rows=`{reports['aws_shadow_mirror']['accepted_rows']}`, "
+                f"skipped_rows=`{reports['aws_shadow_mirror']['skipped_rows']}`, "
+                f"postures=`{reports['aws_shadow_mirror']['customer_evaluation']['summary']['posture_counts']}` |"
+            ),
+            (
                 f"| Performance | status=`{reports['performance']['status']}`, "
                 f"slowest_p95_ms=`{reports['performance']['slowest_p95_ms']}` |"
             ),
@@ -202,6 +228,12 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
         lines.append(
             f"| Customer AWS postcondition evidence | statuses="
             f"`{customer_postcondition['aws_postcondition_status_counts']}` |"
+        )
+    if reports.get("customer_aws_shadow_mirror_review"):
+        customer_shadow = reports["customer_aws_shadow_mirror_review"]
+        lines.append(
+            f"| Customer AWS shadow mirror review | accepted_rows=`{customer_shadow['accepted_rows']}`, "
+            f"skipped_rows=`{customer_shadow['skipped_rows']}` |"
         )
     lines.extend(
         [
@@ -241,6 +273,11 @@ def write_outputs(bundle: Mapping[str, Any], *, output_dir: str | Path) -> None:
         render_aws_postcondition_markdown(reports["aws_postcondition_evidence"]),
         encoding="utf-8",
     )
+    _write_json(out / "aws_shadow_mirror_adapter_report.json", reports["aws_shadow_mirror"])
+    (out / "AWS_Shadow_Mirror_Adapter_Report.md").write_text(
+        render_shadow_mirror_markdown(reports["aws_shadow_mirror"]),
+        encoding="utf-8",
+    )
     _write_json(out / "serious_report_performance.json", reports["performance"])
     (out / "Serious_Report_Performance.md").write_text(
         render_performance_markdown(reports["performance"]),
@@ -268,15 +305,33 @@ def write_outputs(bundle: Mapping[str, Any], *, output_dir: str | Path) -> None:
             render_aws_postcondition_markdown(customer_postcondition),
             encoding="utf-8",
         )
+    if reports.get("customer_aws_shadow_mirror_review"):
+        customer_shadow = reports["customer_aws_shadow_mirror_review"]
+        _write_json(out / "customer_aws_shadow_mirror_adapter_report.json", customer_shadow)
+        (out / "Customer_AWS_Shadow_Mirror_Adapter_Report.md").write_text(
+            render_shadow_mirror_markdown(customer_shadow),
+            encoding="utf-8",
+        )
+        _write_json(
+            out / "customer_aws_shadow_mirror_normalized_customer_actions.json",
+            customer_shadow["normalized_customer_evaluation"],
+        )
+        if customer_shadow["customer_evaluation"]:
+            _write_json(
+                out / "customer_aws_shadow_mirror_customer_evaluation_report.json",
+                customer_shadow["customer_evaluation"],
+            )
 
 
 def _readiness(
     *,
     chain_postcondition: Mapping[str, Any],
     aws_postcondition: Mapping[str, Any],
+    shadow_mirror: Mapping[str, Any],
     performance: Mapping[str, Any],
     customer_metadata_review: Mapping[str, Any] | None = None,
     customer_postcondition: Mapping[str, Any] | None = None,
+    customer_shadow_mirror_review: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     chain_counts = chain_postcondition["aws_postcondition_status_counts"]
     aws_counts = aws_postcondition["aws_postcondition_status_counts"]
@@ -303,6 +358,10 @@ def _readiness(
         warnings.append("customer AWS metadata review has fewer than 5 accepted rows")
     if customer_postcondition is not None and int(customer_postcondition["aws_postcondition_status_counts"].get("violation", 0)):
         blockers.append("customer AWS postcondition evidence includes a route violation")
+    if int(shadow_mirror["skipped_rows"]) > 0:
+        warnings.append("AWS shadow mirror proof intentionally skipped unsafe or unsupported rows")
+    if customer_shadow_mirror_review is not None and int(customer_shadow_mirror_review["accepted_rows"]) < 5:
+        warnings.append("customer AWS shadow mirror review has fewer than 5 accepted rows")
 
     if blockers:
         status = "not_ready_for_aws_reviewer"
@@ -317,6 +376,7 @@ def _readiness(
     takeaways = [
         "The AWS path is now one command instead of separate documents.",
         "The bundle explains the difference between content guardrails, authority controls, recoverability control, and postcondition evidence.",
+        "The shadow mirror path adds operational flow evidence without packet payloads or live AWS access.",
         "The proof remains metadata-only and does not need live AWS access.",
         "The next real proof is reviewer-owned AWS-style metadata from one workflow.",
     ]
@@ -328,6 +388,11 @@ def _readiness(
     if customer_postcondition is not None:
         takeaways.append(
             f"Customer AWS postcondition statuses: {customer_postcondition['aws_postcondition_status_counts']}."
+        )
+    if customer_shadow_mirror_review is not None:
+        takeaways.append(
+            f"Customer AWS shadow mirror metadata supplied: {customer_shadow_mirror_review['accepted_rows']} "
+            f"accepted rows and {customer_shadow_mirror_review['skipped_rows']} skipped rows."
         )
     if warnings:
         takeaways.append(f"Warnings: {', '.join(warnings)}.")
@@ -368,6 +433,7 @@ def main() -> int:
     parser.add_argument("--iterations", type=int, default=5)
     parser.add_argument("--customer-aws-source-exports")
     parser.add_argument("--customer-aws-observations")
+    parser.add_argument("--customer-aws-shadow-mirror-exports")
     parser.add_argument("--output-dir", default="reports/aws_reviewer_bundle")
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args()
@@ -378,6 +444,7 @@ def main() -> int:
         iterations=args.iterations,
         customer_aws_source_exports=args.customer_aws_source_exports,
         customer_aws_observations=args.customer_aws_observations,
+        customer_aws_shadow_mirror_exports=args.customer_aws_shadow_mirror_exports,
     )
     write_outputs(bundle, output_dir=args.output_dir)
     print(json.dumps(bundle, indent=2 if args.pretty else None, sort_keys=True))
