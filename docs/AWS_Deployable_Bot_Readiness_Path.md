@@ -66,6 +66,7 @@ This path should therefore prioritize evidence that an AWS-style platform review
 - performance overhead
 - commercial-use boundary
 - customer-owned metadata replacement path
+- sanitized shadow-mirror metadata path without packet payloads
 
 ## Readiness Milestones
 
@@ -250,6 +251,30 @@ Current artifact:
 
 Marketplace or CloudFormation/Terraform packaging should come after local proof, customer-owned metadata review, and shadow-mode validation.
 
+### 10. AWS Shadow Mirror Metadata Path
+
+Status: implemented as a metadata-only shadow-mode adapter.
+
+Current artifact:
+
+```bash
+python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty
+```
+
+Contract:
+
+- `docs/AWS_Shadow_Mirror_Metadata_Path.md`
+- `examples/aws_shadow_mirror_source_exports.json`
+- `reference_engine/aws_shadow_mirror_adapter.py`
+
+The path accepts sanitized summaries shaped like VPC Traffic Mirroring, Network Load Balancer fan-out, or Gateway Load Balancer endpoint observations. It rejects raw packet payloads, retained payload content, account IDs, ARNs, raw logs, credentials, customer records, private topology, production commands, and live AWS access.
+
+Work: convert mirror-derived flow summaries into SMERC customer-evaluation actions.
+
+Result: the generated report shows posture, route, skipped unsafe rows, high-velocity flow counts, sensitive-pattern flow counts, and evidence boundaries.
+
+Impact: an AWS-style reviewer can test SMERC against realistic operational behavior in shadow mode without making SMERC a packet firewall or granting live cloud access.
+
 ## Success Criteria
 
 SMERC is closer to an AWS-deployable bot when it can show:
@@ -264,6 +289,7 @@ SMERC is closer to an AWS-deployable bot when it can show:
 - customer-owned metadata path
 - bounded shadow-mode pilot plan
 - clear commercial-use boundary
+- safe shadow mirror evidence path
 
 ## Non-Claims
 

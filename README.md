@@ -43,6 +43,7 @@ Fast reviewer paths:
 - AWS metadata adapter reviewer: `docs/AWS_Metadata_Intake_Contract.md`
 - AWS security evidence path: `docs/AWS_Security_Ecosystem_Evidence_Path.md`
 - AWS marketplace validation path: `docs/AWS_Marketplace_Validation_Path.md`
+- AWS shadow mirror metadata path: `docs/AWS_Shadow_Mirror_Metadata_Path.md`
 - AWS postcondition evidence: `docs/AWS_Postcondition_Evidence.md`
 - AWS customer-owned metadata request: `reports/AWS_Customer_Owned_Metadata_Request.md`
 - Defensible moat and commercial boundary: `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
@@ -449,6 +450,7 @@ Start here before reading the code:
 - `docs/AWS_Cloud_Action_Replay.md` gives AWS-style platform, cloud-security, SRE, FinOps, and AI-agent reviewers a runnable metadata-only replay across AgentCore-style runtime and gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style scaling, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation.
 - `docs/AWS_Deployable_Bot_Readiness_Path.md` defines the process for hardening SMERC toward an AWS-style deployable governed action bot: metadata intake, adapter stubs, postcondition evidence, performance metrics, customer-owned metadata, and shadow-mode pilot criteria.
 - `docs/AWS_Metadata_Intake_Contract.md` defines the strict AWS-style metadata contract and non-executing adapter path for exported summaries, AWS/MCP session and delegated approval context, accepted/skipped rows, normalized customer-evaluation actions, and safe no-credential review.
+- `docs/AWS_Shadow_Mirror_Metadata_Path.md` shows how sanitized VPC Traffic Mirroring, NLB fan-out, or Gateway Load Balancer endpoint summaries can become shadow-mode SMERC evidence without packet payloads or live AWS access.
 - `docs/Cloud_Admin_Customer_Evaluation.md` gives cloud security, SRE, platform, and infrastructure reviewers a runnable metadata-only evaluation pack for IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions.
 - `docs/Cloud_Admin_Proof_Pack.md` gives cloud, SRE, DevOps, CI/CD, and AI-agent platform reviewers a 24-scenario proof pack with cloud reason codes for IAM expansion, network widening, data-plane destructive action, DNS cutover, rollback uncertainty, evidence gaps, production blast radius, and autonomy scope pressure.
 - `docs/Cloud_Metadata_Connector.md` shows how read-only cloud-change exports can be normalized into SMERC customer-evaluation actions before any live AWS, Azure, Google Cloud, Cloudflare, Kubernetes, Terraform, DNS, database, or secrets-manager integration.

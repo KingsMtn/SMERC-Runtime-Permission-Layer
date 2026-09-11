@@ -1,0 +1,210 @@
+{
+  "actions": [
+    {
+      "action_id": "AWS_MIRROR_001_agent_runtime_calls_internal_customer_preference_service_through_governe",
+      "action_type": "aws_vpc_mirror_flow_review",
+      "actor": "bedrock_agent_runtime",
+      "anomaly_pressure": 0.18,
+      "authorization_confidence": 0.86,
+      "base_action_risk": 0.275,
+      "cancel_reliability": 0.78,
+      "containment_strength": 0.78,
+      "context": {
+        "current_control": "ALLOW",
+        "domain_profile": "cloud_admin",
+        "source_format": "vpc_traffic_mirror_eni_summary",
+        "source_url": "internal-export://vpc-traffic-mirror/eni-summary",
+        "workflow": "agent_runtime_internal_service_call"
+      },
+      "description": "Sanitized AWS shadow mirror summary for vpc_traffic_mirror_eni_summary: Agent runtime calls internal customer preference service through governed endpoint during 2026-09-10T14:00:00Z/2026-09-10T14:05:00Z.",
+      "evidence_validity": 0.82,
+      "external_side_effect": false,
+      "impact_scope": 0.35,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.82,
+      "rollback_latency": 0.25,
+      "sensitive_data": false,
+      "tool": "aws.vpc_traffic_mirror_summary",
+      "tool_plan": {
+        "action": "aws_vpc_mirror_flow_review",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "shadow_observe_only",
+          "capture_window": "2026-09-10T14:00:00Z/2026-09-10T14:05:00Z",
+          "cloud_provider": "aws",
+          "data_sensitivity_pressure": 0.38,
+          "destination_class": "internal_service",
+          "mirror_method": "direct_eni_mirroring",
+          "payload_boundary": {
+            "derived_metadata_only": true,
+            "payload_inspected": false,
+            "payload_retained": false
+          },
+          "postcondition_evidence_expected": true,
+          "rollback_path_available": true,
+          "sensitive_pattern_indicator": false,
+          "source_format": "vpc_traffic_mirror_eni_summary",
+          "source_record_id": "aws-mirror-001",
+          "source_service_class": "agent_runtime",
+          "traffic_velocity_ratio": 0.32
+        },
+        "plan_id": "plan_aws_mirror_001_agent_runtime_calls_internal_customer_preference_service_through_governe",
+        "requested_capability": "review_mirrored_internal_service_flow",
+        "requested_scope_units": 22,
+        "side_effect_level": "internal",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": true,
+        "supports_scope_limit": true,
+        "tool": "aws.vpc_traffic_mirror_summary",
+        "version": "smerc.sparta-plan.v1"
+      }
+    },
+    {
+      "action_id": "AWS_MIRROR_002_agent_automation_produces_elevated_outbound_traffic_to_an_external_api_c",
+      "action_type": "aws_nlb_mirror_fanout_review",
+      "actor": "cloud_ops_agent",
+      "anomaly_pressure": 0.72,
+      "authorization_confidence": 0.69,
+      "base_action_risk": 0.716,
+      "cancel_reliability": 0.62,
+      "containment_strength": 0.54,
+      "context": {
+        "current_control": "ALERT",
+        "domain_profile": "cloud_admin",
+        "source_format": "nlb_udp_fanout_summary",
+        "source_url": "internal-export://nlb/udp-fanout-summary",
+        "workflow": "agent_runtime_external_api_call"
+      },
+      "description": "Sanitized AWS shadow mirror summary for nlb_udp_fanout_summary: Agent automation produces elevated outbound traffic to an external API class during 2026-09-10T14:05:00Z/2026-09-10T14:10:00Z.",
+      "evidence_validity": 0.74,
+      "external_side_effect": true,
+      "impact_scope": 0.68,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.48,
+      "rollback_latency": 0.51,
+      "sensitive_data": true,
+      "tool": "aws.nlb_mirror_fanout_summary",
+      "tool_plan": {
+        "action": "aws_nlb_mirror_fanout_review",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "shadow_observe_only",
+          "capture_window": "2026-09-10T14:05:00Z/2026-09-10T14:10:00Z",
+          "cloud_provider": "aws",
+          "data_sensitivity_pressure": 0.61,
+          "destination_class": "external_api",
+          "mirror_method": "nlb_udp_fanout",
+          "payload_boundary": {
+            "derived_metadata_only": true,
+            "payload_inspected": false,
+            "payload_retained": false
+          },
+          "postcondition_evidence_expected": true,
+          "rollback_path_available": true,
+          "sensitive_pattern_indicator": false,
+          "source_format": "nlb_udp_fanout_summary",
+          "source_record_id": "aws-mirror-002",
+          "source_service_class": "cloud_automation_worker",
+          "traffic_velocity_ratio": 0.86
+        },
+        "plan_id": "plan_aws_mirror_002_agent_automation_produces_elevated_outbound_traffic_to_an_external_api_c",
+        "requested_capability": "review_mirrored_external_flow",
+        "requested_scope_units": 67,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": true,
+        "supports_scope_limit": true,
+        "tool": "aws.nlb_mirror_fanout_summary",
+        "version": "smerc.sparta-plan.v1"
+      }
+    },
+    {
+      "action_id": "AWS_MIRROR_003_agent_workflow_attempts_high_volume_egress_from_sensitive_data_service_t",
+      "action_type": "aws_gwlb_endpoint_flow_review",
+      "actor": "data_ops_agent",
+      "anomaly_pressure": 0.81,
+      "authorization_confidence": 0.58,
+      "base_action_risk": 1.0,
+      "cancel_reliability": 0.42,
+      "containment_strength": 0.36,
+      "context": {
+        "current_control": "REVIEW",
+        "domain_profile": "cloud_admin",
+        "source_format": "gateway_load_balancer_endpoint_summary",
+        "source_url": "internal-export://gwlb/endpoint-summary",
+        "workflow": "agent_runtime_high_sensitivity_egress"
+      },
+      "description": "Sanitized AWS shadow mirror summary for gateway_load_balancer_endpoint_summary: Agent workflow attempts high-volume egress from sensitive data service to internet destination class during 2026-09-10T14:10:00Z/2026-09-10T14:15:00Z.",
+      "evidence_validity": 0.59,
+      "external_side_effect": true,
+      "impact_scope": 0.86,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": false,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.28,
+      "rollback_latency": 0.72,
+      "sensitive_data": true,
+      "tool": "aws.gwlb_endpoint_summary",
+      "tool_plan": {
+        "action": "aws_gwlb_endpoint_flow_review",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "shadow_observe_only",
+          "capture_window": "2026-09-10T14:10:00Z/2026-09-10T14:15:00Z",
+          "cloud_provider": "aws",
+          "data_sensitivity_pressure": 0.88,
+          "destination_class": "internet_destination",
+          "mirror_method": "gateway_load_balancer_endpoint",
+          "payload_boundary": {
+            "derived_metadata_only": true,
+            "payload_inspected": false,
+            "payload_retained": false
+          },
+          "postcondition_evidence_expected": true,
+          "rollback_path_available": false,
+          "sensitive_pattern_indicator": true,
+          "source_format": "gateway_load_balancer_endpoint_summary",
+          "source_record_id": "aws-mirror-003",
+          "source_service_class": "sensitive_data_service",
+          "traffic_velocity_ratio": 0.93
+        },
+        "plan_id": "plan_aws_mirror_003_agent_workflow_attempts_high_volume_egress_from_sensitive_data_service_t",
+        "requested_capability": "review_mirrored_high_sensitivity_egress",
+        "requested_scope_units": 92,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": false,
+        "supports_human_approval": true,
+        "supports_rollback": false,
+        "supports_scope_limit": true,
+        "tool": "aws.gwlb_endpoint_summary",
+        "version": "smerc.sparta-plan.v1"
+      }
+    }
+  ],
+  "contact_role": "cloud_security_or_platform_reviewer",
+  "data_boundary": "AWS shadow mirror evaluation. Inputs are derived flow summaries only. No packet payloads, retained payload content, AWS credentials, account IDs, ARNs, raw logs, private topology, customer records, secrets, production commands, or live AWS access are included.",
+  "evaluation_date": "2026-09-11",
+  "initial_autonomy_state": "HEALTHY",
+  "organization": "AWS Shadow Mirror Review",
+  "tenant_id": "aws-shadow-mirror-review",
+  "version": "smerc.customer-evaluation.v1",
+  "workflow_context": "Non-executing AWS-style shadow mirror adapter normalizing sanitized VPC Traffic Mirroring, Network Load Balancer fan-out, or Gateway Load Balancer endpoint summaries into SMERC customer-evaluation actions for shadow-mode review."
+}
