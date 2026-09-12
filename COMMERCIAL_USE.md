@@ -52,3 +52,12 @@ The intended first step is a metadata-only or shadow-mode pilot:
 This file is a plain-English summary. The controlling terms are in `LICENSE`.
 Organizations considering production use, commercial embedding, or acquisition
 review should perform their own legal review.
+
+## Field-Of-Use Planning
+
+SMERC Core is broader than any one deployment field. AWS/cloud, financial
+actions, crypto, insurance, healthcare, CI/CD, MCP/tool governance, and
+security operations may require separate field-of-use treatment in any
+commercial discussion.
+
+See `docs/SMERC_Field_Of_Use_Strategy.md`.

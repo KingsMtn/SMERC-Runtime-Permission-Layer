@@ -68,6 +68,8 @@ The public layer helps others learn the language.
 
 The enterprise layer shows why a company might want the implementation, evidence chain, and integration model instead of only copying terms.
 
+The field-of-use strategy in `docs/SMERC_Field_Of_Use_Strategy.md` should be kept alongside this valuation path. It keeps AWS/cloud as the first enterprise proof lane without implying that financial, crypto, insurance, healthcare, CI/CD, MCP/tool governance, or broader SMERC Core rights are included in that lane.
+
 If the public layer grows without the enterprise layer, SMERC risks becoming a vocabulary artifact.
 
 If the enterprise layer grows without the public layer, SMERC risks becoming a private demo that nobody can evaluate.

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a SMERC field-of-use strategy that separates SMERC Core from AWS/cloud and reserved future verticals such as finance, crypto, insurance, healthcare, CI/CD, MCP/tool governance, and security operations.
 - Added a local source-of-truth note clarifying that `.smerc-action-language-publish` is the active GitHub-connected checkout and older local SMERC folders are non-authoritative unless intentionally compared or migrated.
 - Added an OpenSSF response playbook and five-row metadata example so the next public reply can stay bounded, concrete, and safe if reviewers ask for a clearer evidence shape.
 - Added a SMERC premortem that turns possible project failure into testable warning signals, current evidence checks, and response paths.

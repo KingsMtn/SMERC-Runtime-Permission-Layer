@@ -50,6 +50,8 @@ Public review, research, non-production evaluation, and metadata-only pilot test
 
 Production deployment, commercial embedding, hosted use, resale, revenue-generating use, or integration into a commercial product, internal enterprise platform, cloud service, agent framework, financial workflow, security product, or managed service requires a separate written commercial license or agreement.
 
+Commercial discussions should also preserve field-of-use clarity. AWS/cloud action governance is one implementation package, not the whole SMERC platform. See `docs/SMERC_Field_Of_Use_Strategy.md`.
+
 ## Work / Result / Impact
 
 Work:
@@ -63,4 +65,3 @@ Reviewers can test the project without confusion about what is free to inspect v
 Impact:
 
 SMERC becomes safer to share publicly while preserving acquisition, licensing, and strategic-partner optionality.
-

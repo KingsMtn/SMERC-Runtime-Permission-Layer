@@ -265,6 +265,42 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("docs/Local_Source_Of_Truth.md", indexing)
         self.assertIn("local source-of-truth note", changelog)
 
+    def test_field_of_use_strategy_is_linked_and_preserves_core(self):
+        strategy = (ROOT / "docs" / "SMERC_Field_Of_Use_Strategy.md").read_text(
+            encoding="utf-8"
+        )
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        commercial = (ROOT / "COMMERCIAL_USE.md").read_text(encoding="utf-8")
+        boundary = (
+            ROOT / "docs" / "SMERC_Defensible_Moat_And_Commercial_Boundary.md"
+        ).read_text(encoding="utf-8")
+        valuation = (ROOT / "docs" / "Two_Tier_Valuation_Path.md").read_text(
+            encoding="utf-8"
+        )
+        strategic = (ROOT / "docs" / "Strategic_Acquisition_Positioning.md").read_text(
+            encoding="utf-8"
+        )
+        indexing = (ROOT / "docs" / "Public_Indexing_Assets.md").read_text(
+            encoding="utf-8"
+        )
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+
+        self.assertIn("SMERC Core", strategy)
+        self.assertIn("AWS / Cloud Action Governance", strategy)
+        self.assertIn("Reserved Future Fields", strategy)
+        self.assertIn("insurance", strategy)
+        self.assertIn("SMERC-F", strategy)
+        self.assertIn("crypto", strategy)
+        self.assertIn("field of use", strategy.lower())
+        self.assertIn("not legal advice", strategy)
+        self.assertIn("docs/SMERC_Field_Of_Use_Strategy.md", readme)
+        self.assertIn("docs/SMERC_Field_Of_Use_Strategy.md", commercial)
+        self.assertIn("docs/SMERC_Field_Of_Use_Strategy.md", boundary)
+        self.assertIn("docs/SMERC_Field_Of_Use_Strategy.md", valuation)
+        self.assertIn("docs/SMERC_Field_Of_Use_Strategy.md", strategic)
+        self.assertIn("docs/SMERC_Field_Of_Use_Strategy.md", indexing)
+        self.assertIn("field-of-use strategy", changelog)
+
 
 if __name__ == "__main__":
     unittest.main()

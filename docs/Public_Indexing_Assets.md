@@ -85,6 +85,7 @@ The repository companion files are:
 - `docs/OpenSSF_Response_Playbook.md`
 - `docs/Five_Row_Metadata_Example.md`
 - `docs/Local_Source_Of_Truth.md`
+- `docs/SMERC_Field_Of_Use_Strategy.md`
 
 These files make the same story inspectable inside GitHub, where technical reviewers and code-aware AI systems are more likely to begin.
 

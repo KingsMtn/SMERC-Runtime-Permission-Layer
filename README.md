@@ -56,6 +56,7 @@ Fast reviewer paths:
 - AWS postcondition evidence: `docs/AWS_Postcondition_Evidence.md`
 - AWS customer-owned metadata request: `reports/AWS_Customer_Owned_Metadata_Request.md`
 - Defensible moat and commercial boundary: `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
+- Field-of-use strategy: `docs/SMERC_Field_Of_Use_Strategy.md`
 - Two-tier valuation path: `docs/Two_Tier_Valuation_Path.md`
 - AWS Tier 2 review notes: `docs/Release_Notes_v0_15_AWS_Tier2_Review.md`
 - Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
@@ -422,6 +423,7 @@ The current project is ready for technical review and shadow-mode pilot discussi
 If you are evaluating SMERC as a potential platform feature, strategic partnership, acquisition target, or serious design-partner candidate, start here:
 
 - `docs/Strategic_Acquisition_Positioning.md` explains the acquisition-relevant thesis and what evidence is still missing.
+- `docs/SMERC_Field_Of_Use_Strategy.md` separates SMERC Core from AWS/cloud and future vertical packages so one field opportunity does not accidentally consume all SMERC rights.
 - `docs/Strategic_Buyer_Map.md` maps the platform categories where SMERC may matter.
 - `docs/Two_Tier_Valuation_Path.md` separates the public decision-language value layer from the enterprise cloud-action governance package.
 - `docs/Why_SMERC_Fits_Strategic_Platforms.md` compares SMERC's runtime checkpoint to IAM, policy engines, AI gateways, approvals, and audit logs.

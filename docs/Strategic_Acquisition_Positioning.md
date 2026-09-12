@@ -52,6 +52,8 @@ The first layer creates credibility, discoverability, and ecosystem vocabulary. 
 
 See `docs/Two_Tier_Valuation_Path.md` for the concrete evidence gates.
 
+See `docs/SMERC_Field_Of_Use_Strategy.md` for the planning boundary between SMERC Core, the AWS/cloud field package, and reserved future fields such as financial actions, crypto, insurance, healthcare, CI/CD, MCP/tool governance, and security operations.
+
 ## Best Strategic Framing
 
 Use this language:
