@@ -2,7 +2,9 @@
 
 ## Unreleased
 
+- Added v0.15 AWS Tier 2 review notes, refreshed AI/GitHub discovery language, and made the AWS shadow mirror metadata path visible in AI-readable review assets while Netlify publishing is paused.
 - Added a one-command AWS-Style Reviewer Bundle that assembles AWS action-chain proof, route-control postcondition evidence, AWS postcondition evidence, performance metrics, and AWS customer-owned metadata request.
+- Added AWS shadow mirror metadata evidence to the one-command AWS-Style Reviewer Bundle so reviewers can inspect sanitized VPC Traffic Mirroring, NLB fan-out, or Gateway Load Balancer endpoint summaries without packet payloads or live AWS access.
 - Added AWS Agent Action Chain Postcondition Evidence so AWS-style reviewers can compare SMERC route controls with safe observation metadata and see pass/gap evidence after routing.
 - Added an AWS Agent Action Chain proof showing where SMERC fits after Bedrock-style content/model guardrails and before Dynamic IAM, Systems Manager, CloudFormation, CloudWatch remediation, cost-sensitive scaling, or cloud execution.
 - Recorded the SMERC vision statement for public and AI-readable review: intelligent-system power should be governed by consent, accountability, and protection from irreversible harm.

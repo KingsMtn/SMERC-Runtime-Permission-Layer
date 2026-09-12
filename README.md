@@ -35,6 +35,7 @@ Fast reviewer paths:
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
 - AWS-style reviewer bundle: `docs/AWS_Reviewer_Bundle.md`
 - AWS reviewer quickstart: `docs/AWS_Reviewer_Quickstart.md`
+- Tier 2 AWS reviewer front door: `docs/Tier2_AWS_Reviewer_Front_Door.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
@@ -49,6 +50,7 @@ Fast reviewer paths:
 - AWS customer-owned metadata request: `reports/AWS_Customer_Owned_Metadata_Request.md`
 - Defensible moat and commercial boundary: `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
 - Two-tier valuation path: `docs/Two_Tier_Valuation_Path.md`
+- AWS Tier 2 review notes: `docs/Release_Notes_v0_15_AWS_Tier2_Review.md`
 - Cloud infrastructure reviewer: `docs/Cloud_Admin_Proof_Pack.md`
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
 - Balanced runtime judgment replay: `docs/Balanced_Runtime_Judgment_Replay.md`
@@ -447,6 +449,7 @@ Start here before reading the code:
 - `docs/External_Reviewer_Metadata_Response.md` checks whether a reviewer response is usable, too limited, or unsafe before treating customer-owned metadata as pilot evidence.
 - `docs/AWS_Agent_Action_Chain.md` shows the clean AWS-style placement: AI Agent Action -> Bedrock-style Guardrail -> SMERC Recoverability Gate -> Dynamic IAM / Systems Manager / Cloud Execution -> Postcondition Evidence.
 - `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md` checks whether AWS-style action-chain observation metadata proves that SMERC-required controls actually happened after the recoverability route.
+- `docs/Tier2_AWS_Reviewer_Front_Door.md` gives cloud, security, SRE, FinOps, and AI-infrastructure reviewers the shortest GitHub-first Tier 2 review path.
 - `docs/AWS_Reviewer_Quickstart.md` gives AWS-style reviewers the shortest path: run one command, inspect three outputs, understand what SMERC proves, and use `examples/aws_customer_metadata_template.json` to replace public examples with safe customer-owned metadata.
 - `docs/AWS_Cloud_Action_Replay.md` gives AWS-style platform, cloud-security, SRE, FinOps, and AI-agent reviewers a runnable metadata-only replay across AgentCore-style runtime and gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style scaling, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation.
 - `docs/AWS_Deployable_Bot_Readiness_Path.md` defines the process for hardening SMERC toward an AWS-style deployable governed action bot: metadata intake, adapter stubs, postcondition evidence, performance metrics, customer-owned metadata, and shadow-mode pilot criteria.

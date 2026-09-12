@@ -54,10 +54,19 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("pre-execution recoverability control", bundle["category"])
         self.assertIn("runtime permission infrastructure", bundle["category"])
         self.assertIn("Recovery Authority Gate for governed unlock after pause", bundle["implemented_surfaces"])
+        self.assertIn(
+            "AWS Shadow Mirror Metadata Path for converting sanitized VPC Traffic Mirroring, Network Load Balancer fan-out, and Gateway Load Balancer endpoint summaries into SMERC shadow-mode evidence without packet payloads or live AWS access",
+            bundle["implemented_surfaces"],
+        )
         self.assertIn("customer validation", bundle["current_evidence"]["evidence_boundary"])
+        self.assertIn("aws_shadow_mirror_metadata_path", bundle["current_evidence"])
+        self.assertIn("two_tier_valuation_path", bundle["current_evidence"])
+        self.assertIn("AWS shadow mirror metadata", bundle["search_and_index_terms"])
         self.assertIn("SMERC is not production-certified.", bundle["non_claims"])
         self.assertIn("docs/AI_Readable_Reviewer_Bundle.md", readme)
         self.assertIn("examples/ai_reviewer_bundle.json", readme)
+        self.assertIn("AWS Shadow Mirror Metadata Path", doc)
+        self.assertIn("Two-Tier Valuation Path", doc)
         self.assertIn("What It Does Not Prove", doc)
         self.assertIn("Impact", doc)
 
@@ -93,6 +102,38 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("docs/Two_Tier_Valuation_Path.md", readme)
         self.assertIn("Two-Tier Valuation Path", strategic)
         self.assertIn("Tier 2 proof path", aws)
+
+    def test_aws_tier2_release_note_is_discoverable(self):
+        release = (ROOT / "docs" / "Release_Notes_v0_15_AWS_Tier2_Review.md").read_text(
+            encoding="utf-8"
+        )
+        indexing = (ROOT / "docs" / "Public_Indexing_Assets.md").read_text(encoding="utf-8")
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+
+        self.assertIn("AWS Tier 2 Review Notes", release)
+        self.assertIn("AWS shadow mirror metadata", release)
+        self.assertIn("Two_Tier_Valuation_Path.md", release)
+        self.assertIn("What This Does Not Prove", release)
+        self.assertIn("customer willingness to pay", release)
+        self.assertIn("docs/Release_Notes_v0_15_AWS_Tier2_Review.md", indexing)
+        self.assertIn("AWS shadow mirror metadata evidence", changelog)
+
+    def test_tier2_aws_reviewer_front_door_is_linked_and_bounded(self):
+        front_door = (ROOT / "docs" / "Tier2_AWS_Reviewer_Front_Door.md").read_text(
+            encoding="utf-8"
+        )
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        self.assertIn(
+            "Does recoverability before execution change cloud-agent or automation judgment",
+            front_door,
+        )
+        self.assertIn("AWS shadow mirror metadata evidence", front_door)
+        self.assertIn("5 to 25 safe AWS-style action summaries", front_door)
+        self.assertIn("5 to 25 sanitized mirror-derived summaries", front_door)
+        self.assertIn("acquisition-grade Tier 3 evidence", front_door)
+        self.assertIn("docs/Tier2_AWS_Reviewer_Front_Door.md", readme)
+        self.assertIn("docs/Release_Notes_v0_15_AWS_Tier2_Review.md", readme)
 
 
 if __name__ == "__main__":

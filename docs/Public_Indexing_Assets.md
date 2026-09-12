@@ -77,8 +77,16 @@ The repository companion files are:
 
 - `docs/AI_Readable_Reviewer_Bundle.md`
 - `examples/ai_reviewer_bundle.json`
+- `docs/Release_Notes_v0_15_AWS_Tier2_Review.md`
 
 These files make the same story inspectable inside GitHub, where technical reviewers and code-aware AI systems are more likely to begin.
+
+While Netlify deployment is paused, GitHub should be treated as the current source of truth for new discovery material. The latest GitHub-visible discovery additions are:
+
+- `docs/Two_Tier_Valuation_Path.md`
+- `docs/AWS_Shadow_Mirror_Metadata_Path.md`
+- `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md`
+- `reports/aws_reviewer_bundle/AWS_Shadow_Mirror_Adapter_Report.md`
 
 The category definition page and glossary give search engines, AI assistants, and first-time reviewers clearer language before they encounter the SMERC acronym. They define the work/result/impact frame:
 
