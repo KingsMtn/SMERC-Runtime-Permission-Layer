@@ -1,0 +1,64 @@
+{
+  "schema_version": "smerc.external_metadata_reviewer_example.v1",
+  "purpose": "Five metadata-only rows showing the smallest external reviewer ask. This is example shape, not customer evidence.",
+  "data_boundary": "No account IDs, ARNs, credentials, raw logs, packet payloads, customer records, private topology, screenshots with identifiers, production commands, or live access.",
+  "workflow_family": "example_agentic_cloud_automation",
+  "rows": [
+    {
+      "row_id": "example-row-001",
+      "proposed_action": "Agent requests a read-only deployment validation.",
+      "actor_or_system": "deployment_agent",
+      "current_outcome": "ALLOW",
+      "current_reason": "CI policy allows non-production validation.",
+      "possible_consequence_if_wrong": "Low impact. Failed validation wastes time but does not change production.",
+      "recovery_path": "Rerun or cancel job.",
+      "postcondition_evidence_known": "validation result artifact",
+      "reviewer_label_requested": "Is ALLOW useful?"
+    },
+    {
+      "row_id": "example-row-002",
+      "proposed_action": "Agent requests a small production canary deploy.",
+      "actor_or_system": "deployment_agent",
+      "current_outcome": "REVIEW",
+      "current_reason": "Change ticket and deployment role are valid.",
+      "possible_consequence_if_wrong": "Bad deploy affects a limited production slice.",
+      "recovery_path": "Roll back release or disable canary.",
+      "postcondition_evidence_known": "deployment status and rollback flag",
+      "reviewer_label_requested": "Is THROTTLE or ESCALATE more useful than block?"
+    },
+    {
+      "row_id": "example-row-003",
+      "proposed_action": "Agent requests an IAM permission expansion.",
+      "actor_or_system": "cloud_admin_agent",
+      "current_outcome": "REVIEW",
+      "current_reason": "Request comes through approved workflow.",
+      "possible_consequence_if_wrong": "Role may gain broader production authority than intended.",
+      "recovery_path": "Revert policy, but exposure exists until detected.",
+      "postcondition_evidence_known": "policy diff and approval record",
+      "reviewer_label_requested": "Should SMERC FREEZE until evidence improves?"
+    },
+    {
+      "row_id": "example-row-004",
+      "proposed_action": "Agent requests capacity increase during a retry loop.",
+      "actor_or_system": "finops_agent",
+      "current_outcome": "ALLOW",
+      "current_reason": "Autoscaling or FinOps policy permits the action.",
+      "possible_consequence_if_wrong": "Cost can spike quickly if loop continues.",
+      "recovery_path": "Reduce capacity and stop loop.",
+      "postcondition_evidence_known": "cost velocity and retry-loop signal",
+      "reviewer_label_requested": "Should velocity trigger THROTTLE or FREEZE?"
+    },
+    {
+      "row_id": "example-row-005",
+      "proposed_action": "Agent requests destructive data cleanup using incomplete evidence.",
+      "actor_or_system": "support_resolution_agent",
+      "current_outcome": "REVIEW",
+      "current_reason": "Actor is authorized and action shape matches tool contract.",
+      "possible_consequence_if_wrong": "Wrong records may be deleted or customer impact may become irreversible.",
+      "recovery_path": "Backup restore may be slow, partial, or unavailable.",
+      "postcondition_evidence_known": "unknown",
+      "reviewer_label_requested": "Should missing recovery evidence force DENY or ESCALATE?"
+    }
+  ]
+}
+

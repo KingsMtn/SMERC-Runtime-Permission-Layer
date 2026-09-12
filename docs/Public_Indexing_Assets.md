@@ -82,6 +82,8 @@ The repository companion files are:
 - `docs/Public_Outreach_Post_Drafts.md`
 - `docs/Public_Outreach_Status.md`
 - `docs/SMERC_Premortem.md`
+- `docs/OpenSSF_Response_Playbook.md`
+- `docs/Five_Row_Metadata_Example.md`
 
 These files make the same story inspectable inside GitHub, where technical reviewers and code-aware AI systems are more likely to begin.
 

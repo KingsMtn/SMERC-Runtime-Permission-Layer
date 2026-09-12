@@ -14,6 +14,8 @@ SMERC is not asking reviewers to adopt a product. It is asking whether safe meta
 
 Share 5 to 25 metadata-only examples from one workflow.
 
+If that is too much for a first reaction, start with the smaller example shape in `docs/Five_Row_Metadata_Example.md`.
+
 Good examples include:
 
 - an AI agent proposing a cloud change
@@ -97,4 +99,3 @@ SMERC gets closer to external proof only if real reviewers can say whether the p
 SMERC is pilot-grade. It is not production-certified, AWS-endorsed, compliance-attested, independently security-audited, or proven to reduce incidents.
 
 Existing identity, authorization, policy, guardrail, SIEM, SOAR, change-management, approval, and human-accountability controls remain authoritative.
-

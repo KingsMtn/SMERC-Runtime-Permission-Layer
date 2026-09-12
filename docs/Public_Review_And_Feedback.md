@@ -16,6 +16,8 @@ The project is not asking reviewers to accept a broad claim. It is asking review
 - Public outreach post drafts: `docs/Public_Outreach_Post_Drafts.md`
 - Public outreach status: `docs/Public_Outreach_Status.md`
 - SMERC premortem: `docs/SMERC_Premortem.md`
+- OpenSSF response playbook: `docs/OpenSSF_Response_Playbook.md`
+- Five-row metadata example: `docs/Five_Row_Metadata_Example.md`
 - Community guide: `COMMUNITY.md`
 - Community submission kit: `docs/Community_Submission_Kit.md`
 - Technical quickstart: `docs/Developer_Quickstart.md`

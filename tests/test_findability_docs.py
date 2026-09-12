@@ -207,6 +207,45 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("docs/SMERC_Premortem.md", valuation)
         self.assertIn("SMERC premortem", changelog)
 
+    def test_openssf_response_playbook_and_five_row_example_are_linked(self):
+        playbook = (ROOT / "docs" / "OpenSSF_Response_Playbook.md").read_text(
+            encoding="utf-8"
+        )
+        example_doc = (ROOT / "docs" / "Five_Row_Metadata_Example.md").read_text(
+            encoding="utf-8"
+        )
+        example_json = json.loads(
+            (ROOT / "examples" / "external_metadata_reviewer_5_row_example.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        indexing = (ROOT / "docs" / "Public_Indexing_Assets.md").read_text(
+            encoding="utf-8"
+        )
+        outreach_status = (ROOT / "docs" / "Public_Outreach_Status.md").read_text(
+            encoding="utf-8"
+        )
+        reviewer_request = (ROOT / "docs" / "External_Metadata_Reviewer_Request.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("If They Say This Is The Wrong Forum", playbook)
+        self.assertIn("If They Say Existing Tools Already Cover It", playbook)
+        self.assertIn("If They Ask For A Concrete Example", playbook)
+        self.assertIn("ask for critique, not adoption", playbook)
+        self.assertIn("This is the smallest readable example", example_doc)
+        self.assertIn("Agent requests capacity increase during a retry loop", example_doc)
+        self.assertIn("examples/external_metadata_reviewer_5_row_example.json", example_doc)
+        self.assertEqual(example_json["schema_version"], "smerc.external_metadata_reviewer_example.v1")
+        self.assertEqual(len(example_json["rows"]), 5)
+        self.assertIn("docs/OpenSSF_Response_Playbook.md", readme)
+        self.assertIn("docs/Five_Row_Metadata_Example.md", readme)
+        self.assertIn("docs/OpenSSF_Response_Playbook.md", indexing)
+        self.assertIn("docs/Five_Row_Metadata_Example.md", indexing)
+        self.assertIn("docs/OpenSSF_Response_Playbook.md", outreach_status)
+        self.assertIn("docs/Five_Row_Metadata_Example.md", reviewer_request)
+
 
 if __name__ == "__main__":
     unittest.main()

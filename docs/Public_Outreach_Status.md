@@ -25,6 +25,7 @@ If OpenSSF responds:
 
 - incorporate the feedback first
 - update `docs/External_Metadata_Reviewer_Request.md` if the evidence ask should change
+- use `docs/OpenSSF_Response_Playbook.md` to choose the reply shape
 - then decide whether a second community post is still needed
 
 If OpenSSF does not respond:
@@ -41,4 +42,3 @@ Keep outreach narrow and humble:
 - ask whether the evidence request is shaped correctly
 - avoid secrets, logs, account identifiers, payloads, screenshots with identifiers, customer data, production commands, or live access
 - avoid claiming production readiness, customer validation, AWS endorsement, incident reduction, or acquisition value
-
