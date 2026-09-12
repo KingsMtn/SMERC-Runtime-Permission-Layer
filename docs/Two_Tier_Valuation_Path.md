@@ -81,6 +81,8 @@ The valuation path needs both:
 
 SMERC does not reach a serious two-tier valuation because the idea is clever. It gets there by accumulating proof.
 
+The premortem in `docs/SMERC_Premortem.md` should be used as a check against overbuilding the wrong proof. It lists warning signals that would show whether the project needs tighter framing, more concrete packaging, real reviewer metadata, or a different first buyer.
+
 Required proof:
 
 - one-command public AWS-style replay
@@ -131,4 +133,3 @@ Avoid this:
 The best path is not to split SMERC into a consumer product right now.
 
 The best path is to make the public standard easy to reference while making the AWS-style implementation hard to dismiss.
-

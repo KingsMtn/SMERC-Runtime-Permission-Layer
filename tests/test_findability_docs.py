@@ -184,6 +184,29 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("External_Metadata_Reviewer_Request.md", aws_template)
         self.assertIn("External_Metadata_Reviewer_Request.md", mirror_template)
 
+    def test_premortem_is_linked_and_actionable(self):
+        premortem = (ROOT / "docs" / "SMERC_Premortem.md").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        indexing = (ROOT / "docs" / "Public_Indexing_Assets.md").read_text(
+            encoding="utf-8"
+        )
+        valuation = (ROOT / "docs" / "Two_Tier_Valuation_Path.md").read_text(
+            encoding="utf-8"
+        )
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+
+        self.assertIn("If SMERC does not get traction", premortem)
+        self.assertIn("Failure mode", premortem)
+        self.assertIn("Warning signal", premortem)
+        self.assertIn("The proof is too synthetic", premortem)
+        self.assertIn("The product surface is unclear", premortem)
+        self.assertIn("Current Highest-Risk Assumption", premortem)
+        self.assertIn("What Failure Would Teach", premortem)
+        self.assertIn("docs/SMERC_Premortem.md", readme)
+        self.assertIn("docs/SMERC_Premortem.md", indexing)
+        self.assertIn("docs/SMERC_Premortem.md", valuation)
+        self.assertIn("SMERC premortem", changelog)
+
 
 if __name__ == "__main__":
     unittest.main()
