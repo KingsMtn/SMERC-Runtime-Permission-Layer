@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a local source-of-truth note clarifying that `.smerc-action-language-publish` is the active GitHub-connected checkout and older local SMERC folders are non-authoritative unless intentionally compared or migrated.
 - Added an OpenSSF response playbook and five-row metadata example so the next public reply can stay bounded, concrete, and safe if reviewers ask for a clearer evidence shape.
 - Added a SMERC premortem that turns possible project failure into testable warning signals, current evidence checks, and response paths.
 - Added a public outreach status note to record the OpenSSF metadata-reviewer ask and keep broader community posting gated until there is a response or a deliberate no-response decision.

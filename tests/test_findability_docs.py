@@ -246,6 +246,25 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("docs/OpenSSF_Response_Playbook.md", outreach_status)
         self.assertIn("docs/Five_Row_Metadata_Example.md", reviewer_request)
 
+    def test_local_source_of_truth_is_linked_and_explicit(self):
+        source_note = (ROOT / "docs" / "Local_Source_Of_Truth.md").read_text(
+            encoding="utf-8"
+        )
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        indexing = (ROOT / "docs" / "Public_Indexing_Assets.md").read_text(
+            encoding="utf-8"
+        )
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+
+        self.assertIn(".smerc-action-language-publish", source_note)
+        self.assertIn("https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer.git", source_note)
+        self.assertIn("SMERC-Macro-Language-Model", source_note)
+        self.assertIn("SMERC-Runtime-Permission-Layer", source_note)
+        self.assertIn("not the active source of truth", source_note)
+        self.assertIn("docs/Local_Source_Of_Truth.md", readme)
+        self.assertIn("docs/Local_Source_Of_Truth.md", indexing)
+        self.assertIn("local source-of-truth note", changelog)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -42,6 +42,7 @@ Fast reviewer paths:
 - SMERC premortem: `docs/SMERC_Premortem.md`
 - OpenSSF response playbook: `docs/OpenSSF_Response_Playbook.md`
 - Five-row metadata example: `docs/Five_Row_Metadata_Example.md`
+- Local source of truth: `docs/Local_Source_Of_Truth.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
@@ -462,6 +463,7 @@ Start here before reading the code:
 - `docs/SMERC_Premortem.md` turns possible project failure into testable warning signals, current evidence checks, and response paths.
 - `docs/OpenSSF_Response_Playbook.md` gives response paths for wrong-forum feedback, existing-tool objections, evidence-ask friction, better framing, concrete-example requests, and no-response timing.
 - `docs/Five_Row_Metadata_Example.md` gives the smallest readable version of the metadata-only reviewer ask, with a matching JSON example at `examples/external_metadata_reviewer_5_row_example.json`.
+- `docs/Local_Source_Of_Truth.md` records that `.smerc-action-language-publish` is the active GitHub-connected checkout and that older local folders should not be treated as authoritative unless intentionally compared or migrated.
 - `docs/AWS_Reviewer_Quickstart.md` gives AWS-style reviewers the shortest path: run one command, inspect three outputs, understand what SMERC proves, and use `examples/aws_customer_metadata_template.json` to replace public examples with safe customer-owned metadata.
 - `docs/AWS_Cloud_Action_Replay.md` gives AWS-style platform, cloud-security, SRE, FinOps, and AI-agent reviewers a runnable metadata-only replay across AgentCore-style runtime and gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style scaling, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation.
 - `docs/AWS_Deployable_Bot_Readiness_Path.md` defines the process for hardening SMERC toward an AWS-style deployable governed action bot: metadata intake, adapter stubs, postcondition evidence, performance metrics, customer-owned metadata, and shadow-mode pilot criteria.
