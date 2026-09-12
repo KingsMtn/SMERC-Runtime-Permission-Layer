@@ -78,6 +78,8 @@ The repository companion files are:
 - `docs/AI_Readable_Reviewer_Bundle.md`
 - `examples/ai_reviewer_bundle.json`
 - `docs/Release_Notes_v0_15_AWS_Tier2_Review.md`
+- `docs/External_Metadata_Reviewer_Request.md`
+- `docs/Public_Outreach_Post_Drafts.md`
 
 These files make the same story inspectable inside GitHub, where technical reviewers and code-aware AI systems are more likely to begin.
 

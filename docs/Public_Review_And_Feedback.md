@@ -12,6 +12,8 @@ The project is not asking reviewers to accept a broad claim. It is asking review
 - GitHub Actions pilot: `https://admirable-sorbet-9986d5.netlify.app/github-action.html`
 - Public feedback page: `https://admirable-sorbet-9986d5.netlify.app/community.html`
 - Repository: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer`
+- External metadata reviewer request: `docs/External_Metadata_Reviewer_Request.md`
+- Public outreach post drafts: `docs/Public_Outreach_Post_Drafts.md`
 - Community guide: `COMMUNITY.md`
 - Community submission kit: `docs/Community_Submission_Kit.md`
 - Technical quickstart: `docs/Developer_Quickstart.md`

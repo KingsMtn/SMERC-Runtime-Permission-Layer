@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an external metadata reviewer request and public outreach post drafts so message-board and community reviewers can safely provide 5 to 25 metadata-only workflow examples without sharing secrets or granting live access.
 - Added v0.15 AWS Tier 2 review notes, refreshed AI/GitHub discovery language, and made the AWS shadow mirror metadata path visible in AI-readable review assets while Netlify publishing is paused.
 - Added a one-command AWS-Style Reviewer Bundle that assembles AWS action-chain proof, route-control postcondition evidence, AWS postcondition evidence, performance metrics, and AWS customer-owned metadata request.
 - Added AWS shadow mirror metadata evidence to the one-command AWS-Style Reviewer Bundle so reviewers can inspect sanitized VPC Traffic Mirroring, NLB fan-out, or Gateway Load Balancer endpoint summaries without packet payloads or live AWS access.

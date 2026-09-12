@@ -135,6 +135,46 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("docs/Tier2_AWS_Reviewer_Front_Door.md", readme)
         self.assertIn("docs/Release_Notes_v0_15_AWS_Tier2_Review.md", readme)
 
+    def test_external_metadata_reviewer_request_is_linked_and_bounded(self):
+        request = (ROOT / "docs" / "External_Metadata_Reviewer_Request.md").read_text(
+            encoding="utf-8"
+        )
+        drafts = (ROOT / "docs" / "Public_Outreach_Post_Drafts.md").read_text(
+            encoding="utf-8"
+        )
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        indexing = (ROOT / "docs" / "Public_Indexing_Assets.md").read_text(
+            encoding="utf-8"
+        )
+        feedback = (ROOT / "docs" / "Public_Review_And_Feedback.md").read_text(
+            encoding="utf-8"
+        )
+        aws_template = (
+            ROOT / ".github" / "ISSUE_TEMPLATE" / "aws_metadata_pilot_request.md"
+        ).read_text(encoding="utf-8")
+        mirror_template = (
+            ROOT / ".github" / "ISSUE_TEMPLATE" / "aws_shadow_mirror_metadata_request.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn(
+            "Does recoverability before execution belong as its own control layer",
+            request,
+        )
+        self.assertIn("Share 5 to 25 metadata-only examples", request)
+        self.assertIn("Do not share", request)
+        self.assertIn("live AWS access", request)
+        self.assertIn("reviewer label after seeing SMERC posture", request)
+        self.assertIn("Hacker News Draft", drafts)
+        self.assertIn("Reddit Or Cloud Forum Draft", drafts)
+        self.assertIn("ask reviewers to challenge the control gap", drafts)
+        self.assertIn("docs/External_Metadata_Reviewer_Request.md", readme)
+        self.assertIn("docs/Public_Outreach_Post_Drafts.md", readme)
+        self.assertIn("docs/External_Metadata_Reviewer_Request.md", indexing)
+        self.assertIn("docs/Public_Outreach_Post_Drafts.md", indexing)
+        self.assertIn("External_Metadata_Reviewer_Request.md", feedback)
+        self.assertIn("External_Metadata_Reviewer_Request.md", aws_template)
+        self.assertIn("External_Metadata_Reviewer_Request.md", mirror_template)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -98,6 +98,8 @@ Choose one:
 
 ## Relevant Links
 
+- External metadata reviewer request: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/External_Metadata_Reviewer_Request.md
+- Tier 2 AWS reviewer front door: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Tier2_AWS_Reviewer_Front_Door.md
 - AWS shadow mirror metadata path: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Shadow_Mirror_Metadata_Path.md
 - AWS shadow mirror customer request: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md
 - Shadow mirror template: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/examples/aws_shadow_mirror_customer_template.json
