@@ -14,6 +14,7 @@ The project is not asking reviewers to accept a broad claim. It is asking review
 - Repository: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer`
 - External metadata reviewer request: `docs/External_Metadata_Reviewer_Request.md`
 - Public outreach post drafts: `docs/Public_Outreach_Post_Drafts.md`
+- Public outreach status: `docs/Public_Outreach_Status.md`
 - Community guide: `COMMUNITY.md`
 - Community submission kit: `docs/Community_Submission_Kit.md`
 - Technical quickstart: `docs/Developer_Quickstart.md`

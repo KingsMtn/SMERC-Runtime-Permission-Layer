@@ -38,6 +38,7 @@ Fast reviewer paths:
 - Tier 2 AWS reviewer front door: `docs/Tier2_AWS_Reviewer_Front_Door.md`
 - External metadata reviewer request: `docs/External_Metadata_Reviewer_Request.md`
 - Public outreach post drafts: `docs/Public_Outreach_Post_Drafts.md`
+- Public outreach status: `docs/Public_Outreach_Status.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
@@ -454,6 +455,7 @@ Start here before reading the code:
 - `docs/Tier2_AWS_Reviewer_Front_Door.md` gives cloud, security, SRE, FinOps, and AI-infrastructure reviewers the shortest GitHub-first Tier 2 review path.
 - `docs/External_Metadata_Reviewer_Request.md` gives public reviewers and message-board readers one safe way to provide 5 to 25 metadata-only workflow examples without sharing secrets.
 - `docs/Public_Outreach_Post_Drafts.md` gives reusable GitHub, OpenSSF, Hacker News, Reddit, cloud-forum, and follow-up drafts that ask for critique instead of adoption.
+- `docs/Public_Outreach_Status.md` records the current OpenSSF feedback ask and keeps the next outreach move gated until there is a response or a deliberate no-response decision.
 - `docs/AWS_Reviewer_Quickstart.md` gives AWS-style reviewers the shortest path: run one command, inspect three outputs, understand what SMERC proves, and use `examples/aws_customer_metadata_template.json` to replace public examples with safe customer-owned metadata.
 - `docs/AWS_Cloud_Action_Replay.md` gives AWS-style platform, cloud-security, SRE, FinOps, and AI-agent reviewers a runnable metadata-only replay across AgentCore-style runtime and gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style scaling, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation.
 - `docs/AWS_Deployable_Bot_Readiness_Path.md` defines the process for hardening SMERC toward an AWS-style deployable governed action bot: metadata intake, adapter stubs, postcondition evidence, performance metrics, customer-owned metadata, and shadow-mode pilot criteria.

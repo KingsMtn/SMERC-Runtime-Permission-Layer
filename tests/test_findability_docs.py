@@ -142,6 +142,9 @@ class FindabilityDocsTests(unittest.TestCase):
         drafts = (ROOT / "docs" / "Public_Outreach_Post_Drafts.md").read_text(
             encoding="utf-8"
         )
+        status = (ROOT / "docs" / "Public_Outreach_Status.md").read_text(
+            encoding="utf-8"
+        )
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         indexing = (ROOT / "docs" / "Public_Indexing_Assets.md").read_text(
             encoding="utf-8"
@@ -167,11 +170,17 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("Hacker News Draft", drafts)
         self.assertIn("Reddit Or Cloud Forum Draft", drafts)
         self.assertIn("ask reviewers to challenge the control gap", drafts)
+        self.assertIn("OpenSSF `ossf/ai-ml-security` issue #50", status)
+        self.assertIn("Wait for a response before posting the same ask broadly", status)
+        self.assertIn("ask for critique, not adoption", status)
         self.assertIn("docs/External_Metadata_Reviewer_Request.md", readme)
         self.assertIn("docs/Public_Outreach_Post_Drafts.md", readme)
+        self.assertIn("docs/Public_Outreach_Status.md", readme)
         self.assertIn("docs/External_Metadata_Reviewer_Request.md", indexing)
         self.assertIn("docs/Public_Outreach_Post_Drafts.md", indexing)
+        self.assertIn("docs/Public_Outreach_Status.md", indexing)
         self.assertIn("External_Metadata_Reviewer_Request.md", feedback)
+        self.assertIn("Public_Outreach_Status.md", feedback)
         self.assertIn("External_Metadata_Reviewer_Request.md", aws_template)
         self.assertIn("External_Metadata_Reviewer_Request.md", mirror_template)
 
