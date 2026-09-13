@@ -301,6 +301,31 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("docs/SMERC_Field_Of_Use_Strategy.md", indexing)
         self.assertIn("field-of-use strategy", changelog)
 
+    def test_public_agent_runtime_incident_learning_is_linked_and_bounded(self):
+        learning = (
+            ROOT / "docs" / "Public_Agent_Runtime_Incident_Learning.md"
+        ).read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        indexing = (ROOT / "docs" / "Public_Indexing_Assets.md").read_text(
+            encoding="utf-8"
+        )
+        data_map = (ROOT / "docs" / "Runtime_Data_Source_Map.md").read_text(
+            encoding="utf-8"
+        )
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+
+        self.assertIn("Do not use leaked proprietary source", learning)
+        self.assertIn("public reporting", learning)
+        self.assertIn("More Than Code", learning)
+        self.assertIn("AGENT_RUNTIME_PROVENANCE_WEAK", learning)
+        self.assertIn("CREDENTIAL_EXFILTRATION_PRESSURE", learning)
+        self.assertIn("RECOVERY_PATH_UNPROVEN", learning)
+        self.assertIn("POSTCONDITION_EVIDENCE_MISSING", learning)
+        self.assertIn("docs/Public_Agent_Runtime_Incident_Learning.md", readme)
+        self.assertIn("docs/Public_Agent_Runtime_Incident_Learning.md", indexing)
+        self.assertIn("docs/Public_Agent_Runtime_Incident_Learning.md", data_map)
+        self.assertIn("public agent-runtime incident learning", changelog)
+
 
 if __name__ == "__main__":
     unittest.main()

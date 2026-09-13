@@ -43,6 +43,7 @@ Fast reviewer paths:
 - OpenSSF response playbook: `docs/OpenSSF_Response_Playbook.md`
 - Five-row metadata example: `docs/Five_Row_Metadata_Example.md`
 - Local source of truth: `docs/Local_Source_Of_Truth.md`
+- Public agent runtime incident learning: `docs/Public_Agent_Runtime_Incident_Learning.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`

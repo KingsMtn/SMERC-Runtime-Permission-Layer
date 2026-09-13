@@ -55,6 +55,8 @@ The first implemented source-specific replay is `docs/Agent_Security_Benchmark_R
 
 The first implemented MCP adversarial replay is `docs/MCP_Adversarial_Metadata_Replay.md`, which converts public MCP security pain points into safe metadata-only records for tool metadata, schema, server-instruction, cache, argument, encoded-instruction, and missing-evidence failure shapes.
 
+Public incident learning should follow `docs/Public_Agent_Runtime_Incident_Learning.md`: use public reporting, public advisories, public research, and public benchmark descriptions to improve threat models and metadata-only replay packs, but do not use leaked proprietary source, copied private architecture, credentials, raw logs, private prompts, or customer data.
+
 ### 2. Metadata-Only Normalizers
 
 Build source-specific normalizers that output `smerc.customer-evaluation.v1` actions or MCP Governance Gateway inputs.
@@ -67,6 +69,8 @@ Priority order:
 4. SyFI TraceLab metadata normalizer
 5. Blackstable financial runtime normalizer
 6. Toolathlon long-horizon tool-use normalizer
+
+Public agent-runtime incident lessons should become metadata-only records only after the source boundary is clean. Useful derived fields include agent family, tool family, delegated authority mode, rollback path status, credential exposure pressure, postcondition evidence status, and reviewer label.
 
 ### 3. Benchmark Boundary Reports
 
