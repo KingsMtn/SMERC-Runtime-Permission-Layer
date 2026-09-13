@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added Local Shadow Intake, a reject-first utility for preparing reviewer-owned metadata-only action summaries without claiming automatic anonymization.
 - Added a Dynamic Schema Gate for MCP/JSON-RPC-style tool calls, with a pinned local schema registry, drift detection, structural argument checks, unsafe text checks, generated report, and tests.
 - Added a runnable AWS audit-delay irreversibility replay loop with an in-memory pending mutation cache, normalized customer-evaluation actions, generated reports, and tests proving delayed-evidence hazards do not pass as `ALLOW`.
 - Added an AWS audit-delay and irreversibility map covering pending mutation state, KMS recovery dead ends, CloudTrail audit blinding, IAM boundary drift, S3 exposure expansion, broad remediation blast radius, and unreconciled mutation velocity.

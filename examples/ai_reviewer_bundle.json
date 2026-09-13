@@ -27,6 +27,7 @@
     "Recovery Authority Gate for governed unlock after pause",
     "complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence",
     "serious reviewer bundle assembling customer evaluation, postcondition evidence, performance metrics, balanced runtime judgment, metadata request, and response assessment in one command",
+    "Local Shadow Intake for reject-first preparation of 5 to 25 reviewer-owned metadata-only action summaries without claiming automatic anonymization",
     "AWS-style reviewer bundle assembling AWS action-chain proof, route-control postcondition evidence, AWS postcondition evidence, AWS shadow mirror metadata evidence, performance metrics, and AWS customer-owned metadata request in one command",
     "postcondition evidence comparing Governance Routing Workbench controls with observed control, execution, hold, and rollback evidence",
     "customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata",
@@ -75,6 +76,8 @@
     "complete_lifecycle_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/complete_lifecycle/Complete_Lifecycle_Proof_Report.md",
     "serious_reviewer_bundle": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Serious_Reviewer_Bundle.md",
     "serious_reviewer_bundle_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/serious_reviewer_bundle/Serious_Reviewer_Bundle.md",
+    "local_shadow_intake": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Local_Shadow_Intake.md",
+    "local_shadow_intake_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Local_Shadow_Intake_Report.md",
     "postcondition_evidence": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Postcondition_Evidence.md",
     "postcondition_evidence_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Postcondition_Evidence_Report.md",
     "aws_agent_action_chain": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Agent_Action_Chain.md",
@@ -187,78 +190,84 @@
     },
     {
       "step": 11,
+      "name": "Run Local Shadow Intake",
+      "command": "python -m reference_engine.local_shadow_intake examples/local_shadow_intake_examples.json --pretty",
+      "result": "Reviewer sees reject-first preparation of metadata-only action summaries, including accepted rows, skipped prohibited fields, rejected raw-log-shaped records, and human-review-required output."
+    },
+    {
+      "step": 12,
       "name": "Run the balanced runtime judgment replay",
       "command": "python -m reference_engine.balanced_runtime_judgment_replay examples/balanced_runtime_judgment_actions.json --pretty",
       "result": "Reviewer sees one ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE result with Governance Routing Workbench routes and Decision Lifecycle Ledger evidence."
     },
     {
-      "step": 12,
+      "step": 13,
       "name": "Run the serious report performance harness",
       "command": "python -m reference_engine.serious_report_performance --iterations 5 --pretty",
       "result": "Reviewer sees local proof-path p50, p95, and maximum timing for serious reports without treating local timing as production SLA evidence."
     },
     {
-      "step": 13,
+      "step": 14,
       "name": "Generate the customer-owned metadata request",
       "command": "python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty",
       "result": "Reviewer receives a safe ask for replacing public examples with 5 to 25 metadata-only actions from one real workflow."
     },
     {
-      "step": 14,
+      "step": 15,
       "name": "Run the pilot-in-a-box path",
       "command": "python -m reference_engine.pilot_in_a_box --pretty",
       "result": "Reviewer receives a local proof package across general AI-agent, cloud-admin, financial-runtime, and single-action examples."
     },
     {
-      "step": 15,
+      "step": 16,
       "name": "Assess the external reviewer metadata response",
       "command": "python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty",
       "result": "Reviewer-supplied metadata is classified as ready, limited, or unsafe before being treated as pilot evidence."
     },
     {
-      "step": 16,
+      "step": 17,
       "name": "Replace examples with 5 to 25 safe company-owned metadata records",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/customer_eval/README.md",
       "result": "Reviewer can test whether SMERC changes judgment on actions that resemble their own workflows without sharing secrets or production authority."
     },
     {
-      "step": 17,
+      "step": 18,
       "name": "Run the Financial Runtime evaluation when the workflow is financial",
       "command": "python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty",
       "result": "Financial-services reviewers can test metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions with the full proof package."
     },
     {
-      "step": 18,
+      "step": 19,
       "name": "Run the AWS Cloud Action Replay when the workflow is AWS-style cloud automation",
       "command": "python -m reference_engine.aws_cloud_action_replay --pretty",
       "result": "AWS-style platform reviewers can test AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost-velocity, Secrets Manager, and cross-account delegation examples with bounded non-claim language."
     },
     {
-      "step": 19,
+      "step": 20,
       "name": "Run the AWS Shadow Mirror Metadata path",
       "command": "python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty",
       "result": "Reviewer sees how sanitized VPC Traffic Mirroring, NLB fan-out, and Gateway Load Balancer endpoint summaries become SMERC shadow-mode evidence without packet payloads or live AWS access."
     },
     {
-      "step": 20,
+      "step": 21,
       "name": "Run the AWS Audit Delay and Irreversibility Replay",
       "command": "python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty",
       "result": "Reviewer sees the in-memory pending mutation cache, delayed-evidence pressure, KMS dead-end, CloudTrail audit-blinding, IAM boundary, S3 exposure, broad remediation, and second-mutation scenarios route through SMERC without live AWS access."
     },
     {
-      "step": 21,
+      "step": 22,
       "name": "Run the AWS Postcondition Evidence path",
       "command": "python -m reference_engine.aws_postcondition_evidence --pretty",
       "result": "Reviewer sees whether AWS-style controls were actually observed after SMERC routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata."
     },
     {
-      "step": 22,
+      "step": 23,
       "name": "Read the two-tier valuation path",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Two_Tier_Valuation_Path.md",
       "result": "Reviewer sees the difference between the public decision-language layer and the enterprise cloud-action governance package."
     },
     {
-      "step": 23,
+      "step": 24,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."
@@ -269,6 +278,9 @@
     "pre-execution recoverability control",
     "runtime permission infrastructure",
     "runtime AI governance",
+    "local shadow intake",
+    "metadata-only action summaries",
+    "reviewer-owned metadata",
     "recoverability scoring",
     "recoverability-aware authorization",
     "MCP governance",

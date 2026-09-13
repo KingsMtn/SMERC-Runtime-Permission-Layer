@@ -86,6 +86,7 @@ The repository companion files are:
 - `docs/OpenSSF_Response_Playbook.md`
 - `docs/Five_Row_Metadata_Example.md`
 - `docs/Local_Source_Of_Truth.md`
+- `docs/Local_Shadow_Intake.md`
 - `docs/SMERC_Field_Of_Use_Strategy.md`
 - `docs/Public_Agent_Runtime_Incident_Learning.md`
 - `docs/Public_Agent_Runtime_Incident_Replay.md`

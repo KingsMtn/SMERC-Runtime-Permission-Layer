@@ -1,0 +1,234 @@
+{
+  "accepted_action_count": 5,
+  "classification_counts": {
+    "ACCEPTED_METADATA_ONLY": 5,
+    "REJECTED_RAW_LOG": 1,
+    "SKIPPED_PROHIBITED_FIELD": 1
+  },
+  "decisions": [
+    {
+      "classification": "ACCEPTED_METADATA_ONLY",
+      "reason_codes": [
+        "METADATA_ONLY_DRAFT"
+      ],
+      "sanitized_record": {
+        "action_id": "ACT-001",
+        "action_type": "Identity Modification",
+        "blast_radius_scope": "Account-wide privilege escalation risk",
+        "containment_strength": "High",
+        "current_system_posture": "allow",
+        "evidence_available": "Deterministic policy diff summary",
+        "external_side_effects": true,
+        "human_approval_existed": false,
+        "intake_posture_hint": "THROTTLE",
+        "reversibility": "Fully Reversible",
+        "rollback_latency_seconds": 5,
+        "schema_contract_match": true,
+        "tool_system_class": "AWS IAM"
+      },
+      "source_index": 1
+    },
+    {
+      "classification": "ACCEPTED_METADATA_ONLY",
+      "reason_codes": [
+        "METADATA_ONLY_DRAFT"
+      ],
+      "sanitized_record": {
+        "action_id": "ACT-002",
+        "action_type": "Credential Rotation",
+        "blast_radius_scope": "Downstream application outage",
+        "containment_strength": "Low",
+        "current_system_posture": "allow",
+        "evidence_available": "Target secret class summary",
+        "external_side_effects": true,
+        "human_approval_existed": false,
+        "intake_posture_hint": "FREEZE",
+        "reversibility": "Irreversible",
+        "rollback_latency_seconds": -1,
+        "schema_contract_match": true,
+        "tool_system_class": "Secrets Manager"
+      },
+      "source_index": 2
+    },
+    {
+      "classification": "ACCEPTED_METADATA_ONLY",
+      "reason_codes": [
+        "METADATA_ONLY_DRAFT"
+      ],
+      "sanitized_record": {
+        "action_id": "ACT-003",
+        "action_type": "Dynamic Tool Invocation",
+        "blast_radius_scope": "Arbitrary runtime execution",
+        "containment_strength": "None",
+        "current_system_posture": "log only",
+        "evidence_available": "Mismatched input schema summary",
+        "external_side_effects": "Unknown",
+        "human_approval_existed": false,
+        "intake_posture_hint": "DENY",
+        "reversibility": "Unknown",
+        "rollback_latency_seconds": -1,
+        "schema_contract_match": false,
+        "tool_system_class": "MCP Server"
+      },
+      "source_index": 3
+    },
+    {
+      "classification": "ACCEPTED_METADATA_ONLY",
+      "reason_codes": [
+        "METADATA_ONLY_DRAFT"
+      ],
+      "sanitized_record": {
+        "action_id": "ACT-004",
+        "action_type": "Database Drop",
+        "blast_radius_scope": "Production data loss",
+        "containment_strength": "Low",
+        "current_system_posture": "block",
+        "evidence_available": "DDL command class summary",
+        "external_side_effects": true,
+        "human_approval_existed": false,
+        "intake_posture_hint": "FREEZE",
+        "reversibility": "Hard Rollback",
+        "rollback_latency_seconds": 3600,
+        "schema_contract_match": true,
+        "tool_system_class": "PostgreSQL"
+      },
+      "source_index": 4
+    },
+    {
+      "classification": "ACCEPTED_METADATA_ONLY",
+      "reason_codes": [
+        "METADATA_ONLY_DRAFT"
+      ],
+      "sanitized_record": {
+        "action_id": "ACT-005",
+        "action_type": "Compute Scaling",
+        "blast_radius_scope": "Financial budget spike",
+        "containment_strength": "High",
+        "current_system_posture": "allow",
+        "evidence_available": "Desired count summary",
+        "external_side_effects": true,
+        "human_approval_existed": false,
+        "intake_posture_hint": "THROTTLE",
+        "reversibility": "Fully Reversible",
+        "rollback_latency_seconds": 120,
+        "schema_contract_match": true,
+        "tool_system_class": "AWS ECS"
+      },
+      "source_index": 5
+    },
+    {
+      "classification": "SKIPPED_PROHIBITED_FIELD",
+      "reason_codes": [
+        "PROHIBITED_KEY:account_id"
+      ],
+      "source_index": 6
+    },
+    {
+      "classification": "REJECTED_RAW_LOG",
+      "reason_codes": [
+        "RAW_LOG_SHAPED_RECORD"
+      ],
+      "source_index": 7
+    }
+  ],
+  "evidence_boundary": "This utility is reject-first intake, not guaranteed anonymization. Hashing is not treated as proof of privacy. A human must inspect the output before sharing, and raw logs should not be submitted.",
+  "generated_at": "2026-09-13T11:26:23+00:00",
+  "input_action_count": 7,
+  "reason_code_counts": {
+    "METADATA_ONLY_DRAFT": 5,
+    "PROHIBITED_KEY:account_id": 1,
+    "RAW_LOG_SHAPED_RECORD": 1
+  },
+  "recommended_next_action": "Manually inspect the sanitized draft, then use accepted records for a shadow-mode posture gap matrix.",
+  "sanitized_metadata_draft": {
+    "actions": [
+      {
+        "action_id": "ACT-001",
+        "action_type": "Identity Modification",
+        "blast_radius_scope": "Account-wide privilege escalation risk",
+        "containment_strength": "High",
+        "current_system_posture": "allow",
+        "evidence_available": "Deterministic policy diff summary",
+        "external_side_effects": true,
+        "human_approval_existed": false,
+        "intake_posture_hint": "THROTTLE",
+        "reversibility": "Fully Reversible",
+        "rollback_latency_seconds": 5,
+        "schema_contract_match": true,
+        "tool_system_class": "AWS IAM"
+      },
+      {
+        "action_id": "ACT-002",
+        "action_type": "Credential Rotation",
+        "blast_radius_scope": "Downstream application outage",
+        "containment_strength": "Low",
+        "current_system_posture": "allow",
+        "evidence_available": "Target secret class summary",
+        "external_side_effects": true,
+        "human_approval_existed": false,
+        "intake_posture_hint": "FREEZE",
+        "reversibility": "Irreversible",
+        "rollback_latency_seconds": -1,
+        "schema_contract_match": true,
+        "tool_system_class": "Secrets Manager"
+      },
+      {
+        "action_id": "ACT-003",
+        "action_type": "Dynamic Tool Invocation",
+        "blast_radius_scope": "Arbitrary runtime execution",
+        "containment_strength": "None",
+        "current_system_posture": "log only",
+        "evidence_available": "Mismatched input schema summary",
+        "external_side_effects": "Unknown",
+        "human_approval_existed": false,
+        "intake_posture_hint": "DENY",
+        "reversibility": "Unknown",
+        "rollback_latency_seconds": -1,
+        "schema_contract_match": false,
+        "tool_system_class": "MCP Server"
+      },
+      {
+        "action_id": "ACT-004",
+        "action_type": "Database Drop",
+        "blast_radius_scope": "Production data loss",
+        "containment_strength": "Low",
+        "current_system_posture": "block",
+        "evidence_available": "DDL command class summary",
+        "external_side_effects": true,
+        "human_approval_existed": false,
+        "intake_posture_hint": "FREEZE",
+        "reversibility": "Hard Rollback",
+        "rollback_latency_seconds": 3600,
+        "schema_contract_match": true,
+        "tool_system_class": "PostgreSQL"
+      },
+      {
+        "action_id": "ACT-005",
+        "action_type": "Compute Scaling",
+        "blast_radius_scope": "Financial budget spike",
+        "containment_strength": "High",
+        "current_system_posture": "allow",
+        "evidence_available": "Desired count summary",
+        "external_side_effects": true,
+        "human_approval_existed": false,
+        "intake_posture_hint": "THROTTLE",
+        "reversibility": "Fully Reversible",
+        "rollback_latency_seconds": 120,
+        "schema_contract_match": true,
+        "tool_system_class": "AWS ECS"
+      }
+    ],
+    "data_boundary": "Metadata-only draft produced by local reject-first intake. Human review is required before sharing.",
+    "generated_at": "2026-09-13T11:26:23+00:00",
+    "schema_version": "smerc.local-shadow-metadata-draft.v1",
+    "source_name": "SMERC Local Shadow Intake"
+  },
+  "share_status": "HUMAN_REVIEW_REQUIRED",
+  "source_name": "SMERC Local Shadow Intake",
+  "version": "smerc.local-shadow-intake.v1",
+  "work_result_impact": {
+    "impact": "Reviewers can prepare 5 to 25 metadata-only actions without sending raw logs, secrets, account identifiers, private prompts, customer records, ARNs, or production commands into the public repo.",
+    "result": "Accepted 5 of 7 action summaries and rejected or flagged the rest.",
+    "work": "Screen local structured action summaries before they become SMERC reviewer-owned metadata."
+  }
+}

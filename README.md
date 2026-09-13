@@ -44,6 +44,7 @@ Fast reviewer paths:
 - OpenSSF response playbook: `docs/OpenSSF_Response_Playbook.md`
 - Five-row metadata example: `docs/Five_Row_Metadata_Example.md`
 - Local source of truth: `docs/Local_Source_Of_Truth.md`
+- Local shadow intake: `docs/Local_Shadow_Intake.md`
 - Public agent runtime incident learning: `docs/Public_Agent_Runtime_Incident_Learning.md`
 - Public agent runtime incident replay: `docs/Public_Agent_Runtime_Incident_Replay.md`
 - Dynamic schema gate: `docs/Dynamic_Schema_Gate.md`
@@ -1388,6 +1389,14 @@ python -m reference_engine.dynamic_schema_gate examples/dynamic_schema_gate_exam
 ```
 
 The Dynamic Schema Gate evaluates MCP/JSON-RPC-style tool-call payloads against a pinned local schema registry before execution. It classifies calls as valid, unknown, drifted, structurally mismatched, unsafe, or under-specified, then returns SMERC posture hints before a payload touches an external tool. This is the lower-pain schema-control lane compared with AWS audit-delay risk: it happens entirely in memory at the gateway boundary.
+
+Run Local Shadow Intake:
+
+```bash
+python -m reference_engine.local_shadow_intake examples/local_shadow_intake_examples.json --pretty
+```
+
+Local Shadow Intake is the reject-first path for preparing 5 to 25 reviewer-owned action summaries. It does not promise anonymization. It rejects prohibited fields, identifier-shaped values, and raw-log-shaped records, then emits a metadata-only draft plus a report requiring human review before sharing.
 
 Run the Postcondition Evidence report:
 

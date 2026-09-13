@@ -29,6 +29,7 @@ It sits after detection, identity, policy, and intent signals, but before an aut
 The repository contains working pilot-grade artifacts:
 
 - one-action front door for testing a single proposed agent, tool, cloud, deployment, or automation action, documented at `docs/Try_SMERC_On_One_Action.md`
+- Local Shadow Intake for reject-first preparation of 5 to 25 reviewer-owned metadata-only action summaries, documented at `docs/Local_Shadow_Intake.md`
 - recoverability scoring engine
 - runtime admission gate
 - hard policy and evidence gates
@@ -122,6 +123,8 @@ The serious report performance harness shows local p50, p95, and maximum timing 
 
 The customer-owned metadata request gives reviewers a safe next ask: replace public examples with 5 to 25 metadata-only actions from one real workflow, then judge whether SMERC changes review behavior enough to justify shadow-mode testing.
 
+Local Shadow Intake supports that ask by rejecting raw-log-shaped records, prohibited fields, and identifier-shaped values before a reviewer shares metadata. It produces a draft only; it does not guarantee anonymization or remove the need for human review.
+
 The AWS customer-owned metadata request narrows that ask to AWS-style platform review: 5 to 25 safe action summaries and matching postcondition observation summaries from one workflow, with no account IDs, ARNs, raw logs, credentials, production commands, or live AWS access.
 
 The external reviewer metadata response assessment prevents vague interest or unsafe data sharing from being treated as pilot proof.
@@ -153,27 +156,28 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 9. Run `python -m reference_engine.agent_security_benchmark_replay examples/agent_security_benchmark_metadata.json --pretty`.
 10. Run `python -m reference_engine.mcp_adversarial_metadata_replay examples/mcp_adversarial_metadata.json --pretty`.
 11. Run `python -m reference_engine.dynamic_schema_gate examples/dynamic_schema_gate_examples.json --pretty`.
-12. Run `python -m reference_engine.balanced_runtime_judgment_replay examples/balanced_runtime_judgment_actions.json --pretty`.
-13. Run `python -m reference_engine.postcondition_evidence --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json --observations examples/postcondition_observations.json --pretty`.
-14. Run `python -m reference_engine.serious_report_performance --iterations 5 --pretty`.
-15. Run `python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty`.
-16. Run `python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty`.
-17. Run `python -m reference_engine.pilot_in_a_box --pretty`.
-18. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
-19. For financial-services review, run `python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty`.
-20. For AWS-style agent action chain review, run `python -m reference_engine.aws_agent_action_chain --pretty`.
-21. For AWS-style agent action chain postcondition review, run `python -m reference_engine.aws_agent_action_chain_postcondition --pretty`.
-22. For the one-command AWS-style reviewer bundle, run `python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty`.
-23. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
-24. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
-25. For AWS-style shadow mirror review, run `python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty`.
-26. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
-27. For AWS audit-delay and irreversibility review, run `python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty`.
-28. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
-29. Read `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md` if the reviewer can provide sanitized operational flow summaries.
-30. Read `docs/Two_Tier_Valuation_Path.md` if the reviewer is evaluating strategic value.
-31. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
-32. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+12. Run `python -m reference_engine.local_shadow_intake examples/local_shadow_intake_examples.json --pretty`.
+13. Run `python -m reference_engine.balanced_runtime_judgment_replay examples/balanced_runtime_judgment_actions.json --pretty`.
+14. Run `python -m reference_engine.postcondition_evidence --evaluation reports/public_benchmark_customer_evaluation/customer_evaluation_report.json --observations examples/postcondition_observations.json --pretty`.
+15. Run `python -m reference_engine.serious_report_performance --iterations 5 --pretty`.
+16. Run `python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty`.
+17. Run `python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty`.
+18. Run `python -m reference_engine.pilot_in_a_box --pretty`.
+19. Replace examples with 5 to 25 safe company-owned metadata records using `customer_eval/README.md`.
+20. For financial-services review, run `python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty`.
+21. For AWS-style agent action chain review, run `python -m reference_engine.aws_agent_action_chain --pretty`.
+22. For AWS-style agent action chain postcondition review, run `python -m reference_engine.aws_agent_action_chain_postcondition --pretty`.
+23. For the one-command AWS-style reviewer bundle, run `python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty`.
+24. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
+25. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
+26. For AWS-style shadow mirror review, run `python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty`.
+27. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
+28. For AWS audit-delay and irreversibility review, run `python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty`.
+29. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
+30. Read `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md` if the reviewer can provide sanitized operational flow summaries.
+31. Read `docs/Two_Tier_Valuation_Path.md` if the reviewer is evaluating strategic value.
+32. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
+33. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 
