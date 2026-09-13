@@ -1,0 +1,162 @@
+{
+  "artifacts": {
+    "metadata_intake_input": "examples/local_shadow_intake_examples.json",
+    "metadata_intake_report": "reports/local_shadow_intake_report.json",
+    "policy_input": "examples/policies/github_actions_shadow_spl.json",
+    "schema_gate_input": "examples/dynamic_schema_gate_examples.json",
+    "schema_gate_report": "reports/dynamic_schema_gate_report.json"
+  },
+  "evidence_boundary": "This is a local proof wrapper. It does not call AWS, connect to MCP servers, execute tools, certify anonymization, prove incident reduction, or replace IAM, policy engines, scanners, approval workflows, SIEM, SOAR, or human accountability.",
+  "flow": [
+    "metadata_intake",
+    "schema_validation",
+    "policy_evaluation",
+    "posture_output",
+    "evidence_report"
+  ],
+  "generated_at": "2026-09-13T11:56:14+00:00",
+  "metadata_intake": {
+    "accepted_action_count": 5,
+    "classification_counts": {
+      "ACCEPTED_METADATA_ONLY": 5,
+      "REJECTED_RAW_LOG": 1,
+      "SKIPPED_PROHIBITED_FIELD": 1
+    },
+    "input_action_count": 7,
+    "share_status": "HUMAN_REVIEW_REQUIRED"
+  },
+  "policy": {
+    "evidence_ceiling": "OBSERVE",
+    "mode": "OBSERVE",
+    "policy_hash": "cc7b8bfd3d8f87eb10158bba6b203d5691de16529dc289a840fd7c2e0417f886",
+    "policy_id": "github-actions-shadow-mode",
+    "policy_revision": "2026.07.07",
+    "tenant_id": "platform-team"
+  },
+  "posture_output": {
+    "posture_counts": {
+      "DENY": 1,
+      "FREEZE": 2,
+      "THROTTLE": 2
+    },
+    "route_counts": {
+      "BLOCK": 1,
+      "CONSTRAINED_EXECUTE": 2,
+      "PAUSE": 2
+    },
+    "rows": [
+      {
+        "action_id": "ACT-001",
+        "action_type": "Identity Modification",
+        "containment_strength": "High",
+        "current_system_posture": "allow",
+        "evidence_available": "Deterministic policy diff summary",
+        "policy_hash": "cc7b8bfd3d8f87eb10158bba6b203d5691de16529dc289a840fd7c2e0417f886",
+        "rollback_latency_seconds": 5,
+        "route_hint": "CONSTRAINED_EXECUTE",
+        "smerc_posture": "THROTTLE",
+        "tool_system_class": "AWS IAM"
+      },
+      {
+        "action_id": "ACT-002",
+        "action_type": "Credential Rotation",
+        "containment_strength": "Low",
+        "current_system_posture": "allow",
+        "evidence_available": "Target secret class summary",
+        "policy_hash": "cc7b8bfd3d8f87eb10158bba6b203d5691de16529dc289a840fd7c2e0417f886",
+        "rollback_latency_seconds": -1,
+        "route_hint": "PAUSE",
+        "smerc_posture": "FREEZE",
+        "tool_system_class": "Secrets Manager"
+      },
+      {
+        "action_id": "ACT-003",
+        "action_type": "Dynamic Tool Invocation",
+        "containment_strength": "None",
+        "current_system_posture": "log only",
+        "evidence_available": "Mismatched input schema summary",
+        "policy_hash": "cc7b8bfd3d8f87eb10158bba6b203d5691de16529dc289a840fd7c2e0417f886",
+        "rollback_latency_seconds": -1,
+        "route_hint": "BLOCK",
+        "smerc_posture": "DENY",
+        "tool_system_class": "MCP Server"
+      },
+      {
+        "action_id": "ACT-004",
+        "action_type": "Database Drop",
+        "containment_strength": "Low",
+        "current_system_posture": "block",
+        "evidence_available": "DDL command class summary",
+        "policy_hash": "cc7b8bfd3d8f87eb10158bba6b203d5691de16529dc289a840fd7c2e0417f886",
+        "rollback_latency_seconds": 3600,
+        "route_hint": "PAUSE",
+        "smerc_posture": "FREEZE",
+        "tool_system_class": "PostgreSQL"
+      },
+      {
+        "action_id": "ACT-005",
+        "action_type": "Compute Scaling",
+        "containment_strength": "High",
+        "current_system_posture": "allow",
+        "evidence_available": "Desired count summary",
+        "policy_hash": "cc7b8bfd3d8f87eb10158bba6b203d5691de16529dc289a840fd7c2e0417f886",
+        "rollback_latency_seconds": 120,
+        "route_hint": "CONSTRAINED_EXECUTE",
+        "smerc_posture": "THROTTLE",
+        "tool_system_class": "AWS ECS"
+      }
+    ]
+  },
+  "schema_validation": {
+    "classification_counts": {
+      "DRIFTED": 1,
+      "STRUCTURAL_MISMATCH": 1,
+      "UNDER_SPECIFIED": 1,
+      "UNKNOWN_SCHEMA": 1,
+      "UNSAFE": 2,
+      "VALID": 1
+    },
+    "registry_count": 5,
+    "smerc_posture_counts": {
+      "ALLOW": 1,
+      "DENY": 3,
+      "ESCALATE": 2,
+      "THROTTLE": 1
+    },
+    "tool_call_count": 7
+  },
+  "source_name": "SMERC End-to-End Reviewer Flow",
+  "stage_results": [
+    {
+      "stage": "metadata_intake",
+      "status": "PASS",
+      "summary": "Accepted 5 of 7 metadata-only action summaries."
+    },
+    {
+      "stage": "schema_validation",
+      "status": "PASS",
+      "summary": "Evaluated 7 dynamic tool calls against 5 pinned schema entries."
+    },
+    {
+      "stage": "policy_evaluation",
+      "status": "PASS",
+      "summary": "Compiled SPL policy github-actions-shadow-mode@2026.07.07 in OBSERVE mode with evidence ceiling OBSERVE."
+    },
+    {
+      "stage": "posture_output",
+      "status": "PASS",
+      "summary": "Produced 5 posture rows and route hints from accepted metadata."
+    },
+    {
+      "stage": "evidence_report",
+      "status": "PASS",
+      "summary": "Generated a single evidence packet with boundaries, source artifacts, posture counts, and non-claims."
+    }
+  ],
+  "version": "smerc.end-to-end-reviewer-flow.v1",
+  "work_result_impact": {
+    "impact": "A contributor can map AWS-like or tool-call actions into SMERC safely enough for public review, while a company reviewer can see the exact handoff points needed for a private shadow-mode pilot.",
+    "result": "SMERC can show a coherent end-to-end flow without live AWS credentials, raw logs, customer data, or production execution authority.",
+    "work": "Run one reviewer-facing proof path from local metadata intake through schema validation, policy identity, posture output, and evidence reporting."
+  }
+}

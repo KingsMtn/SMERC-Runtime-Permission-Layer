@@ -30,6 +30,7 @@ The repository contains working pilot-grade artifacts:
 
 - one-action front door for testing a single proposed agent, tool, cloud, deployment, or automation action, documented at `docs/Try_SMERC_On_One_Action.md`
 - Local Shadow Intake for reject-first preparation of 5 to 25 reviewer-owned metadata-only action summaries, documented at `docs/Local_Shadow_Intake.md`
+- End-to-End Reviewer Flow for tying local metadata intake, schema validation, SPL policy identity, posture output, and evidence reporting into one command, documented at `docs/End_To_End_Reviewer_Flow.md`
 - recoverability scoring engine
 - runtime admission gate
 - hard policy and evidence gates
@@ -124,6 +125,8 @@ The serious report performance harness shows local p50, p95, and maximum timing 
 The customer-owned metadata request gives reviewers a safe next ask: replace public examples with 5 to 25 metadata-only actions from one real workflow, then judge whether SMERC changes review behavior enough to justify shadow-mode testing.
 
 Local Shadow Intake supports that ask by rejecting raw-log-shaped records, prohibited fields, and identifier-shaped values before a reviewer shares metadata. It produces a draft only; it does not guarantee anonymization or remove the need for human review.
+
+The End-to-End Reviewer Flow is the clean path after intake. It shows how accepted metadata moves through local schema validation, policy identity, posture output, and one evidence report without pretending to connect to AWS, MCP servers, or production systems.
 
 The AWS customer-owned metadata request narrows that ask to AWS-style platform review: 5 to 25 safe action summaries and matching postcondition observation summaries from one workflow, with no account IDs, ARNs, raw logs, credentials, production commands, or live AWS access.
 

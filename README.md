@@ -45,6 +45,7 @@ Fast reviewer paths:
 - Five-row metadata example: `docs/Five_Row_Metadata_Example.md`
 - Local source of truth: `docs/Local_Source_Of_Truth.md`
 - Local shadow intake: `docs/Local_Shadow_Intake.md`
+- End-to-end reviewer flow: `docs/End_To_End_Reviewer_Flow.md`
 - Public agent runtime incident learning: `docs/Public_Agent_Runtime_Incident_Learning.md`
 - Public agent runtime incident replay: `docs/Public_Agent_Runtime_Incident_Replay.md`
 - Dynamic schema gate: `docs/Dynamic_Schema_Gate.md`
@@ -1397,6 +1398,14 @@ python -m reference_engine.local_shadow_intake examples/local_shadow_intake_exam
 ```
 
 Local Shadow Intake is the reject-first path for preparing 5 to 25 reviewer-owned action summaries. It does not promise anonymization. It rejects prohibited fields, identifier-shaped values, and raw-log-shaped records, then emits a metadata-only draft plus a report requiring human review before sharing.
+
+Run the End-to-End Reviewer Flow:
+
+```bash
+python -m reference_engine.end_to_end_reviewer_flow --pretty
+```
+
+The End-to-End Reviewer Flow ties the safer contributor path together: metadata intake -> schema validation -> policy evaluation -> posture output -> evidence report. It reuses Local Shadow Intake, Dynamic Schema Gate, and the SPL policy profile to produce one reviewer packet without live AWS credentials, raw logs, customer data, or production execution authority.
 
 Run the Postcondition Evidence report:
 
