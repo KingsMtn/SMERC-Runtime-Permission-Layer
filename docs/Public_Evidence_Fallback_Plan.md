@@ -56,6 +56,14 @@ Build source-specific metadata adapters in this order:
 5. Agent Reliability Lab-style state-transition evidence
 6. NIKA-style infrastructure remediation mapping
 
+The first focused adapter combines the first two source shapes:
+
+```bash
+python -m reference_engine.public_fallback_adapter --pretty
+```
+
+See `docs/Public_Fallback_Adapter.md`.
+
 ## Evidence Boundary
 
 This path does not prove customer demand, willingness to pay, production safety, incident reduction, compliance, AWS endorsement, or acquisition value.

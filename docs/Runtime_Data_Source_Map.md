@@ -68,6 +68,14 @@ python -m reference_engine.public_evidence_fallback --pretty
 
 It records where adjacent projects got their metadata and which source shapes SMERC can safely learn from if outside reviewers do not provide workflow rows.
 
+The first focused fallback adapter is:
+
+```bash
+python -m reference_engine.public_fallback_adapter --pretty
+```
+
+It maps Agent Action Boundary-style drift and AgentShield-style MCP/tool-call safety rows into the same customer-evaluation path used for company reviewers.
+
 The first implemented source-specific replay is `docs/Agent_Security_Benchmark_Replay.md`.
 
 The first implemented MCP adversarial replay is `docs/MCP_Adversarial_Metadata_Replay.md`, which converts public MCP security pain points into safe metadata-only records for tool metadata, schema, server-instruction, cache, argument, encoded-instruction, and missing-evidence failure shapes.

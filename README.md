@@ -49,6 +49,7 @@ Fast reviewer paths:
 - Public agent runtime incident learning: `docs/Public_Agent_Runtime_Incident_Learning.md`
 - Public agent runtime incident replay: `docs/Public_Agent_Runtime_Incident_Replay.md`
 - Public evidence fallback plan: `docs/Public_Evidence_Fallback_Plan.md`
+- Public fallback adapter: `docs/Public_Fallback_Adapter.md`
 - Dynamic schema gate: `docs/Dynamic_Schema_Gate.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
@@ -1383,6 +1384,14 @@ python -m reference_engine.public_evidence_fallback --pretty
 ```
 
 The fallback plan records where adjacent agent-failure, action-boundary, MCP-security, reliability, failure-repair, and incident benchmarks get their metadata, then maps which source shapes SMERC can safely learn from. It preserves the key boundary: public-pattern evidence can improve technical proof, but it is not customer validation.
+
+Run the first focused Public Fallback Adapter:
+
+```bash
+python -m reference_engine.public_fallback_adapter --pretty
+```
+
+The adapter maps Agent Action Boundary-style drift rows and AgentShield-style MCP/tool-call safety rows into the same SMERC customer-evaluation path used for company reviewers. The report ends with the replacement ask: provide 5 to 25 metadata-only actions from one real workflow.
 
 Run the MCP Adversarial Metadata Replay Pack:
 
