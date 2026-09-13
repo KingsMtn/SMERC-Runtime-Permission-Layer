@@ -1,0 +1,29 @@
+{
+  "version": "smerc.spl.v0",
+  "tenant": {
+    "id": "platform-team"
+  },
+  "policy": {
+    "id": "rollback-latency-approval-gate",
+    "revision": "2026.09.13",
+    "mode": "ENFORCE",
+    "fail_behavior": "deny",
+    "approved_by_role": "security-architecture-review",
+    "effective_at": "2026-09-13T00:00:00Z"
+  },
+  "evidence": {
+    "program_id": "smerc-core-validation-v1",
+    "ceiling": "CALIBRATED_ENFORCE"
+  },
+  "thresholds": {
+    "deny": {
+      "rollback_latency_max": 300,
+      "human_approval_required": true
+    }
+  },
+  "rule_logic": {
+    "description": "Block any action with rollback_latency_seconds > 300 unless human_approval_existed is true",
+    "condition": "IF (rollback_latency_seconds > 300) AND (human_approval_existed == false) THEN DENY",
+    "rationale": "High-latency rollback actions pose significant recovery risks. Human approval is mandatory for actions requiring >5 minutes to reverse."
+  }
+}
