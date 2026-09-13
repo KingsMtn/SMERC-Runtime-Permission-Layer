@@ -62,9 +62,15 @@ Do not share:
 
 Use the path that matches your evidence:
 
+- Fast workflow intake: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/issues/new?template=workflow-intake-template.md`
 - AWS action metadata request: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/issues/new?template=aws_metadata_pilot_request.md`
 - AWS shadow mirror metadata request: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/issues/new?template=aws_shadow_mirror_metadata_request.md`
 - General public review feedback: `https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/issues/new?template=public_review_feedback.md`
+
+Before responding, reviewers can check the current evidence boundary:
+
+- Claim Registry: `docs/Claim_Registry.md`
+- Evidence Bundle: `docs/Evidence_Bundle.md`
 
 ## What SMERC Returns
 

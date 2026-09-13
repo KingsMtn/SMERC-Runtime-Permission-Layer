@@ -1,6 +1,6 @@
 ---
 name: Workflow intake template
-about: Share 5 metadata-only workflow actions for SMERC posture review
+about: Share 5 to 25 metadata-only workflow actions for SMERC posture review
 title: "Workflow intake: "
 labels: ["workflow-intake", "metadata-only", "public-review"]
 ---
@@ -13,7 +13,7 @@ Use metadata only. If you are unsure, keep the example generic.
 
 ## Quick Ask
 
-Can you replace the 5 sample rows below with 5 actions from one workflow and tell us whether the SMERC posture would be useful, too strict, too loose, or irrelevant compared with your current controls?
+Can you replace the sample rows below with 5 to 25 actions from one workflow and tell us whether the SMERC posture would be useful, too strict, too loose, or irrelevant compared with your current controls?
 
 ## Workflow Context
 
@@ -78,3 +78,5 @@ After filling the rows, please add a quick reviewer label:
 - End-to-end reviewer flow: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/End_To_End_Reviewer_Flow.md
 - Local shadow intake: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Local_Shadow_Intake.md
 - Five-row example: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Five_Row_Metadata_Example.md
+- Claim Registry: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Claim_Registry.md
+- Evidence Bundle: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Evidence_Bundle.md

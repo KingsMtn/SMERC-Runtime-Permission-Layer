@@ -53,15 +53,24 @@ class CommunityPartnerDocsTests(unittest.TestCase):
         self.assertIn("Recoverability Question", public)
         self.assertIn("Missing Evidence", public)
         self.assertIn("Recoverability Analysis", scenario)
-        self.assertIn("5 actions from one workflow", workflow)
+        self.assertIn("5 to 25 actions from one workflow", workflow)
         self.assertIn("Copy-Paste Table", workflow)
         self.assertIn("schema_version", workflow)
+        self.assertIn("Claim Registry", workflow)
+        self.assertIn("Evidence Bundle", workflow)
         self.assertIn("reference_engine.local_shadow_intake", shadow)
         self.assertNotIn("smerc_evaluator.py", shadow)
         self.assertNotIn("entirely anonymous", shadow)
         self.assertIn("Do not include secrets", design)
         self.assertIn("Do not include secrets", public)
         self.assertIn("Do not include secrets", workflow)
+
+    def test_external_metadata_request_points_to_fast_intake_and_evidence(self):
+        request = (ROOT / "docs" / "External_Metadata_Reviewer_Request.md").read_text(encoding="utf-8")
+
+        self.assertIn("workflow-intake-template.md", request)
+        self.assertIn("Claim Registry", request)
+        self.assertIn("Evidence Bundle", request)
 
     def test_pull_request_template_requires_claims_check(self):
         template = (ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md").read_text(encoding="utf-8")
