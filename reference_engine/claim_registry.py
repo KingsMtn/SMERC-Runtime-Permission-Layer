@@ -61,6 +61,19 @@ CLAIMS = [
         "boundary": "Public-pattern evidence improves technical proof but is not customer validation.",
     },
     {
+        "claim_id": "small_generated_stress_corpus_exists",
+        "claim": "SMERC has a small generated metadata-only stress corpus that runs through the customer-evaluation path.",
+        "status": "supported",
+        "evidence": [
+            "docs/Small_Generated_Stress_Corpus.md",
+            "examples/smerc_stress_corpus_small.json",
+            "reports/Small_Generated_Stress_Corpus_Report.md",
+            "reports/small_generated_stress_corpus_report.json",
+            "reference_engine/small_stress_corpus.py",
+        ],
+        "boundary": "Generated stress data is fallback technical evidence, not customer validation or production proof.",
+    },
+    {
         "claim_id": "customer_owned_metadata_received",
         "claim": "SMERC has received enough customer-owned metadata to validate usefulness against a real workflow.",
         "status": "not_supported",

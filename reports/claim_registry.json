@@ -1,5 +1,5 @@
 {
-  "claim_count": 7,
+  "claim_count": 8,
   "claims": [
     {
       "boundary": "Local proof only; no live AWS, MCP server, customer data, or production execution.",
@@ -70,6 +70,24 @@
       "status": "supported"
     },
     {
+      "boundary": "Generated stress data is fallback technical evidence, not customer validation or production proof.",
+      "claim": "SMERC has a small generated metadata-only stress corpus that runs through the customer-evaluation path.",
+      "claim_id": "small_generated_stress_corpus_exists",
+      "evidence": [
+        "docs/Small_Generated_Stress_Corpus.md",
+        "examples/smerc_stress_corpus_small.json",
+        "reports/Small_Generated_Stress_Corpus_Report.md",
+        "reports/small_generated_stress_corpus_report.json",
+        "reference_engine/small_stress_corpus.py"
+      ],
+      "evidence_status": {
+        "existing_count": 5,
+        "missing": [],
+        "missing_count": 0
+      },
+      "status": "supported"
+    },
+    {
       "boundary": "The repo has the ask and templates, but no sufficient customer-owned response is recorded here.",
       "claim": "SMERC has received enough customer-owned metadata to validate usefulness against a real workflow.",
       "claim_id": "customer_owned_metadata_received",
@@ -117,10 +135,10 @@
     }
   ],
   "evidence_boundary": "The registry is a claims-control artifact. It does not create validation by itself; it records what the repository evidence currently supports.",
-  "generated_at": "2026-09-13T13:10:26+00:00",
+  "generated_at": "2026-09-13T13:21:25+00:00",
   "status_counts": {
     "not_supported": 3,
-    "supported": 4
+    "supported": 5
   },
   "version": "smerc.claim-registry.v1",
   "work_result_impact": {

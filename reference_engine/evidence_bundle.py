@@ -23,6 +23,10 @@ DEFAULT_ARTIFACTS = [
     "docs/Local_Shadow_Intake.md",
     "docs/Public_Fallback_Adapter.md",
     "docs/Public_Evidence_Fallback_Plan.md",
+    "docs/Small_Generated_Stress_Corpus.md",
+    "examples/smerc_stress_corpus_small.json",
+    "reports/Small_Generated_Stress_Corpus_Report.md",
+    "reports/small_generated_stress_corpus_report.json",
 ]
 
 REQUIRED_BUNDLE_FIELDS = {

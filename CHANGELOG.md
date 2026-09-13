@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Small Generated Stress Corpus that exercises AWS-style cloud, MCP/tool-call, CI/CD, financial velocity, security remediation, data mutation, network boundary, incident-pressure, and approved-intent drift patterns through the customer-evaluation path.
 - Added a Claim Registry and SHA-256 Evidence Bundle verifier so reviewers can distinguish supported claims from unsupported claims.
 - Added a Public Fallback Adapter for Agent Action Boundary-style drift and AgentShield-style MCP/tool-call safety rows.
 - Added a Public Evidence Fallback Plan that records source provenance for adjacent agent-failure, action-boundary, MCP-security, reliability, failure-repair, and incident benchmarks.

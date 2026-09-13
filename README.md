@@ -52,6 +52,7 @@ Fast reviewer paths:
 - Public fallback adapter: `docs/Public_Fallback_Adapter.md`
 - Claim registry: `docs/Claim_Registry.md`
 - Evidence bundle: `docs/Evidence_Bundle.md`
+- Small generated stress corpus: `docs/Small_Generated_Stress_Corpus.md`
 - Dynamic schema gate: `docs/Dynamic_Schema_Gate.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
@@ -1394,6 +1395,14 @@ python -m reference_engine.public_fallback_adapter --pretty
 ```
 
 The adapter maps Agent Action Boundary-style drift rows and AgentShield-style MCP/tool-call safety rows into the same SMERC customer-evaluation path used for company reviewers. The report ends with the replacement ask: provide 5 to 25 metadata-only actions from one real workflow.
+
+Run the Small Generated Stress Corpus:
+
+```bash
+python -m reference_engine.small_stress_corpus --pretty
+```
+
+This creates a deterministic metadata-only stress corpus and evaluates it through the same customer-evaluation path used for reviewer-owned metadata. It covers AWS-style cloud actions, MCP/tool-call governance, CI/CD deployment, financial velocity, security remediation, data mutation, network boundary changes, incident-pressure actions, and approved-intent drift. This is fallback technical evidence, not customer validation.
 
 Build the claim registry and evidence bundle:
 
