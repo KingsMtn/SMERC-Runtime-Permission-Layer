@@ -57,6 +57,7 @@ Fast reviewer paths:
 - AWS shadow mirror metadata path: `docs/AWS_Shadow_Mirror_Metadata_Path.md`
 - AWS shadow mirror customer metadata request: `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md`
 - AWS postcondition evidence: `docs/AWS_Postcondition_Evidence.md`
+- AWS audit delay and irreversibility map: `docs/AWS_Audit_Delay_And_Irreversibility_Map.md`
 - AWS customer-owned metadata request: `reports/AWS_Customer_Owned_Metadata_Request.md`
 - Defensible moat and commercial boundary: `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
 - Field-of-use strategy: `docs/SMERC_Field_Of_Use_Strategy.md`

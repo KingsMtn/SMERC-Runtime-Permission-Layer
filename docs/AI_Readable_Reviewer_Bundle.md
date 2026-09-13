@@ -70,6 +70,7 @@ The repository contains working pilot-grade artifacts:
 - AWS Metadata Intake Contract and non-executing adapter stub for accepting safe AWS-style exported summaries, skipping unsafe rows, and normalizing accepted rows into SMERC customer evaluation
 - AWS/MCP session and delegated approval context in the AWS metadata adapter, including gateway-only path, bypass detection, on-behalf-of authority, session mode, tool discovery, approval mode, temporal policy context, elicitation/sampling, and progress/message notifications
 - AWS Postcondition Evidence for checking whether AWS-style route controls were actually observed after routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata
+- AWS Audit Delay and Irreversibility Map for connecting delayed cloud evidence, pending mutation state, KMS dead ends, CloudTrail audit blinding, IAM boundary drift, S3 exposure expansion, broad remediation, and unreconciled mutation velocity to SMERC posture rules
 - AWS Shadow Mirror Metadata Path for converting sanitized VPC Traffic Mirroring, NLB fan-out, and Gateway Load Balancer endpoint summaries into SMERC shadow-mode evidence without packet payloads or live AWS access
 - AWS Shadow Mirror Customer Metadata Request for asking reviewers for 5 to 25 sanitized mirror-derived summaries from one owned workflow
 - Two-Tier Valuation Path separating the public decision-language layer from the enterprise cloud-action governance proof package

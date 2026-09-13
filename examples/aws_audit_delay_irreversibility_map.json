@@ -1,0 +1,203 @@
+{
+  "schema_version": "smerc.aws_audit_delay_irreversibility_map.v1",
+  "purpose": "Metadata-only map for AWS-style delayed audit evidence, pending mutation state, and structural irreversibility rules. This file does not call AWS APIs, include account IDs, ARNs, credentials, raw CloudTrail events, raw logs, production commands, or live access.",
+  "source_boundary": "Public AWS-style documentation and public security discussion only; no live AWS data and no private customer telemetry.",
+  "pending_state_cache": {
+    "cache_name": "smerc_aws_pending_mutation_cache",
+    "ttl_minutes": 30,
+    "reason": "Track permitted or attempted mutations while CloudTrail-, CloudWatch-, Security Lake-, EventBridge-, or adapter-shaped evidence is not yet reconciled.",
+    "required_fields": [
+      "permit_id",
+      "agent_id",
+      "workflow_id",
+      "issued_at",
+      "expires_at",
+      "reconciliation_status",
+      "pending_mutations",
+      "unreconciled_risk",
+      "required_evidence"
+    ],
+    "statuses": [
+      "PENDING_CLOUD_EVIDENCE",
+      "RECONCILED_PASS",
+      "RECONCILED_GAP",
+      "EXPIRED_UNRECONCILED"
+    ]
+  },
+  "structural_irreversibility_rules": [
+    {
+      "rule_id": "AWS-IRR-001",
+      "name": "Prevent cryptographic recovery dead ends",
+      "aws_action_patterns": [
+        "kms:DisableKey",
+        "kms:ScheduleKeyDeletion",
+        "kms:PutKeyPolicy"
+      ],
+      "default_smerc_posture": "DENY",
+      "reason_codes": [
+        "AWS_KMS_RECOVERY_DEAD_END",
+        "RECOVERY_PATH_UNPROVEN",
+        "POSTCONDITION_EVIDENCE_MISSING"
+      ],
+      "recoverability_effect": {
+        "reversibility": 0.05,
+        "containment_strength": 0.1,
+        "rollback_latency": 0.95,
+        "evidence_validity": 0.2
+      },
+      "required_evidence_before_release": [
+        "key not used by active log archive",
+        "key not used by active backups",
+        "break-glass approval recorded",
+        "tested restoration path"
+      ],
+      "non_claim": "This is a metadata-only rule map and does not inspect actual KMS keys."
+    },
+    {
+      "rule_id": "AWS-IRR-002",
+      "name": "Preserve cloud audit path",
+      "aws_action_patterns": [
+        "cloudtrail:StopLogging",
+        "cloudtrail:DeleteTrail",
+        "cloudtrail:UpdateTrail"
+      ],
+      "default_smerc_posture": "FREEZE",
+      "reason_codes": [
+        "AWS_AUDIT_PATH_BLINDING_RISK",
+        "POSTCONDITION_EVIDENCE_MISSING",
+        "RECOVERY_PATH_UNPROVEN"
+      ],
+      "recoverability_effect": {
+        "reversibility": 0.2,
+        "containment_strength": 0.25,
+        "rollback_latency": 0.85,
+        "evidence_validity": 0.1
+      },
+      "required_evidence_before_release": [
+        "central log archive remains active",
+        "log integrity validation remains enabled",
+        "independent approval recorded",
+        "replacement trail or evidence path verified"
+      ],
+      "non_claim": "This rule does not read raw CloudTrail events or alter CloudTrail configuration."
+    },
+    {
+      "rule_id": "AWS-IRR-003",
+      "name": "Protect identity permission boundaries",
+      "aws_action_patterns": [
+        "iam:PutRolePermissionsBoundary",
+        "iam:DeleteRolePolicy",
+        "iam:PutRolePolicy",
+        "iam:AttachRolePolicy"
+      ],
+      "default_smerc_posture": "ESCALATE",
+      "reason_codes": [
+        "AWS_IAM_BOUNDARY_DRIFT",
+        "DELEGATED_AUTHORITY_UNCLEAR",
+        "LEAST_PRIVILEGE_UNPROVEN"
+      ],
+      "recoverability_effect": {
+        "reversibility": 0.35,
+        "containment_strength": 0.3,
+        "rollback_latency": 0.65,
+        "evidence_validity": 0.45
+      },
+      "required_evidence_before_release": [
+        "policy diff reviewed",
+        "blast radius bounded",
+        "least privilege evidence attached",
+        "human approval for autonomous-agent change"
+      ],
+      "non_claim": "This rule does not replace IAM, SCPs, Cedar policies, or access analyzer review."
+    },
+    {
+      "rule_id": "AWS-IRR-004",
+      "name": "Freeze sensitive data exposure expansion",
+      "aws_action_patterns": [
+        "s3:PutBucketPolicy",
+        "s3:PutBucketAcl",
+        "s3:PutAccessPointPolicy"
+      ],
+      "default_smerc_posture": "FREEZE",
+      "reason_codes": [
+        "AWS_S3_EXPOSURE_EXPANSION",
+        "SENSITIVE_DATA",
+        "RECOVERY_PATH_UNPROVEN"
+      ],
+      "recoverability_effect": {
+        "reversibility": 0.25,
+        "containment_strength": 0.28,
+        "rollback_latency": 0.78,
+        "evidence_validity": 0.42
+      },
+      "required_evidence_before_release": [
+        "public access block unchanged or justified",
+        "data classification present",
+        "policy diff reviewed",
+        "access scope bounded"
+      ],
+      "non_claim": "This rule does not read S3 bucket contents or customer data."
+    },
+    {
+      "rule_id": "AWS-IRR-005",
+      "name": "Escalate broad remediation blast radius",
+      "aws_action_patterns": [
+        "cloudformation:DeleteStack",
+        "ec2:TerminateInstances",
+        "organizations:DetachPolicy",
+        "route53:ChangeResourceRecordSets"
+      ],
+      "default_smerc_posture": "ESCALATE",
+      "reason_codes": [
+        "AWS_REMEDIATION_BLAST_RADIUS_HIGH",
+        "SCOPE_UNBOUNDED",
+        "RECOVERY_PATH_UNPROVEN"
+      ],
+      "recoverability_effect": {
+        "reversibility": 0.4,
+        "containment_strength": 0.35,
+        "rollback_latency": 0.75,
+        "evidence_validity": 0.5
+      },
+      "required_evidence_before_release": [
+        "dry-run affected-object count",
+        "scope owner approval",
+        "rollback or rebuild path",
+        "collateral impact review"
+      ],
+      "non_claim": "This rule maps blast-radius risk and does not execute remediation."
+    },
+    {
+      "rule_id": "AWS-IRR-006",
+      "name": "Constrain second mutation while previous mutation is unreconciled",
+      "aws_action_patterns": [
+        "*"
+      ],
+      "default_smerc_posture": "THROTTLE",
+      "reason_codes": [
+        "AWS_PENDING_MUTATION_UNRECONCILED",
+        "POSTCONDITION_EVIDENCE_MISSING",
+        "AUTONOMY_BUDGET_PRESSURE"
+      ],
+      "recoverability_effect": {
+        "reversibility": 0.5,
+        "containment_strength": 0.45,
+        "rollback_latency": 0.6,
+        "evidence_validity": 0.35
+      },
+      "required_evidence_before_release": [
+        "previous mutation reconciled",
+        "required postcondition evidence observed",
+        "autonomy budget not exhausted",
+        "rate limit applied"
+      ],
+      "non_claim": "This rule requires a live integration to know real pending mutation state."
+    }
+  ],
+  "public_reference_urls": [
+    "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/cloudtrail-or-cloudwatch.html",
+    "https://docs.aws.amazon.com/prescriptive-guidance/latest/logging-monitoring-for-application-owners/cloudtrail.html",
+    "https://aws.amazon.com/blogs/security/incident-response-guide-for-aws-cloudtrail-investigations-part-2/",
+    "https://aws.amazon.com/blogs/security/secure-ai-agent-access-patterns-to-aws-resources-using-model-context-protocol/"
+  ]
+}

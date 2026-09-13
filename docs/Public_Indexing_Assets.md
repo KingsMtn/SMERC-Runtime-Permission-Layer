@@ -89,6 +89,7 @@ The repository companion files are:
 - `docs/SMERC_Field_Of_Use_Strategy.md`
 - `docs/Public_Agent_Runtime_Incident_Learning.md`
 - `docs/Public_Agent_Runtime_Incident_Replay.md`
+- `docs/AWS_Audit_Delay_And_Irreversibility_Map.md`
 
 These files make the same story inspectable inside GitHub, where technical reviewers and code-aware AI systems are more likely to begin.
 
