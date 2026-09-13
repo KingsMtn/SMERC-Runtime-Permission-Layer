@@ -1,22 +1,30 @@
-name: "📊 Submit Sanitized Shadow Data"
-description: "Contribute anonymous agent execution metrics to help calibrate the SMERC benchmark."
-title: "[Data Submission]: Sanitized Agent Action Footprints"
+name: "Submit SMERC Shadow Metadata"
+description: "Contribute metadata-only agent action summaries for SMERC posture review."
+title: "[Shadow Metadata]: Metadata-only action summaries"
 labels: ["shadow-mode-data", "community-contribution"]
 body:
   - type: markdown
     attributes:
       value: |
-        ### Thank you for contributing to the SMERC Runtime Layer!
-        Before pasting your data, please ensure you have run the `smerc_evaluator.py` sanitation utility locally to strip all AWS Account IDs, custom ARNs, secret strings, and PII.
+        ### Thank you for contributing to the SMERC Runtime Layer.
+        Do not paste secrets, credentials, account IDs, ARNs, IP addresses, emails, customer records, raw logs, source code, private prompts, confidential incidents, regulated payloads, or production commands.
+
+        If you want a local reject-first check first, run:
+
+        `python -m reference_engine.local_shadow_intake examples/local_shadow_intake_examples.json --pretty`
+
+        This is not guaranteed anonymization. Human review is still required before sharing.
   - type: textarea
     id: smerc-json-payload
     attributes:
-      label: "Sanitized JSON Output"
-      description: "Paste the raw array content generated from your local smerc_anonymous_contribution.json file here."
+      label: "Metadata-only JSON Output"
+      description: "Paste metadata-only action summaries or the accepted actions from reports/smerc_anonymous_contribution.json after manual review."
       placeholder: |
-        [
-          {
-            "smerc_record_id": "SMC-SHADOW-8F3B92",
+        {
+          "schema_version": "smerc.local-shadow-metadata-draft.v1",
+          "actions": [
+            {
+            "action_id": "ACT-001",
             "action_type": "iam:CreatePolicyVersion",
             "tool_system_class": "aws.iam",
             "external_side_effects": false,
@@ -25,14 +33,15 @@ body:
             "containment_strength": "High",
             "schema_contract_match": true,
             "current_system_posture": "allow"
-          }
-        ]
+            }
+          ]
+        }
     validations:
       required: true
   - type: checkboxes
     id: privacy-clearance
     attributes:
-      label: "Privacy & Sanitation Verification"
+      label: "Privacy and Metadata Boundary"
       options:
-        - label: "I confirm that this dataset is entirely anonymous and contains absolutely no company secrets, active credentials, or private target asset identifiers."
+        - label: "I confirm this public issue contains metadata only and no secrets, credentials, account IDs, ARNs, IP addresses, emails, customer records, raw logs, source code, private prompts, confidential incidents, regulated payloads, or production commands."
           required: true
