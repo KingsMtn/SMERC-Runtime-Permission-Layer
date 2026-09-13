@@ -1,0 +1,122 @@
+{
+  "classification_counts": {
+    "DRIFTED": 1,
+    "STRUCTURAL_MISMATCH": 1,
+    "UNDER_SPECIFIED": 1,
+    "UNKNOWN_SCHEMA": 1,
+    "UNSAFE": 2,
+    "VALID": 1
+  },
+  "data_boundary": "Metadata-only MCP and JSON-RPC-style tool-call examples. No live MCP server, network call, credentials, account identifiers, customer records, raw logs, or production execution authority.",
+  "decisions": [
+    {
+      "call_id": "DSG-001",
+      "classification": "VALID",
+      "local_only": true,
+      "reason_codes": [
+        "SCHEMA_GATE_VALIDATED"
+      ],
+      "route_hint": "EXECUTE",
+      "schema_version": "2026-09-01",
+      "smerc_posture": "ALLOW",
+      "tool_name": "ticket.search"
+    },
+    {
+      "call_id": "DSG-002",
+      "classification": "UNKNOWN_SCHEMA",
+      "local_only": true,
+      "reason_codes": [
+        "SCHEMA_NOT_IN_GATE_INDEX"
+      ],
+      "route_hint": "REVIEW_REQUIRED",
+      "schema_version": "2026-10-01",
+      "smerc_posture": "ESCALATE",
+      "tool_name": "ticket.search"
+    },
+    {
+      "call_id": "DSG-003",
+      "classification": "DRIFTED",
+      "local_only": true,
+      "reason_codes": [
+        "SCHEMA_DRIFT"
+      ],
+      "route_hint": "CONSTRAINED_EXECUTE",
+      "schema_version": "2026-09-01",
+      "smerc_posture": "THROTTLE",
+      "tool_name": "cloud.instance.resize"
+    },
+    {
+      "call_id": "DSG-004",
+      "classification": "STRUCTURAL_MISMATCH",
+      "local_only": true,
+      "reason_codes": [
+        "STRUCTURAL_MISSING_DESIRED_CAPACITY"
+      ],
+      "route_hint": "BLOCK",
+      "schema_version": "2026-09-01",
+      "smerc_posture": "DENY",
+      "tool_name": "cloud.instance.resize"
+    },
+    {
+      "call_id": "DSG-005",
+      "classification": "UNSAFE",
+      "local_only": true,
+      "reason_codes": [
+        "SCHEMA_GATE_FAIL_CLOSED",
+        "UNSAFE_ARGUMENT_VALUE"
+      ],
+      "route_hint": "BLOCK",
+      "schema_version": "2026-09-01",
+      "smerc_posture": "DENY",
+      "tool_name": "repo.write_file"
+    },
+    {
+      "call_id": "DSG-006",
+      "classification": "UNDER_SPECIFIED",
+      "local_only": true,
+      "reason_codes": [
+        "UNDER_SPECIFIED_SCHEMA"
+      ],
+      "route_hint": "REVIEW_REQUIRED",
+      "schema_version": "2026-09-01",
+      "smerc_posture": "ESCALATE",
+      "tool_name": "ambiguous.admin"
+    },
+    {
+      "call_id": "DSG-007",
+      "classification": "UNSAFE",
+      "local_only": true,
+      "reason_codes": [
+        "SCHEMA_GATE_FAIL_CLOSED",
+        "UNSAFE_SCHEMA_TEXT"
+      ],
+      "route_hint": "BLOCK",
+      "schema_version": "2026-09-01",
+      "smerc_posture": "DENY",
+      "tool_name": "poisoned.schema"
+    }
+  ],
+  "evidence_boundary": "This gate is deterministic and local. It is not a full JSON Schema implementation, not a replacement for MCP clients, not a live proxy trace, not production certification, and not proof that every prompt injection or schema attack is caught.",
+  "generated_at": "2026-09-13T01:07:22+00:00",
+  "registry_count": 5,
+  "route_hint_counts": {
+    "BLOCK": 3,
+    "CONSTRAINED_EXECUTE": 1,
+    "EXECUTE": 1,
+    "REVIEW_REQUIRED": 2
+  },
+  "smerc_posture_counts": {
+    "ALLOW": 1,
+    "DENY": 3,
+    "ESCALATE": 2,
+    "THROTTLE": 1
+  },
+  "source_name": "SMERC Dynamic Schema Gate",
+  "tool_call_count": 7,
+  "version": "smerc.dynamic-schema-gate.v1",
+  "work_result_impact": {
+    "impact": "SMERC can show that dynamic schema handling is a localized gateway problem: known-good calls can continue, while drifted, unknown, poisoned, under-specified, or unsafe calls are denied, frozen, throttled, or escalated before touching an external tool.",
+    "result": "Classified 7 metadata-only tool calls against 5 pinned schema entries using local structural checks, schema-text checks, and argument safety checks.",
+    "work": "Evaluate MCP/JSON-RPC-style dynamic tool-call schemas before recoverability scoring or network execution."
+  }
+}

@@ -46,6 +46,7 @@ Fast reviewer paths:
 - Local source of truth: `docs/Local_Source_Of_Truth.md`
 - Public agent runtime incident learning: `docs/Public_Agent_Runtime_Incident_Learning.md`
 - Public agent runtime incident replay: `docs/Public_Agent_Runtime_Incident_Replay.md`
+- Dynamic schema gate: `docs/Dynamic_Schema_Gate.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
@@ -1379,6 +1380,14 @@ python -m reference_engine.mcp_adversarial_metadata_replay examples/mcp_adversar
 ```
 
 The MCP Adversarial Metadata Replay Pack maps public MCP security pain points into safe metadata-only action records. It tests whether SMERC fails closed around untrusted tool metadata, nested schema instructions, server instructions, public cache poisoning, schema drift after approval, dangerous arguments on approved tools, encoded instruction evasion, and unavailable recoverability evidence.
+
+Run the Dynamic Schema Gate:
+
+```bash
+python -m reference_engine.dynamic_schema_gate examples/dynamic_schema_gate_examples.json --pretty
+```
+
+The Dynamic Schema Gate evaluates MCP/JSON-RPC-style tool-call payloads against a pinned local schema registry before execution. It classifies calls as valid, unknown, drifted, structurally mismatched, unsafe, or under-specified, then returns SMERC posture hints before a payload touches an external tool. This is the lower-pain schema-control lane compared with AWS audit-delay risk: it happens entirely in memory at the gateway boundary.
 
 Run the Postcondition Evidence report:
 

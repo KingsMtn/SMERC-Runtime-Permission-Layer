@@ -53,6 +53,7 @@
     "runtime data source map for selecting Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, or Blackstable as the next public-data replay source",
     "Agent Security Benchmark replay for metadata-only AI-agent tool-use attack categories",
     "MCP Adversarial Metadata Replay Pack for tool metadata, nested schema, server-instruction, cache, schema-drift, dangerous-argument, encoded-instruction, and missing-evidence failure shapes",
+    "Dynamic Schema Gate for MCP/JSON-RPC-style tool-call payloads using a pinned local schema registry, schema drift detection, structural argument checks, unsafe text checks, and posture hints before network execution",
     "Public Agent Runtime Incident Replay for public containment lessons, public security advisories, credential exfiltration pressure, trust-boundary-before-consent risk, approved-domain exfiltration, sandbox boundary weakness, remediation blast radius, and autonomous workflow velocity",
     "Balanced Runtime Judgment Replay proving ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE behavior on metadata-only examples",
     "serious report performance evidence for local p50, p95, and maximum proof-path latency",
@@ -104,6 +105,8 @@
     "runtime_data_source_map": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Runtime_Data_Source_Map.md",
     "agent_security_benchmark_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Agent_Security_Benchmark_Replay.md",
     "mcp_adversarial_metadata_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/MCP_Adversarial_Metadata_Replay.md",
+    "dynamic_schema_gate": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Dynamic_Schema_Gate.md",
+    "dynamic_schema_gate_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Dynamic_Schema_Gate_Report.md",
     "public_agent_runtime_incident_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Public_Agent_Runtime_Incident_Replay.md",
     "public_agent_runtime_incident_replay_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/Public_Agent_Runtime_Incident_Replay_Report.md",
     "balanced_runtime_judgment_replay": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Balanced_Runtime_Judgment_Replay.md",
@@ -178,78 +181,84 @@
     },
     {
       "step": 10,
+      "name": "Run the Dynamic Schema Gate",
+      "command": "python -m reference_engine.dynamic_schema_gate examples/dynamic_schema_gate_examples.json --pretty",
+      "result": "Reviewer sees local in-memory validation for known schemas, unknown schema versions, schema drift, structural mismatch, unsafe schema text, unsafe arguments, and under-specified dynamic schemas before network execution."
+    },
+    {
+      "step": 11,
       "name": "Run the balanced runtime judgment replay",
       "command": "python -m reference_engine.balanced_runtime_judgment_replay examples/balanced_runtime_judgment_actions.json --pretty",
       "result": "Reviewer sees one ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE result with Governance Routing Workbench routes and Decision Lifecycle Ledger evidence."
     },
     {
-      "step": 11,
+      "step": 12,
       "name": "Run the serious report performance harness",
       "command": "python -m reference_engine.serious_report_performance --iterations 5 --pretty",
       "result": "Reviewer sees local proof-path p50, p95, and maximum timing for serious reports without treating local timing as production SLA evidence."
     },
     {
-      "step": 12,
+      "step": 13,
       "name": "Generate the customer-owned metadata request",
       "command": "python -m reference_engine.customer_owned_metadata_request --workflow-family general --requested-actions 10 --pretty",
       "result": "Reviewer receives a safe ask for replacing public examples with 5 to 25 metadata-only actions from one real workflow."
     },
     {
-      "step": 13,
+      "step": 14,
       "name": "Run the pilot-in-a-box path",
       "command": "python -m reference_engine.pilot_in_a_box --pretty",
       "result": "Reviewer receives a local proof package across general AI-agent, cloud-admin, financial-runtime, and single-action examples."
     },
     {
-      "step": 14,
+      "step": 15,
       "name": "Assess the external reviewer metadata response",
       "command": "python -m reference_engine.external_reviewer_metadata_response examples/external_reviewer_metadata_response_example.json --pretty",
       "result": "Reviewer-supplied metadata is classified as ready, limited, or unsafe before being treated as pilot evidence."
     },
     {
-      "step": 15,
+      "step": 16,
       "name": "Replace examples with 5 to 25 safe company-owned metadata records",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/customer_eval/README.md",
       "result": "Reviewer can test whether SMERC changes judgment on actions that resemble their own workflows without sharing secrets or production authority."
     },
     {
-      "step": 16,
+      "step": 17,
       "name": "Run the Financial Runtime evaluation when the workflow is financial",
       "command": "python -m reference_engine.serious_reviewer_bundle --workflow-family financial --requested-actions 12 --pretty",
       "result": "Financial-services reviewers can test metadata-only payment, refund, treasury, stablecoin, tokenized-collateral, wallet-policy, transaction-limit, and reserve-status actions with the full proof package."
     },
     {
-      "step": 17,
+      "step": 18,
       "name": "Run the AWS Cloud Action Replay when the workflow is AWS-style cloud automation",
       "command": "python -m reference_engine.aws_cloud_action_replay --pretty",
       "result": "AWS-style platform reviewers can test AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost-velocity, Secrets Manager, and cross-account delegation examples with bounded non-claim language."
     },
     {
-      "step": 18,
+      "step": 19,
       "name": "Run the AWS Shadow Mirror Metadata path",
       "command": "python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty",
       "result": "Reviewer sees how sanitized VPC Traffic Mirroring, NLB fan-out, and Gateway Load Balancer endpoint summaries become SMERC shadow-mode evidence without packet payloads or live AWS access."
     },
     {
-      "step": 19,
+      "step": 20,
       "name": "Run the AWS Audit Delay and Irreversibility Replay",
       "command": "python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty",
       "result": "Reviewer sees the in-memory pending mutation cache, delayed-evidence pressure, KMS dead-end, CloudTrail audit-blinding, IAM boundary, S3 exposure, broad remediation, and second-mutation scenarios route through SMERC without live AWS access."
     },
     {
-      "step": 20,
+      "step": 21,
       "name": "Run the AWS Postcondition Evidence path",
       "command": "python -m reference_engine.aws_postcondition_evidence --pretty",
       "result": "Reviewer sees whether AWS-style controls were actually observed after SMERC routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata."
     },
     {
-      "step": 21,
+      "step": 22,
       "name": "Read the two-tier valuation path",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Two_Tier_Valuation_Path.md",
       "result": "Reviewer sees the difference between the public decision-language layer and the enterprise cloud-action governance package."
     },
     {
-      "step": 22,
+      "step": 23,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."
@@ -264,6 +273,10 @@
     "recoverability-aware authorization",
     "MCP governance",
     "MCP tool-call governance",
+    "dynamic schema gate",
+    "MCP schema drift",
+    "JSON-RPC tool schema validation",
+    "tool-call schema registry",
     "GitHub Actions governance",
     "AI deployment governance",
     "financial runtime governance",
