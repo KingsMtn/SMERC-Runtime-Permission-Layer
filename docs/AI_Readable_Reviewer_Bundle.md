@@ -57,7 +57,7 @@ The repository contains working pilot-grade artifacts:
 - runtime data source map for selecting Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, or Blackstable as the next public-data replay source
 - Agent Security Benchmark replay for metadata-only AI-agent tool-use attack categories, documented at `docs/Agent_Security_Benchmark_Replay.md`
 - MCP Adversarial Metadata Replay Pack for tool-description poisoning, nested schema poisoning, server instructions injection, public cache poisoning, schema drift, dangerous arguments, encoded instruction evasion, and missing recoverability evidence, documented at `docs/MCP_Adversarial_Metadata_Replay.md`
-- Public Agent Runtime Incident Replay for credential exfiltration pressure, trust-boundary-before-consent risk, approved-domain exfiltration, sandbox boundary weakness, overbroad remediation blast radius, and autonomous workflow velocity, documented at `docs/Public_Agent_Runtime_Incident_Replay.md`
+- Public Agent Runtime Incident Replay for credential exfiltration pressure, trust-boundary-before-consent risk, approved-domain exfiltration, sandbox boundary weakness, overbroad remediation blast radius, and autonomous workflow velocity, documented at `docs/Public_Agent_Runtime_Incident_Replay.md` with generated report `reports/Public_Agent_Runtime_Incident_Replay_Report.md`
 - Balanced Runtime Judgment Replay for proving `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, and `ESCALATE` behavior on curated metadata-only examples, documented at `docs/Balanced_Runtime_Judgment_Replay.md`
 - serious report performance evidence for local p50, p95, and maximum proof-path latency
 - financial runtime evaluation profile

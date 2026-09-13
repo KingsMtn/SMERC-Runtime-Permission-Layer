@@ -64,6 +64,27 @@ It includes six metadata-only records:
 5. overbroad remediation blast radius after leaked material cleanup
 6. autonomous or semi-autonomous cyber workflow acceleration
 
+## Run It
+
+```bash
+python -m reference_engine.public_agent_runtime_incident_replay examples/public_agent_runtime_incident_patterns.json --pretty
+```
+
+Generated outputs:
+
+- `examples/public_agent_runtime_incident_normalized_customer_eval_actions.json`
+- `reports/Public_Agent_Runtime_Incident_Replay_Report.md`
+- `reports/public_agent_runtime_incident_replay_report.json`
+- `reports/public_agent_runtime_incident_customer_evaluation/Customer_Evaluation_Report.md`
+- `reports/public_agent_runtime_incident_customer_evaluation/customer_evaluation_report.json`
+
+Current generated result:
+
+- Records: `6`
+- SMERC posture counts: `DENY=5`, `ESCALATE=1`
+- Valid Decision Lifecycle Ledger records: `6`
+- Source boundary: public incident-pattern data, not leaked implementation data
+
 ## Reason Codes
 
 The first reason-code set is:
@@ -113,4 +134,4 @@ This replay pack is not:
 
 ## Next Build
 
-The next stronger implementation is a small normalizer and report that turns `examples/public_agent_runtime_incident_patterns.json` into `smerc.customer-evaluation.v1` actions, then reports posture distribution, reason-code distribution, and non-claims.
+The next stronger implementation is to add postcondition evidence observations for each replay row, especially blocked filesystem access, blocked egress, deferred configuration loading, verified destination ownership, workspace boundary enforcement, dry-run scope counts, rate limits, and agent provenance records.
