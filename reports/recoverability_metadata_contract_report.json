@@ -1,0 +1,44 @@
+{
+  "evidence_boundary": "Recoverability metadata is a hint contract. It does not authorize execution, replace policy engines, prove safety, or certify production readiness. SMERC or another runtime still has to validate and decide.",
+  "invalid_record_count": 0,
+  "posture_counts": {
+    "FREEZE": 1,
+    "THROTTLE": 2
+  },
+  "record_count": 3,
+  "risk_hint_counts": {
+    "bounded_side_effect": 1,
+    "recovery_unknown_or_hard": 1,
+    "side_effect_with_slow_rollback": 1
+  },
+  "valid_record_count": 3,
+  "validations": [
+    {
+      "action_id": "RMC-MCP-001",
+      "errors": [],
+      "posture": "THROTTLE",
+      "risk_hint": "bounded_side_effect",
+      "valid": true
+    },
+    {
+      "action_id": "RMC-GHA-002",
+      "errors": [],
+      "posture": "THROTTLE",
+      "risk_hint": "side_effect_with_slow_rollback",
+      "valid": true
+    },
+    {
+      "action_id": "RMC-AWS-003",
+      "errors": [],
+      "posture": "FREEZE",
+      "risk_hint": "recovery_unknown_or_hard",
+      "valid": true
+    }
+  ],
+  "version": "smerc.recoverability-metadata-contract.v0",
+  "work_result_impact": {
+    "impact": "If this small contract becomes normal, larger SMERC scoring gets cleaner inputs instead of guessing recoverability from logs after the fact.",
+    "result": "MCP tools, GitHub Actions, AWS-style actions, and other runtimes can describe rollback, side effects, blast radius, evidence, and posture hints before execution.",
+    "work": "Define the smallest recoverability metadata shape for individual tool calls and automation actions."
+  }
+}

@@ -74,6 +74,19 @@ CLAIMS = [
         "boundary": "Generated stress data is fallback technical evidence, not customer validation or production proof.",
     },
     {
+        "claim_id": "recoverability_metadata_contract_exists",
+        "claim": "SMERC defines a small recoverability metadata contract for individual action and tool-call hints.",
+        "status": "supported",
+        "evidence": [
+            "docs/Recoverability_Metadata_Contract.md",
+            "schemas/smerc-recoverability-metadata-v0.schema.json",
+            "examples/recoverability_metadata_examples.json",
+            "reference_engine/recoverability_metadata_contract.py",
+            "reports/Recoverability_Metadata_Contract_Report.md",
+        ],
+        "boundary": "The contract supplies recoverability hints only; it is not authorization, production certification, or a replacement for runtime scoring.",
+    },
+    {
         "claim_id": "customer_owned_metadata_received",
         "claim": "SMERC has received enough customer-owned metadata to validate usefulness against a real workflow.",
         "status": "not_supported",

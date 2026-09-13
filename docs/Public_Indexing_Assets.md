@@ -96,6 +96,7 @@ The repository companion files are:
 - `docs/Claim_Registry.md`
 - `docs/Evidence_Bundle.md`
 - `docs/Small_Generated_Stress_Corpus.md`
+- `docs/Recoverability_Metadata_Contract.md`
 - `docs/Dynamic_Schema_Gate.md`
 - `docs/AWS_Audit_Delay_And_Irreversibility_Map.md`
 - `reports/AWS_Audit_Delay_And_Irreversibility_Replay_Report.md`

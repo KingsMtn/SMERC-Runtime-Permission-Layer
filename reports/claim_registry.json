@@ -1,5 +1,5 @@
 {
-  "claim_count": 8,
+  "claim_count": 9,
   "claims": [
     {
       "boundary": "Local proof only; no live AWS, MCP server, customer data, or production execution.",
@@ -88,6 +88,24 @@
       "status": "supported"
     },
     {
+      "boundary": "The contract supplies recoverability hints only; it is not authorization, production certification, or a replacement for runtime scoring.",
+      "claim": "SMERC defines a small recoverability metadata contract for individual action and tool-call hints.",
+      "claim_id": "recoverability_metadata_contract_exists",
+      "evidence": [
+        "docs/Recoverability_Metadata_Contract.md",
+        "schemas/smerc-recoverability-metadata-v0.schema.json",
+        "examples/recoverability_metadata_examples.json",
+        "reference_engine/recoverability_metadata_contract.py",
+        "reports/Recoverability_Metadata_Contract_Report.md"
+      ],
+      "evidence_status": {
+        "existing_count": 5,
+        "missing": [],
+        "missing_count": 0
+      },
+      "status": "supported"
+    },
+    {
       "boundary": "The repo has the ask and templates, but no sufficient customer-owned response is recorded here.",
       "claim": "SMERC has received enough customer-owned metadata to validate usefulness against a real workflow.",
       "claim_id": "customer_owned_metadata_received",
@@ -135,10 +153,10 @@
     }
   ],
   "evidence_boundary": "The registry is a claims-control artifact. It does not create validation by itself; it records what the repository evidence currently supports.",
-  "generated_at": "2026-09-13T13:21:25+00:00",
+  "generated_at": "2026-09-13T13:27:06+00:00",
   "status_counts": {
     "not_supported": 3,
-    "supported": 5
+    "supported": 6
   },
   "version": "smerc.claim-registry.v1",
   "work_result_impact": {

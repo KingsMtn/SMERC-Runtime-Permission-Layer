@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/schemas/smerc-recoverability-metadata-v0.schema.json",
+  "title": "SMERC Recoverability Metadata Contract v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "action_id",
+    "action_type",
+    "tool_system",
+    "reversible",
+    "rollback_latency_seconds",
+    "external_side_effect",
+    "blast_radius_scope",
+    "evidence_available",
+    "recommended_posture"
+  ],
+  "properties": {
+    "version": {
+      "const": "smerc.recoverability-metadata.v0"
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "action_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "tool_system": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "reversible": {
+      "type": "boolean"
+    },
+    "rollback_latency_seconds": {
+      "type": "integer",
+      "minimum": -1,
+      "maximum": 604800,
+      "description": "-1 means unknown."
+    },
+    "external_side_effect": {
+      "type": "boolean"
+    },
+    "blast_radius_scope": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "evidence_available": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "recommended_posture": {
+      "enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"]
+    },
+    "confidence_hint": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 500
+    }
+  }
+}

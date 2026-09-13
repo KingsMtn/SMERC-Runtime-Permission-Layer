@@ -1,0 +1,47 @@
+{
+  "version": "smerc.recoverability-metadata-example-set.v0",
+  "records": [
+    {
+      "version": "smerc.recoverability-metadata.v0",
+      "action_id": "RMC-MCP-001",
+      "action_type": "tool_call",
+      "tool_system": "mcp.repo.write_file",
+      "reversible": true,
+      "rollback_latency_seconds": 30,
+      "external_side_effect": true,
+      "blast_radius_scope": "single repository file",
+      "evidence_available": "proposed diff and pinned schema id",
+      "recommended_posture": "THROTTLE",
+      "confidence_hint": 0.72,
+      "notes": "Small MCP write action with bounded rollback and visible diff."
+    },
+    {
+      "version": "smerc.recoverability-metadata.v0",
+      "action_id": "RMC-GHA-002",
+      "action_type": "production_deploy",
+      "tool_system": "github_actions.deploy",
+      "reversible": true,
+      "rollback_latency_seconds": 300,
+      "external_side_effect": true,
+      "blast_radius_scope": "one canary service",
+      "evidence_available": "deployment plan, health check, rollback workflow",
+      "recommended_posture": "THROTTLE",
+      "confidence_hint": 0.67,
+      "notes": "Constrain scope and preserve replay before execution."
+    },
+    {
+      "version": "smerc.recoverability-metadata.v0",
+      "action_id": "RMC-AWS-003",
+      "action_type": "iam_policy_change",
+      "tool_system": "aws.iam",
+      "reversible": false,
+      "rollback_latency_seconds": -1,
+      "external_side_effect": true,
+      "blast_radius_scope": "unknown production permission boundary",
+      "evidence_available": "policy intent summary only",
+      "recommended_posture": "FREEZE",
+      "confidence_hint": 0.41,
+      "notes": "Unknown rollback and broad authorization impact should pause before cloud execution."
+    }
+  ]
+}

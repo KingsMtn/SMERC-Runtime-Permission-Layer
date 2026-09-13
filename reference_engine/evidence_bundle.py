@@ -27,6 +27,10 @@ DEFAULT_ARTIFACTS = [
     "examples/smerc_stress_corpus_small.json",
     "reports/Small_Generated_Stress_Corpus_Report.md",
     "reports/small_generated_stress_corpus_report.json",
+    "docs/Recoverability_Metadata_Contract.md",
+    "schemas/smerc-recoverability-metadata-v0.schema.json",
+    "examples/recoverability_metadata_examples.json",
+    "reports/Recoverability_Metadata_Contract_Report.md",
 ]
 
 REQUIRED_BUNDLE_FIELDS = {
