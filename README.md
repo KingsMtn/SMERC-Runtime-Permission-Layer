@@ -30,6 +30,7 @@ Fast reviewer paths:
 - Company reviewer front door: `docs/Company_Reviewer_Front_Door.md`
 - Serious reviewer bundle: `docs/Serious_Reviewer_Bundle.md`
 - AI/search reviewer: `docs/AI_Readable_Reviewer_Bundle.md`
+- Try one action: `docs/Try_SMERC_On_One_Action.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - AWS agent action chain: `docs/AWS_Agent_Action_Chain.md`
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`

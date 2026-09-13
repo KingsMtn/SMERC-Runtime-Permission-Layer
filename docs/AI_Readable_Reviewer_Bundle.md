@@ -28,6 +28,7 @@ It sits after detection, identity, policy, and intent signals, but before an aut
 
 The repository contains working pilot-grade artifacts:
 
+- one-action front door for testing a single proposed agent, tool, cloud, deployment, or automation action, documented at `docs/Try_SMERC_On_One_Action.md`
 - recoverability scoring engine
 - runtime admission gate
 - hard policy and evidence gates

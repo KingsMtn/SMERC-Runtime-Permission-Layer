@@ -76,6 +76,7 @@ It includes:
 The repository companion files are:
 
 - `docs/AI_Readable_Reviewer_Bundle.md`
+- `docs/Try_SMERC_On_One_Action.md`
 - `examples/ai_reviewer_bundle.json`
 - `docs/Release_Notes_v0_15_AWS_Tier2_Review.md`
 - `docs/External_Metadata_Reviewer_Request.md`

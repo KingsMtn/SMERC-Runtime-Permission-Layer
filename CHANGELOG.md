@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a one-action SMERC front door so a human reviewer, AI assistant, coding agent, or platform engineer can run one metadata-only proposed action through SMERC before reading the full repository.
 - Added a runnable public agent-runtime incident replay normalizer and report that converts six public-pattern rows into SMERC customer-evaluation actions, posture counts, route counts, Decision Lifecycle Ledger evidence, and explicit non-claims.
 - Added a public agent-runtime incident replay pack that converts public containment lessons, public security advisories, threat reports, credential-source documentation, and remediation-blast-radius reporting into safe metadata-only SMERC rows without using leaked implementation data.
 - Added public agent-runtime incident learning guidance so SMERC can learn from public reporting, public advisories, and public security research without using leaked proprietary source code or private customer data.

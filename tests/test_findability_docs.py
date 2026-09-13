@@ -326,6 +326,33 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("docs/Public_Agent_Runtime_Incident_Learning.md", data_map)
         self.assertIn("public agent-runtime incident learning", changelog)
 
+    def test_try_smerc_on_one_action_is_linked_and_runnable(self):
+        try_doc = (ROOT / "docs" / "Try_SMERC_On_One_Action.md").read_text(
+            encoding="utf-8"
+        )
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        indexing = (ROOT / "docs" / "Public_Indexing_Assets.md").read_text(
+            encoding="utf-8"
+        )
+        ai_bundle = (ROOT / "docs" / "AI_Readable_Reviewer_Bundle.md").read_text(
+            encoding="utf-8"
+        )
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+
+        self.assertIn("python -m reference_engine.recoverability_engine", try_doc)
+        self.assertIn("examples/recoverability_single_action.json", try_doc)
+        self.assertIn("POST http://127.0.0.1:8788/v1/evaluate", try_doc)
+        self.assertIn("ALLOW", try_doc)
+        self.assertIn("THROTTLE", try_doc)
+        self.assertIn("FREEZE", try_doc)
+        self.assertIn("DENY", try_doc)
+        self.assertIn("ESCALATE", try_doc)
+        self.assertIn("Do not include secrets", try_doc)
+        self.assertIn("docs/Try_SMERC_On_One_Action.md", readme)
+        self.assertIn("docs/Try_SMERC_On_One_Action.md", indexing)
+        self.assertIn("docs/Try_SMERC_On_One_Action.md", ai_bundle)
+        self.assertIn("one-action SMERC front door", changelog)
+
 
 if __name__ == "__main__":
     unittest.main()
