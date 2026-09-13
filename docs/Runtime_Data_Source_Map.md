@@ -57,6 +57,8 @@ The first implemented MCP adversarial replay is `docs/MCP_Adversarial_Metadata_R
 
 Public incident learning should follow `docs/Public_Agent_Runtime_Incident_Learning.md`: use public reporting, public advisories, public research, and public benchmark descriptions to improve threat models and metadata-only replay packs, but do not use leaked proprietary source, copied private architecture, credentials, raw logs, private prompts, or customer data.
 
+The first public agent-runtime incident replay is `docs/Public_Agent_Runtime_Incident_Replay.md`, with metadata-only rows in `examples/public_agent_runtime_incident_patterns.json`. It turns public containment lessons, public security advisories, public threat reports, public cloud credential-source documentation, and public leak-cleanup reporting into bounded SMERC replay patterns.
+
 ### 2. Metadata-Only Normalizers
 
 Build source-specific normalizers that output `smerc.customer-evaluation.v1` actions or MCP Governance Gateway inputs.

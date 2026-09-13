@@ -44,6 +44,7 @@ Fast reviewer paths:
 - Five-row metadata example: `docs/Five_Row_Metadata_Example.md`
 - Local source of truth: `docs/Local_Source_Of_Truth.md`
 - Public agent runtime incident learning: `docs/Public_Agent_Runtime_Incident_Learning.md`
+- Public agent runtime incident replay: `docs/Public_Agent_Runtime_Incident_Replay.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
@@ -480,6 +481,7 @@ Start here before reading the code:
 - `docs/Runtime_Data_Source_Map.md` identifies current external runtime data sources SMERC should use next, including Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, and Blackstable, with license and evidence boundaries.
 - `docs/Agent_Security_Benchmark_Replay.md` maps Agent Security Benchmark-shaped tool-use attack metadata into SMERC posture, Governance Routing Workbench route behavior, autonomy-budget impact, and DLL evidence without claiming an official upstream score.
 - `docs/MCP_Adversarial_Metadata_Replay.md` maps public MCP security pain points into safe metadata-only replay records so reviewers can test whether SMERC treats untrusted metadata, schema drift, dangerous arguments, encoded instructions, and missing evidence as pre-execution risk.
+- `docs/Public_Agent_Runtime_Incident_Replay.md` maps public agent-runtime incident patterns into safe metadata-only replay rows without using leaked implementation data, private prompts, raw logs, credentials, customer data, or exploit payloads.
 - `docs/Postcondition_Evidence.md` shows how to verify whether SPARTa-required controls actually happened after a route decision.
 - `docs/Serious_Report_Performance.md` shows how to measure local p50, p95, and maximum latency for serious proof paths while preserving the boundary that local report timing is not production SLA evidence.
 - `docs/Governance_Pattern_Atlas.md` explains the consolidated operating-model evidence showing SMERC as one runtime permission system across AML, change management, security response, model risk, and SRE.

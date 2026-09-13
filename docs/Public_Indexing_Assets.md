@@ -87,6 +87,7 @@ The repository companion files are:
 - `docs/Local_Source_Of_Truth.md`
 - `docs/SMERC_Field_Of_Use_Strategy.md`
 - `docs/Public_Agent_Runtime_Incident_Learning.md`
+- `docs/Public_Agent_Runtime_Incident_Replay.md`
 
 These files make the same story inspectable inside GitHub, where technical reviewers and code-aware AI systems are more likely to begin.
 

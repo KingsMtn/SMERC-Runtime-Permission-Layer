@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a public agent-runtime incident replay pack that converts public containment lessons, public security advisories, threat reports, credential-source documentation, and remediation-blast-radius reporting into safe metadata-only SMERC rows without using leaked implementation data.
 - Added public agent-runtime incident learning guidance so SMERC can learn from public reporting, public advisories, and public security research without using leaked proprietary source code or private customer data.
 - Added a SMERC field-of-use strategy that separates SMERC Core from AWS/cloud and reserved future verticals such as finance, crypto, insurance, healthcare, CI/CD, MCP/tool governance, and security operations.
 - Added a local source-of-truth note clarifying that `.smerc-action-language-publish` is the active GitHub-connected checkout and older local SMERC folders are non-authoritative unless intentionally compared or migrated.
