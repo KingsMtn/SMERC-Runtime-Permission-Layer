@@ -58,6 +58,7 @@ Fast reviewer paths:
 - AWS shadow mirror customer metadata request: `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md`
 - AWS postcondition evidence: `docs/AWS_Postcondition_Evidence.md`
 - AWS audit delay and irreversibility map: `docs/AWS_Audit_Delay_And_Irreversibility_Map.md`
+- AWS audit-delay replay report: `reports/AWS_Audit_Delay_And_Irreversibility_Replay_Report.md`
 - AWS customer-owned metadata request: `reports/AWS_Customer_Owned_Metadata_Request.md`
 - Defensible moat and commercial boundary: `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
 - Field-of-use strategy: `docs/SMERC_Field_Of_Use_Strategy.md`
@@ -1336,6 +1337,14 @@ python -m reference_engine.aws_cloud_action_replay --pretty
 ```
 
 The AWS Cloud Action Replay Pack runs 12 metadata-only AWS-style actions through SMERC and reports posture counts, AWS reason codes, AWS surface counts, Governance Routing Workbench routes, valid DLL ledgers, autonomy-budget impact, and Work / Result / Impact examples. It is designed for reviewers asking whether SMERC can complement AWS-style identity, gateway, guardrail, monitoring, and infrastructure-change controls by adding recoverability judgment before AgentCore-style tool calls, IAM changes, S3 policy edits, CloudFormation changes, drift remediation, RDS operations, CloudWatch remediation, cost-velocity growth, Secrets Manager-style rotation, or cross-account delegation.
+
+Run the AWS Audit Delay And Irreversibility Replay:
+
+```bash
+python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty
+```
+
+The AWS Audit Delay And Irreversibility Replay combines an in-memory pending mutation cache with structural dead-end guardrails for AWS-style agent actions. It reads the audit-delay map, emits six customer-evaluation actions, reports unreconciled pending mutation pressure, and shows where SMERC blocks or escalates KMS dead ends, CloudTrail audit blinding, IAM boundary drift, S3 exposure expansion, broad remediation, and second-mutation-before-reconciliation scenarios. It does not call AWS APIs, inspect live AWS resources, deploy cloud infrastructure, read CloudTrail, or claim AWS endorsement.
 
 Run the AWS Metadata Adapter stub:
 

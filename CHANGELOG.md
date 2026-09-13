@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a runnable AWS audit-delay irreversibility replay loop with an in-memory pending mutation cache, normalized customer-evaluation actions, generated reports, and tests proving delayed-evidence hazards do not pass as `ALLOW`.
 - Added an AWS audit-delay and irreversibility map covering pending mutation state, KMS recovery dead ends, CloudTrail audit blinding, IAM boundary drift, S3 exposure expansion, broad remediation blast radius, and unreconciled mutation velocity.
 - Added a one-action SMERC front door so a human reviewer, AI assistant, coding agent, or platform engineer can run one metadata-only proposed action through SMERC before reading the full repository.
 - Added a runnable public agent-runtime incident replay normalizer and report that converts six public-pattern rows into SMERC customer-evaluation actions, posture counts, route counts, Decision Lifecycle Ledger evidence, and explicit non-claims.

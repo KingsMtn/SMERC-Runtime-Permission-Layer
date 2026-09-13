@@ -94,6 +94,19 @@ This map does not call AWS APIs, read CloudTrail, assume roles, inspect live acc
 
 It is a design map for what a live AWS integration would need to prove later.
 
-## Next Build
+## Runnable Replay
 
-The next concrete build should be a metadata-only replay runner that reads `examples/aws_audit_delay_irreversibility_map.json`, emits SMERC customer-evaluation actions, and reports posture distribution for KMS, CloudTrail, IAM boundary, S3 exposure, broad remediation, and unreconciled mutation scenarios.
+The metadata-only replay runner is implemented and can be run locally:
+
+```bash
+python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty
+```
+
+It emits:
+
+- normalized customer-evaluation actions at `examples/aws_audit_delay_irreversibility_normalized_customer_eval_actions.json`
+- the replay report at `reports/aws_audit_delay_irreversibility_replay_report.json`
+- the reviewer-readable report at `reports/AWS_Audit_Delay_And_Irreversibility_Replay_Report.md`
+- the full customer-evaluation report under `reports/aws_audit_delay_irreversibility_customer_evaluation/`
+
+This turns the map into a runnable local loop: an in-memory pending mutation cache records unreconciled AWS-style mutations, structural dead-end rules convert them into SMERC customer-evaluation actions, and SPARTa routing shows whether the result is executable, constrained, paused, escalated, or blocked.

@@ -90,6 +90,7 @@ The repository companion files are:
 - `docs/Public_Agent_Runtime_Incident_Learning.md`
 - `docs/Public_Agent_Runtime_Incident_Replay.md`
 - `docs/AWS_Audit_Delay_And_Irreversibility_Map.md`
+- `reports/AWS_Audit_Delay_And_Irreversibility_Replay_Report.md`
 
 These files make the same story inspectable inside GitHub, where technical reviewers and code-aware AI systems are more likely to begin.
 
@@ -99,6 +100,7 @@ While Netlify deployment is paused, GitHub should be treated as the current sour
 - `docs/AWS_Shadow_Mirror_Metadata_Path.md`
 - `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md`
 - `reports/aws_reviewer_bundle/AWS_Shadow_Mirror_Adapter_Report.md`
+- `reports/AWS_Audit_Delay_And_Irreversibility_Replay_Report.md`
 
 The category definition page and glossary give search engines, AI assistants, and first-time reviewers clearer language before they encounter the SMERC acronym. They define the work/result/impact frame:
 

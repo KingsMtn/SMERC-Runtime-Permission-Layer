@@ -42,6 +42,7 @@
     "AWS Cloud Action Replay Pack for AWS-style AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost velocity, Secrets Manager, and cross-account delegation actions",
     "AWS/MCP session and delegated approval context in the AWS metadata adapter, including gateway-only path, bypass detection, on-behalf-of authority, session mode, tool discovery, approval mode, temporal policy context, elicitation/sampling, and progress/message notifications",
     "AWS Postcondition Evidence for checking whether AWS-style route controls were actually observed after routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata",
+    "AWS Audit Delay and Irreversibility Replay combining an in-memory pending mutation cache with structural dead-end guardrails, SMERC customer-evaluation actions, SPARTa routing, autonomy budgeting, and Decision Lifecycle Ledger evidence",
     "AWS Shadow Mirror Metadata Path for converting sanitized VPC Traffic Mirroring, Network Load Balancer fan-out, and Gateway Load Balancer endpoint summaries into SMERC shadow-mode evidence without packet payloads or live AWS access",
     "AWS Shadow Mirror Customer Metadata Request for asking reviewers for 5 to 25 sanitized mirror-derived summaries from one owned workflow",
     "Two-Tier Valuation Path separating the public decision-language layer from the enterprise cloud-action governance proof package",
@@ -87,6 +88,8 @@
     "aws_metadata_adapter_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/aws_metadata_adapter/AWS_Metadata_Adapter_Report.md",
     "aws_postcondition_evidence": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Postcondition_Evidence.md",
     "aws_postcondition_evidence_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/aws_postcondition_evidence/AWS_Postcondition_Evidence_Report.md",
+    "aws_audit_delay_irreversibility_map": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Audit_Delay_And_Irreversibility_Map.md",
+    "aws_audit_delay_irreversibility_replay_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/AWS_Audit_Delay_And_Irreversibility_Replay_Report.md",
     "aws_shadow_mirror_metadata_path": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Shadow_Mirror_Metadata_Path.md",
     "aws_shadow_mirror_adapter_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/aws_shadow_mirror/AWS_Shadow_Mirror_Adapter_Report.md",
     "aws_shadow_mirror_customer_metadata_request": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md",
@@ -229,18 +232,24 @@
     },
     {
       "step": 19,
+      "name": "Run the AWS Audit Delay and Irreversibility Replay",
+      "command": "python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty",
+      "result": "Reviewer sees the in-memory pending mutation cache, delayed-evidence pressure, KMS dead-end, CloudTrail audit-blinding, IAM boundary, S3 exposure, broad remediation, and second-mutation scenarios route through SMERC without live AWS access."
+    },
+    {
+      "step": 20,
       "name": "Run the AWS Postcondition Evidence path",
       "command": "python -m reference_engine.aws_postcondition_evidence --pretty",
       "result": "Reviewer sees whether AWS-style controls were actually observed after SMERC routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata."
     },
     {
-      "step": 20,
+      "step": 21,
       "name": "Read the two-tier valuation path",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Two_Tier_Valuation_Path.md",
       "result": "Reviewer sees the difference between the public decision-language layer and the enterprise cloud-action governance package."
     },
     {
-      "step": 21,
+      "step": 22,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."
@@ -291,6 +300,12 @@
     "AWS postcondition evidence",
     "AWS CloudTrail postcondition evidence",
     "AWS CloudWatch postcondition evidence",
+    "AWS audit delay governance",
+    "AWS pending mutation cache",
+    "AWS structural irreversibility",
+    "CloudTrail audit blinding risk",
+    "KMS recovery dead end",
+    "unreconciled mutation velocity",
     "AWS shadow mirror metadata",
     "AWS VPC Traffic Mirroring governance",
     "AWS Gateway Load Balancer agent governance",

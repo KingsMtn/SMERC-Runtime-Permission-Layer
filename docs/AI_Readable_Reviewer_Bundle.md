@@ -71,6 +71,7 @@ The repository contains working pilot-grade artifacts:
 - AWS/MCP session and delegated approval context in the AWS metadata adapter, including gateway-only path, bypass detection, on-behalf-of authority, session mode, tool discovery, approval mode, temporal policy context, elicitation/sampling, and progress/message notifications
 - AWS Postcondition Evidence for checking whether AWS-style route controls were actually observed after routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata
 - AWS Audit Delay and Irreversibility Map for connecting delayed cloud evidence, pending mutation state, KMS dead ends, CloudTrail audit blinding, IAM boundary drift, S3 exposure expansion, broad remediation, and unreconciled mutation velocity to SMERC posture rules
+- AWS Audit Delay and Irreversibility Replay for running that map through an in-memory pending mutation cache, SMERC customer-evaluation actions, SPARTa routing, autonomy budgeting, and Decision Lifecycle Ledger evidence with generated report `reports/AWS_Audit_Delay_And_Irreversibility_Replay_Report.md`
 - AWS Shadow Mirror Metadata Path for converting sanitized VPC Traffic Mirroring, NLB fan-out, and Gateway Load Balancer endpoint summaries into SMERC shadow-mode evidence without packet payloads or live AWS access
 - AWS Shadow Mirror Customer Metadata Request for asking reviewers for 5 to 25 sanitized mirror-derived summaries from one owned workflow
 - Two-Tier Valuation Path separating the public decision-language layer from the enterprise cloud-action governance proof package
@@ -107,6 +108,8 @@ The postcondition evidence report shows whether Governance Routing Workbench con
 The AWS metadata adapter now also preserves AWS/MCP session and delegated approval context so reviewers can see whether an action stayed on a governed gateway path, whether bypass was detected, who the action was delegated on behalf of, how the session was shaped, and whether approval, temporal policy, elicitation, sampling, progress, and message-notification signals were present.
 
 The AWS postcondition evidence report applies that same loop to AWS-style agentic cloud automation. It models safe observation metadata from AgentCore Gateway CloudTrail events, AgentCore Runtime and Gateway CloudWatch telemetry, runtime usage logs, tool result metadata streams, MCP gateway logs, and native AWS change records without claiming live AWS access or AWS endorsement.
+
+The AWS audit-delay replay shows the pending-mutation loop in runnable form. It records six unreconciled AWS-style mutations, turns structural dead-end rules into customer-evaluation actions, and reports that SMERC returns `DENY` or `ESCALATE` rather than allowing delayed-evidence hazards to continue. This is local metadata-only proof, not live AWS enforcement.
 
 The AWS shadow mirror metadata path shows how sanitized VPC Traffic Mirroring, NLB fan-out, and Gateway Load Balancer endpoint summaries can become SMERC evidence without packet payloads, raw logs, account identifiers, credentials, private topology, production commands, or live AWS access.
 
@@ -161,11 +164,12 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 23. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
 24. For AWS-style shadow mirror review, run `python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty`.
 25. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
-26. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
-27. Read `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md` if the reviewer can provide sanitized operational flow summaries.
-28. Read `docs/Two_Tier_Valuation_Path.md` if the reviewer is evaluating strategic value.
-29. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
-30. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+26. For AWS audit-delay and irreversibility review, run `python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty`.
+27. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
+28. Read `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md` if the reviewer can provide sanitized operational flow summaries.
+29. Read `docs/Two_Tier_Valuation_Path.md` if the reviewer is evaluating strategic value.
+30. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
+31. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 
