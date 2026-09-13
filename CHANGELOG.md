@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Public Evidence Fallback Plan that records source provenance for adjacent agent-failure, action-boundary, MCP-security, reliability, failure-repair, and incident benchmarks.
 - Added an End-to-End Reviewer Flow wrapper that connects metadata intake, schema validation, policy identity, posture output, and evidence reporting in one command.
 - Added Local Shadow Intake, a reject-first utility for preparing reviewer-owned metadata-only action summaries without claiming automatic anonymization.
 - Added a Dynamic Schema Gate for MCP/JSON-RPC-style tool calls, with a pinned local schema registry, drift detection, structural argument checks, unsafe text checks, generated report, and tests.

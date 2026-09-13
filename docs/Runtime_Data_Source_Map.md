@@ -14,12 +14,16 @@ SMERC should prioritize public data that contains tool calls, action attempts, r
 
 The best near-term sources are:
 
-1. Agent Security Benchmark
-2. CrossMCP-Bench
-3. AgentShield-Bench
-4. SyFI TraceLab
-5. Toolathlon
-6. Blackstable stablecoin blacklisting dataset
+1. Agent Action Boundary Benchmark
+2. AgentShield-Bench
+3. Lakmus Agent Failures
+4. CrossMCP-Bench
+5. Agent Reliability Lab
+6. NIKA Network Incidents Benchmark
+7. MCP-AttackBench
+8. SyFI TraceLab
+9. Toolathlon
+10. Blackstable stablecoin blacklisting dataset
 
 These do not prove customer value by themselves. They can prove that SMERC can map current public runtime problems into pre-execution recoverability decisions, Governance Routing Workbench routes, postcondition expectations, and Decision Lifecycle Ledger evidence.
 
@@ -27,9 +31,14 @@ These do not prove customer value by themselves. They can prove that SMERC can m
 
 | Source | What It Contains | SMERC Use | Best Proof Outcome | Boundary |
 | --- | --- | --- | --- | --- |
+| Agent Action Boundary Benchmark | Synthetic runtime-boundary corpus with approved action, executed action, policy, drift class, runtime surfaces, scenario families, and expected control outcomes. | Convert approval-execution drift into SMERC posture, route, rollback, evidence, and replay checks. | Show how SMERC handles the exact boundary between approved intent and side-effecting execution. | Synthetic benchmark corpus; cite source/version and do not claim customer validation. |
+| AgentShield-Bench | Tool-calling and MCP scenarios with trusted instructions, untrusted content, tools, canary secrets, expected safe behavior, and attack success conditions. | Extract metadata-only tool risk, trusted/untrusted boundary, safe behavior, and hard-deny conditions. | Strengthen Dynamic Schema Gate, MCP governance, content evidence, and fallback policy. | Do not commit canary secrets or unnecessary raw prompt content; prefer derived metadata. |
+| Lakmus Agent Failures | Realistic generated tasks run across LLM APIs, labeled failures, passes, judge evidence, task domains, and failure taxonomy. | Use failure taxonomy for calibration language and missing-evidence mapping. | Show that SMERC can learn from public failure labels without pretending they are cloud-action customer data. | Dataset/research artifact; use taxonomy and derived metadata unless row-level replay is license-compatible. |
+| Agent Reliability Lab | Deterministic local runtime, fault injection, state evaluators, runtime comparison, and verifiable evidence bundles. | Use state-transition and fault-injection shapes for rollback, cancellation, and postcondition evidence. | Strengthen SMERC's recovery and evidence loop. | Project-owned synthetic states; do not claim production incident coverage. |
+| NIKA Network Incidents Benchmark | Curated network incidents in emulated scenarios with injectable root causes, telemetry, traces, ground truth, and submissions. | Map incident-remediation actions into recoverability, rollback, and escalation scenarios. | Add infrastructure remediation and network-operations proof later. | Emulated benchmark; useful for incident action mapping, not AWS customer validation. |
+| MCP-AttackBench | MCP-specific samples from public data, real-world metadata, and GPT-augmented content around tool interactions. | Map MCP attack metadata into schema, content-evidence, and tool-call route controls. | Improve MCP-risk coverage beyond hand-written examples. | Mixed source; requires strict license, source, and payload-safety review before replay. |
 | Agent Security Benchmark | Tool-access attack prompts, tool-call transcripts, raw results, MCPGuard comparison, attack categories such as exfiltration, stored prompt injection, privilege escalation, social engineering, multi-step escalation, and inconsistency probing. | Convert attack attempts and captured tool calls into metadata-only SMERC action requests. | Show where SMERC would add `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE` around tool-use attacks before execution. | Use only license-compatible rows and cite source/version. Do not claim official benchmark performance unless the documented runner is used. |
 | CrossMCP-Bench | Authorization-conditioned MCP scenarios across multi-server MCP architectures, including attack and benign scenarios. | Map scenario policy category, server/tool context, requested action, and benign/attack label into MCP Governance Gateway inputs. | Show SMERC fit for MCP runtime authorization and multi-server tool-call governance. | Hugging Face dataset terms and version must be recorded before local replay. |
-| AgentShield-Bench | Structured tool-calling/MCP scenarios with trusted instructions, untrusted content, tools, canary secrets, expected safe behavior, and attack success conditions. | Extract non-secret metadata about trusted/untrusted boundary, tool family, content risk, and expected safe behavior. | Test content evidence, fallback policy, hard gates, and unavailable evidence handling. | Do not commit canary secrets or raw prompt content if unnecessary; prefer derived metadata. |
 | SyFI TraceLab | Real-world coding-agent traces, tool calls, latency distributions, cache behavior, human waits, and workload characteristics from Claude Code and Codex sessions. | Use trace metadata to calibrate autonomy budgets, tool-call pressure, latency reporting, and consequence horizon. | Move SMERC from synthetic action examples toward real agent runtime shape and operational overhead evidence. | Use documented public-access terms. Avoid personal, prompt, or session content unless explicitly permitted and needed. |
 | Toolathlon | Long-horizon tool-use tasks, many tool categories, trajectories, evaluators, and public evaluation service paths. | Use task/tool trajectories to identify where a recoverability checkpoint should intervene without breaking legitimate task completion. | Test SMERC against long-horizon agent workflows instead of isolated one-step actions. | Treat task success as upstream benchmark evidence, not SMERC safety proof, unless SMERC-specific replay is documented. |
 | Blackstable | Stablecoin freeze and unfreeze actions across chains with transaction metadata, public triggers, entities, incidents, and source links. | Feed SMERC-F with public financial-action metadata around freeze/unfreeze authority, reversibility, evidence validity, and policy/timing context. | Strengthen Financial Runtime proof for stablecoin, wallet-policy, reserve, freeze, unfreeze, and recoverability evidence. | Public on-chain and cited event data only. Do not claim AML, sanctions, fraud, custody, settlement, or compliance certification. |
@@ -50,6 +59,14 @@ Create a small registry of external source profiles:
 - evidence boundary
 
 This gives reviewers a clear answer before any external row is ingested.
+
+The public evidence fallback provenance report is generated by:
+
+```bash
+python -m reference_engine.public_evidence_fallback --pretty
+```
+
+It records where adjacent projects got their metadata and which source shapes SMERC can safely learn from if outside reviewers do not provide workflow rows.
 
 The first implemented source-specific replay is `docs/Agent_Security_Benchmark_Replay.md`.
 

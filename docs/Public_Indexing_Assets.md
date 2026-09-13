@@ -91,6 +91,7 @@ The repository companion files are:
 - `docs/SMERC_Field_Of_Use_Strategy.md`
 - `docs/Public_Agent_Runtime_Incident_Learning.md`
 - `docs/Public_Agent_Runtime_Incident_Replay.md`
+- `docs/Public_Evidence_Fallback_Plan.md`
 - `docs/Dynamic_Schema_Gate.md`
 - `docs/AWS_Audit_Delay_And_Irreversibility_Map.md`
 - `reports/AWS_Audit_Delay_And_Irreversibility_Replay_Report.md`

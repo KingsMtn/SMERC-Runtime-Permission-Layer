@@ -1,0 +1,167 @@
+{
+  "evidence_boundary": "This report is source-provenance planning, not an official benchmark run, endorsement, customer validation, production proof, or permission to copy upstream data. Each source needs license and version checks before any row-level replay. SMERC should prefer derived metadata and cite source boundaries.",
+  "generated_at": "2026-09-13T12:54:46+00:00",
+  "priority_counts": {
+    "1": 2,
+    "2": 2,
+    "3": 2,
+    "4": 2
+  },
+  "profiles": [
+    {
+      "metadata_origin": "realistic generated tasks run across multiple LLM APIs, then labeled with failure taxonomy and judge evidence",
+      "name": "Lakmus Agent Failures",
+      "priority": 2,
+      "smerc_mapping": "Map failure labels into missing evidence, wrong-tool selection, goal drift, unsupported claim, or constraint violation pressure before execution.",
+      "source_class": "public_dataset",
+      "source_id": "lakmus_agent_failures",
+      "url": "https://github.com/lakmus-ai/agent-failures",
+      "useful_fields": [
+        "task_domain",
+        "failure_type",
+        "subtype",
+        "judge_evidence",
+        "model_comparison",
+        "pass_fail"
+      ]
+    },
+    {
+      "metadata_origin": "synthetic runtime-boundary corpus with approved_action, executed_action, policy, drift class, expected control outcome, runtime surface, and scenario family",
+      "name": "Agent Action Boundary Benchmark",
+      "priority": 1,
+      "smerc_mapping": "Map approval-execution drift into SMERC posture, route, rollback-path, and evidence-boundary decisions.",
+      "source_class": "synthetic_benchmark_corpus",
+      "source_id": "agent_action_boundary_benchmark",
+      "url": "https://github.com/OndCo/Agent-Action-Boundary-Benchmark",
+      "useful_fields": [
+        "approved_action",
+        "executed_action",
+        "policy",
+        "drift_class",
+        "runtime_surface",
+        "expected_control"
+      ]
+    },
+    {
+      "metadata_origin": "structured adversarial and benign tool-calling/MCP scenarios with trusted instructions, untrusted content, tools, canary secrets, expected safe behaviors, and attack success conditions",
+      "name": "AgentShield-Bench",
+      "priority": 1,
+      "smerc_mapping": "Derive metadata-only tool risk, trusted/untrusted evidence, expected safe behavior, and hard-deny conditions for Dynamic Schema Gate and MCP governance.",
+      "source_class": "public_dataset",
+      "source_id": "agentshield_bench",
+      "url": "https://huggingface.co/datasets/alirezaaminzadeh/agentshield-bench",
+      "useful_fields": [
+        "attack_category",
+        "tools",
+        "expected_safe_behavior",
+        "attack_success_conditions",
+        "trusted_untrusted_boundary"
+      ]
+    },
+    {
+      "metadata_origin": "authorization-conditioned MCP scenarios across multi-server MCP architectures with attack and benign cases",
+      "name": "CrossMCP-Bench",
+      "priority": 2,
+      "smerc_mapping": "Map multi-server MCP authorization conditions into pre-execution posture and gateway route behavior.",
+      "source_class": "public_dataset",
+      "source_id": "crossmcp_bench",
+      "url": "https://huggingface.co/datasets/MLZoo/CrossMCP-Bench",
+      "useful_fields": [
+        "policy_category",
+        "server_context",
+        "tool_context",
+        "attack_or_benign",
+        "authorization_condition"
+      ]
+    },
+    {
+      "metadata_origin": "selected synthetic failures with prompt, first failed result, one correction, checks, scores, evidence notes, and limitations",
+      "name": "WeTriedAI Failure-Repair Corpus",
+      "priority": 3,
+      "smerc_mapping": "Borrow the failure-to-correction audit shape for SMERC calibration reports and transition guidance.",
+      "source_class": "synthetic_failure_repair_corpus",
+      "source_id": "wetriedai_failure_repair",
+      "url": "https://wetriedai.com/dataset",
+      "useful_fields": [
+        "failure_check",
+        "correction",
+        "score_before",
+        "score_after",
+        "evidence_notes",
+        "limitations"
+      ]
+    },
+    {
+      "metadata_origin": "project-owned synthetic states in deterministic local environments with fault injection, state evaluators, runtime comparisons, and evidence bundles",
+      "name": "Agent Reliability Lab",
+      "priority": 3,
+      "smerc_mapping": "Use fault-injected state transitions to test rollback evidence, cancellation reliability, and postcondition proof.",
+      "source_class": "local_synthetic_runtime",
+      "source_id": "agent_reliability_lab",
+      "url": "https://github.com/Hai-qq/agent-reliability-lab",
+      "useful_fields": [
+        "state_transition",
+        "fault_injection",
+        "runtime_intervention",
+        "state_evidence",
+        "verifiable_bundle"
+      ]
+    },
+    {
+      "metadata_origin": "curated network incidents from emulated network scenarios with injectable root causes, telemetry, CLI interaction, traces, ground truth, and submissions",
+      "name": "NIKA Network Incidents Benchmark",
+      "priority": 4,
+      "smerc_mapping": "Map incident-remediation actions into recoverability posture, rollback evidence, and escalation when live network state is uncertain.",
+      "source_class": "emulated_incident_benchmark",
+      "source_id": "nika_network_incidents",
+      "url": "https://sands-lab.github.io/nika/",
+      "useful_fields": [
+        "incident_type",
+        "root_cause",
+        "telemetry_signal",
+        "agent_trace",
+        "ground_truth",
+        "submission"
+      ]
+    },
+    {
+      "metadata_origin": "MCP-specific samples from public data, real-world metadata, and GPT-augmented content for LLM-tool interactions",
+      "name": "MCP-AttackBench",
+      "priority": 4,
+      "smerc_mapping": "Map MCP attack metadata into schema, content-evidence, and tool-call route controls without importing operational exploit payloads.",
+      "source_class": "mixed_public_augmented_benchmark",
+      "source_id": "mcp_attackbench",
+      "url": "https://www.emergentmind.com/topics/mcp-attackbench",
+      "useful_fields": [
+        "attack_type",
+        "tool_metadata",
+        "invocation_context",
+        "protocol_content",
+        "manual_review_signal"
+      ]
+    }
+  ],
+  "recommended_build_order": [
+    "Implement source registry and provenance report before importing any upstream rows.",
+    "Map Agent Action Boundary Benchmark and AgentShield-Bench first because their metadata directly matches action boundary and tool-call governance.",
+    "Use Lakmus Agent Failures for calibration language and failure taxonomy, not direct cloud-action proof.",
+    "Use NIKA later for infrastructure remediation and rollback evidence once SMERC has a stronger live/sandbox story.",
+    "Keep asking for customer-owned metadata, but do not block public-pattern progress on silence."
+  ],
+  "source_class_counts": {
+    "emulated_incident_benchmark": 1,
+    "local_synthetic_runtime": 1,
+    "mixed_public_augmented_benchmark": 1,
+    "public_dataset": 3,
+    "synthetic_benchmark_corpus": 1,
+    "synthetic_failure_repair_corpus": 1
+  },
+  "source_count": 8,
+  "source_name": "SMERC Public Evidence Fallback",
+  "version": "smerc.public-evidence-fallback.v1",
+  "work_result_impact": {
+    "impact": "If outside reviewers do not provide 5 to 25 workflow actions, SMERC can keep building from public-pattern evidence while stating clearly that it is not customer validation.",
+    "result": "SMERC has a fallback evidence map showing where adjacent projects obtained useful metadata and how SMERC can safely learn from their shapes.",
+    "work": "Inspect public agent-failure, action-boundary, MCP-security, reliability, and incident benchmarks for metadata provenance."
+  }
+}

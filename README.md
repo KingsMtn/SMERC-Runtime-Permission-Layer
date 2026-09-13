@@ -48,6 +48,7 @@ Fast reviewer paths:
 - End-to-end reviewer flow: `docs/End_To_End_Reviewer_Flow.md`
 - Public agent runtime incident learning: `docs/Public_Agent_Runtime_Incident_Learning.md`
 - Public agent runtime incident replay: `docs/Public_Agent_Runtime_Incident_Replay.md`
+- Public evidence fallback plan: `docs/Public_Evidence_Fallback_Plan.md`
 - Dynamic schema gate: `docs/Dynamic_Schema_Gate.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
@@ -1374,6 +1375,14 @@ python -m reference_engine.public_benchmark_ingestion examples/public_benchmark_
 The Public Benchmark Ingestion Pack maps representative public benchmark-shaped examples into SMERC's customer-evaluation contract, then reports posture counts, SPARTa routes, Decision Lifecycle Ledger validity, and baseline-versus-SMERC deltas. It is adapter-ready proof for public governance benchmark categories; it is not an official score for any upstream benchmark until license-compatible datasets and documented runners are used.
 
 `docs/Runtime_Data_Source_Map.md` tracks the strongest named public runtime data sources to use next: Agent Security Benchmark, CrossMCP-Bench, AgentShield-Bench, SyFI TraceLab, Toolathlon, and Blackstable. The purpose is to move from representative examples toward license-compatible external replay while preserving source versions, skipped-row reasons, performance metrics, and non-claims.
+
+Run the Public Evidence Fallback Plan when no outside reviewer has provided customer-owned metadata:
+
+```bash
+python -m reference_engine.public_evidence_fallback --pretty
+```
+
+The fallback plan records where adjacent agent-failure, action-boundary, MCP-security, reliability, failure-repair, and incident benchmarks get their metadata, then maps which source shapes SMERC can safely learn from. It preserves the key boundary: public-pattern evidence can improve technical proof, but it is not customer validation.
 
 Run the MCP Adversarial Metadata Replay Pack:
 
