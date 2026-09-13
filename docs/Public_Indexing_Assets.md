@@ -93,6 +93,8 @@ The repository companion files are:
 - `docs/Public_Agent_Runtime_Incident_Replay.md`
 - `docs/Public_Evidence_Fallback_Plan.md`
 - `docs/Public_Fallback_Adapter.md`
+- `docs/Claim_Registry.md`
+- `docs/Evidence_Bundle.md`
 - `docs/Dynamic_Schema_Gate.md`
 - `docs/AWS_Audit_Delay_And_Irreversibility_Map.md`
 - `reports/AWS_Audit_Delay_And_Irreversibility_Replay_Report.md`

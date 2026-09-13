@@ -1,0 +1,131 @@
+{
+  "claim_count": 7,
+  "claims": [
+    {
+      "boundary": "Local proof only; no live AWS, MCP server, customer data, or production execution.",
+      "claim": "SMERC has a local end-to-end reviewer flow connecting metadata intake, schema validation, policy identity, posture output, and evidence reporting.",
+      "claim_id": "local_end_to_end_reviewer_flow_runs",
+      "evidence": [
+        "docs/End_To_End_Reviewer_Flow.md",
+        "reports/End_To_End_Reviewer_Flow.md",
+        "reference_engine/end_to_end_reviewer_flow.py",
+        "tests/test_end_to_end_reviewer_flow.py"
+      ],
+      "evidence_status": {
+        "existing_count": 4,
+        "missing": [],
+        "missing_count": 0
+      },
+      "status": "supported"
+    },
+    {
+      "boundary": "Reject-first intake is not guaranteed anonymization and still requires human review before sharing.",
+      "claim": "SMERC has a reject-first local intake path for preparing metadata-only action summaries.",
+      "claim_id": "reject_first_metadata_intake_exists",
+      "evidence": [
+        "docs/Local_Shadow_Intake.md",
+        "reports/Local_Shadow_Intake_Report.md",
+        "reference_engine/local_shadow_intake.py",
+        "tests/test_local_shadow_intake.py"
+      ],
+      "evidence_status": {
+        "existing_count": 4,
+        "missing": [],
+        "missing_count": 0
+      },
+      "status": "supported"
+    },
+    {
+      "boundary": "This is adapter readiness on benchmark-shaped metadata, not an official benchmark score or customer validation.",
+      "claim": "SMERC can map public-pattern action-boundary and MCP/tool-call safety rows into customer-evaluation posture, route, and ledger evidence.",
+      "claim_id": "public_pattern_fallback_adapter_runs",
+      "evidence": [
+        "docs/Public_Fallback_Adapter.md",
+        "reports/Public_Fallback_Adapter_Report.md",
+        "reference_engine/public_fallback_adapter.py",
+        "tests/test_public_fallback_adapter.py"
+      ],
+      "evidence_status": {
+        "existing_count": 4,
+        "missing": [],
+        "missing_count": 0
+      },
+      "status": "supported"
+    },
+    {
+      "boundary": "Public-pattern evidence improves technical proof but is not customer validation.",
+      "claim": "SMERC has a fallback evidence plan if outside reviewers do not provide metadata.",
+      "claim_id": "public_evidence_fallback_plan_exists",
+      "evidence": [
+        "docs/Public_Evidence_Fallback_Plan.md",
+        "reports/Public_Evidence_Fallback_Plan.md",
+        "reference_engine/public_evidence_fallback.py",
+        "tests/test_public_evidence_fallback.py"
+      ],
+      "evidence_status": {
+        "existing_count": 4,
+        "missing": [],
+        "missing_count": 0
+      },
+      "status": "supported"
+    },
+    {
+      "boundary": "The repo has the ask and templates, but no sufficient customer-owned response is recorded here.",
+      "claim": "SMERC has received enough customer-owned metadata to validate usefulness against a real workflow.",
+      "claim_id": "customer_owned_metadata_received",
+      "evidence": [
+        "docs/External_Metadata_Reviewer_Request.md",
+        ".github/ISSUE_TEMPLATE/workflow-intake-template.md"
+      ],
+      "evidence_status": {
+        "existing_count": 2,
+        "missing": [],
+        "missing_count": 0
+      },
+      "status": "not_supported"
+    },
+    {
+      "boundary": "AWS proof is metadata-only and local; no AWS endorsement, production certification, or live-account control is claimed.",
+      "claim": "SMERC is ready as a production AWS connector or AWS-endorsed deployed control.",
+      "claim_id": "production_aws_connector_ready",
+      "evidence": [
+        "docs/AWS_Deployable_Bot_Readiness_Path.md",
+        "docs/AWS_Metadata_Intake_Contract.md",
+        "docs/AWS_Reviewer_Bundle.md"
+      ],
+      "evidence_status": {
+        "existing_count": 3,
+        "missing": [],
+        "missing_count": 0
+      },
+      "status": "not_supported"
+    },
+    {
+      "boundary": "No production deployment or incident-reduction study is present.",
+      "claim": "SMERC is proven to reduce production incidents.",
+      "claim_id": "incident_reduction_proven",
+      "evidence": [
+        "docs/SMERC_Premortem.md",
+        "docs/Public_Evidence_Fallback_Plan.md"
+      ],
+      "evidence_status": {
+        "existing_count": 2,
+        "missing": [],
+        "missing_count": 0
+      },
+      "status": "not_supported"
+    }
+  ],
+  "evidence_boundary": "The registry is a claims-control artifact. It does not create validation by itself; it records what the repository evidence currently supports.",
+  "generated_at": "2026-09-13T13:10:26+00:00",
+  "status_counts": {
+    "not_supported": 3,
+    "supported": 4
+  },
+  "version": "smerc.claim-registry.v1",
+  "work_result_impact": {
+    "impact": "SMERC can keep moving aggressively without overstating customer validation, AWS readiness, or incident-reduction proof.",
+    "result": "Reviewers can inspect the exact evidence and boundary for each major public claim.",
+    "work": "Separate supported SMERC claims from partial or unsupported claims."
+  }
+}

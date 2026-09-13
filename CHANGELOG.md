@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Claim Registry and SHA-256 Evidence Bundle verifier so reviewers can distinguish supported claims from unsupported claims.
 - Added a Public Fallback Adapter for Agent Action Boundary-style drift and AgentShield-style MCP/tool-call safety rows.
 - Added a Public Evidence Fallback Plan that records source provenance for adjacent agent-failure, action-boundary, MCP-security, reliability, failure-repair, and incident benchmarks.
 - Added an End-to-End Reviewer Flow wrapper that connects metadata intake, schema validation, policy identity, posture output, and evidence reporting in one command.

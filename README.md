@@ -50,6 +50,8 @@ Fast reviewer paths:
 - Public agent runtime incident replay: `docs/Public_Agent_Runtime_Incident_Replay.md`
 - Public evidence fallback plan: `docs/Public_Evidence_Fallback_Plan.md`
 - Public fallback adapter: `docs/Public_Fallback_Adapter.md`
+- Claim registry: `docs/Claim_Registry.md`
+- Evidence bundle: `docs/Evidence_Bundle.md`
 - Dynamic schema gate: `docs/Dynamic_Schema_Gate.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
@@ -1392,6 +1394,16 @@ python -m reference_engine.public_fallback_adapter --pretty
 ```
 
 The adapter maps Agent Action Boundary-style drift rows and AgentShield-style MCP/tool-call safety rows into the same SMERC customer-evaluation path used for company reviewers. The report ends with the replacement ask: provide 5 to 25 metadata-only actions from one real workflow.
+
+Build the claim registry and evidence bundle:
+
+```bash
+python -m reference_engine.claim_registry --pretty
+python -m reference_engine.evidence_bundle build --pretty
+python -m reference_engine.evidence_bundle verify reports/evidence_bundle.json
+```
+
+The claim registry separates supported claims from unsupported claims such as customer validation, production AWS readiness, and incident reduction. The evidence bundle binds key proof artifacts by path, size, and SHA-256 digest so reviewers can detect local drift in the proof package.
 
 Run the MCP Adversarial Metadata Replay Pack:
 
