@@ -109,6 +109,28 @@ SMERC stores these values in the normalized tool-plan metadata as `session_and_d
 
 Gateway bypass and `approval_mode` of `never` on side-effecting actions also increase base action risk in the AWS metadata adapter. This helps reflect a practical AWS/MCP governance question: did the action flow through the governed gateway and did the session carry enough approval context for the requested side effect?
 
+## Recommended AgentCore Runtime Security Fields
+
+These fields are optional, but they make the AWS path sharper for AgentCore-style runtime review:
+
+- `session_user_binding`
+- `credential_exposure_class`
+- `command_execution_class`
+- `audit_correlation_available`
+
+SMERC stores these values in the normalized tool-plan metadata as `agentcore_runtime_security_context`.
+
+For safety, the public intake field `credential_exposure_class` is normalized internally as `execution_authority_exposure_class`. This keeps the customer-evaluation payload free of credential-like key names while still preserving the safe class label.
+
+Risk increases when these fields show practical runtime hazards, including:
+
+- `session_user_binding` values such as `client_supplied_unverified`, `missing`, or `shared_principal_unbound`
+- `credential_exposure_class` values such as `runtime_metadata_credentials` or `broad_execution_role`
+- `command_execution_class` values such as `interactive_shell` or `arbitrary_command`
+- `audit_correlation_available` set to `false`
+
+Use these fields to test whether SMERC can separate normal gateway-mediated runtime calls from direct runtime calls, weak session binding, broad execution authority, shell-like command paths, and missing audit correlation.
+
 ## Recommended AWS Policy Engine Fields
 
 These fields are optional, but they help AWS-style reviewers map SMERC beside AgentCore Gateway, Gateway Target, Cedar policy, inline tool permissions, and parameter constraints:

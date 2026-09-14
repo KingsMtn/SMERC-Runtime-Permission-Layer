@@ -123,6 +123,10 @@ The contract accepts AWS-style evidence:
 
 - agent runtime target
 - gateway or direct-runtime path
+- runtime session-user binding
+- runtime execution-authority exposure class
+- runtime command-execution class
+- audit-correlation availability
 - IAM role or policy change summary
 - CloudFormation change-set summary
 - drift-detection summary

@@ -45,6 +45,12 @@
             "policy_schema_validated": true,
             "target_registered": true
           },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": true,
+            "command_execution_class": "none",
+            "execution_authority_exposure_class": "scoped_gateway_identity",
+            "session_user_binding": "jwt_verified_user_session"
+          },
           "aws_surface": "bedrock_agentcore_gateway",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.24,
@@ -98,7 +104,7 @@
       "actor": "cloud_admin_agent",
       "anomaly_pressure": 0.52,
       "authorization_confidence": 0.61,
-      "base_action_risk": 0.626,
+      "base_action_risk": 0.706,
       "cancel_reliability": 0.53,
       "containment_strength": 0.39,
       "context": {
@@ -136,6 +142,12 @@
             "policy_language": "cedar",
             "policy_schema_validated": true,
             "target_registered": true
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": true,
+            "command_execution_class": "none",
+            "execution_authority_exposure_class": "broad_execution_role",
+            "session_user_binding": "iam_principal_bound_request"
           },
           "aws_surface": "iam",
           "cloud_provider": "aws",
@@ -229,6 +241,12 @@
             "policy_schema_validated": true,
             "target_registered": true
           },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": true,
+            "command_execution_class": "none",
+            "execution_authority_exposure_class": "scoped_infrastructure_role",
+            "session_user_binding": "iam_principal_bound_request"
+          },
           "aws_surface": "cloudformation",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.46,
@@ -282,7 +300,7 @@
       "actor": "finops_agent",
       "anomaly_pressure": 0.72,
       "authorization_confidence": 0.64,
-      "base_action_risk": 0.828,
+      "base_action_risk": 1.0,
       "cancel_reliability": 0.67,
       "containment_strength": 0.48,
       "context": {
@@ -320,6 +338,12 @@
             "policy_language": "cedar",
             "policy_schema_validated": true,
             "target_registered": true
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": false,
+            "command_execution_class": "none",
+            "execution_authority_exposure_class": "runtime_metadata_credentials",
+            "session_user_binding": "shared_principal_unbound"
           },
           "aws_surface": "cost_management",
           "cloud_provider": "aws",
@@ -413,6 +437,12 @@
             "policy_schema_validated": true,
             "target_registered": true
           },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": true,
+            "command_execution_class": "none",
+            "execution_authority_exposure_class": "scoped_gateway_identity",
+            "session_user_binding": "jwt_verified_user_session"
+          },
           "aws_surface": "s3",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.12,
@@ -505,6 +535,12 @@
             "policy_schema_validated": true,
             "target_registered": true
           },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": true,
+            "command_execution_class": "none",
+            "execution_authority_exposure_class": "scoped_execution_role",
+            "session_user_binding": "iam_principal_bound_request"
+          },
           "aws_surface": "secrets_manager",
           "cloud_provider": "aws",
           "cost_velocity_multiplier": 0.18,
@@ -551,11 +587,306 @@
         "tool": "aws.secrets_manager_rotation",
         "version": "smerc.sparta-plan.v1"
       }
+    },
+    {
+      "action_id": "AWS_ADAPTER_007_invoke_runtime_session_with_server_bound_user_session_and_correlated_aud",
+      "action_type": "agentcore_runtime_invocation",
+      "actor": "agent_runtime_backend",
+      "anomaly_pressure": 0.24,
+      "authorization_confidence": 0.8,
+      "base_action_risk": 0.349,
+      "cancel_reliability": 0.76,
+      "containment_strength": 0.7,
+      "context": {
+        "current_control": "REVIEW",
+        "domain_profile": "cloud_admin",
+        "source_format": "agentcore_runtime_invocation_summary",
+        "source_url": "internal-export://agentcore/runtime-invocation-summary",
+        "workflow": "agentcore_runtime_session_binding"
+      },
+      "description": "Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: Invoke runtime session with server-bound user session and correlated audit identifiers in production.",
+      "evidence_validity": 0.78,
+      "external_side_effect": true,
+      "impact_scope": 0.48,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.66,
+      "rollback_latency": 0.32,
+      "sensitive_data": true,
+      "tool": "aws.agentcore_runtime",
+      "tool_plan": {
+        "action": "agentcore_runtime_invocation",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": "agentcore_runtime",
+            "inline_tool_permissions_present": true,
+            "parameter_constraints_present": true,
+            "policy_analysis_result": "session_bound_gateway_path",
+            "policy_engine_decision": "allow_with_constraints",
+            "policy_language": "cedar",
+            "policy_schema_validated": true,
+            "target_registered": true
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": true,
+            "command_execution_class": "none",
+            "execution_authority_exposure_class": "scoped_gateway_identity",
+            "session_user_binding": "jwt_verified_user_session"
+          },
+          "aws_surface": "bedrock_agentcore_runtime",
+          "cloud_provider": "aws",
+          "cost_velocity_multiplier": 0.18,
+          "derived_output_governance": {
+            "access_control_composition": "intersect_access_controls",
+            "derived_output_contains_restricted_summary": true,
+            "input_sensitivity_level": "customer_data",
+            "output_sensitivity_level": "customer_data",
+            "regulatory_tags": [
+              "privacy",
+              "agent-session"
+            ]
+          },
+          "environment": "production",
+          "gateway_path": "agentcore_gateway",
+          "postcondition_evidence_expected": true,
+          "session_and_delegated_approval_context": {
+            "approval_mode": "required_for_side_effect",
+            "delegated_on_behalf_of": true,
+            "gateway_bypass_detected": false,
+            "gateway_only_path": true,
+            "message_notification_observed": true,
+            "principal_type": "oauth_user",
+            "progress_notification_observed": true,
+            "server_initiated_elicitation": false,
+            "server_initiated_sampling": false,
+            "session_mode": "stateful_runtime_session",
+            "temporal_policy_context": "same_session_policy_window",
+            "tool_discovery_method": "registered_gateway_target"
+          },
+          "source_format": "agentcore_runtime_invocation_summary",
+          "source_record_id": "aws-meta-009",
+          "workflow_family": "agentcore_runtime_session_binding"
+        },
+        "plan_id": "plan_aws_adapter_007_invoke_runtime_session_with_server_bound_user_session_and_correlated_aud",
+        "requested_capability": "invoke_agent_runtime",
+        "requested_scope_units": 38,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": true,
+        "supports_scope_limit": true,
+        "tool": "aws.agentcore_runtime",
+        "version": "smerc.sparta-plan.v1"
+      }
+    },
+    {
+      "action_id": "AWS_ADAPTER_008_invoke_runtime_using_client_supplied_session_identifier_under_shared_bac",
+      "action_type": "agentcore_runtime_invocation",
+      "actor": "agent_runtime_backend",
+      "anomaly_pressure": 0.69,
+      "authorization_confidence": 0.52,
+      "base_action_risk": 1.0,
+      "cancel_reliability": 0.42,
+      "containment_strength": 0.35,
+      "context": {
+        "current_control": "ALLOW",
+        "domain_profile": "cloud_admin",
+        "source_format": "agentcore_runtime_invocation_summary",
+        "source_url": "internal-export://agentcore/runtime-session-risk-summary",
+        "workflow": "agentcore_runtime_weak_session_binding"
+      },
+      "description": "Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: Invoke runtime using client-supplied session identifier under shared backend principal in production.",
+      "evidence_validity": 0.46,
+      "external_side_effect": true,
+      "impact_scope": 0.82,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": false,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.34,
+      "rollback_latency": 0.74,
+      "sensitive_data": true,
+      "tool": "aws.agentcore_runtime",
+      "tool_plan": {
+        "action": "agentcore_runtime_invocation",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": "agentcore_runtime",
+            "inline_tool_permissions_present": false,
+            "parameter_constraints_present": false,
+            "policy_analysis_result": "missing_session_user_binding",
+            "policy_engine_decision": "allow",
+            "policy_language": "cedar",
+            "policy_schema_validated": true,
+            "target_registered": false
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": false,
+            "command_execution_class": "none",
+            "execution_authority_exposure_class": "runtime_metadata_credentials",
+            "session_user_binding": "client_supplied_unverified"
+          },
+          "aws_surface": "bedrock_agentcore_runtime",
+          "cloud_provider": "aws",
+          "cost_velocity_multiplier": 0.4,
+          "derived_output_governance": {
+            "access_control_composition": "shared_principal_runtime_session",
+            "derived_output_contains_restricted_summary": true,
+            "input_sensitivity_level": "customer_data",
+            "output_sensitivity_level": "customer_data",
+            "regulatory_tags": [
+              "privacy",
+              "agent-session",
+              "runtime-risk"
+            ]
+          },
+          "environment": "production",
+          "gateway_path": "direct_runtime",
+          "postcondition_evidence_expected": true,
+          "session_and_delegated_approval_context": {
+            "approval_mode": "never",
+            "delegated_on_behalf_of": true,
+            "gateway_bypass_detected": true,
+            "gateway_only_path": false,
+            "message_notification_observed": false,
+            "principal_type": "shared_backend_iam_role",
+            "progress_notification_observed": false,
+            "server_initiated_elicitation": false,
+            "server_initiated_sampling": false,
+            "session_mode": "stateful_runtime_session",
+            "temporal_policy_context": "none",
+            "tool_discovery_method": "direct_runtime_invocation"
+          },
+          "source_format": "agentcore_runtime_invocation_summary",
+          "source_record_id": "aws-meta-010",
+          "workflow_family": "agentcore_runtime_weak_session_binding"
+        },
+        "plan_id": "plan_aws_adapter_008_invoke_runtime_using_client_supplied_session_identifier_under_shared_bac",
+        "requested_capability": "invoke_agent_runtime_for_user",
+        "requested_scope_units": 88,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": false,
+        "supports_scope_limit": true,
+        "tool": "aws.agentcore_runtime",
+        "version": "smerc.sparta-plan.v1"
+      }
+    },
+    {
+      "action_id": "AWS_ADAPTER_009_open_interactive_command_shell_in_runtime_with_broad_execution_role_cred",
+      "action_type": "agentcore_runtime_invocation",
+      "actor": "agent_runtime_operator",
+      "anomaly_pressure": 0.64,
+      "authorization_confidence": 0.58,
+      "base_action_risk": 1.0,
+      "cancel_reliability": 0.35,
+      "containment_strength": 0.32,
+      "context": {
+        "current_control": "REVIEW",
+        "domain_profile": "cloud_admin",
+        "source_format": "agentcore_runtime_invocation_summary",
+        "source_url": "internal-export://agentcore/runtime-command-risk-summary",
+        "workflow": "agentcore_runtime_command_execution"
+      },
+      "description": "Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: Open interactive command shell in runtime with broad execution role credentials available in production.",
+      "evidence_validity": 0.56,
+      "external_side_effect": true,
+      "impact_scope": 0.86,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": false,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.28,
+      "rollback_latency": 0.82,
+      "sensitive_data": true,
+      "tool": "aws.agentcore_runtime_command_shell",
+      "tool_plan": {
+        "action": "agentcore_runtime_invocation",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": "runtime_command",
+            "inline_tool_permissions_present": true,
+            "parameter_constraints_present": false,
+            "policy_analysis_result": "command_execution_requires_audit_and_scope",
+            "policy_engine_decision": "allow_with_constraints",
+            "policy_language": "cedar",
+            "policy_schema_validated": true,
+            "target_registered": true
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": true,
+            "command_execution_class": "interactive_shell",
+            "execution_authority_exposure_class": "broad_execution_role",
+            "session_user_binding": "iam_principal_bound_request"
+          },
+          "aws_surface": "bedrock_agentcore_runtime_command",
+          "cloud_provider": "aws",
+          "cost_velocity_multiplier": 0.28,
+          "derived_output_governance": {
+            "access_control_composition": "runtime_execution_role_boundary",
+            "derived_output_contains_restricted_summary": false,
+            "input_sensitivity_level": "privileged_infrastructure",
+            "output_sensitivity_level": "privileged_infrastructure",
+            "regulatory_tags": [
+              "privileged-access",
+              "runtime-command"
+            ]
+          },
+          "environment": "production",
+          "gateway_path": "operator_command_channel",
+          "postcondition_evidence_expected": true,
+          "session_and_delegated_approval_context": {
+            "approval_mode": "required_for_shell",
+            "delegated_on_behalf_of": false,
+            "gateway_bypass_detected": true,
+            "gateway_only_path": false,
+            "message_notification_observed": true,
+            "principal_type": "iam_entity",
+            "progress_notification_observed": true,
+            "server_initiated_elicitation": false,
+            "server_initiated_sampling": false,
+            "session_mode": "runtime_command_session",
+            "temporal_policy_context": "incident_window",
+            "tool_discovery_method": "runtime_command_api"
+          },
+          "source_format": "agentcore_runtime_invocation_summary",
+          "source_record_id": "aws-meta-011",
+          "workflow_family": "agentcore_runtime_command_execution"
+        },
+        "plan_id": "plan_aws_adapter_009_open_interactive_command_shell_in_runtime_with_broad_execution_role_cred",
+        "requested_capability": "invoke_agent_runtime_command_shell",
+        "requested_scope_units": 92,
+        "side_effect_level": "destructive",
+        "supports_checkpoint": true,
+        "supports_dry_run": false,
+        "supports_human_approval": true,
+        "supports_rollback": false,
+        "supports_scope_limit": true,
+        "tool": "aws.agentcore_runtime_command_shell",
+        "version": "smerc.sparta-plan.v1"
+      }
     }
   ],
   "contact_role": "aws_platform_security_reviewer",
   "data_boundary": "AWS metadata adapter evaluation. Inputs are exported summaries only. No AWS credentials, account IDs, ARNs, raw logs, private topology, customer records, secrets, production commands, or live AWS access are included.",
-  "evaluation_date": "2026-09-09",
+  "evaluation_date": "2026-09-14",
   "initial_autonomy_state": "HEALTHY",
   "organization": "AWS Metadata Adapter Review",
   "tenant_id": "aws-metadata-adapter-review",

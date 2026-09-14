@@ -1,7 +1,7 @@
 # AWS Metadata Adapter Review SMERC Customer Evaluation Report
 
 Version: `smerc.customer-evaluation.v1`
-Generated: `2026-09-09T10:56:16+00:00`
+Generated: `2026-09-14T00:52:59+00:00`
 Contact role: `aws_platform_security_reviewer`
 
 ## Evidence Boundary
@@ -14,13 +14,13 @@ Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC c
 
 ## Summary
 
-- Actions evaluated: `6`
-- Ref-gate counts: `{'fail': 1, 'pass': 5}`
-- Agent identity-gate counts: `{'WATCH': 6}`
-- Posture counts: `{'DENY': 1, 'THROTTLE': 5}`
-- Route state counts: `{'BLOCK': 1, 'CONSTRAINED_EXECUTE': 5}`
-- Non-executable routes: `1`
-- Valid DLL ledgers: `6`
+- Actions evaluated: `9`
+- Ref-gate counts: `{'fail': 3, 'pass': 6}`
+- Agent identity-gate counts: `{'WATCH': 9}`
+- Posture counts: `{'DENY': 3, 'THROTTLE': 6}`
+- Route state counts: `{'BLOCK': 3, 'CONSTRAINED_EXECUTE': 6}`
+- Non-executable routes: `3`
+- Valid DLL ledgers: `9`
 - Autonomy state: `SUSPEND_AUTONOMY`
 - Pilot fit: `strong`
 - Fit reason: The evaluation includes multiple side-effecting actions, at least one constrained path, and hard-stop cases worth reviewer labeling.
@@ -29,11 +29,11 @@ Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC c
 
 | Action | Posture | Route | Exposure |
 | --- | --- | --- | ---: |
+| `AWS_ADAPTER_009_open_interactive_command_shell_in_runtime_with_broad_execution_role_cred` | `DENY` | `BLOCK` | 0.911 |
+| `AWS_ADAPTER_008_invoke_runtime_using_client_supplied_session_identifier_under_shared_bac` | `DENY` | `BLOCK` | 0.872 |
+| `AWS_ADAPTER_002_expand_execution_role_from_service_update_scope_to_broad_infrastructure_` | `DENY` | `BLOCK` | 0.764 |
 | `AWS_ADAPTER_003_execute_change_set_that_replaces_stateful_resources` | `THROTTLE` | `CONSTRAINED_EXECUTE` | 0.755 |
-| `AWS_ADAPTER_002_expand_execution_role_from_service_update_scope_to_broad_infrastructure_` | `DENY` | `BLOCK` | 0.748 |
 | `AWS_ADAPTER_005_widen_bucket_object_access_during_failed_data_export` | `THROTTLE` | `CONSTRAINED_EXECUTE` | 0.73 |
-| `AWS_ADAPTER_006_rotate_shared_service_credential_before_dependency_readiness_is_confirme` | `THROTTLE` | `CONSTRAINED_EXECUTE` | 0.658 |
-| `AWS_ADAPTER_001_invoke_lambda_backed_customer_configuration_tool_through_governed_gatewa` | `THROTTLE` | `CONSTRAINED_EXECUTE` | 0.586 |
 
 ## Decision Path
 
@@ -45,6 +45,9 @@ Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC c
 | 4 | `AWS_ADAPTER_004_increase_regional_compute_capacity_while_completion_certainty_is_low` | `pass` | `admitted_with_agent_identity_watch` | `THROTTLE` | `CONSTRAINED_EXECUTE` | `True` | `True` |
 | 5 | `AWS_ADAPTER_005_widen_bucket_object_access_during_failed_data_export` | `pass` | `admitted_with_agent_identity_watch` | `THROTTLE` | `CONSTRAINED_EXECUTE` | `True` | `True` |
 | 6 | `AWS_ADAPTER_006_rotate_shared_service_credential_before_dependency_readiness_is_confirme` | `pass` | `admitted_with_agent_identity_watch` | `THROTTLE` | `CONSTRAINED_EXECUTE` | `True` | `True` |
+| 7 | `AWS_ADAPTER_007_invoke_runtime_session_with_server_bound_user_session_and_correlated_aud` | `pass` | `admitted_with_agent_identity_watch` | `THROTTLE` | `CONSTRAINED_EXECUTE` | `True` | `True` |
+| 8 | `AWS_ADAPTER_008_invoke_runtime_using_client_supplied_session_identifier_under_shared_bac` | `fail` | `capped_by_ref_gate` | `DENY` | `BLOCK` | `False` | `True` |
+| 9 | `AWS_ADAPTER_009_open_interactive_command_shell_in_runtime_with_broad_execution_role_cred` | `fail` | `capped_by_ref_gate` | `DENY` | `BLOCK` | `False` | `True` |
 
 ## Action Details
 
@@ -73,7 +76,7 @@ Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC c
 - Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
 - Scoring admission: `capped_by_ref_gate`
 - SMERC posture: `DENY`
-- Scores: `{'irreversible_exposure_score': 0.748, 'reversible_capacity_score': 0.428, 'confidence_score': 0.577, 'operational_stress_score': 0.588, 'risk_adjusted_authorization_score': 0.429, 'cancel_reliability_score': 0.53}`
+- Scores: `{'irreversible_exposure_score': 0.764, 'reversible_capacity_score': 0.428, 'confidence_score': 0.577, 'operational_stress_score': 0.605, 'risk_adjusted_authorization_score': 0.425, 'cancel_reliability_score': 0.53}`
 - Reason codes: `['CONTAINMENT_WEAK', 'EXTERNAL_SIDE_EFFECT', 'IMPACT_SCOPE_WIDE', 'IRREVERSIBLE_EXPOSURE_HIGH', 'REF_GATE_LEAST_PRIVILEGE_CONFIRMED_FAILED', 'SENSITIVE_DATA']`
 - SPARTa route: `BLOCK`
 - Executable: `False`
@@ -105,7 +108,7 @@ Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC c
 - Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
 - Scoring admission: `admitted_with_agent_identity_watch`
 - SMERC posture: `THROTTLE`
-- Scores: `{'irreversible_exposure_score': 0.581, 'reversible_capacity_score': 0.572, 'confidence_score': 0.534, 'operational_stress_score': 0.635, 'risk_adjusted_authorization_score': 0.522, 'cancel_reliability_score': 0.67}`
+- Scores: `{'irreversible_exposure_score': 0.614, 'reversible_capacity_score': 0.572, 'confidence_score': 0.534, 'operational_stress_score': 0.671, 'risk_adjusted_authorization_score': 0.514, 'cancel_reliability_score': 0.67}`
 - Reason codes: `['IRREVERSIBLE_EXPOSURE_ELEVATED', 'ANOMALY_PRESSURE_HIGH', 'IMPACT_SCOPE_WIDE', 'EXTERNAL_SIDE_EFFECT']`
 - SPARTa route: `CONSTRAINED_EXECUTE`
 - Executable: `True`
@@ -144,11 +147,59 @@ Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC c
 - Applied controls: `['checkpoint_before_execution', 'limit_scope', 'preserve_replay', 'preview_before_execution', 'record_execution_report']`
 - DLL valid: `True`
 
+### AWS_ADAPTER_007_invoke_runtime_session_with_server_bound_user_session_and_correlated_aud
+
+- Description: Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: Invoke runtime session with server-bound user session and correlated audit identifiers in production.
+- Ref gate: `pass`
+- Ref failures: `[]`
+- Agent identity gate: `WATCH`
+- Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
+- Scoring admission: `admitted_with_agent_identity_watch`
+- SMERC posture: `THROTTLE`
+- Scores: `{'irreversible_exposure_score': 0.492, 'reversible_capacity_score': 0.68, 'confidence_score': 0.777, 'operational_stress_score': 0.324, 'risk_adjusted_authorization_score': 0.666, 'cancel_reliability_score': 0.76}`
+- Reason codes: `['IRREVERSIBLE_EXPOSURE_ELEVATED', 'EXTERNAL_SIDE_EFFECT', 'SENSITIVE_DATA']`
+- SPARTa route: `CONSTRAINED_EXECUTE`
+- Executable: `True`
+- Applied controls: `['checkpoint_before_execution', 'limit_scope', 'preserve_replay', 'preview_before_execution', 'record_execution_report', 'require_rollback_plan']`
+- DLL valid: `True`
+
+### AWS_ADAPTER_008_invoke_runtime_using_client_supplied_session_identifier_under_shared_bac
+
+- Description: Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: Invoke runtime using client-supplied session identifier under shared backend principal in production.
+- Ref gate: `fail`
+- Ref failures: `['least_privilege_confirmed']`
+- Agent identity gate: `WATCH`
+- Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
+- Scoring admission: `capped_by_ref_gate`
+- SMERC posture: `DENY`
+- Scores: `{'irreversible_exposure_score': 0.872, 'reversible_capacity_score': 0.341, 'confidence_score': 0.445, 'operational_stress_score': 0.771, 'risk_adjusted_authorization_score': 0.319, 'cancel_reliability_score': 0.42}`
+- Reason codes: `['ANOMALY_PRESSURE_HIGH', 'CANCEL_RELIABILITY_WEAK', 'CONTAINMENT_WEAK', 'EVIDENCE_VALIDITY_LOW', 'EXTERNAL_SIDE_EFFECT', 'IMPACT_SCOPE_WIDE', 'IRREVERSIBLE_EXPOSURE_HIGH', 'RECOVERY_CAPACITY_LOW', 'REF_GATE_LEAST_PRIVILEGE_CONFIRMED_FAILED', 'ROLLBACK_LATENCY_HIGH', 'SENSITIVE_DATA']`
+- SPARTa route: `BLOCK`
+- Executable: `False`
+- Applied controls: `['block_execution', 'preserve_replay', 'explain_denial']`
+- DLL valid: `True`
+
+### AWS_ADAPTER_009_open_interactive_command_shell_in_runtime_with_broad_execution_role_cred
+
+- Description: Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: Open interactive command shell in runtime with broad execution role credentials available in production.
+- Ref gate: `fail`
+- Ref failures: `['least_privilege_confirmed']`
+- Agent identity gate: `WATCH`
+- Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
+- Scoring admission: `capped_by_ref_gate`
+- SMERC posture: `DENY`
+- Scores: `{'irreversible_exposure_score': 0.911, 'reversible_capacity_score': 0.301, 'confidence_score': 0.512, 'operational_stress_score': 0.759, 'risk_adjusted_authorization_score': 0.311, 'cancel_reliability_score': 0.35}`
+- Reason codes: `['CANCEL_RELIABILITY_WEAK', 'CONTAINMENT_WEAK', 'EXTERNAL_SIDE_EFFECT', 'IMPACT_SCOPE_WIDE', 'IRREVERSIBLE_EXPOSURE_HIGH', 'RECOVERY_CAPACITY_LOW', 'REF_GATE_LEAST_PRIVILEGE_CONFIRMED_FAILED', 'ROLLBACK_LATENCY_HIGH', 'SENSITIVE_DATA']`
+- SPARTa route: `BLOCK`
+- Executable: `False`
+- Applied controls: `['block_execution', 'preserve_replay', 'explain_denial']`
+- DLL valid: `True`
+
 ## Autonomy Budget
 
 - State: `SUSPEND_AUTONOMY`
-- Spent: `{'actions': 6, 'scope_units': 431.0, 'risk_spend': 2.96, 'ref_gate_failures': 1, 'blocked_or_held_attempts': 1}`
-- Review triggers: `['ref_gate_failure', 'autonomy_removed_until_review']`
+- Spent: `{'actions': 9, 'scope_units': 649.0, 'risk_spend': 6.196, 'ref_gate_failures': 3, 'blocked_or_held_attempts': 3}`
+- Review triggers: `['ref_gate_failure', 'risk_budget_exhausted', 'repeated_blocked_or_held_attempts', 'autonomy_removed_until_review']`
 
 ## Recommended Next Action
 

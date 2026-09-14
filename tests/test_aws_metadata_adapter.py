@@ -20,14 +20,14 @@ class AWSMetadataAdapterTests(unittest.TestCase):
     def test_loads_metadata_source_exports(self):
         rows = load_source_exports(INPUTS)
 
-        self.assertEqual(len(rows), 8)
-        self.assertEqual(len({row["record_id"] for row in rows}), 8)
+        self.assertEqual(len(rows), 11)
+        self.assertEqual(len({row["record_id"] for row in rows}), 11)
 
     def test_normalizes_safe_rows_and_skips_unsafe_rows(self):
         payload = normalize_source_exports(load_source_exports(INPUTS))
 
         self.assertEqual(payload["version"], "smerc.customer-evaluation.v1")
-        self.assertEqual(payload["adapter_summary"]["accepted_rows"], 6)
+        self.assertEqual(payload["adapter_summary"]["accepted_rows"], 9)
         self.assertEqual(payload["adapter_summary"]["skipped_rows"], 2)
         reasons = {item["reason"] for item in payload["adapter_summary"]["skipped"]}
         self.assertIn("prohibited field present: raw_log", reasons)
@@ -38,6 +38,7 @@ class AWSMetadataAdapterTests(unittest.TestCase):
             self.assertEqual(action["tool_plan"]["metadata"]["adapter_mode"], "non_executing")
             self.assertIn("postcondition_evidence_expected", action["tool_plan"]["metadata"])
             self.assertIn("session_and_delegated_approval_context", action["tool_plan"]["metadata"])
+            self.assertIn("agentcore_runtime_security_context", action["tool_plan"]["metadata"])
             self.assertIn("agentcore_policy_context", action["tool_plan"]["metadata"])
             self.assertIn("derived_output_governance", action["tool_plan"]["metadata"])
 
@@ -70,21 +71,42 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertIn("data-access", derived_context["regulatory_tags"])
         self.assertTrue(derived_context["derived_output_contains_restricted_summary"])
 
+        runtime_context = by_record["aws-meta-010"]["tool_plan"]["metadata"]["agentcore_runtime_security_context"]
+        self.assertEqual(runtime_context["session_user_binding"], "client_supplied_unverified")
+        self.assertEqual(runtime_context["execution_authority_exposure_class"], "runtime_metadata_credentials")
+        self.assertFalse(runtime_context["audit_correlation_available"])
+
+        command_context = by_record["aws-meta-011"]["tool_plan"]["metadata"]["agentcore_runtime_security_context"]
+        self.assertEqual(command_context["command_execution_class"], "interactive_shell")
+
     def test_builds_adapter_report_and_customer_evaluation(self):
         report = build_adapter_report(load_source_exports(INPUTS))
 
         self.assertEqual(report["version"], "smerc.aws-metadata-adapter.v1")
-        self.assertEqual(report["accepted_rows"], 6)
+        self.assertEqual(report["accepted_rows"], 9)
         self.assertEqual(report["skipped_rows"], 2)
-        self.assertEqual(report["customer_evaluation"]["summary"]["total_actions"], 6)
+        self.assertEqual(report["customer_evaluation"]["summary"]["total_actions"], 9)
         self.assertNotIn("adapter_summary", report["normalized_customer_evaluation"])
         self.assertIn("does not call AWS APIs", report["evidence_boundary"])
         self.assertIn("iam_policy_change_summary", report["accepted_source_format_counts"])
-        self.assertEqual(report["session_and_delegated_approval_summary"]["boolean_counts"]["gateway_bypass_detected"], 1)
-        self.assertEqual(report["session_and_delegated_approval_summary"]["approval_mode_counts"]["never"], 1)
-        self.assertEqual(report["policy_engine_summary"]["policy_language_counts"]["cedar"], 6)
-        self.assertEqual(report["policy_engine_summary"]["policy_engine_decision_counts"]["allow_with_constraints"], 4)
-        self.assertEqual(report["derived_output_governance_summary"]["boolean_counts"]["restricted_summary_outputs"], 3)
+        self.assertEqual(report["session_and_delegated_approval_summary"]["boolean_counts"]["gateway_bypass_detected"], 3)
+        self.assertEqual(report["session_and_delegated_approval_summary"]["approval_mode_counts"]["never"], 2)
+        self.assertEqual(report["policy_engine_summary"]["policy_language_counts"]["cedar"], 9)
+        self.assertEqual(report["policy_engine_summary"]["policy_engine_decision_counts"]["allow_with_constraints"], 6)
+        self.assertEqual(
+            report["agentcore_runtime_security_summary"]["session_user_binding_counts"]["client_supplied_unverified"],
+            1,
+        )
+        self.assertEqual(
+            report["agentcore_runtime_security_summary"]["execution_authority_exposure_class_counts"]["broad_execution_role"],
+            2,
+        )
+        self.assertEqual(
+            report["agentcore_runtime_security_summary"]["command_execution_class_counts"]["interactive_shell"],
+            1,
+        )
+        self.assertEqual(report["agentcore_runtime_security_summary"]["boolean_counts"]["audit_correlation_missing"], 2)
+        self.assertEqual(report["derived_output_governance_summary"]["boolean_counts"]["restricted_summary_outputs"], 5)
         self.assertIn("privacy", report["derived_output_governance_summary"]["regulatory_tag_counts"])
 
     def test_markdown_explains_work_result_impact_and_boundary(self):
@@ -94,6 +116,7 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertIn("Work / Result / Impact", markdown)
         self.assertIn("non-executing", markdown)
         self.assertIn("Session and delegated approval summary", markdown)
+        self.assertIn("AgentCore runtime security summary", markdown)
         self.assertIn("Policy engine summary", markdown)
         self.assertIn("Derived output governance summary", markdown)
         self.assertIn("Reviewer Question", markdown)
@@ -117,7 +140,7 @@ class AWSMetadataAdapterTests(unittest.TestCase):
             customer_markdown_output=customer_md,
         )
 
-        self.assertEqual(len(load_payload(normalized)["actions"]), 6)
+        self.assertEqual(len(load_payload(normalized)["actions"]), 9)
         self.assertIn("AWS Metadata Adapter Report", report_md.read_text(encoding="utf-8"))
         self.assertIn("SMERC Customer Evaluation Report", customer_md.read_text(encoding="utf-8"))
         self.assertEqual(json.loads(report_json.read_text(encoding="utf-8"))["skipped_rows"], 2)
@@ -131,6 +154,7 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertIn("Prohibited Inputs", docs)
         self.assertIn("Recommended AWS Policy Engine Fields", docs)
         self.assertIn("Recommended Derived Output Governance Fields", docs)
+        self.assertIn("Recommended AgentCore Runtime Security Fields", docs)
         self.assertIn("python -m reference_engine.aws_metadata_adapter", docs)
         self.assertIn("docs/AWS_Metadata_Intake_Contract.md", readiness)
         self.assertIn("docs/AWS_Metadata_Intake_Contract.md", readme)

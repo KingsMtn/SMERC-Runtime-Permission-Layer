@@ -80,6 +80,13 @@ DERIVED_OUTPUT_FIELDS = [
     "derived_output_contains_restricted_summary",
 ]
 
+AGENTCORE_RUNTIME_FIELDS = [
+    "session_user_binding",
+    "credential_exposure_class",
+    "command_execution_class",
+    "audit_correlation_available",
+]
+
 
 def load_source_exports(path: str | Path) -> list[Dict[str, Any]]:
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -153,6 +160,7 @@ def build_adapter_report(rows: list[Mapping[str, Any]]) -> Dict[str, Any]:
         "skipped": payload["adapter_summary"]["skipped"],
         "accepted_source_format_counts": dict(sorted(accepted_source_counts.items())),
         "session_and_delegated_approval_summary": session_summary,
+        "agentcore_runtime_security_summary": _agentcore_runtime_summary(payload["actions"]),
         "policy_engine_summary": _policy_summary(payload["actions"]),
         "derived_output_governance_summary": _derived_output_summary(payload["actions"]),
         "skipped_reason_counts": dict(sorted(skipped_reasons.items())),
@@ -208,6 +216,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Skipped rows: `{report['skipped_rows']}`",
         f"- Accepted source formats: `{report['accepted_source_format_counts']}`",
         f"- Session and delegated approval summary: `{report['session_and_delegated_approval_summary']}`",
+        f"- AgentCore runtime security summary: `{report['agentcore_runtime_security_summary']}`",
         f"- Policy engine summary: `{report['policy_engine_summary']}`",
         f"- Derived output governance summary: `{report['derived_output_governance_summary']}`",
         f"- Skipped reason counts: `{report['skipped_reason_counts']}`",
@@ -345,6 +354,7 @@ def _to_customer_action(row: Mapping[str, Any], index: int) -> Dict[str, Any]:
                 "source_record_id": _text(row.get("record_id"), "record_id"),
                 "gateway_path": _optional_text(row.get("gateway_path")),
                 "session_and_delegated_approval_context": _session_context(row),
+                "agentcore_runtime_security_context": _agentcore_runtime_context(row),
                 "agentcore_policy_context": _policy_context(row),
                 "derived_output_governance": _derived_output_context(row),
                 "cost_velocity_multiplier": _optional_ratio(row.get("cost_velocity_multiplier")),
@@ -454,6 +464,14 @@ def _risk(row: Mapping[str, Any], action_type: str) -> float:
         risk += 0.08
     if _optional_text(row.get("approval_mode")) == "never" and _side_effect(row) in {"external", "destructive", "financial"}:
         risk += 0.05
+    if _optional_text(row.get("session_user_binding")) in {"client_supplied_unverified", "missing", "shared_principal_unbound"}:
+        risk += 0.08
+    if _optional_text(row.get("credential_exposure_class")) in {"broad_execution_role", "runtime_metadata_credentials"}:
+        risk += 0.08
+    if _optional_text(row.get("command_execution_class")) in {"interactive_shell", "arbitrary_command"}:
+        risk += 0.08
+    if _optional_boolean(row.get("audit_correlation_available")) is False:
+        risk += 0.05
     return round(min(1.0, risk), 3)
 
 
@@ -539,6 +557,15 @@ def _derived_output_context(row: Mapping[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _agentcore_runtime_context(row: Mapping[str, Any]) -> Dict[str, Any]:
+    return {
+        "session_user_binding": _optional_text(row.get("session_user_binding")),
+        "execution_authority_exposure_class": _optional_text(row.get("credential_exposure_class")),
+        "command_execution_class": _optional_text(row.get("command_execution_class")),
+        "audit_correlation_available": _optional_boolean(row.get("audit_correlation_available")),
+    }
+
+
 def _session_summary(actions: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
     counters: Counter[str] = Counter()
     principal_types: Counter[str] = Counter()
@@ -604,6 +631,31 @@ def _policy_summary(actions: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
         "policy_language_counts": dict(sorted(languages.items())),
         "gateway_target_type_counts": dict(sorted(target_types.items())),
         "policy_analysis_result_counts": dict(sorted(analysis_results.items())),
+    }
+
+
+def _agentcore_runtime_summary(actions: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
+    session_binding: Counter[str] = Counter()
+    execution_authority_exposure: Counter[str] = Counter()
+    command_execution: Counter[str] = Counter()
+    booleans: Counter[str] = Counter()
+    for action in actions:
+        context = action["tool_plan"]["metadata"]["agentcore_runtime_security_context"]
+        if context["session_user_binding"]:
+            session_binding[context["session_user_binding"]] += 1
+        if context["execution_authority_exposure_class"]:
+            execution_authority_exposure[context["execution_authority_exposure_class"]] += 1
+        if context["command_execution_class"]:
+            command_execution[context["command_execution_class"]] += 1
+        if context["audit_correlation_available"] is True:
+            booleans["audit_correlation_available"] += 1
+        if context["audit_correlation_available"] is False:
+            booleans["audit_correlation_missing"] += 1
+    return {
+        "session_user_binding_counts": dict(sorted(session_binding.items())),
+        "execution_authority_exposure_class_counts": dict(sorted(execution_authority_exposure.items())),
+        "command_execution_class_counts": dict(sorted(command_execution.items())),
+        "boolean_counts": dict(sorted(booleans.items())),
     }
 
 
