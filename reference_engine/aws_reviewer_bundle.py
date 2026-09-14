@@ -14,6 +14,10 @@ from reference_engine.aws_agent_action_chain_postcondition import (
     build_report as build_chain_postcondition_report,
     render_markdown as render_chain_postcondition_markdown,
 )
+from reference_engine.aws_decision_api_surface import (
+    build_decision_api_surface,
+    render_markdown as render_decision_api_surface_markdown,
+)
 from reference_engine.aws_metadata_adapter import (
     build_adapter_report,
     load_source_exports,
@@ -55,6 +59,7 @@ def build_aws_reviewer_bundle(
 ) -> Dict[str, Any]:
     base = Path(root)
     chain_report = build_chain_report(load_payload(base / "examples/aws_agent_action_chain.json"))
+    decision_api_surface = build_decision_api_surface(root=base)
     chain_postcondition = build_chain_postcondition_report(
         load_payload(base / "examples/aws_agent_action_chain.json"),
         base / "examples/aws_agent_action_chain_observations.json",
@@ -105,12 +110,13 @@ def build_aws_reviewer_bundle(
         ],
         "work_result_impact": {
             "work": (
-                "Assemble the AWS-style reviewer path into one local package: action-chain proof, route-control "
-                "postcondition evidence, AWS postcondition evidence, shadow mirror metadata evidence, performance "
-                "metrics, and customer-owned AWS metadata request."
+                "Assemble the AWS-style reviewer path into one local package: action-chain proof, decision API "
+                "surface, route-control postcondition evidence, AWS postcondition evidence, shadow mirror metadata "
+                "evidence, performance metrics, and customer-owned AWS metadata request."
             ),
             "result": (
                 f"Generated an AWS reviewer bundle with {chain_report['scenario_count']} action-chain examples, "
+                f"decision API status {decision_api_surface['status']}, "
                 f"chain postcondition statuses {chain_postcondition['aws_postcondition_status_counts']}, "
                 f"AWS postcondition statuses {aws_postcondition['aws_postcondition_status_counts']}, and slowest "
                 f"local p95 {performance['slowest_p95_ms']} ms. The shadow mirror path accepted "
@@ -124,6 +130,7 @@ def build_aws_reviewer_bundle(
         "readiness": readiness,
         "reports": {
             "aws_agent_action_chain": chain_report,
+            "aws_decision_api_surface": decision_api_surface,
             "aws_agent_action_chain_postcondition": chain_postcondition,
             "aws_postcondition_evidence": aws_postcondition,
             "aws_shadow_mirror": shadow_mirror,
@@ -195,6 +202,11 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
                 f"postures=`{reports['aws_agent_action_chain']['summary']['posture_counts']}` |"
             ),
             (
+                f"| AWS decision API surface | status=`{reports['aws_decision_api_surface']['status']}`, "
+                f"operation_id=`{reports['aws_decision_api_surface']['operation_id']}`, "
+                f"posture=`{reports['aws_decision_api_surface']['posture']}` |"
+            ),
+            (
                 f"| AWS chain postcondition evidence | statuses="
                 f"`{reports['aws_agent_action_chain_postcondition']['aws_postcondition_status_counts']}` |"
             ),
@@ -263,6 +275,13 @@ def write_outputs(bundle: Mapping[str, Any], *, output_dir: str | Path) -> None:
         render_chain_markdown(reports["aws_agent_action_chain"]),
         encoding="utf-8",
     )
+    _write_json(out / "aws_decision_api_surface.json", reports["aws_decision_api_surface"])
+    (out / "AWS_Decision_API_Surface.md").write_text(
+        render_decision_api_surface_markdown(reports["aws_decision_api_surface"]),
+        encoding="utf-8",
+    )
+    _write_json(out / "sample_decision_request.json", reports["aws_decision_api_surface"]["request"])
+    _write_json(out / "sample_decision_response.json", reports["aws_decision_api_surface"]["response"])
     _write_json(out / "aws_agent_action_chain_postcondition.json", reports["aws_agent_action_chain_postcondition"])
     (out / "AWS_Agent_Action_Chain_Postcondition_Evidence.md").write_text(
         render_chain_postcondition_markdown(reports["aws_agent_action_chain_postcondition"]),

@@ -36,6 +36,7 @@ Fast reviewer paths:
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
 - AWS-style reviewer bundle: `docs/AWS_Reviewer_Bundle.md`
 - AWS reviewer quickstart and 10-minute learning path: `docs/AWS_Reviewer_Quickstart.md`
+- AWS decision API surface: `docs/AWS_Decision_API_Surface.md`
 - Tier 2 AWS reviewer front door: `docs/Tier2_AWS_Reviewer_Front_Door.md`
 - External metadata reviewer request: `docs/External_Metadata_Reviewer_Request.md`
 - Public outreach post drafts: `docs/Public_Outreach_Post_Drafts.md`
@@ -59,6 +60,7 @@ Fast reviewer paths:
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
+- AWS Lambda/OpenAPI decision surface: `docs/AWS_Decision_API_Surface.md`
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
 - AWS deployable bot path: `docs/AWS_Deployable_Bot_Readiness_Path.md`
 - AWS ecosystem entry path: `docs/AWS_Ecosystem_Entry_Path.md`
@@ -202,7 +204,15 @@ For AWS-style platform review, use the focused AWS reviewer bundle:
 python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty
 ```
 
-This writes `reports/aws_reviewer_bundle/AWS_Reviewer_Bundle.md` plus the AWS action-chain proof, chain postcondition evidence, AWS postcondition evidence, performance metrics, and AWS customer-owned metadata request. It frames the reviewer path as: guardrails check content, IAM checks authority, SMERC checks recoverability, and postcondition evidence checks whether the route happened.
+This writes `reports/aws_reviewer_bundle/AWS_Reviewer_Bundle.md` plus the AWS action-chain proof, decision API surface, chain postcondition evidence, AWS postcondition evidence, performance metrics, and AWS customer-owned metadata request. It frames the reviewer path as: guardrails check content, IAM checks authority, SMERC checks recoverability, and postcondition evidence checks whether the route happened.
+
+To inspect the AWS Lambda/OpenAPI decision surface directly:
+
+```bash
+python -m reference_engine.aws_decision_api_surface --pretty
+```
+
+This writes `reports/aws_decision_api_surface/AWS_Decision_API_Surface.md`, `sample_decision_request.json`, and `sample_decision_response.json`, backed by `schemas/smerc-aws-decision-api-openapi-v1.json`.
 
 To inspect the Lambda-shaped AWS proof path directly, run the local handler against a metadata-only Bedrock-style Action Group example:
 
@@ -359,6 +369,7 @@ The current build includes:
 - SMERC-F External Financial Signal Adapter that normalizes AML/KYT-, wallet-screening-, fraud-, Travel Rule-, treasury-risk-, reserve-monitoring-, blockchain-analytics-, and smart-contract-risk-style outputs into recoverability scoring evidence without claiming to replace those systems
 - AWS Cloud Action Replay Pack with AWS-style metadata-only AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost-velocity, Secrets Manager, and cross-account delegation actions
 - AWS Deployable Bot Readiness Path that defines the milestones needed for SMERC to be evaluated as an AWS-style governed action bot without claiming AWS endorsement, certification, or production integration
+- AWS Decision API Surface that exposes one metadata-only Lambda/OpenAPI contract with operation ID `evaluateAwsActionRecoverability`, sample request, sample response, route controls, scores, and ledger evidence
 - AWS Metadata Intake Contract and non-executing adapter stub that accepts safe AWS-style exported summaries, captures AWS/MCP session and delegated approval context, skips unsafe rows, normalizes accepted rows into customer evaluation, and preserves an explicit no-live-AWS boundary
 - AWS Postcondition Evidence that checks whether AWS-style route controls were actually observed after routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata
 - Cloud Admin Customer Evaluation pack with metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions for infrastructure review
@@ -483,6 +494,7 @@ Start here before reading the code:
 - `docs/Five_Row_Metadata_Example.md` gives the smallest readable version of the metadata-only reviewer ask, with a matching JSON example at `examples/external_metadata_reviewer_5_row_example.json`.
 - `docs/Local_Source_Of_Truth.md` records that `.smerc-action-language-publish` is the active GitHub-connected checkout and that older local folders should not be treated as authoritative unless intentionally compared or migrated.
 - `docs/AWS_Reviewer_Quickstart.md` gives AWS-style reviewers the shortest path: run one command, inspect three outputs, understand what SMERC proves, and use `examples/aws_customer_metadata_template.json` to replace public examples with safe customer-owned metadata.
+- `docs/AWS_Decision_API_Surface.md` gives AWS-style reviewers the callable shape: `POST /smerc/decision`, operation ID `evaluateAwsActionRecoverability`, a metadata-only sample request, and a sample response with posture, route controls, scores, and ledger evidence.
 - `docs/AWS_Cloud_Action_Replay.md` gives AWS-style platform, cloud-security, SRE, FinOps, and AI-agent reviewers a runnable metadata-only replay across AgentCore-style runtime and gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style scaling, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation.
 - `docs/AWS_Deployable_Bot_Readiness_Path.md` defines the process for hardening SMERC toward an AWS-style deployable governed action bot: metadata intake, adapter stubs, postcondition evidence, performance metrics, customer-owned metadata, and shadow-mode pilot criteria.
 - `docs/AWS_Metadata_Intake_Contract.md` defines the strict AWS-style metadata contract and non-executing adapter path for exported summaries, AWS/MCP session and delegated approval context, accepted/skipped rows, normalized customer-evaluation actions, and safe no-credential review.

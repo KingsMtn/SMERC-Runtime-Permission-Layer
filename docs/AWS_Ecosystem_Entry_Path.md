@@ -74,7 +74,9 @@ python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty
 Start with:
 
 - `docs/AWS_Reviewer_Quickstart.md`
+- `docs/AWS_Decision_API_Surface.md`
 - `reports/aws_reviewer_bundle/AWS_Reviewer_Bundle.md`
+- `reports/aws_reviewer_bundle/AWS_Decision_API_Surface.md`
 - `reports/aws_reviewer_bundle/AWS_Postcondition_Evidence_Report.md`
 - `reports/aws_metadata_adapter/AWS_Metadata_Adapter_Report.md`
 - `docs/AWS_Marketplace_Validation_Path.md`
@@ -95,7 +97,7 @@ Would 5 to 25 metadata-only actions from one workflow be safe and useful enough 
 
 ### Route 2: Lambda/OpenAPI Decision Surface
 
-Next build after the reviewer path is understandable.
+Implemented as a local, metadata-only review surface.
 
 Shape SMERC as a small decision endpoint:
 
@@ -103,6 +105,18 @@ Shape SMERC as a small decision endpoint:
 - returns posture, route controls, reason codes, and evidence expectations
 - refuses secrets, account IDs, ARNs, raw logs, and production commands
 - exposes an OpenAPI contract with simple JSON request and response bodies
+
+Run:
+
+```bash
+python -m reference_engine.aws_decision_api_surface --pretty
+```
+
+Inspect:
+
+- `schemas/smerc-aws-decision-api-openapi-v1.json`
+- `examples/aws_lambda_decision_event.json`
+- `reports/aws_decision_api_surface/AWS_Decision_API_Surface.md`
 
 ### Route 3: AgentCore Gateway-Compatible Tool
 
@@ -130,7 +144,7 @@ Before pursuing AWS ecosystem packaging, SMERC still needs:
 
 - external reviewer-owned metadata
 - reviewer labels for useful, too strict, too loose, or irrelevant decisions
-- a stable OpenAPI decision endpoint shape
+- broader external review of the stable OpenAPI decision endpoint shape
 - a support and commercial-use model
 - latency and operational overhead observations
 - a clear deployment boundary for observe-only versus enforce-mode use
@@ -141,9 +155,9 @@ Do this now:
 
 1. Keep the GitHub proof current.
 2. Use `docs/AWS_Reviewer_Quickstart.md` as the first learning path.
-3. Ask for 5 to 25 safe metadata-only rows from one workflow.
-4. Record whether SMERC changed reviewer judgment.
-5. Build the Lambda/OpenAPI endpoint only after the ask is understandable.
+3. Use `docs/AWS_Decision_API_Surface.md` when the reviewer asks what would be callable.
+4. Ask for 5 to 25 safe metadata-only rows from one workflow.
+5. Record whether SMERC changed reviewer judgment.
 
 Do not do this yet:
 

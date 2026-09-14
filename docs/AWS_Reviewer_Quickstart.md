@@ -35,6 +35,8 @@ Amazon Research Awards has also publicly named adjacent research areas such as t
 
 For the ecosystem route from GitHub proof to future Gateway, Runtime, Marketplace, or Partner path, read `docs/AWS_Ecosystem_Entry_Path.md`.
 
+For the reviewable Lambda/OpenAPI surface, read `docs/AWS_Decision_API_Surface.md`.
+
 SMERC should use this moment by making the first proof simple:
 
 - one command
@@ -57,14 +59,7 @@ python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty
 To inspect the Lambda-shaped action-gate proof directly:
 
 ```bash
-python - <<'PY'
-import json
-from pathlib import Path
-from reference_engine.aws_lambda_decision_handler import lambda_handler
-
-event = json.loads(Path("examples/aws_lambda_decision_event.json").read_text())
-print(json.dumps(lambda_handler(event), indent=2, sort_keys=True))
-PY
+python -m reference_engine.aws_decision_api_surface --pretty
 ```
 
 To test the customer-owned metadata handoff with the bundled safe sample:
@@ -95,6 +90,7 @@ python -m reference_engine.aws_reviewer_bundle \
 Also inspect:
 
 - `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
+- `docs/AWS_Decision_API_Surface.md`
 - `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - `docs/AWS_Shadow_Mirror_Metadata_Path.md`
 - `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md`

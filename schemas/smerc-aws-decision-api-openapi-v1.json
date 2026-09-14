@@ -1,0 +1,272 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SMERC AWS-Style Decision API",
+    "version": "smerc.aws-decision-api.v1",
+    "summary": "Metadata-only recoverability decision surface for AWS-style agent and cloud actions.",
+    "description": "A narrow review contract for Lambda, API Gateway, Bedrock Agent Action Group, or AgentCore Gateway-style evaluation. It does not call AWS, execute actions, read logs, assume roles, modify IAM, or prove AWS endorsement."
+  },
+  "servers": [
+    {
+      "url": "https://example.invalid",
+      "description": "Placeholder URL for contract review. Replace only in a real deployment."
+    }
+  ],
+  "paths": {
+    "/smerc/decision": {
+      "post": {
+        "operationId": "evaluateAwsActionRecoverability",
+        "tags": ["AWS Decision Surface"],
+        "summary": "Evaluate one metadata-only AWS-style action before execution",
+        "description": "Returns posture, route controls, recoverability scores, and decision-lifecycle evidence for one metadata-only proposed action. The endpoint is designed for review and shadow-mode integration, not direct cloud mutation.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AwsDecisionRequest"
+              },
+              "examples": {
+                "bedrockActionGroup": {
+                  "summary": "Bedrock-style Lambda action group request",
+                  "value": {
+                    "tenant_id": "aws-style-local-review",
+                    "organization": "AWS-Style Local Review",
+                    "contact_role": "aws_platform_reviewer",
+                    "workflow_context": "Bedrock Agent Action Group proposes a Lambda-backed tool call that can update production configuration.",
+                    "action": {
+                      "action_id": "AWS_BEDROCK_ACTION_GROUP_LAMBDA_001",
+                      "description": "Bedrock-style agent proposes invoking a Lambda-backed action group that can update customer-facing production configuration.",
+                      "actor": "bedrock_agent_runtime",
+                      "tool": "aws.lambda_action_group",
+                      "action_type": "bedrock_action_group_lambda_invoke",
+                      "base_action_risk": 0.68,
+                      "reversibility": 0.54,
+                      "containment_strength": 0.58,
+                      "rollback_latency": 0.46,
+                      "evidence_validity": 0.69,
+                      "anomaly_pressure": 0.38,
+                      "impact_scope": 0.66,
+                      "cancel_reliability": 0.63,
+                      "authorization_confidence": 0.75,
+                      "external_side_effect": true,
+                      "sensitive_data": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recoverability decision envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AwsDecisionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid metadata-only action request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Posture": {
+        "type": "string",
+        "enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"]
+      },
+      "UnitScore": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "AwsDecisionRequest": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "tenant_id": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string"
+          },
+          "contact_role": {
+            "type": "string"
+          },
+          "workflow_context": {
+            "type": "string"
+          },
+          "action": {
+            "$ref": "#/components/schemas/AwsActionMetadata"
+          }
+        },
+        "additionalProperties": true
+      },
+      "AwsActionMetadata": {
+        "type": "object",
+        "required": [
+          "action_id",
+          "description",
+          "actor",
+          "tool",
+          "action_type",
+          "base_action_risk",
+          "reversibility",
+          "containment_strength",
+          "rollback_latency",
+          "evidence_validity",
+          "anomaly_pressure",
+          "impact_scope",
+          "cancel_reliability",
+          "authorization_confidence",
+          "external_side_effect",
+          "sensitive_data"
+        ],
+        "properties": {
+          "action_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "tool": {
+            "type": "string"
+          },
+          "action_type": {
+            "type": "string"
+          },
+          "base_action_risk": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "reversibility": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "containment_strength": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "rollback_latency": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "evidence_validity": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "anomaly_pressure": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "impact_scope": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "cancel_reliability": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "authorization_confidence": {
+            "$ref": "#/components/schemas/UnitScore"
+          },
+          "external_side_effect": {
+            "type": "boolean"
+          },
+          "sensitive_data": {
+            "type": "boolean"
+          },
+          "context": {
+            "type": "object"
+          },
+          "tool_plan": {
+            "type": "object"
+          },
+          "ref_gate": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      },
+      "AwsDecisionResponse": {
+        "type": "object",
+        "required": [
+          "version",
+          "request_id",
+          "posture",
+          "route_state",
+          "executable",
+          "required_controls",
+          "blocked_controls",
+          "reason",
+          "scores",
+          "ledger_id",
+          "ledger_head_hash",
+          "ledger_valid",
+          "recommended_next_action",
+          "evidence_boundary"
+        ],
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "smerc.aws-lambda-decision-handler.v1"
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "posture": {
+            "$ref": "#/components/schemas/Posture"
+          },
+          "route_state": {
+            "type": "string"
+          },
+          "executable": {
+            "type": "boolean"
+          },
+          "required_controls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "blocked_controls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reason": {
+            "type": "string"
+          },
+          "scores": {
+            "type": "object"
+          },
+          "ref_gate_status": {
+            "type": "string"
+          },
+          "identity_gate_status": {
+            "type": "string"
+          },
+          "ledger_id": {
+            "type": "string"
+          },
+          "ledger_head_hash": {
+            "type": "string"
+          },
+          "ledger_valid": {
+            "type": "boolean"
+          },
+          "recommended_next_action": {
+            "type": "string"
+          },
+          "evidence_boundary": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

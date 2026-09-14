@@ -1,0 +1,131 @@
+{
+  "blocked_controls_count": 0,
+  "compatibility_targets": [
+    "AWS Lambda-compatible handler",
+    "API Gateway or Function URL JSON body",
+    "Bedrock Agent Action Group pre-execution decision check",
+    "AgentCore Gateway-style OpenAPI tool surface",
+    "local reviewer CLI proof without live AWS access"
+  ],
+  "decision_summary": {
+    "reason": "SMERC returned THROTTLE and route CONSTRAINED_EXECUTE because the proposed action's recoverability, containment, evidence, rollback, and blast-radius signals produced irreversible exposure 0.653.",
+    "recommended_next_action": "Do not propose a pilot yet; collect better workflow metadata first.",
+    "scores": {
+      "cancel_reliability_score": 0.63,
+      "confidence_score": 0.689,
+      "irreversible_exposure_score": 0.653,
+      "operational_stress_score": 0.501,
+      "reversible_capacity_score": 0.562,
+      "risk_adjusted_authorization_score": 0.546
+    }
+  },
+  "evidence_boundary": "This Lambda-shaped handler is a local, metadata-only adapter. It does not call AWS, invoke Amazon Bedrock, read CloudTrail or CloudWatch, assume roles, modify IAM, execute CloudFormation, access S3, change RDS, rotate secrets, deploy infrastructure, or prove AWS endorsement, AWS certification, production safety, or incident reduction.",
+  "executable": true,
+  "generated_at": "2026-09-14T01:23:39+00:00",
+  "handler_version": "smerc.aws-lambda-decision-handler.v1",
+  "ledger_valid": true,
+  "openapi_path": "schemas/smerc-aws-decision-api-openapi-v1.json",
+  "operation_id": "evaluateAwsActionRecoverability",
+  "posture": "THROTTLE",
+  "readiness_blockers": [],
+  "request": {
+    "action": {
+      "action_id": "AWS_BEDROCK_ACTION_GROUP_LAMBDA_001",
+      "action_type": "bedrock_action_group_lambda_invoke",
+      "actor": "bedrock_agent_runtime",
+      "anomaly_pressure": 0.38,
+      "authorization_confidence": 0.75,
+      "base_action_risk": 0.68,
+      "cancel_reliability": 0.63,
+      "containment_strength": 0.58,
+      "context": {
+        "domain_profile": "cloud_admin",
+        "workflow": "bedrock_agent_action_group"
+      },
+      "description": "Bedrock-style agent proposes invoking a Lambda-backed action group that can update customer-facing production configuration.",
+      "evidence_validity": 0.69,
+      "external_side_effect": true,
+      "impact_scope": 0.66,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.54,
+      "rollback_latency": 0.46,
+      "sensitive_data": true,
+      "tool": "aws.lambda_action_group",
+      "tool_plan": {
+        "action": "bedrock_action_group_lambda_invoke",
+        "max_scope_units": 100,
+        "metadata": {
+          "aws_surface": "bedrock_agent_action_group",
+          "change_family": "agent_tool_execution",
+          "cloud_provider": "aws",
+          "environment": "production"
+        },
+        "plan_id": "plan_aws_bedrock_action_group_lambda_001",
+        "requested_capability": "invoke_side_effecting_action_group",
+        "requested_scope_units": 55,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": true,
+        "supports_scope_limit": true,
+        "tool": "aws.lambda_action_group",
+        "version": "smerc.sparta-plan.v1"
+      }
+    },
+    "contact_role": "aws_platform_reviewer",
+    "organization": "AWS-Style Local Review",
+    "tenant_id": "aws-style-local-review",
+    "workflow_context": "Bedrock Agent Action Group proposes a Lambda-backed tool call that can update production configuration."
+  },
+  "request_id": "AWS_BEDROCK_ACTION_GROUP_LAMBDA_001",
+  "required_controls_count": 6,
+  "response": {
+    "blocked_controls": [],
+    "evidence_boundary": "This Lambda-shaped handler is a local, metadata-only adapter. It does not call AWS, invoke Amazon Bedrock, read CloudTrail or CloudWatch, assume roles, modify IAM, execute CloudFormation, access S3, change RDS, rotate secrets, deploy infrastructure, or prove AWS endorsement, AWS certification, production safety, or incident reduction.",
+    "executable": true,
+    "identity_gate_status": "WATCH",
+    "ledger_head_hash": "f6b0774a96cc545735df3205d9fd62bff8babf345d8e0e91f36246ff1a8a4404",
+    "ledger_id": "customer_eval_AWS_BEDROCK_ACTION_GROUP_LAMBDA_001",
+    "ledger_valid": true,
+    "posture": "THROTTLE",
+    "reason": "SMERC returned THROTTLE and route CONSTRAINED_EXECUTE because the proposed action's recoverability, containment, evidence, rollback, and blast-radius signals produced irreversible exposure 0.653.",
+    "recommended_next_action": "Do not propose a pilot yet; collect better workflow metadata first.",
+    "ref_gate_status": "pass",
+    "request_id": "AWS_BEDROCK_ACTION_GROUP_LAMBDA_001",
+    "required_controls": [
+      "checkpoint_before_execution",
+      "limit_scope",
+      "preserve_replay",
+      "preview_before_execution",
+      "record_execution_report",
+      "require_rollback_plan"
+    ],
+    "route_state": "CONSTRAINED_EXECUTE",
+    "scores": {
+      "cancel_reliability_score": 0.63,
+      "confidence_score": 0.689,
+      "irreversible_exposure_score": 0.653,
+      "operational_stress_score": 0.501,
+      "reversible_capacity_score": 0.562,
+      "risk_adjusted_authorization_score": 0.546
+    },
+    "version": "smerc.aws-lambda-decision-handler.v1"
+  },
+  "reviewer_runbook": [
+    "Inspect schemas/smerc-aws-decision-api-openapi-v1.json.",
+    "Inspect examples/aws_lambda_decision_event.json.",
+    "Run python -m reference_engine.aws_decision_api_surface --pretty.",
+    "Confirm the response returns posture, route controls, scores, and ledger evidence.",
+    "Replace the sample with 5 to 25 metadata-only actions from one workflow when safe."
+  ],
+  "route_state": "CONSTRAINED_EXECUTE",
+  "sample_request_path": "examples/aws_lambda_decision_event.json",
+  "status": "reviewable_aws_decision_surface",
+  "version": "smerc.aws-decision-api-surface.v1"
+}

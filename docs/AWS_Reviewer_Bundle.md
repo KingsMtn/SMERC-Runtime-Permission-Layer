@@ -26,6 +26,9 @@ Generated files:
 reports/aws_reviewer_bundle/AWS_Reviewer_Bundle.md
 reports/aws_reviewer_bundle/aws_reviewer_bundle.json
 reports/aws_reviewer_bundle/AWS_Agent_Action_Chain.md
+reports/aws_reviewer_bundle/AWS_Decision_API_Surface.md
+reports/aws_reviewer_bundle/sample_decision_request.json
+reports/aws_reviewer_bundle/sample_decision_response.json
 reports/aws_reviewer_bundle/AWS_Agent_Action_Chain_Postcondition_Evidence.md
 reports/aws_reviewer_bundle/AWS_Postcondition_Evidence_Report.md
 reports/aws_reviewer_bundle/AWS_Shadow_Mirror_Adapter_Report.md
@@ -36,6 +39,7 @@ reports/aws_reviewer_bundle/AWS_Customer_Owned_Metadata_Request.md
 ## What It Includes
 
 - AWS Agent Action Chain proof.
+- AWS Decision API Surface at `docs/AWS_Decision_API_Surface.md`, with OpenAPI operation ID `evaluateAwsActionRecoverability`.
 - Lambda-shaped Bedrock Agent Action Group decision-handler pattern at `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`.
 - AWS Customer Metadata Mini-Pack at `docs/AWS_Customer_Metadata_Mini_Pack.md`.
 - AWS Agent Action Chain Postcondition Evidence.
@@ -58,7 +62,7 @@ Guardrails check content. IAM checks authority. SMERC checks recoverability. Sha
 
 Work: assemble the AWS-style proof path into one local package.
 
-Result: the reviewer receives one report that summarizes AWS action-chain posture, shadow-mirror operational evidence, route-control evidence, postcondition gaps, local p95 timing, metadata needs, and next action.
+Result: the reviewer receives one report that summarizes AWS action-chain posture, a Lambda/OpenAPI decision surface, shadow-mirror operational evidence, route-control evidence, postcondition gaps, local p95 timing, metadata needs, and next action.
 
 Impact: SMERC becomes easier for an AWS-style platform team to evaluate without founder-led explanation, live AWS access, raw logs, account IDs, ARNs, secrets, production commands, or execution authority.
 

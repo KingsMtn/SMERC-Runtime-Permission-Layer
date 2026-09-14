@@ -1,0 +1,55 @@
+{
+  "action": {
+    "action_id": "AWS_BEDROCK_ACTION_GROUP_LAMBDA_001",
+    "action_type": "bedrock_action_group_lambda_invoke",
+    "actor": "bedrock_agent_runtime",
+    "anomaly_pressure": 0.38,
+    "authorization_confidence": 0.75,
+    "base_action_risk": 0.68,
+    "cancel_reliability": 0.63,
+    "containment_strength": 0.58,
+    "context": {
+      "domain_profile": "cloud_admin",
+      "workflow": "bedrock_agent_action_group"
+    },
+    "description": "Bedrock-style agent proposes invoking a Lambda-backed action group that can update customer-facing production configuration.",
+    "evidence_validity": 0.69,
+    "external_side_effect": true,
+    "impact_scope": 0.66,
+    "ref_gate": {
+      "attestation_valid": true,
+      "least_privilege_confirmed": true,
+      "object_shape_expected": true,
+      "typed_contract_valid": true
+    },
+    "reversibility": 0.54,
+    "rollback_latency": 0.46,
+    "sensitive_data": true,
+    "tool": "aws.lambda_action_group",
+    "tool_plan": {
+      "action": "bedrock_action_group_lambda_invoke",
+      "max_scope_units": 100,
+      "metadata": {
+        "aws_surface": "bedrock_agent_action_group",
+        "change_family": "agent_tool_execution",
+        "cloud_provider": "aws",
+        "environment": "production"
+      },
+      "plan_id": "plan_aws_bedrock_action_group_lambda_001",
+      "requested_capability": "invoke_side_effecting_action_group",
+      "requested_scope_units": 55,
+      "side_effect_level": "external",
+      "supports_checkpoint": true,
+      "supports_dry_run": true,
+      "supports_human_approval": true,
+      "supports_rollback": true,
+      "supports_scope_limit": true,
+      "tool": "aws.lambda_action_group",
+      "version": "smerc.sparta-plan.v1"
+    }
+  },
+  "contact_role": "aws_platform_reviewer",
+  "organization": "AWS-Style Local Review",
+  "tenant_id": "aws-style-local-review",
+  "workflow_context": "Bedrock Agent Action Group proposes a Lambda-backed tool call that can update production configuration."
+}

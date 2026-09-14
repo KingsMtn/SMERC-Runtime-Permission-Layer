@@ -20,6 +20,7 @@ class AWSReviewerBundleTests(unittest.TestCase):
         self.assertEqual(bundle["version"], VERSION)
         self.assertIn(bundle["bundle_status"], {"ready_for_limited_aws_review", "ready_for_aws_shadow_mode_discussion"})
         self.assertIn("aws_agent_action_chain", bundle["reports"])
+        self.assertIn("aws_decision_api_surface", bundle["reports"])
         self.assertIn("aws_agent_action_chain_postcondition", bundle["reports"])
         self.assertIn("aws_postcondition_evidence", bundle["reports"])
         self.assertIn("aws_shadow_mirror", bundle["reports"])
@@ -27,6 +28,11 @@ class AWSReviewerBundleTests(unittest.TestCase):
         self.assertIn("aws_customer_owned_metadata_request", bundle["reports"])
         self.assertEqual(bundle["reports"]["aws_shadow_mirror"]["accepted_rows"], 3)
         self.assertEqual(bundle["reports"]["aws_shadow_mirror"]["skipped_rows"], 1)
+        self.assertEqual(bundle["reports"]["aws_decision_api_surface"]["status"], "reviewable_aws_decision_surface")
+        self.assertEqual(
+            bundle["reports"]["aws_decision_api_surface"]["operation_id"],
+            "evaluateAwsActionRecoverability",
+        )
         self.assertEqual(bundle["reports"]["aws_customer_owned_metadata_request"]["workflow_family"], "aws")
         self.assertIn("metadata-only", bundle["evidence_boundary"])
         self.assertIn("packet payloads", bundle["evidence_boundary"])
@@ -37,6 +43,8 @@ class AWSReviewerBundleTests(unittest.TestCase):
         self.assertIn("# AWS-Style Reviewer Bundle", markdown)
         self.assertIn("Guardrails check content. IAM checks authority. SMERC checks recoverability.", markdown)
         self.assertIn("Shadow mirror metadata tests operational behavior", markdown)
+        self.assertIn("AWS decision API surface", markdown)
+        self.assertIn("evaluateAwsActionRecoverability", markdown)
         self.assertIn("Included Reports", markdown)
         self.assertIn("AWS shadow mirror metadata", markdown)
         self.assertIn("Evidence Boundary", markdown)
@@ -54,6 +62,9 @@ class AWSReviewerBundleTests(unittest.TestCase):
         )
         self.assertIn("AWS-Style Reviewer Bundle", (scratch / "AWS_Reviewer_Bundle.md").read_text(encoding="utf-8"))
         self.assertTrue((scratch / "AWS_Agent_Action_Chain.md").exists())
+        self.assertTrue((scratch / "AWS_Decision_API_Surface.md").exists())
+        self.assertTrue((scratch / "sample_decision_request.json").exists())
+        self.assertTrue((scratch / "sample_decision_response.json").exists())
         self.assertTrue((scratch / "AWS_Agent_Action_Chain_Postcondition_Evidence.md").exists())
         self.assertTrue((scratch / "AWS_Postcondition_Evidence_Report.md").exists())
         self.assertTrue((scratch / "AWS_Shadow_Mirror_Adapter_Report.md").exists())
@@ -66,6 +77,7 @@ class AWSReviewerBundleTests(unittest.TestCase):
         ai_bundle = (ROOT / "docs" / "AI_Readable_Reviewer_Bundle.md").read_text(encoding="utf-8")
 
         self.assertIn("python -m reference_engine.aws_reviewer_bundle", docs)
+        self.assertIn("AWS_Decision_API_Surface.md", docs)
         self.assertIn("AWS_Shadow_Mirror_Adapter_Report.md", docs)
         self.assertIn("docs/AWS_Reviewer_Bundle.md", readme)
         self.assertIn("aws-style reviewer bundle", ai_bundle.lower())

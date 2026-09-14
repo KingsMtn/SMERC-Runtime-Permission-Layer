@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an AWS Decision API Surface with a Lambda/OpenAPI-style `POST /smerc/decision` contract, operation ID, sample request, sample response, and reviewer report for AWS-adjacent evaluation without live AWS access.
 - Added an AWS Ecosystem Entry Path mapping SMERC from GitHub proof to AWS-style practitioner review and future AgentCore Gateway, AgentCore Runtime, AWS Marketplace, or Partner routes while preserving non-claim boundaries.
 - Added a 10-minute AWS reviewer learning path and sharper future AWS Marketplace/AgentCore packaging checklist so companies can understand the SMERC proof before any live integration or listing work.
 - Added AgentCore runtime postcondition evidence for governed runtime sessions, weak session-binding blocks, and runtime command-shell blocks, with a runtime-specific summary in the AWS postcondition report.
