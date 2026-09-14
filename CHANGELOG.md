@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a SMERC Whole System map and runnable one-action demo that shows identity/context, recoverability, posture, SPARTa routing, recovery authority, bounded execution, postcondition evidence, and Decision Lifecycle Ledger as one flow.
 - Added a TRACE-style Evidence Adapter stub that normalizes metadata-only runtime evidence into SMERC postcondition observations while rejecting raw attestation-shaped rows and preserving non-claim boundaries.
 - Added a Linux Foundation Standards Alignment note for TRACE-style runtime evidence, AAIF/MCP/AGENTS.md-style agent infrastructure, Agent Name Service-style identity, and open secure AI governance while preserving non-claim boundaries.
 - Added an AWS Decision API Surface with a Lambda/OpenAPI-style `POST /smerc/decision` contract, operation ID, sample request, sample response, and reviewer report for AWS-adjacent evaluation without live AWS access.

@@ -26,6 +26,7 @@ AWS metadata pilot CTA:
 
 Fast reviewer paths:
 
+- SMERC whole system: `docs/SMERC_Whole_System.md`
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
 - Company reviewer front door: `docs/Company_Reviewer_Front_Door.md`
 - Serious reviewer bundle: `docs/Serious_Reviewer_Bundle.md`
@@ -407,6 +408,7 @@ The current build includes:
 - Postcondition Evidence report that compares SPARTa-required controls with observed control, execution, hold, and rollback evidence
 - one-command Customer Proof Loop that runs runtime admission, recoverability scoring, SPARTa routing, and Decision Lifecycle Ledger evidence into one reviewable report
 - complete lifecycle proof connecting runtime admission, recoverability scoring, SPARTa routing, Recovery Authority Gate, action-bound permit verification, synthetic execution result, and Decision Lifecycle Ledger evidence
+- SMERC Whole System map and runnable demo showing identity/context, recoverability, posture, SPARTa routing, recovery authority, bounded execution, postcondition evidence, and Decision Lifecycle Ledger in one flow
 - self-contained GitHub Actions pilot package generator that assembles signal intake, eligibility, SMERC decision, execution route, DLL, DLL Intelligence, and timing evidence
 - scoring-invariant verification for recoverability and executor fitness math
 - Self-Governance Sandbox that scores proposed SMERC policy, threshold, adapter, and scoring changes before they can affect SMERC itself
@@ -488,6 +490,7 @@ Start here before reading the code:
 - `docs/Run_Customer_Evaluation_From_GitHub.md` gives non-local reviewers a click-by-click path for running the public customer-evaluation workflow from GitHub Actions and downloading the report artifact.
 - `docs/Company_Test_Package.md` gives companies a practical first test: copy `examples/customer_metadata_template.json`, replace it with 5 to 25 metadata-only actions from one workflow, run the evaluation, and decide whether a 30-day shadow-mode pilot is justified.
 - `docs/Customer_Owned_Metadata_Request.md` gives reviewers the clean external ask: replace public examples with 5 to 25 safe metadata-only actions from one workflow, then pair the result with performance and postcondition evidence.
+- `docs/SMERC_Whole_System.md` gives reviewers the shortest map of the whole system and points to `python -m reference_engine.whole_system_demo --pretty` for a one-action lifecycle run.
 - `docs/External_Reviewer_Metadata_Response.md` checks whether a reviewer response is usable, too limited, or unsafe before treating customer-owned metadata as pilot evidence.
 - `docs/AWS_Agent_Action_Chain.md` shows the clean AWS-style placement: AI Agent Action -> Bedrock-style Guardrail -> SMERC Recoverability Gate -> Dynamic IAM / Systems Manager / Cloud Execution -> Postcondition Evidence.
 - `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md` checks whether AWS-style action-chain observation metadata proves that SMERC-required controls actually happened after the recoverability route.

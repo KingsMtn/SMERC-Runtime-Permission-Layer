@@ -53,12 +53,17 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer", bundle["canonical_repository"])
         self.assertIn("pre-execution recoverability control", bundle["category"])
         self.assertIn("runtime permission infrastructure", bundle["category"])
+        self.assertIn(
+            "SMERC Whole System map and runnable demo showing identity/context, recoverability engine, decision posture, SPARTa routing, recovery authority, bounded execution, postcondition evidence, and Decision Lifecycle Ledger as one flow",
+            bundle["implemented_surfaces"],
+        )
         self.assertIn("Recovery Authority Gate for governed unlock after pause", bundle["implemented_surfaces"])
         self.assertIn(
             "AWS Shadow Mirror Metadata Path for converting sanitized VPC Traffic Mirroring, Network Load Balancer fan-out, and Gateway Load Balancer endpoint summaries into SMERC shadow-mode evidence without packet payloads or live AWS access",
             bundle["implemented_surfaces"],
         )
         self.assertIn("customer validation", bundle["current_evidence"]["evidence_boundary"])
+        self.assertIn("smerc_whole_system", bundle["current_evidence"])
         self.assertIn("aws_shadow_mirror_metadata_path", bundle["current_evidence"])
         self.assertIn("aws_ecosystem_entry_path", bundle["current_evidence"])
         self.assertIn("aws_decision_api_surface", bundle["current_evidence"])
@@ -66,6 +71,8 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("trace_evidence_adapter", bundle["current_evidence"])
         self.assertIn("two_tier_valuation_path", bundle["current_evidence"])
         self.assertIn("AWS shadow mirror metadata", bundle["search_and_index_terms"])
+        self.assertIn("SMERC whole system", bundle["search_and_index_terms"])
+        self.assertIn("recoverability brain", bundle["search_and_index_terms"])
         self.assertIn("AWS ecosystem entry path", bundle["search_and_index_terms"])
         self.assertIn("AWS decision API surface", bundle["search_and_index_terms"])
         self.assertIn("evaluateAwsActionRecoverability", bundle["search_and_index_terms"])
@@ -75,6 +82,7 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("SMERC is not production-certified.", bundle["non_claims"])
         self.assertIn("docs/AI_Readable_Reviewer_Bundle.md", readme)
         self.assertIn("examples/ai_reviewer_bundle.json", readme)
+        self.assertIn("SMERC Whole System", doc)
         self.assertIn("AWS Shadow Mirror Metadata Path", doc)
         self.assertIn("AWS Ecosystem Entry Path", doc)
         self.assertIn("AWS Decision API Surface", doc)
