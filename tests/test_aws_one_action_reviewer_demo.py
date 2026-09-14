@@ -86,10 +86,26 @@ class AWSOneActionReviewerDemoTests(unittest.TestCase):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         doc = (ROOT / "docs" / "Try_SMERC_On_One_Action.md").read_text(encoding="utf-8")
         bundle = (ROOT / "docs" / "AI_Readable_Reviewer_Bundle.md").read_text(encoding="utf-8")
+        ask = (ROOT / "docs" / "AWS_One_Action_Reviewer_Ask.md").read_text(encoding="utf-8")
+        ai_bundle = json.loads((ROOT / "examples" / "ai_reviewer_bundle.json").read_text(encoding="utf-8"))
 
         self.assertIn("reference_engine.aws_one_action_reviewer_demo", readme)
         self.assertIn("reference_engine.aws_one_action_reviewer_demo", doc)
         self.assertIn("AWS One-Action Reviewer Demo", bundle)
+        self.assertIn("docs/AWS_One_Action_Reviewer_Ask.md", readme)
+        self.assertIn("docs/AWS_One_Action_Reviewer_Ask.md", doc)
+        self.assertIn("AWS One-Action Reviewer Ask", bundle)
+        self.assertIn("Two-Minute Response Template", ask)
+        self.assertIn("Fallback If No One Responds", ask)
+        self.assertIn("aws_one_action_reviewer_ask", ai_bundle["current_evidence"])
+
+    def test_outreach_drafts_reference_one_action_ask(self):
+        outreach = (ROOT / "docs" / "Public_Outreach_Post_Drafts.md").read_text(encoding="utf-8")
+        reply = (ROOT / "docs" / "AWS_REVIEWER_REPLY_DRAFT.md").read_text(encoding="utf-8")
+
+        self.assertIn("AWS One-Action Reviewer Ask", outreach)
+        self.assertIn("AWS_ONE_RDS_CLUSTER_DELETE", outreach)
+        self.assertIn("docs/AWS_One_Action_Reviewer_Ask.md", reply)
 
 
 if __name__ == "__main__":

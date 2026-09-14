@@ -33,6 +33,7 @@ The repository contains working pilot-grade artifacts:
 - SMERC Whole System map and runnable demo for showing identity/context, recoverability, posture, SPARTa routing, recovery authority, bounded execution, postcondition evidence, and Decision Lifecycle Ledger as one flow
 - one-action front door for testing a single proposed agent, tool, cloud, deployment, or automation action, documented at `docs/Try_SMERC_On_One_Action.md`
 - AWS One-Action Reviewer Demo for running 8 metadata-only AWS-style actions through SMERC and seeing posture, SPARTa route, scores, reason codes, controls, and transition guidance before asking reviewers for their own metadata
+- AWS One-Action Reviewer Ask with a short outbound message, Slack/forum variant, two-minute response template, and fallback plan if reviewers do not respond
 - Local Shadow Intake for reject-first preparation of 5 to 25 reviewer-owned metadata-only action summaries, documented at `docs/Local_Shadow_Intake.md`
 - End-to-End Reviewer Flow for tying local metadata intake, schema validation, SPL policy identity, posture output, and evidence reporting into one command, documented at `docs/End_To_End_Reviewer_Flow.md`
 - recoverability scoring engine
@@ -115,6 +116,8 @@ The AWS Ecosystem Entry Path explains how that proof could later map to AWS-adja
 The AWS Decision API Surface turns that entry strategy into a small reviewable contract. It exposes one metadata-only OpenAPI operation and one Lambda-compatible handler response so reviewers can see what would be callable before any live AWS deployment exists.
 
 The AWS One-Action Reviewer Demo is the shortest AWS-facing proof path. It gives reviewers 8 safe metadata-only examples, including IAM expansion, S3 policy widening, CloudFormation replacement, RDS deletion, cost-velocity scale-out, and Secrets Manager rotation, then shows posture, SPARTa route, scores, reason codes, controls, and transition guidance in one local run.
+
+The AWS One-Action Reviewer Ask turns that proof into the smallest outreach loop: ask one reviewer whether one AWS-style action should be allowed, throttled, frozen, denied, or escalated, and ask what evidence would change the answer.
 
 The Linux Foundation Standards Alignment explains how SMERC can be standards-adjacent without overstating status. TRACE-style runtime evidence can strengthen SMERC postcondition evidence, MCP and AGENTS.md-style metadata can improve action context, and Agent Name Service-style identity can feed the identity side of the decision while SMERC remains focused on recoverability before execution.
 

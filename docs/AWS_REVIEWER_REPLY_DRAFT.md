@@ -12,6 +12,12 @@ The question we are trying to test is narrow:
 
 > If existing controls say an action is authorized, should a recoverability-aware pre-execution layer still throttle, freeze, deny, or escalate it because rollback, blast radius, evidence, fallback, or cost velocity are not strong enough?
 
+If you only have 2 minutes, the smallest critique path is one action:
+
+```text
+https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_One_Action_Reviewer_Ask.md
+```
+
 The GitHub intake path is here:
 
 ```text

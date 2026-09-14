@@ -85,3 +85,19 @@ Reviewer request:
 https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/External_Metadata_Reviewer_Request.md
 ```
 
+## AWS One-Action Reviewer Ask
+
+```text
+I am looking for a quick technical gut check on one AWS-style action.
+
+SMERC is a metadata-only recoverability gate for AI-agent and cloud-automation actions. It asks whether an already-authorized action should still be allowed, throttled, frozen, denied, or escalated based on rollback path, blast radius, evidence quality, containment, and cost velocity.
+
+The one-action demo is here:
+https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/aws_one_action_reviewer_demo/AWS_One_Action_Reviewer_Demo.md
+
+For `AWS_ONE_RDS_CLUSTER_DELETE`, SMERC returns `DENY`.
+
+Question: would your team allow, throttle, freeze, deny, or escalate this kind of action, and what evidence would change your mind?
+
+No account IDs, ARNs, credentials, raw logs, customer data, production commands, or live AWS access wanted.
+```

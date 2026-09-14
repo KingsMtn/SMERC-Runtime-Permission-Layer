@@ -33,6 +33,7 @@ Fast reviewer paths:
 - AI/search reviewer: `docs/AI_Readable_Reviewer_Bundle.md`
 - Try one action: `docs/Try_SMERC_On_One_Action.md`
 - AWS one-action reviewer demo: `python -m reference_engine.aws_one_action_reviewer_demo --action-id AWS_ONE_RDS_CLUSTER_DELETE --pretty`
+- AWS one-action reviewer ask: `docs/AWS_One_Action_Reviewer_Ask.md`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - AWS agent action chain: `docs/AWS_Agent_Action_Chain.md`
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
@@ -494,6 +495,7 @@ Start here before reading the code:
 - `docs/Customer_Owned_Metadata_Request.md` gives reviewers the clean external ask: replace public examples with 5 to 25 safe metadata-only actions from one workflow, then pair the result with performance and postcondition evidence.
 - `docs/SMERC_Whole_System.md` gives reviewers the shortest map of the whole system and points to `python -m reference_engine.whole_system_demo --pretty` for a one-action lifecycle run.
 - `python -m reference_engine.aws_one_action_reviewer_demo --pretty` gives AWS-style reviewers 8 safe metadata-only actions and a compact explanation of posture, route, reason codes, scores, controls, and transition guidance.
+- `docs/AWS_One_Action_Reviewer_Ask.md` gives the exact short outbound message and two-minute response template for asking reviewers whether one AWS-style action should be allowed, throttled, frozen, denied, or escalated.
 - `docs/External_Reviewer_Metadata_Response.md` checks whether a reviewer response is usable, too limited, or unsafe before treating customer-owned metadata as pilot evidence.
 - `docs/AWS_Agent_Action_Chain.md` shows the clean AWS-style placement: AI Agent Action -> Bedrock-style Guardrail -> SMERC Recoverability Gate -> Dynamic IAM / Systems Manager / Cloud Execution -> Postcondition Evidence.
 - `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md` checks whether AWS-style action-chain observation metadata proves that SMERC-required controls actually happened after the recoverability route.

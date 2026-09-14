@@ -56,6 +56,10 @@ This path is meant to answer the fastest reviewer question: does SMERC's posture
 
 Included examples cover Lambda configuration, IAM role expansion, S3 policy widening, CloudFormation replacement risk, ECS capacity shift, RDS deletion, cost-velocity scale-out, and Secrets Manager rotation.
 
+To ask someone for feedback on one of these examples, use:
+
+- `docs/AWS_One_Action_Reviewer_Ask.md`
+
 ## Change The Example
 
 Copy `examples/recoverability_single_action.json` and change only safe metadata.
