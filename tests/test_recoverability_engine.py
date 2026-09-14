@@ -129,6 +129,25 @@ class RecoverabilityEngineTests(unittest.TestCase):
         self.assertIn("EVIDENCE_VALIDITY_UNAVAILABLE", result["reason_codes"])
         self.assertIn("treat_unavailable_recoverability_as_uncertainty", result["controls"])
 
+    def test_omitted_recoverability_signal_is_marked_unavailable(self):
+        action = dict(self.by_id("AGENT_PROD_DEPLOY_MISSING_ROLLBACK_EVIDENCE"))
+        action["context"] = {
+            key: value
+            for key, value in action["context"].items()
+            if key != "unavailable_recoverability_signals"
+        }
+        del action["rollback_latency"]
+
+        result = self.engine.evaluate(action)
+
+        self.assertEqual(result["posture"], "FREEZE")
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", result["reason_codes"])
+        self.assertIn("ROLLBACK_LATENCY_UNAVAILABLE", result["reason_codes"])
+        self.assertEqual(
+            result["replay"]["context"]["auto_unavailable_recoverability_signals"],
+            ["rollback_latency"],
+        )
+
     def test_unavailable_recoverability_signal_list_is_validated(self):
         action = dict(self.by_id("AGENT_RUN_TESTS"))
         action["context"] = {"unavailable_recoverability_signals": ["unknown_signal"]}

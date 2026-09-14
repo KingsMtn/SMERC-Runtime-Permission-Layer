@@ -61,6 +61,8 @@ Can you replace the sample rows below with 5 to 25 actions from one workflow and
 
 After filling the rows, please add a quick reviewer label:
 
+This is an agreement/usefulness label after seeing SMERC posture, not blind ground truth.
+
 - useful
 - too strict
 - too loose
@@ -72,11 +74,13 @@ After filling the rows, please add a quick reviewer label:
 - [ ] I removed secrets, credentials, account IDs, ARNs, IP addresses, emails, customer records, raw logs, source code, private prompts, confidential incidents, regulated payloads, and production commands.
 - [ ] These are metadata-only summaries from one workflow or realistic public examples.
 - [ ] I understand this public issue is for review signal only, not production certification or incident-response handling.
+- [ ] I understand production deployment, commercial embedding, hosted use, resale, revenue-generating use, or product integration requires a separate written agreement.
 
 ## Relevant Links
 
 - End-to-end reviewer flow: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/End_To_End_Reviewer_Flow.md
 - Local shadow intake: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Local_Shadow_Intake.md
 - Five-row example: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Five_Row_Metadata_Example.md
+- Commercial-use boundary: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/COMMERCIAL_USE.md
 - Claim Registry: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Claim_Registry.md
 - Evidence Bundle: https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Evidence_Bundle.md

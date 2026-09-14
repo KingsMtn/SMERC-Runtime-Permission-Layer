@@ -1674,6 +1674,52 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         )
         return result
 
+    def _evaluate_inline_admission(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        admission_payload = payload.get("admission")
+        if admission_payload is None:
+            return None
+        if not isinstance(admission_payload, dict):
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_admission_request", "admission must be an object")
+        try:
+            return evaluate_runtime_admission_gate(admission_payload)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_admission_request", str(exc)) from exc
+
+    def _apply_inline_admission(
+        self,
+        decision: Dict[str, Any],
+        admission: Optional[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        if admission is None:
+            return decision
+
+        decision["runtime_admission"] = admission
+        decision["admission_skipped_recoverability_scoring"] = False
+        if admission["decision"] == "ADMIT":
+            decision["admission_capped_recoverability_scoring"] = False
+            decision["reason_codes"] = list(admission["reason_codes"]) + list(decision.get("reason_codes", []))
+            decision["controls"] = list(admission["required_controls"]) + list(decision.get("controls", []))
+            return decision
+
+        capped_posture = admission["max_recommended_posture"]
+        decision["posture"] = capped_posture
+        decision["enforcement_state"] = "block" if capped_posture == RuntimePosture.DENY.value else "pause"
+        decision["admission_capped_recoverability_scoring"] = True
+        decision["reason_codes"] = list(admission["reason_codes"]) + list(decision.get("reason_codes", []))
+        decision["controls"] = list(admission["required_controls"]) + list(decision.get("controls", []))
+        decision["plain_english_summary"] = (
+            f"{admission['plain_english_summary']} Recoverability scoring was capped at "
+            f"{capped_posture} because runtime admission did not admit the request."
+        )
+        if isinstance(decision.get("replay"), dict):
+            decision["replay"]["posture"] = decision["posture"]
+            decision["replay"]["enforcement_state"] = decision["enforcement_state"]
+            decision["replay"]["reason_codes"] = decision["reason_codes"]
+            decision["replay"]["controls"] = decision["controls"]
+            decision["replay"]["runtime_admission"] = admission
+            decision["replay"]["admission_capped_recoverability_scoring"] = True
+        return decision
+
     def _evaluate_and_record(
         self,
         principal: APIPrincipal,
@@ -1685,7 +1731,9 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         if not isinstance(payload, dict):
             raise TypeError("Each action must be a JSON object.")
         started_at = time.perf_counter()
+        admission = self._evaluate_inline_admission(payload)
         decision = self.server.engine_for(tenant_id).evaluate(payload)
+        decision = self._apply_inline_admission(decision, admission)
         self._attach_runtime_observation(decision, started_at)
         decision["tenant_id"] = tenant_id
         self._bind_principal(decision, principal)

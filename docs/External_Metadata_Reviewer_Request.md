@@ -38,6 +38,8 @@ For each example, include:
 - whether a route control or postcondition observation exists, if known
 - reviewer label after seeing SMERC posture: useful, too strict, too loose, irrelevant, or unclear
 
+The reviewer label is an agreement/usefulness label after seeing SMERC posture. It is not blind ground truth.
+
 ## What Not To Share
 
 Do not share:
@@ -105,3 +107,5 @@ SMERC gets closer to external proof only if real reviewers can say whether the p
 SMERC is pilot-grade. It is not production-certified, AWS-endorsed, compliance-attested, independently security-audited, or proven to reduce incidents.
 
 Existing identity, authorization, policy, guardrail, SIEM, SOAR, change-management, approval, and human-accountability controls remain authoritative.
+
+Public review and non-production evaluation are welcome. Production deployment, commercial embedding, hosted use, resale, revenue-generating use, or integration into a commercial product requires a separate written agreement. See `COMMERCIAL_USE.md`.

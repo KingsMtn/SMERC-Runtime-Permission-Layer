@@ -21,6 +21,7 @@ UNAVAILABLE_RECOVERABILITY_SIGNALS = {
     "impact_scope",
     "cancel_reliability",
 }
+RECOVERABILITY_SIGNAL_DEFAULTS = {signal: 0.5 for signal in UNAVAILABLE_RECOVERABILITY_SIGNALS}
 
 
 class RuntimePosture(str, Enum):
@@ -185,24 +186,7 @@ class RecoverabilityAction:
 
     def unavailable_recoverability_signals(self) -> List[str]:
         raw = self.context.get("unavailable_recoverability_signals", [])
-        if raw is None:
-            return []
-        if not isinstance(raw, list):
-            raise TypeError("context.unavailable_recoverability_signals must be a list when provided")
-        signals = []
-        for index, item in enumerate(raw):
-            if not isinstance(item, str) or not item.strip():
-                raise TypeError(f"context.unavailable_recoverability_signals[{index}] must be a non-empty string")
-            signal = item.strip()
-            if signal not in UNAVAILABLE_RECOVERABILITY_SIGNALS:
-                raise ValueError(
-                    "context.unavailable_recoverability_signals contains unsupported signal: "
-                    f"{signal}"
-                )
-            signals.append(signal)
-        if len(set(signals)) != len(signals):
-            raise ValueError("context.unavailable_recoverability_signals must not contain duplicates")
-        return sorted(signals)
+        return parse_unavailable_recoverability_signals(raw)
 
     @classmethod
     def from_dict(cls, payload: Dict[str, Any]) -> "RecoverabilityAction":
@@ -213,13 +197,7 @@ class RecoverabilityAction:
             "tool",
             "action_type",
             "base_action_risk",
-            "reversibility",
-            "containment_strength",
-            "rollback_latency",
-            "evidence_validity",
             "anomaly_pressure",
-            "impact_scope",
-            "cancel_reliability",
             "authorization_confidence",
             "external_side_effect",
             "sensitive_data",
@@ -227,6 +205,19 @@ class RecoverabilityAction:
         missing = [key for key in required if key not in payload]
         if missing:
             raise ValueError(f"Missing required recoverability field(s): {', '.join(missing)}")
+
+        context = payload.get("context", {})
+        if not isinstance(context, dict):
+            raise TypeError("context must be an object when provided")
+        context = dict(context)
+        unavailable_signals = parse_unavailable_recoverability_signals(
+            context.get("unavailable_recoverability_signals", [])
+        )
+        auto_unavailable = sorted(signal for signal in UNAVAILABLE_RECOVERABILITY_SIGNALS if signal not in payload)
+        if auto_unavailable:
+            unavailable_signals = sorted(set(unavailable_signals) | set(auto_unavailable))
+            context["unavailable_recoverability_signals"] = unavailable_signals
+            context["auto_unavailable_recoverability_signals"] = auto_unavailable
 
         for key in ["action_id", "description", "actor", "tool", "action_type"]:
             if not isinstance(payload[key], str) or not payload[key].strip():
@@ -244,7 +235,7 @@ class RecoverabilityAction:
             "cancel_reliability",
             "authorization_confidence",
         ]:
-            value = payload[key]
+            value = payload.get(key, RECOVERABILITY_SIGNAL_DEFAULTS.get(key))
             if not isinstance(value, (int, float)) or isinstance(value, bool):
                 raise TypeError(f"{key} must be a number between 0.0 and 1.0")
             if value < 0 or value > 1:
@@ -254,10 +245,6 @@ class RecoverabilityAction:
         for key in ["external_side_effect", "sensitive_data"]:
             if not isinstance(payload[key], bool):
                 raise TypeError(f"{key} must be a boolean")
-
-        context = payload.get("context", {})
-        if not isinstance(context, dict):
-            raise TypeError("context must be an object when provided")
 
         return cls(
             action_id=payload["action_id"],
@@ -278,6 +265,27 @@ class RecoverabilityAction:
             sensitive_data=payload["sensitive_data"],
             context=context,
         )
+
+
+def parse_unavailable_recoverability_signals(raw: Any) -> List[str]:
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise TypeError("context.unavailable_recoverability_signals must be a list when provided")
+    signals = []
+    for index, item in enumerate(raw):
+        if not isinstance(item, str) or not item.strip():
+            raise TypeError(f"context.unavailable_recoverability_signals[{index}] must be a non-empty string")
+        signal = item.strip()
+        if signal not in UNAVAILABLE_RECOVERABILITY_SIGNALS:
+            raise ValueError(
+                "context.unavailable_recoverability_signals contains unsupported signal: "
+                f"{signal}"
+            )
+        signals.append(signal)
+    if len(set(signals)) != len(signals):
+        raise ValueError("context.unavailable_recoverability_signals must not contain duplicates")
+    return sorted(signals)
 
 
 class RecoverabilityEngine:

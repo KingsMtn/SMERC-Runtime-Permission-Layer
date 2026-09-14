@@ -209,6 +209,26 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(status, 400)
         self.assertEqual(body["error"], "invalid_admission_request")
 
+    def test_evaluate_with_inline_failed_admission_is_capped_before_execution(self):
+        payload = json.loads(json.dumps(EXAMPLES[0]))
+        payload["admission"] = json.loads(json.dumps(ADMISSION_EXAMPLE))
+        payload["admission"]["checks"]["identity_valid"] = False
+
+        status, _, body = self.request_json(
+            "/v1/evaluate",
+            method="POST",
+            payload=payload,
+            key="alpha-secret",
+        )
+
+        self.assertEqual(status, 200)
+        self.assertEqual(body["runtime_admission"]["decision"], "REJECT")
+        self.assertTrue(body["admission_capped_recoverability_scoring"])
+        self.assertEqual(body["posture"], "DENY")
+        self.assertEqual(body["enforcement_state"], "block")
+        self.assertIn("RUNTIME_ADMISSION_REJECT", body["reason_codes"])
+        self.assertIn("do_not_use_recoverability_to_rescue_failed_admission", body["controls"])
+
     def test_evaluate_requires_bearer_authentication(self):
         status, headers, body = self.request_json("/v1/evaluate", method="POST", payload=EXAMPLES[0])
         self.assertEqual(status, 401)
