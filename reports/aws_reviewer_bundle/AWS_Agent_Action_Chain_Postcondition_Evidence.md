@@ -1,6 +1,6 @@
 # AWS Agent Action Chain Postcondition Evidence
 
-Generated: `2026-09-11T23:45:48+00:00`
+Generated: `2026-09-14T00:58:34+00:00`
 Version: `smerc.aws-agent-action-chain-postcondition.v1`
 
 ## Purpose
@@ -33,6 +33,7 @@ This is metadata-only AWS-style postcondition evidence. It does not call AWS API
 - Observed actions: `8`
 - Route control evidence: `{'required_control_count': 33, 'applied_required_control_count': 33, 'missing_required_control_count': 0, 'failed_required_control_count': 0, 'route_control_evidence_ratio': 1.0}`
 - AWS postcondition status counts: `{'gap': 1, 'pass': 7}`
+- AgentCore runtime postcondition summary: `{'runtime_action_count': 2, 'runtime_action_ids': ['AWS_CHAIN_COST_SCALE_SPIKE_005', 'AWS_CHAIN_AGENT_RETRY_LOOP_008'], 'status_counts': {'pass': 2}, 'execution_status_counts': {'held_for_review': 1, 'succeeded': 1}, 'observed_runtime_source_counts': {'agentcore_runtime_usage_log': 2, 'cloudwatch_metric_or_log': 2, 'cost_anomaly_signal': 2}}`
 - Observed AWS evidence sources: `{'agentcore_gateway_cloudtrail_data_event': 1, 'agentcore_gateway_mcp_log': 1, 'agentcore_runtime_usage_log': 2, 'cloudformation_change_set_record': 1, 'cloudtrail_management_event': 6, 'cloudwatch_metric_or_log': 4, 'cost_anomaly_signal': 2, 'iam_access_analyzer_or_policy_record': 2, 's3_policy_audit_record': 1, 'tool_result_metadata_stream': 1}`
 - Missing AWS evidence sources: `{'cloudwatch_metric_or_log': 1}`
 

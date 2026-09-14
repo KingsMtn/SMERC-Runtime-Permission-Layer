@@ -345,5 +345,158 @@
       "rollback_success": null,
       "notes": "Credential rotation proof uses safe rotation-status and management-event-shaped evidence without exposing secret material."
     }
+  },
+  {
+    "action_id": "AWS_ADAPTER_007_invoke_runtime_session_with_server_bound_user_session_and_correlated_aud",
+    "aws_surface": "bedrock_agentcore_runtime",
+    "expected_aws_evidence_sources": [
+      "agentcore_gateway_cloudtrail_data_event",
+      "agentcore_gateway_mcp_log",
+      "agentcore_runtime_trace_span",
+      "agentcore_runtime_usage_log",
+      "cloudwatch_metric_or_log",
+      "tool_result_metadata_stream"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "checkpoint_before_execution",
+        "outcome": "applied",
+        "mechanism": "runtime-session-checkpoint-observation",
+        "evidence_ref": "aws-postcondition://adapter/007/checkpoint",
+        "observed_at": "2026-09-07T18:36:00Z",
+        "aws_evidence_sources": ["agentcore_runtime_trace_span"]
+      },
+      {
+        "control_id": "limit_scope",
+        "outcome": "applied",
+        "mechanism": "gateway-bound-runtime-session-scope",
+        "evidence_ref": "aws-postcondition://adapter/007/scope",
+        "observed_at": "2026-09-07T18:36:01Z",
+        "aws_evidence_sources": ["agentcore_gateway_cloudtrail_data_event", "agentcore_gateway_mcp_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "runtime-session-replay-and-trace-link",
+        "evidence_ref": "aws-postcondition://adapter/007/replay",
+        "observed_at": "2026-09-07T18:36:02Z",
+        "aws_evidence_sources": ["agentcore_runtime_trace_span", "tool_result_metadata_stream"]
+      },
+      {
+        "control_id": "preview_before_execution",
+        "outcome": "applied",
+        "mechanism": "gateway-tool-preview-metadata",
+        "evidence_ref": "aws-postcondition://adapter/007/preview",
+        "observed_at": "2026-09-07T18:36:03Z",
+        "aws_evidence_sources": ["tool_result_metadata_stream"]
+      },
+      {
+        "control_id": "record_execution_report",
+        "outcome": "applied",
+        "mechanism": "runtime-usage-and-execution-summary",
+        "evidence_ref": "aws-postcondition://adapter/007/report",
+        "observed_at": "2026-09-07T18:36:04Z",
+        "aws_evidence_sources": ["agentcore_runtime_usage_log", "cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "require_rollback_plan",
+        "outcome": "applied",
+        "mechanism": "gateway-runtime-rollback-reference",
+        "evidence_ref": "aws-postcondition://adapter/007/rollback-plan",
+        "observed_at": "2026-09-07T18:36:05Z",
+        "aws_evidence_sources": ["agentcore_gateway_mcp_log"]
+      }
+    ],
+    "execution": {
+      "attempted": true,
+      "status": "succeeded",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Server-bound runtime session includes gateway path, session scope, trace, usage, tool-result, and replay-shaped evidence."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_008_invoke_runtime_using_client_supplied_session_identifier_under_shared_bac",
+    "aws_surface": "bedrock_agentcore_runtime",
+    "expected_aws_evidence_sources": [
+      "agentcore_runtime_trace_span",
+      "cloudtrail_management_event",
+      "cloudwatch_metric_or_log"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "runtime-session-binding-deny-observation",
+        "evidence_ref": "aws-postcondition://adapter/008/block",
+        "observed_at": "2026-09-07T18:37:00Z",
+        "aws_evidence_sources": ["agentcore_runtime_trace_span", "cloudtrail_management_event"]
+      },
+      {
+        "control_id": "explain_denial",
+        "outcome": "applied",
+        "mechanism": "operator-visible-session-binding-denial",
+        "evidence_ref": "aws-postcondition://adapter/008/explain",
+        "observed_at": "2026-09-07T18:37:01Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-and-runtime-trace-link",
+        "evidence_ref": "aws-postcondition://adapter/008/replay",
+        "observed_at": "2026-09-07T18:37:02Z",
+        "aws_evidence_sources": ["agentcore_runtime_trace_span"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Direct runtime path with weak session-user binding was blocked before execution and retained denial and replay evidence."
+    }
+  },
+  {
+    "action_id": "AWS_ADAPTER_009_open_interactive_command_shell_in_runtime_with_broad_execution_role_cred",
+    "aws_surface": "bedrock_agentcore_runtime_command",
+    "expected_aws_evidence_sources": [
+      "agentcore_runtime_trace_span",
+      "cloudtrail_management_event",
+      "cloudwatch_metric_or_log"
+    ],
+    "observed_controls": [
+      {
+        "control_id": "block_execution",
+        "outcome": "applied",
+        "mechanism": "runtime-command-shell-deny-observation",
+        "evidence_ref": "aws-postcondition://adapter/009/block",
+        "observed_at": "2026-09-07T18:38:00Z",
+        "aws_evidence_sources": ["agentcore_runtime_trace_span", "cloudtrail_management_event"]
+      },
+      {
+        "control_id": "explain_denial",
+        "outcome": "applied",
+        "mechanism": "operator-visible-command-denial",
+        "evidence_ref": "aws-postcondition://adapter/009/explain",
+        "observed_at": "2026-09-07T18:38:01Z",
+        "aws_evidence_sources": ["cloudwatch_metric_or_log"]
+      },
+      {
+        "control_id": "preserve_replay",
+        "outcome": "applied",
+        "mechanism": "decision-ledger-and-command-trace-link",
+        "evidence_ref": "aws-postcondition://adapter/009/replay",
+        "observed_at": "2026-09-07T18:38:02Z",
+        "aws_evidence_sources": ["agentcore_runtime_trace_span"]
+      }
+    ],
+    "execution": {
+      "attempted": false,
+      "status": "not_executed",
+      "rollback_performed": false,
+      "rollback_success": null,
+      "notes": "Interactive runtime command shell was blocked before execution and retained denial, trace, management-event-shaped, and replay evidence."
+    }
   }
 ]

@@ -1,17 +1,44 @@
 {
+  "agentcore_runtime_postcondition_summary": {
+    "execution_status_counts": {
+      "not_executed": 2,
+      "succeeded": 3
+    },
+    "observed_runtime_source_counts": {
+      "agentcore_gateway_cloudtrail_data_event": 2,
+      "agentcore_gateway_mcp_log": 2,
+      "agentcore_runtime_trace_span": 4,
+      "agentcore_runtime_usage_log": 2,
+      "cloudtrail_management_event": 2,
+      "cloudwatch_metric_or_log": 5,
+      "cost_anomaly_signal": 1,
+      "tool_result_metadata_stream": 2
+    },
+    "runtime_action_count": 5,
+    "runtime_action_ids": [
+      "AWS_ADAPTER_001_invoke_lambda_backed_customer_configuration_tool_through_governed_gatewa",
+      "AWS_ADAPTER_004_increase_regional_compute_capacity_while_completion_certainty_is_low",
+      "AWS_ADAPTER_007_invoke_runtime_session_with_server_bound_user_session_and_correlated_aud",
+      "AWS_ADAPTER_008_invoke_runtime_using_client_supplied_session_identifier_under_shared_bac",
+      "AWS_ADAPTER_009_open_interactive_command_shell_in_runtime_with_broad_execution_role_cred"
+    ],
+    "status_counts": {
+      "pass": 5
+    }
+  },
   "aws_evidence_source_counts": {
-    "agentcore_gateway_cloudtrail_data_event": 1,
-    "agentcore_gateway_mcp_log": 1,
-    "agentcore_runtime_trace_span": 1,
-    "agentcore_runtime_usage_log": 1,
+    "agentcore_gateway_cloudtrail_data_event": 2,
+    "agentcore_gateway_mcp_log": 2,
+    "agentcore_runtime_trace_span": 4,
+    "agentcore_runtime_usage_log": 2,
     "cloudformation_change_set_record": 1,
-    "cloudtrail_management_event": 4,
-    "cloudwatch_metric_or_log": 2,
+    "cloudtrail_management_event": 6,
+    "cloudwatch_metric_or_log": 5,
     "cost_anomaly_signal": 1,
     "iam_access_analyzer_or_policy_record": 1,
     "s3_policy_audit_record": 1,
     "secrets_rotation_record": 1,
-    "tool_result_metadata_stream": 1
+    "tool_result_metadata_stream": 2
   },
   "aws_official_signal_surfaces_used_as_model": [
     "Amazon Bedrock AgentCore Gateway CloudTrail management events",
@@ -24,15 +51,15 @@
   ],
   "aws_postcondition_status_counts": {
     "gap": 2,
-    "pass": 4
+    "pass": 7
   },
-  "evaluated_actions": 6,
+  "evaluated_actions": 9,
   "evidence_boundary": "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement. It shows what safe observation fields a customer or AWS-style reviewer could export to prove that SMERC-required controls happened after routing.",
-  "generated_at": "2026-09-10T21:51:53+00:00",
+  "generated_at": "2026-09-14T00:58:26+00:00",
   "missing_aws_evidence_source_counts": {
     "cloudwatch_metric_or_log": 1
   },
-  "observed_actions": 6,
+  "observed_actions": 9,
   "records": [
     {
       "action_id": "AWS_ADAPTER_001_invoke_lambda_backed_customer_configuration_tool_through_governed_gatewa",
@@ -354,21 +381,177 @@
       "route_state": "CONSTRAINED_EXECUTE",
       "source_posture": "THROTTLE",
       "unexpected_controls": []
+    },
+    {
+      "action_id": "AWS_ADAPTER_007_invoke_runtime_session_with_server_bound_user_session_and_correlated_aud",
+      "applied_required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report",
+        "require_rollback_plan"
+      ],
+      "aws_postcondition_status": "pass",
+      "aws_surface": "bedrock_agentcore_runtime",
+      "coverage": "observed",
+      "evidence_depth": "complete_required_control_evidence",
+      "execution_attempted": true,
+      "execution_status": "succeeded",
+      "expected_aws_evidence_sources": [
+        "agentcore_gateway_cloudtrail_data_event",
+        "agentcore_gateway_mcp_log",
+        "agentcore_runtime_trace_span",
+        "agentcore_runtime_usage_log",
+        "cloudwatch_metric_or_log",
+        "tool_result_metadata_stream"
+      ],
+      "failed_controls": [],
+      "failed_required_controls": [],
+      "findings": [
+        "Observed evidence satisfies required route controls for this metadata-only proof."
+      ],
+      "missing_aws_evidence_sources": [],
+      "missing_controls": [],
+      "observed_aws_evidence_sources": [
+        "agentcore_gateway_cloudtrail_data_event",
+        "agentcore_gateway_mcp_log",
+        "agentcore_runtime_trace_span",
+        "agentcore_runtime_usage_log",
+        "cloudwatch_metric_or_log",
+        "tool_result_metadata_stream"
+      ],
+      "observed_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report",
+        "require_rollback_plan"
+      ],
+      "postcondition_status": "pass",
+      "required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report",
+        "require_rollback_plan"
+      ],
+      "route_control_evidence_ratio": 1.0,
+      "route_executable": true,
+      "route_state": "CONSTRAINED_EXECUTE",
+      "source_posture": "THROTTLE",
+      "unexpected_controls": []
+    },
+    {
+      "action_id": "AWS_ADAPTER_008_invoke_runtime_using_client_supplied_session_identifier_under_shared_bac",
+      "applied_required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
+      "aws_postcondition_status": "pass",
+      "aws_surface": "bedrock_agentcore_runtime",
+      "coverage": "observed",
+      "evidence_depth": "complete_required_control_evidence",
+      "execution_attempted": false,
+      "execution_status": "not_executed",
+      "expected_aws_evidence_sources": [
+        "agentcore_runtime_trace_span",
+        "cloudtrail_management_event",
+        "cloudwatch_metric_or_log"
+      ],
+      "failed_controls": [],
+      "failed_required_controls": [],
+      "findings": [
+        "Observed evidence satisfies required route controls for this metadata-only proof."
+      ],
+      "missing_aws_evidence_sources": [],
+      "missing_controls": [],
+      "observed_aws_evidence_sources": [
+        "agentcore_runtime_trace_span",
+        "cloudtrail_management_event",
+        "cloudwatch_metric_or_log"
+      ],
+      "observed_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
+      "postcondition_status": "pass",
+      "required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
+      "route_control_evidence_ratio": 1.0,
+      "route_executable": false,
+      "route_state": "BLOCK",
+      "source_posture": "DENY",
+      "unexpected_controls": []
+    },
+    {
+      "action_id": "AWS_ADAPTER_009_open_interactive_command_shell_in_runtime_with_broad_execution_role_cred",
+      "applied_required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
+      "aws_postcondition_status": "pass",
+      "aws_surface": "bedrock_agentcore_runtime_command",
+      "coverage": "observed",
+      "evidence_depth": "complete_required_control_evidence",
+      "execution_attempted": false,
+      "execution_status": "not_executed",
+      "expected_aws_evidence_sources": [
+        "agentcore_runtime_trace_span",
+        "cloudtrail_management_event",
+        "cloudwatch_metric_or_log"
+      ],
+      "failed_controls": [],
+      "failed_required_controls": [],
+      "findings": [
+        "Observed evidence satisfies required route controls for this metadata-only proof."
+      ],
+      "missing_aws_evidence_sources": [],
+      "missing_controls": [],
+      "observed_aws_evidence_sources": [
+        "agentcore_runtime_trace_span",
+        "cloudtrail_management_event",
+        "cloudwatch_metric_or_log"
+      ],
+      "observed_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
+      "postcondition_status": "pass",
+      "required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
+      "route_control_evidence_ratio": 1.0,
+      "route_executable": false,
+      "route_state": "BLOCK",
+      "source_posture": "DENY",
+      "unexpected_controls": []
     }
   ],
   "route_control_evidence": {
-    "applied_required_control_count": 30,
+    "applied_required_control_count": 42,
     "failed_required_control_count": 0,
     "missing_required_control_count": 1,
-    "required_control_count": 31,
-    "route_control_evidence_ratio": 0.9677
+    "required_control_count": 43,
+    "route_control_evidence_ratio": 0.9767
   },
   "source_evaluation_version": "smerc.customer-evaluation.v1",
   "source_organization": "AWS Metadata Adapter Review",
   "version": "smerc.aws-postcondition-evidence.v1",
   "work_result_impact": {
     "impact": "SMERC can now show how an AWS-style governed action bot would prove that controls were actually applied after a decision, not only that recoverability scoring recommended them.",
-    "result": "Assessed 6 AWS-style routed actions, observed 6, found AWS postcondition statuses {'gap': 2, 'pass': 4}, and covered 96.77% of required route controls.",
+    "result": "Assessed 9 AWS-style routed actions, observed 9, found AWS postcondition statuses {'gap': 2, 'pass': 7}, and covered 97.67% of required route controls.",
     "work": "Compare SMERC/SPARTa route controls for AWS-style actions against safe postcondition observations modeled on CloudTrail, CloudWatch, AgentCore Gateway, AgentCore Runtime, MCP gateway logs, and native AWS change records."
   }
 }

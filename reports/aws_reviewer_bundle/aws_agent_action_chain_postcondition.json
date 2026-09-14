@@ -1,4 +1,23 @@
 {
+  "agentcore_runtime_postcondition_summary": {
+    "execution_status_counts": {
+      "held_for_review": 1,
+      "succeeded": 1
+    },
+    "observed_runtime_source_counts": {
+      "agentcore_runtime_usage_log": 2,
+      "cloudwatch_metric_or_log": 2,
+      "cost_anomaly_signal": 2
+    },
+    "runtime_action_count": 2,
+    "runtime_action_ids": [
+      "AWS_CHAIN_COST_SCALE_SPIKE_005",
+      "AWS_CHAIN_AGENT_RETRY_LOOP_008"
+    ],
+    "status_counts": {
+      "pass": 2
+    }
+  },
   "aws_evidence_source_counts": {
     "agentcore_gateway_cloudtrail_data_event": 1,
     "agentcore_gateway_mcp_log": 1,
@@ -67,7 +86,7 @@
   },
   "evaluated_actions": 8,
   "evidence_boundary": "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement. It shows what safe observation fields a customer or AWS-style reviewer could export to prove that SMERC-required controls happened after routing.",
-  "generated_at": "2026-09-11T23:45:48+00:00",
+  "generated_at": "2026-09-14T00:58:34+00:00",
   "missing_aws_evidence_source_counts": {
     "cloudwatch_metric_or_log": 1
   },

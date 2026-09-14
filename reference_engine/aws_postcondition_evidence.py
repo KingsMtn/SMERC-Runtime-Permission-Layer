@@ -148,6 +148,7 @@ def build_aws_postcondition_report(
         "aws_evidence_source_counts": dict(sorted(source_counts.items())),
         "missing_aws_evidence_source_counts": dict(sorted(missing_source_counts.items())),
         "aws_postcondition_status_counts": dict(sorted(status_counts.items())),
+        "agentcore_runtime_postcondition_summary": _agentcore_runtime_summary(records),
         "records": records,
         "aws_official_signal_surfaces_used_as_model": official_sources,
         "evidence_boundary": (
@@ -210,6 +211,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             f"- Observed actions: `{report['observed_actions']}`",
             f"- Route control evidence: `{report['route_control_evidence']}`",
             f"- AWS postcondition status counts: `{report['aws_postcondition_status_counts']}`",
+            f"- AgentCore runtime postcondition summary: `{report['agentcore_runtime_postcondition_summary']}`",
             f"- Observed AWS evidence sources: `{report['aws_evidence_source_counts']}`",
             f"- Missing AWS evidence sources: `{report['missing_aws_evidence_source_counts']}`",
             "",
@@ -260,6 +262,32 @@ def _to_generic_observation(item: Mapping[str, Any]) -> Dict[str, Any]:
             for control in item["observed_controls"]
         ],
         "execution": dict(item["execution"]),
+    }
+
+
+def _agentcore_runtime_summary(records: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
+    status_counts: Counter[str] = Counter()
+    execution_counts: Counter[str] = Counter()
+    source_counts: Counter[str] = Counter()
+    action_ids = []
+    for record in records:
+        surface = str(record.get("aws_surface", ""))
+        observed_sources = record.get("observed_aws_evidence_sources", [])
+        is_runtime = surface.startswith("bedrock_agentcore_runtime") or any(
+            str(source).startswith("agentcore_runtime_") for source in observed_sources
+        )
+        if not is_runtime:
+            continue
+        action_ids.append(str(record["action_id"]))
+        status_counts[str(record["aws_postcondition_status"])] += 1
+        execution_counts[str(record["execution_status"])] += 1
+        source_counts.update(str(source) for source in observed_sources)
+    return {
+        "runtime_action_count": len(action_ids),
+        "runtime_action_ids": action_ids,
+        "status_counts": dict(sorted(status_counts.items())),
+        "execution_status_counts": dict(sorted(execution_counts.items())),
+        "observed_runtime_source_counts": dict(sorted(source_counts.items())),
     }
 
 

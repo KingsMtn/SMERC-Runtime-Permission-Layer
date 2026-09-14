@@ -183,9 +183,16 @@ python -m reference_engine.aws_postcondition_evidence --pretty
 
 Work: compare SMERC/SPARTa route controls for AWS-style actions against safe postcondition observations modeled on CloudTrail, CloudWatch, AgentCore Gateway, AgentCore Runtime, MCP gateway logs, and native AWS change records.
 
-Result: `reports/aws_postcondition_evidence/AWS_Postcondition_Evidence_Report.md` shows 6 AWS-style routed actions, observed controls, expected AWS evidence sources, missing sources, and route-control gaps.
+Result: `reports/aws_postcondition_evidence/AWS_Postcondition_Evidence_Report.md` shows 9 AWS-style routed actions, observed controls, expected AWS evidence sources, missing sources, AgentCore runtime postcondition evidence, and route-control gaps.
 
 Impact: SMERC can now show how an AWS-style governed action bot would prove that controls were actually applied after a decision, not only that recoverability scoring recommended them.
+
+Current AgentCore runtime extension:
+
+- governed runtime session evidence for gateway path, session scope, trace, usage, tool-result, replay, and rollback-plan reference
+- weak session-binding block evidence for direct runtime calls
+- interactive runtime command-shell block evidence
+- runtime-specific postcondition summary in the AWS postcondition report
 
 ### 5. Performance And Overhead Report
 
