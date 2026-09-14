@@ -33,6 +33,8 @@ AWS now has clearer public paths for agent infrastructure, AgentCore Runtime/Gat
 
 Amazon Research Awards has also publicly named adjacent research areas such as trustworthy and reliable agentic AI for security operations, AI agent access governance, policy verification, guardrails, conditionally scoped authentication and authorization, confused deputy behavior, and cloud compliance. That is market signal for the problem category, not validation of SMERC.
 
+For the ecosystem route from GitHub proof to future Gateway, Runtime, Marketplace, or Partner path, read `docs/AWS_Ecosystem_Entry_Path.md`.
+
 SMERC should use this moment by making the first proof simple:
 
 - one command
@@ -97,6 +99,7 @@ Also inspect:
 - `docs/AWS_Shadow_Mirror_Metadata_Path.md`
 - `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md`
 - `docs/AWS_Security_Ecosystem_Evidence_Path.md`
+- `docs/AWS_Ecosystem_Entry_Path.md`
 - `docs/AWS_Marketplace_Validation_Path.md`
 - `docs/SMERC_Defensible_Moat_And_Commercial_Boundary.md`
 

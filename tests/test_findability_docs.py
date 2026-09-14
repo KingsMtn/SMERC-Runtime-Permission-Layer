@@ -60,12 +60,15 @@ class FindabilityDocsTests(unittest.TestCase):
         )
         self.assertIn("customer validation", bundle["current_evidence"]["evidence_boundary"])
         self.assertIn("aws_shadow_mirror_metadata_path", bundle["current_evidence"])
+        self.assertIn("aws_ecosystem_entry_path", bundle["current_evidence"])
         self.assertIn("two_tier_valuation_path", bundle["current_evidence"])
         self.assertIn("AWS shadow mirror metadata", bundle["search_and_index_terms"])
+        self.assertIn("AWS ecosystem entry path", bundle["search_and_index_terms"])
         self.assertIn("SMERC is not production-certified.", bundle["non_claims"])
         self.assertIn("docs/AI_Readable_Reviewer_Bundle.md", readme)
         self.assertIn("examples/ai_reviewer_bundle.json", readme)
         self.assertIn("AWS Shadow Mirror Metadata Path", doc)
+        self.assertIn("AWS Ecosystem Entry Path", doc)
         self.assertIn("Two-Tier Valuation Path", doc)
         self.assertIn("What It Does Not Prove", doc)
         self.assertIn("Impact", doc)
@@ -134,6 +137,25 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("acquisition-grade Tier 3 evidence", front_door)
         self.assertIn("docs/Tier2_AWS_Reviewer_Front_Door.md", readme)
         self.assertIn("docs/Release_Notes_v0_15_AWS_Tier2_Review.md", readme)
+
+    def test_aws_ecosystem_entry_path_is_linked_and_bounded(self):
+        entry = (ROOT / "docs" / "AWS_Ecosystem_Entry_Path.md").read_text(encoding="utf-8")
+        quickstart = (ROOT / "docs" / "AWS_Reviewer_Quickstart.md").read_text(encoding="utf-8")
+        marketplace = (ROOT / "docs" / "AWS_Marketplace_Validation_Path.md").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        ai_bundle = json.loads((ROOT / "examples" / "ai_reviewer_bundle.json").read_text(encoding="utf-8"))
+
+        self.assertIn("AWS has created a more direct path", entry)
+        self.assertIn("AgentCore Gateway", entry)
+        self.assertIn("AgentCore Runtime", entry)
+        self.assertIn("AWS Marketplace", entry)
+        self.assertIn("Partner Agent Factory", entry)
+        self.assertIn("not current claims", entry)
+        self.assertIn("claim AWS partnership", entry)
+        self.assertIn("docs/AWS_Ecosystem_Entry_Path.md", quickstart)
+        self.assertIn("docs/AWS_Ecosystem_Entry_Path.md", marketplace)
+        self.assertIn("docs/AWS_Ecosystem_Entry_Path.md", readme)
+        self.assertIn("aws_ecosystem_entry_path", ai_bundle["current_evidence"])
 
     def test_external_metadata_reviewer_request_is_linked_and_bounded(self):
         request = (ROOT / "docs" / "External_Metadata_Reviewer_Request.md").read_text(

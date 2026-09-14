@@ -61,6 +61,7 @@ Fast reviewer paths:
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
 - AWS deployable bot path: `docs/AWS_Deployable_Bot_Readiness_Path.md`
+- AWS ecosystem entry path: `docs/AWS_Ecosystem_Entry_Path.md`
 - AWS metadata adapter reviewer: `docs/AWS_Metadata_Intake_Contract.md`
 - AWS security evidence path: `docs/AWS_Security_Ecosystem_Evidence_Path.md`
 - AWS marketplace validation path: `docs/AWS_Marketplace_Validation_Path.md`

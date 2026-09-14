@@ -44,6 +44,7 @@ The repository contains working pilot-grade artifacts:
 - complete lifecycle proof connecting admission, pause, unlock, permit, execution result, and ledger evidence
 - serious reviewer bundle that assembles customer evaluation, postcondition evidence, performance metrics, balanced runtime judgment, metadata request, and response assessment in one command
 - AWS-style reviewer bundle that assembles AWS action-chain proof, route-control postcondition evidence, AWS postcondition evidence, AWS shadow mirror metadata evidence, performance metrics, and AWS customer-owned metadata request in one command
+- AWS Ecosystem Entry Path for mapping the route from GitHub proof to AWS-style practitioner review to future AgentCore Gateway, AgentCore Runtime, AWS Marketplace, or Partner paths without claiming current AWS endorsement
 - postcondition evidence that checks whether required SPARTa controls were actually observed after routing
 - customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata
 - AWS customer-owned metadata request mode for asking AWS-style platform reviewers for safe action summaries and postcondition observation summaries
@@ -101,6 +102,8 @@ The complete lifecycle proof shows the connected product path: `ADMIT -> FREEZE 
 The serious reviewer bundle packages the current company-review path into one local run. It produces customer evaluation, postcondition evidence, performance, balanced runtime judgment, customer-owned metadata request, and external reviewer response assessment outputs together, so a reviewer does not need to assemble separate reports by hand.
 
 The AWS-style reviewer bundle packages the AWS platform-review path into one local run. It frames the distinction clearly: guardrails check content, IAM and change systems check authority, SMERC checks recoverability, shadow mirror metadata tests operational behavior, and postcondition evidence checks whether the required route control actually happened.
+
+The AWS Ecosystem Entry Path explains how that proof could later map to AWS-adjacent channels such as AgentCore Gateway, AgentCore Runtime, AWS Marketplace, or Partner paths. It is an entry strategy, not a claim of AWS partnership, certification, listing, or production readiness.
 
 The public benchmark currently shows that SMERC creates middle-state governance behavior across MCP tool calls, coding agents, cloud administration, financial runtime actions, execution tickets, and security approval workflows.
 
@@ -171,16 +174,17 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 21. For AWS-style agent action chain review, run `python -m reference_engine.aws_agent_action_chain --pretty`.
 22. For AWS-style agent action chain postcondition review, run `python -m reference_engine.aws_agent_action_chain_postcondition --pretty`.
 23. For the one-command AWS-style reviewer bundle, run `python -m reference_engine.aws_reviewer_bundle --requested-actions 12 --pretty`.
-24. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
-25. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
-26. For AWS-style shadow mirror review, run `python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty`.
-27. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
-28. For AWS audit-delay and irreversibility review, run `python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty`.
-29. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
-30. Read `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md` if the reviewer can provide sanitized operational flow summaries.
-31. Read `docs/Two_Tier_Valuation_Path.md` if the reviewer is evaluating strategic value.
-32. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
-33. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+24. Read `docs/AWS_Ecosystem_Entry_Path.md` if the reviewer is evaluating AWS-adjacent distribution, Gateway, Runtime, Marketplace, or Partner routes.
+25. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
+26. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
+27. For AWS-style shadow mirror review, run `python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty`.
+28. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
+29. For AWS audit-delay and irreversibility review, run `python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty`.
+30. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
+31. Read `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md` if the reviewer can provide sanitized operational flow summaries.
+32. Read `docs/Two_Tier_Valuation_Path.md` if the reviewer is evaluating strategic value.
+33. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
+34. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 

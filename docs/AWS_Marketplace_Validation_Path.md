@@ -6,6 +6,8 @@ AWS Marketplace packaging is a later validation path, not the immediate build pr
 
 The current priority is to prove SMERC can evaluate AWS-style action metadata, return useful posture decisions, preserve evidence, and help reviewers replace examples with safe customer-owned metadata. Marketplace packaging only matters after that proof is credible.
 
+For the broader AWS ecosystem route from GitHub proof to practitioner review to future AgentCore Gateway, AgentCore Runtime, Marketplace, or Partner path, read `docs/AWS_Ecosystem_Entry_Path.md`.
+
 ## Future Package Shape
 
 A future AWS-style package could include:
