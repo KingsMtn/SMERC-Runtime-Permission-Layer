@@ -18,13 +18,52 @@ A future AWS-style package could include:
 - no-credentials local review mode
 - commercial-use license boundary
 
+If shaped for an AgentCore Runtime-style package, the future package would also need:
+
+- containerized runtime surface
+- health endpoint such as `/ping`
+- invocation endpoint such as `/invocations`
+- clear non-secret logging policy
+- cold-start and timeout notes
+- concurrency and fallback behavior
+- support/contact information
+- pricing and commercial-use terms
+- documentation that explains exactly what metadata SMERC consumes and what it refuses
+
+If shaped for an AgentCore Gateway-style tool, the future package would need:
+
+- OpenAPI 3.0 or 3.1 description with operation IDs
+- HTTPS server endpoint
+- simple JSON request and response bodies
+- no complex security schemes embedded in the OpenAPI document
+- clear MCP/tool-call metadata boundary
+- explicit statement that SMERC is a decision and evidence layer, not the cloud control plane itself
+
+These are packaging targets, not current claims.
+
 ## Validation Sequence
 
 1. Run the local AWS reviewer bundle.
 2. Run the Lambda-shaped decision handler with metadata-only examples.
 3. Replace examples with 5 to 25 safe customer-owned action summaries.
 4. Confirm whether SMERC changes reviewer judgment.
-5. Only then consider Marketplace-style packaging or a cloud-native deployment example.
+5. Add matching postcondition observations for the same workflow.
+6. Measure local and pilot latency.
+7. Only then consider Marketplace-style packaging or a cloud-native deployment example.
+
+## Trigger To Start Packaging
+
+Do not start Marketplace packaging because the idea is exciting.
+
+Start packaging only when at least one outside reviewer can say:
+
+- the AWS reviewer bundle was understandable in under 10 minutes
+- the metadata replacement path was safe enough to try
+- SMERC produced at least one useful difference from existing controls
+- the postcondition evidence model was understandable
+- the commercial boundary was clear
+
+Until then, the better use of effort is proof, reviewer-owned metadata, and outreach.
 
 ## Work / Result / Impact
 
@@ -52,4 +91,3 @@ This document does not claim:
 - commercial customer validation
 - usage-based pricing readiness
 - acquisition interest
-

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a 10-minute AWS reviewer learning path and sharper future AWS Marketplace/AgentCore packaging checklist so companies can understand the SMERC proof before any live integration or listing work.
 - Added AgentCore runtime postcondition evidence for governed runtime sessions, weak session-binding blocks, and runtime command-shell blocks, with a runtime-specific summary in the AWS postcondition report.
 - Extended the AWS Metadata Adapter with AgentCore-style session binding, execution-authority exposure, command-execution, and audit-correlation fields, plus safe example rows for gateway-mediated and direct-runtime paths.
 - Added a public runtime pain-point map connecting AWS AgentCore gateway/session/credential/command/audit concerns and MCP token/tool-metadata concerns to SMERC proof work.

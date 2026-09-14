@@ -35,7 +35,7 @@ Fast reviewer paths:
 - AWS agent action chain: `docs/AWS_Agent_Action_Chain.md`
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
 - AWS-style reviewer bundle: `docs/AWS_Reviewer_Bundle.md`
-- AWS reviewer quickstart: `docs/AWS_Reviewer_Quickstart.md`
+- AWS reviewer quickstart and 10-minute learning path: `docs/AWS_Reviewer_Quickstart.md`
 - Tier 2 AWS reviewer front door: `docs/Tier2_AWS_Reviewer_Front_Door.md`
 - External metadata reviewer request: `docs/External_Metadata_Reviewer_Request.md`
 - Public outreach post drafts: `docs/Public_Outreach_Post_Drafts.md`

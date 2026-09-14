@@ -10,6 +10,40 @@ If Bedrock-style guardrails approve the content and IAM permits the actor, can S
 
 Put differently: can SMERC reduce systemic liability and operational downtime risk for autonomous cloud execution by checking recoverability before the agent or tool call acts?
 
+## 10-Minute Learning Path
+
+If you are new to SMERC, do not start with the whole repository.
+
+Use this path:
+
+1. Run the AWS reviewer bundle.
+2. Open `reports/aws_reviewer_bundle/AWS_Reviewer_Bundle.md`.
+3. Read only the one-line reviewer frame, readiness section, and included reports table.
+4. Open `reports/aws_reviewer_bundle/AWS_Postcondition_Evidence_Report.md`.
+5. Check whether the AgentCore runtime rows show route evidence after the decision.
+6. Open `reports/aws_metadata_adapter/AWS_Metadata_Adapter_Report.md`.
+7. Check whether the safe metadata fields match a workflow you understand.
+8. Decide whether replacing the examples with 5 to 25 rows from one owned workflow is worth 20 minutes.
+
+The goal is not to understand every SMERC layer in the first pass. The goal is to decide whether recoverability before execution is a useful missing question beside guardrails, IAM, AgentCore Gateway, CloudTrail, CloudWatch, and human review.
+
+## Why This Is Timely
+
+AWS now has clearer public paths for agent infrastructure, AgentCore Runtime/Gateway, AI agent tools, and AWS Marketplace packaging. That does not make SMERC an AWS product, partner, or listed solution. It does mean the buyer education path is less abstract: companies already understand agents, tools, gateways, runtime hosting, Marketplace procurement, and cloud security evidence.
+
+Amazon Research Awards has also publicly named adjacent research areas such as trustworthy and reliable agentic AI for security operations, AI agent access governance, policy verification, guardrails, conditionally scoped authentication and authorization, confused deputy behavior, and cloud compliance. That is market signal for the problem category, not validation of SMERC.
+
+SMERC should use this moment by making the first proof simple:
+
+- one command
+- one report
+- no live AWS access
+- no account IDs
+- no ARNs
+- no raw logs
+- no credentials
+- a clear replacement ask for 5 to 25 metadata-only actions
+
 ## Run The Proof
 
 From the repository root:
