@@ -40,6 +40,7 @@ How SMERC should use this:
 - keep SMERC postcondition evidence explicitly exportable
 - keep Decision Lifecycle Ledger records digest-bound and replayable
 - add a future TRACE-compatible evidence adapter path
+- inspect the runnable TRACE-style adapter stub at `docs/TRACE_Evidence_Adapter.md`
 - treat hardware attestation as stronger evidence input, not as a replacement for recoverability judgment
 
 ### Agentic AI Foundation, MCP, Goose, And AGENTS.md
@@ -121,7 +122,7 @@ The best standards-aligned SMERC path is:
 
 Near-term:
 
-- document `smerc.trace_evidence_adapter.v0` as a future adapter boundary
+- document and run `smerc.trace-evidence-adapter.v0` as a future adapter boundary
 - add TRACE, ANS, MCP, AGENTS.md, and AAIF terms to the AI-readable reviewer bundle
 - keep AWS, MCP, GitHub Actions, and cloud-admin examples framed as metadata-only proof
 

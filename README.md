@@ -38,6 +38,7 @@ Fast reviewer paths:
 - AWS reviewer quickstart and 10-minute learning path: `docs/AWS_Reviewer_Quickstart.md`
 - AWS decision API surface: `docs/AWS_Decision_API_Surface.md`
 - Linux Foundation standards alignment: `docs/Linux_Foundation_Standards_Alignment.md`
+- TRACE-style evidence adapter: `docs/TRACE_Evidence_Adapter.md`
 - Tier 2 AWS reviewer front door: `docs/Tier2_AWS_Reviewer_Front_Door.md`
 - External metadata reviewer request: `docs/External_Metadata_Reviewer_Request.md`
 - Public outreach post drafts: `docs/Public_Outreach_Post_Drafts.md`
@@ -63,6 +64,7 @@ Fast reviewer paths:
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
 - AWS Lambda/OpenAPI decision surface: `docs/AWS_Decision_API_Surface.md`
 - Linux Foundation standards alignment: `docs/Linux_Foundation_Standards_Alignment.md`
+- TRACE-style evidence adapter: `docs/TRACE_Evidence_Adapter.md`
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
 - AWS deployable bot path: `docs/AWS_Deployable_Bot_Readiness_Path.md`
 - AWS ecosystem entry path: `docs/AWS_Ecosystem_Entry_Path.md`
@@ -373,6 +375,7 @@ The current build includes:
 - AWS Deployable Bot Readiness Path that defines the milestones needed for SMERC to be evaluated as an AWS-style governed action bot without claiming AWS endorsement, certification, or production integration
 - AWS Decision API Surface that exposes one metadata-only Lambda/OpenAPI contract with operation ID `evaluateAwsActionRecoverability`, sample request, sample response, route controls, scores, and ledger evidence
 - Linux Foundation Standards Alignment showing how SMERC complements TRACE-style runtime evidence, Agentic AI Foundation/MCP/AGENTS.md-style agent infrastructure, Agent Name Service-style identity, and open secure AI governance without claiming standards approval
+- TRACE-style Evidence Adapter stub that normalizes metadata-only runtime evidence into SMERC postcondition observations without claiming TRACE implementation, hardware attestation verification, or Linux Foundation endorsement
 - AWS Metadata Intake Contract and non-executing adapter stub that accepts safe AWS-style exported summaries, captures AWS/MCP session and delegated approval context, skips unsafe rows, normalizes accepted rows into customer evaluation, and preserves an explicit no-live-AWS boundary
 - AWS Postcondition Evidence that checks whether AWS-style route controls were actually observed after routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata
 - Cloud Admin Customer Evaluation pack with metadata-only IAM, network, database, Kubernetes, DNS, rotation, capacity, and backup-policy actions for infrastructure review
@@ -499,6 +502,7 @@ Start here before reading the code:
 - `docs/AWS_Reviewer_Quickstart.md` gives AWS-style reviewers the shortest path: run one command, inspect three outputs, understand what SMERC proves, and use `examples/aws_customer_metadata_template.json` to replace public examples with safe customer-owned metadata.
 - `docs/AWS_Decision_API_Surface.md` gives AWS-style reviewers the callable shape: `POST /smerc/decision`, operation ID `evaluateAwsActionRecoverability`, a metadata-only sample request, and a sample response with posture, route controls, scores, and ledger evidence.
 - `docs/Linux_Foundation_Standards_Alignment.md` explains how SMERC can learn from TRACE, AAIF/MCP/AGENTS.md, Agent Name Service, and open secure AI work while remaining standards-adjacent, not standards-approved.
+- `docs/TRACE_Evidence_Adapter.md` gives reviewers a runnable metadata-only adapter stub for translating TRACE-style runtime evidence into SMERC postcondition observations.
 - `docs/AWS_Cloud_Action_Replay.md` gives AWS-style platform, cloud-security, SRE, FinOps, and AI-agent reviewers a runnable metadata-only replay across AgentCore-style runtime and gateway actions, IAM, S3, CloudFormation, drift remediation, ECS/Fargate-style scaling, RDS, CloudWatch remediation, cost velocity, Secrets Manager-style rotation, and cross-account delegation.
 - `docs/AWS_Deployable_Bot_Readiness_Path.md` defines the process for hardening SMERC toward an AWS-style deployable governed action bot: metadata intake, adapter stubs, postcondition evidence, performance metrics, customer-owned metadata, and shadow-mode pilot criteria.
 - `docs/AWS_Metadata_Intake_Contract.md` defines the strict AWS-style metadata contract and non-executing adapter path for exported summaries, AWS/MCP session and delegated approval context, accepted/skipped rows, normalized customer-evaluation actions, and safe no-credential review.

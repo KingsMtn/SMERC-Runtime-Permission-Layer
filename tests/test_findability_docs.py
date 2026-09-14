@@ -63,6 +63,7 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("aws_ecosystem_entry_path", bundle["current_evidence"])
         self.assertIn("aws_decision_api_surface", bundle["current_evidence"])
         self.assertIn("linux_foundation_standards_alignment", bundle["current_evidence"])
+        self.assertIn("trace_evidence_adapter", bundle["current_evidence"])
         self.assertIn("two_tier_valuation_path", bundle["current_evidence"])
         self.assertIn("AWS shadow mirror metadata", bundle["search_and_index_terms"])
         self.assertIn("AWS ecosystem entry path", bundle["search_and_index_terms"])
@@ -70,6 +71,7 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("evaluateAwsActionRecoverability", bundle["search_and_index_terms"])
         self.assertIn("Linux Foundation standards alignment", bundle["search_and_index_terms"])
         self.assertIn("TRACE runtime evidence", bundle["search_and_index_terms"])
+        self.assertIn("TRACE-style evidence adapter", bundle["search_and_index_terms"])
         self.assertIn("SMERC is not production-certified.", bundle["non_claims"])
         self.assertIn("docs/AI_Readable_Reviewer_Bundle.md", readme)
         self.assertIn("examples/ai_reviewer_bundle.json", readme)
@@ -77,6 +79,7 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("AWS Ecosystem Entry Path", doc)
         self.assertIn("AWS Decision API Surface", doc)
         self.assertIn("Linux Foundation Standards Alignment", doc)
+        self.assertIn("TRACE-style Evidence Adapter", doc)
         self.assertIn("Two-Tier Valuation Path", doc)
         self.assertIn("What It Does Not Prove", doc)
         self.assertIn("Impact", doc)
@@ -181,9 +184,12 @@ class FindabilityDocsTests(unittest.TestCase):
         self.assertIn("claim Linux Foundation affiliation", text)
         self.assertIn("claim TRACE compatibility", text)
         self.assertIn("docs/Linux_Foundation_Standards_Alignment.md", readme)
+        self.assertIn("docs/TRACE_Evidence_Adapter.md", readme)
         self.assertIn("Linux Foundation Standards Alignment", ai_doc)
         self.assertIn("linux_foundation_standards_alignment", ai_bundle["current_evidence"])
+        self.assertIn("trace_evidence_adapter", ai_bundle["current_evidence"])
         self.assertIn("TRACE runtime evidence", ai_bundle["search_and_index_terms"])
+        self.assertIn("TRACE-style evidence adapter", ai_bundle["search_and_index_terms"])
 
     def test_external_metadata_reviewer_request_is_linked_and_bounded(self):
         request = (ROOT / "docs" / "External_Metadata_Reviewer_Request.md").read_text(

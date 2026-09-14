@@ -47,6 +47,7 @@ The repository contains working pilot-grade artifacts:
 - AWS Ecosystem Entry Path for mapping the route from GitHub proof to AWS-style practitioner review to future AgentCore Gateway, AgentCore Runtime, AWS Marketplace, or Partner paths without claiming current AWS endorsement
 - AWS Decision API Surface with a Lambda/OpenAPI-style `POST /smerc/decision` operation, operation ID `evaluateAwsActionRecoverability`, sample request, sample response, route controls, scores, and ledger evidence
 - Linux Foundation Standards Alignment for positioning SMERC beside TRACE-style runtime evidence, AAIF/MCP/AGENTS.md-style agent infrastructure, Agent Name Service-style identity, and open secure AI governance without claiming standards approval
+- TRACE-style Evidence Adapter for normalizing metadata-only runtime evidence into SMERC postcondition observations without claiming TRACE implementation or hardware attestation verification
 - postcondition evidence that checks whether required SPARTa controls were actually observed after routing
 - customer-owned metadata request for asking external reviewers to replace public examples with safe action metadata
 - AWS customer-owned metadata request mode for asking AWS-style platform reviewers for safe action summaries and postcondition observation summaries
@@ -110,6 +111,8 @@ The AWS Ecosystem Entry Path explains how that proof could later map to AWS-adja
 The AWS Decision API Surface turns that entry strategy into a small reviewable contract. It exposes one metadata-only OpenAPI operation and one Lambda-compatible handler response so reviewers can see what would be callable before any live AWS deployment exists.
 
 The Linux Foundation Standards Alignment explains how SMERC can be standards-adjacent without overstating status. TRACE-style runtime evidence can strengthen SMERC postcondition evidence, MCP and AGENTS.md-style metadata can improve action context, and Agent Name Service-style identity can feed the identity side of the decision while SMERC remains focused on recoverability before execution.
+
+The TRACE-style Evidence Adapter turns that learning into a runnable stub. It accepts metadata-only runtime evidence, skips unsafe raw-attestation-shaped rows, normalizes accepted rows into SMERC postcondition observations, and preserves the boundary that this is not TRACE compatibility or hardware attestation verification.
 
 The public benchmark currently shows that SMERC creates middle-state governance behavior across MCP tool calls, coding agents, cloud administration, financial runtime actions, execution tickets, and security approval workflows.
 
@@ -183,16 +186,17 @@ Those require external reviewers, customer-owned metadata, shadow-mode pilots, s
 24. Read `docs/AWS_Ecosystem_Entry_Path.md` if the reviewer is evaluating AWS-adjacent distribution, Gateway, Runtime, Marketplace, or Partner routes.
 25. For the AWS Lambda/OpenAPI decision surface, run `python -m reference_engine.aws_decision_api_surface --pretty`.
 26. Read `docs/Linux_Foundation_Standards_Alignment.md` if the reviewer is evaluating open standards fit or Linux Foundation-adjacent signals.
-27. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
-28. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
-29. For AWS-style shadow mirror review, run `python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty`.
-30. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
-31. For AWS audit-delay and irreversibility review, run `python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty`.
-32. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
-33. Read `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md` if the reviewer can provide sanitized operational flow summaries.
-34. Read `docs/Two_Tier_Valuation_Path.md` if the reviewer is evaluating strategic value.
-35. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
-36. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
+27. For TRACE-style runtime evidence review, run `python -m reference_engine.trace_evidence_adapter --pretty`.
+28. For AWS-style cloud platform review, run `python -m reference_engine.aws_cloud_action_replay --pretty`.
+29. For AWS-style metadata-adapter review, run `python -m reference_engine.aws_metadata_adapter examples/aws_metadata_adapter_source_exports.json --pretty`.
+30. For AWS-style shadow mirror review, run `python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty`.
+31. For AWS-style postcondition evidence review, run `python -m reference_engine.aws_postcondition_evidence --pretty`.
+32. For AWS audit-delay and irreversibility review, run `python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty`.
+33. Generate the AWS customer-owned metadata request with `python -m reference_engine.customer_owned_metadata_request --workflow-family aws --requested-actions 12 --json-output reports/aws_customer_owned_metadata_request.json --markdown-output reports/AWS_Customer_Owned_Metadata_Request.md --pretty`.
+34. Read `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md` if the reviewer can provide sanitized operational flow summaries.
+35. Read `docs/Two_Tier_Valuation_Path.md` if the reviewer is evaluating strategic value.
+36. Read `docs/AWS_Deployable_Bot_Readiness_Path.md` if the reviewer is evaluating AWS-style deployment fit.
+37. Use `pilot_package/Pilot_Handoff_Checklist.md` before any live integration.
 
 ## Impact
 
