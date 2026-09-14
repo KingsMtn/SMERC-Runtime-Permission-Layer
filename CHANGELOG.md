@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an AWS one-action reviewer demo with 8 metadata-only AWS-style actions and compact posture, SPARTa route, score, reason-code, control, and transition-guidance output.
 - Added a SMERC Whole System map and runnable one-action demo that shows identity/context, recoverability, posture, SPARTa routing, recovery authority, bounded execution, postcondition evidence, and Decision Lifecycle Ledger as one flow.
 - Added a TRACE-style Evidence Adapter stub that normalizes metadata-only runtime evidence into SMERC postcondition observations while rejecting raw attestation-shaped rows and preserving non-claim boundaries.
 - Added a Linux Foundation Standards Alignment note for TRACE-style runtime evidence, AAIF/MCP/AGENTS.md-style agent infrastructure, Agent Name Service-style identity, and open secure AI governance while preserving non-claim boundaries.

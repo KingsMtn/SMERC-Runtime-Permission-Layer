@@ -33,6 +33,7 @@
     "AWS-style reviewer bundle assembling AWS action-chain proof, route-control postcondition evidence, AWS postcondition evidence, AWS shadow mirror metadata evidence, performance metrics, and AWS customer-owned metadata request in one command",
     "AWS ecosystem entry path mapping the route from GitHub proof to AWS-style practitioner review to future AgentCore Gateway, AgentCore Runtime, AWS Marketplace, or Partner paths without claiming current AWS endorsement",
     "AWS Decision API Surface with a Lambda/OpenAPI-style POST /smerc/decision operation, operation ID evaluateAwsActionRecoverability, sample request, sample response, route controls, scores, and ledger evidence",
+    "AWS One-Action Reviewer Demo with 8 metadata-only AWS-style actions for compact posture, SPARTa route, score, reason-code, control, and transition-guidance output",
     "Linux Foundation Standards Alignment for positioning SMERC beside TRACE-style runtime evidence, AAIF/MCP/AGENTS.md-style agent infrastructure, Agent Name Service-style identity, and open secure AI governance without claiming standards approval",
     "TRACE-style Evidence Adapter for normalizing metadata-only runtime evidence into SMERC postcondition observations without claiming TRACE implementation or hardware attestation verification",
     "postcondition evidence comparing Governance Routing Workbench controls with observed control, execution, hold, and rollback evidence",
@@ -99,6 +100,8 @@
     "aws_ecosystem_entry_path": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Ecosystem_Entry_Path.md",
     "aws_decision_api_surface": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/AWS_Decision_API_Surface.md",
     "aws_decision_api_surface_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/aws_decision_api_surface/AWS_Decision_API_Surface.md",
+    "aws_one_action_reviewer_demo_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/aws_one_action_reviewer_demo/AWS_One_Action_Reviewer_Demo.md",
+    "aws_one_action_reviewer_samples": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/examples/aws_one_action_reviewer_samples.json",
     "linux_foundation_standards_alignment": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Linux_Foundation_Standards_Alignment.md",
     "trace_evidence_adapter": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/TRACE_Evidence_Adapter.md",
     "trace_evidence_adapter_report": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/reports/trace_evidence_adapter/TRACE_Evidence_Adapter_Report.md",
@@ -254,36 +257,42 @@
     },
     {
       "step": 19,
+      "name": "Run the AWS One-Action Reviewer Demo",
+      "command": "python -m reference_engine.aws_one_action_reviewer_demo --action-id AWS_ONE_RDS_CLUSTER_DELETE --pretty",
+      "result": "AWS-style reviewer sees one compact metadata-only action with posture, SPARTa route, scores, reason codes, controls, and transition guidance before replacing examples with owned metadata."
+    },
+    {
+      "step": 20,
       "name": "Run the AWS Cloud Action Replay when the workflow is AWS-style cloud automation",
       "command": "python -m reference_engine.aws_cloud_action_replay --pretty",
       "result": "AWS-style platform reviewers can test AgentCore Runtime/Gateway, IAM, S3, CloudFormation, drift remediation, ECS/Fargate, RDS, CloudWatch remediation, cost-velocity, Secrets Manager, and cross-account delegation examples with bounded non-claim language."
     },
     {
-      "step": 20,
+      "step": 21,
       "name": "Run the AWS Shadow Mirror Metadata path",
       "command": "python -m reference_engine.aws_shadow_mirror_adapter examples/aws_shadow_mirror_source_exports.json --pretty",
       "result": "Reviewer sees how sanitized VPC Traffic Mirroring, NLB fan-out, and Gateway Load Balancer endpoint summaries become SMERC shadow-mode evidence without packet payloads or live AWS access."
     },
     {
-      "step": 21,
+      "step": 22,
       "name": "Run the AWS Audit Delay and Irreversibility Replay",
       "command": "python -m reference_engine.aws_audit_delay_irreversibility_replay examples/aws_audit_delay_irreversibility_map.json --pretty",
       "result": "Reviewer sees the in-memory pending mutation cache, delayed-evidence pressure, KMS dead-end, CloudTrail audit-blinding, IAM boundary, S3 exposure, broad remediation, and second-mutation scenarios route through SMERC without live AWS access."
     },
     {
-      "step": 22,
+      "step": 23,
       "name": "Run the AWS Postcondition Evidence path",
       "command": "python -m reference_engine.aws_postcondition_evidence --pretty",
       "result": "Reviewer sees whether AWS-style controls were actually observed after SMERC routing using safe CloudTrail-, CloudWatch-, AgentCore-, MCP gateway-, and native change-record-shaped metadata."
     },
     {
-      "step": 23,
+      "step": 24,
       "name": "Read the two-tier valuation path",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/docs/Two_Tier_Valuation_Path.md",
       "result": "Reviewer sees the difference between the public decision-language layer and the enterprise cloud-action governance package."
     },
     {
-      "step": 24,
+      "step": 25,
       "name": "Decide whether a bounded shadow-mode pilot is justified",
       "url": "https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/blob/main/pilot_package/Pilot_Handoff_Checklist.md",
       "result": "Reviewer has a concrete go/no-go gate before any live integration discussion."
@@ -326,6 +335,7 @@
     "remediation blast radius",
     "cloud admin proof pack",
     "AWS cloud action replay",
+    "AWS one-action reviewer demo",
     "AWS-style reviewer bundle",
     "AWS ecosystem entry path",
     "AWS decision API surface",

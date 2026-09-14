@@ -29,6 +29,33 @@ The result includes:
 - replay metadata
 - transition guidance
 
+## Run The AWS-Style Reviewer Demo
+
+For an AWS-style platform, cloud-security, SRE, or AI-agent reviewer, use the small curated sample set:
+
+```bash
+python -m reference_engine.aws_one_action_reviewer_demo --pretty
+```
+
+To run only one sample:
+
+```bash
+python -m reference_engine.aws_one_action_reviewer_demo --action-id AWS_ONE_RDS_CLUSTER_DELETE --pretty
+```
+
+The sample set is:
+
+- `examples/aws_one_action_reviewer_samples.json`
+
+The generated outputs are:
+
+- `reports/aws_one_action_reviewer_demo/aws_one_action_reviewer_demo.json`
+- `reports/aws_one_action_reviewer_demo/AWS_One_Action_Reviewer_Demo.md`
+
+This path is meant to answer the fastest reviewer question: does SMERC's posture and SPARTa route match how you would handle one AWS-like action before it executes?
+
+Included examples cover Lambda configuration, IAM role expansion, S3 policy widening, CloudFormation replacement risk, ECS capacity shift, RDS deletion, cost-velocity scale-out, and Secrets Manager rotation.
+
 ## Change The Example
 
 Copy `examples/recoverability_single_action.json` and change only safe metadata.

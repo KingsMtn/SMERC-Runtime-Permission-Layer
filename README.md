@@ -32,6 +32,7 @@ Fast reviewer paths:
 - Serious reviewer bundle: `docs/Serious_Reviewer_Bundle.md`
 - AI/search reviewer: `docs/AI_Readable_Reviewer_Bundle.md`
 - Try one action: `docs/Try_SMERC_On_One_Action.md`
+- AWS one-action reviewer demo: `python -m reference_engine.aws_one_action_reviewer_demo --action-id AWS_ONE_RDS_CLUSTER_DELETE --pretty`
 - Technical reviewer: `docs/External_Review_Start_Here.md`
 - AWS agent action chain: `docs/AWS_Agent_Action_Chain.md`
 - AWS chain postcondition evidence: `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md`
@@ -369,6 +370,7 @@ The current build includes:
 - Customer Evaluation runner that accepts 5 to 25 metadata-only customer actions and returns Ref-gate results, SMERC postures, SPARTa routes, DLL evidence, autonomy budget impact, and a pilot-fit recommendation
 - Customer-Owned Metadata Request generator that gives external reviewers a safe ask for replacing public examples with 5 to 25 metadata-only actions from one real workflow
 - AWS customer-owned metadata request mode for asking AWS-style platform reviewers for safe action summaries and matching postcondition observation summaries without account IDs, ARNs, raw logs, credentials, production commands, or live AWS access
+- AWS one-action reviewer demo with 8 metadata-only AWS-style actions for showing posture, route, reason codes, scores, and transition guidance before asking for customer-owned metadata
 - External Reviewer Metadata Response assessor that classifies reviewer-supplied metadata as ready, limited, or not ready before customer-specific evaluation
 - Financial Runtime Customer Evaluation pack, internally called SMERC-F, with finance-specific metadata-only actions for refunds, payment retries, treasury rebalancing, stablecoin liquidity, tokenized collateral, wallet-policy changes, transaction limits, and reserve-status publication
 - SMERC-F External Financial Signal Adapter that normalizes AML/KYT-, wallet-screening-, fraud-, Travel Rule-, treasury-risk-, reserve-monitoring-, blockchain-analytics-, and smart-contract-risk-style outputs into recoverability scoring evidence without claiming to replace those systems
@@ -491,6 +493,7 @@ Start here before reading the code:
 - `docs/Company_Test_Package.md` gives companies a practical first test: copy `examples/customer_metadata_template.json`, replace it with 5 to 25 metadata-only actions from one workflow, run the evaluation, and decide whether a 30-day shadow-mode pilot is justified.
 - `docs/Customer_Owned_Metadata_Request.md` gives reviewers the clean external ask: replace public examples with 5 to 25 safe metadata-only actions from one workflow, then pair the result with performance and postcondition evidence.
 - `docs/SMERC_Whole_System.md` gives reviewers the shortest map of the whole system and points to `python -m reference_engine.whole_system_demo --pretty` for a one-action lifecycle run.
+- `python -m reference_engine.aws_one_action_reviewer_demo --pretty` gives AWS-style reviewers 8 safe metadata-only actions and a compact explanation of posture, route, reason codes, scores, controls, and transition guidance.
 - `docs/External_Reviewer_Metadata_Response.md` checks whether a reviewer response is usable, too limited, or unsafe before treating customer-owned metadata as pilot evidence.
 - `docs/AWS_Agent_Action_Chain.md` shows the clean AWS-style placement: AI Agent Action -> Bedrock-style Guardrail -> SMERC Recoverability Gate -> Dynamic IAM / Systems Manager / Cloud Execution -> Postcondition Evidence.
 - `docs/AWS_Agent_Action_Chain_Postcondition_Evidence.md` checks whether AWS-style action-chain observation metadata proves that SMERC-required controls actually happened after the recoverability route.
