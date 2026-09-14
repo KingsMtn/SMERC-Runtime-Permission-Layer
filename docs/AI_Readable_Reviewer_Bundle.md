@@ -18,6 +18,8 @@ SMERC, short for Structural Momentum Entropy Range Confidence, is a pre-executio
 
 It checks whether a technically authorized action is recoverable enough to execute now, then returns a replayable posture: `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, or `ESCALATE`.
 
+The reason this matters now is that AI agents and automation are gaining execution authority. IAM answers who may act, guardrails filter content, policy checks rules, and audit logs show what happened later. SMERC adds the pre-execution recoverability question: should this authorized action continue right now?
+
 ## What It Is
 
 SMERC is a pre-execution governance checkpoint.
@@ -118,6 +120,8 @@ The AWS Decision API Surface turns that entry strategy into a small reviewable c
 The AWS One-Action Reviewer Demo is the shortest AWS-facing proof path. It gives reviewers 8 safe metadata-only examples, including IAM expansion, S3 policy widening, CloudFormation replacement, RDS deletion, cost-velocity scale-out, and Secrets Manager rotation, then shows posture, SPARTa route, scores, reason codes, controls, and transition guidance in one local run.
 
 The AWS One-Action Reviewer Ask turns that proof into the smallest outreach loop: ask one reviewer whether one AWS-style action should be allowed, throttled, frozen, denied, or escalated, and ask what evidence would change the answer.
+
+The Known Data Fallback Brief explains the no-response path: keep building from public-pattern evidence, generated stress cases, benchmark-shaped metadata, and AWS-style samples while never calling that fallback customer validation.
 
 The Linux Foundation Standards Alignment explains how SMERC can be standards-adjacent without overstating status. TRACE-style runtime evidence can strengthen SMERC postcondition evidence, MCP and AGENTS.md-style metadata can improve action context, and Agent Name Service-style identity can feed the identity side of the decision while SMERC remains focused on recoverability before execution.
 

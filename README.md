@@ -27,6 +27,8 @@ AWS metadata pilot CTA:
 Fast reviewer paths:
 
 - SMERC whole system: `docs/SMERC_Whole_System.md`
+- Why this matters now: `docs/Why_This_Matters_Now.md`
+- Known data fallback brief: `docs/Known_Data_Fallback_Brief.md`
 - CISO or security architect: `docs/CISO_Security_Architect_15_Minute_Review.md`
 - Company reviewer front door: `docs/Company_Reviewer_Front_Door.md`
 - Serious reviewer bundle: `docs/Serious_Reviewer_Bundle.md`
@@ -55,6 +57,7 @@ Fast reviewer paths:
 - Public agent runtime incident learning: `docs/Public_Agent_Runtime_Incident_Learning.md`
 - Public agent runtime incident replay: `docs/Public_Agent_Runtime_Incident_Replay.md`
 - Public evidence fallback plan: `docs/Public_Evidence_Fallback_Plan.md`
+- Known data fallback brief: `docs/Known_Data_Fallback_Brief.md`
 - Public fallback adapter: `docs/Public_Fallback_Adapter.md`
 - Claim registry: `docs/Claim_Registry.md`
 - Evidence bundle: `docs/Evidence_Bundle.md`
@@ -488,6 +491,7 @@ Start here before reading the code:
 - `docs/Accelerator_And_Adjacent_Company_Map.md` gives accelerator and strategic reviewers a blunt map of adjacent company categories and SMERC's recoverability-specific lane.
 - `docs/CISO_Security_Architect_15_Minute_Review.md` gives CISOs and security architects the fastest serious review path from product claim to MCP Gateway proof, GitHub Actions pilot path, replay evidence, and pilot decision.
 - `docs/AI_Agent_Recoverability_Governance.md` explains the institutional control gap: why AI-agent governance should ask whether an action is recoverable, not only whether it is allowed.
+- `docs/Why_This_Matters_Now.md` gives the shortest buyer/reviewer explanation for why recoverability-before-execution matters now as AI agents gain execution authority.
 - `docs/Reviewer_Quickstart.md` gives reviewers a one-command path that generates a local proof package linking PR Guardian, Ref-gated tool-call screening, SPARTa, DLL, CISO seed evidence, and benchmark comparison.
 - `docs/Customer_Evaluation.md` gives prospective design partners a one-command metadata-only evaluation path for testing 5 to 25 of their own AI-agent or automation actions before a pilot discussion.
 - `docs/Run_Customer_Evaluation_From_GitHub.md` gives non-local reviewers a click-by-click path for running the public customer-evaluation workflow from GitHub Actions and downloading the report artifact.

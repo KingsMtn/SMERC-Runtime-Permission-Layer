@@ -6,6 +6,8 @@ This plan is for the case where outside reviewers do not provide 5 to 25 custome
 
 The fallback is not to wait forever and not to fake customer validation. The fallback is to build from public-pattern evidence with strict provenance.
 
+For the shorter operating brief, see `docs/Known_Data_Fallback_Brief.md`.
+
 ## Rule
 
 Use public, synthetic, generated, emulated, or benchmark-shaped evidence only when the source boundary is clear.

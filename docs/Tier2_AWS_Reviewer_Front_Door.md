@@ -8,6 +8,8 @@ The question is:
 
 > Does recoverability before execution change cloud-agent or automation judgment enough to justify a bounded shadow-mode pilot?
 
+For the shortest "why now" explanation, read `docs/Why_This_Matters_Now.md`.
+
 ## Start Here
 
 Run:
@@ -102,4 +104,3 @@ Not yet:
 - proven to reduce incidents
 - proven to have customer willingness to pay
 - acquisition-grade Tier 3 evidence
-

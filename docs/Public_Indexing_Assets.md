@@ -76,6 +76,8 @@ It includes:
 The repository companion files are:
 
 - `docs/AI_Readable_Reviewer_Bundle.md`
+- `docs/Why_This_Matters_Now.md`
+- `docs/Known_Data_Fallback_Brief.md`
 - `docs/Try_SMERC_On_One_Action.md`
 - `examples/ai_reviewer_bundle.json`
 - `docs/Release_Notes_v0_15_AWS_Tier2_Review.md`
@@ -106,6 +108,8 @@ These files make the same story inspectable inside GitHub, where technical revie
 
 While Netlify deployment is paused, GitHub should be treated as the current source of truth for new discovery material. The latest GitHub-visible discovery additions are:
 
+- `docs/Why_This_Matters_Now.md`
+- `docs/Known_Data_Fallback_Brief.md`
 - `docs/Two_Tier_Valuation_Path.md`
 - `docs/AWS_Shadow_Mirror_Metadata_Path.md`
 - `docs/AWS_Shadow_Mirror_Customer_Metadata_Request.md`
