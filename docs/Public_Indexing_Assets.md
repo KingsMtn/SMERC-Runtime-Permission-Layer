@@ -91,6 +91,7 @@ The repository companion files are:
 - `docs/SMERC_Field_Of_Use_Strategy.md`
 - `docs/Public_Agent_Runtime_Incident_Learning.md`
 - `docs/Public_Agent_Runtime_Incident_Replay.md`
+- `docs/Public_Runtime_Pain_Points_To_SMERC.md`
 - `docs/Public_Evidence_Fallback_Plan.md`
 - `docs/Public_Fallback_Adapter.md`
 - `docs/Claim_Registry.md`

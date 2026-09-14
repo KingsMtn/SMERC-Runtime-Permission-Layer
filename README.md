@@ -54,6 +54,7 @@ Fast reviewer paths:
 - Evidence bundle: `docs/Evidence_Bundle.md`
 - Small generated stress corpus: `docs/Small_Generated_Stress_Corpus.md`
 - Recoverability metadata contract: `docs/Recoverability_Metadata_Contract.md`
+- Public runtime pain points to SMERC: `docs/Public_Runtime_Pain_Points_To_SMERC.md`
 - Dynamic schema gate: `docs/Dynamic_Schema_Gate.md`
 - AWS pilot request: `docs/AWS_PILOT_REQUEST.md`
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
@@ -1412,6 +1413,14 @@ python -m reference_engine.recoverability_metadata_contract --pretty
 ```
 
 This validates the smallest SMERC-adjacent contract: one action or tool call declares reversibility, rollback latency, external side effect, blast radius, available evidence, and a posture hint before execution. It is not authorization and does not replace SMERC scoring; it makes recoverability visible at the action boundary.
+
+Read the Public Runtime Pain Points map:
+
+```text
+docs/Public_Runtime_Pain_Points_To_SMERC.md
+```
+
+This maps current public AWS AgentCore and MCP security pain points to SMERC proof work: gateway bypass, session-to-user binding, execution role credential exposure, command execution authority, audit correlation gaps, MCP token passthrough, confused deputy risk, and tool metadata poisoning. It is source-backed market signal, not customer validation.
 
 Build the claim registry and evidence bundle:
 

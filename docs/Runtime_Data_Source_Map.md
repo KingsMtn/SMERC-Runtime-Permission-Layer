@@ -84,6 +84,8 @@ Public incident learning should follow `docs/Public_Agent_Runtime_Incident_Learn
 
 The first public agent-runtime incident replay is `docs/Public_Agent_Runtime_Incident_Replay.md`, with metadata-only rows in `examples/public_agent_runtime_incident_patterns.json`. It turns public containment lessons, public security advisories, public threat reports, public cloud credential-source documentation, and public leak-cleanup reporting into bounded SMERC replay patterns.
 
+The current public runtime pain-point map is `docs/Public_Runtime_Pain_Points_To_SMERC.md`. It uses public AWS AgentCore security guidance and MCP authorization/tool-poisoning guidance to track gateway bypass, session binding, credential exposure, command execution authority, audit correlation, token passthrough, confused deputy risk, and tool metadata poisoning as source-backed signals for SMERC proof work.
+
 ### 2. Metadata-Only Normalizers
 
 Build source-specific normalizers that output `smerc.customer-evaluation.v1` actions or MCP Governance Gateway inputs.
