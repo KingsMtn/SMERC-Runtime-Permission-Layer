@@ -216,6 +216,15 @@ def compile_customer_evaluation_payload(payload: Mapping[str, Any]) -> Dict[str,
         scores = action["scores"]
         properties = action["properties"]
         capabilities = action["tool_capabilities"]
+        context = {
+            "domain_profile": properties["domain_profile"],
+            "workflow": payload["workflow_family"],
+            "current_control_outcome": action["current_control_outcome"],
+            "possible_consequence": action["possible_consequence"],
+            "rollback_path": action["rollback_path"],
+        }
+        if _rollback_path_unknown(action["rollback_path"]):
+            context["unavailable_recoverability_signals"] = ["evidence_validity", "rollback_latency"]
         actions.append(
             {
                 "action_id": action["action_id"],
@@ -234,13 +243,7 @@ def compile_customer_evaluation_payload(payload: Mapping[str, Any]) -> Dict[str,
                 "authorization_confidence": scores["authorization_confidence"],
                 "external_side_effect": properties["external_side_effect"],
                 "sensitive_data": properties["sensitive_data"],
-                "context": {
-                    "domain_profile": properties["domain_profile"],
-                    "workflow": payload["workflow_family"],
-                    "current_control_outcome": action["current_control_outcome"],
-                    "possible_consequence": action["possible_consequence"],
-                    "rollback_path": action["rollback_path"],
-                },
+                "context": context,
                 "ref_gate": action["ref_gate"],
                 "tool_plan": {
                     "version": "smerc.sparta-plan.v1",
@@ -429,6 +432,22 @@ def _recommend(pilot_fit: Mapping[str, str], differences: int, constrained: int)
         "Do not pitch enforcement from this report. Ask for better side-effecting examples and current-control "
         "labels before proposing a pilot."
     )
+
+
+def _rollback_path_unknown(value: str) -> bool:
+    normalized = value.strip().lower()
+    return normalized in {
+        "unknown",
+        "not known",
+        "not-known",
+        "none",
+        "n/a",
+        "na",
+        "unavailable",
+        "not available",
+        "no rollback path known",
+        "rollback path unknown",
+    }
 
 
 def _scores(value: Any, path: str) -> Dict[str, float]:

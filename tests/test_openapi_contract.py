@@ -50,6 +50,19 @@ class OpenAPIContractTests(unittest.TestCase):
         self.assertEqual(response_schema["properties"]["decision"]["enum"], ["ADMIT", "REJECT", "ESCALATE"])
         self.assertIn("admissible_for_recoverability_scoring", response_schema["required"])
 
+    def test_evaluate_contract_documents_inline_admission_and_missing_signal_behavior(self):
+        operation = self.contract["paths"]["/v1/evaluate"]["post"]
+        request_schema = self.contract["components"]["schemas"]["RecoverabilityActionRequest"]
+        decision_schema = self.contract["components"]["schemas"]["RecoverabilityDecision"]
+
+        self.assertIn("inline admission", operation["description"])
+        self.assertNotIn("rollback_latency", request_schema["required"])
+        self.assertNotIn("evidence_validity", request_schema["required"])
+        self.assertIn("admission", request_schema["properties"])
+        self.assertIn("unavailable evidence", request_schema["description"])
+        self.assertIn("runtime_admission", decision_schema["properties"])
+        self.assertIn("admission_capped_recoverability_scoring", decision_schema["properties"])
+
     def test_contract_keeps_pilot_boundary_language(self):
         description = self.contract["info"]["description"]
         self.assertIn("pilot", description.lower())

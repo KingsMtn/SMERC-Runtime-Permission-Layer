@@ -111,7 +111,7 @@
       "post": {
         "tags": ["Evaluation"],
         "summary": "Evaluate one recoverability action request",
-        "description": "Requires actions.evaluate scope. Persists a tenant-scoped replayable decision.",
+        "description": "Requires actions.evaluate scope. Persists a tenant-scoped replayable decision. If an inline admission block is supplied, hard admission is evaluated before the final posture is returned; failed admission caps the recoverability decision. Omitted supported recoverability signals are treated as unavailable evidence, not permission.",
         "parameters": [
           {
             "$ref": "#/components/parameters/IdempotencyKey"
@@ -768,6 +768,7 @@
       },
       "RecoverabilityActionRequest": {
         "type": "object",
+        "description": "Recoverability action request. Core action identity, base risk, anomaly pressure, authorization confidence, and side-effect flags are required. Supported recoverability signals such as rollback latency or evidence validity may be omitted; omission is interpreted as unavailable evidence and can cap posture.",
         "required": [
           "action_id",
           "description",
@@ -775,13 +776,7 @@
           "tool",
           "action_type",
           "base_action_risk",
-          "reversibility",
-          "containment_strength",
-          "rollback_latency",
-          "evidence_validity",
           "anomaly_pressure",
-          "impact_scope",
-          "cancel_reliability",
           "authorization_confidence",
           "external_side_effect",
           "sensitive_data"
@@ -834,6 +829,15 @@
           },
           "sensitive_data": {
             "type": "boolean"
+          },
+          "context": {
+            "type": "object",
+            "description": "Optional runtime context. context.unavailable_recoverability_signals can name omitted or unavailable signals such as rollback_latency or evidence_validity.",
+            "additionalProperties": true
+          },
+          "admission": {
+            "$ref": "#/components/schemas/RuntimeAdmissionRequest",
+            "description": "Optional inline hard admission request evaluated before the final recoverability posture is returned."
           }
         },
         "additionalProperties": true
@@ -865,6 +869,12 @@
           },
           "replay": {
             "type": "object"
+          },
+          "runtime_admission": {
+            "$ref": "#/components/schemas/RuntimeAdmissionResponse"
+          },
+          "admission_capped_recoverability_scoring": {
+            "type": "boolean"
           }
         },
         "additionalProperties": true

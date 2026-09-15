@@ -547,6 +547,7 @@ Start here before reading the code:
 - `docs/Fallback_Policy_Layer.md` explains deterministic fail-safe posture handling when evidence, scanners, adapters, policies, review queues, rollback plans, or runtime dependencies are unavailable or stale.
 - `docs/Constraint_Eligibility_Layer.md` explains why recoverability is a permission modifier, not a substitute for authority, hard policy, or categorical denies.
 - `docs/OpenSSF_Feedback_Alignment.md` explains how external OpenSSF issue #50 feedback sharpened the runtime order: hard mechanical evidence gates first, recoverability scoring second, route and audit evidence third.
+- `probes/README.md` records the safe path for turning external reviewer probes into regression tests; `probes/openssf_issue_50_probe_summary.md` captures the first OpenSSF-derived probes.
 - `docs/Policy_Bundle_Manifest.md` explains signed, versioned policy bundle manifests for reviewed SPL, profile, control, approval, and activation evidence.
 - `docs/Operator_Status_And_OPA_Log_Export.md` explains the pilot operator status report, `/v1/operator/status` API, and OPA-style decision log export for existing policy/audit pipelines.
 - `docs/Runtime_Health_Metrics.md` explains runtime health, latency, unavailable-evaluation, and fail-closed metrics for pilot operations.

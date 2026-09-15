@@ -46,6 +46,23 @@ class PilotIntakeReportTests(unittest.TestCase):
         self.assertEqual(compiled["actions"][0]["tool"], "github_actions.test")
         self.assertIn("current_control_outcome", compiled["actions"][0]["context"])
 
+    def test_unknown_rollback_path_becomes_unavailable_recoverability_evidence(self):
+        payload = load_payload(SAMPLE)
+        payload = copy.deepcopy(payload)
+        payload["actions"][0]["rollback_path"] = "unknown"
+
+        compiled = compile_customer_evaluation_payload(validate_payload(payload))
+        context = compiled["actions"][0]["context"]
+
+        self.assertEqual(
+            context["unavailable_recoverability_signals"],
+            ["evidence_validity", "rollback_latency"],
+        )
+        report = build_pilot_intake_report(payload)
+        decision = report["customer_evaluation"]["records"][0]["decision"]
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", decision["reason_codes"])
+        self.assertIn("ROLLBACK_LATENCY_UNAVAILABLE", decision["reason_codes"])
+
     def test_markdown_is_external_reviewer_readable_and_bounded(self):
         report = build_pilot_intake_report(load_payload(SAMPLE))
         markdown = render_markdown(report)

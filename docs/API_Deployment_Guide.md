@@ -48,6 +48,10 @@ curl -X POST http://127.0.0.1:8788/v1/evaluate \
   --data @examples/recoverability_single_action.json
 ```
 
+Inline hard admission is optional but recommended for probes that test gate ordering. When an `admission` object is included in the `/v1/evaluate` payload, SMERC evaluates that deterministic gate before returning the final posture. Failed admission caps the final posture, so recoverability scoring cannot rescue a request that failed identity, scope, contract, attestation, least-privilege, object-shape, or required-evidence checks.
+
+Supported recoverability signals such as `rollback_latency` and `evidence_validity` may be omitted when the caller genuinely does not know them. Omitted supported signals are treated as unavailable evidence and can cap posture; they are not treated as permission to proceed.
+
 Listing decisions requires a separate `decisions.read` principal:
 
 ```bash
