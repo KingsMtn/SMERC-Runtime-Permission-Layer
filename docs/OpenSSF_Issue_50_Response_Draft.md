@@ -1,6 +1,11 @@
 # OpenSSF Issue #50 Response Draft
 
-Thanks again. This feedback was specific enough to turn into code, not just wording.
+Absolutely. Strong feedback, and thank you.
+
+Your feedback was great because it gave me the exact work needed to make SMERC stronger. I am serious about this project, and your comment helped identify two credibility problems worth fixing directly:
+
+1. Missing recoverability evidence should not quietly behave like permission.
+2. A failed hard admission gate should not be bypassable through `/v1/evaluate`.
 
 I agreed with your ordering: static classification first, then hard admission checks, then recoverability evidence, then posture and controls. Two concrete gaps came out of your comment and I patched both:
 
