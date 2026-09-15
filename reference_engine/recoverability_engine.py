@@ -501,9 +501,11 @@ class RecoverabilityEngine:
         )
         if high_impact_context and {
             "reversibility",
+            "containment_strength",
             "rollback_latency",
             "evidence_validity",
             "impact_scope",
+            "cancel_reliability",
         } & set(unavailable_signals):
             return RuntimePosture.FREEZE
         return RuntimePosture.THROTTLE

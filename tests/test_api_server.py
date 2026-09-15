@@ -229,6 +229,45 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("RUNTIME_ADMISSION_REJECT", body["reason_codes"])
         self.assertIn("do_not_use_recoverability_to_rescue_failed_admission", body["controls"])
 
+    def test_evaluate_without_inline_admission_fails_closed_by_default(self):
+        status, _, body = self.request_json(
+            "/v1/evaluate",
+            method="POST",
+            payload=EXAMPLES[0],
+            key="alpha-secret",
+        )
+
+        self.assertEqual(status, 200)
+        self.assertEqual(body["runtime_admission"]["decision"], "REJECT")
+        self.assertEqual(body["posture"], "DENY")
+        self.assertIn("identity_valid", body["runtime_admission"]["missing_required_checks"])
+
+    def test_inline_admission_cap_cannot_lower_stricter_recoverability_posture(self):
+        payload = json.loads(json.dumps(EXAMPLES[3]))
+        payload["admission"] = json.loads(json.dumps(ADMISSION_EXAMPLE))
+        payload["admission"]["required_checks"] = [
+            "identity_valid",
+            "session_scope_valid",
+            "typed_contract_valid",
+            "attestation_valid",
+            "least_privilege_confirmed",
+            "object_shape_expected",
+        ]
+        payload["admission"]["checks"]["permit_valid"] = False
+
+        status, _, body = self.request_json(
+            "/v1/evaluate",
+            method="POST",
+            payload=payload,
+            key="alpha-secret",
+        )
+
+        self.assertEqual(status, 200)
+        self.assertEqual(body["runtime_admission"]["decision"], "ESCALATE")
+        self.assertEqual(body["runtime_admission"]["max_recommended_posture"], "FREEZE")
+        self.assertEqual(body["posture"], "DENY")
+        self.assertEqual(body["enforcement_state"], "block")
+
     def test_evaluate_requires_bearer_authentication(self):
         status, headers, body = self.request_json("/v1/evaluate", method="POST", payload=EXAMPLES[0])
         self.assertEqual(status, 401)
@@ -437,7 +476,9 @@ class APIServerTests(unittest.TestCase):
         self.assertEqual(body["error"], "idempotency_conflict")
 
     def test_decision_list_is_tenant_scoped_and_filterable(self):
-        self.request_json("/v1/evaluate", method="POST", payload=EXAMPLES[0], key="beta-secret")
+        payload = json.loads(json.dumps(EXAMPLES[0]))
+        payload["admission"] = ADMISSION_EXAMPLE
+        self.request_json("/v1/evaluate", method="POST", payload=payload, key="beta-secret")
         status, _, body = self.request_json("/v1/decisions?limit=10&posture=ALLOW", key="beta-secret")
         self.assertEqual(status, 200)
         self.assertEqual(body["tenant_id"], "beta")

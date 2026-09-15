@@ -7,7 +7,11 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
-from reference_engine.recoverability_engine import RecoverabilityEngine, evaluate_action
+from reference_engine.recoverability_engine import (
+    RecoverabilityEngine,
+    UNAVAILABLE_RECOVERABILITY_SIGNALS,
+    evaluate_action,
+)
 
 
 ACTION_VERSION = "smerc.action.v1"
@@ -22,6 +26,8 @@ SIGNAL_FIELDS = {"base_action_risk", "evidence_validity", "anomaly_pressure", "i
 RECOVERY_FIELDS = {
     "reversibility", "containment_strength", "rollback_latency", "cancel_reliability", "rollback_method"
 }
+OPTIONAL_SIGNAL_FIELDS = SIGNAL_FIELDS & UNAVAILABLE_RECOVERABILITY_SIGNALS
+OPTIONAL_RECOVERY_FIELDS = RECOVERY_FIELDS & UNAVAILABLE_RECOVERABILITY_SIGNALS
 EFFECT_FIELDS = {"external_side_effect", "sensitive_data"}
 
 REASON_TITLES = {
@@ -136,11 +142,13 @@ def validate_action_envelope(payload: Dict[str, Any]) -> Dict[str, Any]:
     recovery = _object(root["recoverability"], "recoverability")
     effects = _object(root["effects"], "effects")
     context = _object(root["context"], "context")
-    for value, fields, path in (
-        (action, ACTION_FIELDS, "action"), (signals, SIGNAL_FIELDS, "signals"),
-        (recovery, RECOVERY_FIELDS, "recoverability"), (effects, EFFECT_FIELDS, "effects"),
+    for value, fields, optional, path in (
+        (action, ACTION_FIELDS, set(), "action"),
+        (signals, SIGNAL_FIELDS, OPTIONAL_SIGNAL_FIELDS, "signals"),
+        (recovery, RECOVERY_FIELDS, OPTIONAL_RECOVERY_FIELDS, "recoverability"),
+        (effects, EFFECT_FIELDS, set(), "effects"),
     ):
-        _required(value, fields, path)
+        _required(value, fields - optional, path)
         _strict(value, fields, path)
 
     target = _object(action["target"], "action.target")
@@ -156,9 +164,9 @@ def validate_action_envelope(payload: Dict[str, Any]) -> Dict[str, Any]:
         target[field] = _text(target[field], f"action.target.{field}", 256)
     authority["basis"] = _text(authority["basis"], "action.authority.basis", 256)
     authority["confidence"] = _score(authority["confidence"], "action.authority.confidence")
-    for field in SIGNAL_FIELDS:
+    for field in SIGNAL_FIELDS & set(signals):
         signals[field] = _score(signals[field], f"signals.{field}")
-    for field in RECOVERY_FIELDS - {"rollback_method"}:
+    for field in (RECOVERY_FIELDS - {"rollback_method"}) & set(recovery):
         recovery[field] = _score(recovery[field], f"recoverability.{field}")
     recovery["rollback_method"] = _text(recovery["rollback_method"], "recoverability.rollback_method", 512)
     for field in EFFECT_FIELDS:
@@ -188,13 +196,15 @@ def compile_action(payload: Dict[str, Any]) -> Dict[str, Any]:
         "authority_basis": action["authority"]["basis"],
         "rollback_method": recovery["rollback_method"],
     }
-    return {
+    compiled = {
         "action_id": action["id"], "description": action["description"], "actor": action["actor"],
         "tool": action["tool"], "action_type": action["type"], **signals,
-        "reversibility": recovery["reversibility"], "containment_strength": recovery["containment_strength"],
-        "rollback_latency": recovery["rollback_latency"], "cancel_reliability": recovery["cancel_reliability"],
         "authorization_confidence": action["authority"]["confidence"], **effects, "context": compiled_context,
     }
+    for field in OPTIONAL_RECOVERY_FIELDS:
+        if field in recovery:
+            compiled[field] = recovery[field]
+    return compiled
 
 
 def transition_for(posture: str, controls: List[str]) -> Dict[str, Any]:

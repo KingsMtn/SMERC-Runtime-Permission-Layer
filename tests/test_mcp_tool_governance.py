@@ -50,6 +50,23 @@ class MCPToolGovernanceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown field"):
             evaluate_mcp_tool_call(payload)
 
+    def test_missing_recoverability_evidence_is_treated_as_unavailable(self):
+        payload = load(DELETE_CALL)
+        del payload["risk_signals"]["rollback_latency"]
+        del payload["risk_signals"]["containment_strength"]
+
+        report = evaluate_mcp_tool_call(payload)
+
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", report["decision"]["reason_codes"])
+        self.assertIn(
+            "rollback_latency",
+            report["decision"]["replay"]["context"]["auto_unavailable_recoverability_signals"],
+        )
+        self.assertIn(
+            "containment_strength",
+            report["decision"]["replay"]["context"]["auto_unavailable_recoverability_signals"],
+        )
+
     def test_markdown_and_outputs_are_reviewable(self):
         report = evaluate_mcp_tool_call(load(DELETE_CALL))
         markdown = render_markdown(report)

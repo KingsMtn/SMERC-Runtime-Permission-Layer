@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, Mapping
 
 from reference_engine.agent_identity import evaluate_agent_identity
-from reference_engine.recoverability_engine import RecoverabilityEngine
+from reference_engine.recoverability_engine import RecoverabilityEngine, UNAVAILABLE_RECOVERABILITY_SIGNALS
 from reference_engine.sparta_router import SPARTA_PLAN_VERSION, route_decision
 
 
@@ -171,20 +171,14 @@ def _action_from_request(request: Mapping[str, Any]) -> Dict[str, Any]:
     tool_call = request["tool_call"]
     signals = request["risk_signals"]
     operation_class = _text(tool_call.get("operation_class", "execute"), "tool_call.operation_class")
-    return {
+    action = {
         "action_id": f"MCP_{request['mcp_request_id']}",
         "description": _text(tool_call.get("description", tool_call.get("tool_name")), "tool_call.description"),
         "actor": _safe_identifier(request["agent"].get("agent_id"), "agent.agent_id"),
         "tool": f"mcp.{_safe_identifier(request['server'].get('name'), 'server.name')}.{_safe_identifier(tool_call.get('tool_name'), 'tool_call.tool_name')}",
         "action_type": f"mcp_{operation_class}",
         "base_action_risk": _score(signals.get("base_action_risk"), "risk_signals.base_action_risk"),
-        "reversibility": _score(signals.get("reversibility"), "risk_signals.reversibility"),
-        "containment_strength": _score(signals.get("containment_strength"), "risk_signals.containment_strength"),
-        "rollback_latency": _score(signals.get("rollback_latency"), "risk_signals.rollback_latency"),
-        "evidence_validity": _score(signals.get("evidence_validity"), "risk_signals.evidence_validity"),
         "anomaly_pressure": _score(signals.get("anomaly_pressure"), "risk_signals.anomaly_pressure"),
-        "impact_scope": _score(signals.get("impact_scope"), "risk_signals.impact_scope"),
-        "cancel_reliability": _score(signals.get("cancel_reliability"), "risk_signals.cancel_reliability"),
         "authorization_confidence": _score(signals.get("authorization_confidence"), "risk_signals.authorization_confidence"),
         "external_side_effect": bool(tool_call.get("external_side_effect", operation_class != "read")),
         "sensitive_data": bool(tool_call.get("sensitive_data", False)),
@@ -195,6 +189,10 @@ def _action_from_request(request: Mapping[str, Any]) -> Dict[str, Any]:
             "operation_class": operation_class,
         },
     }
+    for field in UNAVAILABLE_RECOVERABILITY_SIGNALS:
+        if field in signals:
+            action[field] = _score(signals[field], f"risk_signals.{field}")
+    return action
 
 
 def _plan_from_request(request: Mapping[str, Any]) -> Dict[str, Any]:

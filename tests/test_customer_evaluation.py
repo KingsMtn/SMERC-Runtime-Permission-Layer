@@ -40,6 +40,18 @@ class CustomerEvaluationTests(unittest.TestCase):
         self.assertFalse(failed[0]["sparta_route"]["executable"])
         self.assertTrue(failed[0]["decision_lifecycle_ledger"]["verification"]["valid"])
 
+    def test_missing_recoverability_evidence_is_scored_as_unavailable(self):
+        payload = copy.deepcopy(load_payload(SAMPLE))
+        del payload["actions"][0]["rollback_latency"]
+        del payload["actions"][0]["evidence_validity"]
+
+        report = build_customer_evaluation(payload)
+
+        first = report["records"][0]["decision"]
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", first["reason_codes"])
+        self.assertIn("rollback_latency", first["replay"]["context"]["auto_unavailable_recoverability_signals"])
+        self.assertIn("evidence_validity", first["replay"]["context"]["auto_unavailable_recoverability_signals"])
+
     def test_sensitive_customer_material_is_rejected(self):
         payload = load_payload(SAMPLE)
         payload = copy.deepcopy(payload)

@@ -49,7 +49,7 @@ class APISmokeTestTests(unittest.TestCase):
         self.assertEqual(report["schema"], "smerc.api-smoke-test.v1")
         self.assertTrue(report["passed"])
         self.assertEqual(report["failed_checks"], [])
-        self.assertEqual(report["artifacts"]["decision"]["posture"], "THROTTLE")
+        self.assertEqual(report["artifacts"]["decision"]["posture"], "DENY")
         self.assertEqual(report["artifacts"]["runtime_health"]["health_status"], "healthy")
         self.assertEqual(report["artifacts"]["operator_status"]["schema"], "smerc.operator-status.v1")
         self.assertIn("does not prove production availability", report["evidence_boundary"])

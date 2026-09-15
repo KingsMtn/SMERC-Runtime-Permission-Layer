@@ -10,7 +10,7 @@ from typing import Any, Dict, Mapping
 from reference_engine.autonomy_budget import evaluate_autonomy_budget
 from reference_engine.decision_lifecycle_ledger import DecisionLifecycleLedger
 from reference_engine.agent_identity import evaluate_agent_identity
-from reference_engine.recoverability_engine import RecoverabilityEngine
+from reference_engine.recoverability_engine import RecoverabilityEngine, UNAVAILABLE_RECOVERABILITY_SIGNALS
 from reference_engine.sparta_router import route_decision
 
 
@@ -53,6 +53,8 @@ RECOVERABILITY_FIELDS = {
     "context",
 }
 ACTION_FIELDS = RECOVERABILITY_FIELDS | {"ref_gate", "tool_plan"}
+OPTIONAL_ACTION_FIELDS = RECOVERABILITY_FIELDS & UNAVAILABLE_RECOVERABILITY_SIGNALS
+REQUIRED_ACTION_FIELDS = ACTION_FIELDS - OPTIONAL_ACTION_FIELDS
 PROHIBITED_KEY_FRAGMENTS = {
     "secret",
     "token",
@@ -89,7 +91,7 @@ def validate_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
         if not isinstance(action, dict):
             raise TypeError(f"actions[{index}] must be an object")
         _reject_sensitive_keys(action, f"actions[{index}]")
-        _exact_fields(action, ACTION_FIELDS, f"actions[{index}]")
+        _exact_fields(action, REQUIRED_ACTION_FIELDS, f"actions[{index}]", optional=OPTIONAL_ACTION_FIELDS)
         action_id = _text(action["action_id"], f"actions[{index}].action_id", 128)
         if action_id in seen:
             raise ValueError(f"duplicate action_id: {action_id}")
@@ -353,7 +355,7 @@ def write_outputs(report: Mapping[str, Any], json_output: str | Path, markdown_o
 
 
 def _recoverability_payload(action: Mapping[str, Any]) -> Dict[str, Any]:
-    return {key: action[key] for key in RECOVERABILITY_FIELDS}
+    return {key: action[key] for key in RECOVERABILITY_FIELDS if key in action}
 
 
 def _evaluate_ref_gate(ref_gate: Mapping[str, bool]) -> Dict[str, Any]:

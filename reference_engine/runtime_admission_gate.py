@@ -93,16 +93,17 @@ def evaluate_runtime_admission_gate(payload: Mapping[str, Any], *, required: boo
 
 
 def ref_gate_compat_report(payload: Mapping[str, Any], *, required: bool = True) -> Dict[str, Any]:
+    ref_gate_checks = [
+        "typed_contract_valid",
+        "attestation_valid",
+        "least_privilege_confirmed",
+        "object_shape_expected",
+    ]
     report = evaluate_runtime_admission_gate(
         {
             "version": ADMISSION_INPUT_VERSION,
             "request_id": str(payload.get("request_id", payload.get("mcp_request_id", "unknown-request"))),
-            "required_checks": [
-                "typed_contract_valid",
-                "attestation_valid",
-                "least_privilege_confirmed",
-                "object_shape_expected",
-            ],
+            "required_checks": ref_gate_checks if required else [],
             "checks": {
                 "typed_contract_valid": payload.get("typed_contract_valid"),
                 "attestation_valid": payload.get("attestation_valid"),
@@ -110,7 +111,7 @@ def ref_gate_compat_report(payload: Mapping[str, Any], *, required: bool = True)
                 "object_shape_expected": payload.get("object_shape_expected"),
             },
         },
-        required=required,
+        required=False,
     )
     return {
         "pattern": "deterministic_pre_execution_ref_gate",
@@ -142,6 +143,8 @@ def _required_checks(value: Any, *, required: bool) -> tuple[str, ...]:
         raise ValueError(f"admission.required_checks contains unknown check(s): {', '.join(unknown)}")
     if len(set(checks)) != len(checks):
         raise ValueError("admission.required_checks must not contain duplicates")
+    if required:
+        return tuple(dict.fromkeys((*DEFAULT_REQUIRED_CHECKS, *checks)))
     return checks
 
 

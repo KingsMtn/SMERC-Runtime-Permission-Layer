@@ -102,6 +102,12 @@ from reference_engine.sparta_router import SPARTA_PLAN_VERSION, SPARTA_ROUTE_VER
 
 DEFAULT_MAX_BODY_BYTES = 256 * 1024
 DEFAULT_MAX_BATCH_SIZE = 100
+POSTURE_RANK = {"ALLOW": 0, "THROTTLE": 1, "FREEZE": 2, "ESCALATE": 3, "DENY": 4}
+RANK_POSTURE = {value: key for key, value in POSTURE_RANK.items()}
+
+
+def _stricter_posture(left: str, right: str) -> str:
+    return RANK_POSTURE[max(POSTURE_RANK[left], POSTURE_RANK[right])]
 
 
 class APIError(Exception):
@@ -1677,7 +1683,11 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
     def _evaluate_inline_admission(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         admission_payload = payload.get("admission")
         if admission_payload is None:
-            return None
+            admission_payload = {
+                "version": ADMISSION_INPUT_VERSION,
+                "request_id": str(payload.get("action_id", "evaluate-request")),
+                "checks": {},
+            }
         if not isinstance(admission_payload, dict):
             raise APIError(HTTPStatus.BAD_REQUEST, "invalid_admission_request", "admission must be an object")
         try:
@@ -1701,15 +1711,16 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             decision["controls"] = list(admission["required_controls"]) + list(decision.get("controls", []))
             return decision
 
-        capped_posture = admission["max_recommended_posture"]
+        original_posture = decision["posture"]
+        capped_posture = _stricter_posture(original_posture, admission["max_recommended_posture"])
         decision["posture"] = capped_posture
         decision["enforcement_state"] = "block" if capped_posture == RuntimePosture.DENY.value else "pause"
         decision["admission_capped_recoverability_scoring"] = True
         decision["reason_codes"] = list(admission["reason_codes"]) + list(decision.get("reason_codes", []))
         decision["controls"] = list(admission["required_controls"]) + list(decision.get("controls", []))
         decision["plain_english_summary"] = (
-            f"{admission['plain_english_summary']} Recoverability scoring was capped at "
-            f"{capped_posture} because runtime admission did not admit the request."
+            f"{admission['plain_english_summary']} Final posture resolved to {capped_posture} using the stricter of "
+            f"recoverability posture {original_posture} and admission maximum {admission['max_recommended_posture']}."
         )
         if isinstance(decision.get("replay"), dict):
             decision["replay"]["posture"] = decision["posture"]

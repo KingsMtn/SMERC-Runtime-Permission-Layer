@@ -148,6 +148,24 @@ class RecoverabilityEngineTests(unittest.TestCase):
             ["rollback_latency"],
         )
 
+    def test_omitted_high_impact_containment_signal_freezes(self):
+        action = dict(self.by_id("AGENT_DEPLOY_PROD_CONFIG"))
+        del action["containment_strength"]
+
+        result = self.engine.evaluate(action)
+
+        self.assertEqual(result["posture"], "FREEZE")
+        self.assertIn("CONTAINMENT_STRENGTH_UNAVAILABLE", result["reason_codes"])
+
+    def test_omitted_high_impact_cancel_signal_freezes(self):
+        action = dict(self.by_id("AGENT_DEPLOY_PROD_CONFIG"))
+        del action["cancel_reliability"]
+
+        result = self.engine.evaluate(action)
+
+        self.assertEqual(result["posture"], "FREEZE")
+        self.assertIn("CANCEL_RELIABILITY_UNAVAILABLE", result["reason_codes"])
+
     def test_unavailable_recoverability_signal_list_is_validated(self):
         action = dict(self.by_id("AGENT_RUN_TESTS"))
         action["context"] = {"unavailable_recoverability_signals": ["unknown_signal"]}

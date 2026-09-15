@@ -16,6 +16,9 @@ class CustomerProofLoopTests(unittest.TestCase):
     def _example(self):
         return json.loads((ROOT / "examples" / "customer_proof_action.json").read_text(encoding="utf-8"))
 
+    def _openssf_probe(self):
+        return json.loads((ROOT / "examples" / "openssf_issue_50_end_to_end_probe.json").read_text(encoding="utf-8"))
+
     def test_customer_proof_loop_builds_replayable_bundle(self):
         report = build_customer_proof_loop(self._example())
 
@@ -47,6 +50,19 @@ class CustomerProofLoopTests(unittest.TestCase):
         self.assertFalse(report["summary"]["route_executable"])
         self.assertTrue(report["summary"]["ledger_valid"])
         self.assertEqual(report["summary"]["overall_status"], "REVIEW")
+
+    def test_openssf_issue_50_probe_runs_end_to_end_with_missing_evidence_cap(self):
+        report = build_customer_proof_loop(self._openssf_probe())
+
+        self.assertEqual(report["admission"]["decision"], "ADMIT")
+        self.assertFalse(report["recoverability_stage"]["skipped"])
+        self.assertEqual(report["recoverability_decision"]["posture"], "FREEZE")
+        self.assertEqual(report["sparta_route"]["route_state"], "PAUSE")
+        self.assertFalse(report["summary"]["route_executable"])
+        self.assertTrue(report["summary"]["ledger_valid"])
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", report["summary"]["reason_codes"])
+        self.assertIn("ROLLBACK_LATENCY_UNAVAILABLE", report["summary"]["reason_codes"])
+        self.assertIn("EVIDENCE_VALIDITY_UNAVAILABLE", report["summary"]["reason_codes"])
 
     def test_write_customer_proof_loop_outputs_json_and_markdown(self):
         report = build_customer_proof_loop(self._example())

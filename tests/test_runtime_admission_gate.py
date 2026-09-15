@@ -61,18 +61,26 @@ class RuntimeAdmissionGateTests(unittest.TestCase):
         self.assertIn("OBJECT_SHAPE_UNEXPECTED", report["reason_codes"])
 
     def test_optional_warning_escalates_without_full_rejection(self):
-        report = evaluate_runtime_admission_gate(
-            {
-                "version": "smerc.runtime-admission-input.v1",
-                "request_id": "REQ-OPTIONAL",
-                "required_checks": ["identity_valid"],
-                "checks": {"identity_valid": True, "permit_valid": False},
-            }
-        )
+        report = evaluate_runtime_admission_gate(_payload(permit_valid=False))
 
         self.assertEqual(report["decision"], "ESCALATE")
         self.assertEqual(report["max_recommended_posture"], "FREEZE")
         self.assertIn("permit_invalid", report["drivers"])
+
+    def test_empty_required_checks_cannot_bypass_default_gate(self):
+        report = evaluate_runtime_admission_gate(
+            {
+                "version": "smerc.runtime-admission-input.v1",
+                "request_id": "REQ-EMPTY-REQUIRED",
+                "required_checks": [],
+                "checks": {},
+            }
+        )
+
+        self.assertEqual(report["decision"], "REJECT")
+        self.assertEqual(report["max_recommended_posture"], "DENY")
+        self.assertIn("identity_valid", report["missing_required_checks"])
+        self.assertIn("session_scope_valid", report["missing_required_checks"])
 
     def test_unknown_required_check_fails_closed(self):
         with self.assertRaises(ValueError):

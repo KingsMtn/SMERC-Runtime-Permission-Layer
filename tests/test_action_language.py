@@ -61,6 +61,18 @@ class ActionLanguageTests(unittest.TestCase):
         self.assertTrue(all({"code", "title"} <= set(item) for item in decision["reasons"]))
         self.assertEqual(decision["replay"]["action_hash"], decision["action_hash"])
 
+    def test_missing_recoverability_evidence_compiles_as_unavailable_signal(self):
+        payload = copy.deepcopy(EXAMPLE)
+        del payload["recoverability"]["rollback_latency"]
+        del payload["signals"]["evidence_validity"]
+
+        decision = evaluate_language_action(payload)
+
+        self.assertIn(decision["posture"], {"FREEZE", "DENY", "ESCALATE"})
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", decision["reason_codes"])
+        self.assertIn("rollback_latency", decision["replay"]["context"]["auto_unavailable_recoverability_signals"])
+        self.assertIn("evidence_validity", decision["replay"]["context"]["auto_unavailable_recoverability_signals"])
+
     def test_posture_transitions_are_explicit(self):
         self.assertEqual(transition_for("ALLOW", ["execute"])["mode"], "maintain")
         self.assertEqual(transition_for("THROTTLE", ["limit_scope"])["eligible_target_posture"], "ALLOW")

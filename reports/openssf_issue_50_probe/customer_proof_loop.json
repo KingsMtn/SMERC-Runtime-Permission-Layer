@@ -1,0 +1,674 @@
+{
+  "admission": {
+    "admissible_for_recoverability_scoring": true,
+    "checks": {
+      "attestation_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "identity_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "least_privilege_confirmed": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "object_shape_expected": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "permit_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "required_evidence_present": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "session_scope_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      },
+      "typed_contract_valid": {
+        "required": true,
+        "source": "explicit",
+        "value": true
+      }
+    },
+    "claim_boundary": "The runtime admission gate is a deterministic pre-scoring check. It does not authenticate a remote system by itself, prove compliance, or replace IAM, OPA, API validation, endpoint type checking, or customer-specific policy.",
+    "decision": "ADMIT",
+    "drivers": [],
+    "failed_required_checks": [],
+    "generated_at": "2026-09-15T21:55:53+00:00",
+    "max_recommended_posture": "ALLOW",
+    "missing_required_checks": [],
+    "plain_english_summary": "The request passed deterministic runtime admission checks and may proceed to recoverability scoring.",
+    "reason_codes": [
+      "RUNTIME_ADMISSION_ADMIT"
+    ],
+    "request_id": "openssf-issue-50-missing-evidence-001",
+    "required_controls": [
+      "continue_to_recoverability_scoring"
+    ],
+    "version": "smerc.runtime-admission-gate.v1"
+  },
+  "decision_lifecycle_ledger": {
+    "decision_id": "customer-proof:openssf-issue-50-missing-evidence-001",
+    "head_record_hash": "399048d2631ad3fe3ded37a41a96dc852f503beaa0ef9270c8abe6f54c592ede",
+    "record_count": 4,
+    "records": [
+      {
+        "actor": "deployment_agent",
+        "decision_id": "customer-proof:openssf-issue-50-missing-evidence-001",
+        "event_type": "REQUEST",
+        "payload": {
+          "environment": "production",
+          "initiated_by": "deployment_agent",
+          "requested_operation": "production_deploy",
+          "risk_profile": {
+            "action_id": "OPENSSF_ISSUE_50_UNKNOWN_ROLLBACK_DEPLOY",
+            "admission_decision": "ADMIT",
+            "base_action_risk": 0.64,
+            "impact_scope": 0.58
+          }
+        },
+        "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "record_hash": "90c7b842e8955acc38ecb1c198656bc3821dd248cdfe0184e1f23d0e4b653a8d",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-09-15T21:55:53+00:00",
+        "sequence": 1,
+        "tenant_id": "openssf-issue-50-probe"
+      },
+      {
+        "actor": "smerc.runtime_admission_gate",
+        "decision_id": "customer-proof:openssf-issue-50-missing-evidence-001",
+        "event_type": "EVIDENCE",
+        "payload": {
+          "available_evidence": [
+            "identity_valid",
+            "session_scope_valid",
+            "permit_valid",
+            "typed_contract_valid",
+            "attestation_valid",
+            "least_privilege_confirmed",
+            "object_shape_expected",
+            "required_evidence_present"
+          ],
+          "confidence_score": 0.638,
+          "external_dependencies": [
+            "github_actions.deploy",
+            "github_actions"
+          ],
+          "missing_evidence": [],
+          "model_version": "deterministic_reference_engine",
+          "policy_version": "smerc.runtime-admission-gate.v1"
+        },
+        "previous_record_hash": "90c7b842e8955acc38ecb1c198656bc3821dd248cdfe0184e1f23d0e4b653a8d",
+        "record_hash": "6684703f7a89e98ee93fe33337cbb1e9b3f6cf91c48bc8f16677f7819032919f",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-09-15T21:55:53+00:00",
+        "sequence": 2,
+        "tenant_id": "openssf-issue-50-probe"
+      },
+      {
+        "actor": "smerc.customer_proof_loop",
+        "decision_id": "customer-proof:openssf-issue-50-missing-evidence-001",
+        "event_type": "EVALUATION",
+        "payload": {
+          "authorization_recommendation": "FREEZE",
+          "entropy_indicators": [
+            "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
+            "EVIDENCE_VALIDITY_UNAVAILABLE",
+            "ROLLBACK_LATENCY_UNAVAILABLE",
+            "IRREVERSIBLE_EXPOSURE_ELEVATED",
+            "EXTERNAL_SIDE_EFFECT"
+          ],
+          "reason_codes": [
+            "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
+            "EVIDENCE_VALIDITY_UNAVAILABLE",
+            "ROLLBACK_LATENCY_UNAVAILABLE",
+            "IRREVERSIBLE_EXPOSURE_ELEVATED",
+            "EXTERNAL_SIDE_EFFECT"
+          ],
+          "recommended_safeguards": [
+            "pause_execution",
+            "collect_more_evidence",
+            "snapshot_current_state",
+            "preserve_replay",
+            "treat_unavailable_recoverability_as_uncertainty"
+          ],
+          "recoverability_score": 0.61,
+          "structural_state": "runtime_admitted"
+        },
+        "previous_record_hash": "6684703f7a89e98ee93fe33337cbb1e9b3f6cf91c48bc8f16677f7819032919f",
+        "record_hash": "13154926aeaa40d9e493b16662afc4e44886b2a0cbace3d1b07e32870a40144f",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-09-15T21:55:53+00:00",
+        "sequence": 3,
+        "tenant_id": "openssf-issue-50-probe"
+      },
+      {
+        "actor": "smerc.sparta_router",
+        "decision_id": "customer-proof:openssf-issue-50-missing-evidence-001",
+        "event_type": "EXECUTION",
+        "payload": {
+          "duration_ms": 0,
+          "executed_operation": "deploy_canary",
+          "execution_status": "blocked",
+          "rollback_performed": false,
+          "rollback_success": null,
+          "started_at": "2026-09-15T21:55:53+00:00"
+        },
+        "previous_record_hash": "13154926aeaa40d9e493b16662afc4e44886b2a0cbace3d1b07e32870a40144f",
+        "record_hash": "399048d2631ad3fe3ded37a41a96dc852f503beaa0ef9270c8abe6f54c592ede",
+        "record_version": "smerc.dll-record.v1",
+        "recorded_at": "2026-09-15T21:55:53+00:00",
+        "sequence": 4,
+        "tenant_id": "openssf-issue-50-probe"
+      }
+    ],
+    "summary": {
+      "decision_id": "customer-proof:openssf-issue-50-missing-evidence-001",
+      "event_counts": {
+        "EVALUATION": 1,
+        "EVIDENCE": 1,
+        "EXECUTION": 1,
+        "HUMAN_INTERACTION": 0,
+        "LEARNING_RECOMMENDATION": 0,
+        "OUTCOME": 0,
+        "REQUEST": 1
+      },
+      "final_event_type": "EXECUTION",
+      "judged_correct": null,
+      "override_count": 0,
+      "pending_learning_recommendations": 0,
+      "record_count": 4,
+      "rollback_performed": false,
+      "rollback_success": null,
+      "tenant_id": "openssf-issue-50-probe"
+    },
+    "tenant_id": "openssf-issue-50-probe",
+    "verification": {
+      "errors": [],
+      "head_record_hash": "399048d2631ad3fe3ded37a41a96dc852f503beaa0ef9270c8abe6f54c592ede",
+      "record_count": 4,
+      "valid": true
+    },
+    "version": "smerc.decision-lifecycle-ledger.v1"
+  },
+  "generated_at": "2026-09-15T21:55:53+00:00",
+  "markdown_report": "# SMERC Customer Proof Loop Report\n\nGenerated: `2026-09-15T21:55:53+00:00`\nTenant: `openssf-issue-50-probe`\n\n## Result\n\n- Overall status: **REVIEW**\n- Runtime admission: **ADMIT**\n- Recoverability posture: **FREEZE**\n- SPARTa route: **PAUSE**\n- Ledger valid: **True**\n\n## Pass/Fail Checks\n\n| Check | Result |\n| --- | --- |\n| Hard runtime gates passed | `True` |\n| Recoverability permits progression | `False` |\n| Route executable | `False` |\n| Ledger valid | `True` |\n\n## Reason Codes\n\n- `EVIDENCE_VALIDITY_UNAVAILABLE`\n- `EXTERNAL_SIDE_EFFECT`\n- `IRREVERSIBLE_EXPOSURE_ELEVATED`\n- `RECOVERABILITY_EVIDENCE_UNAVAILABLE`\n- `ROLLBACK_LATENCY_UNAVAILABLE`\n- `RUNTIME_ADMISSION_ADMIT`\n- `SPARTA_FREEZE_PAUSES_AUTOMATION`\n\n## Controls\n\n- `checkpoint_before_execution`\n- `collect_more_evidence`\n- `continue_to_recoverability_scoring`\n- `pause_execution`\n- `preserve_replay`\n- `snapshot_current_state`\n- `treat_unavailable_recoverability_as_uncertainty`\n\n## Plain English\n\nRuntime admission returned ADMIT. SMERC posture is FREEZE. SPARTa route is PAUSE. The lifecycle ledger is valid: True.\n\n## Evidence Artifacts\n\n- Full JSON evidence bundle: `customer_proof_loop.json`\n- Replayable lifecycle chain: `decision_lifecycle_ledger` inside the JSON bundle\n",
+  "recoverability_decision": {
+    "action_id": "OPENSSF_ISSUE_50_UNKNOWN_ROLLBACK_DEPLOY",
+    "controls": [
+      "pause_execution",
+      "collect_more_evidence",
+      "snapshot_current_state",
+      "preserve_replay",
+      "treat_unavailable_recoverability_as_uncertainty"
+    ],
+    "decision_trace": {
+      "profile": {
+        "label": "GitHub Actions and software delivery",
+        "notes": [
+          "Production delivery changes should preserve rollback and deployment evidence."
+        ],
+        "profile_id": "github_actions"
+      },
+      "score_contributions": {
+        "confidence_score": {
+          "anomaly_resistance": 0.137,
+          "authorization_confidence": 0.252,
+          "containment_strength": 0.05,
+          "evidence_validity": 0.2,
+          "profile_multiplier": 1.0,
+          "total": 0.638
+        },
+        "irreversible_exposure_score": {
+          "base_action_risk": 0.115,
+          "containment_gap": 0.049,
+          "external_side_effect": 0.08,
+          "impact_scope": 0.07,
+          "irreversibility": 0.077,
+          "profile_multiplier": 1.03,
+          "rollback_latency": 0.085,
+          "sensitive_data": 0.0,
+          "total": 0.49
+        },
+        "operational_stress_score": {
+          "anomaly_pressure": 0.048,
+          "base_action_risk": 0.128,
+          "cancel_gap": 0.02,
+          "confidence_gap": 0.031,
+          "evidence_gap": 0.07,
+          "impact_scope": 0.104,
+          "profile_multiplier": 1.04,
+          "rollback_latency": 0.05,
+          "total": 0.47
+        },
+        "reversible_capacity_score": {
+          "cancel_reliability": 0.106,
+          "containment_strength": 0.149,
+          "evidence_validity": 0.05,
+          "profile_multiplier": 1.0,
+          "reversibility": 0.211,
+          "rollback_speed": 0.095,
+          "total": 0.61
+        },
+        "risk_adjusted_authorization_score": {
+          "confidence_score": 0.191,
+          "profile_multiplier": 1.0,
+          "recoverability_margin": 0.127,
+          "reversible_capacity": 0.275,
+          "total": 0.593
+        }
+      },
+      "threshold_trace": [
+        {
+          "details": {
+            "capacity": 0.61,
+            "capacity_rule": "< 0.42",
+            "confidence": 0.638,
+            "confidence_rule": "< 0.48"
+          },
+          "observed": 0.49,
+          "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+          "threshold": ">= 0.78",
+          "triggered": false
+        },
+        {
+          "details": {
+            "exposure": 0.49,
+            "exposure_rule": ">= 0.62"
+          },
+          "observed": 0.66,
+          "rule": "deny_by_unreliable_cancel_and_high_exposure",
+          "threshold": "< 0.3",
+          "triggered": false
+        },
+        {
+          "details": {
+            "external_side_effect": true,
+            "sensitive_data": false
+          },
+          "observed": 0.47,
+          "rule": "escalate_by_operational_stress",
+          "threshold": ">= 0.7",
+          "triggered": false
+        },
+        {
+          "details": {
+            "capacity": 0.61,
+            "confidence": 0.638
+          },
+          "observed": 0.61,
+          "rule": "freeze_by_low_confidence_or_capacity",
+          "threshold": "confidence < 0.45 or capacity < 0.36",
+          "triggered": false
+        },
+        {
+          "details": {
+            "exposure": 0.49,
+            "external_side_effect": true,
+            "profile_allows_external_side_effect_release": false
+          },
+          "observed": 0.593,
+          "rule": "throttle_by_authorization_exposure_or_side_effect",
+          "threshold": "authorization < 0.62 or exposure >= 0.45",
+          "triggered": true
+        }
+      ]
+    },
+    "domain_profile": {
+      "label": "GitHub Actions and software delivery",
+      "notes": [
+        "Production delivery changes should preserve rollback and deployment evidence."
+      ],
+      "profile_id": "github_actions"
+    },
+    "enforcement_state": "pause",
+    "plain_english_summary": "Action 'OPENSSF_ISSUE_50_UNKNOWN_ROLLBACK_DEPLOY' received FREEZE. Irreversible exposure is 0.490, reversible capacity is 0.610, and authorization score is 0.593. Controls: pause_execution, collect_more_evidence, snapshot_current_state, preserve_replay, treat_unavailable_recoverability_as_uncertainty.",
+    "policy": {
+      "evidence_ceiling": "OBSERVE",
+      "mode": "OBSERVE",
+      "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+      "policy_id": "smerc-reference-recoverability",
+      "policy_revision": "1.0.0",
+      "tenant_id": "*"
+    },
+    "posture": "FREEZE",
+    "reason_codes": [
+      "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
+      "EVIDENCE_VALIDITY_UNAVAILABLE",
+      "ROLLBACK_LATENCY_UNAVAILABLE",
+      "IRREVERSIBLE_EXPOSURE_ELEVATED",
+      "EXTERNAL_SIDE_EFFECT"
+    ],
+    "replay": {
+      "action_type": "production_deploy",
+      "actor": "deployment_agent",
+      "context": {
+        "auto_unavailable_recoverability_signals": [
+          "evidence_validity",
+          "rollback_latency"
+        ],
+        "environment": "production",
+        "probe_source": "openssf_issue_50",
+        "rollback_path": "unknown",
+        "unavailable_recoverability_signals": [
+          "evidence_validity",
+          "rollback_latency"
+        ],
+        "workflow": "deployment"
+      },
+      "controls": [
+        "pause_execution",
+        "collect_more_evidence",
+        "snapshot_current_state",
+        "preserve_replay",
+        "treat_unavailable_recoverability_as_uncertainty"
+      ],
+      "decision_trace": {
+        "profile": {
+          "label": "GitHub Actions and software delivery",
+          "notes": [
+            "Production delivery changes should preserve rollback and deployment evidence."
+          ],
+          "profile_id": "github_actions"
+        },
+        "score_contributions": {
+          "confidence_score": {
+            "anomaly_resistance": 0.137,
+            "authorization_confidence": 0.252,
+            "containment_strength": 0.05,
+            "evidence_validity": 0.2,
+            "profile_multiplier": 1.0,
+            "total": 0.638
+          },
+          "irreversible_exposure_score": {
+            "base_action_risk": 0.115,
+            "containment_gap": 0.049,
+            "external_side_effect": 0.08,
+            "impact_scope": 0.07,
+            "irreversibility": 0.077,
+            "profile_multiplier": 1.03,
+            "rollback_latency": 0.085,
+            "sensitive_data": 0.0,
+            "total": 0.49
+          },
+          "operational_stress_score": {
+            "anomaly_pressure": 0.048,
+            "base_action_risk": 0.128,
+            "cancel_gap": 0.02,
+            "confidence_gap": 0.031,
+            "evidence_gap": 0.07,
+            "impact_scope": 0.104,
+            "profile_multiplier": 1.04,
+            "rollback_latency": 0.05,
+            "total": 0.47
+          },
+          "reversible_capacity_score": {
+            "cancel_reliability": 0.106,
+            "containment_strength": 0.149,
+            "evidence_validity": 0.05,
+            "profile_multiplier": 1.0,
+            "reversibility": 0.211,
+            "rollback_speed": 0.095,
+            "total": 0.61
+          },
+          "risk_adjusted_authorization_score": {
+            "confidence_score": 0.191,
+            "profile_multiplier": 1.0,
+            "recoverability_margin": 0.127,
+            "reversible_capacity": 0.275,
+            "total": 0.593
+          }
+        },
+        "threshold_trace": [
+          {
+            "details": {
+              "capacity": 0.61,
+              "capacity_rule": "< 0.42",
+              "confidence": 0.638,
+              "confidence_rule": "< 0.48"
+            },
+            "observed": 0.49,
+            "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+            "threshold": ">= 0.78",
+            "triggered": false
+          },
+          {
+            "details": {
+              "exposure": 0.49,
+              "exposure_rule": ">= 0.62"
+            },
+            "observed": 0.66,
+            "rule": "deny_by_unreliable_cancel_and_high_exposure",
+            "threshold": "< 0.3",
+            "triggered": false
+          },
+          {
+            "details": {
+              "external_side_effect": true,
+              "sensitive_data": false
+            },
+            "observed": 0.47,
+            "rule": "escalate_by_operational_stress",
+            "threshold": ">= 0.7",
+            "triggered": false
+          },
+          {
+            "details": {
+              "capacity": 0.61,
+              "confidence": 0.638
+            },
+            "observed": 0.61,
+            "rule": "freeze_by_low_confidence_or_capacity",
+            "threshold": "confidence < 0.45 or capacity < 0.36",
+            "triggered": false
+          },
+          {
+            "details": {
+              "exposure": 0.49,
+              "external_side_effect": true,
+              "profile_allows_external_side_effect_release": false
+            },
+            "observed": 0.593,
+            "rule": "throttle_by_authorization_exposure_or_side_effect",
+            "threshold": "authorization < 0.62 or exposure >= 0.45",
+            "triggered": true
+          }
+        ]
+      },
+      "domain_profile": {
+        "label": "GitHub Actions and software delivery",
+        "notes": [
+          "Production delivery changes should preserve rollback and deployment evidence."
+        ],
+        "profile_id": "github_actions"
+      },
+      "enforcement_state": "pause",
+      "evaluated_at": "2026-09-15T21:55:53.596708+00:00",
+      "policy": {
+        "evidence_ceiling": "OBSERVE",
+        "mode": "OBSERVE",
+        "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+        "policy_id": "smerc-reference-recoverability",
+        "policy_revision": "1.0.0",
+        "tenant_id": "*"
+      },
+      "posture": "FREEZE",
+      "reason_codes": [
+        "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
+        "EVIDENCE_VALIDITY_UNAVAILABLE",
+        "ROLLBACK_LATENCY_UNAVAILABLE",
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "replay_id": "replay_OPENSSF_ISSUE_50_UNKNOWN_ROLLBACK_DEPLOY_1789509353596_4bab6dd39e4c",
+      "scores": {
+        "cancel_reliability_score": 0.66,
+        "confidence_score": 0.638,
+        "irreversible_exposure_score": 0.49,
+        "operational_stress_score": 0.47,
+        "reversible_capacity_score": 0.61,
+        "risk_adjusted_authorization_score": 0.593
+      },
+      "tool": "github_actions.deploy",
+      "transition_guidance": {
+        "blocking_factors": [
+          "confidence_below_release_target",
+          "irreversible_exposure_above_release_threshold"
+        ],
+        "control_improvements": [
+          "collect_more_evidence",
+          "increase_containment",
+          "narrow_impact_scope",
+          "pause_execution",
+          "preserve_replay",
+          "prove_rollback_path",
+          "rate limit or stage external side effect",
+          "reliable cancellation handle",
+          "snapshot_current_state",
+          "treat_unavailable_recoverability_as_uncertainty"
+        ],
+        "current_posture": "FREEZE",
+        "evidence_needed": [
+          "stronger authorization and evidence validity"
+        ],
+        "release_conditions": {
+          "authorization_score_at_or_above": 0.62,
+          "confidence_score_target": 0.7,
+          "irreversible_exposure_below": 0.45,
+          "reversible_capacity_target": 0.6
+        },
+        "target_posture": "THROTTLE"
+      }
+    },
+    "replay_id": "replay_OPENSSF_ISSUE_50_UNKNOWN_ROLLBACK_DEPLOY_1789509353596_4bab6dd39e4c",
+    "scores": {
+      "cancel_reliability_score": 0.66,
+      "confidence_score": 0.638,
+      "irreversible_exposure_score": 0.49,
+      "operational_stress_score": 0.47,
+      "reversible_capacity_score": 0.61,
+      "risk_adjusted_authorization_score": 0.593
+    },
+    "transition_guidance": {
+      "blocking_factors": [
+        "confidence_below_release_target",
+        "irreversible_exposure_above_release_threshold"
+      ],
+      "control_improvements": [
+        "collect_more_evidence",
+        "increase_containment",
+        "narrow_impact_scope",
+        "pause_execution",
+        "preserve_replay",
+        "prove_rollback_path",
+        "rate limit or stage external side effect",
+        "reliable cancellation handle",
+        "snapshot_current_state",
+        "treat_unavailable_recoverability_as_uncertainty"
+      ],
+      "current_posture": "FREEZE",
+      "evidence_needed": [
+        "stronger authorization and evidence validity"
+      ],
+      "release_conditions": {
+        "authorization_score_at_or_above": 0.62,
+        "confidence_score_target": 0.7,
+        "irreversible_exposure_below": 0.45,
+        "reversible_capacity_target": 0.6
+      },
+      "target_posture": "THROTTLE"
+    }
+  },
+  "recoverability_stage": {
+    "reason": "runtime_admission_passed",
+    "skipped": false
+  },
+  "sparta_route": {
+    "applied_controls": [
+      "pause_execution",
+      "preserve_replay",
+      "snapshot_current_state",
+      "checkpoint_before_execution"
+    ],
+    "blocked_controls": [
+      "execute"
+    ],
+    "decision_digest": "38698fe69284fd8ea5da77483cbbdc2597d7ab0f5313320baf696094f79891a2",
+    "decision_replay_id": "replay_OPENSSF_ISSUE_50_UNKNOWN_ROLLBACK_DEPLOY_1789509353596_4bab6dd39e4c",
+    "effective_scope_units": 0,
+    "executable": false,
+    "plain_english_summary": "SPARTa paused execution because SMERC returned FREEZE, indicating instability or unacceptable deployment risk.",
+    "plan_id": "openssf-issue-50-prod-deploy",
+    "reason_codes": [
+      "SPARTA_FREEZE_PAUSES_AUTOMATION"
+    ],
+    "recommended_next_action": "Preserve the replay, snapshot current state, and require accountable review before a new request.",
+    "route_id": "sparta_openssf-issue-50-prod-deploy_7ba619b32d41",
+    "route_state": "PAUSE",
+    "routed_at": "2026-09-15T21:55:53+00:00",
+    "source_posture": "FREEZE",
+    "tool_plan": {
+      "action": "deploy_canary",
+      "max_scope_units": 100,
+      "metadata": {
+        "environment": "production",
+        "probe_source": "openssf_issue_50",
+        "service": "payments-api",
+        "workflow": "deploy.yml"
+      },
+      "plan_id": "openssf-issue-50-prod-deploy",
+      "requested_capability": "deployment",
+      "requested_scope_units": 80,
+      "side_effect_level": "external",
+      "supports_checkpoint": true,
+      "supports_dry_run": true,
+      "supports_human_approval": true,
+      "supports_rollback": true,
+      "supports_scope_limit": true,
+      "tool": "github_actions",
+      "version": "smerc.sparta-plan.v1"
+    },
+    "version": "smerc.sparta-route.v1"
+  },
+  "summary": {
+    "controls": [
+      "checkpoint_before_execution",
+      "collect_more_evidence",
+      "continue_to_recoverability_scoring",
+      "pause_execution",
+      "preserve_replay",
+      "snapshot_current_state",
+      "treat_unavailable_recoverability_as_uncertainty"
+    ],
+    "hard_gates_passed": true,
+    "ledger_valid": true,
+    "overall_status": "REVIEW",
+    "plain_english_summary": "Runtime admission returned ADMIT. SMERC posture is FREEZE. SPARTa route is PAUSE. The lifecycle ledger is valid: True.",
+    "reason_codes": [
+      "EVIDENCE_VALIDITY_UNAVAILABLE",
+      "EXTERNAL_SIDE_EFFECT",
+      "IRREVERSIBLE_EXPOSURE_ELEVATED",
+      "RECOVERABILITY_EVIDENCE_UNAVAILABLE",
+      "ROLLBACK_LATENCY_UNAVAILABLE",
+      "RUNTIME_ADMISSION_ADMIT",
+      "SPARTA_FREEZE_PAUSES_AUTOMATION"
+    ],
+    "recoverability_permits_progression": false,
+    "route_executable": false
+  },
+  "tenant_id": "openssf-issue-50-probe",
+  "version": "smerc.customer-proof-loop.v1"
+}
