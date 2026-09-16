@@ -25,6 +25,8 @@ SMERC is classified as:
 
 The repository has enough implementation, testing, and documentation for an outside technical team to evaluate SMERC in shadow mode. It is not Level 6 because no external pilot data, independent security review, or production operating record exists.
 
+For the product-specific scoreboard, see `docs/Product_Readiness_Index.md`.
+
 ## Evidence For Level 5 Candidate Status
 
 The generated readiness report is in:

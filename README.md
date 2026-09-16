@@ -97,6 +97,7 @@ Fast reviewer paths:
 - Public scenario benchmark: `docs/Public_Action_Governance_Benchmark.md`
 - Pilot reviewer: `docs/Pilot_Intake_Template.md`
 - Strategic/platform reviewer: `docs/Why_SMERC_Fits_Strategic_Platforms.md`
+- Product readiness index: `docs/Product_Readiness_Index.md`
 
 SMERC is short for Structural Momentum Entropy Range Confidence. For cloud and platform teams, it is best read as recoverability-aware risk control for autonomous cloud execution: it evaluates a proposed action before execution and returns a replayable posture:
 
