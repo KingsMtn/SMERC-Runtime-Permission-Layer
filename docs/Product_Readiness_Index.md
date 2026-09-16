@@ -14,7 +14,7 @@ Current status:
 | --- | --- | --- | --- | --- |
 | Core decision engine | Implemented and tested. Scores recoverability, evidence, side effects, impact, autonomy, and execution-boundary weakness. | Needs external calibration against real workflow metadata. | 5 to 25 customer-owned actions from one workflow with reviewer labels. | Keep core engine stable while collecting reviewer deltas. |
 | AWS shadow-mode lane | Implemented as metadata-only adapters, reviewer bundles, decision API surface, action-chain proof, postcondition evidence, and environment-boundary intake. | No external AWS workflow owner has supplied replacement metadata yet. | One AWS-style reviewer replaces examples with safe metadata from an owned workflow. | Lead with AWS metadata pilot request and one-action reviewer ask. |
-| Intake friction | GitHub issue templates, JSON templates, local reports, GitHub Actions customer evaluation path, and pilot intake docs exist. | Too many possible entry points may confuse reviewers. | A reviewer can complete one intake path without live help. | Create one preferred product front door and keep other docs secondary. |
+| Intake friction | GitHub issue templates, JSON templates, local reports, GitHub Actions customer evaluation path, pilot intake docs, and the shadow-mode product lane exist. | Too many possible entry points may confuse reviewers. | A reviewer can complete one intake path without live help. | Make `docs/Shadow_Mode_Product_Lane.md` the preferred product front door and keep other docs secondary. |
 | Buyer-facing proof packet | Serious reviewer bundle, AWS reviewer bundle, CISO packets, and product docs exist. | Proof is broad and document-heavy. | One short artifact that shows problem, input, decision, report, pilot offer, and boundary. | Create a single product proof packet that points to deeper evidence. |
 | Posture language | `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, and `ESCALATE` are implemented as decision outcomes with controls and reason codes. | Postures need clearer product-role framing. | Reviewers understand what each posture does operationally. | Describe postures as specialized decision roles, not as vague labels. |
 | Execution-boundary evidence | Implemented in intake, AWS adapter, recoverability metadata contract, and core engine scoring floors. | Needs real-world examples of weak and strong execution boundaries. | Reviewer-supplied rows with tooling, host, network, sandbox surface, and boundary context. | Keep asking: where will it execute, and can that boundary contain failure? |
@@ -48,9 +48,9 @@ Do not claim:
 
 ## Next Product Moves
 
-1. Create one buyer-facing product proof packet.
-2. Make the AWS metadata pilot request the preferred external ask.
-3. Collapse duplicate front doors into one primary path.
+1. Use `docs/Shadow_Mode_Product_Lane.md` as the preferred front door for pilot-grade product review.
+2. Create one buyer-facing product proof packet.
+3. Make the AWS metadata pilot request the preferred AWS-specific ask under the same lane.
 4. Add posture-role framing for `ALLOW`, `THROTTLE`, `FREEZE`, `DENY`, and `ESCALATE`.
 5. Ask for one reviewer-owned 5-to-25 action dataset.
 6. Run the 30-day shadow-mode pilot only after a reviewer says the report is useful.
