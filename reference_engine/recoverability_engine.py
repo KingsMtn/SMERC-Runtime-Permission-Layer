@@ -309,6 +309,7 @@ class RecoverabilityEngine:
         reason_codes = self._reason_codes(action, scores)
         posture, threshold_trace = self._posture(action, scores, profile)
         posture = self._apply_unavailable_signal_floor(action, posture)
+        posture = self._apply_environment_boundary_floor(action, posture)
         enforcement_state = self._enforcement_state(posture)
         controls = self._controls(action, posture, scores)
         transition_guidance = self._transition_guidance(action, posture, scores, controls)
@@ -483,6 +484,7 @@ class RecoverabilityEngine:
             reasons.append("EXTERNAL_SIDE_EFFECT")
         if action.sensitive_data:
             reasons.append("SENSITIVE_DATA")
+        reasons.extend(environment_boundary_reason_codes(action))
         return reasons or ["RECOVERABILITY_ACCEPTABLE"]
 
     @staticmethod
@@ -509,6 +511,26 @@ class RecoverabilityEngine:
         } & set(unavailable_signals):
             return RuntimePosture.FREEZE
         return RuntimePosture.THROTTLE
+
+    @staticmethod
+    def _apply_environment_boundary_floor(
+        action: RecoverabilityAction,
+        posture: RuntimePosture,
+    ) -> RuntimePosture:
+        if posture in {RuntimePosture.FREEZE, RuntimePosture.DENY, RuntimePosture.ESCALATE}:
+            return posture
+        weakness = environment_boundary_weakness(action)
+        high_impact = (
+            action.external_side_effect
+            or action.sensitive_data
+            or action.base_action_risk >= 0.55
+            or action.impact_scope >= 0.55
+        )
+        if weakness["freeze"] and high_impact:
+            return RuntimePosture.FREEZE
+        if weakness["throttle"] and high_impact:
+            return RuntimePosture.THROTTLE
+        return posture
 
     def _posture(
         self,
@@ -598,6 +620,7 @@ class RecoverabilityEngine:
     @staticmethod
     def _controls(action: RecoverabilityAction, posture: RuntimePosture, scores: Dict[str, float]) -> List[str]:
         unavailable_signals = action.unavailable_recoverability_signals()
+        boundary_weakness = environment_boundary_weakness(action)
         if posture == RuntimePosture.ALLOW:
             return ["execute", "record_replay", "retain_cancel_handle"]
         if posture == RuntimePosture.THROTTLE:
@@ -610,11 +633,15 @@ class RecoverabilityEngine:
                 controls.append("rate_limit_external_side_effect")
             if scores["reversible_capacity_score"] < 0.60:
                 controls.append("checkpoint_before_execution")
+            if boundary_weakness["throttle"]:
+                controls.append("prove_execution_boundary")
             return controls
         if posture == RuntimePosture.FREEZE:
             controls = ["pause_execution", "collect_more_evidence", "snapshot_current_state", "preserve_replay"]
             if unavailable_signals:
                 controls.append("treat_unavailable_recoverability_as_uncertainty")
+            if boundary_weakness["freeze"] or boundary_weakness["throttle"]:
+                controls.append("strengthen_execution_boundary")
             return controls
         if posture == RuntimePosture.DENY:
             return ["block_execution", "explain_denial", "preserve_replay", "require_new_request"]
@@ -661,6 +688,11 @@ class RecoverabilityEngine:
             control_improvements.append("data minimization or scoped export proof")
         if action.cancel_reliability < 0.70:
             control_improvements.append("reliable cancellation handle")
+        weakness = environment_boundary_weakness(action)
+        if weakness["missing"]:
+            evidence_needed.append("execution boundary evidence")
+        if weakness["throttle"] or weakness["freeze"]:
+            control_improvements.append("stronger tooling, host, network, or sandbox containment")
 
         next_posture = "ALLOW" if posture == RuntimePosture.ALLOW else "THROTTLE"
         if posture in {RuntimePosture.DENY, RuntimePosture.FREEZE, RuntimePosture.ESCALATE}:
@@ -682,6 +714,81 @@ class RecoverabilityEngine:
 
 def clamp(value: float) -> float:
     return max(0.0, min(1.0, value))
+
+
+def environment_boundary_context(action: RecoverabilityAction) -> Dict[str, Any]:
+    raw = action.context.get("environment_boundary_context", {})
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        raise TypeError("context.environment_boundary_context must be an object when provided")
+    return dict(raw)
+
+
+def environment_boundary_weakness(action: RecoverabilityAction) -> Dict[str, Any]:
+    context = environment_boundary_context(action)
+    if not context:
+        return {"missing": True, "throttle": False, "freeze": False}
+    surfaces = context.get("sandbox_escape_surface", [])
+    if surfaces is None:
+        surfaces = []
+    if not isinstance(surfaces, list):
+        raise TypeError("context.environment_boundary_context.sandbox_escape_surface must be a list")
+    risky_surfaces = {
+        "docker_socket",
+        "privileged_container",
+        "host_mount",
+        "cloud_metadata_access",
+        "production_credentials",
+    }
+    has_risky_surface = any(surface in risky_surfaces for surface in surfaces)
+    host = context.get("host_isolation")
+    network = context.get("network_isolation")
+    tooling = context.get("tooling_isolation")
+    boundary = context.get("execution_environment_boundary")
+    missing_material = any(
+        not context.get(field)
+        for field in [
+            "tooling_isolation",
+            "host_isolation",
+            "network_isolation",
+            "execution_environment_boundary",
+        ]
+    )
+    weak_host = host in {"none", "process"}
+    broad_network = network in {"internet", "production_network"}
+    privileged_tooling = tooling in {"shell", "code_execution", "privileged_automation"}
+    production_boundary = boundary in {"production_host", "bedrock_action_group", "kubernetes_workload"}
+    freeze = bool(has_risky_surface or (weak_host and broad_network and privileged_tooling))
+    throttle = bool(missing_material or weak_host or broad_network or privileged_tooling or production_boundary)
+    return {"missing": missing_material, "throttle": throttle, "freeze": freeze}
+
+
+def environment_boundary_reason_codes(action: RecoverabilityAction) -> List[str]:
+    context = environment_boundary_context(action)
+    if not context:
+        return []
+    weakness = environment_boundary_weakness(action)
+    reasons: List[str] = []
+    if weakness["missing"]:
+        reasons.append("EXECUTION_BOUNDARY_EVIDENCE_INCOMPLETE")
+    if context.get("host_isolation") in {"none", "process"}:
+        reasons.append("HOST_ISOLATION_WEAK")
+    if context.get("network_isolation") == "production_network":
+        reasons.append("PRODUCTION_NETWORK_REACHABLE")
+    if context.get("tooling_isolation") in {"shell", "code_execution", "privileged_automation"}:
+        reasons.append("TOOLING_AUTHORITY_BROAD")
+    surfaces = context.get("sandbox_escape_surface") or []
+    risky_surfaces = {
+        "docker_socket",
+        "privileged_container",
+        "host_mount",
+        "cloud_metadata_access",
+        "production_credentials",
+    }
+    if any(surface in risky_surfaces for surface in surfaces):
+        reasons.append("SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE")
+    return reasons
 
 
 def build_domain_profile_catalog(

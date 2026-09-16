@@ -173,6 +173,54 @@ class RecoverabilityEngineTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported signal"):
             self.engine.evaluate(action)
 
+    def test_weak_execution_boundary_freezes_high_impact_action(self):
+        action = dict(self.by_id("AGENT_DEPLOY_PROD_CONFIG"))
+        action["context"] = {
+            **action.get("context", {}),
+            "environment_boundary_context": {
+                "tooling_isolation": "privileged_automation",
+                "host_isolation": "dedicated_account",
+                "network_isolation": "production_network",
+                "sandbox_escape_surface": ["cloud_metadata_access", "production_credentials"],
+                "execution_environment_boundary": "bedrock_action_group",
+            },
+        }
+
+        result = self.engine.evaluate(action)
+
+        self.assertEqual(result["posture"], "FREEZE")
+        self.assertIn("SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE", result["reason_codes"])
+        self.assertIn("PRODUCTION_NETWORK_REACHABLE", result["reason_codes"])
+        self.assertIn("strengthen_execution_boundary", result["controls"])
+        self.assertIn(
+            "stronger tooling, host, network, or sandbox containment",
+            result["transition_guidance"]["control_improvements"],
+        )
+
+    def test_incomplete_execution_boundary_throttles_otherwise_allowable_side_effect(self):
+        action = dict(self.by_id("AGENT_RUN_TESTS"))
+        action.update(
+            {
+                "external_side_effect": True,
+                "base_action_risk": 0.2,
+                "impact_scope": 0.2,
+                "context": {
+                    "environment_boundary_context": {
+                        "tooling_isolation": "restricted_tools",
+                        "host_isolation": "container",
+                        "network_isolation": "outbound_only",
+                        "sandbox_escape_surface": ["none_known"],
+                    }
+                },
+            }
+        )
+
+        result = self.engine.evaluate(action)
+
+        self.assertEqual(result["posture"], "THROTTLE")
+        self.assertIn("EXECUTION_BOUNDARY_EVIDENCE_INCOMPLETE", result["reason_codes"])
+        self.assertIn("prove_execution_boundary", result["controls"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -355,7 +355,13 @@ def write_outputs(report: Mapping[str, Any], json_output: str | Path, markdown_o
 
 
 def _recoverability_payload(action: Mapping[str, Any]) -> Dict[str, Any]:
-    return {key: action[key] for key in RECOVERABILITY_FIELDS if key in action}
+    payload = {key: action[key] for key in RECOVERABILITY_FIELDS if key in action}
+    metadata = action.get("tool_plan", {}).get("metadata", {})
+    if isinstance(metadata, dict) and isinstance(metadata.get("environment_boundary_context"), dict):
+        context = dict(payload.get("context", {}))
+        context["environment_boundary_context"] = dict(metadata["environment_boundary_context"])
+        payload["context"] = context
+    return payload
 
 
 def _evaluate_ref_gate(ref_gate: Mapping[str, bool]) -> Dict[str, Any]:

@@ -52,6 +52,31 @@ class CustomerEvaluationTests(unittest.TestCase):
         self.assertIn("rollback_latency", first["replay"]["context"]["auto_unavailable_recoverability_signals"])
         self.assertIn("evidence_validity", first["replay"]["context"]["auto_unavailable_recoverability_signals"])
 
+    def test_tool_plan_environment_boundary_reaches_recoverability_engine(self):
+        payload = copy.deepcopy(load_payload(SAMPLE))
+        payload["actions"][0]["tool_plan"]["metadata"] = {
+            **payload["actions"][0]["tool_plan"].get("metadata", {}),
+            "environment_boundary_context": {
+                "tooling_isolation": "shell",
+                "host_isolation": "process",
+                "network_isolation": "production_network",
+                "sandbox_escape_surface": ["host_mount"],
+                "execution_environment_boundary": "production_host",
+            },
+        }
+        payload["actions"][0]["external_side_effect"] = True
+
+        report = build_customer_evaluation(payload)
+        decision = report["records"][0]["decision"]
+
+        self.assertEqual(decision["posture"], "FREEZE")
+        self.assertIn("HOST_ISOLATION_WEAK", decision["reason_codes"])
+        self.assertIn("SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE", decision["reason_codes"])
+        self.assertEqual(
+            decision["replay"]["context"]["environment_boundary_context"]["execution_environment_boundary"],
+            "production_host",
+        )
+
     def test_sensitive_customer_material_is_rejected(self):
         payload = load_payload(SAMPLE)
         payload = copy.deepcopy(payload)
