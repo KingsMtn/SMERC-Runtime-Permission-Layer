@@ -29,6 +29,7 @@ The file uses the `smerc.pilot-intake.v1` format. It is friendlier than the lowe
 - how rollback would work
 - whether hard evidence gates pass
 - whether the tool supports dry run, scope limit, checkpoint, rollback, and human approval
+- optional environment-boundary evidence such as tooling, host, network, sandbox escape surfaces, and execution boundary
 - recoverability, evidence, anomaly, scope, and authorization scores from `0.0` to `1.0`
 
 For a completed synthetic example, start with:

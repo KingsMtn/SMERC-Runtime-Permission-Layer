@@ -46,6 +46,7 @@ Provide 5 to 25 metadata-only AWS-style actions from one workflow. For each acti
 - why current controls produce that outcome
 - possible consequence if the action is wrong
 - rollback or recovery path
+- environment boundary if known: tooling isolation, host isolation, network isolation, sandbox escape surfaces, execution boundary
 - whether a route control was observed after the decision, if known
 
 Example:
@@ -59,6 +60,7 @@ Current outcome: ALLOW
 Current reason: IAM role and change ticket are valid
 Possible consequence: rapid over-scaling or service instability
 Rollback path: revert change set or restore previous scaling policy within 20 minutes
+Environment boundary: CI runner, container host isolation, production network access, no known sandbox escape surface
 Observed route control: change set review required before execution
 ```
 

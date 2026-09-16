@@ -87,6 +87,14 @@ AGENTCORE_RUNTIME_FIELDS = [
     "audit_correlation_available",
 ]
 
+ENVIRONMENT_BOUNDARY_FIELDS = [
+    "tooling_isolation",
+    "host_isolation",
+    "network_isolation",
+    "sandbox_escape_surface",
+    "execution_environment_boundary",
+]
+
 
 def load_source_exports(path: str | Path) -> list[Dict[str, Any]]:
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -163,6 +171,7 @@ def build_adapter_report(rows: list[Mapping[str, Any]]) -> Dict[str, Any]:
         "agentcore_runtime_security_summary": _agentcore_runtime_summary(payload["actions"]),
         "policy_engine_summary": _policy_summary(payload["actions"]),
         "derived_output_governance_summary": _derived_output_summary(payload["actions"]),
+        "environment_boundary_summary": _environment_boundary_summary(payload["actions"]),
         "skipped_reason_counts": dict(sorted(skipped_reasons.items())),
         "normalized_customer_evaluation": customer_payload,
         "customer_evaluation": evaluation,
@@ -219,6 +228,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- AgentCore runtime security summary: `{report['agentcore_runtime_security_summary']}`",
         f"- Policy engine summary: `{report['policy_engine_summary']}`",
         f"- Derived output governance summary: `{report['derived_output_governance_summary']}`",
+        f"- Environment boundary summary: `{report['environment_boundary_summary']}`",
         f"- Skipped reason counts: `{report['skipped_reason_counts']}`",
         "",
         "## Skipped Rows",
@@ -357,6 +367,7 @@ def _to_customer_action(row: Mapping[str, Any], index: int) -> Dict[str, Any]:
                 "agentcore_runtime_security_context": _agentcore_runtime_context(row),
                 "agentcore_policy_context": _policy_context(row),
                 "derived_output_governance": _derived_output_context(row),
+                "environment_boundary_context": _environment_boundary_context(row),
                 "cost_velocity_multiplier": _optional_ratio(row.get("cost_velocity_multiplier")),
                 "postcondition_evidence_expected": _boolean(
                     row.get("postcondition_evidence_expected"),
@@ -472,6 +483,19 @@ def _risk(row: Mapping[str, Any], action_type: str) -> float:
         risk += 0.08
     if _optional_boolean(row.get("audit_correlation_available")) is False:
         risk += 0.05
+    if _optional_text(row.get("host_isolation")) in {"none", "process"} and _side_effect(row) in {
+        "external",
+        "destructive",
+        "financial",
+    }:
+        risk += 0.04
+    if _optional_text(row.get("network_isolation")) == "production_network":
+        risk += 0.04
+    if any(
+        surface in {"docker_socket", "privileged_container", "host_mount", "cloud_metadata_access", "production_credentials"}
+        for surface in _optional_text_list(row.get("sandbox_escape_surface"))
+    ):
+        risk += 0.06
     return round(min(1.0, risk), 3)
 
 
@@ -563,6 +587,16 @@ def _agentcore_runtime_context(row: Mapping[str, Any]) -> Dict[str, Any]:
         "execution_authority_exposure_class": _optional_text(row.get("credential_exposure_class")),
         "command_execution_class": _optional_text(row.get("command_execution_class")),
         "audit_correlation_available": _optional_boolean(row.get("audit_correlation_available")),
+    }
+
+
+def _environment_boundary_context(row: Mapping[str, Any]) -> Dict[str, Any]:
+    return {
+        "tooling_isolation": _optional_text(row.get("tooling_isolation")),
+        "host_isolation": _optional_text(row.get("host_isolation")),
+        "network_isolation": _optional_text(row.get("network_isolation")),
+        "sandbox_escape_surface": _optional_text_list(row.get("sandbox_escape_surface")),
+        "execution_environment_boundary": _optional_text(row.get("execution_environment_boundary")),
     }
 
 
@@ -683,6 +717,33 @@ def _derived_output_summary(actions: Iterable[Mapping[str, Any]]) -> Dict[str, A
         "output_sensitivity_counts": dict(sorted(output_sensitivity.items())),
         "access_control_composition_counts": dict(sorted(compositions.items())),
         "regulatory_tag_counts": dict(sorted(regulatory_tags.items())),
+    }
+
+
+def _environment_boundary_summary(actions: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
+    tooling: Counter[str] = Counter()
+    host: Counter[str] = Counter()
+    network: Counter[str] = Counter()
+    escape_surfaces: Counter[str] = Counter()
+    boundaries: Counter[str] = Counter()
+    for action in actions:
+        context = action["tool_plan"]["metadata"]["environment_boundary_context"]
+        if context["tooling_isolation"]:
+            tooling[context["tooling_isolation"]] += 1
+        if context["host_isolation"]:
+            host[context["host_isolation"]] += 1
+        if context["network_isolation"]:
+            network[context["network_isolation"]] += 1
+        if context["execution_environment_boundary"]:
+            boundaries[context["execution_environment_boundary"]] += 1
+        for surface in context["sandbox_escape_surface"]:
+            escape_surfaces[surface] += 1
+    return {
+        "tooling_isolation_counts": dict(sorted(tooling.items())),
+        "host_isolation_counts": dict(sorted(host.items())),
+        "network_isolation_counts": dict(sorted(network.items())),
+        "sandbox_escape_surface_counts": dict(sorted(escape_surfaces.items())),
+        "execution_environment_boundary_counts": dict(sorted(boundaries.items())),
     }
 
 

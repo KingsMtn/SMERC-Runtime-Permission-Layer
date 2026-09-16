@@ -32,9 +32,30 @@ This validates `examples/recoverability_metadata_examples.json` and writes:
   "external_side_effect": true,
   "blast_radius_scope": "single repository file",
   "evidence_available": "proposed diff and pinned schema id",
+  "tooling_isolation": "restricted_tools",
+  "host_isolation": "process",
+  "network_isolation": "none",
+  "sandbox_escape_surface": ["none_known"],
+  "execution_environment_boundary": "mcp_server",
   "recommended_posture": "THROTTLE"
 }
 ```
+
+## Optional Environment Boundary Evidence
+
+Public sandboxing and agent-evaluation work increasingly treats the execution environment as part of the safety question. SMERC should do the same without forcing every contributor to expose infrastructure details.
+
+The optional fields are:
+
+| Field | Why it matters |
+| --- | --- |
+| `tooling_isolation` | Shows whether the action is limited to restricted tools or can reach shell, browser, code execution, or privileged automation. |
+| `host_isolation` | Shows whether the executor is a process, container, hardened container, VM, dedicated account, production host, or unknown. |
+| `network_isolation` | Shows whether the action can reach the internet, a scoped private network, or production network paths. |
+| `sandbox_escape_surface` | Names known risk surfaces such as Docker sockets, privileged containers, host mounts, cloud metadata access, or production credentials. |
+| `execution_environment_boundary` | Names where the action would run, such as an MCP server, CI runner, cloud function, Bedrock action group, Kubernetes workload, or production host. |
+
+These are evidence fields, not automatic permission. Weak isolation should generally raise the required evidence before SMERC returns `ALLOW`.
 
 ## Why This Is Smaller Than SMERC
 

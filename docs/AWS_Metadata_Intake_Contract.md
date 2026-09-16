@@ -162,6 +162,20 @@ SMERC stores these values in the normalized tool-plan metadata as `derived_outpu
 
 Use these fields when a tool result, report, summary, or agent-to-agent handoff may inherit sensitivity from its inputs. The first safe rule is conservative: preserve the highest sensitivity, intersect access controls when multiple sources are combined, and union regulatory or operational tags for downstream review.
 
+## Recommended Environment Boundary Fields
+
+These fields are optional, but they make AWS-style review more useful because they show whether an authorized action is also running inside an environment that can contain failure:
+
+- `tooling_isolation`
+- `host_isolation`
+- `network_isolation`
+- `sandbox_escape_surface`
+- `execution_environment_boundary`
+
+SMERC stores these values in the normalized tool-plan metadata as `environment_boundary_context`.
+
+Use these fields to separate a safe-looking approval from an unsafe execution setting. For example, the same tool call is different if it runs through a restricted gateway in a hardened container than if it runs from a production host with cloud metadata access and broad execution authority.
+
 ## Prohibited Inputs
 
 The first AWS-style pilot should not include:

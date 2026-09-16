@@ -86,6 +86,8 @@ The first public agent-runtime incident replay is `docs/Public_Agent_Runtime_Inc
 
 The current public runtime pain-point map is `docs/Public_Runtime_Pain_Points_To_SMERC.md`. It uses public AWS AgentCore security guidance and MCP authorization/tool-poisoning guidance to track gateway bypass, session binding, credential exposure, command execution authority, audit correlation, token passthrough, confused deputy risk, and tool metadata poisoning as source-backed signals for SMERC proof work.
 
+The current international runtime governance learning map is `docs/International_Runtime_Governance_Learning_Map.md`. It converts public sandboxing, MCP, agent evaluation, incident-response, disclosure, and regulatory-engineering patterns from UK AISI, Singapore IMDA, Japan AISI, Canada CAISI, the EU, Microsoft, and adjacent gateway vendors into bounded SMERC build inputs. It should be used for engineering direction and source-backed evidence fields, not as endorsement, compliance proof, or customer validation.
+
 ### 2. Metadata-Only Normalizers
 
 Build source-specific normalizers that output `smerc.customer-evaluation.v1` actions or MCP Governance Gateway inputs.

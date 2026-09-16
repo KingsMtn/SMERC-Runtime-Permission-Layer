@@ -46,6 +46,7 @@ Provide 5 to 25 metadata-only actions. For each action, include:
 - why current controls produce that outcome
 - possible consequence if the action is wrong
 - rollback or recovery path
+- environment boundary if known: tooling isolation, host isolation, network isolation, sandbox escape surfaces, execution boundary
 
 Example:
 
@@ -57,6 +58,7 @@ Current outcome: ALLOW
 Current reason: branch protection and deployment approval are satisfied
 Possible consequence: limited customer-facing outage if the canary is bad
 Rollback path: revert artifact and disable feature flag within 15 minutes
+Environment boundary: GitHub Actions runner, container host isolation, production network access, no known sandbox escape surface
 ```
 
 ## Main Concern

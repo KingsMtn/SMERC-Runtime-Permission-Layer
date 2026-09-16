@@ -65,6 +65,15 @@
             ]
           },
           "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": "bedrock_action_group",
+            "host_isolation": "container",
+            "network_isolation": "scoped_private_network",
+            "sandbox_escape_surface": [
+              "none_known"
+            ],
+            "tooling_isolation": "restricted_tools"
+          },
           "gateway_path": "governed_gateway",
           "postcondition_evidence_expected": true,
           "session_and_delegated_approval_context": {
@@ -104,7 +113,7 @@
       "actor": "cloud_admin_agent",
       "anomaly_pressure": 0.52,
       "authorization_confidence": 0.61,
-      "base_action_risk": 0.706,
+      "base_action_risk": 0.806,
       "cancel_reliability": 0.53,
       "containment_strength": 0.39,
       "context": {
@@ -163,6 +172,16 @@
             ]
           },
           "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": "ci_runner",
+            "host_isolation": "dedicated_account",
+            "network_isolation": "production_network",
+            "sandbox_escape_surface": [
+              "cloud_metadata_access",
+              "production_credentials"
+            ],
+            "tooling_isolation": "privileged_automation"
+          },
           "gateway_path": "change_management_queue",
           "postcondition_evidence_expected": true,
           "session_and_delegated_approval_context": {
@@ -261,6 +280,13 @@
             ]
           },
           "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
           "gateway_path": "deployment_change_set",
           "postcondition_evidence_expected": true,
           "session_and_delegated_approval_context": {
@@ -359,6 +385,13 @@
             ]
           },
           "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
           "gateway_path": "autoscaling_policy",
           "postcondition_evidence_expected": true,
           "session_and_delegated_approval_context": {
@@ -457,6 +490,13 @@
             ]
           },
           "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
           "gateway_path": "data_access_change_queue",
           "postcondition_evidence_expected": true,
           "session_and_delegated_approval_context": {
@@ -555,6 +595,13 @@
             ]
           },
           "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
           "gateway_path": "service_auth_change_queue",
           "postcondition_evidence_expected": true,
           "session_and_delegated_approval_context": {
@@ -653,6 +700,13 @@
             ]
           },
           "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
           "gateway_path": "agentcore_gateway",
           "postcondition_evidence_expected": true,
           "session_and_delegated_approval_context": {
@@ -752,6 +806,13 @@
             ]
           },
           "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
           "gateway_path": "direct_runtime",
           "postcondition_evidence_expected": true,
           "session_and_delegated_approval_context": {
@@ -850,6 +911,13 @@
             ]
           },
           "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
           "gateway_path": "operator_command_channel",
           "postcondition_evidence_expected": true,
           "session_and_delegated_approval_context": {
@@ -886,7 +954,7 @@
   ],
   "contact_role": "aws_platform_security_reviewer",
   "data_boundary": "AWS metadata adapter evaluation. Inputs are exported summaries only. No AWS credentials, account IDs, ARNs, raw logs, private topology, customer records, secrets, production commands, or live AWS access are included.",
-  "evaluation_date": "2026-09-14",
+  "evaluation_date": "2026-09-15",
   "initial_autonomy_state": "HEALTHY",
   "organization": "AWS Metadata Adapter Review",
   "tenant_id": "aws-metadata-adapter-review",

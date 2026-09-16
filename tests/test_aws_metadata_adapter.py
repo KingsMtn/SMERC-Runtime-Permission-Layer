@@ -41,6 +41,7 @@ class AWSMetadataAdapterTests(unittest.TestCase):
             self.assertIn("agentcore_runtime_security_context", action["tool_plan"]["metadata"])
             self.assertIn("agentcore_policy_context", action["tool_plan"]["metadata"])
             self.assertIn("derived_output_governance", action["tool_plan"]["metadata"])
+            self.assertIn("environment_boundary_context", action["tool_plan"]["metadata"])
 
     def test_preserves_session_and_delegated_approval_context(self):
         payload = normalize_source_exports(load_source_exports(INPUTS))
@@ -79,6 +80,11 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         command_context = by_record["aws-meta-011"]["tool_plan"]["metadata"]["agentcore_runtime_security_context"]
         self.assertEqual(command_context["command_execution_class"], "interactive_shell")
 
+        environment_context = by_record["aws-meta-002"]["tool_plan"]["metadata"]["environment_boundary_context"]
+        self.assertEqual(environment_context["network_isolation"], "production_network")
+        self.assertIn("cloud_metadata_access", environment_context["sandbox_escape_surface"])
+        self.assertEqual(environment_context["execution_environment_boundary"], "ci_runner")
+
     def test_builds_adapter_report_and_customer_evaluation(self):
         report = build_adapter_report(load_source_exports(INPUTS))
 
@@ -108,6 +114,11 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertEqual(report["agentcore_runtime_security_summary"]["boolean_counts"]["audit_correlation_missing"], 2)
         self.assertEqual(report["derived_output_governance_summary"]["boolean_counts"]["restricted_summary_outputs"], 5)
         self.assertIn("privacy", report["derived_output_governance_summary"]["regulatory_tag_counts"])
+        self.assertEqual(report["environment_boundary_summary"]["network_isolation_counts"]["production_network"], 1)
+        self.assertEqual(
+            report["environment_boundary_summary"]["sandbox_escape_surface_counts"]["production_credentials"],
+            1,
+        )
 
     def test_markdown_explains_work_result_impact_and_boundary(self):
         markdown = render_markdown(build_adapter_report(load_source_exports(INPUTS)))
@@ -119,6 +130,7 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertIn("AgentCore runtime security summary", markdown)
         self.assertIn("Policy engine summary", markdown)
         self.assertIn("Derived output governance summary", markdown)
+        self.assertIn("Environment boundary summary", markdown)
         self.assertIn("Reviewer Question", markdown)
 
     def test_writes_adapter_outputs(self):
@@ -155,6 +167,8 @@ class AWSMetadataAdapterTests(unittest.TestCase):
         self.assertIn("Recommended AWS Policy Engine Fields", docs)
         self.assertIn("Recommended Derived Output Governance Fields", docs)
         self.assertIn("Recommended AgentCore Runtime Security Fields", docs)
+        self.assertIn("Recommended Environment Boundary Fields", docs)
+        self.assertIn("environment_boundary_context", docs)
         self.assertIn("python -m reference_engine.aws_metadata_adapter", docs)
         self.assertIn("docs/AWS_Metadata_Intake_Contract.md", readiness)
         self.assertIn("docs/AWS_Metadata_Intake_Contract.md", readme)

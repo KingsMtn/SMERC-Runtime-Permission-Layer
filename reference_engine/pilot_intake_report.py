@@ -29,6 +29,14 @@ ACTION_FIELDS = {
     "ref_gate",
     "tool_capabilities",
 }
+OPTIONAL_ACTION_FIELDS = {"environment_boundary"}
+ENVIRONMENT_BOUNDARY_FIELDS = {
+    "tooling_isolation",
+    "host_isolation",
+    "network_isolation",
+    "sandbox_escape_surface",
+    "execution_environment_boundary",
+}
 SCORE_FIELDS = {
     "base_action_risk",
     "reversibility",
@@ -155,7 +163,7 @@ def validate_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
         if not isinstance(action, dict):
             raise TypeError(f"actions[{index}] must be an object")
         _reject_sensitive_keys(action, f"actions[{index}]")
-        _exact_fields(action, ACTION_FIELDS, f"actions[{index}]")
+        _exact_fields(action, ACTION_FIELDS, f"actions[{index}]", optional=OPTIONAL_ACTION_FIELDS)
         action_id = _text(action["action_id"], f"actions[{index}].action_id", 128)
         if action_id in seen:
             raise ValueError(f"duplicate action_id: {action_id}")
@@ -175,6 +183,11 @@ def validate_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
         parsed["rollback_path"] = _text(action["rollback_path"], f"actions[{index}].rollback_path", 500)
         parsed["scores"] = _scores(action["scores"], f"actions[{index}].scores")
         parsed["properties"] = _properties(action["properties"], f"actions[{index}].properties")
+        if "environment_boundary" in action:
+            parsed["environment_boundary"] = _environment_boundary(
+                action["environment_boundary"],
+                f"actions[{index}].environment_boundary",
+            )
         parsed["ref_gate"] = _booleans(action["ref_gate"], REF_GATE_FIELDS, f"actions[{index}].ref_gate")
         parsed["tool_capabilities"] = _booleans(
             action["tool_capabilities"],
@@ -262,6 +275,7 @@ def compile_customer_evaluation_payload(payload: Mapping[str, Any]) -> Dict[str,
                     "metadata": {
                         "workflow_stage": action["workflow_stage"],
                         "rollback_path": action["rollback_path"],
+                        "environment_boundary_context": action.get("environment_boundary", {}),
                     },
                 },
             }
@@ -480,6 +494,26 @@ def _booleans(value: Any, fields: set[str], path: str) -> Dict[str, bool]:
         raise TypeError(f"{path} must be an object")
     _exact_fields(value, fields, path)
     return {key: _bool(value[key], f"{path}.{key}") for key in fields}
+
+
+def _environment_boundary(value: Any, path: str) -> Dict[str, Any]:
+    if not isinstance(value, dict):
+        raise TypeError(f"{path} must be an object")
+    _exact_fields(value, ENVIRONMENT_BOUNDARY_FIELDS, path)
+    surfaces = value["sandbox_escape_surface"]
+    if not isinstance(surfaces, list) or not surfaces:
+        raise TypeError(f"{path}.sandbox_escape_surface must be a non-empty list")
+    return {
+        "tooling_isolation": _text(value["tooling_isolation"], f"{path}.tooling_isolation", 64),
+        "host_isolation": _text(value["host_isolation"], f"{path}.host_isolation", 64),
+        "network_isolation": _text(value["network_isolation"], f"{path}.network_isolation", 64),
+        "sandbox_escape_surface": [_text(item, f"{path}.sandbox_escape_surface[]", 80) for item in surfaces],
+        "execution_environment_boundary": _text(
+            value["execution_environment_boundary"],
+            f"{path}.execution_environment_boundary",
+            120,
+        ),
+    }
 
 
 def _score(value: Any, path: str) -> float:

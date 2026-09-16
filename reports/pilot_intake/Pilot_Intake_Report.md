@@ -1,7 +1,7 @@
 # Replace With Company Name Pilot Intake Evaluation Report
 
 Version: `smerc.pilot-intake.v1`
-Generated: `2026-08-27T02:00:29+00:00`
+Generated: `2026-09-15T23:50:19+00:00`
 Reviewer role: `security_architect`
 Workflow family: Replace with one workflow family, such as AI-assisted pull requests, deployment automation, MCP tool calls, cloud administration, support automation, security response, or financial operations.
 
@@ -14,6 +14,7 @@ This report is based on metadata-only pilot intake. It compares current reviewer
 - Actions evaluated: `5`
 - Current control outcomes: `{'ALLOW': 3, 'BLOCK': 1, 'REVIEW': 1}`
 - SMERC posture counts: `{'ALLOW': 1, 'DENY': 3, 'THROTTLE': 1}`
+- Agent identity-gate counts: `{'WATCH': 5}`
 - Decisions that differ: `3` (`0.6`)
 - Constrained rather than blocked: `0` (`0.0`)
 - Pilot fit: `strong`
@@ -52,6 +53,8 @@ This report shows where a binary or review-only control posture may miss recover
 - Rollback path: Cancel the workflow or rerun the job.
 - SMERC posture: `ALLOW`
 - SPARTa route: `EXECUTE`
+- Agent identity gate: `WATCH`
+- Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
 - Reason codes: `['RECOVERABILITY_ACCEPTABLE']`
 - Recommended controls: `['execute', 'record_replay', 'retain_cancel_handle']`
 - Control impact: SMERC broadly agrees with the current control posture.
@@ -65,6 +68,8 @@ This report shows where a binary or review-only control posture may miss recover
 - Rollback path: Revert deployment through versioned release and feature flag rollback.
 - SMERC posture: `THROTTLE`
 - SPARTa route: `CONSTRAINED_EXECUTE`
+- Agent identity gate: `WATCH`
+- Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
 - Reason codes: `['EXTERNAL_SIDE_EFFECT']`
 - Recommended controls: `['limit_scope', 'preview_before_execution', 'record_replay', 'rate_limit_external_side_effect']`
 - Control impact: SMERC keeps the action possible but adds runtime controls.
@@ -78,6 +83,8 @@ This report shows where a binary or review-only control posture may miss recover
 - Rollback path: Restore only if recent backups and record lineage are verified.
 - SMERC posture: `DENY`
 - SPARTa route: `BLOCK`
+- Agent identity gate: `WATCH`
+- Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
 - Reason codes: `['IRREVERSIBLE_EXPOSURE_HIGH', 'RECOVERY_CAPACITY_LOW', 'ROLLBACK_LATENCY_HIGH', 'CANCEL_RELIABILITY_WEAK', 'CONTAINMENT_WEAK', 'IMPACT_SCOPE_WIDE', 'EXTERNAL_SIDE_EFFECT', 'SENSITIVE_DATA']`
 - Recommended controls: `['block_execution', 'explain_denial', 'preserve_replay', 'require_new_request']`
 - Control impact: SMERC broadly agrees with the current control posture.
@@ -91,6 +98,8 @@ This report shows where a binary or review-only control posture may miss recover
 - Rollback path: Revert IAM policy if the exact permission delta is captured and no dependent automation breaks.
 - SMERC posture: `DENY`
 - SPARTa route: `BLOCK`
+- Agent identity gate: `WATCH`
+- Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
 - Reason codes: `['CONTAINMENT_WEAK', 'EXTERNAL_SIDE_EFFECT', 'IMPACT_SCOPE_WIDE', 'IRREVERSIBLE_EXPOSURE_HIGH', 'REF_GATE_LEAST_PRIVILEGE_CONFIRMED_FAILED', 'SENSITIVE_DATA']`
 - Recommended controls: `['block_execution', 'preserve_replay', 'repair_ref_gate_evidence', 'require_new_request']`
 - Control impact: SMERC would stop or route an action current controls would allow.
@@ -104,6 +113,8 @@ This report shows where a binary or review-only control posture may miss recover
 - Rollback path: Transfer reversal is limited and depends on venue cooperation, settlement timing, and available liquidity.
 - SMERC posture: `DENY`
 - SPARTa route: `BLOCK`
+- Agent identity gate: `WATCH`
+- Agent identity reasons: `['AGENT_IDENTITY_MISSING']`
 - Reason codes: `['CANCEL_RELIABILITY_WEAK', 'CONTAINMENT_WEAK', 'EXTERNAL_SIDE_EFFECT', 'IMPACT_SCOPE_WIDE', 'IRREVERSIBLE_EXPOSURE_HIGH', 'RECOVERY_CAPACITY_LOW', 'REF_GATE_OBJECT_SHAPE_EXPECTED_FAILED', 'ROLLBACK_LATENCY_HIGH', 'SENSITIVE_DATA']`
 - Recommended controls: `['block_execution', 'preserve_replay', 'repair_ref_gate_evidence', 'require_new_request']`
 - Control impact: SMERC broadly agrees with the current control posture.

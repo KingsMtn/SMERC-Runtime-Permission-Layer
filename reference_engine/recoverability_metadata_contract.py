@@ -23,6 +23,43 @@ REQUIRED_FIELDS = {
     "recommended_posture",
 }
 OPTIONAL_FIELDS = {"confidence_hint", "notes"}
+ISOLATION_FIELDS = {
+    "tooling_isolation",
+    "host_isolation",
+    "network_isolation",
+    "sandbox_escape_surface",
+    "execution_environment_boundary",
+}
+TOOLING_ISOLATION_VALUES = {
+    "none",
+    "restricted_tools",
+    "shell",
+    "browser",
+    "code_execution",
+    "privileged_automation",
+    "unknown",
+}
+HOST_ISOLATION_VALUES = {"none", "process", "container", "hardened_container", "vm", "dedicated_account", "unknown"}
+NETWORK_ISOLATION_VALUES = {"none", "outbound_only", "scoped_private_network", "internet", "production_network", "unknown"}
+SANDBOX_ESCAPE_SURFACE_VALUES = {
+    "none_known",
+    "docker_socket",
+    "privileged_container",
+    "host_mount",
+    "cloud_metadata_access",
+    "production_credentials",
+    "unknown",
+}
+EXECUTION_ENVIRONMENT_BOUNDARY_VALUES = {
+    "local",
+    "ci_runner",
+    "mcp_server",
+    "cloud_function",
+    "bedrock_action_group",
+    "kubernetes_workload",
+    "production_host",
+    "unknown",
+}
 PROHIBITED_KEY_FRAGMENTS = {
     "secret",
     "token",
@@ -52,7 +89,7 @@ def validate_record(record: Mapping[str, Any]) -> Dict[str, Any]:
         raise TypeError("record must be an object")
     _reject_sensitive_keys(record)
     missing = sorted(REQUIRED_FIELDS - set(record))
-    unknown = sorted(set(record) - REQUIRED_FIELDS - OPTIONAL_FIELDS)
+    unknown = sorted(set(record) - REQUIRED_FIELDS - OPTIONAL_FIELDS - ISOLATION_FIELDS)
     errors = []
     if missing:
         errors.append(f"missing fields: {', '.join(missing)}")
@@ -78,6 +115,27 @@ def validate_record(record: Mapping[str, Any]) -> Dict[str, Any]:
             errors.append("confidence_hint must be a number between 0 and 1")
         if "notes" in record and not isinstance(record["notes"], str):
             errors.append("notes must be a string")
+        _validate_optional_enum(record, "tooling_isolation", TOOLING_ISOLATION_VALUES, errors)
+        _validate_optional_enum(record, "host_isolation", HOST_ISOLATION_VALUES, errors)
+        _validate_optional_enum(record, "network_isolation", NETWORK_ISOLATION_VALUES, errors)
+        _validate_optional_enum(
+            record,
+            "execution_environment_boundary",
+            EXECUTION_ENVIRONMENT_BOUNDARY_VALUES,
+            errors,
+        )
+        if "sandbox_escape_surface" in record:
+            surfaces = record["sandbox_escape_surface"]
+            if (
+                not isinstance(surfaces, list)
+                or not surfaces
+                or any(not isinstance(item, str) or item not in SANDBOX_ESCAPE_SURFACE_VALUES for item in surfaces)
+            ):
+                errors.append(
+                    "sandbox_escape_surface must be a non-empty list of known escape-surface labels"
+                )
+            elif "none_known" in surfaces and len(surfaces) > 1:
+                errors.append("sandbox_escape_surface cannot combine none_known with other surfaces")
     return {
         "action_id": str(record.get("action_id", "UNKNOWN")),
         "valid": not errors,
@@ -92,6 +150,10 @@ def build_contract_report(records: list[Mapping[str, Any]]) -> Dict[str, Any]:
     valid_records = [record for record in records if validate_record(record)["valid"]]
     posture_counts = Counter(str(record["recommended_posture"]) for record in valid_records)
     risk_hints = Counter(item["risk_hint"] for item in validations)
+    environment_boundary_counts = Counter(
+        str(record.get("execution_environment_boundary", "unspecified")) for record in valid_records
+    )
+    host_isolation_counts = Counter(str(record.get("host_isolation", "unspecified")) for record in valid_records)
     return {
         "version": VERSION,
         "record_count": len(records),
@@ -99,10 +161,12 @@ def build_contract_report(records: list[Mapping[str, Any]]) -> Dict[str, Any]:
         "invalid_record_count": sum(1 for item in validations if not item["valid"]),
         "posture_counts": dict(sorted(posture_counts.items())),
         "risk_hint_counts": dict(sorted(risk_hints.items())),
+        "environment_boundary_counts": dict(sorted(environment_boundary_counts.items())),
+        "host_isolation_counts": dict(sorted(host_isolation_counts.items())),
         "validations": validations,
         "work_result_impact": {
             "work": "Define the smallest recoverability metadata shape for individual tool calls and automation actions.",
-            "result": "MCP tools, GitHub Actions, AWS-style actions, and other runtimes can describe rollback, side effects, blast radius, evidence, and posture hints before execution.",
+            "result": "MCP tools, GitHub Actions, AWS-style actions, and other runtimes can describe rollback, side effects, blast radius, evidence, isolation boundaries, and posture hints before execution.",
             "impact": "If this small contract becomes normal, larger SMERC scoring gets cleaner inputs instead of guessing recoverability from logs after the fact.",
         },
         "evidence_boundary": (
@@ -131,6 +195,8 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- Invalid records: `{report['invalid_record_count']}`",
         f"- Posture counts: `{report['posture_counts']}`",
         f"- Risk hint counts: `{report['risk_hint_counts']}`",
+        f"- Environment boundary counts: `{report['environment_boundary_counts']}`",
+        f"- Host isolation counts: `{report['host_isolation_counts']}`",
         "",
         "## Validation Results",
         "",
@@ -154,6 +220,11 @@ def write_outputs(report: Mapping[str, Any], *, json_output: str | Path, markdow
 
 
 def _risk_hint(record: Mapping[str, Any]) -> str:
+    if any(
+        surface in {"docker_socket", "privileged_container", "host_mount", "cloud_metadata_access", "production_credentials"}
+        for surface in record.get("sandbox_escape_surface", [])
+    ):
+        return "sandbox_escape_or_credential_surface"
     if not record.get("reversible") or record.get("rollback_latency_seconds") == -1:
         return "recovery_unknown_or_hard"
     if record.get("external_side_effect") and int(record.get("rollback_latency_seconds", 0)) > 60:
@@ -161,6 +232,16 @@ def _risk_hint(record: Mapping[str, Any]) -> str:
     if record.get("external_side_effect"):
         return "bounded_side_effect"
     return "local_or_read_only"
+
+
+def _validate_optional_enum(
+    record: Mapping[str, Any],
+    field: str,
+    allowed_values: set[str],
+    errors: list[str],
+) -> None:
+    if field in record and (not isinstance(record[field], str) or record[field] not in allowed_values):
+        errors.append(f"{field} must be one of {', '.join(sorted(allowed_values))}")
 
 
 def _reject_sensitive_keys(value: Any) -> None:

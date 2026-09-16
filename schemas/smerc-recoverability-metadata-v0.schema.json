@@ -60,6 +60,31 @@
     "recommended_posture": {
       "enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"]
     },
+    "tooling_isolation": {
+      "enum": ["none", "restricted_tools", "shell", "browser", "code_execution", "privileged_automation", "unknown"],
+      "description": "Optional action-environment evidence. Describes the tools or execution powers available at the action boundary."
+    },
+    "host_isolation": {
+      "enum": ["none", "process", "container", "hardened_container", "vm", "dedicated_account", "unknown"],
+      "description": "Optional action-environment evidence. Describes how strongly the executing host is isolated."
+    },
+    "network_isolation": {
+      "enum": ["none", "outbound_only", "scoped_private_network", "internet", "production_network", "unknown"],
+      "description": "Optional action-environment evidence. Describes network reachability at execution time."
+    },
+    "sandbox_escape_surface": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["none_known", "docker_socket", "privileged_container", "host_mount", "cloud_metadata_access", "production_credentials", "unknown"]
+      },
+      "description": "Optional action-environment evidence. Lists known sandbox escape or privilege-escalation surfaces relevant to the proposed action."
+    },
+    "execution_environment_boundary": {
+      "enum": ["local", "ci_runner", "mcp_server", "cloud_function", "bedrock_action_group", "kubernetes_workload", "production_host", "unknown"],
+      "description": "Optional action-environment evidence. Names the boundary where the action would execute."
+    },
     "confidence_hint": {
       "type": "number",
       "minimum": 0,

@@ -91,6 +91,7 @@ Fast reviewer paths:
 - Complete lifecycle proof: `docs/Complete_Lifecycle_Proof.md`
 - Balanced runtime judgment replay: `docs/Balanced_Runtime_Judgment_Replay.md`
 - Skeptical competitive review: `docs/External_Signal_And_Competitive_Review.md`
+- International runtime governance learning map: `docs/International_Runtime_Governance_Learning_Map.md`
 - Market signal to proof map: `docs/Market_Signal_To_Proof_Map.md`
 - Accelerator/adjacent company map: `docs/Accelerator_And_Adjacent_Company_Map.md`
 - Public scenario benchmark: `docs/Public_Action_Governance_Benchmark.md`

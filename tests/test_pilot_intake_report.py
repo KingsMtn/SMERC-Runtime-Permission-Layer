@@ -45,6 +45,10 @@ class PilotIntakeReportTests(unittest.TestCase):
         self.assertEqual(len(compiled["actions"]), 5)
         self.assertEqual(compiled["actions"][0]["tool"], "github_actions.test")
         self.assertIn("current_control_outcome", compiled["actions"][0]["context"])
+        self.assertEqual(
+            compiled["actions"][3]["tool_plan"]["metadata"]["environment_boundary_context"]["execution_environment_boundary"],
+            "bedrock_action_group",
+        )
 
     def test_unknown_rollback_path_becomes_unavailable_recoverability_evidence(self):
         payload = load_payload(SAMPLE)
@@ -100,6 +104,7 @@ class PilotIntakeReportTests(unittest.TestCase):
 
         self.assertIn("docs/Pilot_Intake_Template.md", readme)
         self.assertIn("reference_engine.pilot_intake_report", doc)
+        self.assertIn("environment-boundary evidence", doc)
 
 
 if __name__ == "__main__":
