@@ -50,6 +50,7 @@ Fast reviewer paths:
 - Public outreach status: `docs/Public_Outreach_Status.md`
 - SMERC premortem: `docs/SMERC_Premortem.md`
 - OpenSSF response playbook: `docs/OpenSSF_Response_Playbook.md`
+- Cross-path safety invariants: `docs/Cross_Path_Safety_Invariants.md`
 - Five-row metadata example: `docs/Five_Row_Metadata_Example.md`
 - Local source of truth: `docs/Local_Source_Of_Truth.md`
 - Local shadow intake: `docs/Local_Shadow_Intake.md`
