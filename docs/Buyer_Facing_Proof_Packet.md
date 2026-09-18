@@ -81,6 +81,30 @@ The report shows:
 - which actions have weak execution-boundary evidence
 - whether a shadow-mode pilot is justified
 
+## Hardening Evidence
+
+The pilot is backed by a cross-path safety invariant suite:
+
+```bash
+python -m unittest tests.test_cross_path_safety_invariants -v
+```
+
+The suite protects the defect classes identified through external OpenSSF review:
+
+- missing admission cannot quietly reach `ALLOW`
+- an empty `required_checks` list cannot remove default hard gates
+- combined decisions retain the strictest posture
+- omitted recoverability evidence is handled consistently by the engine, Action Language, customer evaluation, and MCP paths
+- unknown contract fields fail closed
+
+The current verified repository snapshot is commit `f24c19c`: 1,017 tests passed and 2 were skipped. This is regression evidence, not proof of deployed enforcement or complete attack coverage. See `docs/Cross_Path_Safety_Invariants.md`.
+
+For a worked AWS-style buyer example, see:
+
+```bash
+docs/AWS_Shadow_Mode_Buyer_Example.md
+```
+
 ## The Buyer Question
 
 The useful buyer question is not:
@@ -104,6 +128,7 @@ This can prove:
 - SMERC can identify missing recoverability evidence
 - SMERC can ask where an action will execute and whether failure is contained
 - SMERC can help decide whether a workflow deserves shadow-mode testing
+- reviewer-discovered bypass classes have permanent local regression coverage
 
 ## What This Does Not Prove
 

@@ -1,0 +1,522 @@
+{
+  "actions": [
+    {
+      "action_id": "AWS_ADAPTER_001_invoke_action_group_update_config",
+      "action_type": "agentcore_gateway_tool_call",
+      "actor": "bedrock_agent_runtime",
+      "anomaly_pressure": 0.35,
+      "authorization_confidence": 0.74,
+      "base_action_risk": 0.457,
+      "cancel_reliability": 0.66,
+      "containment_strength": 0.61,
+      "context": {
+        "current_control": "REVIEW",
+        "domain_profile": "cloud_admin",
+        "source_format": "agentcore_gateway_tool_call_summary",
+        "source_url": "internal-export://sample/action-group-001",
+        "workflow": "bedrock_action_group_tool_execution"
+      },
+      "description": "Non-executing AWS metadata adapter summary for agentcore_gateway_tool_call_summary: invoke action group update config in production.",
+      "evidence_validity": 0.7,
+      "external_side_effect": true,
+      "impact_scope": 0.62,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.58,
+      "rollback_latency": 0.44,
+      "sensitive_data": true,
+      "tool": "aws.lambda_action_group",
+      "tool_plan": {
+        "action": "agentcore_gateway_tool_call",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": null,
+            "inline_tool_permissions_present": null,
+            "parameter_constraints_present": null,
+            "policy_analysis_result": null,
+            "policy_engine_decision": null,
+            "policy_language": null,
+            "policy_schema_validated": null,
+            "target_registered": null
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": null,
+            "command_execution_class": null,
+            "execution_authority_exposure_class": null,
+            "session_user_binding": null
+          },
+          "aws_surface": "bedrock_agent_action_group",
+          "cloud_provider": "aws",
+          "cost_velocity_multiplier": 0.24,
+          "derived_output_governance": {
+            "access_control_composition": null,
+            "derived_output_contains_restricted_summary": null,
+            "input_sensitivity_level": null,
+            "output_sensitivity_level": null,
+            "regulatory_tags": []
+          },
+          "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
+          "gateway_path": "governed_gateway",
+          "postcondition_evidence_expected": true,
+          "session_and_delegated_approval_context": {
+            "approval_mode": "required_for_side_effect",
+            "delegated_on_behalf_of": true,
+            "gateway_bypass_detected": false,
+            "gateway_only_path": true,
+            "message_notification_observed": null,
+            "principal_type": "oauth_user",
+            "progress_notification_observed": null,
+            "server_initiated_elicitation": null,
+            "server_initiated_sampling": null,
+            "session_mode": "stateful_gateway_session",
+            "temporal_policy_context": "same_session_policy_window",
+            "tool_discovery_method": "registered_tool_policy"
+          },
+          "source_format": "agentcore_gateway_tool_call_summary",
+          "source_record_id": "aws-customer-sample-001",
+          "workflow_family": "bedrock_action_group_tool_execution"
+        },
+        "plan_id": "plan_aws_adapter_001_invoke_action_group_update_config",
+        "requested_capability": "invoke_side_effecting_action_group",
+        "requested_scope_units": 48,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": true,
+        "supports_scope_limit": true,
+        "tool": "aws.lambda_action_group",
+        "version": "smerc.sparta-plan.v1"
+      }
+    },
+    {
+      "action_id": "AWS_ADAPTER_002_expand_execution_role_permissions",
+      "action_type": "iam_policy_change",
+      "actor": "cloud_admin_agent",
+      "anomaly_pressure": 0.52,
+      "authorization_confidence": 0.61,
+      "base_action_risk": 0.626,
+      "cancel_reliability": 0.53,
+      "containment_strength": 0.39,
+      "context": {
+        "current_control": "REVIEW",
+        "domain_profile": "cloud_admin",
+        "source_format": "iam_policy_change_summary",
+        "source_url": "internal-export://sample/iam-002",
+        "workflow": "production_identity_change"
+      },
+      "description": "Non-executing AWS metadata adapter summary for iam_policy_change_summary: expand execution role permissions in production.",
+      "evidence_validity": 0.63,
+      "external_side_effect": true,
+      "impact_scope": 0.8,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": false,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.37,
+      "rollback_latency": 0.55,
+      "sensitive_data": true,
+      "tool": "aws.iam_policy",
+      "tool_plan": {
+        "action": "iam_policy_change",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": null,
+            "inline_tool_permissions_present": null,
+            "parameter_constraints_present": null,
+            "policy_analysis_result": null,
+            "policy_engine_decision": null,
+            "policy_language": null,
+            "policy_schema_validated": null,
+            "target_registered": null
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": null,
+            "command_execution_class": null,
+            "execution_authority_exposure_class": null,
+            "session_user_binding": null
+          },
+          "aws_surface": "iam",
+          "cloud_provider": "aws",
+          "cost_velocity_multiplier": 0.2,
+          "derived_output_governance": {
+            "access_control_composition": null,
+            "derived_output_contains_restricted_summary": null,
+            "input_sensitivity_level": null,
+            "output_sensitivity_level": null,
+            "regulatory_tags": []
+          },
+          "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
+          "gateway_path": "change_management_queue",
+          "postcondition_evidence_expected": true,
+          "session_and_delegated_approval_context": {
+            "approval_mode": "required_for_permission_boundary_change",
+            "delegated_on_behalf_of": false,
+            "gateway_bypass_detected": false,
+            "gateway_only_path": true,
+            "message_notification_observed": null,
+            "principal_type": "iam_entity",
+            "progress_notification_observed": null,
+            "server_initiated_elicitation": null,
+            "server_initiated_sampling": null,
+            "session_mode": "stateless_request",
+            "temporal_policy_context": "change_window_required",
+            "tool_discovery_method": "registered_tool_policy"
+          },
+          "source_format": "iam_policy_change_summary",
+          "source_record_id": "aws-customer-sample-002",
+          "workflow_family": "production_identity_change"
+        },
+        "plan_id": "plan_aws_adapter_002_expand_execution_role_permissions",
+        "requested_capability": "modify_execution_role",
+        "requested_scope_units": 82,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": true,
+        "supports_scope_limit": true,
+        "tool": "aws.iam_policy",
+        "version": "smerc.sparta-plan.v1"
+      }
+    },
+    {
+      "action_id": "AWS_ADAPTER_003_execute_stateful_change_set",
+      "action_type": "cloudformation_changeset_execute",
+      "actor": "infrastructure_agent",
+      "anomaly_pressure": 0.44,
+      "authorization_confidence": 0.68,
+      "base_action_risk": 0.578,
+      "cancel_reliability": 0.5,
+      "containment_strength": 0.5,
+      "context": {
+        "current_control": "REVIEW",
+        "domain_profile": "cloud_admin",
+        "source_format": "cloudformation_changeset_summary",
+        "source_url": "internal-export://sample/cfn-003",
+        "workflow": "infrastructure_change"
+      },
+      "description": "Non-executing AWS metadata adapter summary for cloudformation_changeset_summary: execute stateful change set in production.",
+      "evidence_validity": 0.67,
+      "external_side_effect": true,
+      "impact_scope": 0.76,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": true,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.41,
+      "rollback_latency": 0.68,
+      "sensitive_data": false,
+      "tool": "aws.cloudformation_changeset",
+      "tool_plan": {
+        "action": "cloudformation_changeset_execute",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": null,
+            "inline_tool_permissions_present": null,
+            "parameter_constraints_present": null,
+            "policy_analysis_result": null,
+            "policy_engine_decision": null,
+            "policy_language": null,
+            "policy_schema_validated": null,
+            "target_registered": null
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": null,
+            "command_execution_class": null,
+            "execution_authority_exposure_class": null,
+            "session_user_binding": null
+          },
+          "aws_surface": "cloudformation",
+          "cloud_provider": "aws",
+          "cost_velocity_multiplier": 0.32,
+          "derived_output_governance": {
+            "access_control_composition": null,
+            "derived_output_contains_restricted_summary": null,
+            "input_sensitivity_level": null,
+            "output_sensitivity_level": null,
+            "regulatory_tags": []
+          },
+          "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
+          "gateway_path": "change_management_queue",
+          "postcondition_evidence_expected": true,
+          "session_and_delegated_approval_context": {
+            "approval_mode": "required_for_stateful_change",
+            "delegated_on_behalf_of": false,
+            "gateway_bypass_detected": false,
+            "gateway_only_path": true,
+            "message_notification_observed": null,
+            "principal_type": "iam_entity",
+            "progress_notification_observed": null,
+            "server_initiated_elicitation": null,
+            "server_initiated_sampling": null,
+            "session_mode": "stateless_request",
+            "temporal_policy_context": "change_window_required",
+            "tool_discovery_method": "change_set_registry"
+          },
+          "source_format": "cloudformation_changeset_summary",
+          "source_record_id": "aws-customer-sample-003",
+          "workflow_family": "infrastructure_change"
+        },
+        "plan_id": "plan_aws_adapter_003_execute_stateful_change_set",
+        "requested_capability": "execute_change_set",
+        "requested_scope_units": 71,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": false,
+        "supports_scope_limit": true,
+        "tool": "aws.cloudformation_changeset",
+        "version": "smerc.sparta-plan.v1"
+      }
+    },
+    {
+      "action_id": "AWS_ADAPTER_004_widen_bucket_policy_access",
+      "action_type": "s3_policy_change",
+      "actor": "data_ops_agent",
+      "anomaly_pressure": 0.66,
+      "authorization_confidence": 0.57,
+      "base_action_risk": 0.663,
+      "cancel_reliability": 0.62,
+      "containment_strength": 0.29,
+      "context": {
+        "current_control": "REVIEW",
+        "domain_profile": "cloud_admin",
+        "source_format": "s3_policy_change_summary",
+        "source_url": "internal-export://sample/s3-004",
+        "workflow": "data_access_change"
+      },
+      "description": "Non-executing AWS metadata adapter summary for s3_policy_change_summary: widen bucket policy access in production.",
+      "evidence_validity": 0.54,
+      "external_side_effect": true,
+      "impact_scope": 0.85,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": false,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.46,
+      "rollback_latency": 0.43,
+      "sensitive_data": true,
+      "tool": "aws.s3_bucket_policy",
+      "tool_plan": {
+        "action": "s3_policy_change",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": null,
+            "inline_tool_permissions_present": null,
+            "parameter_constraints_present": null,
+            "policy_analysis_result": null,
+            "policy_engine_decision": null,
+            "policy_language": null,
+            "policy_schema_validated": null,
+            "target_registered": null
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": null,
+            "command_execution_class": null,
+            "execution_authority_exposure_class": null,
+            "session_user_binding": null
+          },
+          "aws_surface": "s3",
+          "cloud_provider": "aws",
+          "cost_velocity_multiplier": 0.18,
+          "derived_output_governance": {
+            "access_control_composition": null,
+            "derived_output_contains_restricted_summary": null,
+            "input_sensitivity_level": null,
+            "output_sensitivity_level": null,
+            "regulatory_tags": []
+          },
+          "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
+          "gateway_path": "data_access_review_queue",
+          "postcondition_evidence_expected": true,
+          "session_and_delegated_approval_context": {
+            "approval_mode": "required_for_data_access_change",
+            "delegated_on_behalf_of": false,
+            "gateway_bypass_detected": false,
+            "gateway_only_path": true,
+            "message_notification_observed": null,
+            "principal_type": "iam_entity",
+            "progress_notification_observed": null,
+            "server_initiated_elicitation": null,
+            "server_initiated_sampling": null,
+            "session_mode": "stateless_request",
+            "temporal_policy_context": "incident_pressure",
+            "tool_discovery_method": "registered_tool_policy"
+          },
+          "source_format": "s3_policy_change_summary",
+          "source_record_id": "aws-customer-sample-004",
+          "workflow_family": "data_access_change"
+        },
+        "plan_id": "plan_aws_adapter_004_widen_bucket_policy_access",
+        "requested_capability": "modify_bucket_policy",
+        "requested_scope_units": 77,
+        "side_effect_level": "external",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": true,
+        "supports_scope_limit": true,
+        "tool": "aws.s3_bucket_policy",
+        "version": "smerc.sparta-plan.v1"
+      }
+    },
+    {
+      "action_id": "AWS_ADAPTER_005_increase_compute_capacity_during_retry_loop",
+      "action_type": "cost_velocity_control_change",
+      "actor": "finops_agent",
+      "anomaly_pressure": 0.83,
+      "authorization_confidence": 0.59,
+      "base_action_risk": 0.774,
+      "cancel_reliability": 0.55,
+      "containment_strength": 0.42,
+      "context": {
+        "current_control": "REVIEW",
+        "domain_profile": "cloud_admin",
+        "source_format": "cost_anomaly_action_summary",
+        "source_url": "internal-export://sample/cost-005",
+        "workflow": "cost_automation"
+      },
+      "description": "Non-executing AWS metadata adapter summary for cost_anomaly_action_summary: increase compute capacity during retry loop in production.",
+      "evidence_validity": 0.46,
+      "external_side_effect": true,
+      "impact_scope": 0.7,
+      "ref_gate": {
+        "attestation_valid": true,
+        "least_privilege_confirmed": false,
+        "object_shape_expected": true,
+        "typed_contract_valid": true
+      },
+      "reversibility": 0.48,
+      "rollback_latency": 0.49,
+      "sensitive_data": false,
+      "tool": "aws.cost_management",
+      "tool_plan": {
+        "action": "cost_velocity_control_change",
+        "max_scope_units": 100,
+        "metadata": {
+          "adapter_mode": "non_executing",
+          "agentcore_policy_context": {
+            "gateway_target_type": null,
+            "inline_tool_permissions_present": null,
+            "parameter_constraints_present": null,
+            "policy_analysis_result": null,
+            "policy_engine_decision": null,
+            "policy_language": null,
+            "policy_schema_validated": null,
+            "target_registered": null
+          },
+          "agentcore_runtime_security_context": {
+            "audit_correlation_available": null,
+            "command_execution_class": null,
+            "execution_authority_exposure_class": null,
+            "session_user_binding": null
+          },
+          "aws_surface": "cost_management",
+          "cloud_provider": "aws",
+          "cost_velocity_multiplier": 0.92,
+          "derived_output_governance": {
+            "access_control_composition": null,
+            "derived_output_contains_restricted_summary": null,
+            "input_sensitivity_level": null,
+            "output_sensitivity_level": null,
+            "regulatory_tags": []
+          },
+          "environment": "production",
+          "environment_boundary_context": {
+            "execution_environment_boundary": null,
+            "host_isolation": null,
+            "network_isolation": null,
+            "sandbox_escape_surface": [],
+            "tooling_isolation": null
+          },
+          "gateway_path": "finops_policy_queue",
+          "postcondition_evidence_expected": true,
+          "session_and_delegated_approval_context": {
+            "approval_mode": "required_for_cost_velocity_change",
+            "delegated_on_behalf_of": false,
+            "gateway_bypass_detected": false,
+            "gateway_only_path": true,
+            "message_notification_observed": null,
+            "principal_type": "iam_entity",
+            "progress_notification_observed": null,
+            "server_initiated_elicitation": null,
+            "server_initiated_sampling": null,
+            "session_mode": "stateful_gateway_session",
+            "temporal_policy_context": "retry_loop_detected",
+            "tool_discovery_method": "registered_tool_policy"
+          },
+          "source_format": "cost_anomaly_action_summary",
+          "source_record_id": "aws-customer-sample-005",
+          "workflow_family": "cost_automation"
+        },
+        "plan_id": "plan_aws_adapter_005_increase_compute_capacity_during_retry_loop",
+        "requested_capability": "increase_capacity_budget",
+        "requested_scope_units": 88,
+        "side_effect_level": "financial",
+        "supports_checkpoint": true,
+        "supports_dry_run": true,
+        "supports_human_approval": true,
+        "supports_rollback": true,
+        "supports_scope_limit": true,
+        "tool": "aws.cost_management",
+        "version": "smerc.sparta-plan.v1"
+      }
+    }
+  ],
+  "contact_role": "aws_platform_security_reviewer",
+  "data_boundary": "AWS metadata adapter evaluation. Inputs are exported summaries only. No AWS credentials, account IDs, ARNs, raw logs, private topology, customer records, secrets, production commands, or live AWS access are included.",
+  "evaluation_date": "2026-09-18",
+  "initial_autonomy_state": "HEALTHY",
+  "organization": "AWS Metadata Adapter Review",
+  "tenant_id": "aws-metadata-adapter-review",
+  "version": "smerc.customer-evaluation.v1",
+  "workflow_context": "Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC customer-evaluation actions for shadow-mode review."
+}

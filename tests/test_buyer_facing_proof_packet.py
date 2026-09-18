@@ -23,6 +23,11 @@ class BuyerFacingProofPacketTests(unittest.TestCase):
             "AWS endorsement",
             "replacement of IAM",
             "field-of-use separable",
+            "tests.test_cross_path_safety_invariants",
+            "strictest posture",
+            "docs/Cross_Path_Safety_Invariants.md",
+            "docs/AWS_Shadow_Mode_Buyer_Example.md",
+            "regression evidence, not proof",
         ]:
             self.assertIn(phrase, text)
 
@@ -32,6 +37,21 @@ class BuyerFacingProofPacketTests(unittest.TestCase):
 
         for text in [readme, readiness]:
             self.assertIn("docs/Buyer_Facing_Proof_Packet.md", text)
+
+    def test_aws_example_is_reproducible_and_bounded(self):
+        text = (ROOT / "docs" / "AWS_Shadow_Mode_Buyer_Example.md").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        for phrase in [
+            "examples/aws_customer_metadata_filled_sample.json",
+            "reference_engine.aws_metadata_adapter",
+            "reports/aws_shadow_mode_buyer_example/AWS_Metadata_Adapter_Report.md",
+            "tests.test_cross_path_safety_invariants",
+            "five synthetic AWS-style actions",
+            "cannot demonstrate deployed AWS enforcement",
+        ]:
+            self.assertIn(phrase, text)
+        self.assertIn("docs/AWS_Shadow_Mode_Buyer_Example.md", readme)
 
 
 if __name__ == "__main__":

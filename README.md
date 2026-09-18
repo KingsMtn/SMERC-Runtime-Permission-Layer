@@ -101,6 +101,7 @@ Fast reviewer paths:
 - Product readiness index: `docs/Product_Readiness_Index.md`
 - Shadow-mode product lane: `docs/Shadow_Mode_Product_Lane.md`
 - Buyer-facing proof packet: `docs/Buyer_Facing_Proof_Packet.md`
+- AWS shadow-mode buyer example: `docs/AWS_Shadow_Mode_Buyer_Example.md`
 
 SMERC is short for Structural Momentum Entropy Range Confidence. For cloud and platform teams, it is best read as recoverability-aware risk control for autonomous cloud execution: it evaluates a proposed action before execution and returns a replayable posture:
 
