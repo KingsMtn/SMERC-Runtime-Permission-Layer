@@ -42,6 +42,9 @@ class AWSMetadataAdapterTests(unittest.TestCase):
             self.assertIn("agentcore_policy_context", action["tool_plan"]["metadata"])
             self.assertIn("derived_output_governance", action["tool_plan"]["metadata"])
             self.assertIn("environment_boundary_context", action["tool_plan"]["metadata"])
+            self.assertIn("source_observation", action["tool_plan"]["metadata"])
+            self.assertIn("label_basis", action["tool_plan"]["metadata"])
+            self.assertIn("label_confidence", action["tool_plan"]["metadata"])
 
     def test_preserves_session_and_delegated_approval_context(self):
         payload = normalize_source_exports(load_source_exports(INPUTS))
