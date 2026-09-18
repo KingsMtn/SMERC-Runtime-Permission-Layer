@@ -1,0 +1,51 @@
+{
+  "all_broad_variants_stricter": true,
+  "comparisons": [
+    {
+      "bounded_posture": "THROTTLE",
+      "bounded_reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "bounded_route": "REVIEW_REQUIRED",
+      "broad_is_stricter": true,
+      "broad_posture": "FREEZE",
+      "broad_reason_codes": [
+        "IRREVERSIBLE_EXPOSURE_ELEVATED",
+        "EXTERNAL_SIDE_EFFECT",
+        "HOST_ISOLATION_WEAK",
+        "PRODUCTION_NETWORK_REACHABLE",
+        "TOOLING_AUTHORITY_BROAD",
+        "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+      ],
+      "broad_route": "PAUSE",
+      "source_record_id": "aws-open-agentcore-create-runtime-002"
+    },
+    {
+      "bounded_posture": "THROTTLE",
+      "bounded_reason_codes": [
+        "EXTERNAL_SIDE_EFFECT"
+      ],
+      "bounded_route": "REVIEW_REQUIRED",
+      "broad_is_stricter": true,
+      "broad_posture": "FREEZE",
+      "broad_reason_codes": [
+        "EXTERNAL_SIDE_EFFECT",
+        "HOST_ISOLATION_WEAK",
+        "PRODUCTION_NETWORK_REACHABLE",
+        "TOOLING_AUTHORITY_BROAD",
+        "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+      ],
+      "broad_route": "PAUSE",
+      "source_record_id": "aws-open-bedrock-invoke-004"
+    }
+  ],
+  "evidence_boundary": "Boundary variants are controlled SMERC fixtures derived from public AWS action descriptions. They are not observed AWS configurations, customer outcomes, or proof of deployed enforcement.",
+  "generated_at": "2026-09-18T01:22:16.378426+00:00",
+  "posture_counts": {
+    "FREEZE": 2,
+    "THROTTLE": 2
+  },
+  "source_record_count": 2,
+  "variant_count": 4,
+  "version": "smerc.aws-boundary-contrast.v1"
+}

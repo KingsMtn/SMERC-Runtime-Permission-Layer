@@ -1,0 +1,3276 @@
+{
+  "accepted_rows": 4,
+  "accepted_source_format_counts": {
+    "agentcore_gateway_tool_call_summary": 2,
+    "agentcore_runtime_invocation_summary": 2
+  },
+  "agentcore_runtime_security_summary": {
+    "boolean_counts": {},
+    "command_execution_class_counts": {},
+    "execution_authority_exposure_class_counts": {},
+    "session_user_binding_counts": {}
+  },
+  "customer_evaluation": {
+    "autonomy_budget": {
+      "allowed_tool_risk_tiers": [],
+      "autonomy_state": "SUSPEND_AUTONOMY",
+      "blocked_tool_risk_tiers": [
+        "low",
+        "medium",
+        "high",
+        "financial",
+        "destructive"
+      ],
+      "budget": {
+        "allowed_tool_risk_tiers": [
+          "low",
+          "medium",
+          "high",
+          "financial",
+          "destructive"
+        ],
+        "max_actions": 10,
+        "max_risk_spend": 3.0,
+        "max_scope_units": 1000,
+        "valid_for_minutes": 60
+      },
+      "decision_ledger": [
+        {
+          "autonomy_state_after": "WATCH",
+          "posture": "THROTTLE",
+          "ref_gate_status": "pass",
+          "remaining_actions": 9,
+          "remaining_risk_spend": 2.773,
+          "remaining_scope_units": 999.0,
+          "request_id": "AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+          "risk_spend": 0.227,
+          "sequence": 1,
+          "tool_name": "aws.agentcore.create_runtime"
+        },
+        {
+          "autonomy_state_after": "DEGRADE",
+          "posture": "FREEZE",
+          "ref_gate_status": "pass",
+          "remaining_actions": 8,
+          "remaining_risk_spend": 2.402,
+          "remaining_scope_units": 998.0,
+          "request_id": "AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+          "risk_spend": 0.371,
+          "sequence": 2,
+          "tool_name": "aws.agentcore.create_runtime"
+        },
+        {
+          "autonomy_state_after": "DEGRADE",
+          "posture": "THROTTLE",
+          "ref_gate_status": "pass",
+          "remaining_actions": 7,
+          "remaining_risk_spend": 2.23,
+          "remaining_scope_units": 993.0,
+          "request_id": "AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+          "risk_spend": 0.172,
+          "sequence": 3,
+          "tool_name": "aws.bedrock.invoke_model"
+        },
+        {
+          "autonomy_state_after": "SUSPEND_AUTONOMY",
+          "posture": "FREEZE",
+          "ref_gate_status": "pass",
+          "remaining_actions": 6,
+          "remaining_risk_spend": 1.945,
+          "remaining_scope_units": 988.0,
+          "request_id": "AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+          "risk_spend": 0.285,
+          "sequence": 4,
+          "tool_name": "aws.bedrock.invoke_model"
+        }
+      ],
+      "earned_autonomy": {},
+      "generated_at": "2026-09-18T01:22:16+00:00",
+      "initial_state": "HEALTHY",
+      "plain_english_summary": "Autonomy should be suspended for this session because the action stream exhausted or violated the current autonomy budget. Human review should requalify the agent or tool family before more autonomous execution is allowed.",
+      "remaining": {
+        "actions": 6,
+        "risk_spend": 1.945,
+        "scope_units": 988.0,
+        "valid_for_minutes": 0
+      },
+      "review_triggers": [
+        "repeated_blocked_or_held_attempts",
+        "autonomy_removed_until_review"
+      ],
+      "spent": {
+        "actions": 4,
+        "blocked_or_held_attempts": 2,
+        "ref_gate_failures": 0,
+        "risk_spend": 1.055,
+        "scope_units": 12.0
+      },
+      "version": "smerc.autonomy-budget.v1"
+    },
+    "contact_role": "aws_platform_security_reviewer",
+    "data_boundary": "AWS metadata adapter evaluation. Inputs are exported summaries only. No AWS credentials, account IDs, ARNs, raw logs, private topology, customer records, secrets, production commands, or live AWS access are included.",
+    "evaluation_date": "2026-09-18",
+    "evidence_boundary": "This is a metadata-only customer evaluation. It proves local runtime coherence on supplied action metadata; it does not prove production safety, compliance, incident reduction, customer demand, or readiness to enforce in a live environment.",
+    "generated_at": "2026-09-18T01:22:16+00:00",
+    "organization": "AWS Metadata Adapter Review",
+    "pilot_fit": {
+      "fit": "moderate",
+      "reason": "The evaluation shows at least one meaningful action where SMERC changes execution posture."
+    },
+    "recommended_next_action": "Ask for more side-effecting actions from one workflow before proposing a pilot.",
+    "records": [
+      {
+        "action_id": "AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+        "decision": {
+          "action_id": "AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+          "controls": [
+            "limit_scope",
+            "preview_before_execution",
+            "record_replay",
+            "rate_limit_external_side_effect"
+          ],
+          "decision_trace": {
+            "profile": {
+              "label": "Cloud administration",
+              "notes": [
+                "Cloud changes can widen blast radius quickly when containment is weak."
+              ],
+              "profile_id": "cloud_admin"
+            },
+            "score_contributions": {
+              "confidence_score": {
+                "anomaly_resistance": 0.122,
+                "authorization_confidence": 0.258,
+                "containment_strength": 0.053,
+                "evidence_validity": 0.28,
+                "profile_multiplier": 1.0,
+                "total": 0.714
+              },
+              "irreversible_exposure_score": {
+                "base_action_risk": 0.093,
+                "containment_gap": 0.044,
+                "external_side_effect": 0.08,
+                "impact_scope": 0.07,
+                "irreversibility": 0.067,
+                "profile_multiplier": 1.08,
+                "rollback_latency": 0.071,
+                "sensitive_data": 0.0,
+                "total": 0.459
+              },
+              "operational_stress_score": {
+                "anomaly_pressure": 0.064,
+                "base_action_risk": 0.103,
+                "cancel_gap": 0.018,
+                "confidence_gap": 0.029,
+                "evidence_gap": 0.042,
+                "impact_scope": 0.104,
+                "profile_multiplier": 1.06,
+                "rollback_latency": 0.042,
+                "total": 0.427
+              },
+              "reversible_capacity_score": {
+                "cancel_reliability": 0.112,
+                "containment_strength": 0.158,
+                "evidence_validity": 0.07,
+                "profile_multiplier": 0.97,
+                "reversibility": 0.223,
+                "rollback_speed": 0.11,
+                "total": 0.654
+              },
+              "risk_adjusted_authorization_score": {
+                "confidence_score": 0.214,
+                "profile_multiplier": 1.0,
+                "recoverability_margin": 0.135,
+                "reversible_capacity": 0.294,
+                "total": 0.643
+              }
+            },
+            "threshold_trace": [
+              {
+                "details": {
+                  "capacity": 0.654,
+                  "capacity_rule": "< 0.42",
+                  "confidence": 0.714,
+                  "confidence_rule": "< 0.48"
+                },
+                "observed": 0.459,
+                "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+                "threshold": ">= 0.78",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "exposure": 0.459,
+                  "exposure_rule": ">= 0.62"
+                },
+                "observed": 0.7,
+                "rule": "deny_by_unreliable_cancel_and_high_exposure",
+                "threshold": "< 0.3",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "external_side_effect": true,
+                  "sensitive_data": false
+                },
+                "observed": 0.427,
+                "rule": "escalate_by_operational_stress",
+                "threshold": ">= 0.7",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "capacity": 0.654,
+                  "confidence": 0.714
+                },
+                "observed": 0.654,
+                "rule": "freeze_by_low_confidence_or_capacity",
+                "threshold": "confidence < 0.45 or capacity < 0.36",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "exposure": 0.459,
+                  "external_side_effect": true,
+                  "profile_allows_external_side_effect_release": false
+                },
+                "observed": 0.643,
+                "rule": "throttle_by_authorization_exposure_or_side_effect",
+                "threshold": "authorization < 0.62 or exposure >= 0.45",
+                "triggered": true
+              }
+            ]
+          },
+          "domain_profile": {
+            "label": "Cloud administration",
+            "notes": [
+              "Cloud changes can widen blast radius quickly when containment is weak."
+            ],
+            "profile_id": "cloud_admin"
+          },
+          "enforcement_state": "constrain",
+          "plain_english_summary": "Action 'AWS_ADAPTER_001_create_a_billable_agentcore_runtime' received THROTTLE. Irreversible exposure is 0.459, reversible capacity is 0.654, and authorization score is 0.643. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+          "policy": {
+            "evidence_ceiling": "OBSERVE",
+            "mode": "OBSERVE",
+            "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+            "policy_id": "smerc-reference-recoverability",
+            "policy_revision": "1.0.0",
+            "tenant_id": "*"
+          },
+          "posture": "THROTTLE",
+          "reason_codes": [
+            "EXTERNAL_SIDE_EFFECT"
+          ],
+          "replay": {
+            "action_type": "agentcore_runtime_invocation",
+            "actor": "agent_platform_automation",
+            "context": {
+              "current_control": "ALLOW",
+              "domain_profile": "cloud_admin",
+              "environment_boundary_context": {
+                "execution_environment_boundary": "cloud_function",
+                "host_isolation": "hardened_container",
+                "network_isolation": "scoped_private_network",
+                "sandbox_escape_surface": [
+                  "none_known"
+                ],
+                "tooling_isolation": "restricted_tools"
+              },
+              "source_format": "agentcore_runtime_invocation_summary",
+              "source_url": "https://github.com/awslabs/mcp/blob/main/src/amazon-bedrock-agentcore-mcp-server/README.md",
+              "workflow": "agentcore_runtime_lifecycle_boundary_contrast"
+            },
+            "controls": [
+              "limit_scope",
+              "preview_before_execution",
+              "record_replay",
+              "rate_limit_external_side_effect"
+            ],
+            "decision_trace": {
+              "profile": {
+                "label": "Cloud administration",
+                "notes": [
+                  "Cloud changes can widen blast radius quickly when containment is weak."
+                ],
+                "profile_id": "cloud_admin"
+              },
+              "score_contributions": {
+                "confidence_score": {
+                  "anomaly_resistance": 0.122,
+                  "authorization_confidence": 0.258,
+                  "containment_strength": 0.053,
+                  "evidence_validity": 0.28,
+                  "profile_multiplier": 1.0,
+                  "total": 0.714
+                },
+                "irreversible_exposure_score": {
+                  "base_action_risk": 0.093,
+                  "containment_gap": 0.044,
+                  "external_side_effect": 0.08,
+                  "impact_scope": 0.07,
+                  "irreversibility": 0.067,
+                  "profile_multiplier": 1.08,
+                  "rollback_latency": 0.071,
+                  "sensitive_data": 0.0,
+                  "total": 0.459
+                },
+                "operational_stress_score": {
+                  "anomaly_pressure": 0.064,
+                  "base_action_risk": 0.103,
+                  "cancel_gap": 0.018,
+                  "confidence_gap": 0.029,
+                  "evidence_gap": 0.042,
+                  "impact_scope": 0.104,
+                  "profile_multiplier": 1.06,
+                  "rollback_latency": 0.042,
+                  "total": 0.427
+                },
+                "reversible_capacity_score": {
+                  "cancel_reliability": 0.112,
+                  "containment_strength": 0.158,
+                  "evidence_validity": 0.07,
+                  "profile_multiplier": 0.97,
+                  "reversibility": 0.223,
+                  "rollback_speed": 0.11,
+                  "total": 0.654
+                },
+                "risk_adjusted_authorization_score": {
+                  "confidence_score": 0.214,
+                  "profile_multiplier": 1.0,
+                  "recoverability_margin": 0.135,
+                  "reversible_capacity": 0.294,
+                  "total": 0.643
+                }
+              },
+              "threshold_trace": [
+                {
+                  "details": {
+                    "capacity": 0.654,
+                    "capacity_rule": "< 0.42",
+                    "confidence": 0.714,
+                    "confidence_rule": "< 0.48"
+                  },
+                  "observed": 0.459,
+                  "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+                  "threshold": ">= 0.78",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "exposure": 0.459,
+                    "exposure_rule": ">= 0.62"
+                  },
+                  "observed": 0.7,
+                  "rule": "deny_by_unreliable_cancel_and_high_exposure",
+                  "threshold": "< 0.3",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "external_side_effect": true,
+                    "sensitive_data": false
+                  },
+                  "observed": 0.427,
+                  "rule": "escalate_by_operational_stress",
+                  "threshold": ">= 0.7",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "capacity": 0.654,
+                    "confidence": 0.714
+                  },
+                  "observed": 0.654,
+                  "rule": "freeze_by_low_confidence_or_capacity",
+                  "threshold": "confidence < 0.45 or capacity < 0.36",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "exposure": 0.459,
+                    "external_side_effect": true,
+                    "profile_allows_external_side_effect_release": false
+                  },
+                  "observed": 0.643,
+                  "rule": "throttle_by_authorization_exposure_or_side_effect",
+                  "threshold": "authorization < 0.62 or exposure >= 0.45",
+                  "triggered": true
+                }
+              ]
+            },
+            "domain_profile": {
+              "label": "Cloud administration",
+              "notes": [
+                "Cloud changes can widen blast radius quickly when containment is weak."
+              ],
+              "profile_id": "cloud_admin"
+            },
+            "enforcement_state": "constrain",
+            "evaluated_at": "2026-09-18T01:22:16.360997+00:00",
+            "policy": {
+              "evidence_ceiling": "OBSERVE",
+              "mode": "OBSERVE",
+              "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+              "policy_id": "smerc-reference-recoverability",
+              "policy_revision": "1.0.0",
+              "tenant_id": "*"
+            },
+            "posture": "THROTTLE",
+            "reason_codes": [
+              "EXTERNAL_SIDE_EFFECT"
+            ],
+            "replay_id": "replay_AWS_ADAPTER_001_create_a_billable_agentcore_runtime_1789694536360_15de0e895ec5",
+            "scores": {
+              "cancel_reliability_score": 0.7,
+              "confidence_score": 0.714,
+              "irreversible_exposure_score": 0.459,
+              "operational_stress_score": 0.427,
+              "reversible_capacity_score": 0.654,
+              "risk_adjusted_authorization_score": 0.643
+            },
+            "tool": "aws.agentcore.create_runtime",
+            "transition_guidance": {
+              "blocking_factors": [
+                "irreversible_exposure_above_release_threshold"
+              ],
+              "control_improvements": [
+                "increase_containment",
+                "limit_scope",
+                "narrow_impact_scope",
+                "preview_before_execution",
+                "prove_rollback_path",
+                "rate limit or stage external side effect",
+                "rate_limit_external_side_effect",
+                "record_replay"
+              ],
+              "current_posture": "THROTTLE",
+              "evidence_needed": [],
+              "release_conditions": {
+                "authorization_score_at_or_above": 0.62,
+                "confidence_score_target": 0.7,
+                "irreversible_exposure_below": 0.45,
+                "reversible_capacity_target": 0.6
+              },
+              "target_posture": "THROTTLE"
+            }
+          },
+          "replay_id": "replay_AWS_ADAPTER_001_create_a_billable_agentcore_runtime_1789694536360_15de0e895ec5",
+          "scores": {
+            "cancel_reliability_score": 0.7,
+            "confidence_score": 0.714,
+            "irreversible_exposure_score": 0.459,
+            "operational_stress_score": 0.427,
+            "reversible_capacity_score": 0.654,
+            "risk_adjusted_authorization_score": 0.643
+          },
+          "transition_guidance": {
+            "blocking_factors": [
+              "irreversible_exposure_above_release_threshold"
+            ],
+            "control_improvements": [
+              "increase_containment",
+              "limit_scope",
+              "narrow_impact_scope",
+              "preview_before_execution",
+              "prove_rollback_path",
+              "rate limit or stage external side effect",
+              "rate_limit_external_side_effect",
+              "record_replay"
+            ],
+            "current_posture": "THROTTLE",
+            "evidence_needed": [],
+            "release_conditions": {
+              "authorization_score_at_or_above": 0.62,
+              "confidence_score_target": 0.7,
+              "irreversible_exposure_below": 0.45,
+              "reversible_capacity_target": 0.6
+            },
+            "target_posture": "THROTTLE"
+          }
+        },
+        "decision_lifecycle_ledger": {
+          "decision_id": "customer_eval_AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+          "head_record_hash": "5c3fa7aab185120fc27c744703a5e5d7b2747a8fcff5b6c146c363388831f01e",
+          "record_count": 5,
+          "records": [
+            {
+              "actor": "agent_platform_automation",
+              "decision_id": "customer_eval_AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+              "event_type": "REQUEST",
+              "payload": {
+                "environment": "production",
+                "initiated_by": "agent_platform_automation",
+                "requested_operation": "Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: create a billable AgentCore runtime in production.",
+                "risk_profile": "cloud_admin"
+              },
+              "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+              "record_hash": "467678c5ebafa947f54773dd53599465f6916ac2442f28be1dc4be4961748628",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 1,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-customer-evaluation",
+              "decision_id": "customer_eval_AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+              "event_type": "EVIDENCE",
+              "payload": {
+                "available_evidence": [
+                  "metadata_only_action",
+                  "ref_gate_declaration",
+                  "agent_identity_gate",
+                  "tool_plan_declaration"
+                ],
+                "confidence_score": 0.714,
+                "external_dependencies": [
+                  "aws.agentcore.create_runtime"
+                ],
+                "missing_evidence": [],
+                "model_version": "customer-supplied-agent-metadata",
+                "policy_version": "smerc-reference-recoverability"
+              },
+              "previous_record_hash": "467678c5ebafa947f54773dd53599465f6916ac2442f28be1dc4be4961748628",
+              "record_hash": "2a45823708bec84b78f2114b30082affeea7d19160056a42242cc8b816c2b84d",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 2,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-engine",
+              "decision_id": "customer_eval_AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+              "event_type": "EVALUATION",
+              "payload": {
+                "authorization_recommendation": "THROTTLE",
+                "entropy_indicators": [
+                  "EXTERNAL_SIDE_EFFECT"
+                ],
+                "reason_codes": [
+                  "EXTERNAL_SIDE_EFFECT"
+                ],
+                "recommended_safeguards": [
+                  "limit_scope",
+                  "preview_before_execution",
+                  "record_replay",
+                  "rate_limit_external_side_effect",
+                  "require_agent_identity_record",
+                  "route_to_human_review"
+                ],
+                "recoverability_score": 0.654,
+                "structural_state": "ref_gate=pass; scoring=admitted_with_agent_identity_watch; route=REVIEW_REQUIRED"
+              },
+              "previous_record_hash": "2a45823708bec84b78f2114b30082affeea7d19160056a42242cc8b816c2b84d",
+              "record_hash": "2efb42442c52ddaece68514164db4b3e3387638c382dfbd440e0317f1628ab81",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 3,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "sparta-router",
+              "decision_id": "customer_eval_AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+              "event_type": "EXECUTION",
+              "payload": {
+                "duration_ms": 0,
+                "executed_operation": "REVIEW_REQUIRED",
+                "execution_status": "not_executed",
+                "rollback_performed": false,
+                "rollback_success": null,
+                "started_at": "2026-09-18T01:22:16+00:00"
+              },
+              "previous_record_hash": "2efb42442c52ddaece68514164db4b3e3387638c382dfbd440e0317f1628ab81",
+              "record_hash": "f5328bed56a4305742419ffc0e2ea2afc94222954c6c1f8ac9123765a335c777",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 4,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-customer-evaluation",
+              "decision_id": "customer_eval_AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+              "event_type": "OUTCOME",
+              "payload": {
+                "controls_sufficient": true,
+                "cost_incurred": 0.0,
+                "customer_impact": "not measured in metadata-only evaluation",
+                "financial_impact": "not measured in metadata-only evaluation",
+                "judged_correct": true,
+                "security_impact": "not measured in metadata-only evaluation",
+                "time_to_recover_minutes": 0.0,
+                "unexpected_consequences": false
+              },
+              "previous_record_hash": "f5328bed56a4305742419ffc0e2ea2afc94222954c6c1f8ac9123765a335c777",
+              "record_hash": "5c3fa7aab185120fc27c744703a5e5d7b2747a8fcff5b6c146c363388831f01e",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 5,
+              "tenant_id": "aws-metadata-adapter-review"
+            }
+          ],
+          "summary": {
+            "decision_id": "customer_eval_AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+            "event_counts": {
+              "EVALUATION": 1,
+              "EVIDENCE": 1,
+              "EXECUTION": 1,
+              "HUMAN_INTERACTION": 0,
+              "LEARNING_RECOMMENDATION": 0,
+              "OUTCOME": 1,
+              "REQUEST": 1
+            },
+            "final_event_type": "OUTCOME",
+            "judged_correct": true,
+            "override_count": 0,
+            "pending_learning_recommendations": 0,
+            "record_count": 5,
+            "rollback_performed": false,
+            "rollback_success": null,
+            "tenant_id": "aws-metadata-adapter-review"
+          },
+          "tenant_id": "aws-metadata-adapter-review",
+          "verification": {
+            "errors": [],
+            "head_record_hash": "5c3fa7aab185120fc27c744703a5e5d7b2747a8fcff5b6c146c363388831f01e",
+            "record_count": 5,
+            "valid": true
+          },
+          "version": "smerc.decision-lifecycle-ledger.v1"
+        },
+        "description": "Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: create a billable AgentCore runtime in production.",
+        "identity_gate": {
+          "agent_id": "agent_platform_automation",
+          "identity_score": 0.48,
+          "plain_english_summary": "Agent 'agent_platform_automation' has no identity record for this request.",
+          "reason_codes": [
+            "AGENT_IDENTITY_MISSING"
+          ],
+          "recommended_controls": [
+            "require_agent_identity_record",
+            "route_to_human_review"
+          ],
+          "status": "WATCH",
+          "trust_modifier": 0.75,
+          "version": "smerc.agent-identity.v1"
+        },
+        "ref_gate": {
+          "failures": [],
+          "rule": "typed contract, attestation, least privilege, and object shape must pass before recoverability can support execution",
+          "status": "pass"
+        },
+        "scoring_admission": "admitted_with_agent_identity_watch",
+        "sequence": 1,
+        "sparta_route": {
+          "applied_controls": [
+            "record_execution_report",
+            "preserve_replay"
+          ],
+          "blocked_controls": [
+            "dry_run"
+          ],
+          "decision_digest": "fce5b86675280f3f083286c82f5069fcf9ad1e0983997a66d26832a2c1b37973",
+          "decision_replay_id": "replay_AWS_ADAPTER_001_create_a_billable_agentcore_runtime_1789694536360_15de0e895ec5",
+          "effective_scope_units": 0,
+          "executable": false,
+          "plain_english_summary": "SMERC throttled the action, but the declared tool plan cannot apply the required native constraints.",
+          "plan_id": "plan_aws_adapter_001_create_a_billable_agentcore_runtime",
+          "reason_codes": [
+            "SPARTA_CANNOT_CONSTRAIN_TOOL"
+          ],
+          "recommended_next_action": "Route to a reviewer or replace the tool plan with one that supports scope limits, dry runs, checkpoints, or rollback.",
+          "route_id": "sparta_plan_aws_adapter_001_create_a_billable_agentcore_runtime_4c251d45be73",
+          "route_state": "REVIEW_REQUIRED",
+          "routed_at": "2026-09-18T01:22:16+00:00",
+          "source_posture": "THROTTLE",
+          "tool_plan": {
+            "action": "agentcore_runtime_invocation",
+            "max_scope_units": 10,
+            "metadata": {
+              "adapter_mode": "non_executing",
+              "agentcore_policy_context": {
+                "gateway_target_type": null,
+                "inline_tool_permissions_present": null,
+                "parameter_constraints_present": null,
+                "policy_analysis_result": null,
+                "policy_engine_decision": null,
+                "policy_language": null,
+                "policy_schema_validated": null,
+                "target_registered": null
+              },
+              "agentcore_runtime_security_context": {
+                "audit_correlation_available": null,
+                "command_execution_class": null,
+                "execution_authority_exposure_class": null,
+                "session_user_binding": null
+              },
+              "aws_surface": "bedrock_agentcore_runtime",
+              "cloud_provider": "aws",
+              "cost_velocity_multiplier": 0.55,
+              "derived_output_governance": {
+                "access_control_composition": null,
+                "derived_output_contains_restricted_summary": null,
+                "input_sensitivity_level": null,
+                "output_sensitivity_level": null,
+                "regulatory_tags": []
+              },
+              "environment": "production",
+              "environment_boundary_context": {
+                "execution_environment_boundary": "cloud_function",
+                "host_isolation": "hardened_container",
+                "network_isolation": "scoped_private_network",
+                "sandbox_escape_surface": [
+                  "none_known"
+                ],
+                "tooling_isolation": "restricted_tools"
+              },
+              "gateway_path": null,
+              "label_basis": "SMERC analyst inference from the public tool catalogue; cost and rollback values are hypotheses for testing. Boundary fields are a SMERC test fixture, not an observed AWS deployment.",
+              "label_confidence": "medium",
+              "postcondition_evidence_expected": true,
+              "session_and_delegated_approval_context": {
+                "approval_mode": null,
+                "delegated_on_behalf_of": null,
+                "gateway_bypass_detected": null,
+                "gateway_only_path": null,
+                "message_notification_observed": null,
+                "principal_type": null,
+                "progress_notification_observed": null,
+                "server_initiated_elicitation": null,
+                "server_initiated_sampling": null,
+                "session_mode": null,
+                "temporal_policy_context": null,
+                "tool_discovery_method": null
+              },
+              "source_format": "agentcore_runtime_invocation_summary",
+              "source_observation": "The public AgentCore MCP server exposes runtime-management tools and marks billable operations with cost warnings.",
+              "source_record_id": "aws-open-agentcore-create-runtime-002-bounded",
+              "workflow_family": "agentcore_runtime_lifecycle_boundary_contrast"
+            },
+            "plan_id": "plan_aws_adapter_001_create_a_billable_agentcore_runtime",
+            "requested_capability": "create_runtime",
+            "requested_scope_units": 1,
+            "side_effect_level": "financial",
+            "supports_checkpoint": true,
+            "supports_dry_run": false,
+            "supports_human_approval": true,
+            "supports_rollback": true,
+            "supports_scope_limit": true,
+            "tool": "aws.agentcore.create_runtime",
+            "version": "smerc.sparta-plan.v1"
+          },
+          "version": "smerc.sparta-route.v1"
+        }
+      },
+      {
+        "action_id": "AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+        "decision": {
+          "action_id": "AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+          "controls": [
+            "pause_execution",
+            "collect_more_evidence",
+            "snapshot_current_state",
+            "preserve_replay",
+            "strengthen_execution_boundary"
+          ],
+          "decision_trace": {
+            "profile": {
+              "label": "Cloud administration",
+              "notes": [
+                "Cloud changes can widen blast radius quickly when containment is weak."
+              ],
+              "profile_id": "cloud_admin"
+            },
+            "score_contributions": {
+              "confidence_score": {
+                "anomaly_resistance": 0.122,
+                "authorization_confidence": 0.258,
+                "containment_strength": 0.053,
+                "evidence_validity": 0.28,
+                "profile_multiplier": 1.0,
+                "total": 0.714
+              },
+              "irreversible_exposure_score": {
+                "base_action_risk": 0.118,
+                "containment_gap": 0.044,
+                "external_side_effect": 0.08,
+                "impact_scope": 0.07,
+                "irreversibility": 0.067,
+                "profile_multiplier": 1.08,
+                "rollback_latency": 0.071,
+                "sensitive_data": 0.0,
+                "total": 0.487
+              },
+              "operational_stress_score": {
+                "anomaly_pressure": 0.064,
+                "base_action_risk": 0.131,
+                "cancel_gap": 0.018,
+                "confidence_gap": 0.029,
+                "evidence_gap": 0.042,
+                "impact_scope": 0.104,
+                "profile_multiplier": 1.06,
+                "rollback_latency": 0.042,
+                "total": 0.456
+              },
+              "reversible_capacity_score": {
+                "cancel_reliability": 0.112,
+                "containment_strength": 0.158,
+                "evidence_validity": 0.07,
+                "profile_multiplier": 0.97,
+                "reversibility": 0.223,
+                "rollback_speed": 0.11,
+                "total": 0.654
+              },
+              "risk_adjusted_authorization_score": {
+                "confidence_score": 0.214,
+                "profile_multiplier": 1.0,
+                "recoverability_margin": 0.128,
+                "reversible_capacity": 0.294,
+                "total": 0.637
+              }
+            },
+            "threshold_trace": [
+              {
+                "details": {
+                  "capacity": 0.654,
+                  "capacity_rule": "< 0.42",
+                  "confidence": 0.714,
+                  "confidence_rule": "< 0.48"
+                },
+                "observed": 0.487,
+                "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+                "threshold": ">= 0.78",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "exposure": 0.487,
+                  "exposure_rule": ">= 0.62"
+                },
+                "observed": 0.7,
+                "rule": "deny_by_unreliable_cancel_and_high_exposure",
+                "threshold": "< 0.3",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "external_side_effect": true,
+                  "sensitive_data": false
+                },
+                "observed": 0.456,
+                "rule": "escalate_by_operational_stress",
+                "threshold": ">= 0.7",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "capacity": 0.654,
+                  "confidence": 0.714
+                },
+                "observed": 0.654,
+                "rule": "freeze_by_low_confidence_or_capacity",
+                "threshold": "confidence < 0.45 or capacity < 0.36",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "exposure": 0.487,
+                  "external_side_effect": true,
+                  "profile_allows_external_side_effect_release": false
+                },
+                "observed": 0.637,
+                "rule": "throttle_by_authorization_exposure_or_side_effect",
+                "threshold": "authorization < 0.62 or exposure >= 0.45",
+                "triggered": true
+              }
+            ]
+          },
+          "domain_profile": {
+            "label": "Cloud administration",
+            "notes": [
+              "Cloud changes can widen blast radius quickly when containment is weak."
+            ],
+            "profile_id": "cloud_admin"
+          },
+          "enforcement_state": "pause",
+          "plain_english_summary": "Action 'AWS_ADAPTER_002_create_a_billable_agentcore_runtime' received FREEZE. Irreversible exposure is 0.487, reversible capacity is 0.654, and authorization score is 0.637. Controls: pause_execution, collect_more_evidence, snapshot_current_state, preserve_replay, strengthen_execution_boundary.",
+          "policy": {
+            "evidence_ceiling": "OBSERVE",
+            "mode": "OBSERVE",
+            "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+            "policy_id": "smerc-reference-recoverability",
+            "policy_revision": "1.0.0",
+            "tenant_id": "*"
+          },
+          "posture": "FREEZE",
+          "reason_codes": [
+            "IRREVERSIBLE_EXPOSURE_ELEVATED",
+            "EXTERNAL_SIDE_EFFECT",
+            "HOST_ISOLATION_WEAK",
+            "PRODUCTION_NETWORK_REACHABLE",
+            "TOOLING_AUTHORITY_BROAD",
+            "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+          ],
+          "replay": {
+            "action_type": "agentcore_runtime_invocation",
+            "actor": "agent_platform_automation",
+            "context": {
+              "current_control": "ALLOW",
+              "domain_profile": "cloud_admin",
+              "environment_boundary_context": {
+                "execution_environment_boundary": "production_host",
+                "host_isolation": "process",
+                "network_isolation": "production_network",
+                "sandbox_escape_surface": [
+                  "cloud_metadata_access",
+                  "production_credentials"
+                ],
+                "tooling_isolation": "privileged_automation"
+              },
+              "source_format": "agentcore_runtime_invocation_summary",
+              "source_url": "https://github.com/awslabs/mcp/blob/main/src/amazon-bedrock-agentcore-mcp-server/README.md",
+              "workflow": "agentcore_runtime_lifecycle_boundary_contrast"
+            },
+            "controls": [
+              "pause_execution",
+              "collect_more_evidence",
+              "snapshot_current_state",
+              "preserve_replay",
+              "strengthen_execution_boundary"
+            ],
+            "decision_trace": {
+              "profile": {
+                "label": "Cloud administration",
+                "notes": [
+                  "Cloud changes can widen blast radius quickly when containment is weak."
+                ],
+                "profile_id": "cloud_admin"
+              },
+              "score_contributions": {
+                "confidence_score": {
+                  "anomaly_resistance": 0.122,
+                  "authorization_confidence": 0.258,
+                  "containment_strength": 0.053,
+                  "evidence_validity": 0.28,
+                  "profile_multiplier": 1.0,
+                  "total": 0.714
+                },
+                "irreversible_exposure_score": {
+                  "base_action_risk": 0.118,
+                  "containment_gap": 0.044,
+                  "external_side_effect": 0.08,
+                  "impact_scope": 0.07,
+                  "irreversibility": 0.067,
+                  "profile_multiplier": 1.08,
+                  "rollback_latency": 0.071,
+                  "sensitive_data": 0.0,
+                  "total": 0.487
+                },
+                "operational_stress_score": {
+                  "anomaly_pressure": 0.064,
+                  "base_action_risk": 0.131,
+                  "cancel_gap": 0.018,
+                  "confidence_gap": 0.029,
+                  "evidence_gap": 0.042,
+                  "impact_scope": 0.104,
+                  "profile_multiplier": 1.06,
+                  "rollback_latency": 0.042,
+                  "total": 0.456
+                },
+                "reversible_capacity_score": {
+                  "cancel_reliability": 0.112,
+                  "containment_strength": 0.158,
+                  "evidence_validity": 0.07,
+                  "profile_multiplier": 0.97,
+                  "reversibility": 0.223,
+                  "rollback_speed": 0.11,
+                  "total": 0.654
+                },
+                "risk_adjusted_authorization_score": {
+                  "confidence_score": 0.214,
+                  "profile_multiplier": 1.0,
+                  "recoverability_margin": 0.128,
+                  "reversible_capacity": 0.294,
+                  "total": 0.637
+                }
+              },
+              "threshold_trace": [
+                {
+                  "details": {
+                    "capacity": 0.654,
+                    "capacity_rule": "< 0.42",
+                    "confidence": 0.714,
+                    "confidence_rule": "< 0.48"
+                  },
+                  "observed": 0.487,
+                  "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+                  "threshold": ">= 0.78",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "exposure": 0.487,
+                    "exposure_rule": ">= 0.62"
+                  },
+                  "observed": 0.7,
+                  "rule": "deny_by_unreliable_cancel_and_high_exposure",
+                  "threshold": "< 0.3",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "external_side_effect": true,
+                    "sensitive_data": false
+                  },
+                  "observed": 0.456,
+                  "rule": "escalate_by_operational_stress",
+                  "threshold": ">= 0.7",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "capacity": 0.654,
+                    "confidence": 0.714
+                  },
+                  "observed": 0.654,
+                  "rule": "freeze_by_low_confidence_or_capacity",
+                  "threshold": "confidence < 0.45 or capacity < 0.36",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "exposure": 0.487,
+                    "external_side_effect": true,
+                    "profile_allows_external_side_effect_release": false
+                  },
+                  "observed": 0.637,
+                  "rule": "throttle_by_authorization_exposure_or_side_effect",
+                  "threshold": "authorization < 0.62 or exposure >= 0.45",
+                  "triggered": true
+                }
+              ]
+            },
+            "domain_profile": {
+              "label": "Cloud administration",
+              "notes": [
+                "Cloud changes can widen blast radius quickly when containment is weak."
+              ],
+              "profile_id": "cloud_admin"
+            },
+            "enforcement_state": "pause",
+            "evaluated_at": "2026-09-18T01:22:16.360997+00:00",
+            "policy": {
+              "evidence_ceiling": "OBSERVE",
+              "mode": "OBSERVE",
+              "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+              "policy_id": "smerc-reference-recoverability",
+              "policy_revision": "1.0.0",
+              "tenant_id": "*"
+            },
+            "posture": "FREEZE",
+            "reason_codes": [
+              "IRREVERSIBLE_EXPOSURE_ELEVATED",
+              "EXTERNAL_SIDE_EFFECT",
+              "HOST_ISOLATION_WEAK",
+              "PRODUCTION_NETWORK_REACHABLE",
+              "TOOLING_AUTHORITY_BROAD",
+              "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+            ],
+            "replay_id": "replay_AWS_ADAPTER_002_create_a_billable_agentcore_runtime_1789694536360_76261e6b2c8f",
+            "scores": {
+              "cancel_reliability_score": 0.7,
+              "confidence_score": 0.714,
+              "irreversible_exposure_score": 0.487,
+              "operational_stress_score": 0.456,
+              "reversible_capacity_score": 0.654,
+              "risk_adjusted_authorization_score": 0.637
+            },
+            "tool": "aws.agentcore.create_runtime",
+            "transition_guidance": {
+              "blocking_factors": [
+                "irreversible_exposure_above_release_threshold"
+              ],
+              "control_improvements": [
+                "collect_more_evidence",
+                "increase_containment",
+                "narrow_impact_scope",
+                "pause_execution",
+                "preserve_replay",
+                "prove_rollback_path",
+                "rate limit or stage external side effect",
+                "snapshot_current_state",
+                "strengthen_execution_boundary",
+                "stronger tooling, host, network, or sandbox containment"
+              ],
+              "current_posture": "FREEZE",
+              "evidence_needed": [],
+              "release_conditions": {
+                "authorization_score_at_or_above": 0.62,
+                "confidence_score_target": 0.7,
+                "irreversible_exposure_below": 0.45,
+                "reversible_capacity_target": 0.6
+              },
+              "target_posture": "THROTTLE"
+            }
+          },
+          "replay_id": "replay_AWS_ADAPTER_002_create_a_billable_agentcore_runtime_1789694536360_76261e6b2c8f",
+          "scores": {
+            "cancel_reliability_score": 0.7,
+            "confidence_score": 0.714,
+            "irreversible_exposure_score": 0.487,
+            "operational_stress_score": 0.456,
+            "reversible_capacity_score": 0.654,
+            "risk_adjusted_authorization_score": 0.637
+          },
+          "transition_guidance": {
+            "blocking_factors": [
+              "irreversible_exposure_above_release_threshold"
+            ],
+            "control_improvements": [
+              "collect_more_evidence",
+              "increase_containment",
+              "narrow_impact_scope",
+              "pause_execution",
+              "preserve_replay",
+              "prove_rollback_path",
+              "rate limit or stage external side effect",
+              "snapshot_current_state",
+              "strengthen_execution_boundary",
+              "stronger tooling, host, network, or sandbox containment"
+            ],
+            "current_posture": "FREEZE",
+            "evidence_needed": [],
+            "release_conditions": {
+              "authorization_score_at_or_above": 0.62,
+              "confidence_score_target": 0.7,
+              "irreversible_exposure_below": 0.45,
+              "reversible_capacity_target": 0.6
+            },
+            "target_posture": "THROTTLE"
+          }
+        },
+        "decision_lifecycle_ledger": {
+          "decision_id": "customer_eval_AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+          "head_record_hash": "7db4f430da41f18807d3677df4bf487b5ffc5a154eb428de066c485612dfa043",
+          "record_count": 5,
+          "records": [
+            {
+              "actor": "agent_platform_automation",
+              "decision_id": "customer_eval_AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+              "event_type": "REQUEST",
+              "payload": {
+                "environment": "production",
+                "initiated_by": "agent_platform_automation",
+                "requested_operation": "Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: create a billable AgentCore runtime in production.",
+                "risk_profile": "cloud_admin"
+              },
+              "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+              "record_hash": "b976ce776a0aba0303a2a88bced2a3a8b6ef957d6c88b4bba9fa00a5aed6ebc0",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 1,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-customer-evaluation",
+              "decision_id": "customer_eval_AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+              "event_type": "EVIDENCE",
+              "payload": {
+                "available_evidence": [
+                  "metadata_only_action",
+                  "ref_gate_declaration",
+                  "agent_identity_gate",
+                  "tool_plan_declaration"
+                ],
+                "confidence_score": 0.714,
+                "external_dependencies": [
+                  "aws.agentcore.create_runtime"
+                ],
+                "missing_evidence": [],
+                "model_version": "customer-supplied-agent-metadata",
+                "policy_version": "smerc-reference-recoverability"
+              },
+              "previous_record_hash": "b976ce776a0aba0303a2a88bced2a3a8b6ef957d6c88b4bba9fa00a5aed6ebc0",
+              "record_hash": "49dc007961fbe93acdc5ba8c916e03ff7652053529ac0f2e2940e80f34c61e36",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 2,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-engine",
+              "decision_id": "customer_eval_AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+              "event_type": "EVALUATION",
+              "payload": {
+                "authorization_recommendation": "FREEZE",
+                "entropy_indicators": [
+                  "IRREVERSIBLE_EXPOSURE_ELEVATED",
+                  "EXTERNAL_SIDE_EFFECT",
+                  "HOST_ISOLATION_WEAK",
+                  "PRODUCTION_NETWORK_REACHABLE",
+                  "TOOLING_AUTHORITY_BROAD",
+                  "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+                ],
+                "reason_codes": [
+                  "IRREVERSIBLE_EXPOSURE_ELEVATED",
+                  "EXTERNAL_SIDE_EFFECT",
+                  "HOST_ISOLATION_WEAK",
+                  "PRODUCTION_NETWORK_REACHABLE",
+                  "TOOLING_AUTHORITY_BROAD",
+                  "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+                ],
+                "recommended_safeguards": [
+                  "pause_execution",
+                  "collect_more_evidence",
+                  "snapshot_current_state",
+                  "preserve_replay",
+                  "strengthen_execution_boundary",
+                  "require_agent_identity_record",
+                  "route_to_human_review"
+                ],
+                "recoverability_score": 0.654,
+                "structural_state": "ref_gate=pass; scoring=admitted_with_agent_identity_watch; route=PAUSE"
+              },
+              "previous_record_hash": "49dc007961fbe93acdc5ba8c916e03ff7652053529ac0f2e2940e80f34c61e36",
+              "record_hash": "e54cdee6e4f150ffba1aa080ec0ffa204eb1370d49a2c400d58910f79868bd37",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 3,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "sparta-router",
+              "decision_id": "customer_eval_AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+              "event_type": "EXECUTION",
+              "payload": {
+                "duration_ms": 0,
+                "executed_operation": "PAUSE",
+                "execution_status": "not_executed",
+                "rollback_performed": false,
+                "rollback_success": null,
+                "started_at": "2026-09-18T01:22:16+00:00"
+              },
+              "previous_record_hash": "e54cdee6e4f150ffba1aa080ec0ffa204eb1370d49a2c400d58910f79868bd37",
+              "record_hash": "ecf392bb80e4418f45be9bb2bd9135ed43d78dd1eeff4e26be071434e432c619",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 4,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-customer-evaluation",
+              "decision_id": "customer_eval_AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+              "event_type": "OUTCOME",
+              "payload": {
+                "controls_sufficient": true,
+                "cost_incurred": 0.0,
+                "customer_impact": "not measured in metadata-only evaluation",
+                "financial_impact": "not measured in metadata-only evaluation",
+                "judged_correct": true,
+                "security_impact": "not measured in metadata-only evaluation",
+                "time_to_recover_minutes": 0.0,
+                "unexpected_consequences": false
+              },
+              "previous_record_hash": "ecf392bb80e4418f45be9bb2bd9135ed43d78dd1eeff4e26be071434e432c619",
+              "record_hash": "7db4f430da41f18807d3677df4bf487b5ffc5a154eb428de066c485612dfa043",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 5,
+              "tenant_id": "aws-metadata-adapter-review"
+            }
+          ],
+          "summary": {
+            "decision_id": "customer_eval_AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+            "event_counts": {
+              "EVALUATION": 1,
+              "EVIDENCE": 1,
+              "EXECUTION": 1,
+              "HUMAN_INTERACTION": 0,
+              "LEARNING_RECOMMENDATION": 0,
+              "OUTCOME": 1,
+              "REQUEST": 1
+            },
+            "final_event_type": "OUTCOME",
+            "judged_correct": true,
+            "override_count": 0,
+            "pending_learning_recommendations": 0,
+            "record_count": 5,
+            "rollback_performed": false,
+            "rollback_success": null,
+            "tenant_id": "aws-metadata-adapter-review"
+          },
+          "tenant_id": "aws-metadata-adapter-review",
+          "verification": {
+            "errors": [],
+            "head_record_hash": "7db4f430da41f18807d3677df4bf487b5ffc5a154eb428de066c485612dfa043",
+            "record_count": 5,
+            "valid": true
+          },
+          "version": "smerc.decision-lifecycle-ledger.v1"
+        },
+        "description": "Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: create a billable AgentCore runtime in production.",
+        "identity_gate": {
+          "agent_id": "agent_platform_automation",
+          "identity_score": 0.48,
+          "plain_english_summary": "Agent 'agent_platform_automation' has no identity record for this request.",
+          "reason_codes": [
+            "AGENT_IDENTITY_MISSING"
+          ],
+          "recommended_controls": [
+            "require_agent_identity_record",
+            "route_to_human_review"
+          ],
+          "status": "WATCH",
+          "trust_modifier": 0.75,
+          "version": "smerc.agent-identity.v1"
+        },
+        "ref_gate": {
+          "failures": [],
+          "rule": "typed contract, attestation, least privilege, and object shape must pass before recoverability can support execution",
+          "status": "pass"
+        },
+        "scoring_admission": "admitted_with_agent_identity_watch",
+        "sequence": 2,
+        "sparta_route": {
+          "applied_controls": [
+            "pause_execution",
+            "preserve_replay",
+            "snapshot_current_state",
+            "checkpoint_before_execution"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "decision_digest": "a9bd9831a3e5ed1b1b512bf3655c3160df7e58cb8e75813f53f51d2af36c8f1b",
+          "decision_replay_id": "replay_AWS_ADAPTER_002_create_a_billable_agentcore_runtime_1789694536360_76261e6b2c8f",
+          "effective_scope_units": 0,
+          "executable": false,
+          "plain_english_summary": "SPARTa paused execution because SMERC returned FREEZE, indicating instability or unacceptable deployment risk.",
+          "plan_id": "plan_aws_adapter_002_create_a_billable_agentcore_runtime",
+          "reason_codes": [
+            "SPARTA_FREEZE_PAUSES_AUTOMATION"
+          ],
+          "recommended_next_action": "Preserve the replay, snapshot current state, and require accountable review before a new request.",
+          "route_id": "sparta_plan_aws_adapter_002_create_a_billable_agentcore_runtime_14ac6e583f25",
+          "route_state": "PAUSE",
+          "routed_at": "2026-09-18T01:22:16+00:00",
+          "source_posture": "FREEZE",
+          "tool_plan": {
+            "action": "agentcore_runtime_invocation",
+            "max_scope_units": 10,
+            "metadata": {
+              "adapter_mode": "non_executing",
+              "agentcore_policy_context": {
+                "gateway_target_type": null,
+                "inline_tool_permissions_present": null,
+                "parameter_constraints_present": null,
+                "policy_analysis_result": null,
+                "policy_engine_decision": null,
+                "policy_language": null,
+                "policy_schema_validated": null,
+                "target_registered": null
+              },
+              "agentcore_runtime_security_context": {
+                "audit_correlation_available": null,
+                "command_execution_class": null,
+                "execution_authority_exposure_class": null,
+                "session_user_binding": null
+              },
+              "aws_surface": "bedrock_agentcore_runtime",
+              "cloud_provider": "aws",
+              "cost_velocity_multiplier": 0.55,
+              "derived_output_governance": {
+                "access_control_composition": null,
+                "derived_output_contains_restricted_summary": null,
+                "input_sensitivity_level": null,
+                "output_sensitivity_level": null,
+                "regulatory_tags": []
+              },
+              "environment": "production",
+              "environment_boundary_context": {
+                "execution_environment_boundary": "production_host",
+                "host_isolation": "process",
+                "network_isolation": "production_network",
+                "sandbox_escape_surface": [
+                  "cloud_metadata_access",
+                  "production_credentials"
+                ],
+                "tooling_isolation": "privileged_automation"
+              },
+              "gateway_path": null,
+              "label_basis": "SMERC analyst inference from the public tool catalogue; cost and rollback values are hypotheses for testing. Boundary fields are a SMERC test fixture, not an observed AWS deployment.",
+              "label_confidence": "medium",
+              "postcondition_evidence_expected": true,
+              "session_and_delegated_approval_context": {
+                "approval_mode": null,
+                "delegated_on_behalf_of": null,
+                "gateway_bypass_detected": null,
+                "gateway_only_path": null,
+                "message_notification_observed": null,
+                "principal_type": null,
+                "progress_notification_observed": null,
+                "server_initiated_elicitation": null,
+                "server_initiated_sampling": null,
+                "session_mode": null,
+                "temporal_policy_context": null,
+                "tool_discovery_method": null
+              },
+              "source_format": "agentcore_runtime_invocation_summary",
+              "source_observation": "The public AgentCore MCP server exposes runtime-management tools and marks billable operations with cost warnings.",
+              "source_record_id": "aws-open-agentcore-create-runtime-002-broad",
+              "workflow_family": "agentcore_runtime_lifecycle_boundary_contrast"
+            },
+            "plan_id": "plan_aws_adapter_002_create_a_billable_agentcore_runtime",
+            "requested_capability": "create_runtime",
+            "requested_scope_units": 1,
+            "side_effect_level": "financial",
+            "supports_checkpoint": true,
+            "supports_dry_run": false,
+            "supports_human_approval": true,
+            "supports_rollback": true,
+            "supports_scope_limit": true,
+            "tool": "aws.agentcore.create_runtime",
+            "version": "smerc.sparta-plan.v1"
+          },
+          "version": "smerc.sparta-route.v1"
+        }
+      },
+      {
+        "action_id": "AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+        "decision": {
+          "action_id": "AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+          "controls": [
+            "limit_scope",
+            "preview_before_execution",
+            "record_replay",
+            "rate_limit_external_side_effect"
+          ],
+          "decision_trace": {
+            "profile": {
+              "label": "Cloud administration",
+              "notes": [
+                "Cloud changes can widen blast radius quickly when containment is weak."
+              ],
+              "profile_id": "cloud_admin"
+            },
+            "score_contributions": {
+              "confidence_score": {
+                "anomaly_resistance": 0.148,
+                "authorization_confidence": 0.289,
+                "containment_strength": 0.062,
+                "evidence_validity": 0.32,
+                "profile_multiplier": 1.0,
+                "total": 0.819
+              },
+              "irreversible_exposure_score": {
+                "base_action_risk": 0.076,
+                "containment_gap": 0.029,
+                "external_side_effect": 0.08,
+                "impact_scope": 0.036,
+                "irreversibility": 0.108,
+                "profile_multiplier": 1.08,
+                "rollback_latency": 0.043,
+                "sensitive_data": 0.0,
+                "total": 0.401
+              },
+              "operational_stress_score": {
+                "anomaly_pressure": 0.036,
+                "base_action_risk": 0.084,
+                "cancel_gap": 0.013,
+                "confidence_gap": 0.018,
+                "evidence_gap": 0.028,
+                "impact_scope": 0.054,
+                "profile_multiplier": 1.06,
+                "rollback_latency": 0.025,
+                "total": 0.274
+              },
+              "reversible_capacity_score": {
+                "cancel_reliability": 0.125,
+                "containment_strength": 0.187,
+                "evidence_validity": 0.08,
+                "profile_multiplier": 0.97,
+                "reversibility": 0.171,
+                "rollback_speed": 0.143,
+                "total": 0.684
+              },
+              "risk_adjusted_authorization_score": {
+                "confidence_score": 0.246,
+                "profile_multiplier": 1.0,
+                "recoverability_margin": 0.15,
+                "reversible_capacity": 0.308,
+                "total": 0.703
+              }
+            },
+            "threshold_trace": [
+              {
+                "details": {
+                  "capacity": 0.684,
+                  "capacity_rule": "< 0.42",
+                  "confidence": 0.819,
+                  "confidence_rule": "< 0.48"
+                },
+                "observed": 0.401,
+                "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+                "threshold": ">= 0.78",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "exposure": 0.401,
+                  "exposure_rule": ">= 0.62"
+                },
+                "observed": 0.78,
+                "rule": "deny_by_unreliable_cancel_and_high_exposure",
+                "threshold": "< 0.3",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "external_side_effect": true,
+                  "sensitive_data": false
+                },
+                "observed": 0.274,
+                "rule": "escalate_by_operational_stress",
+                "threshold": ">= 0.7",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "capacity": 0.684,
+                  "confidence": 0.819
+                },
+                "observed": 0.684,
+                "rule": "freeze_by_low_confidence_or_capacity",
+                "threshold": "confidence < 0.45 or capacity < 0.36",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "exposure": 0.401,
+                  "external_side_effect": true,
+                  "profile_allows_external_side_effect_release": false
+                },
+                "observed": 0.703,
+                "rule": "throttle_by_authorization_exposure_or_side_effect",
+                "threshold": "authorization < 0.62 or exposure >= 0.45",
+                "triggered": true
+              }
+            ]
+          },
+          "domain_profile": {
+            "label": "Cloud administration",
+            "notes": [
+              "Cloud changes can widen blast radius quickly when containment is weak."
+            ],
+            "profile_id": "cloud_admin"
+          },
+          "enforcement_state": "constrain",
+          "plain_english_summary": "Action 'AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input' received THROTTLE. Irreversible exposure is 0.401, reversible capacity is 0.684, and authorization score is 0.703. Controls: limit_scope, preview_before_execution, record_replay, rate_limit_external_side_effect.",
+          "policy": {
+            "evidence_ceiling": "OBSERVE",
+            "mode": "OBSERVE",
+            "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+            "policy_id": "smerc-reference-recoverability",
+            "policy_revision": "1.0.0",
+            "tenant_id": "*"
+          },
+          "posture": "THROTTLE",
+          "reason_codes": [
+            "EXTERNAL_SIDE_EFFECT"
+          ],
+          "replay": {
+            "action_type": "agentcore_gateway_tool_call",
+            "actor": "application_agent",
+            "context": {
+              "current_control": "ALLOW",
+              "domain_profile": "cloud_admin",
+              "environment_boundary_context": {
+                "execution_environment_boundary": "cloud_function",
+                "host_isolation": "hardened_container",
+                "network_isolation": "scoped_private_network",
+                "sandbox_escape_surface": [
+                  "none_known"
+                ],
+                "tooling_isolation": "restricted_tools"
+              },
+              "source_format": "agentcore_gateway_tool_call_summary",
+              "source_url": "https://github.com/aws-samples/cloud-trail-lake-query-samples",
+              "workflow": "bedrock_model_invocation_boundary_contrast"
+            },
+            "controls": [
+              "limit_scope",
+              "preview_before_execution",
+              "record_replay",
+              "rate_limit_external_side_effect"
+            ],
+            "decision_trace": {
+              "profile": {
+                "label": "Cloud administration",
+                "notes": [
+                  "Cloud changes can widen blast radius quickly when containment is weak."
+                ],
+                "profile_id": "cloud_admin"
+              },
+              "score_contributions": {
+                "confidence_score": {
+                  "anomaly_resistance": 0.148,
+                  "authorization_confidence": 0.289,
+                  "containment_strength": 0.062,
+                  "evidence_validity": 0.32,
+                  "profile_multiplier": 1.0,
+                  "total": 0.819
+                },
+                "irreversible_exposure_score": {
+                  "base_action_risk": 0.076,
+                  "containment_gap": 0.029,
+                  "external_side_effect": 0.08,
+                  "impact_scope": 0.036,
+                  "irreversibility": 0.108,
+                  "profile_multiplier": 1.08,
+                  "rollback_latency": 0.043,
+                  "sensitive_data": 0.0,
+                  "total": 0.401
+                },
+                "operational_stress_score": {
+                  "anomaly_pressure": 0.036,
+                  "base_action_risk": 0.084,
+                  "cancel_gap": 0.013,
+                  "confidence_gap": 0.018,
+                  "evidence_gap": 0.028,
+                  "impact_scope": 0.054,
+                  "profile_multiplier": 1.06,
+                  "rollback_latency": 0.025,
+                  "total": 0.274
+                },
+                "reversible_capacity_score": {
+                  "cancel_reliability": 0.125,
+                  "containment_strength": 0.187,
+                  "evidence_validity": 0.08,
+                  "profile_multiplier": 0.97,
+                  "reversibility": 0.171,
+                  "rollback_speed": 0.143,
+                  "total": 0.684
+                },
+                "risk_adjusted_authorization_score": {
+                  "confidence_score": 0.246,
+                  "profile_multiplier": 1.0,
+                  "recoverability_margin": 0.15,
+                  "reversible_capacity": 0.308,
+                  "total": 0.703
+                }
+              },
+              "threshold_trace": [
+                {
+                  "details": {
+                    "capacity": 0.684,
+                    "capacity_rule": "< 0.42",
+                    "confidence": 0.819,
+                    "confidence_rule": "< 0.48"
+                  },
+                  "observed": 0.401,
+                  "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+                  "threshold": ">= 0.78",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "exposure": 0.401,
+                    "exposure_rule": ">= 0.62"
+                  },
+                  "observed": 0.78,
+                  "rule": "deny_by_unreliable_cancel_and_high_exposure",
+                  "threshold": "< 0.3",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "external_side_effect": true,
+                    "sensitive_data": false
+                  },
+                  "observed": 0.274,
+                  "rule": "escalate_by_operational_stress",
+                  "threshold": ">= 0.7",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "capacity": 0.684,
+                    "confidence": 0.819
+                  },
+                  "observed": 0.684,
+                  "rule": "freeze_by_low_confidence_or_capacity",
+                  "threshold": "confidence < 0.45 or capacity < 0.36",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "exposure": 0.401,
+                    "external_side_effect": true,
+                    "profile_allows_external_side_effect_release": false
+                  },
+                  "observed": 0.703,
+                  "rule": "throttle_by_authorization_exposure_or_side_effect",
+                  "threshold": "authorization < 0.62 or exposure >= 0.45",
+                  "triggered": true
+                }
+              ]
+            },
+            "domain_profile": {
+              "label": "Cloud administration",
+              "notes": [
+                "Cloud changes can widen blast radius quickly when containment is weak."
+              ],
+              "profile_id": "cloud_admin"
+            },
+            "enforcement_state": "constrain",
+            "evaluated_at": "2026-09-18T01:22:16.371290+00:00",
+            "policy": {
+              "evidence_ceiling": "OBSERVE",
+              "mode": "OBSERVE",
+              "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+              "policy_id": "smerc-reference-recoverability",
+              "policy_revision": "1.0.0",
+              "tenant_id": "*"
+            },
+            "posture": "THROTTLE",
+            "reason_codes": [
+              "EXTERNAL_SIDE_EFFECT"
+            ],
+            "replay_id": "replay_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input_1789694536371_b6682b5a7e39",
+            "scores": {
+              "cancel_reliability_score": 0.78,
+              "confidence_score": 0.819,
+              "irreversible_exposure_score": 0.401,
+              "operational_stress_score": 0.274,
+              "reversible_capacity_score": 0.684,
+              "risk_adjusted_authorization_score": 0.703
+            },
+            "tool": "aws.bedrock.invoke_model",
+            "transition_guidance": {
+              "blocking_factors": [],
+              "control_improvements": [
+                "limit_scope",
+                "preview_before_execution",
+                "rate limit or stage external side effect",
+                "rate_limit_external_side_effect",
+                "record_replay"
+              ],
+              "current_posture": "THROTTLE",
+              "evidence_needed": [],
+              "release_conditions": {
+                "authorization_score_at_or_above": 0.62,
+                "confidence_score_target": 0.7,
+                "irreversible_exposure_below": 0.45,
+                "reversible_capacity_target": 0.6
+              },
+              "target_posture": "THROTTLE"
+            }
+          },
+          "replay_id": "replay_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input_1789694536371_b6682b5a7e39",
+          "scores": {
+            "cancel_reliability_score": 0.78,
+            "confidence_score": 0.819,
+            "irreversible_exposure_score": 0.401,
+            "operational_stress_score": 0.274,
+            "reversible_capacity_score": 0.684,
+            "risk_adjusted_authorization_score": 0.703
+          },
+          "transition_guidance": {
+            "blocking_factors": [],
+            "control_improvements": [
+              "limit_scope",
+              "preview_before_execution",
+              "rate limit or stage external side effect",
+              "rate_limit_external_side_effect",
+              "record_replay"
+            ],
+            "current_posture": "THROTTLE",
+            "evidence_needed": [],
+            "release_conditions": {
+              "authorization_score_at_or_above": 0.62,
+              "confidence_score_target": 0.7,
+              "irreversible_exposure_below": 0.45,
+              "reversible_capacity_target": 0.6
+            },
+            "target_posture": "THROTTLE"
+          }
+        },
+        "decision_lifecycle_ledger": {
+          "decision_id": "customer_eval_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+          "head_record_hash": "12d828aa612c0607273db0e439c6437fae280d5eaf5974e60f79774bbfdb6fff",
+          "record_count": 5,
+          "records": [
+            {
+              "actor": "application_agent",
+              "decision_id": "customer_eval_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "REQUEST",
+              "payload": {
+                "environment": "production",
+                "initiated_by": "application_agent",
+                "requested_operation": "Non-executing AWS metadata adapter summary for agentcore_gateway_tool_call_summary: invoke a Bedrock model with bounded input in production.",
+                "risk_profile": "cloud_admin"
+              },
+              "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+              "record_hash": "bccebe5a94cd94a23529e81c42d716cb3c8d64abae90a41a005f1ad8272147bd",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 1,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-customer-evaluation",
+              "decision_id": "customer_eval_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "EVIDENCE",
+              "payload": {
+                "available_evidence": [
+                  "metadata_only_action",
+                  "ref_gate_declaration",
+                  "agent_identity_gate",
+                  "tool_plan_declaration"
+                ],
+                "confidence_score": 0.819,
+                "external_dependencies": [
+                  "aws.bedrock.invoke_model"
+                ],
+                "missing_evidence": [],
+                "model_version": "customer-supplied-agent-metadata",
+                "policy_version": "smerc-reference-recoverability"
+              },
+              "previous_record_hash": "bccebe5a94cd94a23529e81c42d716cb3c8d64abae90a41a005f1ad8272147bd",
+              "record_hash": "8a1dc1021d9f9751a679cfbb202c161f06d00409623935e65dc1233f5e1cee2c",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 2,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-engine",
+              "decision_id": "customer_eval_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "EVALUATION",
+              "payload": {
+                "authorization_recommendation": "THROTTLE",
+                "entropy_indicators": [
+                  "EXTERNAL_SIDE_EFFECT"
+                ],
+                "reason_codes": [
+                  "EXTERNAL_SIDE_EFFECT"
+                ],
+                "recommended_safeguards": [
+                  "limit_scope",
+                  "preview_before_execution",
+                  "record_replay",
+                  "rate_limit_external_side_effect",
+                  "require_agent_identity_record",
+                  "route_to_human_review"
+                ],
+                "recoverability_score": 0.684,
+                "structural_state": "ref_gate=pass; scoring=admitted_with_agent_identity_watch; route=REVIEW_REQUIRED"
+              },
+              "previous_record_hash": "8a1dc1021d9f9751a679cfbb202c161f06d00409623935e65dc1233f5e1cee2c",
+              "record_hash": "c590cb6d8dd84cce1d1ace672988978601ce735452069e258cec1d6eacac977e",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 3,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "sparta-router",
+              "decision_id": "customer_eval_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "EXECUTION",
+              "payload": {
+                "duration_ms": 0,
+                "executed_operation": "REVIEW_REQUIRED",
+                "execution_status": "not_executed",
+                "rollback_performed": false,
+                "rollback_success": null,
+                "started_at": "2026-09-18T01:22:16+00:00"
+              },
+              "previous_record_hash": "c590cb6d8dd84cce1d1ace672988978601ce735452069e258cec1d6eacac977e",
+              "record_hash": "64d349aee9d25ebdf67269bfdb876ba1317b46d35b9593fd1cf7c0fa65004c5b",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 4,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-customer-evaluation",
+              "decision_id": "customer_eval_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "OUTCOME",
+              "payload": {
+                "controls_sufficient": true,
+                "cost_incurred": 0.0,
+                "customer_impact": "not measured in metadata-only evaluation",
+                "financial_impact": "not measured in metadata-only evaluation",
+                "judged_correct": true,
+                "security_impact": "not measured in metadata-only evaluation",
+                "time_to_recover_minutes": 0.0,
+                "unexpected_consequences": false
+              },
+              "previous_record_hash": "64d349aee9d25ebdf67269bfdb876ba1317b46d35b9593fd1cf7c0fa65004c5b",
+              "record_hash": "12d828aa612c0607273db0e439c6437fae280d5eaf5974e60f79774bbfdb6fff",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 5,
+              "tenant_id": "aws-metadata-adapter-review"
+            }
+          ],
+          "summary": {
+            "decision_id": "customer_eval_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+            "event_counts": {
+              "EVALUATION": 1,
+              "EVIDENCE": 1,
+              "EXECUTION": 1,
+              "HUMAN_INTERACTION": 0,
+              "LEARNING_RECOMMENDATION": 0,
+              "OUTCOME": 1,
+              "REQUEST": 1
+            },
+            "final_event_type": "OUTCOME",
+            "judged_correct": true,
+            "override_count": 0,
+            "pending_learning_recommendations": 0,
+            "record_count": 5,
+            "rollback_performed": false,
+            "rollback_success": null,
+            "tenant_id": "aws-metadata-adapter-review"
+          },
+          "tenant_id": "aws-metadata-adapter-review",
+          "verification": {
+            "errors": [],
+            "head_record_hash": "12d828aa612c0607273db0e439c6437fae280d5eaf5974e60f79774bbfdb6fff",
+            "record_count": 5,
+            "valid": true
+          },
+          "version": "smerc.decision-lifecycle-ledger.v1"
+        },
+        "description": "Non-executing AWS metadata adapter summary for agentcore_gateway_tool_call_summary: invoke a Bedrock model with bounded input in production.",
+        "identity_gate": {
+          "agent_id": "application_agent",
+          "identity_score": 0.48,
+          "plain_english_summary": "Agent 'application_agent' has no identity record for this request.",
+          "reason_codes": [
+            "AGENT_IDENTITY_MISSING"
+          ],
+          "recommended_controls": [
+            "require_agent_identity_record",
+            "route_to_human_review"
+          ],
+          "status": "WATCH",
+          "trust_modifier": 0.75,
+          "version": "smerc.agent-identity.v1"
+        },
+        "ref_gate": {
+          "failures": [],
+          "rule": "typed contract, attestation, least privilege, and object shape must pass before recoverability can support execution",
+          "status": "pass"
+        },
+        "scoring_admission": "admitted_with_agent_identity_watch",
+        "sequence": 3,
+        "sparta_route": {
+          "applied_controls": [
+            "record_execution_report",
+            "preserve_replay"
+          ],
+          "blocked_controls": [
+            "dry_run"
+          ],
+          "decision_digest": "d918b58d2c1a19522d50ccf61d4da4cb7b067ed5fc5f77b50471886876ad5648",
+          "decision_replay_id": "replay_AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input_1789694536371_b6682b5a7e39",
+          "effective_scope_units": 0,
+          "executable": false,
+          "plain_english_summary": "SMERC throttled the action, but the declared tool plan cannot apply the required native constraints.",
+          "plan_id": "plan_aws_adapter_003_invoke_a_bedrock_model_with_bounded_input",
+          "reason_codes": [
+            "SPARTA_CANNOT_CONSTRAIN_TOOL"
+          ],
+          "recommended_next_action": "Route to a reviewer or replace the tool plan with one that supports scope limits, dry runs, checkpoints, or rollback.",
+          "route_id": "sparta_plan_aws_adapter_003_invoke_a_bedrock_model_with_bounded_input_d6c898a66129",
+          "route_state": "REVIEW_REQUIRED",
+          "routed_at": "2026-09-18T01:22:16+00:00",
+          "source_posture": "THROTTLE",
+          "tool_plan": {
+            "action": "agentcore_gateway_tool_call",
+            "max_scope_units": 100,
+            "metadata": {
+              "adapter_mode": "non_executing",
+              "agentcore_policy_context": {
+                "gateway_target_type": null,
+                "inline_tool_permissions_present": null,
+                "parameter_constraints_present": null,
+                "policy_analysis_result": null,
+                "policy_engine_decision": null,
+                "policy_language": null,
+                "policy_schema_validated": null,
+                "target_registered": null
+              },
+              "agentcore_runtime_security_context": {
+                "audit_correlation_available": null,
+                "command_execution_class": null,
+                "execution_authority_exposure_class": null,
+                "session_user_binding": null
+              },
+              "aws_surface": "bedrock",
+              "cloud_provider": "aws",
+              "cost_velocity_multiplier": 0.22,
+              "derived_output_governance": {
+                "access_control_composition": null,
+                "derived_output_contains_restricted_summary": null,
+                "input_sensitivity_level": null,
+                "output_sensitivity_level": null,
+                "regulatory_tags": []
+              },
+              "environment": "production",
+              "environment_boundary_context": {
+                "execution_environment_boundary": "cloud_function",
+                "host_isolation": "hardened_container",
+                "network_isolation": "scoped_private_network",
+                "sandbox_escape_surface": [
+                  "none_known"
+                ],
+                "tooling_isolation": "restricted_tools"
+              },
+              "gateway_path": null,
+              "label_basis": "SMERC analyst inference for a bounded model invocation with cost and data-egress considerations. Boundary fields are a SMERC test fixture, not an observed AWS deployment.",
+              "label_confidence": "medium",
+              "postcondition_evidence_expected": true,
+              "session_and_delegated_approval_context": {
+                "approval_mode": null,
+                "delegated_on_behalf_of": null,
+                "gateway_bypass_detected": null,
+                "gateway_only_path": null,
+                "message_notification_observed": null,
+                "principal_type": null,
+                "progress_notification_observed": null,
+                "server_initiated_elicitation": null,
+                "server_initiated_sampling": null,
+                "session_mode": null,
+                "temporal_policy_context": null,
+                "tool_discovery_method": null
+              },
+              "source_format": "agentcore_gateway_tool_call_summary",
+              "source_observation": "AWS publishes CloudTrail Lake queries for Bedrock model invocation and potential data access.",
+              "source_record_id": "aws-open-bedrock-invoke-004-bounded",
+              "workflow_family": "bedrock_model_invocation_boundary_contrast"
+            },
+            "plan_id": "plan_aws_adapter_003_invoke_a_bedrock_model_with_bounded_input",
+            "requested_capability": "invoke_model",
+            "requested_scope_units": 5,
+            "side_effect_level": "financial",
+            "supports_checkpoint": true,
+            "supports_dry_run": false,
+            "supports_human_approval": true,
+            "supports_rollback": false,
+            "supports_scope_limit": true,
+            "tool": "aws.bedrock.invoke_model",
+            "version": "smerc.sparta-plan.v1"
+          },
+          "version": "smerc.sparta-route.v1"
+        }
+      },
+      {
+        "action_id": "AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+        "decision": {
+          "action_id": "AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+          "controls": [
+            "pause_execution",
+            "collect_more_evidence",
+            "snapshot_current_state",
+            "preserve_replay",
+            "strengthen_execution_boundary"
+          ],
+          "decision_trace": {
+            "profile": {
+              "label": "Cloud administration",
+              "notes": [
+                "Cloud changes can widen blast radius quickly when containment is weak."
+              ],
+              "profile_id": "cloud_admin"
+            },
+            "score_contributions": {
+              "confidence_score": {
+                "anomaly_resistance": 0.148,
+                "authorization_confidence": 0.289,
+                "containment_strength": 0.062,
+                "evidence_validity": 0.32,
+                "profile_multiplier": 1.0,
+                "total": 0.819
+              },
+              "irreversible_exposure_score": {
+                "base_action_risk": 0.101,
+                "containment_gap": 0.029,
+                "external_side_effect": 0.08,
+                "impact_scope": 0.036,
+                "irreversibility": 0.108,
+                "profile_multiplier": 1.08,
+                "rollback_latency": 0.043,
+                "sensitive_data": 0.0,
+                "total": 0.428
+              },
+              "operational_stress_score": {
+                "anomaly_pressure": 0.036,
+                "base_action_risk": 0.112,
+                "cancel_gap": 0.013,
+                "confidence_gap": 0.018,
+                "evidence_gap": 0.028,
+                "impact_scope": 0.054,
+                "profile_multiplier": 1.06,
+                "rollback_latency": 0.025,
+                "total": 0.304
+              },
+              "reversible_capacity_score": {
+                "cancel_reliability": 0.125,
+                "containment_strength": 0.187,
+                "evidence_validity": 0.08,
+                "profile_multiplier": 0.97,
+                "reversibility": 0.171,
+                "rollback_speed": 0.143,
+                "total": 0.684
+              },
+              "risk_adjusted_authorization_score": {
+                "confidence_score": 0.246,
+                "profile_multiplier": 1.0,
+                "recoverability_margin": 0.143,
+                "reversible_capacity": 0.308,
+                "total": 0.696
+              }
+            },
+            "threshold_trace": [
+              {
+                "details": {
+                  "capacity": 0.684,
+                  "capacity_rule": "< 0.42",
+                  "confidence": 0.819,
+                  "confidence_rule": "< 0.48"
+                },
+                "observed": 0.428,
+                "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+                "threshold": ">= 0.78",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "exposure": 0.428,
+                  "exposure_rule": ">= 0.62"
+                },
+                "observed": 0.78,
+                "rule": "deny_by_unreliable_cancel_and_high_exposure",
+                "threshold": "< 0.3",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "external_side_effect": true,
+                  "sensitive_data": false
+                },
+                "observed": 0.304,
+                "rule": "escalate_by_operational_stress",
+                "threshold": ">= 0.7",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "capacity": 0.684,
+                  "confidence": 0.819
+                },
+                "observed": 0.684,
+                "rule": "freeze_by_low_confidence_or_capacity",
+                "threshold": "confidence < 0.45 or capacity < 0.36",
+                "triggered": false
+              },
+              {
+                "details": {
+                  "exposure": 0.428,
+                  "external_side_effect": true,
+                  "profile_allows_external_side_effect_release": false
+                },
+                "observed": 0.696,
+                "rule": "throttle_by_authorization_exposure_or_side_effect",
+                "threshold": "authorization < 0.62 or exposure >= 0.45",
+                "triggered": true
+              }
+            ]
+          },
+          "domain_profile": {
+            "label": "Cloud administration",
+            "notes": [
+              "Cloud changes can widen blast radius quickly when containment is weak."
+            ],
+            "profile_id": "cloud_admin"
+          },
+          "enforcement_state": "pause",
+          "plain_english_summary": "Action 'AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input' received FREEZE. Irreversible exposure is 0.428, reversible capacity is 0.684, and authorization score is 0.696. Controls: pause_execution, collect_more_evidence, snapshot_current_state, preserve_replay, strengthen_execution_boundary.",
+          "policy": {
+            "evidence_ceiling": "OBSERVE",
+            "mode": "OBSERVE",
+            "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+            "policy_id": "smerc-reference-recoverability",
+            "policy_revision": "1.0.0",
+            "tenant_id": "*"
+          },
+          "posture": "FREEZE",
+          "reason_codes": [
+            "EXTERNAL_SIDE_EFFECT",
+            "HOST_ISOLATION_WEAK",
+            "PRODUCTION_NETWORK_REACHABLE",
+            "TOOLING_AUTHORITY_BROAD",
+            "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+          ],
+          "replay": {
+            "action_type": "agentcore_gateway_tool_call",
+            "actor": "application_agent",
+            "context": {
+              "current_control": "ALLOW",
+              "domain_profile": "cloud_admin",
+              "environment_boundary_context": {
+                "execution_environment_boundary": "production_host",
+                "host_isolation": "process",
+                "network_isolation": "production_network",
+                "sandbox_escape_surface": [
+                  "cloud_metadata_access",
+                  "production_credentials"
+                ],
+                "tooling_isolation": "privileged_automation"
+              },
+              "source_format": "agentcore_gateway_tool_call_summary",
+              "source_url": "https://github.com/aws-samples/cloud-trail-lake-query-samples",
+              "workflow": "bedrock_model_invocation_boundary_contrast"
+            },
+            "controls": [
+              "pause_execution",
+              "collect_more_evidence",
+              "snapshot_current_state",
+              "preserve_replay",
+              "strengthen_execution_boundary"
+            ],
+            "decision_trace": {
+              "profile": {
+                "label": "Cloud administration",
+                "notes": [
+                  "Cloud changes can widen blast radius quickly when containment is weak."
+                ],
+                "profile_id": "cloud_admin"
+              },
+              "score_contributions": {
+                "confidence_score": {
+                  "anomaly_resistance": 0.148,
+                  "authorization_confidence": 0.289,
+                  "containment_strength": 0.062,
+                  "evidence_validity": 0.32,
+                  "profile_multiplier": 1.0,
+                  "total": 0.819
+                },
+                "irreversible_exposure_score": {
+                  "base_action_risk": 0.101,
+                  "containment_gap": 0.029,
+                  "external_side_effect": 0.08,
+                  "impact_scope": 0.036,
+                  "irreversibility": 0.108,
+                  "profile_multiplier": 1.08,
+                  "rollback_latency": 0.043,
+                  "sensitive_data": 0.0,
+                  "total": 0.428
+                },
+                "operational_stress_score": {
+                  "anomaly_pressure": 0.036,
+                  "base_action_risk": 0.112,
+                  "cancel_gap": 0.013,
+                  "confidence_gap": 0.018,
+                  "evidence_gap": 0.028,
+                  "impact_scope": 0.054,
+                  "profile_multiplier": 1.06,
+                  "rollback_latency": 0.025,
+                  "total": 0.304
+                },
+                "reversible_capacity_score": {
+                  "cancel_reliability": 0.125,
+                  "containment_strength": 0.187,
+                  "evidence_validity": 0.08,
+                  "profile_multiplier": 0.97,
+                  "reversibility": 0.171,
+                  "rollback_speed": 0.143,
+                  "total": 0.684
+                },
+                "risk_adjusted_authorization_score": {
+                  "confidence_score": 0.246,
+                  "profile_multiplier": 1.0,
+                  "recoverability_margin": 0.143,
+                  "reversible_capacity": 0.308,
+                  "total": 0.696
+                }
+              },
+              "threshold_trace": [
+                {
+                  "details": {
+                    "capacity": 0.684,
+                    "capacity_rule": "< 0.42",
+                    "confidence": 0.819,
+                    "confidence_rule": "< 0.48"
+                  },
+                  "observed": 0.428,
+                  "rule": "deny_by_exposure_and_low_recovery_or_confidence",
+                  "threshold": ">= 0.78",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "exposure": 0.428,
+                    "exposure_rule": ">= 0.62"
+                  },
+                  "observed": 0.78,
+                  "rule": "deny_by_unreliable_cancel_and_high_exposure",
+                  "threshold": "< 0.3",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "external_side_effect": true,
+                    "sensitive_data": false
+                  },
+                  "observed": 0.304,
+                  "rule": "escalate_by_operational_stress",
+                  "threshold": ">= 0.7",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "capacity": 0.684,
+                    "confidence": 0.819
+                  },
+                  "observed": 0.684,
+                  "rule": "freeze_by_low_confidence_or_capacity",
+                  "threshold": "confidence < 0.45 or capacity < 0.36",
+                  "triggered": false
+                },
+                {
+                  "details": {
+                    "exposure": 0.428,
+                    "external_side_effect": true,
+                    "profile_allows_external_side_effect_release": false
+                  },
+                  "observed": 0.696,
+                  "rule": "throttle_by_authorization_exposure_or_side_effect",
+                  "threshold": "authorization < 0.62 or exposure >= 0.45",
+                  "triggered": true
+                }
+              ]
+            },
+            "domain_profile": {
+              "label": "Cloud administration",
+              "notes": [
+                "Cloud changes can widen blast radius quickly when containment is weak."
+              ],
+              "profile_id": "cloud_admin"
+            },
+            "enforcement_state": "pause",
+            "evaluated_at": "2026-09-18T01:22:16.371290+00:00",
+            "policy": {
+              "evidence_ceiling": "OBSERVE",
+              "mode": "OBSERVE",
+              "policy_hash": "434884eaa61dba70feaf2b999a09bc8ef7ed05a05c62727da115b43d879ecf64",
+              "policy_id": "smerc-reference-recoverability",
+              "policy_revision": "1.0.0",
+              "tenant_id": "*"
+            },
+            "posture": "FREEZE",
+            "reason_codes": [
+              "EXTERNAL_SIDE_EFFECT",
+              "HOST_ISOLATION_WEAK",
+              "PRODUCTION_NETWORK_REACHABLE",
+              "TOOLING_AUTHORITY_BROAD",
+              "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+            ],
+            "replay_id": "replay_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input_1789694536371_089dc954b782",
+            "scores": {
+              "cancel_reliability_score": 0.78,
+              "confidence_score": 0.819,
+              "irreversible_exposure_score": 0.428,
+              "operational_stress_score": 0.304,
+              "reversible_capacity_score": 0.684,
+              "risk_adjusted_authorization_score": 0.696
+            },
+            "tool": "aws.bedrock.invoke_model",
+            "transition_guidance": {
+              "blocking_factors": [],
+              "control_improvements": [
+                "collect_more_evidence",
+                "pause_execution",
+                "preserve_replay",
+                "rate limit or stage external side effect",
+                "snapshot_current_state",
+                "strengthen_execution_boundary",
+                "stronger tooling, host, network, or sandbox containment"
+              ],
+              "current_posture": "FREEZE",
+              "evidence_needed": [],
+              "release_conditions": {
+                "authorization_score_at_or_above": 0.62,
+                "confidence_score_target": 0.7,
+                "irreversible_exposure_below": 0.45,
+                "reversible_capacity_target": 0.6
+              },
+              "target_posture": "THROTTLE"
+            }
+          },
+          "replay_id": "replay_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input_1789694536371_089dc954b782",
+          "scores": {
+            "cancel_reliability_score": 0.78,
+            "confidence_score": 0.819,
+            "irreversible_exposure_score": 0.428,
+            "operational_stress_score": 0.304,
+            "reversible_capacity_score": 0.684,
+            "risk_adjusted_authorization_score": 0.696
+          },
+          "transition_guidance": {
+            "blocking_factors": [],
+            "control_improvements": [
+              "collect_more_evidence",
+              "pause_execution",
+              "preserve_replay",
+              "rate limit or stage external side effect",
+              "snapshot_current_state",
+              "strengthen_execution_boundary",
+              "stronger tooling, host, network, or sandbox containment"
+            ],
+            "current_posture": "FREEZE",
+            "evidence_needed": [],
+            "release_conditions": {
+              "authorization_score_at_or_above": 0.62,
+              "confidence_score_target": 0.7,
+              "irreversible_exposure_below": 0.45,
+              "reversible_capacity_target": 0.6
+            },
+            "target_posture": "THROTTLE"
+          }
+        },
+        "decision_lifecycle_ledger": {
+          "decision_id": "customer_eval_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+          "head_record_hash": "8ee7e7cc5a3fa906f271d1312c0aca9f01c3b5c766b41af8fe55c0224911a37e",
+          "record_count": 5,
+          "records": [
+            {
+              "actor": "application_agent",
+              "decision_id": "customer_eval_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "REQUEST",
+              "payload": {
+                "environment": "production",
+                "initiated_by": "application_agent",
+                "requested_operation": "Non-executing AWS metadata adapter summary for agentcore_gateway_tool_call_summary: invoke a Bedrock model with bounded input in production.",
+                "risk_profile": "cloud_admin"
+              },
+              "previous_record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+              "record_hash": "1c311137cc7c051c090ab17c7854dc7533c99d5e72e1cc99c271ab3a9c2ad5f4",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 1,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-customer-evaluation",
+              "decision_id": "customer_eval_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "EVIDENCE",
+              "payload": {
+                "available_evidence": [
+                  "metadata_only_action",
+                  "ref_gate_declaration",
+                  "agent_identity_gate",
+                  "tool_plan_declaration"
+                ],
+                "confidence_score": 0.819,
+                "external_dependencies": [
+                  "aws.bedrock.invoke_model"
+                ],
+                "missing_evidence": [],
+                "model_version": "customer-supplied-agent-metadata",
+                "policy_version": "smerc-reference-recoverability"
+              },
+              "previous_record_hash": "1c311137cc7c051c090ab17c7854dc7533c99d5e72e1cc99c271ab3a9c2ad5f4",
+              "record_hash": "3322087220da40804bcf9776c33280fc9c47ad513902803405bbd6ed276d2e10",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 2,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-engine",
+              "decision_id": "customer_eval_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "EVALUATION",
+              "payload": {
+                "authorization_recommendation": "FREEZE",
+                "entropy_indicators": [
+                  "EXTERNAL_SIDE_EFFECT",
+                  "HOST_ISOLATION_WEAK",
+                  "PRODUCTION_NETWORK_REACHABLE",
+                  "TOOLING_AUTHORITY_BROAD",
+                  "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+                ],
+                "reason_codes": [
+                  "EXTERNAL_SIDE_EFFECT",
+                  "HOST_ISOLATION_WEAK",
+                  "PRODUCTION_NETWORK_REACHABLE",
+                  "TOOLING_AUTHORITY_BROAD",
+                  "SANDBOX_ESCAPE_OR_CREDENTIAL_SURFACE"
+                ],
+                "recommended_safeguards": [
+                  "pause_execution",
+                  "collect_more_evidence",
+                  "snapshot_current_state",
+                  "preserve_replay",
+                  "strengthen_execution_boundary",
+                  "require_agent_identity_record",
+                  "route_to_human_review"
+                ],
+                "recoverability_score": 0.684,
+                "structural_state": "ref_gate=pass; scoring=admitted_with_agent_identity_watch; route=PAUSE"
+              },
+              "previous_record_hash": "3322087220da40804bcf9776c33280fc9c47ad513902803405bbd6ed276d2e10",
+              "record_hash": "61ae1ea441cfa791956d69b9ab01fb9d22c552e5b147a5202f9447469d4cf059",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 3,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "sparta-router",
+              "decision_id": "customer_eval_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "EXECUTION",
+              "payload": {
+                "duration_ms": 0,
+                "executed_operation": "PAUSE",
+                "execution_status": "not_executed",
+                "rollback_performed": false,
+                "rollback_success": null,
+                "started_at": "2026-09-18T01:22:16+00:00"
+              },
+              "previous_record_hash": "61ae1ea441cfa791956d69b9ab01fb9d22c552e5b147a5202f9447469d4cf059",
+              "record_hash": "8c371ddf1c4da3e4efa6c8e7ce545a4d6add66a56e903ecd97253507976e6744",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 4,
+              "tenant_id": "aws-metadata-adapter-review"
+            },
+            {
+              "actor": "smerc-customer-evaluation",
+              "decision_id": "customer_eval_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+              "event_type": "OUTCOME",
+              "payload": {
+                "controls_sufficient": true,
+                "cost_incurred": 0.0,
+                "customer_impact": "not measured in metadata-only evaluation",
+                "financial_impact": "not measured in metadata-only evaluation",
+                "judged_correct": true,
+                "security_impact": "not measured in metadata-only evaluation",
+                "time_to_recover_minutes": 0.0,
+                "unexpected_consequences": false
+              },
+              "previous_record_hash": "8c371ddf1c4da3e4efa6c8e7ce545a4d6add66a56e903ecd97253507976e6744",
+              "record_hash": "8ee7e7cc5a3fa906f271d1312c0aca9f01c3b5c766b41af8fe55c0224911a37e",
+              "record_version": "smerc.dll-record.v1",
+              "recorded_at": "2026-09-18T01:22:16+00:00",
+              "sequence": 5,
+              "tenant_id": "aws-metadata-adapter-review"
+            }
+          ],
+          "summary": {
+            "decision_id": "customer_eval_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+            "event_counts": {
+              "EVALUATION": 1,
+              "EVIDENCE": 1,
+              "EXECUTION": 1,
+              "HUMAN_INTERACTION": 0,
+              "LEARNING_RECOMMENDATION": 0,
+              "OUTCOME": 1,
+              "REQUEST": 1
+            },
+            "final_event_type": "OUTCOME",
+            "judged_correct": true,
+            "override_count": 0,
+            "pending_learning_recommendations": 0,
+            "record_count": 5,
+            "rollback_performed": false,
+            "rollback_success": null,
+            "tenant_id": "aws-metadata-adapter-review"
+          },
+          "tenant_id": "aws-metadata-adapter-review",
+          "verification": {
+            "errors": [],
+            "head_record_hash": "8ee7e7cc5a3fa906f271d1312c0aca9f01c3b5c766b41af8fe55c0224911a37e",
+            "record_count": 5,
+            "valid": true
+          },
+          "version": "smerc.decision-lifecycle-ledger.v1"
+        },
+        "description": "Non-executing AWS metadata adapter summary for agentcore_gateway_tool_call_summary: invoke a Bedrock model with bounded input in production.",
+        "identity_gate": {
+          "agent_id": "application_agent",
+          "identity_score": 0.48,
+          "plain_english_summary": "Agent 'application_agent' has no identity record for this request.",
+          "reason_codes": [
+            "AGENT_IDENTITY_MISSING"
+          ],
+          "recommended_controls": [
+            "require_agent_identity_record",
+            "route_to_human_review"
+          ],
+          "status": "WATCH",
+          "trust_modifier": 0.75,
+          "version": "smerc.agent-identity.v1"
+        },
+        "ref_gate": {
+          "failures": [],
+          "rule": "typed contract, attestation, least privilege, and object shape must pass before recoverability can support execution",
+          "status": "pass"
+        },
+        "scoring_admission": "admitted_with_agent_identity_watch",
+        "sequence": 4,
+        "sparta_route": {
+          "applied_controls": [
+            "pause_execution",
+            "preserve_replay",
+            "snapshot_current_state",
+            "checkpoint_before_execution"
+          ],
+          "blocked_controls": [
+            "execute"
+          ],
+          "decision_digest": "ae5c8fab189fb9512ad5d9921391244e2ec6dcf7ee5885726103e644ba6978ed",
+          "decision_replay_id": "replay_AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input_1789694536371_089dc954b782",
+          "effective_scope_units": 0,
+          "executable": false,
+          "plain_english_summary": "SPARTa paused execution because SMERC returned FREEZE, indicating instability or unacceptable deployment risk.",
+          "plan_id": "plan_aws_adapter_004_invoke_a_bedrock_model_with_bounded_input",
+          "reason_codes": [
+            "SPARTA_FREEZE_PAUSES_AUTOMATION"
+          ],
+          "recommended_next_action": "Preserve the replay, snapshot current state, and require accountable review before a new request.",
+          "route_id": "sparta_plan_aws_adapter_004_invoke_a_bedrock_model_with_bounded_input_8fd3764b03c9",
+          "route_state": "PAUSE",
+          "routed_at": "2026-09-18T01:22:16+00:00",
+          "source_posture": "FREEZE",
+          "tool_plan": {
+            "action": "agentcore_gateway_tool_call",
+            "max_scope_units": 100,
+            "metadata": {
+              "adapter_mode": "non_executing",
+              "agentcore_policy_context": {
+                "gateway_target_type": null,
+                "inline_tool_permissions_present": null,
+                "parameter_constraints_present": null,
+                "policy_analysis_result": null,
+                "policy_engine_decision": null,
+                "policy_language": null,
+                "policy_schema_validated": null,
+                "target_registered": null
+              },
+              "agentcore_runtime_security_context": {
+                "audit_correlation_available": null,
+                "command_execution_class": null,
+                "execution_authority_exposure_class": null,
+                "session_user_binding": null
+              },
+              "aws_surface": "bedrock",
+              "cloud_provider": "aws",
+              "cost_velocity_multiplier": 0.22,
+              "derived_output_governance": {
+                "access_control_composition": null,
+                "derived_output_contains_restricted_summary": null,
+                "input_sensitivity_level": null,
+                "output_sensitivity_level": null,
+                "regulatory_tags": []
+              },
+              "environment": "production",
+              "environment_boundary_context": {
+                "execution_environment_boundary": "production_host",
+                "host_isolation": "process",
+                "network_isolation": "production_network",
+                "sandbox_escape_surface": [
+                  "cloud_metadata_access",
+                  "production_credentials"
+                ],
+                "tooling_isolation": "privileged_automation"
+              },
+              "gateway_path": null,
+              "label_basis": "SMERC analyst inference for a bounded model invocation with cost and data-egress considerations. Boundary fields are a SMERC test fixture, not an observed AWS deployment.",
+              "label_confidence": "medium",
+              "postcondition_evidence_expected": true,
+              "session_and_delegated_approval_context": {
+                "approval_mode": null,
+                "delegated_on_behalf_of": null,
+                "gateway_bypass_detected": null,
+                "gateway_only_path": null,
+                "message_notification_observed": null,
+                "principal_type": null,
+                "progress_notification_observed": null,
+                "server_initiated_elicitation": null,
+                "server_initiated_sampling": null,
+                "session_mode": null,
+                "temporal_policy_context": null,
+                "tool_discovery_method": null
+              },
+              "source_format": "agentcore_gateway_tool_call_summary",
+              "source_observation": "AWS publishes CloudTrail Lake queries for Bedrock model invocation and potential data access.",
+              "source_record_id": "aws-open-bedrock-invoke-004-broad",
+              "workflow_family": "bedrock_model_invocation_boundary_contrast"
+            },
+            "plan_id": "plan_aws_adapter_004_invoke_a_bedrock_model_with_bounded_input",
+            "requested_capability": "invoke_model",
+            "requested_scope_units": 5,
+            "side_effect_level": "financial",
+            "supports_checkpoint": true,
+            "supports_dry_run": false,
+            "supports_human_approval": true,
+            "supports_rollback": false,
+            "supports_scope_limit": true,
+            "tool": "aws.bedrock.invoke_model",
+            "version": "smerc.sparta-plan.v1"
+          },
+          "version": "smerc.sparta-route.v1"
+        }
+      }
+    ],
+    "summary": {
+      "autonomy_state": "SUSPEND_AUTONOMY",
+      "highest_exposure_actions": [
+        {
+          "action_id": "AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+          "irreversible_exposure_score": 0.487,
+          "posture": "FREEZE",
+          "route_state": "PAUSE"
+        },
+        {
+          "action_id": "AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+          "irreversible_exposure_score": 0.459,
+          "posture": "THROTTLE",
+          "route_state": "REVIEW_REQUIRED"
+        },
+        {
+          "action_id": "AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+          "irreversible_exposure_score": 0.428,
+          "posture": "FREEZE",
+          "route_state": "PAUSE"
+        },
+        {
+          "action_id": "AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+          "irreversible_exposure_score": 0.401,
+          "posture": "THROTTLE",
+          "route_state": "REVIEW_REQUIRED"
+        }
+      ],
+      "identity_gate_counts": {
+        "WATCH": 4
+      },
+      "non_executable_routes": 4,
+      "posture_counts": {
+        "FREEZE": 2,
+        "THROTTLE": 2
+      },
+      "ref_gate_counts": {
+        "pass": 4
+      },
+      "route_state_counts": {
+        "PAUSE": 2,
+        "REVIEW_REQUIRED": 2
+      },
+      "total_actions": 4,
+      "valid_ledgers": 4
+    },
+    "tenant_id": "aws-metadata-adapter-review",
+    "version": "smerc.customer-evaluation.v1",
+    "workflow_context": "Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC customer-evaluation actions for shadow-mode review."
+  },
+  "derived_output_governance_summary": {
+    "access_control_composition_counts": {},
+    "boolean_counts": {},
+    "input_sensitivity_counts": {},
+    "output_sensitivity_counts": {},
+    "regulatory_tag_counts": {}
+  },
+  "environment_boundary_summary": {
+    "execution_environment_boundary_counts": {
+      "cloud_function": 2,
+      "production_host": 2
+    },
+    "host_isolation_counts": {
+      "hardened_container": 2,
+      "process": 2
+    },
+    "network_isolation_counts": {
+      "production_network": 2,
+      "scoped_private_network": 2
+    },
+    "sandbox_escape_surface_counts": {
+      "cloud_metadata_access": 2,
+      "none_known": 2,
+      "production_credentials": 2
+    },
+    "tooling_isolation_counts": {
+      "privileged_automation": 2,
+      "restricted_tools": 2
+    }
+  },
+  "evidence_boundary": "The adapter is a non-executing stub. It does not call AWS APIs, assume roles, inspect live accounts, read CloudTrail, execute CloudFormation, modify IAM, access S3, change RDS, trigger remediation, rotate secrets, or change cross-account trust.",
+  "generated_at": "2026-09-18T01:22:16+00:00",
+  "normalized_customer_evaluation": {
+    "actions": [
+      {
+        "action_id": "AWS_ADAPTER_001_create_a_billable_agentcore_runtime",
+        "action_type": "agentcore_runtime_invocation",
+        "actor": "agent_platform_automation",
+        "anomaly_pressure": 0.32,
+        "authorization_confidence": 0.76,
+        "base_action_risk": 0.517,
+        "cancel_reliability": 0.7,
+        "containment_strength": 0.66,
+        "context": {
+          "current_control": "ALLOW",
+          "domain_profile": "cloud_admin",
+          "source_format": "agentcore_runtime_invocation_summary",
+          "source_url": "https://github.com/awslabs/mcp/blob/main/src/amazon-bedrock-agentcore-mcp-server/README.md",
+          "workflow": "agentcore_runtime_lifecycle_boundary_contrast"
+        },
+        "description": "Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: create a billable AgentCore runtime in production.",
+        "evidence_validity": 0.7,
+        "external_side_effect": true,
+        "impact_scope": 0.58,
+        "ref_gate": {
+          "attestation_valid": true,
+          "least_privilege_confirmed": true,
+          "object_shape_expected": true,
+          "typed_contract_valid": true
+        },
+        "reversibility": 0.72,
+        "rollback_latency": 0.42,
+        "sensitive_data": false,
+        "tool": "aws.agentcore.create_runtime",
+        "tool_plan": {
+          "action": "agentcore_runtime_invocation",
+          "max_scope_units": 10,
+          "metadata": {
+            "adapter_mode": "non_executing",
+            "agentcore_policy_context": {
+              "gateway_target_type": null,
+              "inline_tool_permissions_present": null,
+              "parameter_constraints_present": null,
+              "policy_analysis_result": null,
+              "policy_engine_decision": null,
+              "policy_language": null,
+              "policy_schema_validated": null,
+              "target_registered": null
+            },
+            "agentcore_runtime_security_context": {
+              "audit_correlation_available": null,
+              "command_execution_class": null,
+              "execution_authority_exposure_class": null,
+              "session_user_binding": null
+            },
+            "aws_surface": "bedrock_agentcore_runtime",
+            "cloud_provider": "aws",
+            "cost_velocity_multiplier": 0.55,
+            "derived_output_governance": {
+              "access_control_composition": null,
+              "derived_output_contains_restricted_summary": null,
+              "input_sensitivity_level": null,
+              "output_sensitivity_level": null,
+              "regulatory_tags": []
+            },
+            "environment": "production",
+            "environment_boundary_context": {
+              "execution_environment_boundary": "cloud_function",
+              "host_isolation": "hardened_container",
+              "network_isolation": "scoped_private_network",
+              "sandbox_escape_surface": [
+                "none_known"
+              ],
+              "tooling_isolation": "restricted_tools"
+            },
+            "gateway_path": null,
+            "label_basis": "SMERC analyst inference from the public tool catalogue; cost and rollback values are hypotheses for testing. Boundary fields are a SMERC test fixture, not an observed AWS deployment.",
+            "label_confidence": "medium",
+            "postcondition_evidence_expected": true,
+            "session_and_delegated_approval_context": {
+              "approval_mode": null,
+              "delegated_on_behalf_of": null,
+              "gateway_bypass_detected": null,
+              "gateway_only_path": null,
+              "message_notification_observed": null,
+              "principal_type": null,
+              "progress_notification_observed": null,
+              "server_initiated_elicitation": null,
+              "server_initiated_sampling": null,
+              "session_mode": null,
+              "temporal_policy_context": null,
+              "tool_discovery_method": null
+            },
+            "source_format": "agentcore_runtime_invocation_summary",
+            "source_observation": "The public AgentCore MCP server exposes runtime-management tools and marks billable operations with cost warnings.",
+            "source_record_id": "aws-open-agentcore-create-runtime-002-bounded",
+            "workflow_family": "agentcore_runtime_lifecycle_boundary_contrast"
+          },
+          "plan_id": "plan_aws_adapter_001_create_a_billable_agentcore_runtime",
+          "requested_capability": "create_runtime",
+          "requested_scope_units": 1,
+          "side_effect_level": "financial",
+          "supports_checkpoint": true,
+          "supports_dry_run": false,
+          "supports_human_approval": true,
+          "supports_rollback": true,
+          "supports_scope_limit": true,
+          "tool": "aws.agentcore.create_runtime",
+          "version": "smerc.sparta-plan.v1"
+        }
+      },
+      {
+        "action_id": "AWS_ADAPTER_002_create_a_billable_agentcore_runtime",
+        "action_type": "agentcore_runtime_invocation",
+        "actor": "agent_platform_automation",
+        "anomaly_pressure": 0.32,
+        "authorization_confidence": 0.76,
+        "base_action_risk": 0.657,
+        "cancel_reliability": 0.7,
+        "containment_strength": 0.66,
+        "context": {
+          "current_control": "ALLOW",
+          "domain_profile": "cloud_admin",
+          "source_format": "agentcore_runtime_invocation_summary",
+          "source_url": "https://github.com/awslabs/mcp/blob/main/src/amazon-bedrock-agentcore-mcp-server/README.md",
+          "workflow": "agentcore_runtime_lifecycle_boundary_contrast"
+        },
+        "description": "Non-executing AWS metadata adapter summary for agentcore_runtime_invocation_summary: create a billable AgentCore runtime in production.",
+        "evidence_validity": 0.7,
+        "external_side_effect": true,
+        "impact_scope": 0.58,
+        "ref_gate": {
+          "attestation_valid": true,
+          "least_privilege_confirmed": true,
+          "object_shape_expected": true,
+          "typed_contract_valid": true
+        },
+        "reversibility": 0.72,
+        "rollback_latency": 0.42,
+        "sensitive_data": false,
+        "tool": "aws.agentcore.create_runtime",
+        "tool_plan": {
+          "action": "agentcore_runtime_invocation",
+          "max_scope_units": 10,
+          "metadata": {
+            "adapter_mode": "non_executing",
+            "agentcore_policy_context": {
+              "gateway_target_type": null,
+              "inline_tool_permissions_present": null,
+              "parameter_constraints_present": null,
+              "policy_analysis_result": null,
+              "policy_engine_decision": null,
+              "policy_language": null,
+              "policy_schema_validated": null,
+              "target_registered": null
+            },
+            "agentcore_runtime_security_context": {
+              "audit_correlation_available": null,
+              "command_execution_class": null,
+              "execution_authority_exposure_class": null,
+              "session_user_binding": null
+            },
+            "aws_surface": "bedrock_agentcore_runtime",
+            "cloud_provider": "aws",
+            "cost_velocity_multiplier": 0.55,
+            "derived_output_governance": {
+              "access_control_composition": null,
+              "derived_output_contains_restricted_summary": null,
+              "input_sensitivity_level": null,
+              "output_sensitivity_level": null,
+              "regulatory_tags": []
+            },
+            "environment": "production",
+            "environment_boundary_context": {
+              "execution_environment_boundary": "production_host",
+              "host_isolation": "process",
+              "network_isolation": "production_network",
+              "sandbox_escape_surface": [
+                "cloud_metadata_access",
+                "production_credentials"
+              ],
+              "tooling_isolation": "privileged_automation"
+            },
+            "gateway_path": null,
+            "label_basis": "SMERC analyst inference from the public tool catalogue; cost and rollback values are hypotheses for testing. Boundary fields are a SMERC test fixture, not an observed AWS deployment.",
+            "label_confidence": "medium",
+            "postcondition_evidence_expected": true,
+            "session_and_delegated_approval_context": {
+              "approval_mode": null,
+              "delegated_on_behalf_of": null,
+              "gateway_bypass_detected": null,
+              "gateway_only_path": null,
+              "message_notification_observed": null,
+              "principal_type": null,
+              "progress_notification_observed": null,
+              "server_initiated_elicitation": null,
+              "server_initiated_sampling": null,
+              "session_mode": null,
+              "temporal_policy_context": null,
+              "tool_discovery_method": null
+            },
+            "source_format": "agentcore_runtime_invocation_summary",
+            "source_observation": "The public AgentCore MCP server exposes runtime-management tools and marks billable operations with cost warnings.",
+            "source_record_id": "aws-open-agentcore-create-runtime-002-broad",
+            "workflow_family": "agentcore_runtime_lifecycle_boundary_contrast"
+          },
+          "plan_id": "plan_aws_adapter_002_create_a_billable_agentcore_runtime",
+          "requested_capability": "create_runtime",
+          "requested_scope_units": 1,
+          "side_effect_level": "financial",
+          "supports_checkpoint": true,
+          "supports_dry_run": false,
+          "supports_human_approval": true,
+          "supports_rollback": true,
+          "supports_scope_limit": true,
+          "tool": "aws.agentcore.create_runtime",
+          "version": "smerc.sparta-plan.v1"
+        }
+      },
+      {
+        "action_id": "AWS_ADAPTER_003_invoke_a_bedrock_model_with_bounded_input",
+        "action_type": "agentcore_gateway_tool_call",
+        "actor": "application_agent",
+        "anomaly_pressure": 0.18,
+        "authorization_confidence": 0.85,
+        "base_action_risk": 0.421,
+        "cancel_reliability": 0.78,
+        "containment_strength": 0.78,
+        "context": {
+          "current_control": "ALLOW",
+          "domain_profile": "cloud_admin",
+          "source_format": "agentcore_gateway_tool_call_summary",
+          "source_url": "https://github.com/aws-samples/cloud-trail-lake-query-samples",
+          "workflow": "bedrock_model_invocation_boundary_contrast"
+        },
+        "description": "Non-executing AWS metadata adapter summary for agentcore_gateway_tool_call_summary: invoke a Bedrock model with bounded input in production.",
+        "evidence_validity": 0.8,
+        "external_side_effect": true,
+        "impact_scope": 0.3,
+        "ref_gate": {
+          "attestation_valid": true,
+          "least_privilege_confirmed": true,
+          "object_shape_expected": true,
+          "typed_contract_valid": true
+        },
+        "reversibility": 0.55,
+        "rollback_latency": 0.25,
+        "sensitive_data": false,
+        "tool": "aws.bedrock.invoke_model",
+        "tool_plan": {
+          "action": "agentcore_gateway_tool_call",
+          "max_scope_units": 100,
+          "metadata": {
+            "adapter_mode": "non_executing",
+            "agentcore_policy_context": {
+              "gateway_target_type": null,
+              "inline_tool_permissions_present": null,
+              "parameter_constraints_present": null,
+              "policy_analysis_result": null,
+              "policy_engine_decision": null,
+              "policy_language": null,
+              "policy_schema_validated": null,
+              "target_registered": null
+            },
+            "agentcore_runtime_security_context": {
+              "audit_correlation_available": null,
+              "command_execution_class": null,
+              "execution_authority_exposure_class": null,
+              "session_user_binding": null
+            },
+            "aws_surface": "bedrock",
+            "cloud_provider": "aws",
+            "cost_velocity_multiplier": 0.22,
+            "derived_output_governance": {
+              "access_control_composition": null,
+              "derived_output_contains_restricted_summary": null,
+              "input_sensitivity_level": null,
+              "output_sensitivity_level": null,
+              "regulatory_tags": []
+            },
+            "environment": "production",
+            "environment_boundary_context": {
+              "execution_environment_boundary": "cloud_function",
+              "host_isolation": "hardened_container",
+              "network_isolation": "scoped_private_network",
+              "sandbox_escape_surface": [
+                "none_known"
+              ],
+              "tooling_isolation": "restricted_tools"
+            },
+            "gateway_path": null,
+            "label_basis": "SMERC analyst inference for a bounded model invocation with cost and data-egress considerations. Boundary fields are a SMERC test fixture, not an observed AWS deployment.",
+            "label_confidence": "medium",
+            "postcondition_evidence_expected": true,
+            "session_and_delegated_approval_context": {
+              "approval_mode": null,
+              "delegated_on_behalf_of": null,
+              "gateway_bypass_detected": null,
+              "gateway_only_path": null,
+              "message_notification_observed": null,
+              "principal_type": null,
+              "progress_notification_observed": null,
+              "server_initiated_elicitation": null,
+              "server_initiated_sampling": null,
+              "session_mode": null,
+              "temporal_policy_context": null,
+              "tool_discovery_method": null
+            },
+            "source_format": "agentcore_gateway_tool_call_summary",
+            "source_observation": "AWS publishes CloudTrail Lake queries for Bedrock model invocation and potential data access.",
+            "source_record_id": "aws-open-bedrock-invoke-004-bounded",
+            "workflow_family": "bedrock_model_invocation_boundary_contrast"
+          },
+          "plan_id": "plan_aws_adapter_003_invoke_a_bedrock_model_with_bounded_input",
+          "requested_capability": "invoke_model",
+          "requested_scope_units": 5,
+          "side_effect_level": "financial",
+          "supports_checkpoint": true,
+          "supports_dry_run": false,
+          "supports_human_approval": true,
+          "supports_rollback": false,
+          "supports_scope_limit": true,
+          "tool": "aws.bedrock.invoke_model",
+          "version": "smerc.sparta-plan.v1"
+        }
+      },
+      {
+        "action_id": "AWS_ADAPTER_004_invoke_a_bedrock_model_with_bounded_input",
+        "action_type": "agentcore_gateway_tool_call",
+        "actor": "application_agent",
+        "anomaly_pressure": 0.18,
+        "authorization_confidence": 0.85,
+        "base_action_risk": 0.561,
+        "cancel_reliability": 0.78,
+        "containment_strength": 0.78,
+        "context": {
+          "current_control": "ALLOW",
+          "domain_profile": "cloud_admin",
+          "source_format": "agentcore_gateway_tool_call_summary",
+          "source_url": "https://github.com/aws-samples/cloud-trail-lake-query-samples",
+          "workflow": "bedrock_model_invocation_boundary_contrast"
+        },
+        "description": "Non-executing AWS metadata adapter summary for agentcore_gateway_tool_call_summary: invoke a Bedrock model with bounded input in production.",
+        "evidence_validity": 0.8,
+        "external_side_effect": true,
+        "impact_scope": 0.3,
+        "ref_gate": {
+          "attestation_valid": true,
+          "least_privilege_confirmed": true,
+          "object_shape_expected": true,
+          "typed_contract_valid": true
+        },
+        "reversibility": 0.55,
+        "rollback_latency": 0.25,
+        "sensitive_data": false,
+        "tool": "aws.bedrock.invoke_model",
+        "tool_plan": {
+          "action": "agentcore_gateway_tool_call",
+          "max_scope_units": 100,
+          "metadata": {
+            "adapter_mode": "non_executing",
+            "agentcore_policy_context": {
+              "gateway_target_type": null,
+              "inline_tool_permissions_present": null,
+              "parameter_constraints_present": null,
+              "policy_analysis_result": null,
+              "policy_engine_decision": null,
+              "policy_language": null,
+              "policy_schema_validated": null,
+              "target_registered": null
+            },
+            "agentcore_runtime_security_context": {
+              "audit_correlation_available": null,
+              "command_execution_class": null,
+              "execution_authority_exposure_class": null,
+              "session_user_binding": null
+            },
+            "aws_surface": "bedrock",
+            "cloud_provider": "aws",
+            "cost_velocity_multiplier": 0.22,
+            "derived_output_governance": {
+              "access_control_composition": null,
+              "derived_output_contains_restricted_summary": null,
+              "input_sensitivity_level": null,
+              "output_sensitivity_level": null,
+              "regulatory_tags": []
+            },
+            "environment": "production",
+            "environment_boundary_context": {
+              "execution_environment_boundary": "production_host",
+              "host_isolation": "process",
+              "network_isolation": "production_network",
+              "sandbox_escape_surface": [
+                "cloud_metadata_access",
+                "production_credentials"
+              ],
+              "tooling_isolation": "privileged_automation"
+            },
+            "gateway_path": null,
+            "label_basis": "SMERC analyst inference for a bounded model invocation with cost and data-egress considerations. Boundary fields are a SMERC test fixture, not an observed AWS deployment.",
+            "label_confidence": "medium",
+            "postcondition_evidence_expected": true,
+            "session_and_delegated_approval_context": {
+              "approval_mode": null,
+              "delegated_on_behalf_of": null,
+              "gateway_bypass_detected": null,
+              "gateway_only_path": null,
+              "message_notification_observed": null,
+              "principal_type": null,
+              "progress_notification_observed": null,
+              "server_initiated_elicitation": null,
+              "server_initiated_sampling": null,
+              "session_mode": null,
+              "temporal_policy_context": null,
+              "tool_discovery_method": null
+            },
+            "source_format": "agentcore_gateway_tool_call_summary",
+            "source_observation": "AWS publishes CloudTrail Lake queries for Bedrock model invocation and potential data access.",
+            "source_record_id": "aws-open-bedrock-invoke-004-broad",
+            "workflow_family": "bedrock_model_invocation_boundary_contrast"
+          },
+          "plan_id": "plan_aws_adapter_004_invoke_a_bedrock_model_with_bounded_input",
+          "requested_capability": "invoke_model",
+          "requested_scope_units": 5,
+          "side_effect_level": "financial",
+          "supports_checkpoint": true,
+          "supports_dry_run": false,
+          "supports_human_approval": true,
+          "supports_rollback": false,
+          "supports_scope_limit": true,
+          "tool": "aws.bedrock.invoke_model",
+          "version": "smerc.sparta-plan.v1"
+        }
+      }
+    ],
+    "contact_role": "aws_platform_security_reviewer",
+    "data_boundary": "AWS metadata adapter evaluation. Inputs are exported summaries only. No AWS credentials, account IDs, ARNs, raw logs, private topology, customer records, secrets, production commands, or live AWS access are included.",
+    "evaluation_date": "2026-09-18",
+    "initial_autonomy_state": "HEALTHY",
+    "organization": "AWS Metadata Adapter Review",
+    "tenant_id": "aws-metadata-adapter-review",
+    "version": "smerc.customer-evaluation.v1",
+    "workflow_context": "Non-executing AWS-style metadata adapter normalizing safe summaries into SMERC customer-evaluation actions for shadow-mode review."
+  },
+  "policy_engine_summary": {
+    "boolean_counts": {},
+    "gateway_target_type_counts": {},
+    "policy_analysis_result_counts": {},
+    "policy_engine_decision_counts": {},
+    "policy_language_counts": {}
+  },
+  "session_and_delegated_approval_summary": {
+    "approval_mode_counts": {},
+    "boolean_counts": {},
+    "principal_type_counts": {},
+    "session_mode_counts": {}
+  },
+  "skipped": [],
+  "skipped_reason_counts": {},
+  "skipped_rows": 0,
+  "source_export_count": 4,
+  "version": "smerc.aws-metadata-adapter.v1",
+  "work_result_impact": {
+    "impact": "An AWS-style platform reviewer can test recoverability judgment without granting credentials, sharing sensitive identifiers, or allowing production execution.",
+    "result": "Accepted 4 rows, skipped 0 rows, and normalized accepted rows into the SMERC customer-evaluation contract.",
+    "work": "Accept safe AWS-style exported summaries and reject unsafe or unsupported rows before scoring."
+  }
+}

@@ -103,6 +103,7 @@ Fast reviewer paths:
 - Buyer-facing proof packet: `docs/Buyer_Facing_Proof_Packet.md`
 - AWS shadow-mode buyer example: `docs/AWS_Shadow_Mode_Buyer_Example.md`
 - AWS open-source validation corpus: `docs/AWS_Open_Source_Validation_Corpus.md`
+- AWS execution-boundary contrast: `docs/AWS_Execution_Boundary_Contrast.md`
 
 SMERC is short for Structural Momentum Entropy Range Confidence. For cloud and platform teams, it is best read as recoverability-aware risk control for autonomous cloud execution: it evaluates a proposed action before execution and returns a replayable posture:
 
