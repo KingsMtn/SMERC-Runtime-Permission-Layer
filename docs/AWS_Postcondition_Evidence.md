@@ -27,6 +27,8 @@ The checked-in example is metadata-only. It is modeled on public AWS documentati
 
 It does not read live AWS accounts, call AWS APIs, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement.
 
+The report separates **route satisfaction** from **evidence assurance**. A sample or reviewer-supplied observation may satisfy every expected route control while still being `modeled_unverified`. Such a row is not proof-eligible until a trusted adapter or native-record verifier authenticates the evidence and binds it to the governed action.
+
 ## Run It
 
 ```bash

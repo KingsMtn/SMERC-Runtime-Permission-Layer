@@ -1,4 +1,23 @@
 {
+  "agentcore_runtime_postcondition_summary": {
+    "execution_status_counts": {
+      "held_for_review": 1,
+      "succeeded": 1
+    },
+    "observed_runtime_source_counts": {
+      "agentcore_runtime_usage_log": 2,
+      "cloudwatch_metric_or_log": 2,
+      "cost_anomaly_signal": 2
+    },
+    "runtime_action_count": 2,
+    "runtime_action_ids": [
+      "AWS_CHAIN_COST_SCALE_SPIKE_005",
+      "AWS_CHAIN_AGENT_RETRY_LOOP_008"
+    ],
+    "status_counts": {
+      "pass": 2
+    }
+  },
   "aws_evidence_source_counts": {
     "agentcore_gateway_cloudtrail_data_event": 1,
     "agentcore_gateway_mcp_log": 1,
@@ -66,19 +85,33 @@
     "valid_ledgers": 8
   },
   "evaluated_actions": 8,
-  "evidence_boundary": "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement. It shows what safe observation fields a customer or AWS-style reviewer could export to prove that SMERC-required controls happened after routing.",
-  "generated_at": "2026-09-09T07:58:12+00:00",
+  "evidence_assurance_counts": {
+    "modeled_unverified": 8
+  },
+  "evidence_boundary": "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement. Supplied observations can show route satisfaction, but remain modeled and unverified until a trusted adapter or native-record verifier authenticates and binds them to the action.",
+  "generated_at": "2026-09-19T00:45:15+00:00",
   "missing_aws_evidence_source_counts": {
     "cloudwatch_metric_or_log": 1
   },
   "observed_actions": 8,
+  "proof_eligible_actions": 0,
   "recommended_next_action": "Ask an AWS-style reviewer for 5 to 25 safe action-chain examples and matching observation summaries so SMERC can compare guardrail status, IAM authorization, route controls, and postcondition evidence without live AWS access.",
   "records": [
     {
       "action_id": "AWS_CHAIN_SAFE_CONFIG_UPDATE_001",
+      "applied_required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report",
+        "require_rollback_plan"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "systems_manager_execution_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
       "expected_aws_evidence_sources": [
@@ -89,8 +122,10 @@
         "tool_result_metadata_stream"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -110,6 +145,7 @@
         "require_rollback_plan"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "checkpoint_before_execution",
         "limit_scope",
@@ -118,6 +154,7 @@
         "record_execution_report",
         "require_rollback_plan"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": true,
       "route_state": "CONSTRAINED_EXECUTE",
       "source_posture": "THROTTLE",
@@ -125,9 +162,16 @@
     },
     {
       "action_id": "AWS_CHAIN_GUARDRAIL_PASS_IAM_WIDE_002",
+      "applied_required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "iam_policy_change_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": false,
       "execution_status": "not_executed",
       "expected_aws_evidence_sources": [
@@ -135,8 +179,10 @@
         "iam_access_analyzer_or_policy_record"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -150,11 +196,13 @@
         "preserve_replay"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "block_execution",
         "explain_denial",
         "preserve_replay"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": false,
       "route_state": "BLOCK",
       "source_posture": "DENY",
@@ -162,9 +210,16 @@
     },
     {
       "action_id": "AWS_CHAIN_CLOUDFORMATION_REPLACE_003",
+      "applied_required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
       "aws_postcondition_status": "gap",
       "aws_surface": "cloudformation_changeset_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": false,
       "execution_status": "not_executed",
       "expected_aws_evidence_sources": [
@@ -173,9 +228,11 @@
         "cloudwatch_metric_or_log"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
         "Observed evidence satisfies required route controls for this metadata-only proof.",
-        "Missing expected AWS evidence source: cloudwatch_metric_or_log."
+        "Missing expected AWS evidence source: cloudwatch_metric_or_log.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [
         "cloudwatch_metric_or_log"
@@ -191,11 +248,13 @@
         "preserve_replay"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "block_execution",
         "explain_denial",
         "preserve_replay"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": false,
       "route_state": "BLOCK",
       "source_posture": "DENY",
@@ -203,9 +262,16 @@
     },
     {
       "action_id": "AWS_CHAIN_CLOUDWATCH_REMEDIATION_004",
+      "applied_required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "cloudwatch_remediation_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": false,
       "execution_status": "not_executed",
       "expected_aws_evidence_sources": [
@@ -213,8 +279,10 @@
         "cloudwatch_metric_or_log"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -228,11 +296,13 @@
         "preserve_replay"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "block_execution",
         "explain_denial",
         "preserve_replay"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": false,
       "route_state": "BLOCK",
       "source_posture": "DENY",
@@ -240,9 +310,19 @@
     },
     {
       "action_id": "AWS_CHAIN_COST_SCALE_SPIKE_005",
+      "applied_required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report",
+        "require_rollback_plan"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "cost_velocity_action_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
       "expected_aws_evidence_sources": [
@@ -251,8 +331,10 @@
         "cost_anomaly_signal"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -270,6 +352,7 @@
         "require_rollback_plan"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "checkpoint_before_execution",
         "limit_scope",
@@ -278,6 +361,7 @@
         "record_execution_report",
         "require_rollback_plan"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": true,
       "route_state": "CONSTRAINED_EXECUTE",
       "source_posture": "THROTTLE",
@@ -285,9 +369,16 @@
     },
     {
       "action_id": "AWS_CHAIN_S3_DATA_EXPOSURE_006",
+      "applied_required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "s3_policy_change_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": false,
       "execution_status": "not_executed",
       "expected_aws_evidence_sources": [
@@ -295,8 +386,10 @@
         "s3_policy_audit_record"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -310,11 +403,13 @@
         "preserve_replay"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "block_execution",
         "explain_denial",
         "preserve_replay"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": false,
       "route_state": "BLOCK",
       "source_posture": "DENY",
@@ -322,9 +417,16 @@
     },
     {
       "action_id": "AWS_CHAIN_CROSS_ACCOUNT_DELEGATION_007",
+      "applied_required_controls": [
+        "block_execution",
+        "explain_denial",
+        "preserve_replay"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "cross_account_trust_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": false,
       "execution_status": "not_executed",
       "expected_aws_evidence_sources": [
@@ -332,8 +434,10 @@
         "iam_access_analyzer_or_policy_record"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -347,11 +451,13 @@
         "preserve_replay"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "block_execution",
         "explain_denial",
         "preserve_replay"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": false,
       "route_state": "BLOCK",
       "source_posture": "DENY",
@@ -359,9 +465,19 @@
     },
     {
       "action_id": "AWS_CHAIN_AGENT_RETRY_LOOP_008",
+      "applied_required_controls": [
+        "checkpoint_before_execution",
+        "limit_scope",
+        "preserve_replay",
+        "preview_before_execution",
+        "record_execution_report",
+        "require_rollback_plan"
+      ],
       "aws_postcondition_status": "pass",
       "aws_surface": "agent_runtime_retry_loop_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
+      "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "held_for_review",
       "expected_aws_evidence_sources": [
@@ -370,8 +486,10 @@
         "cost_anomaly_signal"
       ],
       "failed_controls": [],
+      "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -389,6 +507,7 @@
         "require_rollback_plan"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "checkpoint_before_execution",
         "limit_scope",
@@ -397,12 +516,20 @@
         "record_execution_report",
         "require_rollback_plan"
       ],
+      "route_control_evidence_ratio": 1.0,
       "route_executable": true,
       "route_state": "CONSTRAINED_EXECUTE",
       "source_posture": "THROTTLE",
       "unexpected_controls": []
     }
   ],
+  "route_control_evidence": {
+    "applied_required_control_count": 33,
+    "failed_required_control_count": 0,
+    "missing_required_control_count": 0,
+    "required_control_count": 33,
+    "route_control_evidence_ratio": 1.0
+  },
   "source_chain_version": "smerc.aws-agent-action-chain.v1",
   "source_evaluation_version": "smerc.customer-evaluation.v1",
   "source_organization": "AWS-Style Agent Action Chain Review",

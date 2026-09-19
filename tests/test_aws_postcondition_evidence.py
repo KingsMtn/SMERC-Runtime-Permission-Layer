@@ -25,6 +25,8 @@ class AWSPostconditionEvidenceTests(unittest.TestCase):
         self.assertEqual(report["aws_postcondition_status_counts"].get("pass", 0), 7)
         self.assertEqual(report["aws_postcondition_status_counts"].get("gap", 0), 2)
         self.assertNotIn("unobserved", report["aws_postcondition_status_counts"])
+        self.assertEqual(report["evidence_assurance_counts"], {"modeled_unverified": 9})
+        self.assertEqual(report["proof_eligible_actions"], 0)
         self.assertGreater(report["route_control_evidence"]["required_control_count"], 0)
         self.assertGreater(report["route_control_evidence"]["route_control_evidence_ratio"], 0.9)
         self.assertEqual(report["agentcore_runtime_postcondition_summary"]["runtime_action_count"], 5)
@@ -35,6 +37,8 @@ class AWSPostconditionEvidenceTests(unittest.TestCase):
         )
         self.assertIn("AgentCore Runtime", " ".join(report["aws_official_signal_surfaces_used_as_model"]))
         self.assertIn("metadata-only", report["evidence_boundary"])
+        self.assertIn("modeled and unverified", report["evidence_boundary"])
+        self.assertTrue(all(not record["proof_eligible"] for record in report["records"]))
 
     def test_detects_missing_aws_source_and_missing_route_control(self):
         report = build_aws_postcondition_report(load_json_object(EVALUATION), load_aws_observations(OBSERVATIONS))
@@ -93,6 +97,8 @@ class AWSPostconditionEvidenceTests(unittest.TestCase):
         self.assertIn("Route control evidence", markdown)
         self.assertIn("AgentCore runtime postcondition summary", markdown)
         self.assertIn("Evidence ratio", markdown)
+        self.assertIn("Evidence assurance counts", markdown)
+        self.assertIn("Proof-eligible actions", markdown)
 
         scratch = ROOT / "tests" / "_tmp" / "aws_postcondition"
         json_path = scratch / "report.json"

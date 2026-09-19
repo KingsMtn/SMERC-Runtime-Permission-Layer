@@ -47,6 +47,7 @@ PROHIBITED_FIELDS = {
 
 EXECUTION_STATUSES = {"succeeded", "failed", "not_executed", "held_for_review", "rolled_back"}
 CONTROL_OUTCOMES = {"applied", "failed", "missing", "not_applicable"}
+DEFAULT_EVIDENCE_ASSURANCE = "modeled_unverified"
 
 
 def load_aws_observations(path: str | Path) -> list[Dict[str, Any]]:
@@ -88,6 +89,7 @@ def build_aws_postcondition_report(
     source_counts: Counter[str] = Counter()
     missing_source_counts: Counter[str] = Counter()
     status_counts: Counter[str] = Counter()
+    assurance_counts: Counter[str] = Counter()
     for generic in generic_report["records"]:
         action_id = generic["action_id"]
         aws_observation = aws_by_action.get(action_id)
@@ -110,11 +112,18 @@ def build_aws_postcondition_report(
             missing_source_counts.update(missing_sources)
 
         aws_status = generic["postcondition_status"]
+        evidence_assurance = DEFAULT_EVIDENCE_ASSURANCE if aws_observation else "unobserved"
+        proof_eligible = False
         findings = list(generic["findings"])
         if generic["coverage"] == "observed" and missing_sources:
             aws_status = "gap"
             findings.append(f"Missing expected AWS evidence source: {', '.join(missing_sources)}.")
+        if aws_observation:
+            findings.append(
+                "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
+            )
         status_counts[aws_status] += 1
+        assurance_counts[evidence_assurance] += 1
         records.append(
             {
                 **generic,
@@ -123,6 +132,8 @@ def build_aws_postcondition_report(
                 "observed_aws_evidence_sources": aws_sources,
                 "missing_aws_evidence_sources": missing_sources,
                 "aws_postcondition_status": aws_status,
+                "evidence_assurance": evidence_assurance,
+                "proof_eligible": proof_eligible,
                 "findings": findings,
             }
         )
@@ -148,14 +159,16 @@ def build_aws_postcondition_report(
         "aws_evidence_source_counts": dict(sorted(source_counts.items())),
         "missing_aws_evidence_source_counts": dict(sorted(missing_source_counts.items())),
         "aws_postcondition_status_counts": dict(sorted(status_counts.items())),
+        "evidence_assurance_counts": dict(sorted(assurance_counts.items())),
+        "proof_eligible_actions": sum(1 for item in records if item["proof_eligible"]),
         "agentcore_runtime_postcondition_summary": _agentcore_runtime_summary(records),
         "records": records,
         "aws_official_signal_surfaces_used_as_model": official_sources,
         "evidence_boundary": (
             "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, "
             "collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production "
-            "enforcement. It shows what safe observation fields a customer or AWS-style reviewer could export to prove "
-            "that SMERC-required controls happened after routing."
+            "enforcement. Supplied observations can show route satisfaction, but remain modeled and unverified until "
+            "a trusted adapter or native-record verifier authenticates and binds them to the action."
         ),
         "work_result_impact": {
             "work": (
@@ -211,21 +224,24 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             f"- Observed actions: `{report['observed_actions']}`",
             f"- Route control evidence: `{report['route_control_evidence']}`",
             f"- AWS postcondition status counts: `{report['aws_postcondition_status_counts']}`",
+            f"- Evidence assurance counts: `{report['evidence_assurance_counts']}`",
+            f"- Proof-eligible actions: `{report['proof_eligible_actions']}`",
             f"- AgentCore runtime postcondition summary: `{report['agentcore_runtime_postcondition_summary']}`",
             f"- Observed AWS evidence sources: `{report['aws_evidence_source_counts']}`",
             f"- Missing AWS evidence sources: `{report['missing_aws_evidence_source_counts']}`",
             "",
             "## Action Checks",
             "",
-            "| Action | AWS surface | Route | Execution | Evidence ratio | Missing route controls | Missing AWS sources | Status |",
-            "| --- | --- | --- | --- | --- | --- | --- | --- |",
+            "| Action | AWS surface | Route | Execution | Evidence ratio | Missing route controls | Missing AWS sources | Status | Assurance | Proof eligible |",
+            "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
         ]
     )
     for item in report["records"]:
         lines.append(
             f"| `{item['action_id']}` | `{item['aws_surface']}` | `{item['route_state']}` | "
             f"`{item['execution_status']}` | `{item['route_control_evidence_ratio']}` | `{item['missing_controls']}` | "
-            f"`{item['missing_aws_evidence_sources']}` | `{item['aws_postcondition_status']}` |"
+            f"`{item['missing_aws_evidence_sources']}` | `{item['aws_postcondition_status']}` | "
+            f"`{item['evidence_assurance']}` | `{item['proof_eligible']}` |"
         )
     lines.extend(
         [
