@@ -135,9 +135,99 @@ class CrossPathSafetyInvariantTests(unittest.TestCase):
         self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", combined["reason_codes"])
         self.assertTrue(combined["admission_capped_recoverability_scoring"])
 
+    def test_one_canonical_action_has_identical_safety_signature_across_paths(self):
+        decisions = self._canonical_cross_path_decisions()
+        expected = self._safety_signature(decisions["recoverability"])
+
+        for path, decision in decisions.items():
+            with self.subTest(path=path):
+                self.assertEqual(self._safety_signature(decision), expected)
+                self.assertEqual(decision["posture"], "DENY")
+                self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", decision["reason_codes"])
+                self.assertIn("ROLLBACK_LATENCY_UNAVAILABLE", decision["reason_codes"])
+                self.assertIn("CONTAINMENT_STRENGTH_UNAVAILABLE", decision["reason_codes"])
+
     @staticmethod
     def _safety_signature(decision):
         return decision["posture"], frozenset(decision["reason_codes"])
+
+    @classmethod
+    def _canonical_cross_path_decisions(cls):
+        action = cls._engine_action()
+        engine_decision = RecoverabilityEngine().evaluate(action)
+
+        language = copy.deepcopy(ACTION_LANGUAGE_SAMPLE)
+        language["action"].update(
+            {
+                "id": action["action_id"],
+                "description": action["description"],
+                "actor": action["actor"],
+                "tool": action["tool"],
+                "type": action["action_type"],
+            }
+        )
+        language["action"]["authority"]["confidence"] = action["authorization_confidence"]
+        language["signals"] = {
+            key: action[key]
+            for key in ("base_action_risk", "evidence_validity", "anomaly_pressure", "impact_scope")
+        }
+        language["recoverability"] = {
+            key: action[key]
+            for key in ("reversibility", "cancel_reliability")
+        }
+        language["recoverability"]["rollback_method"] = "No verified rollback method"
+        language["effects"] = {
+            "external_side_effect": action["external_side_effect"],
+            "sensitive_data": action["sensitive_data"],
+        }
+        language["context"] = copy.deepcopy(action["context"])
+
+        customer = copy.deepcopy(load_payload(CUSTOMER_SAMPLE))
+        customer_action = copy.deepcopy(customer["actions"][0])
+        for key, value in action.items():
+            if key != "context":
+                customer_action[key] = value
+        customer_action["context"] = copy.deepcopy(action["context"])
+        customer_action.pop("rollback_latency", None)
+        customer_action.pop("containment_strength", None)
+        customer_action["ref_gate"] = {key: True for key in customer_action["ref_gate"]}
+        customer_action["tool_plan"]["side_effect_level"] = "external"
+        customer["actions"] = [customer_action]
+        customer["agents"] = []
+
+        mcp = copy.deepcopy(MCP_SAMPLE)
+        mcp.pop("agent_identity", None)
+        mcp["agent"]["agent_id"] = action["actor"]
+        mcp["server"]["name"] = "cloud"
+        mcp["tool_call"].update(
+            {
+                "tool_name": "deploy",
+                "description": action["description"],
+                "operation_class": "deploy",
+                "domain_profile": "general",
+                "external_side_effect": action["external_side_effect"],
+                "sensitive_data": action["sensitive_data"],
+            }
+        )
+        mcp["risk_signals"] = {
+            key: action[key]
+            for key in (
+                "base_action_risk",
+                "reversibility",
+                "evidence_validity",
+                "anomaly_pressure",
+                "impact_scope",
+                "cancel_reliability",
+                "authorization_confidence",
+            )
+        }
+
+        return {
+            "recoverability": engine_decision,
+            "action_language": evaluate_language_action(language),
+            "customer_evaluation": build_customer_evaluation(customer)["records"][0]["decision"],
+            "mcp": evaluate_mcp_tool_call(mcp)["decision"],
+        }
 
     @classmethod
     def _recoverability_variants(cls):
