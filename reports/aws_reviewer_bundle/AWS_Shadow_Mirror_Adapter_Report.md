@@ -1,6 +1,6 @@
 # AWS Shadow Mirror Adapter Report
 
-Generated: `2026-09-14T01:23:39+00:00`
+Generated: `2026-09-19T01:02:35+00:00`
 Version: `smerc.aws-shadow-mirror-adapter.v1`
 
 ## Purpose

@@ -54,12 +54,19 @@
     "pass": 7
   },
   "evaluated_actions": 9,
-  "evidence_boundary": "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement. It shows what safe observation fields a customer or AWS-style reviewer could export to prove that SMERC-required controls happened after routing.",
-  "generated_at": "2026-09-14T01:23:39+00:00",
+  "evidence_assurance_counts": {
+    "modeled_unverified": 9
+  },
+  "evidence_boundary": "This is metadata-only AWS-style postcondition evidence. It does not call AWS APIs, read live AWS accounts, collect raw CloudTrail, collect raw CloudWatch logs, expose account IDs, expose ARNs, or prove AWS production enforcement. Supplied observations can show route satisfaction, but remain modeled and unverified until a trusted adapter or native-record verifier authenticates and binds them to the action.",
+  "generated_at": "2026-09-19T01:02:35+00:00",
   "missing_aws_evidence_source_counts": {
     "cloudwatch_metric_or_log": 1
   },
   "observed_actions": 9,
+  "proof_eligible_actions": 0,
+  "provenance_verification": {
+    "status": "NOT_PROVIDED"
+  },
   "records": [
     {
       "action_id": "AWS_ADAPTER_001_invoke_lambda_backed_customer_configuration_tool_through_governed_gatewa",
@@ -74,6 +81,7 @@
       "aws_postcondition_status": "pass",
       "aws_surface": "agentcore_gateway_tool_call_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
       "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
@@ -87,7 +95,8 @@
       "failed_controls": [],
       "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -107,6 +116,7 @@
         "require_rollback_plan"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "checkpoint_before_execution",
         "limit_scope",
@@ -131,6 +141,7 @@
       "aws_postcondition_status": "pass",
       "aws_surface": "iam_policy_change_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
       "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": false,
       "execution_status": "not_executed",
@@ -141,7 +152,8 @@
       "failed_controls": [],
       "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -155,6 +167,7 @@
         "preserve_replay"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "block_execution",
         "explain_denial",
@@ -178,6 +191,7 @@
       "aws_postcondition_status": "gap",
       "aws_surface": "cloudformation_changeset_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
       "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
@@ -190,7 +204,8 @@
       "failed_required_controls": [],
       "findings": [
         "Observed evidence satisfies required route controls for this metadata-only proof.",
-        "Missing expected AWS evidence source: cloudwatch_metric_or_log."
+        "Missing expected AWS evidence source: cloudwatch_metric_or_log.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [
         "cloudwatch_metric_or_log"
@@ -208,6 +223,7 @@
         "record_execution_report"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "checkpoint_before_execution",
         "limit_scope",
@@ -234,6 +250,7 @@
       "aws_postcondition_status": "pass",
       "aws_surface": "cost_anomaly_action_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
       "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
@@ -245,7 +262,8 @@
       "failed_controls": [],
       "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -263,6 +281,7 @@
         "require_rollback_plan"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "checkpoint_before_execution",
         "limit_scope",
@@ -289,6 +308,7 @@
       "aws_postcondition_status": "gap",
       "aws_surface": "s3_policy_change_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
       "evidence_depth": "partial_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
@@ -299,7 +319,8 @@
       "failed_controls": [],
       "failed_required_controls": [],
       "findings": [
-        "Missing required control evidence: require_rollback_plan."
+        "Missing required control evidence: require_rollback_plan.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [
@@ -317,6 +338,7 @@
         "record_execution_report"
       ],
       "postcondition_status": "gap",
+      "proof_eligible": false,
       "required_controls": [
         "checkpoint_before_execution",
         "limit_scope",
@@ -343,6 +365,7 @@
       "aws_postcondition_status": "pass",
       "aws_surface": "secrets_rotation_summary",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
       "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
@@ -353,7 +376,8 @@
       "failed_controls": [],
       "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -369,6 +393,7 @@
         "record_execution_report"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "checkpoint_before_execution",
         "limit_scope",
@@ -395,6 +420,7 @@
       "aws_postcondition_status": "pass",
       "aws_surface": "bedrock_agentcore_runtime",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
       "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": true,
       "execution_status": "succeeded",
@@ -409,7 +435,8 @@
       "failed_controls": [],
       "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -430,6 +457,7 @@
         "require_rollback_plan"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "checkpoint_before_execution",
         "limit_scope",
@@ -454,6 +482,7 @@
       "aws_postcondition_status": "pass",
       "aws_surface": "bedrock_agentcore_runtime",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
       "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": false,
       "execution_status": "not_executed",
@@ -465,7 +494,8 @@
       "failed_controls": [],
       "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -480,6 +510,7 @@
         "preserve_replay"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "block_execution",
         "explain_denial",
@@ -501,6 +532,7 @@
       "aws_postcondition_status": "pass",
       "aws_surface": "bedrock_agentcore_runtime_command",
       "coverage": "observed",
+      "evidence_assurance": "modeled_unverified",
       "evidence_depth": "complete_required_control_evidence",
       "execution_attempted": false,
       "execution_status": "not_executed",
@@ -512,7 +544,8 @@
       "failed_controls": [],
       "failed_required_controls": [],
       "findings": [
-        "Observed evidence satisfies required route controls for this metadata-only proof."
+        "Observed evidence satisfies required route controls for this metadata-only proof.",
+        "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
       ],
       "missing_aws_evidence_sources": [],
       "missing_controls": [],
@@ -527,6 +560,7 @@
         "preserve_replay"
       ],
       "postcondition_status": "pass",
+      "proof_eligible": false,
       "required_controls": [
         "block_execution",
         "explain_denial",

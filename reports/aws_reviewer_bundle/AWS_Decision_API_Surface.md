@@ -1,6 +1,6 @@
 # AWS Decision API Surface
 
-Generated: `2026-09-14T01:23:39+00:00`
+Generated: `2026-09-19T01:02:35+00:00`
 Version: `smerc.aws-decision-api-surface.v1`
 Status: `reviewable_aws_decision_surface`
 Handler version: `smerc.aws-lambda-decision-handler.v1`

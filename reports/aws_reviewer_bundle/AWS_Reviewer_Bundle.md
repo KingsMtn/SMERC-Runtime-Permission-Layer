@@ -1,6 +1,6 @@
 # AWS-Style Reviewer Bundle
 
-Generated: `2026-09-14T01:23:39+00:00`
+Generated: `2026-09-19T01:02:35+00:00`
 Version: `smerc.aws-reviewer-bundle.v1`
 Bundle status: `ready_for_limited_aws_review`
 
@@ -19,17 +19,20 @@ Guardrails check content. IAM checks authority. SMERC checks recoverability. Sha
 ## Work / Result / Impact
 
 - Work: Assemble the AWS-style reviewer path into one local package: action-chain proof, decision API surface, route-control postcondition evidence, AWS postcondition evidence, shadow mirror metadata evidence, performance metrics, and customer-owned AWS metadata request.
-- Result: Generated an AWS reviewer bundle with 8 action-chain examples, decision API status reviewable_aws_decision_surface, chain postcondition statuses {'gap': 1, 'pass': 7}, AWS postcondition statuses {'gap': 2, 'pass': 7}, and slowest local p95 4.471 ms. The shadow mirror path accepted 3 safe rows and skipped 1 unsafe rows.
+- Result: Generated an AWS reviewer bundle with 8 action-chain examples, decision API status reviewable_aws_decision_surface, chain postcondition statuses {'gap': 1, 'pass': 7}, AWS postcondition statuses {'gap': 2, 'pass': 7}, and slowest local p95 13.002 ms. The shadow mirror path accepted 3 safe rows and skipped 1 unsafe rows.
 - Impact: An AWS-style platform reviewer can inspect where SMERC fits, what it decides, what evidence would prove the route, and what safe customer-owned metadata is needed next without granting live AWS access.
 
 ## Readiness
 
 - Status: `ready_for_limited_aws_review`
-- Slowest local p95 ms: `4.471`
+- Slowest local p95 ms: `13.002`
 - Chain postcondition gaps: `1`
 - Chain postcondition violations: `0`
 - AWS postcondition gaps: `2`
 - AWS postcondition violations: `0`
+- Chain proof-eligible observations: `0`
+- AWS proof-eligible observations: `0`
+- Customer proof-eligible observations: `0`
 
 ## Reviewer Takeaways
 
@@ -38,7 +41,7 @@ Guardrails check content. IAM checks authority. SMERC checks recoverability. Sha
 - The shadow mirror path adds operational flow evidence without packet payloads or live AWS access.
 - The proof remains metadata-only and does not need live AWS access.
 - The next real proof is reviewer-owned AWS-style metadata from one workflow.
-- Warnings: AWS chain postcondition evidence includes expected evidence gaps, AWS postcondition evidence includes expected evidence gaps, AWS shadow mirror proof intentionally skipped unsafe or unsupported rows.
+- Warnings: AWS chain postcondition evidence includes expected evidence gaps, AWS postcondition evidence includes expected evidence gaps, AWS chain observations are modeled and not proof-eligible, AWS observations are modeled and not proof-eligible, AWS shadow mirror proof intentionally skipped unsafe or unsupported rows.
 
 ## Included Reports
 
@@ -46,10 +49,10 @@ Guardrails check content. IAM checks authority. SMERC checks recoverability. Sha
 | --- | --- |
 | AWS agent action chain | scenarios=`8`, postures=`{'DENY': 5, 'THROTTLE': 3}` |
 | AWS decision API surface | status=`reviewable_aws_decision_surface`, operation_id=`evaluateAwsActionRecoverability`, posture=`THROTTLE` |
-| AWS chain postcondition evidence | statuses=`{'gap': 1, 'pass': 7}` |
-| AWS postcondition evidence | statuses=`{'gap': 2, 'pass': 7}` |
+| AWS chain postcondition evidence | statuses=`{'gap': 1, 'pass': 7}`, proof_eligible=`0` |
+| AWS postcondition evidence | statuses=`{'gap': 2, 'pass': 7}`, proof_eligible=`0` |
 | AWS shadow mirror metadata | accepted_rows=`3`, skipped_rows=`1`, postures=`{'ALLOW': 1, 'DENY': 1, 'THROTTLE': 1}` |
-| Performance | status=`ready_for_local_review`, slowest_p95_ms=`4.471` |
+| Performance | status=`ready_for_local_review`, slowest_p95_ms=`13.002` |
 | AWS customer-owned metadata request | requested_actions=`12` |
 
 ## Evidence Boundary

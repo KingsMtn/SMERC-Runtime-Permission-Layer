@@ -28,7 +28,9 @@ from reference_engine.aws_postcondition_evidence import (
     load_aws_observations,
     load_json_object,
     render_markdown as render_aws_postcondition_markdown,
+    verify_aws_observation_provenance,
 )
+from reference_engine.evidence_provenance import hmac_key_from_env
 from reference_engine.aws_shadow_mirror_adapter import (
     build_adapter_report as build_shadow_mirror_report,
     load_source_exports as load_shadow_mirror_exports,
@@ -55,6 +57,8 @@ def build_aws_reviewer_bundle(
     iterations: int = 5,
     customer_aws_source_exports: str | Path | None = None,
     customer_aws_observations: str | Path | None = None,
+    customer_aws_provenance_ledger: str | Path | None = None,
+    customer_aws_hmac_key: bytes | None = None,
     customer_aws_shadow_mirror_exports: str | Path | None = None,
 ) -> Dict[str, Any]:
     base = Path(root)
@@ -79,10 +83,25 @@ def build_aws_reviewer_bundle(
     if customer_aws_source_exports:
         customer_metadata_review = build_adapter_report(load_source_exports(_resolve_path(base, customer_aws_source_exports)))
         if customer_aws_observations:
+            customer_observations = load_aws_observations(_resolve_path(base, customer_aws_observations))
+            customer_provenance = None
+            if customer_aws_provenance_ledger:
+                customer_provenance = verify_aws_observation_provenance(
+                    customer_observations,
+                    load_json_object(_resolve_path(base, customer_aws_provenance_ledger)),
+                    hmac_key=customer_aws_hmac_key,
+                )
             customer_postcondition = build_aws_postcondition_report(
                 customer_metadata_review["customer_evaluation"],
-                load_aws_observations(_resolve_path(base, customer_aws_observations)),
+                customer_observations,
+                provenance_verification=customer_provenance,
             )
+    elif customer_aws_observations or customer_aws_provenance_ledger:
+        raise ValueError("customer AWS observations and provenance require customer AWS source exports")
+    if customer_aws_provenance_ledger and not customer_aws_observations:
+        raise ValueError("customer AWS provenance ledger requires customer AWS observations")
+    if customer_aws_hmac_key is not None and not customer_aws_provenance_ledger:
+        raise ValueError("customer AWS HMAC key requires customer AWS provenance ledger")
     if customer_aws_shadow_mirror_exports:
         customer_shadow_mirror_review = build_shadow_mirror_report(
             load_shadow_mirror_exports(_resolve_path(base, customer_aws_shadow_mirror_exports))
@@ -184,6 +203,9 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
             f"- Chain postcondition violations: `{readiness['chain_postcondition_violations']}`",
             f"- AWS postcondition gaps: `{readiness['aws_postcondition_gaps']}`",
             f"- AWS postcondition violations: `{readiness['aws_postcondition_violations']}`",
+            f"- Chain proof-eligible observations: `{readiness['chain_proof_eligible_actions']}`",
+            f"- AWS proof-eligible observations: `{readiness['aws_proof_eligible_actions']}`",
+            f"- Customer proof-eligible observations: `{readiness['customer_proof_eligible_actions']}`",
             "",
             "## Reviewer Takeaways",
             "",
@@ -208,11 +230,13 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
             ),
             (
                 f"| AWS chain postcondition evidence | statuses="
-                f"`{reports['aws_agent_action_chain_postcondition']['aws_postcondition_status_counts']}` |"
+                f"`{reports['aws_agent_action_chain_postcondition']['aws_postcondition_status_counts']}`, "
+                f"proof_eligible=`{reports['aws_agent_action_chain_postcondition']['proof_eligible_actions']}` |"
             ),
             (
                 f"| AWS postcondition evidence | statuses="
-                f"`{reports['aws_postcondition_evidence']['aws_postcondition_status_counts']}` |"
+                f"`{reports['aws_postcondition_evidence']['aws_postcondition_status_counts']}`, "
+                f"proof_eligible=`{reports['aws_postcondition_evidence']['proof_eligible_actions']}` |"
             ),
             (
                 f"| AWS shadow mirror metadata | accepted_rows=`{reports['aws_shadow_mirror']['accepted_rows']}`, "
@@ -239,7 +263,8 @@ def render_markdown(bundle: Mapping[str, Any]) -> str:
         customer_postcondition = reports["customer_aws_postcondition_evidence"]
         lines.append(
             f"| Customer AWS postcondition evidence | statuses="
-            f"`{customer_postcondition['aws_postcondition_status_counts']}` |"
+            f"`{customer_postcondition['aws_postcondition_status_counts']}`, "
+            f"proof_eligible=`{customer_postcondition['proof_eligible_actions']}` |"
         )
     if reports.get("customer_aws_shadow_mirror_review"):
         customer_shadow = reports["customer_aws_shadow_mirror_review"]
@@ -359,6 +384,9 @@ def _readiness(
     aws_gaps = int(aws_counts.get("gap", 0))
     aws_violations = int(aws_counts.get("violation", 0))
     slowest_p95 = float(performance["slowest_p95_ms"])
+    chain_proof_eligible = int(chain_postcondition.get("proof_eligible_actions", 0))
+    aws_proof_eligible = int(aws_postcondition.get("proof_eligible_actions", 0))
+    customer_proof_eligible = int(customer_postcondition.get("proof_eligible_actions", 0)) if customer_postcondition else 0
 
     blockers = []
     if chain_violations or aws_violations:
@@ -371,12 +399,18 @@ def _readiness(
         warnings.append("AWS chain postcondition evidence includes expected evidence gaps")
     if aws_gaps:
         warnings.append("AWS postcondition evidence includes expected evidence gaps")
+    if chain_proof_eligible < int(chain_postcondition.get("observed_actions", 0)):
+        warnings.append("AWS chain observations are modeled and not proof-eligible")
+    if aws_proof_eligible < int(aws_postcondition.get("observed_actions", 0)):
+        warnings.append("AWS observations are modeled and not proof-eligible")
     if slowest_p95 >= 250:
         warnings.append("local proof-path p95 should be remeasured in the reviewer environment")
     if customer_metadata_review is not None and int(customer_metadata_review["accepted_rows"]) < 5:
         warnings.append("customer AWS metadata review has fewer than 5 accepted rows")
     if customer_postcondition is not None and int(customer_postcondition["aws_postcondition_status_counts"].get("violation", 0)):
         blockers.append("customer AWS postcondition evidence includes a route violation")
+    if customer_postcondition is not None and customer_proof_eligible < int(customer_postcondition.get("observed_actions", 0)):
+        warnings.append("customer AWS observations are not fully authenticated or proof-eligible")
     if int(shadow_mirror["skipped_rows"]) > 0:
         warnings.append("AWS shadow mirror proof intentionally skipped unsafe or unsupported rows")
     if customer_shadow_mirror_review is not None and int(customer_shadow_mirror_review["accepted_rows"]) < 5:
@@ -425,6 +459,9 @@ def _readiness(
         "chain_postcondition_violations": chain_violations,
         "aws_postcondition_gaps": aws_gaps,
         "aws_postcondition_violations": aws_violations,
+        "chain_proof_eligible_actions": chain_proof_eligible,
+        "aws_proof_eligible_actions": aws_proof_eligible,
+        "customer_proof_eligible_actions": customer_proof_eligible,
         "warnings": warnings,
         "blockers": blockers,
         "takeaways": takeaways,
@@ -452,6 +489,8 @@ def main() -> int:
     parser.add_argument("--iterations", type=int, default=5)
     parser.add_argument("--customer-aws-source-exports")
     parser.add_argument("--customer-aws-observations")
+    parser.add_argument("--customer-aws-provenance-ledger")
+    parser.add_argument("--customer-aws-hmac-key-env")
     parser.add_argument("--customer-aws-shadow-mirror-exports")
     parser.add_argument("--output-dir", default="reports/aws_reviewer_bundle")
     parser.add_argument("--pretty", action="store_true")
@@ -463,6 +502,8 @@ def main() -> int:
         iterations=args.iterations,
         customer_aws_source_exports=args.customer_aws_source_exports,
         customer_aws_observations=args.customer_aws_observations,
+        customer_aws_provenance_ledger=args.customer_aws_provenance_ledger,
+        customer_aws_hmac_key=hmac_key_from_env(args.customer_aws_hmac_key_env),
         customer_aws_shadow_mirror_exports=args.customer_aws_shadow_mirror_exports,
     )
     write_outputs(bundle, output_dir=args.output_dir)

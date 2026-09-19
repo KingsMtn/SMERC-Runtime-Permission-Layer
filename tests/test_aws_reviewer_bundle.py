@@ -8,6 +8,8 @@ from reference_engine.aws_reviewer_bundle import (
     render_markdown,
     write_outputs,
 )
+from reference_engine.aws_postcondition_evidence import load_aws_observations
+from reference_engine.evidence_provenance import build_ledger, digest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,6 +36,9 @@ class AWSReviewerBundleTests(unittest.TestCase):
             "evaluateAwsActionRecoverability",
         )
         self.assertEqual(bundle["reports"]["aws_customer_owned_metadata_request"]["workflow_family"], "aws")
+        self.assertEqual(bundle["readiness"]["chain_proof_eligible_actions"], 0)
+        self.assertEqual(bundle["readiness"]["aws_proof_eligible_actions"], 0)
+        self.assertIn("not proof-eligible", " ".join(bundle["readiness"]["warnings"]))
         self.assertIn("metadata-only", bundle["evidence_boundary"])
         self.assertIn("packet payloads", bundle["evidence_boundary"])
 
@@ -49,6 +54,7 @@ class AWSReviewerBundleTests(unittest.TestCase):
         self.assertIn("AWS shadow mirror metadata", markdown)
         self.assertIn("Evidence Boundary", markdown)
         self.assertIn("Next Action", markdown)
+        self.assertIn("AWS proof-eligible observations", markdown)
 
     def test_writes_bundle_outputs(self):
         scratch = ROOT / "tests" / "_tmp" / "aws_reviewer_bundle"
@@ -70,6 +76,49 @@ class AWSReviewerBundleTests(unittest.TestCase):
         self.assertTrue((scratch / "AWS_Shadow_Mirror_Adapter_Report.md").exists())
         self.assertTrue((scratch / "Serious_Report_Performance.md").exists())
         self.assertTrue((scratch / "AWS_Customer_Owned_Metadata_Request.md").exists())
+
+    def test_customer_provenance_is_verified_through_bundle(self):
+        observations_path = ROOT / "examples" / "aws_customer_postcondition_observations_sample.json"
+        observations = load_aws_observations(observations_path)
+        provenance_rows = [{"observation_id": row["action_id"], **row} for row in observations]
+        artifacts = {row["observation_id"]: digest({"fixture": row["observation_id"]}) for row in provenance_rows}
+        key = b"aws-reviewer-bundle-test-key-0123456789"
+        ledger = build_ledger(
+            provenance_rows,
+            program_id="aws-customer-review-test",
+            collector_id="customer-test-adapter",
+            collection_method="test-fixture",
+            artifact_digests=artifacts,
+            hmac_key=key,
+            recorded_at="2026-09-18T20:00:00+00:00",
+        )
+        ledger_path = ROOT / "tests" / "_tmp" / "aws_reviewer_bundle" / "customer_provenance.json"
+        ledger_path.parent.mkdir(parents=True, exist_ok=True)
+        ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+
+        bundle = build_aws_reviewer_bundle(
+            root=ROOT,
+            iterations=1,
+            customer_aws_source_exports="examples/aws_customer_metadata_filled_sample.json",
+            customer_aws_observations="examples/aws_customer_postcondition_observations_sample.json",
+            customer_aws_provenance_ledger=ledger_path,
+            customer_aws_hmac_key=key,
+        )
+
+        customer = bundle["reports"]["customer_aws_postcondition_evidence"]
+        self.assertEqual(customer["proof_eligible_actions"], customer["observed_actions"])
+        self.assertEqual(bundle["readiness"]["customer_proof_eligible_actions"], customer["observed_actions"])
+        self.assertNotIn("customer AWS observations are not fully authenticated", bundle["readiness"]["warnings"])
+
+    def test_rejects_hmac_key_without_provenance_ledger(self):
+        with self.assertRaisesRegex(ValueError, "HMAC key requires customer AWS provenance ledger"):
+            build_aws_reviewer_bundle(
+                root=ROOT,
+                iterations=1,
+                customer_aws_source_exports="examples/aws_customer_metadata_filled_sample.json",
+                customer_aws_observations="examples/aws_customer_postcondition_observations_sample.json",
+                customer_aws_hmac_key=b"unused-key",
+            )
 
     def test_docs_and_readme_reference_bundle(self):
         docs = (ROOT / "docs" / "AWS_Reviewer_Bundle.md").read_text(encoding="utf-8")

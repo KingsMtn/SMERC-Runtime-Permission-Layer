@@ -88,3 +88,5 @@ python -m reference_engine.aws_reviewer_bundle \
   --iterations 1 \
   --pretty
 ```
+
+For authenticated customer observation provenance, also provide `--customer-aws-provenance-ledger` and `--customer-aws-hmac-key-env`. The bundle reports route satisfaction separately from proof eligibility and will warn when supplied customer observations are not authenticated.
