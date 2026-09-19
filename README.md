@@ -101,6 +101,7 @@ Fast reviewer paths:
 - Product readiness index: `docs/Product_Readiness_Index.md`
 - Shadow-mode product lane: `docs/Shadow_Mode_Product_Lane.md`
 - Buyer-facing proof packet: `docs/Buyer_Facing_Proof_Packet.md`
+- Weekly integration validation: `docs/Weekly_Validation_2026-09-18.md`
 - AWS shadow-mode buyer example: `docs/AWS_Shadow_Mode_Buyer_Example.md`
 - AWS open-source validation corpus: `docs/AWS_Open_Source_Validation_Corpus.md`
 - AWS execution-boundary contrast: `docs/AWS_Execution_Boundary_Contrast.md`
