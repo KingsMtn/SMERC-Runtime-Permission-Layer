@@ -89,6 +89,10 @@ separate written agreement says otherwise.
 Do not submit customer-confidential data, production secrets, regulated
 payloads, or proprietary material you do not have permission to share.
 
+Production AWS executors, customer-specific adapters, operational calibration,
+and private evidence belong outside this public repository. See
+`docs/Public_Private_Product_Boundary.md` before proposing a production integration.
+
 ## Security Issues
 
 Do not open public issues for sensitive vulnerabilities. Follow `SECURITY.md`.

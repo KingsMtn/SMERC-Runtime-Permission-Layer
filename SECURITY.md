@@ -8,6 +8,9 @@ SMERC is an MVP/reference implementation intended for controlled technical revie
 
 Do not publish suspected vulnerabilities, secrets, or sensitive customer information in a public issue.
 
+When GitHub private vulnerability reporting is enabled, use the repository's
+**Security > Report a vulnerability** path. Otherwise contact the repository owner privately before disclosing details.
+
 Use the repository owner's private GitHub contact path to report a suspected security issue and include:
 
 - affected component
