@@ -1041,6 +1041,7 @@ python -m reference_engine.mcp_proxy_runner --request examples/mcp/tool_call_del
 python -m reference_engine.mcp_proxy_runner --request examples/mcp/tool_call_search_docs.json --mode enforce --require-agent-identity --pretty
 python -m reference_engine.mcp_transport_proxy --envelope examples/mcp/transport_proxy_delete_customer_records.json --require-agent-identity --pretty
 python -m reference_engine.mcp_governance_gateway --mode enforce --pretty
+python -m reference_engine.mcp_aws_enforcement_adapter
 python -m reference_engine.self_service_pilot_connector --bundle examples/self_service_pilot_bundle.json --pretty
 python -m reference_engine.content_evidence --pretty
 python -m reference_engine.fallback_policy --pretty
