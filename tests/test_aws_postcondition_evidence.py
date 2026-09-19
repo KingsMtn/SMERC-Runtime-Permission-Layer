@@ -1,3 +1,4 @@
+import copy
 import unittest
 from pathlib import Path
 
@@ -6,8 +7,10 @@ from reference_engine.aws_postcondition_evidence import (
     load_aws_observations,
     load_json_object,
     render_markdown,
+    verify_aws_observation_provenance,
     write_outputs,
 )
+from reference_engine.evidence_provenance import build_ledger, digest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -86,6 +89,55 @@ class AWSPostconditionEvidenceTests(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             load_aws_observations(scratch)
+
+    def test_authenticated_provenance_makes_only_admitted_observations_proof_eligible(self):
+        observations = load_aws_observations(OBSERVATIONS)
+        provenance_rows = [{"observation_id": row["action_id"], **row} for row in observations]
+        artifacts = {row["observation_id"]: digest({"fixture": row["observation_id"]}) for row in provenance_rows}
+        key = b"aws-postcondition-test-key-0123456789"
+        ledger = build_ledger(
+            provenance_rows,
+            program_id="aws-postconditions-test",
+            collector_id="test-adapter",
+            collection_method="test-fixture",
+            artifact_digests=artifacts,
+            hmac_key=key,
+            recorded_at="2026-09-18T20:00:00+00:00",
+        )
+
+        verification = verify_aws_observation_provenance(observations, ledger, hmac_key=key)
+        report = build_aws_postcondition_report(
+            load_json_object(EVALUATION),
+            observations,
+            provenance_verification=verification,
+        )
+
+        self.assertEqual(verification["status"], "AUTHENTICATED")
+        self.assertEqual(report["proof_eligible_actions"], 9)
+        self.assertEqual(report["evidence_assurance_counts"], {"authenticated_provenance": 9})
+        self.assertTrue(all(record["proof_eligible"] for record in report["records"]))
+
+        hash_only_ledger = build_ledger(
+            provenance_rows,
+            program_id="aws-postconditions-test",
+            collector_id="test-adapter",
+            collection_method="test-fixture",
+            artifact_digests=artifacts,
+            recorded_at="2026-09-18T20:00:00+00:00",
+        )
+        hash_only_verification = verify_aws_observation_provenance(observations, hash_only_ledger)
+        hash_only_report = build_aws_postcondition_report(
+            load_json_object(EVALUATION),
+            observations,
+            provenance_verification=hash_only_verification,
+        )
+        self.assertEqual(hash_only_verification["status"], "HASH_VERIFIED")
+        self.assertEqual(hash_only_report["proof_eligible_actions"], 0)
+
+        tampered = copy.deepcopy(observations)
+        tampered[0]["execution"]["status"] = "failed"
+        with self.assertRaisesRegex(ValueError, "does not match the observation"):
+            verify_aws_observation_provenance(tampered, ledger, hmac_key=key)
 
     def test_markdown_and_outputs_include_work_result_impact(self):
         report = build_aws_postcondition_report(load_json_object(EVALUATION), load_aws_observations(OBSERVATIONS))

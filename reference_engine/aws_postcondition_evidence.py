@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping
 
+from reference_engine.evidence_provenance import hmac_key_from_env, verify_ledger
 from reference_engine.postcondition_evidence import build_postcondition_report
 
 
@@ -76,9 +77,13 @@ def load_json_object(path: str | Path) -> Dict[str, Any]:
 
 
 def build_aws_postcondition_report(
-    evaluation: Mapping[str, Any], observations: Iterable[Mapping[str, Any]]
+    evaluation: Mapping[str, Any],
+    observations: Iterable[Mapping[str, Any]],
+    *,
+    provenance_verification: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     normalized_observations = [dict(item) for item in observations]
+    authenticated_action_ids = _authenticated_action_ids(provenance_verification)
     generic_report = build_postcondition_report(
         evaluation,
         [_to_generic_observation(item) for item in normalized_observations],
@@ -112,16 +117,22 @@ def build_aws_postcondition_report(
             missing_source_counts.update(missing_sources)
 
         aws_status = generic["postcondition_status"]
-        evidence_assurance = DEFAULT_EVIDENCE_ASSURANCE if aws_observation else "unobserved"
-        proof_eligible = False
+        proof_eligible = action_id in authenticated_action_ids
+        evidence_assurance = (
+            "authenticated_provenance"
+            if proof_eligible
+            else DEFAULT_EVIDENCE_ASSURANCE if aws_observation else "unobserved"
+        )
         findings = list(generic["findings"])
         if generic["coverage"] == "observed" and missing_sources:
             aws_status = "gap"
             findings.append(f"Missing expected AWS evidence source: {', '.join(missing_sources)}.")
-        if aws_observation:
+        if aws_observation and not proof_eligible:
             findings.append(
                 "Evidence assurance is modeled_unverified; route satisfaction is not independent proof that native AWS controls operated."
             )
+        elif proof_eligible:
+            findings.append("Evidence provenance ledger authenticated and bound this observation to the reported action.")
         status_counts[aws_status] += 1
         assurance_counts[evidence_assurance] += 1
         records.append(
@@ -161,6 +172,7 @@ def build_aws_postcondition_report(
         "aws_postcondition_status_counts": dict(sorted(status_counts.items())),
         "evidence_assurance_counts": dict(sorted(assurance_counts.items())),
         "proof_eligible_actions": sum(1 for item in records if item["proof_eligible"]),
+        "provenance_verification": dict(provenance_verification or {"status": "NOT_PROVIDED"}),
         "agentcore_runtime_postcondition_summary": _agentcore_runtime_summary(records),
         "records": records,
         "aws_official_signal_surfaces_used_as_model": official_sources,
@@ -279,6 +291,30 @@ def _to_generic_observation(item: Mapping[str, Any]) -> Dict[str, Any]:
         ],
         "execution": dict(item["execution"]),
     }
+
+
+def verify_aws_observation_provenance(
+    observations: Iterable[Mapping[str, Any]],
+    ledger: Mapping[str, Any],
+    *,
+    hmac_key: bytes | None = None,
+) -> Dict[str, Any]:
+    provenance_observations = [
+        {"observation_id": str(item["action_id"]), **dict(item)}
+        for item in observations
+    ]
+    return verify_ledger(provenance_observations, dict(ledger), hmac_key=hmac_key)
+
+
+def _authenticated_action_ids(provenance_verification: Mapping[str, Any] | None) -> set[str]:
+    if provenance_verification is None:
+        return set()
+    if provenance_verification.get("status") != "AUTHENTICATED":
+        return set()
+    action_ids = provenance_verification.get("admitted_observation_ids")
+    if not isinstance(action_ids, list) or any(not isinstance(value, str) for value in action_ids):
+        raise TypeError("provenance_verification.admitted_observation_ids must be a list of strings")
+    return set(action_ids)
 
 
 def _agentcore_runtime_summary(records: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
@@ -423,9 +459,23 @@ def main() -> int:
     )
     parser.add_argument("--json-output", default="reports/aws_postcondition_evidence/aws_postcondition_evidence_report.json")
     parser.add_argument("--markdown-output", default="reports/aws_postcondition_evidence/AWS_Postcondition_Evidence_Report.md")
+    parser.add_argument("--provenance-ledger", type=Path)
+    parser.add_argument("--hmac-key-env")
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args()
-    report = build_aws_postcondition_report(load_json_object(args.evaluation), load_aws_observations(args.observations))
+    observations = load_aws_observations(args.observations)
+    provenance_verification = None
+    if args.provenance_ledger:
+        provenance_verification = verify_aws_observation_provenance(
+            observations,
+            load_json_object(args.provenance_ledger),
+            hmac_key=hmac_key_from_env(args.hmac_key_env),
+        )
+    report = build_aws_postcondition_report(
+        load_json_object(args.evaluation),
+        observations,
+        provenance_verification=provenance_verification,
+    )
     write_outputs(report, json_path=args.json_output, markdown_path=args.markdown_output)
     print(json.dumps(report, indent=2 if args.pretty else None, sort_keys=True))
     return 0

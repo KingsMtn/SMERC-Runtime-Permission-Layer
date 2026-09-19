@@ -29,10 +29,22 @@ It does not read live AWS accounts, call AWS APIs, collect raw CloudTrail, colle
 
 The report separates **route satisfaction** from **evidence assurance**. A sample or reviewer-supplied observation may satisfy every expected route control while still being `modeled_unverified`. Such a row is not proof-eligible until a trusted adapter or native-record verifier authenticates the evidence and binds it to the governed action.
 
+An authenticated SMERC evidence-provenance ledger can promote matching rows to `authenticated_provenance`. The ledger must hash-bind every normalized observation and pass HMAC verification; changing an observation after collection invalidates the chain.
+
 ## Run It
 
 ```bash
 python -m reference_engine.aws_postcondition_evidence --pretty
+```
+
+To verify an authenticated observation ledger before reporting:
+
+```bash
+export SMERC_AWS_EVIDENCE_HMAC="replace-with-a-secret-of-at-least-32-characters"
+python -m reference_engine.aws_postcondition_evidence \
+  --provenance-ledger path/to/aws-postcondition-ledger.json \
+  --hmac-key-env SMERC_AWS_EVIDENCE_HMAC \
+  --pretty
 ```
 
 Generated outputs:
