@@ -22,6 +22,25 @@ UNAVAILABLE_RECOVERABILITY_SIGNALS = {
     "cancel_reliability",
 }
 RECOVERABILITY_SIGNAL_DEFAULTS = {signal: 0.5 for signal in UNAVAILABLE_RECOVERABILITY_SIGNALS}
+RECOVERABILITY_ACTION_FIELDS = {
+    "action_id",
+    "description",
+    "actor",
+    "tool",
+    "action_type",
+    "base_action_risk",
+    "reversibility",
+    "containment_strength",
+    "rollback_latency",
+    "evidence_validity",
+    "anomaly_pressure",
+    "impact_scope",
+    "cancel_reliability",
+    "authorization_confidence",
+    "external_side_effect",
+    "sensitive_data",
+    "context",
+}
 
 
 class RuntimePosture(str, Enum):
@@ -190,6 +209,9 @@ class RecoverabilityAction:
 
     @classmethod
     def from_dict(cls, payload: Dict[str, Any]) -> "RecoverabilityAction":
+        unknown = sorted(set(payload) - RECOVERABILITY_ACTION_FIELDS)
+        if unknown:
+            raise ValueError(f"recoverability action contains unknown field(s): {', '.join(unknown)}")
         required = [
             "action_id",
             "description",

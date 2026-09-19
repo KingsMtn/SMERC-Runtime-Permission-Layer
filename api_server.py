@@ -1743,7 +1743,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             raise TypeError("Each action must be a JSON object.")
         started_at = time.perf_counter()
         admission = self._evaluate_inline_admission(payload)
-        decision = self.server.engine_for(tenant_id).evaluate(payload)
+        recoverability_payload = {key: value for key, value in payload.items() if key != "admission"}
+        decision = self.server.engine_for(tenant_id).evaluate(recoverability_payload)
         decision = self._apply_inline_admission(decision, admission)
         self._attach_runtime_observation(decision, started_at)
         decision["tenant_id"] = tenant_id

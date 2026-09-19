@@ -91,27 +91,154 @@ class CrossPathSafetyInvariantTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown field"):
             evaluate_mcp_tool_call(mcp)
 
+        mcp_nested = copy.deepcopy(MCP_SAMPLE)
+        mcp_nested["risk_signals"]["rollback_latency_alias"] = None
+        with self.assertRaisesRegex(ValueError, "risk_signals contains unknown field"):
+            evaluate_mcp_tool_call(mcp_nested)
+
+    def test_representation_mutations_preserve_fail_closed_semantics(self):
+        evaluators = {
+            "recoverability": self._recoverability_variants,
+            "action_language": self._action_language_variants,
+            "customer_evaluation": self._customer_variants,
+            "mcp": self._mcp_variants,
+        }
+
+        for path, build_variants in evaluators.items():
+            canonical, equivalent, invalid_variants = build_variants()
+            canonical_signature = self._safety_signature(canonical)
+            with self.subTest(path=path, variant="equivalent"):
+                self.assertEqual(self._safety_signature(equivalent), canonical_signature)
+                self.assertEqual(canonical_signature[0], "DENY")
+                self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", canonical_signature[1])
+                self.assertIn("ROLLBACK_LATENCY_UNAVAILABLE", canonical_signature[1])
+
+            for variant_name, invalid_call in invalid_variants.items():
+                with self.subTest(path=path, variant=variant_name):
+                    with self.assertRaises((TypeError, ValueError)):
+                        invalid_call()
+
+    def test_failed_inline_admission_never_weakens_deny(self):
+        decision = self._recoverability_missing_evidence()
+        self.assertEqual(decision["posture"], "DENY")
+        admission = evaluate_runtime_admission_gate(
+            {
+                "version": "smerc.runtime-admission-input.v1",
+                "request_id": "SEMANTIC-EQUIVALENCE-ADMISSION",
+                "checks": {},
+            }
+        )
+        combined = SMERCRequestHandler._apply_inline_admission(object(), decision, admission)
+
+        self.assertEqual(combined["posture"], "DENY")
+        self.assertEqual(combined["runtime_admission"]["decision"], "REJECT")
+        self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", combined["reason_codes"])
+        self.assertTrue(combined["admission_capped_recoverability_scoring"])
+
+    @staticmethod
+    def _safety_signature(decision):
+        return decision["posture"], frozenset(decision["reason_codes"])
+
+    @classmethod
+    def _recoverability_variants(cls):
+        canonical_action = cls._engine_action()
+        equivalent_action = copy.deepcopy(canonical_action)
+        equivalent_action["context"] = {"unavailable_recoverability_signals": []}
+        invalid_null = copy.deepcopy(canonical_action)
+        invalid_null["rollback_latency"] = None
+        invalid_alias = copy.deepcopy(canonical_action)
+        invalid_alias["rollback_latency_alias"] = None
+        return (
+            RecoverabilityEngine().evaluate(canonical_action),
+            RecoverabilityEngine().evaluate(equivalent_action),
+            {
+                "null": lambda: RecoverabilityEngine().evaluate(invalid_null),
+                "alias": lambda: RecoverabilityEngine().evaluate(invalid_alias),
+            },
+        )
+
+    @classmethod
+    def _action_language_variants(cls):
+        canonical = copy.deepcopy(ACTION_LANGUAGE_SAMPLE)
+        del canonical["recoverability"]["rollback_latency"]
+        equivalent = copy.deepcopy(canonical)
+        equivalent["context"]["unavailable_recoverability_signals"] = []
+        invalid_null = copy.deepcopy(canonical)
+        invalid_null["recoverability"]["rollback_latency"] = None
+        invalid_nested = copy.deepcopy(canonical)
+        invalid_nested["recoverability"]["rollback_latency_alias"] = None
+        return (
+            evaluate_language_action(canonical),
+            evaluate_language_action(equivalent),
+            {
+                "null": lambda: evaluate_language_action(invalid_null),
+                "nested_unknown": lambda: evaluate_language_action(invalid_nested),
+            },
+        )
+
+    @classmethod
+    def _customer_variants(cls):
+        canonical = copy.deepcopy(load_payload(CUSTOMER_SAMPLE))
+        canonical["actions"] = [canonical["actions"][2]]
+        del canonical["actions"][0]["rollback_latency"]
+        equivalent = copy.deepcopy(canonical)
+        equivalent["actions"][0]["context"]["unavailable_recoverability_signals"] = []
+        invalid_null = copy.deepcopy(canonical)
+        invalid_null["actions"][0]["rollback_latency"] = None
+        invalid_nested = copy.deepcopy(canonical)
+        invalid_nested["actions"][0]["rollback_latency_alias"] = None
+        return (
+            build_customer_evaluation(canonical)["records"][0]["decision"],
+            build_customer_evaluation(equivalent)["records"][0]["decision"],
+            {
+                "null": lambda: build_customer_evaluation(invalid_null),
+                "nested_unknown": lambda: build_customer_evaluation(invalid_nested),
+            },
+        )
+
+    @classmethod
+    def _mcp_variants(cls):
+        canonical = copy.deepcopy(MCP_SAMPLE)
+        del canonical["risk_signals"]["rollback_latency"]
+        equivalent = copy.deepcopy(canonical)
+        equivalent["tool_call"].pop("description", None)
+        invalid_null = copy.deepcopy(canonical)
+        invalid_null["risk_signals"]["rollback_latency"] = None
+        invalid_nested = copy.deepcopy(canonical)
+        invalid_nested["risk_signals"]["rollback_latency_alias"] = None
+        return (
+            evaluate_mcp_tool_call(canonical)["decision"],
+            evaluate_mcp_tool_call(equivalent)["decision"],
+            {
+                "null": lambda: evaluate_mcp_tool_call(invalid_null),
+                "nested_unknown": lambda: evaluate_mcp_tool_call(invalid_nested),
+            },
+        )
+
     @staticmethod
     def _recoverability_missing_evidence():
-        action = {
+        action = CrossPathSafetyInvariantTests._engine_action()
+        return RecoverabilityEngine().evaluate(action)
+
+    @staticmethod
+    def _engine_action():
+        return {
             "action_id": "CROSS-PATH-ENGINE",
             "description": "High-impact production mutation with missing recovery evidence",
             "actor": "deployment_agent",
             "tool": "cloud.deploy",
             "action_type": "production_deploy",
-            "base_action_risk": 0.82,
-            "reversibility": 0.52,
-            "evidence_validity": 0.72,
-            "anomaly_pressure": 0.20,
-            "impact_scope": 0.82,
-            "cancel_reliability": 0.64,
-            "authorization_confidence": 0.78,
+            "base_action_risk": 0.99,
+            "reversibility": 0.05,
+            "evidence_validity": 0.20,
+            "anomaly_pressure": 0.90,
+            "impact_scope": 0.99,
+            "cancel_reliability": 0.10,
+            "authorization_confidence": 0.10,
             "external_side_effect": True,
-            "sensitive_data": False,
+            "sensitive_data": True,
             "context": {},
         }
-        del action["cancel_reliability"]
-        return RecoverabilityEngine().evaluate(action)
 
     @staticmethod
     def _action_language_missing_evidence():

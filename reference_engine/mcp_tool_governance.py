@@ -20,6 +20,39 @@ SIDE_EFFECT_MAP = {
     "delete": "destructive",
     "payment": "financial",
 }
+AGENT_FIELDS = {"agent_id", "display_name", "provider"}
+SERVER_FIELDS = {"name", "transport", "trust_boundary"}
+TOOL_CALL_FIELDS = {
+    "tool_name",
+    "description",
+    "operation_class",
+    "requested_capability",
+    "domain_profile",
+    "external_side_effect",
+    "sensitive_data",
+    "supports_dry_run",
+    "supports_scope_limit",
+    "supports_checkpoint",
+    "supports_rollback",
+    "supports_human_approval",
+    "requested_scope_units",
+    "max_scope_units",
+    "typed_contract_valid",
+    "attestation_valid",
+    "least_privilege_confirmed",
+    "object_shape_expected",
+}
+RISK_SIGNAL_FIELDS = {
+    "base_action_risk",
+    "reversibility",
+    "containment_strength",
+    "rollback_latency",
+    "evidence_validity",
+    "anomaly_pressure",
+    "impact_scope",
+    "cancel_reliability",
+    "authorization_confidence",
+}
 
 
 def evaluate_mcp_tool_call(
@@ -141,6 +174,15 @@ def _parse_request(payload: Mapping[str, Any]) -> Dict[str, Any]:
         if not isinstance(request[section], Mapping):
             raise TypeError(f"{section} must be an object")
         request[section] = dict(request[section])
+    for section, allowed_fields in (
+        ("agent", AGENT_FIELDS),
+        ("server", SERVER_FIELDS),
+        ("tool_call", TOOL_CALL_FIELDS),
+        ("risk_signals", RISK_SIGNAL_FIELDS),
+    ):
+        unknown_nested = sorted(set(request[section]) - allowed_fields)
+        if unknown_nested:
+            raise ValueError(f"{section} contains unknown field(s): {', '.join(unknown_nested)}")
     return request
 
 
