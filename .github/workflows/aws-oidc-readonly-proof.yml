@@ -1,0 +1,29 @@
+name: AWS OIDC read-only identity proof
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  prove-identity:
+    runs-on: ubuntu-latest
+    environment: aws-readonly-pilot
+    timeout-minutes: 5
+    steps:
+      - name: Exchange GitHub OIDC identity for the permissionless pilot role
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_READONLY_ROLE_ARN }}
+          role-session-name: smerc-readonly-${{ github.run_id }}
+          aws-region: us-east-1
+          allowed-account-ids: "497790081591"
+          mask-aws-account-id: true
+
+      - name: Prove temporary AWS identity without reading or changing resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          aws sts get-caller-identity --query Arn --output text
