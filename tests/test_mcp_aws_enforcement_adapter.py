@@ -4,7 +4,12 @@ import sys
 import unittest
 from pathlib import Path
 
-from reference_engine.mcp_aws_enforcement_adapter import AWSMCPEnforcementAdapter, StdioMCPExecutor, TOOL_NAME
+from reference_engine.mcp_aws_enforcement_adapter import (
+    AWSMCPEnforcementAdapter,
+    ManagedAWSMCPProxyExecutor,
+    StdioMCPExecutor,
+    TOOL_NAME,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -280,6 +285,44 @@ class AWSMCPEnforcementAdapterTests(unittest.TestCase):
 
         with self.assertRaisesRegex(RuntimeError, "no matching"):
             executor("aws-mcp", "list_regions", {})
+
+    def test_managed_aws_proxy_executor_locks_endpoint_and_region_metadata(self):
+        executor = ManagedAWSMCPProxyExecutor(
+            ["uvx", "mcp-proxy-for-aws-cli@reviewed"],
+            resource_region="us-east-2",
+        )
+
+        self.assertEqual(
+            executor._command,
+            (
+                "uvx",
+                "mcp-proxy-for-aws-cli@reviewed",
+                "https://aws-mcp.us-east-1.api.aws/mcp",
+                "--metadata",
+                "AWS_REGION=us-east-2",
+            ),
+        )
+
+    def test_managed_aws_proxy_executor_rejects_untrusted_endpoints(self):
+        invalid_endpoints = (
+            "http://aws-mcp.us-east-1.api.aws/mcp",
+            "https://example.com/mcp",
+            "https://aws-mcp.us-east-1.api.aws/not-mcp",
+            "https://user@aws-mcp.us-east-1.api.aws/mcp",
+            "https://aws-mcp.us-east-1.api.aws/mcp?oauth=initialize",
+        )
+
+        for endpoint in invalid_endpoints:
+            with self.subTest(endpoint=endpoint), self.assertRaises(ValueError):
+                ManagedAWSMCPProxyExecutor(["proxy"], endpoint=endpoint)
+
+    def test_managed_aws_proxy_executor_rejects_floating_package_version(self):
+        for command in (
+            ["uvx", "mcp-proxy-for-aws-cli"],
+            ["uvx", "mcp-proxy-for-aws-cli@latest"],
+        ):
+            with self.subTest(command=command), self.assertRaisesRegex(ValueError, "pinned version"):
+                ManagedAWSMCPProxyExecutor(command)
 
 
 if __name__ == "__main__":

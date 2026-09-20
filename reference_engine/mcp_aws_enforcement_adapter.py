@@ -3,9 +3,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 import sys
 from typing import Any, Callable, Dict, Mapping, Sequence
+from urllib.parse import urlsplit
 
 from reference_engine.mcp_proxy_runner import run_mcp_proxy
 from reference_engine.runtime_admission_gate import evaluate_runtime_admission_gate
@@ -92,6 +94,26 @@ class StdioMCPExecutor:
         if not isinstance(result, Mapping) or result.get("isError") is True:
             raise RuntimeError("trusted AWS MCP upstream returned a failed or invalid tool result")
         return dict(result)
+
+
+class ManagedAWSMCPProxyExecutor(StdioMCPExecutor):
+    """Trusted stdio route to the AWS managed MCP endpoint via AWS's proxy."""
+
+    def __init__(
+        self,
+        proxy_command: Sequence[str],
+        *,
+        endpoint: str = "https://aws-mcp.us-east-1.api.aws/mcp",
+        resource_region: str = "us-east-1",
+        timeout_seconds: float = 30.0,
+    ) -> None:
+        if not proxy_command:
+            raise ValueError("AWS MCP proxy command must not be empty")
+        _require_reviewed_proxy_command(proxy_command)
+        endpoint = _managed_aws_mcp_endpoint(endpoint)
+        resource_region = _aws_region(resource_region)
+        command = (*proxy_command, endpoint, "--metadata", f"AWS_REGION={resource_region}")
+        super().__init__(command, timeout_seconds=timeout_seconds)
 
 
 class AWSMCPEnforcementAdapter:
@@ -284,6 +306,40 @@ def _is_aws_target(server_name: str) -> bool:
     return lowered.startswith(("aws", "awslabs", "amazon")) or ".aws" in lowered
 
 
+def _managed_aws_mcp_endpoint(value: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise TypeError("AWS managed MCP endpoint must be a non-empty string")
+    endpoint = value.strip()
+    parsed = urlsplit(endpoint)
+    hostname = parsed.hostname or ""
+    if (
+        parsed.scheme != "https"
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.port is not None
+        or parsed.path != "/mcp"
+        or parsed.query
+        or parsed.fragment
+        or not re.fullmatch(r"aws-mcp\.[a-z]{2}(?:-gov)?-[a-z]+-\d\.api\.aws", hostname)
+    ):
+        raise ValueError("endpoint must be an AWS managed MCP HTTPS /mcp endpoint")
+    return endpoint
+
+
+def _require_reviewed_proxy_command(command: Sequence[str]) -> None:
+    lowered = [part.strip().lower() for part in command if isinstance(part, str)]
+    if "mcp-proxy-for-aws-cli" in lowered or any(
+        part.startswith("mcp-proxy-for-aws-cli@") and part.endswith("@latest") for part in lowered
+    ):
+        raise ValueError("mcp-proxy-for-aws-cli must use a pinned version or reviewed installed executable")
+
+
+def _aws_region(value: str) -> str:
+    if not isinstance(value, str) or not re.fullmatch(r"[a-z]{2}(?:-gov)?-[a-z]+-\d", value):
+        raise ValueError("resource_region must be a valid AWS Region identifier")
+    return value
+
+
 def _required_text(payload: Mapping[str, Any], field: str) -> str:
     value = payload.get(field)
     if not isinstance(value, str) or not value.strip():
@@ -336,9 +392,25 @@ def main() -> int:
         nargs=argparse.REMAINDER,
         help="Explicit argv for a trusted AWS MCP stdio bridge; no shell parsing is used.",
     )
+    parser.add_argument(
+        "--managed-aws-proxy-command",
+        nargs=argparse.REMAINDER,
+        help="Reviewed mcp-proxy-for-aws argv; SMERC appends the validated managed endpoint and Region metadata.",
+    )
+    parser.add_argument("--managed-aws-endpoint", default="https://aws-mcp.us-east-1.api.aws/mcp")
+    parser.add_argument("--aws-resource-region", default="us-east-1")
     args = parser.parse_args()
+    if args.upstream_command and args.managed_aws_proxy_command:
+        parser.error("choose either --upstream-command or --managed-aws-proxy-command")
     executor = None
-    if args.upstream_command:
+    if args.managed_aws_proxy_command:
+        executor = ManagedAWSMCPProxyExecutor(
+            args.managed_aws_proxy_command,
+            endpoint=args.managed_aws_endpoint,
+            resource_region=args.aws_resource_region,
+            timeout_seconds=args.upstream_timeout,
+        )
+    elif args.upstream_command:
         executor = StdioMCPExecutor(args.upstream_command, timeout_seconds=args.upstream_timeout)
     return serve_stdio(AWSMCPEnforcementAdapter(executor, approved_cost_usd=args.approved_cost_usd))
 

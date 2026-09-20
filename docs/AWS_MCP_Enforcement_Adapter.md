@@ -30,6 +30,22 @@ next integration step is a separately authenticated executor for the AWS managed
 AWS Labs MCP server. That executor must use scoped AWS identity and return CloudTrail/postcondition evidence;
 it must not place AWS credentials in the MCP request.
 
+For the AWS managed MCP Server, `ManagedAWSMCPProxyExecutor` constructs a locked-down stdio command for a
+locally installed and reviewed `mcp-proxy-for-aws` executable. It only accepts AWS managed HTTPS `/mcp`
+endpoints, validates the resource Region metadata, and inherits `shell=False` execution. SMERC does not
+download the proxy, accept a floating package version, or handle AWS credentials. Operators should pin and
+review the proxy package and provide short-lived SigV4 credentials through the standard AWS credential chain.
+An interactive Codex OAuth session is not assumed to transfer to the proxy subprocess.
+
+After installing a pinned, reviewed proxy build, select the constrained route explicitly (options must precede
+the proxy command because the remaining arguments are passed through verbatim):
+
+```bash
+python -m reference_engine.mcp_aws_enforcement_adapter \
+  --aws-resource-region us-east-2 \
+  --managed-aws-proxy-command uvx mcp-proxy-for-aws-cli@PINNED_VERSION
+```
+
 The cost declaration is an admission control, not a substitute for AWS Budgets or billing reports. Estimates
 must be derived before execution from current AWS pricing and the proposed resource shape. The pilot should
 use a zero-spend AWS Budget as the independent account-level backstop.
@@ -39,6 +55,6 @@ The session counter is defense in depth, not an account-wide meter, and resets w
 
 ## Current boundary
 
-This increment proves native MCP discovery, tool invocation, SMERC admission, exact target binding, and
-fail-closed execution ownership. It does not yet implement AWS SigV4/OAuth identity brokering, managed AWS MCP
-transport, CloudTrail correlation, independently attested AWS results, or production deployment in Bedrock AgentCore.
+This increment proves native MCP discovery, tool invocation, SMERC admission, exact target binding, fail-closed
+execution ownership, and a constrained command route to AWS's managed MCP proxy. It does not yet provision or
+broker AWS credentials, correlate CloudTrail events, independently attest AWS results, or deploy in Bedrock AgentCore.
