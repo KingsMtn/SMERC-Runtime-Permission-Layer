@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -13,6 +14,7 @@ from reference_engine.policy import DEFAULT_POLICY, RuntimePolicy, load_policy
 
 
 DOMAIN_PROFILE_VERSION = "smerc.domain_profile.v1"
+EXPLANATION_CONTRACT_VERSION = "smerc.explanation-contract.v1"
 UNAVAILABLE_RECOVERABILITY_SIGNALS = {
     "reversibility",
     "containment_strength",
@@ -310,6 +312,55 @@ def parse_unavailable_recoverability_signals(raw: Any) -> List[str]:
     return sorted(signals)
 
 
+def build_explanation_contract(
+    action: RecoverabilityAction,
+    reason_codes: List[str],
+    threshold_posture: RuntimePosture,
+    evidence_posture: RuntimePosture,
+    final_posture: RuntimePosture,
+) -> Dict[str, Any]:
+    """Return the stable policy-boundary explanation shared by every adapter."""
+    canonical_action_id = action.context.get("canonical_action_id", action.action_id)
+    if not isinstance(canonical_action_id, str) or not canonical_action_id.strip():
+        raise TypeError("context.canonical_action_id must be a non-empty string when provided")
+    identity = {"action_id": canonical_action_id}
+    encoded = json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    unavailable = action.unavailable_recoverability_signals()
+    return {
+        "version": EXPLANATION_CONTRACT_VERSION,
+        "canonical_action_identity": {
+            **identity,
+            "sha256": hashlib.sha256(encoded).hexdigest(),
+        },
+        "required_evidence_failures": [
+            {"signal": signal, "reason_code": f"{signal.upper()}_UNAVAILABLE"}
+            for signal in unavailable
+        ],
+        "canonical_reason_codes": sorted(set(reason_codes)),
+        "precedence_trace": [
+            {
+                "stage": "policy_thresholds",
+                "input_posture": None,
+                "output_posture": threshold_posture.value,
+                "applied": True,
+            },
+            {
+                "stage": "unavailable_recoverability_evidence",
+                "input_posture": threshold_posture.value,
+                "output_posture": evidence_posture.value,
+                "applied": evidence_posture != threshold_posture,
+            },
+            {
+                "stage": "environment_boundary",
+                "input_posture": evidence_posture.value,
+                "output_posture": final_posture.value,
+                "applied": final_posture != evidence_posture,
+            },
+        ],
+        "final_posture": final_posture.value,
+    }
+
+
 class RecoverabilityEngine:
     """Recoverability-aware runtime permission engine for automated actions."""
 
@@ -329,9 +380,9 @@ class RecoverabilityEngine:
         trace = self._score_trace(action, profile)
         scores = trace["scores"]
         reason_codes = self._reason_codes(action, scores)
-        posture, threshold_trace = self._posture(action, scores, profile)
-        posture = self._apply_unavailable_signal_floor(action, posture)
-        posture = self._apply_environment_boundary_floor(action, posture)
+        threshold_posture, threshold_trace = self._posture(action, scores, profile)
+        evidence_posture = self._apply_unavailable_signal_floor(action, threshold_posture)
+        posture = self._apply_environment_boundary_floor(action, evidence_posture)
         enforcement_state = self._enforcement_state(posture)
         controls = self._controls(action, posture, scores)
         transition_guidance = self._transition_guidance(action, posture, scores, controls)
@@ -342,6 +393,13 @@ class RecoverabilityEngine:
         summary = self._summary(action, posture, scores, controls)
         evaluated_at = datetime.now(timezone.utc).isoformat()
         policy_metadata = self.policy.decision_metadata()
+        explanation_contract = build_explanation_contract(
+            action,
+            reason_codes,
+            threshold_posture,
+            evidence_posture,
+            posture,
+        )
 
         return {
             "action_id": action.action_id,
@@ -349,6 +407,7 @@ class RecoverabilityEngine:
             "enforcement_state": enforcement_state.value,
             "scores": {key: round(value, 3) for key, value in scores.items()},
             "reason_codes": reason_codes,
+            "explanation_contract": explanation_contract,
             "controls": controls,
             "domain_profile": profile_payload(profile),
             "decision_trace": {
@@ -370,6 +429,7 @@ class RecoverabilityEngine:
                 "enforcement_state": enforcement_state.value,
                 "scores": {key: round(value, 3) for key, value in scores.items()},
                 "reason_codes": reason_codes,
+                "explanation_contract": explanation_contract,
                 "controls": controls,
                 "domain_profile": profile_payload(profile),
                 "decision_trace": {

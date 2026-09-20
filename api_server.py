@@ -1709,6 +1709,9 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             decision["admission_capped_recoverability_scoring"] = False
             decision["reason_codes"] = list(admission["reason_codes"]) + list(decision.get("reason_codes", []))
             decision["controls"] = list(admission["required_controls"]) + list(decision.get("controls", []))
+            SMERCRequestHandler._update_explanation_contract_for_admission(
+                decision, admission, decision["posture"]
+            )
             return decision
 
         original_posture = decision["posture"]
@@ -1718,6 +1721,9 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         decision["admission_capped_recoverability_scoring"] = True
         decision["reason_codes"] = list(admission["reason_codes"]) + list(decision.get("reason_codes", []))
         decision["controls"] = list(admission["required_controls"]) + list(decision.get("controls", []))
+        SMERCRequestHandler._update_explanation_contract_for_admission(
+            decision, admission, original_posture
+        )
         decision["plain_english_summary"] = (
             f"{admission['plain_english_summary']} Final posture resolved to {capped_posture} using the stricter of "
             f"recoverability posture {original_posture} and admission maximum {admission['max_recommended_posture']}."
@@ -1730,6 +1736,29 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             decision["replay"]["runtime_admission"] = admission
             decision["replay"]["admission_capped_recoverability_scoring"] = True
         return decision
+
+    @staticmethod
+    def _update_explanation_contract_for_admission(
+        decision: Dict[str, Any],
+        admission: Dict[str, Any],
+        input_posture: str,
+    ) -> None:
+        contract = decision.get("explanation_contract")
+        if not isinstance(contract, dict):
+            return
+        contract["canonical_reason_codes"] = sorted(set(decision.get("reason_codes", [])))
+        contract["precedence_trace"] = list(contract.get("precedence_trace", [])) + [
+            {
+                "stage": "runtime_admission",
+                "input_posture": input_posture,
+                "output_posture": decision["posture"],
+                "applied": decision["posture"] != input_posture,
+                "admission_decision": admission["decision"],
+            }
+        ]
+        contract["final_posture"] = decision["posture"]
+        if isinstance(decision.get("replay"), dict):
+            decision["replay"]["explanation_contract"] = contract
 
     def _evaluate_and_record(
         self,

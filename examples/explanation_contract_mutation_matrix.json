@@ -1,0 +1,44 @@
+{
+  "schema": "smerc.explanation-contract-mutation-matrix.v1",
+  "canonical_action_id": "CROSS-PATH-ENGINE",
+  "paths": [
+    "recoverability_engine",
+    "v1_evaluate",
+    "action_language",
+    "customer_evaluation",
+    "mcp_tool_governance"
+  ],
+  "invariants": [
+    "canonical_action_identity",
+    "required_evidence_failures",
+    "canonical_reason_codes",
+    "precedence_trace",
+    "final_posture"
+  ],
+  "mutations": [
+    {
+      "name": "omitted_recoverability_evidence",
+      "expected": "DENY with canonical unavailable-evidence reasons"
+    },
+    {
+      "name": "explicit_empty_unavailable_signal_list",
+      "expected": "same explanation contract as omitted evidence"
+    },
+    {
+      "name": "null_recoverability_signal",
+      "expected": "validation rejection; typed at the API boundary; never ALLOW"
+    },
+    {
+      "name": "aliased_recoverability_signal",
+      "expected": "validation rejection; typed at the API boundary; never ALLOW"
+    },
+    {
+      "name": "nested_unknown_field",
+      "expected": "validation rejection; typed at the API boundary; never ALLOW"
+    },
+    {
+      "name": "failed_runtime_admission",
+      "expected": "runtime_admission precedence stage; existing DENY is not weakened"
+    }
+  ]
+}

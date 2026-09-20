@@ -550,6 +550,7 @@ Start here before reading the code:
 - `docs/Runtime_Contract_Index.md` explains the machine-readable `smerc.runtime-contract-index.v1` assembly map for SMERC's contracts and handoffs.
 - `docs/SPARK_Signal_Intake_And_Timing_Evidence.md` explains the proposed SPARK signal-intake layer and timing evidence metrics around recoverability decisions.
 - `docs/Runtime_Admission_Gate.md` explains the reusable pre-scoring admission contract for identity, scope, permits, typed contracts, attestation, least privilege, object shape, and required evidence.
+- `docs/Explanation_Contract_v1.md` defines the stable action identity, evidence-failure, reason-code, and precedence trace shared across decision paths.
 - `docs/Customer_Proof_Loop.md` gives reviewers a one-command path that runs a synthetic customer action through runtime admission, recoverability scoring, SPARTa routing, and Decision Lifecycle Ledger evidence.
 - `docs/Runtime_Evidence_Trust_Gate.md` explains how SMERC screens whether action metadata is trustworthy enough to support a runtime decision.
 - `docs/Content_Evidence_Adapter.md` explains how SMERC consumes trusted content-risk signals from scanners, eval platforms, policy engines, and reviewers without pretending to replace them.
