@@ -138,10 +138,12 @@ class CrossPathSafetyInvariantTests(unittest.TestCase):
     def test_one_canonical_action_has_identical_safety_signature_across_paths(self):
         decisions = self._canonical_cross_path_decisions()
         expected = self._safety_signature(decisions["recoverability"])
+        expected_explanation = self._explanation_signature(decisions["recoverability"])
 
         for path, decision in decisions.items():
             with self.subTest(path=path):
                 self.assertEqual(self._safety_signature(decision), expected)
+                self.assertEqual(self._explanation_signature(decision), expected_explanation)
                 self.assertEqual(decision["posture"], "DENY")
                 self.assertIn("RECOVERABILITY_EVIDENCE_UNAVAILABLE", decision["reason_codes"])
                 self.assertIn("ROLLBACK_LATENCY_UNAVAILABLE", decision["reason_codes"])
@@ -150,6 +152,35 @@ class CrossPathSafetyInvariantTests(unittest.TestCase):
     @staticmethod
     def _safety_signature(decision):
         return decision["posture"], frozenset(decision["reason_codes"])
+
+    @staticmethod
+    def _explanation_signature(decision):
+        contract = decision["explanation_contract"]
+        return {
+            "version": contract["version"],
+            "canonical_action_identity": contract["canonical_action_identity"],
+            "required_evidence_failures": contract["required_evidence_failures"],
+            "canonical_reason_codes": contract["canonical_reason_codes"],
+            "precedence_stages": [item["stage"] for item in contract["precedence_trace"]],
+            "final_posture": contract["final_posture"],
+        }
+
+    def test_inline_admission_is_recorded_in_precedence_trace(self):
+        decision = self._recoverability_missing_evidence()
+        admission = evaluate_runtime_admission_gate(
+            {
+                "version": "smerc.runtime-admission-input.v1",
+                "request_id": "EXPLANATION-CONTRACT-ADMISSION",
+                "checks": {},
+            }
+        )
+        combined = SMERCRequestHandler._apply_inline_admission(object(), decision, admission)
+
+        contract = combined["explanation_contract"]
+        self.assertEqual(contract["precedence_trace"][-1]["stage"], "runtime_admission")
+        self.assertEqual(contract["precedence_trace"][-1]["admission_decision"], "REJECT")
+        self.assertEqual(contract["final_posture"], combined["posture"])
+        self.assertEqual(contract["canonical_reason_codes"], sorted(set(combined["reason_codes"])))
 
     @classmethod
     def _canonical_cross_path_decisions(cls):
@@ -196,6 +227,7 @@ class CrossPathSafetyInvariantTests(unittest.TestCase):
         customer["agents"] = []
 
         mcp = copy.deepcopy(MCP_SAMPLE)
+        mcp["canonical_action_id"] = action["action_id"]
         mcp.pop("agent_identity", None)
         mcp["agent"]["agent_id"] = action["actor"]
         mcp["server"]["name"] = "cloud"

@@ -164,12 +164,14 @@ def _parse_request(payload: Mapping[str, Any]) -> Dict[str, Any]:
     missing = sorted(required - set(payload))
     if missing:
         raise ValueError(f"MCP governance request missing field(s): {', '.join(missing)}")
-    allowed = required | {"agent_identity"}
+    allowed = required | {"agent_identity", "canonical_action_id"}
     unknown = sorted(set(payload) - allowed)
     if unknown:
         raise ValueError(f"MCP governance request contains unknown field(s): {', '.join(unknown)}")
     request = dict(payload)
     _safe_identifier(request["mcp_request_id"], "mcp_request_id")
+    if "canonical_action_id" in request:
+        _safe_identifier(request["canonical_action_id"], "canonical_action_id")
     for section in ("agent", "server", "tool_call", "risk_signals"):
         if not isinstance(request[section], Mapping):
             raise TypeError(f"{section} must be an object")
@@ -229,6 +231,11 @@ def _action_from_request(request: Mapping[str, Any]) -> Dict[str, Any]:
             "mcp_server": request["server"].get("name"),
             "mcp_tool": tool_call.get("tool_name"),
             "operation_class": operation_class,
+            **(
+                {"canonical_action_id": request["canonical_action_id"]}
+                if "canonical_action_id" in request
+                else {}
+            ),
         },
     }
     for field in UNAVAILABLE_RECOVERABILITY_SIGNALS:
