@@ -1,0 +1,44 @@
+{
+  "schema": "smerc.aws-mcp-supervised-live-proof.v1",
+  "observed_on": "2026-09-20",
+  "evidence_class": "supervised_live_read_only",
+  "production_evidence": false,
+  "transport_enforced": false,
+  "action": {
+    "canonical_action_id": "AWS_MCP_LIST_REGIONS_LIVE_001",
+    "canonical_action_sha256": "95590d2772443ef94d0691fb986c2305c143e6b883e82cfc3a8237a47ef0abf6",
+    "server_name": "aws-mcp",
+    "tool_name": "list_regions",
+    "arguments": {},
+    "external_side_effect": false,
+    "estimated_incremental_cost_usd": 0.0
+  },
+  "smerc_gate": {
+    "posture": "ALLOW",
+    "should_forward": true,
+    "reason_codes": [
+      "RECOVERABILITY_ACCEPTABLE"
+    ],
+    "required_evidence_failures": [],
+    "precedence_stages": [
+      "policy_thresholds",
+      "unavailable_recoverability_evidence",
+      "environment_boundary"
+    ]
+  },
+  "aws_observation": {
+    "status": "succeeded",
+    "region_count": 37,
+    "first_region_id": "af-south-1",
+    "last_region_id": "us-west-2",
+    "sanitized_summary_sha256": "27fd31eb13d8f47b8243bcdd40cbec85577ee3b44667830540e393c7b4f50c04",
+    "resources_created_or_modified": false,
+    "raw_response_stored": false
+  },
+  "boundary": {
+    "sequence": "SMERC gate evaluated first; the authenticated managed AWS MCP call was then invoked under operator supervision.",
+    "proves": "The current SMERC policy allows this exact read-only action and the authenticated AWS MCP session can execute it successfully.",
+    "does_not_prove": "The managed AWS MCP transport is technically unable to bypass SMERC, or that AWS independently attested the SMERC decision and result.",
+    "next_requirement": "Route the managed AWS MCP transport through the trusted SMERC executor boundary and correlate the execution with native AWS audit evidence."
+  }
+}
