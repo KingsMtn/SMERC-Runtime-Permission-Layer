@@ -13,6 +13,8 @@ from reference_engine.runtime_admission_gate import evaluate_runtime_admission_g
 VERSION = "smerc.aws-mcp-enforcement-adapter.v1"
 PROTOCOL_VERSION = "2025-06-18"
 TOOL_NAME = "smerc_guarded_aws_call"
+PILOT_COST_CEILING_USD = 2.0
+SESSION_COST_CEILING_USD = 5.0
 Executor = Callable[[str, str, Mapping[str, Any]], Mapping[str, Any]]
 
 
@@ -89,8 +91,14 @@ class StdioMCPExecutor:
 class AWSMCPEnforcementAdapter:
     """MCP-facing fail-closed boundary for SMERC-governed AWS tool calls."""
 
-    def __init__(self, executor: Executor | None = None) -> None:
+    def __init__(self, executor: Executor | None = None, *, approved_cost_usd: float = 0.0) -> None:
+        if not isinstance(approved_cost_usd, (int, float)) or isinstance(approved_cost_usd, bool):
+            raise TypeError("approved_cost_usd must be a number")
+        if approved_cost_usd < 0 or approved_cost_usd > PILOT_COST_CEILING_USD:
+            raise ValueError(f"approved_cost_usd must be between 0 and {PILOT_COST_CEILING_USD}")
         self._executor = executor
+        self._approved_cost_usd = float(approved_cost_usd)
+        self._estimated_session_spend_usd = 0.0
 
     def handle(self, request: Mapping[str, Any]) -> Dict[str, Any] | None:
         if not isinstance(request, Mapping):
@@ -143,6 +151,27 @@ class AWSMCPEnforcementAdapter:
         tool_arguments = aws_call.get("arguments", {})
         if not isinstance(tool_arguments, Mapping):
             raise TypeError("aws_call.arguments must be an object")
+        cost_control = aws_call.get("cost_control")
+        if not isinstance(cost_control, Mapping):
+            raise TypeError("aws_call.cost_control must be an object")
+        estimated_cost = cost_control.get("estimated_incremental_cost_usd")
+        if not isinstance(estimated_cost, (int, float)) or isinstance(estimated_cost, bool) or estimated_cost < 0:
+            raise TypeError("aws_call.cost_control.estimated_incremental_cost_usd must be a non-negative number")
+        cost_evidence = {
+            "estimated_incremental_cost_usd": float(estimated_cost),
+            "operator_approved_cost_usd": self._approved_cost_usd,
+            "pilot_cost_ceiling_usd": PILOT_COST_CEILING_USD,
+            "estimated_session_spend_before_usd": self._estimated_session_spend_usd,
+            "session_cost_ceiling_usd": SESSION_COST_CEILING_USD,
+        }
+        if estimated_cost > PILOT_COST_CEILING_USD:
+            return _tool_error("AWS execution exceeds the SMERC pilot cost ceiling.", cost_evidence)
+        if estimated_cost > self._approved_cost_usd:
+            return _tool_error("AWS execution may incur charges and lacks explicit owner approval.", cost_evidence)
+        projected_session_spend = self._estimated_session_spend_usd + float(estimated_cost)
+        cost_evidence["estimated_session_spend_after_usd"] = projected_session_spend
+        if projected_session_spend >= SESSION_COST_CEILING_USD:
+            return _tool_error("AWS execution would reach the SMERC session cost stop.", cost_evidence)
         if not _is_aws_target(server_name):
             raise ValueError("aws_call.server_name must identify an AWS MCP server")
         governance_tool = governance.get("tool_call")
@@ -178,11 +207,13 @@ class AWSMCPEnforcementAdapter:
             "replay_id": decision["replay_id"],
             "reason_codes": list(decision.get("reason_codes", [])),
             "required_controls": list(route.get("applied_controls", [])),
+            "cost_control": cost_evidence,
         }
         if decision["posture"] != "ALLOW" or not report["proxy_response"]["should_forward_tool_call"]:
             return _tool_error("SMERC did not authorize AWS execution.", evidence)
         if self._executor is None:
             return _tool_error("No trusted AWS MCP executor is configured; execution failed closed.", evidence)
+        self._estimated_session_spend_usd = projected_session_spend
         try:
             upstream_result = self._executor(server_name, tool_name, dict(tool_arguments))
         except Exception:
@@ -211,11 +242,19 @@ def _tool_definition() -> Dict[str, Any]:
                 "aws_call": {
                     "type": "object",
                     "additionalProperties": False,
-                    "required": ["server_name", "tool_name", "arguments"],
+                    "required": ["server_name", "tool_name", "arguments", "cost_control"],
                     "properties": {
                         "server_name": {"type": "string"},
                         "tool_name": {"type": "string"},
                         "arguments": {"type": "object"},
+                        "cost_control": {
+                            "type": "object",
+                            "additionalProperties": False,
+                            "required": ["estimated_incremental_cost_usd"],
+                            "properties": {
+                                "estimated_incremental_cost_usd": {"type": "number", "minimum": 0},
+                            },
+                        },
                     },
                 },
             },
@@ -270,6 +309,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run the fail-closed SMERC AWS MCP enforcement adapter over stdio.")
     parser.add_argument("--upstream-timeout", type=float, default=30.0)
     parser.add_argument(
+        "--approved-cost-usd",
+        type=float,
+        default=0.0,
+        help="Operator-approved per-call cost, capped at the $2 pilot ceiling; defaults to zero.",
+    )
+    parser.add_argument(
         "--upstream-command",
         nargs=argparse.REMAINDER,
         help="Explicit argv for a trusted AWS MCP stdio bridge; no shell parsing is used.",
@@ -278,7 +323,7 @@ def main() -> int:
     executor = None
     if args.upstream_command:
         executor = StdioMCPExecutor(args.upstream_command, timeout_seconds=args.upstream_timeout)
-    return serve_stdio(AWSMCPEnforcementAdapter(executor))
+    return serve_stdio(AWSMCPEnforcementAdapter(executor, approved_cost_usd=args.approved_cost_usd))
 
 
 if __name__ == "__main__":
