@@ -48,6 +48,7 @@ def call_request(governance=None):
                     "server_name": governance["server"]["name"],
                     "tool_name": governance["tool_call"]["tool_name"],
                     "arguments": {"search_phrase": "Lambda rollback"},
+                    "cost_control": {"estimated_incremental_cost_usd": 0.0},
                 },
             },
         },
@@ -124,6 +125,71 @@ class AWSMCPEnforcementAdapterTests(unittest.TestCase):
 
         self.assertTrue(response["result"]["isError"])
         self.assertIn("failed closed", response["result"]["content"][0]["text"])
+
+    def test_unknown_cost_fails_closed(self):
+        request = call_request()
+        del request["params"]["arguments"]["aws_call"]["cost_control"]
+
+        response = AWSMCPEnforcementAdapter(lambda *args: {}).handle(request)
+
+        self.assertEqual(response["error"]["code"], -32602)
+        self.assertIn("cost_control", response["error"]["message"])
+
+    def test_positive_cost_requires_owner_approval(self):
+        request = call_request()
+        request["params"]["arguments"]["aws_call"]["cost_control"]["estimated_incremental_cost_usd"] = 0.01
+        calls = []
+
+        response = AWSMCPEnforcementAdapter(lambda *args: calls.append(args)).handle(request)
+
+        self.assertTrue(response["result"]["isError"])
+        self.assertIn("owner approval", response["result"]["content"][0]["text"])
+        self.assertEqual(calls, [])
+
+    def test_cost_above_pilot_ceiling_is_blocked_even_when_approved(self):
+        request = call_request()
+        cost_control = request["params"]["arguments"]["aws_call"]["cost_control"]
+        cost_control.update({"estimated_incremental_cost_usd": 2.01})
+        calls = []
+
+        response = AWSMCPEnforcementAdapter(lambda *args: calls.append(args)).handle(request)
+
+        self.assertTrue(response["result"]["isError"])
+        self.assertIn("cost ceiling", response["result"]["content"][0]["text"])
+        self.assertEqual(calls, [])
+
+    def test_trusted_operator_can_approve_cost_within_ceiling(self):
+        request = call_request()
+        request["params"]["arguments"]["aws_call"]["cost_control"]["estimated_incremental_cost_usd"] = 0.01
+        calls = []
+
+        response = AWSMCPEnforcementAdapter(
+            lambda *args: calls.append(args) or {"ok": True},
+            approved_cost_usd=0.01,
+        ).handle(request)
+
+        self.assertFalse(response["result"]["isError"])
+        self.assertEqual(len(calls), 1)
+
+    def test_operator_cannot_configure_approval_above_pilot_ceiling(self):
+        with self.assertRaisesRegex(ValueError, "between 0"):
+            AWSMCPEnforcementAdapter(lambda *args: {}, approved_cost_usd=2.01)
+
+    def test_repeated_small_calls_stop_before_five_dollar_session_total(self):
+        request = call_request()
+        request["params"]["arguments"]["aws_call"]["cost_control"]["estimated_incremental_cost_usd"] = 1.0
+        calls = []
+        adapter = AWSMCPEnforcementAdapter(
+            lambda *args: calls.append(args) or {"ok": True},
+            approved_cost_usd=1.0,
+        )
+
+        responses = [adapter.handle(request) for _ in range(5)]
+
+        self.assertTrue(all(not response["result"]["isError"] for response in responses[:4]))
+        self.assertTrue(responses[4]["result"]["isError"])
+        self.assertIn("session cost stop", responses[4]["result"]["content"][0]["text"])
+        self.assertEqual(len(calls), 4)
 
     def test_non_allow_never_reaches_executor(self):
         governance = governance_request()
