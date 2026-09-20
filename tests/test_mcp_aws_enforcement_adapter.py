@@ -100,6 +100,31 @@ class AWSMCPEnforcementAdapterTests(unittest.TestCase):
         self.assertEqual(response["result"]["structuredContent"]["smerc"]["posture"], "ALLOW")
         self.assertEqual(response["result"]["structuredContent"]["smerc"]["admission_decision"], "ADMIT")
 
+    def test_success_evidence_binds_exact_target_and_result(self):
+        first = AWSMCPEnforcementAdapter(lambda *args: {"regions": 37}).handle(call_request())
+        second = AWSMCPEnforcementAdapter(lambda *args: {"regions": 37}).handle(call_request())
+
+        first_evidence = first["result"]["structuredContent"]["smerc"]
+        second_evidence = second["result"]["structuredContent"]["smerc"]
+        self.assertEqual(first_evidence["execution_binding"], second_evidence["execution_binding"])
+        self.assertEqual(first_evidence["execution_result"], second_evidence["execution_result"])
+        self.assertEqual(first_evidence["execution_result"]["status"], "succeeded")
+        self.assertRegex(first_evidence["execution_binding"]["target_sha256"], r"^[0-9a-f]{64}$")
+        self.assertRegex(first_evidence["execution_result"]["result_sha256"], r"^[0-9a-f]{64}$")
+
+    def test_argument_mutation_changes_execution_binding(self):
+        original = call_request()
+        changed = call_request()
+        changed["params"]["arguments"]["aws_call"]["arguments"] = {"search_phrase": "S3 rollback"}
+
+        original_result = AWSMCPEnforcementAdapter(lambda *args: {"ok": True}).handle(original)
+        changed_result = AWSMCPEnforcementAdapter(lambda *args: {"ok": True}).handle(changed)
+
+        original_binding = original_result["result"]["structuredContent"]["smerc"]["execution_binding"]
+        changed_binding = changed_result["result"]["structuredContent"]["smerc"]["execution_binding"]
+        self.assertNotEqual(original_binding["arguments_sha256"], changed_binding["arguments_sha256"])
+        self.assertNotEqual(original_binding["target_sha256"], changed_binding["target_sha256"])
+
     def test_failed_runtime_admission_never_reaches_executor(self):
         request = call_request()
         request["params"]["arguments"]["runtime_admission"]["checks"]["least_privilege_confirmed"] = False

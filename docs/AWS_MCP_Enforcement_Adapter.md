@@ -15,6 +15,9 @@ AWS MCP executor can run it.
   trusted operator approval at adapter startup, and estimates above the `$2.00` pilot ceiling are blocked.
 - Repeated approved calls accumulate an in-process estimate and stop before the session reaches `$5.00`.
 - Successful results include the SMERC posture, route state, replay ID, reason codes, and required controls.
+- Before execution, the adapter records a canonical SHA-256 binding for the exact AWS server, tool, and arguments.
+- After a successful execution, the evidence envelope records a canonical result digest without treating that digest
+  as independent proof that AWS native controls operated.
 
 Run the reference stdio server:
 
@@ -38,4 +41,4 @@ The session counter is defense in depth, not an account-wide meter, and resets w
 
 This increment proves native MCP discovery, tool invocation, SMERC admission, exact target binding, and
 fail-closed execution ownership. It does not yet implement AWS SigV4/OAuth identity brokering, managed AWS MCP
-transport, CloudTrail correlation, or production deployment in Bedrock AgentCore.
+transport, CloudTrail correlation, independently attested AWS results, or production deployment in Bedrock AgentCore.
