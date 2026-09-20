@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  SMERC GitHub Actions OIDC identity proof. Creates an account-level GitHub
+  OIDC provider and a role with no AWS service permissions.
+
+Parameters:
+  GitHubOwner:
+    Type: String
+    Default: KingsMtn
+    AllowedPattern: "^[A-Za-z0-9-]+$"
+  GitHubRepository:
+    Type: String
+    Default: SMERC-Runtime-Permission-Layer
+    AllowedPattern: "^[A-Za-z0-9_.-]+$"
+  GitHubEnvironment:
+    Type: String
+    Default: aws-readonly-pilot
+    AllowedPattern: "^[A-Za-z0-9_.-]+$"
+
+Resources:
+  GitHubActionsOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+
+  SmercGitHubReadOnlyIdentityRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: SMERC-GitHub-ReadOnly-Identity
+      Description: >-
+        Identity-only pilot role. It has no AWS service permissions and exists
+        only to prove exact GitHub-to-AWS OIDC federation.
+      MaxSessionDuration: 3600
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref GitHubActionsOidcProvider
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub: !Sub >-
+                  repo:${GitHubOwner}/${GitHubRepository}:environment:${GitHubEnvironment}
+
+Outputs:
+  ReadOnlyIdentityRoleArn:
+    Description: Store this value as the GitHub Actions variable AWS_READONLY_ROLE_ARN.
+    Value: !GetAtt SmercGitHubReadOnlyIdentityRole.Arn
+  GitHubEnvironmentName:
+    Description: Create this protected environment in the GitHub repository.
+    Value: !Ref GitHubEnvironment
