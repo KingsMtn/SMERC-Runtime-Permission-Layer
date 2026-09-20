@@ -1432,6 +1432,20 @@ Run the Public Evidence Fallback Plan when no outside reviewer has provided cust
 python -m reference_engine.public_evidence_fallback --pretty
 ```
 
+The AWS MCP enforcement adapter fails closed unless each call supplies a passing `runtime_admission` object, the
+recoverability decision is `ALLOW`, and a trusted upstream executor is configured. For a reviewed stdio bridge, pass
+its executable and arguments after `--upstream-command`; SMERC invokes the argv directly without shell parsing:
+
+```bash
+python -m reference_engine.mcp_aws_enforcement_adapter \
+  --upstream-timeout 30 \
+  --upstream-command <reviewed-aws-mcp-stdio-bridge> <bridge-arguments>
+```
+
+Do not expose the managed AWS MCP server as a second direct client route. If callers can reach AWS MCP without this
+adapter, they can bypass SMERC. The pilot IAM identity should remain least-privileged and MFA-protected; OAuth and IAM
+still establish AWS identity and permissions, while SMERC supplies the additional admission and recoverability gate.
+
 The fallback plan records where adjacent agent-failure, action-boundary, MCP-security, reliability, failure-repair, and incident benchmarks get their metadata, then maps which source shapes SMERC can safely learn from. It preserves the key boundary: public-pattern evidence can improve technical proof, but it is not customer validation.
 
 Run the first focused Public Fallback Adapter:

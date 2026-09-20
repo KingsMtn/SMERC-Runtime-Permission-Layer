@@ -2,16 +2,88 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
-from typing import Any, Callable, Dict, Mapping
+from typing import Any, Callable, Dict, Mapping, Sequence
 
 from reference_engine.mcp_proxy_runner import run_mcp_proxy
+from reference_engine.runtime_admission_gate import evaluate_runtime_admission_gate
 
 
 VERSION = "smerc.aws-mcp-enforcement-adapter.v1"
 PROTOCOL_VERSION = "2025-06-18"
 TOOL_NAME = "smerc_guarded_aws_call"
 Executor = Callable[[str, str, Mapping[str, Any]], Mapping[str, Any]]
+
+
+class StdioMCPExecutor:
+    """One-call MCP client for an explicitly configured upstream command."""
+
+    def __init__(self, command: Sequence[str], *, timeout_seconds: float = 30.0) -> None:
+        if not command or any(not isinstance(part, str) or not part.strip() for part in command):
+            raise ValueError("upstream command must contain non-empty argv entries")
+        if timeout_seconds <= 0:
+            raise ValueError("upstream timeout must be greater than zero")
+        self._command = tuple(command)
+        self._timeout_seconds = timeout_seconds
+
+    def __call__(self, server_name: str, tool_name: str, arguments: Mapping[str, Any]) -> Mapping[str, Any]:
+        del server_name  # The configured command is the sole trusted upstream boundary.
+        initialize_id = "smerc-upstream-initialize"
+        call_id = "smerc-upstream-call"
+        requests = (
+            {
+                "jsonrpc": "2.0",
+                "id": initialize_id,
+                "method": "initialize",
+                "params": {
+                    "protocolVersion": PROTOCOL_VERSION,
+                    "capabilities": {},
+                    "clientInfo": {"name": "smerc-aws-enforcement-adapter", "version": VERSION},
+                },
+            },
+            {"jsonrpc": "2.0", "method": "notifications/initialized", "params": {}},
+            {
+                "jsonrpc": "2.0",
+                "id": call_id,
+                "method": "tools/call",
+                "params": {"name": tool_name, "arguments": dict(arguments)},
+            },
+        )
+        payload = "".join(json.dumps(item, separators=(",", ":")) + "\n" for item in requests)
+        try:
+            completed = subprocess.run(
+                self._command,
+                input=payload,
+                text=True,
+                capture_output=True,
+                timeout=self._timeout_seconds,
+                check=False,
+                shell=False,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise RuntimeError("trusted AWS MCP upstream was unavailable") from exc
+        responses = []
+        for line in completed.stdout.splitlines():
+            try:
+                candidate = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(candidate, Mapping):
+                responses.append(candidate)
+        initialized = [item for item in responses if item.get("id") == initialize_id]
+        if len(initialized) != 1 or initialized[0].get("jsonrpc") != "2.0" or "result" not in initialized[0]:
+            raise RuntimeError("trusted AWS MCP upstream did not complete initialization")
+        matching = [item for item in responses if item.get("id") == call_id]
+        if len(matching) != 1 or matching[0].get("jsonrpc") != "2.0":
+            raise RuntimeError("trusted AWS MCP upstream returned no matching JSON-RPC response")
+        response = matching[0]
+        if "error" in response:
+            raise RuntimeError("trusted AWS MCP upstream returned a JSON-RPC error")
+        result = response.get("result")
+        if not isinstance(result, Mapping) or result.get("isError") is True:
+            raise RuntimeError("trusted AWS MCP upstream returned a failed or invalid tool result")
+        return dict(result)
 
 
 class AWSMCPEnforcementAdapter:
@@ -60,7 +132,10 @@ class AWSMCPEnforcementAdapter:
         if not isinstance(arguments, Mapping):
             raise TypeError("tools/call arguments must be an object")
         governance = arguments.get("governance_request")
+        admission_payload = arguments.get("runtime_admission")
         aws_call = arguments.get("aws_call")
+        if not isinstance(admission_payload, Mapping):
+            raise TypeError("runtime_admission must be an object")
         if not isinstance(governance, Mapping) or not isinstance(aws_call, Mapping):
             raise TypeError("governance_request and aws_call must be objects")
         server_name = _required_text(aws_call, "server_name")
@@ -79,11 +154,25 @@ class AWSMCPEnforcementAdapter:
         if governance_server.get("name") != server_name:
             raise ValueError("AWS server name must match governance_request.server.name")
 
+        admission = evaluate_runtime_admission_gate(admission_payload)
+        if admission["decision"] != "ADMIT":
+            return _tool_error(
+                "SMERC runtime admission rejected AWS execution.",
+                {
+                    "adapter_version": VERSION,
+                    "admission_decision": admission["decision"],
+                    "admission_reason_codes": list(admission["reason_codes"]),
+                    "failed_required_checks": list(admission["failed_required_checks"]),
+                },
+            )
+
         report = run_mcp_proxy(governance, mode="enforce", require_agent_identity=True)
         decision = report["governance_report"]["decision"]
         route = report["governance_report"]["sparta_route"]
         evidence = {
             "adapter_version": VERSION,
+            "admission_decision": admission["decision"],
+            "admission_reason_codes": list(admission["reason_codes"]),
             "posture": decision["posture"],
             "route_state": route["route_state"],
             "replay_id": decision["replay_id"],
@@ -115,8 +204,9 @@ def _tool_definition() -> Dict[str, Any]:
         "inputSchema": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["governance_request", "aws_call"],
+            "required": ["runtime_admission", "governance_request", "aws_call"],
             "properties": {
+                "runtime_admission": {"type": "object"},
                 "governance_request": {"type": "object"},
                 "aws_call": {
                     "type": "object",
@@ -178,8 +268,17 @@ def serve_stdio(adapter: AWSMCPEnforcementAdapter) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run the fail-closed SMERC AWS MCP enforcement adapter over stdio.")
-    parser.parse_args()
-    return serve_stdio(AWSMCPEnforcementAdapter())
+    parser.add_argument("--upstream-timeout", type=float, default=30.0)
+    parser.add_argument(
+        "--upstream-command",
+        nargs=argparse.REMAINDER,
+        help="Explicit argv for a trusted AWS MCP stdio bridge; no shell parsing is used.",
+    )
+    args = parser.parse_args()
+    executor = None
+    if args.upstream_command:
+        executor = StdioMCPExecutor(args.upstream_command, timeout_seconds=args.upstream_timeout)
+    return serve_stdio(AWSMCPEnforcementAdapter(executor))
 
 
 if __name__ == "__main__":
