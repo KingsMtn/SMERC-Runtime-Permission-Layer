@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
@@ -16,6 +17,11 @@ TOOL_NAME = "smerc_guarded_aws_call"
 PILOT_COST_CEILING_USD = 2.0
 SESSION_COST_CEILING_USD = 5.0
 Executor = Callable[[str, str, Mapping[str, Any]], Mapping[str, Any]]
+
+
+def _canonical_digest(value: Any) -> str:
+    encoded = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 class StdioMCPExecutor:
@@ -164,6 +170,12 @@ class AWSMCPEnforcementAdapter:
             "estimated_session_spend_before_usd": self._estimated_session_spend_usd,
             "session_cost_ceiling_usd": SESSION_COST_CEILING_USD,
         }
+        execution_binding = {
+            "server_name": server_name,
+            "tool_name": tool_name,
+            "arguments_sha256": _canonical_digest(dict(tool_arguments)),
+        }
+        execution_binding["target_sha256"] = _canonical_digest(execution_binding)
         if estimated_cost > PILOT_COST_CEILING_USD:
             return _tool_error("AWS execution exceeds the SMERC pilot cost ceiling.", cost_evidence)
         if estimated_cost > self._approved_cost_usd:
@@ -208,6 +220,7 @@ class AWSMCPEnforcementAdapter:
             "reason_codes": list(decision.get("reason_codes", [])),
             "required_controls": list(route.get("applied_controls", [])),
             "cost_control": cost_evidence,
+            "execution_binding": execution_binding,
         }
         if decision["posture"] != "ALLOW" or not report["proxy_response"]["should_forward_tool_call"]:
             return _tool_error("SMERC did not authorize AWS execution.", evidence)
@@ -220,6 +233,10 @@ class AWSMCPEnforcementAdapter:
             return _tool_error("The trusted AWS MCP executor failed; execution state is unconfirmed.", evidence)
         if not isinstance(upstream_result, Mapping):
             return _tool_error("The trusted AWS MCP executor returned an invalid result.", evidence)
+        evidence["execution_result"] = {
+            "status": "succeeded",
+            "result_sha256": _canonical_digest(dict(upstream_result)),
+        }
         return {
             "content": [{"type": "text", "text": json.dumps(dict(upstream_result), sort_keys=True)}],
             "structuredContent": {"aws_result": dict(upstream_result), "smerc": evidence},
