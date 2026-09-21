@@ -170,6 +170,7 @@ class AWSMCPEnforcementAdapter:
         governance = arguments.get("governance_request")
         admission_payload = arguments.get("runtime_admission")
         aws_call = arguments.get("aws_call")
+        operator_approval = arguments.get("operator_approval")
         if not isinstance(admission_payload, Mapping):
             raise TypeError("runtime_admission must be an object")
         if not isinstance(governance, Mapping) or not isinstance(aws_call, Mapping):
@@ -244,7 +245,17 @@ class AWSMCPEnforcementAdapter:
             "cost_control": cost_evidence,
             "execution_binding": execution_binding,
         }
-        if decision["posture"] != "ALLOW" or not report["proxy_response"]["should_forward_tool_call"]:
+        approval_transition = _validated_throttle_approval(
+            operator_approval,
+            posture=decision["posture"],
+            target_sha256=execution_binding["target_sha256"],
+        )
+        if approval_transition is not None:
+            evidence["approval_transition"] = approval_transition
+        may_execute = decision["posture"] == "ALLOW" or approval_transition is not None
+        if not may_execute or (
+            decision["posture"] == "ALLOW" and not report["proxy_response"]["should_forward_tool_call"]
+        ):
             return _tool_error("SMERC did not authorize AWS execution.", evidence)
         if self._executor is None:
             return _tool_error("No trusted AWS MCP executor is configured; execution failed closed.", evidence)
@@ -278,6 +289,16 @@ def _tool_definition() -> Dict[str, Any]:
             "properties": {
                 "runtime_admission": {"type": "object"},
                 "governance_request": {"type": "object"},
+                "operator_approval": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["approved", "approver_id", "approved_target_sha256"],
+                    "properties": {
+                        "approved": {"type": "boolean"},
+                        "approver_id": {"type": "string"},
+                        "approved_target_sha256": {"type": "string"},
+                    },
+                },
                 "aws_call": {
                     "type": "object",
                     "additionalProperties": False,
@@ -304,6 +325,37 @@ def _tool_definition() -> Dict[str, Any]:
 def _is_aws_target(server_name: str) -> bool:
     lowered = server_name.lower()
     return lowered.startswith(("aws", "awslabs", "amazon")) or ".aws" in lowered
+
+
+def _validated_throttle_approval(
+    approval: Any,
+    *,
+    posture: str,
+    target_sha256: str,
+) -> Dict[str, Any] | None:
+    if approval is None:
+        return None
+    if not isinstance(approval, Mapping):
+        raise TypeError("operator_approval must be an object")
+    expected = {"approved", "approver_id", "approved_target_sha256"}
+    if set(approval) != expected:
+        raise ValueError("operator_approval must contain exactly approved, approver_id, and approved_target_sha256")
+    if approval.get("approved") is not True:
+        return None
+    approver_id = approval.get("approver_id")
+    approved_target = approval.get("approved_target_sha256")
+    if not isinstance(approver_id, str) or not approver_id.strip():
+        raise TypeError("operator_approval.approver_id must be a non-empty string")
+    if approved_target != target_sha256:
+        raise ValueError("operator approval does not match the exact AWS execution target")
+    if posture != "THROTTLE":
+        return None
+    return {
+        "source_posture": "THROTTLE",
+        "executed_posture": "ALLOW_WITH_OWNER_APPROVAL",
+        "approver_sha256": hashlib.sha256(approver_id.strip().encode("utf-8")).hexdigest(),
+        "approved_target_sha256": target_sha256,
+    }
 
 
 def _managed_aws_mcp_endpoint(value: str) -> str:

@@ -555,6 +555,7 @@ Start here before reading the code:
 - `docs/AWS_MCP_Enforced_Live_Proof.md` defines the fixed, zero-cost runner for proving one managed AWS MCP call crossed SMERC before execution, without storing credentials or the raw AWS response.
 - `docs/AWS_MCP_Denied_Write_Proof.md` proves a concrete destructive AWS request is denied by recoverability policy before the configured executor can run.
 - `docs/AWS_MCP_Dry_Run_Proof.md` binds a fixed EC2 authorization dry-run and zero-resource read-back to the enforced AWS MCP path.
+- `docs/AWS_Reversible_Mutation_Proof.md` defines the bounded create-delete proof and links the sanitized live AWS observation without overstating enforcement.
 - `docs/Customer_Proof_Loop.md` gives reviewers a one-command path that runs a synthetic customer action through runtime admission, recoverability scoring, SPARTa routing, and Decision Lifecycle Ledger evidence.
 - `docs/Runtime_Evidence_Trust_Gate.md` explains how SMERC screens whether action metadata is trustworthy enough to support a runtime decision.
 - `docs/Content_Evidence_Adapter.md` explains how SMERC consumes trusted content-risk signals from scanners, eval platforms, policy engines, and reviewers without pretending to replace them.
