@@ -1,0 +1,27 @@
+{
+  "schema": "smerc.aws-reversible-mutation-observation.v1",
+  "observed_at": "2026-09-21",
+  "observed_at_precision": "day",
+  "evidence_class": "connector_observed_live_reversible_mutation",
+  "production_evidence": false,
+  "transport_enforced_by_smerc": false,
+  "region": "us-east-1",
+  "resource_type": "ec2_security_group",
+  "proof_id": "953d50d22c06",
+  "resource_created": true,
+  "resource_deleted": true,
+  "rollback_latency_seconds": 0.597,
+  "total_exposure_seconds": 1.416,
+  "residual_count": 0,
+  "estimated_incremental_cost_usd": 0.0,
+  "sanitation": {
+    "account_id_stored": false,
+    "vpc_id_stored": false,
+    "security_group_id_stored": false,
+    "credentials_stored": false
+  },
+  "boundary": {
+    "proves": "The authenticated AWS connector created and deleted one empty tagged security group and a read-back found no residual group.",
+    "does_not_prove": "The mutation crossed SMERC enforcement, every AWS path is governed, or the runner is production enforcement."
+  }
+}

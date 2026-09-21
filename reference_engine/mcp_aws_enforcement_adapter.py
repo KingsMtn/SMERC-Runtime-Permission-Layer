@@ -119,13 +119,28 @@ class ManagedAWSMCPProxyExecutor(StdioMCPExecutor):
 class AWSMCPEnforcementAdapter:
     """MCP-facing fail-closed boundary for SMERC-governed AWS tool calls."""
 
-    def __init__(self, executor: Executor | None = None, *, approved_cost_usd: float = 0.0) -> None:
+    def __init__(
+        self,
+        executor: Executor | None = None,
+        *,
+        approved_cost_usd: float = 0.0,
+        approved_target_sha256: str | None = None,
+        approver_id: str | None = None,
+    ) -> None:
         if not isinstance(approved_cost_usd, (int, float)) or isinstance(approved_cost_usd, bool):
             raise TypeError("approved_cost_usd must be a number")
         if approved_cost_usd < 0 or approved_cost_usd > PILOT_COST_CEILING_USD:
             raise ValueError(f"approved_cost_usd must be between 0 and {PILOT_COST_CEILING_USD}")
+        if (approved_target_sha256 is None) != (approver_id is None):
+            raise ValueError("approved_target_sha256 and approver_id must be configured together")
+        if approved_target_sha256 is not None and not re.fullmatch(r"[0-9a-f]{64}", approved_target_sha256):
+            raise ValueError("approved_target_sha256 must be a lowercase SHA-256 digest")
+        if approver_id is not None and (not isinstance(approver_id, str) or not approver_id.strip()):
+            raise TypeError("approver_id must be a non-empty string")
         self._executor = executor
         self._approved_cost_usd = float(approved_cost_usd)
+        self._approved_target_sha256 = approved_target_sha256
+        self._approver_id = approver_id.strip() if approver_id is not None else None
         self._estimated_session_spend_usd = 0.0
 
     def handle(self, request: Mapping[str, Any]) -> Dict[str, Any] | None:
@@ -244,7 +259,18 @@ class AWSMCPEnforcementAdapter:
             "cost_control": cost_evidence,
             "execution_binding": execution_binding,
         }
-        if decision["posture"] != "ALLOW" or not report["proxy_response"]["should_forward_tool_call"]:
+        approval_transition = _validated_throttle_approval(
+            posture=decision["posture"],
+            target_sha256=execution_binding["target_sha256"],
+            approved_target_sha256=self._approved_target_sha256,
+            approver_id=self._approver_id,
+        )
+        if approval_transition is not None:
+            evidence["approval_transition"] = approval_transition
+        may_execute = decision["posture"] == "ALLOW" or approval_transition is not None
+        if not may_execute or (
+            decision["posture"] == "ALLOW" and not report["proxy_response"]["should_forward_tool_call"]
+        ):
             return _tool_error("SMERC did not authorize AWS execution.", evidence)
         if self._executor is None:
             return _tool_error("No trusted AWS MCP executor is configured; execution failed closed.", evidence)
@@ -304,6 +330,27 @@ def _tool_definition() -> Dict[str, Any]:
 def _is_aws_target(server_name: str) -> bool:
     lowered = server_name.lower()
     return lowered.startswith(("aws", "awslabs", "amazon")) or ".aws" in lowered
+
+
+def _validated_throttle_approval(
+    *,
+    posture: str,
+    target_sha256: str,
+    approved_target_sha256: str | None,
+    approver_id: str | None,
+) -> Dict[str, Any] | None:
+    if approved_target_sha256 is None or approver_id is None:
+        return None
+    if approved_target_sha256 != target_sha256:
+        return None
+    if posture != "THROTTLE":
+        return None
+    return {
+        "source_posture": "THROTTLE",
+        "executed_posture": "ALLOW_WITH_OWNER_APPROVAL",
+        "approver_sha256": hashlib.sha256(approver_id.encode("utf-8")).hexdigest(),
+        "approved_target_sha256": target_sha256,
+    }
 
 
 def _managed_aws_mcp_endpoint(value: str) -> str:
