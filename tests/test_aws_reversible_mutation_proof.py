@@ -1,6 +1,6 @@
 import unittest
 
-from reference_engine.aws_reversible_mutation_proof import AWS_MUTATION_SCRIPT, SCHEMA, TOOL_NAME, build_mutation_request, run_mutation_proof
+from reference_engine.aws_reversible_mutation_proof import AWS_MUTATION_SCRIPT, SCHEMA, TOOL_NAME, build_mutation_approval, build_mutation_request, run_mutation_proof
 from reference_engine.mcp_aws_enforcement_adapter import AWSMCPEnforcementAdapter
 
 
@@ -43,16 +43,32 @@ class AWSReversibleMutationProofTests(unittest.TestCase):
         self.assertIn("DeleteSecurityGroup", AWS_MUTATION_SCRIPT)
         self.assertIn("DescribeSecurityGroups", AWS_MUTATION_SCRIPT)
         self.assertEqual(arguments["governance_request"]["agent_identity"]["credential_scope"], "production_write")
-        self.assertTrue(arguments["operator_approval"]["approved"])
+        self.assertNotIn("operator_approval", arguments)
 
     def test_tampered_target_approval_fails_before_execution(self):
         request = build_mutation_request()
-        request["params"]["arguments"]["operator_approval"]["approved_target_sha256"] = "0" * 64
+        request["params"]["arguments"]["aws_call"]["arguments"]["code"] += "\n# tampered"
+        approval = build_mutation_approval()
         calls = []
 
-        response = AWSMCPEnforcementAdapter(lambda *args: calls.append(args)).handle(request)
+        response = AWSMCPEnforcementAdapter(
+            lambda *args: calls.append(args),
+            approved_target_sha256=approval["approved_target_sha256"],
+            approver_id=approval["approver_id"],
+        ).handle(request)
 
-        self.assertEqual(response["error"]["code"], -32602)
+        self.assertTrue(response["result"]["isError"])
+        self.assertEqual(calls, [])
+
+    def test_throttle_without_trusted_adapter_approval_does_not_execute(self):
+        calls = []
+
+        response = AWSMCPEnforcementAdapter(lambda *args: calls.append(args)).handle(build_mutation_request())
+
+        evidence = response["result"]["structuredContent"]["smerc"]
+        self.assertTrue(response["result"]["isError"])
+        self.assertEqual(evidence["posture"], "THROTTLE")
+        self.assertNotIn("approval_transition", evidence)
         self.assertEqual(calls, [])
 
     def test_owner_approval_cannot_override_deny(self):
@@ -70,9 +86,14 @@ class AWSReversibleMutationProofTests(unittest.TestCase):
                 "authorization_confidence": 0.4,
             }
         )
+        approval = build_mutation_approval()
         calls = []
 
-        response = AWSMCPEnforcementAdapter(lambda *args: calls.append(args)).handle(request)
+        response = AWSMCPEnforcementAdapter(
+            lambda *args: calls.append(args),
+            approved_target_sha256=approval["approved_target_sha256"],
+            approver_id=approval["approver_id"],
+        ).handle(request)
 
         evidence = response["result"]["structuredContent"]["smerc"]
         self.assertEqual(evidence["posture"], "DENY")

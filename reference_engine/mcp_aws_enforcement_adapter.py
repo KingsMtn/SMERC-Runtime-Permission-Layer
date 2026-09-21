@@ -119,13 +119,28 @@ class ManagedAWSMCPProxyExecutor(StdioMCPExecutor):
 class AWSMCPEnforcementAdapter:
     """MCP-facing fail-closed boundary for SMERC-governed AWS tool calls."""
 
-    def __init__(self, executor: Executor | None = None, *, approved_cost_usd: float = 0.0) -> None:
+    def __init__(
+        self,
+        executor: Executor | None = None,
+        *,
+        approved_cost_usd: float = 0.0,
+        approved_target_sha256: str | None = None,
+        approver_id: str | None = None,
+    ) -> None:
         if not isinstance(approved_cost_usd, (int, float)) or isinstance(approved_cost_usd, bool):
             raise TypeError("approved_cost_usd must be a number")
         if approved_cost_usd < 0 or approved_cost_usd > PILOT_COST_CEILING_USD:
             raise ValueError(f"approved_cost_usd must be between 0 and {PILOT_COST_CEILING_USD}")
+        if (approved_target_sha256 is None) != (approver_id is None):
+            raise ValueError("approved_target_sha256 and approver_id must be configured together")
+        if approved_target_sha256 is not None and not re.fullmatch(r"[0-9a-f]{64}", approved_target_sha256):
+            raise ValueError("approved_target_sha256 must be a lowercase SHA-256 digest")
+        if approver_id is not None and (not isinstance(approver_id, str) or not approver_id.strip()):
+            raise TypeError("approver_id must be a non-empty string")
         self._executor = executor
         self._approved_cost_usd = float(approved_cost_usd)
+        self._approved_target_sha256 = approved_target_sha256
+        self._approver_id = approver_id.strip() if approver_id is not None else None
         self._estimated_session_spend_usd = 0.0
 
     def handle(self, request: Mapping[str, Any]) -> Dict[str, Any] | None:
@@ -170,7 +185,6 @@ class AWSMCPEnforcementAdapter:
         governance = arguments.get("governance_request")
         admission_payload = arguments.get("runtime_admission")
         aws_call = arguments.get("aws_call")
-        operator_approval = arguments.get("operator_approval")
         if not isinstance(admission_payload, Mapping):
             raise TypeError("runtime_admission must be an object")
         if not isinstance(governance, Mapping) or not isinstance(aws_call, Mapping):
@@ -246,9 +260,10 @@ class AWSMCPEnforcementAdapter:
             "execution_binding": execution_binding,
         }
         approval_transition = _validated_throttle_approval(
-            operator_approval,
             posture=decision["posture"],
             target_sha256=execution_binding["target_sha256"],
+            approved_target_sha256=self._approved_target_sha256,
+            approver_id=self._approver_id,
         )
         if approval_transition is not None:
             evidence["approval_transition"] = approval_transition
@@ -289,16 +304,6 @@ def _tool_definition() -> Dict[str, Any]:
             "properties": {
                 "runtime_admission": {"type": "object"},
                 "governance_request": {"type": "object"},
-                "operator_approval": {
-                    "type": "object",
-                    "additionalProperties": False,
-                    "required": ["approved", "approver_id", "approved_target_sha256"],
-                    "properties": {
-                        "approved": {"type": "boolean"},
-                        "approver_id": {"type": "string"},
-                        "approved_target_sha256": {"type": "string"},
-                    },
-                },
                 "aws_call": {
                     "type": "object",
                     "additionalProperties": False,
@@ -328,32 +333,22 @@ def _is_aws_target(server_name: str) -> bool:
 
 
 def _validated_throttle_approval(
-    approval: Any,
     *,
     posture: str,
     target_sha256: str,
+    approved_target_sha256: str | None,
+    approver_id: str | None,
 ) -> Dict[str, Any] | None:
-    if approval is None:
+    if approved_target_sha256 is None or approver_id is None:
         return None
-    if not isinstance(approval, Mapping):
-        raise TypeError("operator_approval must be an object")
-    expected = {"approved", "approver_id", "approved_target_sha256"}
-    if set(approval) != expected:
-        raise ValueError("operator_approval must contain exactly approved, approver_id, and approved_target_sha256")
-    if approval.get("approved") is not True:
+    if approved_target_sha256 != target_sha256:
         return None
-    approver_id = approval.get("approver_id")
-    approved_target = approval.get("approved_target_sha256")
-    if not isinstance(approver_id, str) or not approver_id.strip():
-        raise TypeError("operator_approval.approver_id must be a non-empty string")
-    if approved_target != target_sha256:
-        raise ValueError("operator approval does not match the exact AWS execution target")
     if posture != "THROTTLE":
         return None
     return {
         "source_posture": "THROTTLE",
         "executed_posture": "ALLOW_WITH_OWNER_APPROVAL",
-        "approver_sha256": hashlib.sha256(approver_id.strip().encode("utf-8")).hexdigest(),
+        "approver_sha256": hashlib.sha256(approver_id.encode("utf-8")).hexdigest(),
         "approved_target_sha256": target_sha256,
     }
 

@@ -5,6 +5,9 @@ deletes it immediately, measures rollback latency, and verifies zero residual
 groups. It requires an explicit operator confirmation flag and estimates zero
 incremental AWS cost.
 
+The approval is injected into trusted adapter configuration and bound to the
+exact server, tool, and argument digest. It is not accepted from the MCP caller.
+
 ```bash
 python -m reference_engine.aws_reversible_mutation_proof \
   --confirm-reversible-mutation \

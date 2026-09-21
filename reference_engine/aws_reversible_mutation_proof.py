@@ -83,7 +83,11 @@ def build_mutation_request() -> dict[str, Any]:
             "cost_control": {"estimated_incremental_cost_usd": 0.0},
         }
     )
-    tool_arguments = arguments["aws_call"]["arguments"]
+    return request
+
+
+def build_mutation_approval() -> dict[str, str]:
+    tool_arguments = {"code": AWS_MUTATION_SCRIPT}
     arguments_sha256 = hashlib.sha256(
         json.dumps(tool_arguments, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
     ).hexdigest()
@@ -95,12 +99,10 @@ def build_mutation_request() -> dict[str, Any]:
             ensure_ascii=True,
         ).encode("utf-8")
     ).hexdigest()
-    arguments["operator_approval"] = {
-        "approved": True,
+    return {
         "approver_id": "owner_confirmed_reversible_proof",
         "approved_target_sha256": target_sha256,
     }
-    return request
 
 
 def _find_result(value: Any) -> Mapping[str, Any] | None:
@@ -126,7 +128,13 @@ def _find_result(value: Any) -> Mapping[str, Any] | None:
 
 
 def run_mutation_proof(executor: Executor, *, observed_at: str | None = None) -> dict[str, Any]:
-    response = AWSMCPEnforcementAdapter(executor, approved_cost_usd=0.0).handle(build_mutation_request())
+    approval = build_mutation_approval()
+    response = AWSMCPEnforcementAdapter(
+        executor,
+        approved_cost_usd=0.0,
+        approved_target_sha256=approval["approved_target_sha256"],
+        approver_id=approval["approver_id"],
+    ).handle(build_mutation_request())
     if not isinstance(response, Mapping) or not isinstance(response.get("result"), Mapping):
         raise RuntimeError("SMERC returned no mutation response")
     result = response["result"]
