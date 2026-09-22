@@ -25,7 +25,7 @@ def promotion_evidence(**changes):
     value = {
         "tests_passed": True, "review_approved": True, "policy_rechecked": True,
         "isolation_verified": True, "approved_target_sha256": SHA_C,
-        "sealed_commit_sha": "d" * 64, "durable_ref": "refs/heads/reviewed/run-001",
+        "sealed_commit_sha": SHA_A, "durable_ref": "refs/heads/reviewed/run-001",
     }
     value.update(changes)
     return value
@@ -34,7 +34,7 @@ def promotion_evidence(**changes):
 class EphemeralExecutionEnvelopeTests(unittest.TestCase):
     def test_happy_path_promotes_only_after_seal_and_evidence(self):
         active = transition_envelope(envelope(), "ACTIVE", now=1_010)
-        sealed = transition_envelope(active, "SEALED", now=1_020)
+        sealed = transition_envelope(active, "SEALED", now=1_020, evidence={"sealed_commit_sha": SHA_A})
         promoted = transition_envelope(sealed, "PROMOTED", now=1_030, evidence=promotion_evidence())
         self.assertEqual(promoted["state"], "PROMOTED")
         self.assertEqual(promoted["ephemeral_ref"], "refs/ephemeral/codex/run-001")
@@ -43,7 +43,10 @@ class EphemeralExecutionEnvelopeTests(unittest.TestCase):
         self.assertEqual(verify_envelope(promoted, now=1_040)["state"], "PROMOTED")
 
     def test_promotion_requires_every_gate_and_exact_target(self):
-        sealed = transition_envelope(transition_envelope(envelope(), "ACTIVE", now=1_010), "SEALED", now=1_020)
+        sealed = transition_envelope(
+            transition_envelope(envelope(), "ACTIVE", now=1_010), "SEALED", now=1_020,
+            evidence={"sealed_commit_sha": SHA_A},
+        )
         with self.assertRaisesRegex(ValueError, "review_approved"):
             transition_envelope(sealed, "PROMOTED", now=1_030, evidence=promotion_evidence(review_approved=False))
         with self.assertRaisesRegex(ValueError, "target"):
