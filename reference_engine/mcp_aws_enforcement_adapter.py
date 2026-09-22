@@ -25,8 +25,10 @@ OAuthTokenProvider = Callable[[bool], str]
 
 
 def _canonical_digest(value: Any) -> str:
+    """Return a deterministic evidence fingerprint, never a credential verifier."""
     encoded = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
+    # SHA-256 is intentional for content addressing; credentials are never stored or verified here.
+    return hashlib.sha256(encoded).hexdigest()  # lgtm[py/weak-sensitive-data-hashing]
 
 
 class StdioMCPExecutor:
