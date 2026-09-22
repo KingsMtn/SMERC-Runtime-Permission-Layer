@@ -10,6 +10,7 @@ from reference_engine.mcp_aws_enforcement_adapter import (
     StdioMCPExecutor,
     TOOL_NAME,
 )
+from reference_engine.ephemeral_execution_envelope import canonical_digest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,7 +61,75 @@ def call_request(governance=None):
     }
 
 
+def github_admission():
+    material = {
+        "version": "smerc.github-admission-evidence.v1",
+        "repository": "KingsMtn/SMERC-Runtime-Permission-Layer",
+        "envelope_id": "smerc-ee-0123456789abcdef0123",
+        "envelope_sha256": "a" * 64,
+        "remote_ref": "refs/heads/smerc-ephemeral/codex/aws-001",
+        "sealed_commit_sha": "b" * 40,
+        "active_ruleset_ids": ["7"],
+        "required_checks": ["unittest"],
+        "check_conclusions": {"unittest": "success"},
+        "admitted": True,
+        "authenticity_boundary": "Authenticated API observation; not a GitHub-signed attestation.",
+    }
+    return {**material, "evidence_sha256": canonical_digest(material)}
+
+
 class AWSMCPEnforcementAdapterTests(unittest.TestCase):
+    def test_required_github_admission_binds_commit_to_aws_receipt(self):
+        request = call_request()
+        admission = github_admission()
+        request["params"]["arguments"]["github_admission"] = admission
+        calls = []
+        adapter = AWSMCPEnforcementAdapter(
+            lambda *args: calls.append(args) or {"regions": 37},
+            required_github_admission_sha256=admission["evidence_sha256"],
+        )
+
+        response = adapter.handle(request)
+
+        self.assertFalse(response["result"]["isError"])
+        self.assertEqual(len(calls), 1)
+        evidence = response["result"]["structuredContent"]["smerc"]
+        self.assertEqual(evidence["execution_binding"]["github_source"]["sealed_commit_sha"], "b" * 40)
+        self.assertEqual(evidence["github_admission"]["evidence_sha256"], admission["evidence_sha256"])
+
+    def test_missing_or_unapproved_github_admission_never_reaches_aws(self):
+        calls = []
+        admission = github_admission()
+        adapter = AWSMCPEnforcementAdapter(
+            lambda *args: calls.append(args),
+            required_github_admission_sha256=admission["evidence_sha256"],
+        )
+        missing = adapter.handle(call_request())
+        self.assertEqual(missing["error"]["code"], -32602)
+
+        request = call_request()
+        request["params"]["arguments"]["github_admission"] = admission
+        other = AWSMCPEnforcementAdapter(
+            lambda *args: calls.append(args), required_github_admission_sha256="f" * 64
+        ).handle(request)
+        self.assertEqual(other["error"]["code"], -32602)
+        self.assertEqual(calls, [])
+
+    def test_tampered_github_admission_never_reaches_aws(self):
+        calls = []
+        admission = github_admission()
+        admission["sealed_commit_sha"] = "c" * 40
+        request = call_request()
+        request["params"]["arguments"]["github_admission"] = admission
+
+        response = AWSMCPEnforcementAdapter(
+            lambda *args: calls.append(args),
+            required_github_admission_sha256=admission["evidence_sha256"],
+        ).handle(request)
+
+        self.assertEqual(response["error"]["code"], -32603)
+        self.assertEqual(calls, [])
+
     def test_exposes_native_mcp_tool(self):
         adapter = AWSMCPEnforcementAdapter()
         initialized = adapter.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}})

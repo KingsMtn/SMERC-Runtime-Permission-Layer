@@ -11,6 +11,7 @@ from urllib.parse import urlsplit
 
 from reference_engine.mcp_proxy_runner import run_mcp_proxy
 from reference_engine.runtime_admission_gate import evaluate_runtime_admission_gate
+from integrations.github_ephemeral.github_remote_adapter import verify_github_admission_evidence
 
 
 VERSION = "smerc.aws-mcp-enforcement-adapter.v1"
@@ -126,6 +127,7 @@ class AWSMCPEnforcementAdapter:
         approved_cost_usd: float = 0.0,
         approved_target_sha256: str | None = None,
         approver_id: str | None = None,
+        required_github_admission_sha256: str | None = None,
     ) -> None:
         if not isinstance(approved_cost_usd, (int, float)) or isinstance(approved_cost_usd, bool):
             raise TypeError("approved_cost_usd must be a number")
@@ -137,10 +139,15 @@ class AWSMCPEnforcementAdapter:
             raise ValueError("approved_target_sha256 must be a lowercase SHA-256 digest")
         if approver_id is not None and (not isinstance(approver_id, str) or not approver_id.strip()):
             raise TypeError("approver_id must be a non-empty string")
+        if required_github_admission_sha256 is not None and not re.fullmatch(
+            r"[0-9a-f]{64}", required_github_admission_sha256
+        ):
+            raise ValueError("required_github_admission_sha256 must be a lowercase SHA-256 digest")
         self._executor = executor
         self._approved_cost_usd = float(approved_cost_usd)
         self._approved_target_sha256 = approved_target_sha256
         self._approver_id = approver_id.strip() if approver_id is not None else None
+        self._required_github_admission_sha256 = required_github_admission_sha256
         self._estimated_session_spend_usd = 0.0
 
     def handle(self, request: Mapping[str, Any]) -> Dict[str, Any] | None:
@@ -185,10 +192,21 @@ class AWSMCPEnforcementAdapter:
         governance = arguments.get("governance_request")
         admission_payload = arguments.get("runtime_admission")
         aws_call = arguments.get("aws_call")
+        github_admission_payload = arguments.get("github_admission")
         if not isinstance(admission_payload, Mapping):
             raise TypeError("runtime_admission must be an object")
         if not isinstance(governance, Mapping) or not isinstance(aws_call, Mapping):
             raise TypeError("governance_request and aws_call must be objects")
+        github_admission = None
+        if github_admission_payload is not None:
+            if not isinstance(github_admission_payload, Mapping):
+                raise TypeError("github_admission must be an object")
+            github_admission = verify_github_admission_evidence(github_admission_payload)
+        if self._required_github_admission_sha256 is not None:
+            if github_admission is None:
+                raise ValueError("github_admission is required before AWS execution")
+            if github_admission["evidence_sha256"] != self._required_github_admission_sha256:
+                raise ValueError("github_admission does not match the operator-approved evidence digest")
         server_name = _required_text(aws_call, "server_name")
         tool_name = _required_text(aws_call, "tool_name")
         tool_arguments = aws_call.get("arguments", {})
@@ -212,6 +230,13 @@ class AWSMCPEnforcementAdapter:
             "tool_name": tool_name,
             "arguments_sha256": _canonical_digest(dict(tool_arguments)),
         }
+        if github_admission is not None:
+            execution_binding["github_source"] = {
+                "repository": github_admission["repository"],
+                "remote_ref": github_admission["remote_ref"],
+                "sealed_commit_sha": github_admission["sealed_commit_sha"],
+                "admission_evidence_sha256": github_admission["evidence_sha256"],
+            }
         execution_binding["target_sha256"] = _canonical_digest(execution_binding)
         if estimated_cost > PILOT_COST_CEILING_USD:
             return _tool_error("AWS execution exceeds the SMERC pilot cost ceiling.", cost_evidence)
@@ -259,6 +284,12 @@ class AWSMCPEnforcementAdapter:
             "cost_control": cost_evidence,
             "execution_binding": execution_binding,
         }
+        if github_admission is not None:
+            evidence["github_admission"] = {
+                "repository": github_admission["repository"],
+                "sealed_commit_sha": github_admission["sealed_commit_sha"],
+                "evidence_sha256": github_admission["evidence_sha256"],
+            }
         approval_transition = _validated_throttle_approval(
             posture=decision["posture"],
             target_sha256=execution_binding["target_sha256"],
@@ -304,6 +335,7 @@ def _tool_definition() -> Dict[str, Any]:
             "properties": {
                 "runtime_admission": {"type": "object"},
                 "governance_request": {"type": "object"},
+                "github_admission": {"type": "object"},
                 "aws_call": {
                     "type": "object",
                     "additionalProperties": False,

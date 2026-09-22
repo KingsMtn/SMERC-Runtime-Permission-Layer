@@ -6,6 +6,8 @@ gates, and an explicitly unsigned TRACE-shaped export candidate. See
 `docs/Ephemeral_Execution_Envelopes.md`, the atomic local Git adapter in
 `integrations/ephemeral_git`, the exact-commit GitHub transport and admission evidence
 in `integrations/github_ephemeral`, and `THIRD_PARTY_NOTICES.md`.
+The AWS MCP enforcement adapter can require that GitHub admission digest and binds the
+exact admitted commit into the AWS execution target and result receipt.
 
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
