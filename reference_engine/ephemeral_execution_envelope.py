@@ -49,6 +49,12 @@ def _sha256(value: Any, path: str) -> str:
     return value
 
 
+def _git_oid(value: Any, path: str) -> str:
+    if not isinstance(value, str) or not re.fullmatch(r"(?:[0-9a-f]{40}|[0-9a-f]{64})", value):
+        raise ValueError(f"{path} must be a lowercase Git SHA-1 or SHA-256 object ID")
+    return value
+
+
 def _timestamp(value: Any, path: str) -> int:
     if isinstance(value, bool) or not isinstance(value, int) or value < 0:
         raise ValueError(f"{path} must be a non-negative Unix timestamp")
@@ -80,7 +86,7 @@ def create_envelope(
         raise ValueError("max_scope_units must be a positive integer")
     namespace = _identifier(namespace, "namespace", 64)
     run_id = _identifier(run_id, "run_id")
-    evidence = {"base_commit_sha": _sha256(base_commit_sha, "base_commit_sha")}
+    evidence = {"base_commit_sha": _git_oid(base_commit_sha, "base_commit_sha")}
     first_event = _event(None, "CREATED", now, evidence, None)
     envelope = {
         "version": VERSION,
@@ -150,7 +156,7 @@ def _validate_promotion(envelope: Mapping[str, Any], evidence: Mapping[str, Any]
             raise ValueError(f"promotion requires {field}=true")
     if _sha256(evidence.get("approved_target_sha256"), "approved_target_sha256") != envelope["execution_target_sha256"]:
         raise ValueError("promotion target does not match the execution envelope")
-    _sha256(evidence.get("sealed_commit_sha"), "sealed_commit_sha")
+    _git_oid(evidence.get("sealed_commit_sha"), "sealed_commit_sha")
     durable_ref = _identifier(evidence.get("durable_ref"), "durable_ref")
     if durable_ref.startswith("refs/ephemeral/"):
         raise ValueError("promotion durable_ref cannot remain in the ephemeral namespace")
@@ -168,7 +174,7 @@ def verify_envelope(envelope: Mapping[str, Any], *, now: int | None = None, allo
     run_id = _identifier(candidate.get("run_id"), "run_id")
     _identifier(candidate.get("envelope_id"), "envelope_id")
     _identifier(candidate.get("base_ref"), "base_ref")
-    _sha256(candidate.get("base_commit_sha"), "base_commit_sha")
+    _git_oid(candidate.get("base_commit_sha"), "base_commit_sha")
     _sha256(candidate.get("policy_bundle_sha256"), "policy_bundle_sha256")
     _sha256(candidate.get("execution_target_sha256"), "execution_target_sha256")
     _identifier(candidate.get("permit_id"), "permit_id")

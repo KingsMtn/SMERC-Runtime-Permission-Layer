@@ -11,9 +11,11 @@ Direct writes to durable refs are prohibited. Promotion requires successful test
 accountable review approval, a fresh policy check, verified isolation, the exact
 approved target digest, a sealed commit digest, and a non-ephemeral destination ref.
 
-This module defines and verifies the contract. It does not itself create Git branches,
-delete refs, or bypass repository protection rules. A GitHub or Git adapter must enforce
-the verified envelope and retain the terminal manifest after branch cleanup.
+The local adapter in `integrations/ephemeral_git` creates and seals ephemeral refs,
+promotes through an atomic compare-and-swap Git transaction, deletes exact observed
+ephemeral refs, and retains terminal manifests. It does not push to GitHub, grant
+credentials, or bypass repository protection rules. Remote transport and GitHub
+ruleset evidence remain separate controls.
 
 ## TRACE export boundary
 
