@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.client
 import json
 import re
 import subprocess
@@ -20,6 +21,7 @@ TOOL_NAME = "smerc_guarded_aws_call"
 PILOT_COST_CEILING_USD = 2.0
 SESSION_COST_CEILING_USD = 5.0
 Executor = Callable[[str, str, Mapping[str, Any]], Mapping[str, Any]]
+OAuthTokenProvider = Callable[[bool], str]
 
 
 def _canonical_digest(value: Any) -> str:
@@ -115,6 +117,153 @@ class ManagedAWSMCPProxyExecutor(StdioMCPExecutor):
         resource_region = _aws_region(resource_region)
         command = (*proxy_command, endpoint, "--metadata", f"AWS_REGION={resource_region}")
         super().__init__(command, timeout_seconds=timeout_seconds)
+
+
+class AWSOAuthMCPExecutor:
+    """Direct, bounded OAuth transport to the AWS managed MCP endpoint.
+
+    Token acquisition and secure storage stay behind ``token_provider``. The
+    executor requests one refresh after a 401 and never includes token material
+    in its return value or raised errors.
+    """
+
+    def __init__(
+        self,
+        token_provider: OAuthTokenProvider,
+        *,
+        endpoint: str = "https://aws-mcp.us-east-1.api.aws/mcp",
+        timeout_seconds: float = 30.0,
+        max_response_bytes: int = 1_048_576,
+    ) -> None:
+        if not callable(token_provider):
+            raise TypeError("token_provider must be callable")
+        if timeout_seconds <= 0:
+            raise ValueError("upstream timeout must be greater than zero")
+        if max_response_bytes <= 0:
+            raise ValueError("max_response_bytes must be greater than zero")
+        endpoint = _managed_aws_mcp_endpoint(endpoint)
+        parsed = urlsplit(endpoint)
+        self._host = parsed.hostname or ""
+        self._path = parsed.path
+        self._token_provider = token_provider
+        self._timeout_seconds = timeout_seconds
+        self._max_response_bytes = max_response_bytes
+
+    def __call__(self, server_name: str, tool_name: str, arguments: Mapping[str, Any]) -> Mapping[str, Any]:
+        if server_name != "aws-mcp":
+            raise RuntimeError("OAuth executor is bound only to aws-mcp")
+        token = self._token(False)
+        try:
+            return self._exchange(token, tool_name, arguments)
+        except _OAuthUnauthorized:
+            refreshed = self._token(True)
+            return self._exchange(refreshed, tool_name, arguments)
+
+    def _token(self, force_refresh: bool) -> str:
+        token = self._token_provider(force_refresh)
+        if not isinstance(token, str) or not token.strip() or any(char.isspace() for char in token):
+            raise RuntimeError("OAuth token provider returned no usable token")
+        return token.strip()
+
+    def _exchange(self, token: str, tool_name: str, arguments: Mapping[str, Any]) -> Mapping[str, Any]:
+        initialize_id = "smerc-oauth-initialize"
+        call_id = "smerc-oauth-call"
+        initialize = {
+            "jsonrpc": "2.0",
+            "id": initialize_id,
+            "method": "initialize",
+            "params": {
+                "protocolVersion": PROTOCOL_VERSION,
+                "capabilities": {},
+                "clientInfo": {"name": "smerc-aws-oauth-executor", "version": VERSION},
+            },
+        }
+        initialized, session_id = self._post(token, initialize)
+        if initialized.get("id") != initialize_id or "result" not in initialized:
+            raise RuntimeError("AWS MCP OAuth endpoint did not complete initialization")
+        self._post(token, {"jsonrpc": "2.0", "method": "notifications/initialized"}, session_id=session_id)
+        response, _ = self._post(
+            token,
+            {
+                "jsonrpc": "2.0",
+                "id": call_id,
+                "method": "tools/call",
+                "params": {"name": tool_name, "arguments": dict(arguments)},
+            },
+            session_id=session_id,
+        )
+        if response.get("id") != call_id or response.get("jsonrpc") != "2.0":
+            raise RuntimeError("AWS MCP OAuth endpoint returned no matching response")
+        if "error" in response:
+            raise RuntimeError("AWS MCP OAuth endpoint returned a JSON-RPC error")
+        result = response.get("result")
+        if not isinstance(result, Mapping) or result.get("isError") is True:
+            raise RuntimeError("AWS MCP OAuth endpoint returned a failed or invalid tool result")
+        return dict(result)
+
+    def _post(
+        self,
+        token: str,
+        payload: Mapping[str, Any],
+        *,
+        session_id: str | None = None,
+    ) -> tuple[dict[str, Any], str | None]:
+        body = json.dumps(payload, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream",
+            "MCP-Protocol-Version": PROTOCOL_VERSION,
+        }
+        if session_id:
+            headers["Mcp-Session-Id"] = session_id
+        connection = http.client.HTTPSConnection(self._host, timeout=self._timeout_seconds)
+        try:
+            connection.request("POST", self._path, body=body, headers=headers)
+            response = connection.getresponse()
+            if response.status == 401:
+                response.read()
+                raise _OAuthUnauthorized
+            if response.status not in (200, 202):
+                response.read()
+                raise RuntimeError(f"AWS MCP OAuth endpoint returned HTTP {response.status}")
+            raw = response.read(self._max_response_bytes + 1)
+            if len(raw) > self._max_response_bytes:
+                raise RuntimeError("AWS MCP OAuth response exceeded the configured size limit")
+            returned_session = response.getheader("Mcp-Session-Id") or session_id
+            if not raw:
+                return {}, returned_session
+            return _decode_streamable_http_response(raw, response.getheader("Content-Type", "")), returned_session
+        except _OAuthUnauthorized:
+            raise
+        except (OSError, http.client.HTTPException) as exc:
+            raise RuntimeError("AWS MCP OAuth endpoint was unavailable") from exc
+        finally:
+            connection.close()
+
+
+class _OAuthUnauthorized(Exception):
+    pass
+
+
+def _decode_streamable_http_response(raw: bytes, content_type: str) -> dict[str, Any]:
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise RuntimeError("AWS MCP OAuth endpoint returned non-UTF-8 content") from exc
+    candidates = []
+    if "text/event-stream" in content_type.lower():
+        candidates = [line[5:].strip() for line in text.splitlines() if line.startswith("data:")]
+    else:
+        candidates = [text]
+    for candidate in reversed(candidates):
+        try:
+            decoded = json.loads(candidate)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(decoded, dict):
+            return decoded
+    raise RuntimeError("AWS MCP OAuth endpoint returned no valid JSON-RPC payload")
 
 
 class AWSMCPEnforcementAdapter:

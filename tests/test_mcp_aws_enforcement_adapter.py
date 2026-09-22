@@ -3,9 +3,11 @@ import subprocess
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from reference_engine.mcp_aws_enforcement_adapter import (
     AWSMCPEnforcementAdapter,
+    AWSOAuthMCPExecutor,
     ManagedAWSMCPProxyExecutor,
     StdioMCPExecutor,
     TOOL_NAME,
@@ -79,6 +81,68 @@ def github_admission():
 
 
 class AWSMCPEnforcementAdapterTests(unittest.TestCase):
+    def test_oauth_executor_binds_session_and_returns_matching_tool_result(self):
+        responses = [
+            _HTTPResponse(200, {"jsonrpc": "2.0", "id": "smerc-oauth-initialize", "result": {}}, "session-1"),
+            _HTTPResponse(202, None),
+            _HTTPResponse(
+                200,
+                {
+                    "jsonrpc": "2.0",
+                    "id": "smerc-oauth-call",
+                    "result": {"content": [{"type": "text", "text": "37 regions"}], "isError": False},
+                },
+            ),
+        ]
+        connections = []
+
+        def connection_factory(*args, **kwargs):
+            connection = _HTTPSConnection(responses, *args, **kwargs)
+            connections.append(connection)
+            return connection
+
+        with patch("reference_engine.mcp_aws_enforcement_adapter.http.client.HTTPSConnection", connection_factory):
+            result = AWSOAuthMCPExecutor(lambda refresh: "secret-token")("aws-mcp", "list_regions", {})
+
+        self.assertFalse(result["isError"])
+        requests = [request for connection in connections for request in connection.requests]
+        self.assertEqual(len(requests), 3)
+        self.assertEqual(requests[1][3]["Mcp-Session-Id"], "session-1")
+        self.assertEqual(requests[2][3]["Mcp-Session-Id"], "session-1")
+        self.assertTrue(all(request[3]["Authorization"] == "Bearer secret-token" for request in requests))
+
+    def test_oauth_executor_refreshes_once_after_unauthorized(self):
+        responses = [
+            _HTTPResponse(401, None),
+            _HTTPResponse(200, {"jsonrpc": "2.0", "id": "smerc-oauth-initialize", "result": {}}),
+            _HTTPResponse(202, None),
+            _HTTPResponse(
+                200,
+                {"jsonrpc": "2.0", "id": "smerc-oauth-call", "result": {"content": [], "isError": False}},
+            ),
+        ]
+        refreshes = []
+
+        def token_provider(force_refresh):
+            refreshes.append(force_refresh)
+            return "refreshed" if force_refresh else "expired"
+
+        with patch(
+            "reference_engine.mcp_aws_enforcement_adapter.http.client.HTTPSConnection",
+            lambda *args, **kwargs: _HTTPSConnection(responses, *args, **kwargs),
+        ):
+            result = AWSOAuthMCPExecutor(token_provider)("aws-mcp", "list_regions", {})
+
+        self.assertFalse(result["isError"])
+        self.assertEqual(refreshes, [False, True])
+
+    def test_oauth_executor_rejects_untrusted_endpoint_and_server(self):
+        with self.assertRaises(ValueError):
+            AWSOAuthMCPExecutor(lambda refresh: "token", endpoint="https://example.com/mcp")
+        executor = AWSOAuthMCPExecutor(lambda refresh: "token")
+        with self.assertRaisesRegex(RuntimeError, "bound only"):
+            executor("other", "list_regions", {})
+
     def test_required_github_admission_binds_commit_to_aws_receipt(self):
         request = call_request()
         admission = github_admission()
@@ -392,6 +456,40 @@ class AWSMCPEnforcementAdapterTests(unittest.TestCase):
         ):
             with self.subTest(command=command), self.assertRaisesRegex(ValueError, "pinned version"):
                 ManagedAWSMCPProxyExecutor(command)
+
+
+class _HTTPResponse:
+    def __init__(self, status, payload, session_id=None):
+        self.status = status
+        self._raw = b"" if payload is None else json.dumps(payload).encode("utf-8")
+        self._session_id = session_id
+
+    def read(self, amount=None):
+        return self._raw if amount is None else self._raw[:amount]
+
+    def getheader(self, name, default=None):
+        if name.lower() == "mcp-session-id":
+            return self._session_id or default
+        if name.lower() == "content-type":
+            return "application/json"
+        return default
+
+
+class _HTTPSConnection:
+    def __init__(self, responses, host, timeout=None):
+        self._responses = responses
+        self.host = host
+        self.timeout = timeout
+        self.requests = []
+
+    def request(self, method, path, body=None, headers=None):
+        self.requests.append((method, path, body, headers or {}))
+
+    def getresponse(self):
+        return self._responses.pop(0)
+
+    def close(self):
+        pass
 
 
 if __name__ == "__main__":
