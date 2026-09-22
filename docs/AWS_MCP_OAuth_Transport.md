@@ -22,6 +22,18 @@ AWS access tokens last up to one hour, and interactive refresh tokens are
 rotated and single-use. A provider must therefore perform atomic refresh-token
 replacement and fail closed if storage or rotation fails.
 
+`OAuthTokenHelperProvider` defines the host integration contract. It launches a
+fixed argv without a shell and sends this JSON on standard input:
+
+```json
+{"version":"smerc.oauth-token-helper.v1","operation":"get_access_token","resource":"https://aws-mcp.us-east-1.api.aws/mcp","force_refresh":false}
+```
+
+The helper returns exactly a JSON object containing `token_type: "Bearer"` and
+`access_token`. Its implementation should read the host's protected credential
+store and atomically rotate refresh tokens. SMERC bounds helper time and output,
+redacts helper output on failure, and keeps the token in process memory only.
+
 ## Threat-Control Overlay
 
 Threat taxonomies belong around the adapter, not inside its protocol state

@@ -242,6 +242,65 @@ class AWSOAuthMCPExecutor:
             connection.close()
 
 
+class OAuthTokenHelperProvider:
+    """Fetch short-lived access tokens from a fixed host credential helper."""
+
+    def __init__(
+        self,
+        command: Sequence[str],
+        *,
+        resource: str = "https://aws-mcp.us-east-1.api.aws/mcp",
+        timeout_seconds: float = 15.0,
+        max_output_bytes: int = 65_536,
+    ) -> None:
+        if not command or any(not isinstance(part, str) or not part.strip() for part in command):
+            raise ValueError("token helper command must contain non-empty argv entries")
+        if timeout_seconds <= 0 or max_output_bytes <= 0:
+            raise ValueError("token helper limits must be greater than zero")
+        self._command = tuple(command)
+        self._resource = _managed_aws_mcp_endpoint(resource)
+        self._timeout_seconds = timeout_seconds
+        self._max_output_bytes = max_output_bytes
+
+    def __call__(self, force_refresh: bool) -> str:
+        request = json.dumps(
+            {
+                "version": "smerc.oauth-token-helper.v1",
+                "operation": "get_access_token",
+                "resource": self._resource,
+                "force_refresh": bool(force_refresh),
+            },
+            separators=(",", ":"),
+        )
+        try:
+            completed = subprocess.run(
+                self._command,
+                input=request + "\n",
+                text=True,
+                capture_output=True,
+                timeout=self._timeout_seconds,
+                check=False,
+                shell=False,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise RuntimeError("OAuth token helper was unavailable") from exc
+        if completed.returncode != 0:
+            raise RuntimeError("OAuth token helper failed")
+        encoded = completed.stdout.encode("utf-8")
+        if len(encoded) > self._max_output_bytes:
+            raise RuntimeError("OAuth token helper response exceeded the configured size limit")
+        try:
+            payload = json.loads(completed.stdout)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("OAuth token helper returned invalid JSON") from exc
+        if not isinstance(payload, Mapping) or payload.get("token_type") != "Bearer":
+            raise RuntimeError("OAuth token helper returned an invalid token response")
+        token = payload.get("access_token")
+        if not isinstance(token, str) or not token.strip() or any(char.isspace() for char in token):
+            raise RuntimeError("OAuth token helper returned no usable token")
+        return token.strip()
+
+
 class _OAuthUnauthorized(Exception):
     pass
 
