@@ -11,3 +11,7 @@ fails closed. Cleanup uses a lease bound to the observed commit.
 
 The resulting record is digest-bound but is not a GitHub-signed attestation. The caller
 must collect ruleset and check observations through an authenticated GitHub API session.
+
+When `AWSMCPEnforcementAdapter` is configured with the approved admission-evidence
+digest, it requires this record before execution and binds the repository, remote ref,
+sealed commit, and evidence digest into both the AWS target hash and success receipt.

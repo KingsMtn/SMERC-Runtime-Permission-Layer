@@ -62,7 +62,7 @@ class GitHubRemoteTransport:
             "envelope_sha256": verified["envelope_sha256"],
             "remote": self.remote,
             "remote_ref": remote_ref,
-        "sealed_commit_sha": local_oid,
+            "sealed_commit_sha": local_oid,
             "observed_remote_sha": observed,
             "transport_verified": True,
         }
@@ -166,3 +166,29 @@ def build_github_admission_evidence(
         ),
     }
     return {**material, "evidence_sha256": canonical_digest(material)}
+
+
+def verify_github_admission_evidence(evidence: Mapping[str, Any]) -> dict[str, Any]:
+    fields = {
+        "version", "repository", "envelope_id", "envelope_sha256", "remote_ref",
+        "sealed_commit_sha", "active_ruleset_ids", "required_checks", "check_conclusions",
+        "admitted", "authenticity_boundary", "evidence_sha256",
+    }
+    if not isinstance(evidence, Mapping) or set(evidence) != fields:
+        raise GitHubRemoteEvidenceError("invalid_admission_evidence", "GitHub admission evidence fields are invalid")
+    candidate = dict(evidence)
+    digest = candidate.pop("evidence_sha256")
+    if candidate.get("version") != "smerc.github-admission-evidence.v1" or digest != canonical_digest(candidate):
+        raise GitHubRemoteEvidenceError("invalid_admission_evidence", "GitHub admission evidence digest is invalid")
+    if candidate.get("admitted") is not True or not candidate.get("active_ruleset_ids"):
+        raise GitHubRemoteEvidenceError("invalid_admission_evidence", "GitHub admission was not established")
+    required = candidate.get("required_checks")
+    conclusions = candidate.get("check_conclusions")
+    if not isinstance(required, list) or not isinstance(conclusions, Mapping):
+        raise GitHubRemoteEvidenceError("invalid_admission_evidence", "GitHub check evidence is invalid")
+    if any(conclusions.get(name) != "success" for name in required):
+        raise GitHubRemoteEvidenceError("invalid_admission_evidence", "GitHub required checks are not successful")
+    _oid(candidate.get("sealed_commit_sha"), "sealed_commit_sha")
+    if not str(candidate.get("remote_ref", "")).startswith(REMOTE_PREFIX):
+        raise GitHubRemoteEvidenceError("invalid_admission_evidence", "GitHub remote ref is outside the ephemeral namespace")
+    return dict(evidence)
