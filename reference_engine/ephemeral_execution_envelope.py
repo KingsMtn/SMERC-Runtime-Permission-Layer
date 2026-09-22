@@ -22,7 +22,7 @@ ENVELOPE_FIELDS = {
     "version", "envelope_id", "namespace", "run_id", "base_ref", "base_commit_sha",
     "ephemeral_ref", "created_at", "expires_at", "state", "policy_bundle_sha256",
     "execution_target_sha256", "permit_id", "replay_id", "containment", "promotion",
-    "terminal_reason", "events", "envelope_sha256",
+    "sealed_commit_sha", "terminal_reason", "events", "envelope_sha256",
 }
 EVENT_FIELDS = {
     "from_state", "to_state", "at", "evidence_sha256", "prior_event_sha256", "event_sha256",
@@ -110,6 +110,7 @@ def create_envelope(
             "max_scope_units": max_scope_units,
         },
         "promotion": None,
+        "sealed_commit_sha": None,
         "terminal_reason": None,
         "events": [first_event],
     }
@@ -133,11 +134,17 @@ def transition_envelope(
     if now >= current["expires_at"] and to_state != "EXPIRED":
         raise ValueError("expired envelope can only transition to EXPIRED")
     transition_evidence = dict(evidence or {})
+    if to_state == "SEALED":
+        if set(transition_evidence) != {"sealed_commit_sha"}:
+            raise ValueError("sealed transition requires exact sealed_commit_sha evidence")
+        _git_oid(transition_evidence.get("sealed_commit_sha"), "sealed_commit_sha")
     if to_state == "PROMOTED":
         _validate_promotion(current, transition_evidence)
     updated = copy.deepcopy(current)
     updated["state"] = to_state
     updated["events"].append(_event(from_state, to_state, now, transition_evidence, updated["events"][-1]["event_sha256"]))
+    if to_state == "SEALED":
+        updated["sealed_commit_sha"] = transition_evidence["sealed_commit_sha"]
     if to_state == "PROMOTED":
         updated["promotion"] = transition_evidence
     if to_state in {"DISCARDED", "EXPIRED"}:
@@ -156,7 +163,8 @@ def _validate_promotion(envelope: Mapping[str, Any], evidence: Mapping[str, Any]
             raise ValueError(f"promotion requires {field}=true")
     if _sha256(evidence.get("approved_target_sha256"), "approved_target_sha256") != envelope["execution_target_sha256"]:
         raise ValueError("promotion target does not match the execution envelope")
-    _git_oid(evidence.get("sealed_commit_sha"), "sealed_commit_sha")
+    if _git_oid(evidence.get("sealed_commit_sha"), "sealed_commit_sha") != envelope["sealed_commit_sha"]:
+        raise ValueError("promotion sealed commit does not match the sealed envelope")
     durable_ref = _identifier(evidence.get("durable_ref"), "durable_ref")
     if durable_ref.startswith("refs/ephemeral/"):
         raise ValueError("promotion durable_ref cannot remain in the ephemeral namespace")
@@ -225,7 +233,17 @@ def verify_envelope(envelope: Mapping[str, Any], *, now: int | None = None, allo
     if events[-1].get("to_state") != candidate.get("state"):
         raise ValueError("envelope state does not match its event chain")
     promotion = candidate.get("promotion")
+    sealed_commit = candidate.get("sealed_commit_sha")
     terminal_reason = candidate.get("terminal_reason")
+    if state in {"SEALED", "PROMOTED"}:
+        _git_oid(sealed_commit, "sealed_commit_sha")
+        sealed_events = [event for event in events if event.get("to_state") == "SEALED"]
+        if len(sealed_events) != 1 or sealed_events[0]["evidence_sha256"] != canonical_digest(
+            {"sealed_commit_sha": sealed_commit}
+        ):
+            raise ValueError("sealed commit does not match its lifecycle evidence")
+    elif sealed_commit is not None:
+        raise ValueError("unsealed envelope cannot contain a sealed commit")
     if state == "PROMOTED":
         if not isinstance(promotion, Mapping):
             raise ValueError("promoted envelope requires promotion evidence")

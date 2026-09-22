@@ -4,7 +4,8 @@ SMERC can bind code-writing agent runs to verified ephemeral execution envelopes
 immutable base commits, TTL expiry, chained lifecycle evidence, fail-closed promotion
 gates, and an explicitly unsigned TRACE-shaped export candidate. See
 `docs/Ephemeral_Execution_Envelopes.md`, the atomic local Git adapter in
-`integrations/ephemeral_git`, and `THIRD_PARTY_NOTICES.md`.
+`integrations/ephemeral_git`, the exact-commit GitHub transport and admission evidence
+in `integrations/github_ephemeral`, and `THIRD_PARTY_NOTICES.md`.
 
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
