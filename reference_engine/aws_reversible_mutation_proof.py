@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
+from reference_engine.aws_portable_evidence import build_aws_portable_evidence
 from reference_engine.aws_mcp_dry_run_proof import PINNED_PROXY_VERSION
 from reference_engine.aws_mcp_enforced_live_proof import build_request
 from reference_engine.mcp_aws_enforcement_adapter import AWSMCPEnforcementAdapter, Executor, ManagedAWSMCPProxyExecutor
@@ -127,7 +128,14 @@ def _find_result(value: Any) -> Mapping[str, Any] | None:
     return None
 
 
-def run_mutation_proof(executor: Executor, *, observed_at: str | None = None) -> dict[str, Any]:
+def run_mutation_proof(
+    executor: Executor,
+    *,
+    observed_at: str | None = None,
+    repository: str = "KingsMtn/SMERC-Runtime-Permission-Layer",
+    commit_sha: str = "0" * 40,
+    ephemeral_ref: str = "not-observed",
+) -> dict[str, Any]:
     approval = build_mutation_approval()
     response = AWSMCPEnforcementAdapter(
         executor,
@@ -152,7 +160,7 @@ def run_mutation_proof(executor: Executor, *, observed_at: str | None = None) ->
         or not isinstance(observation.get("rollback_latency_seconds"), (int, float))
     ):
         raise RuntimeError("rollback or residual-state verification failed; no proof was created")
-    return {
+    proof = {
         "schema": SCHEMA,
         "observed_at": observed_at or datetime.now(timezone.utc).isoformat(),
         "evidence_class": "enforced_live_reversible_mutation",
@@ -173,6 +181,14 @@ def run_mutation_proof(executor: Executor, *, observed_at: str | None = None) ->
             "does_not_prove": "Every AWS path is SMERC-enforced, unrelated resource types are recoverable, or this is production enforcement.",
         },
     }
+    proof["portable_evidence"] = build_aws_portable_evidence(
+        proof,
+        repository=repository,
+        commit_sha=commit_sha,
+        ephemeral_ref=ephemeral_ref,
+        workflow="aws-reversible-mutation-proof",
+    )
+    return proof
 
 
 def main() -> int:
@@ -181,6 +197,9 @@ def main() -> int:
     parser.add_argument("--aws-resource-region", default="us-east-1")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--timeout", type=float, default=90.0)
+    parser.add_argument("--repository", default="KingsMtn/SMERC-Runtime-Permission-Layer")
+    parser.add_argument("--commit-sha", default="0" * 40)
+    parser.add_argument("--ephemeral-ref", default="not-observed")
     args = parser.parse_args()
     if not args.confirm_reversible_mutation:
         parser.error("--confirm-reversible-mutation is required")
@@ -190,7 +209,12 @@ def main() -> int:
         timeout_seconds=args.timeout,
     )
     try:
-        proof = run_mutation_proof(executor)
+        proof = run_mutation_proof(
+            executor,
+            repository=args.repository,
+            commit_sha=args.commit_sha,
+            ephemeral_ref=args.ephemeral_ref,
+        )
     except RuntimeError as exc:
         print(json.dumps({"status": "failed_closed", "message": str(exc)}, sort_keys=True), file=sys.stderr)
         return 1
