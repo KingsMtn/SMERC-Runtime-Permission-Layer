@@ -7,6 +7,7 @@ import json
 import re
 import subprocess
 import sys
+import time
 from typing import Any, Callable, Dict, Mapping, Sequence
 from urllib.parse import urlsplit
 
@@ -136,6 +137,9 @@ class AWSOAuthMCPExecutor:
         endpoint: str = "https://aws-mcp.us-east-1.api.aws/mcp",
         timeout_seconds: float = 30.0,
         max_response_bytes: int = 1_048_576,
+        max_handshake_attempts: int = 3,
+        max_retry_delay_seconds: float = 30.0,
+        sleeper: Callable[[float], None] = time.sleep,
     ) -> None:
         if not callable(token_provider):
             raise TypeError("token_provider must be callable")
@@ -143,6 +147,12 @@ class AWSOAuthMCPExecutor:
             raise ValueError("upstream timeout must be greater than zero")
         if max_response_bytes <= 0:
             raise ValueError("max_response_bytes must be greater than zero")
+        if isinstance(max_handshake_attempts, bool) or not 1 <= max_handshake_attempts <= 5:
+            raise ValueError("max_handshake_attempts must be between 1 and 5")
+        if max_retry_delay_seconds < 0 or max_retry_delay_seconds > 60:
+            raise ValueError("max_retry_delay_seconds must be between 0 and 60")
+        if not callable(sleeper):
+            raise TypeError("sleeper must be callable")
         endpoint = _managed_aws_mcp_endpoint(endpoint)
         parsed = urlsplit(endpoint)
         self._host = parsed.hostname or ""
@@ -150,6 +160,9 @@ class AWSOAuthMCPExecutor:
         self._token_provider = token_provider
         self._timeout_seconds = timeout_seconds
         self._max_response_bytes = max_response_bytes
+        self._max_handshake_attempts = max_handshake_attempts
+        self._max_retry_delay_seconds = float(max_retry_delay_seconds)
+        self._sleeper = sleeper
 
     def __call__(self, server_name: str, tool_name: str, arguments: Mapping[str, Any]) -> Mapping[str, Any]:
         if server_name != "aws-mcp":
@@ -180,20 +193,29 @@ class AWSOAuthMCPExecutor:
                 "clientInfo": {"name": "smerc-aws-oauth-executor", "version": VERSION},
             },
         }
-        initialized, session_id = self._post(token, initialize)
+        initialized, session_id = self._handshake_post(token, initialize)
         if initialized.get("id") != initialize_id or "result" not in initialized:
             raise RuntimeError("AWS MCP OAuth endpoint did not complete initialization")
-        self._post(token, {"jsonrpc": "2.0", "method": "notifications/initialized"}, session_id=session_id)
-        response, _ = self._post(
-            token,
-            {
-                "jsonrpc": "2.0",
-                "id": call_id,
-                "method": "tools/call",
-                "params": {"name": tool_name, "arguments": dict(arguments)},
-            },
-            session_id=session_id,
+        self._handshake_post(
+            token, {"jsonrpc": "2.0", "method": "notifications/initialized"}, session_id=session_id,
         )
+        # The operation is deliberately outside the retrying handshake helper.
+        # An ambiguous tools/call failure must never cause duplicate AWS effects.
+        try:
+            response, _ = self._post(
+                token,
+                {
+                    "jsonrpc": "2.0",
+                    "id": call_id,
+                    "method": "tools/call",
+                    "params": {"name": tool_name, "arguments": dict(arguments)},
+                },
+                session_id=session_id,
+            )
+        except _OAuthRateLimited as exc:
+            raise RuntimeError(
+                "AWS MCP OAuth operation was rate limited; outcome is unconfirmed and was not retried"
+            ) from exc
         if response.get("id") != call_id or response.get("jsonrpc") != "2.0":
             raise RuntimeError("AWS MCP OAuth endpoint returned no matching response")
         if "error" in response:
@@ -202,6 +224,19 @@ class AWSOAuthMCPExecutor:
         if not isinstance(result, Mapping) or result.get("isError") is True:
             raise RuntimeError("AWS MCP OAuth endpoint returned a failed or invalid tool result")
         return dict(result)
+
+    def _handshake_post(
+        self, token: str, payload: Mapping[str, Any], *, session_id: str | None = None,
+    ) -> tuple[dict[str, Any], str | None]:
+        for attempt in range(1, self._max_handshake_attempts + 1):
+            try:
+                return self._post(token, payload, session_id=session_id)
+            except _OAuthRateLimited as exc:
+                if attempt == self._max_handshake_attempts:
+                    raise RuntimeError("AWS MCP OAuth handshake remained rate limited") from exc
+                delay = min(exc.retry_after_seconds, self._max_retry_delay_seconds)
+                self._sleeper(delay)
+        raise AssertionError("unreachable")
 
     def _post(
         self,
@@ -226,6 +261,14 @@ class AWSOAuthMCPExecutor:
             if response.status == 401:
                 response.read()
                 raise _OAuthUnauthorized
+            if response.status == 429:
+                response.read()
+                retry_after = response.getheader("Retry-After", "15")
+                try:
+                    delay = max(0.0, float(retry_after))
+                except (TypeError, ValueError):
+                    delay = 15.0
+                raise _OAuthRateLimited(delay)
             if response.status not in (200, 202):
                 response.read()
                 raise RuntimeError(f"AWS MCP OAuth endpoint returned HTTP {response.status}")
@@ -305,6 +348,12 @@ class OAuthTokenHelperProvider:
 
 class _OAuthUnauthorized(Exception):
     pass
+
+
+class _OAuthRateLimited(Exception):
+    def __init__(self, retry_after_seconds: float) -> None:
+        super().__init__("AWS MCP OAuth endpoint rate limited the handshake")
+        self.retry_after_seconds = retry_after_seconds
 
 
 def _decode_streamable_http_response(raw: bytes, content_type: str) -> dict[str, Any]:

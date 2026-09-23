@@ -137,6 +137,42 @@ class AWSMCPEnforcementAdapterTests(unittest.TestCase):
         self.assertFalse(result["isError"])
         self.assertEqual(refreshes, [False, True])
 
+    def test_oauth_executor_retries_handshake_429_but_not_tool_call(self):
+        responses = [
+            _HTTPResponse(429, None, retry_after="2"),
+            _HTTPResponse(200, {"jsonrpc": "2.0", "id": "smerc-oauth-initialize", "result": {}}),
+            _HTTPResponse(202, None),
+            _HTTPResponse(
+                200,
+                {"jsonrpc": "2.0", "id": "smerc-oauth-call", "result": {"content": [], "isError": False}},
+            ),
+        ]
+        sleeps = []
+        with patch(
+            "reference_engine.mcp_aws_enforcement_adapter.http.client.HTTPSConnection",
+            lambda *args, **kwargs: _HTTPSConnection(responses, *args, **kwargs),
+        ):
+            result = AWSOAuthMCPExecutor(
+                lambda refresh: "token", sleeper=sleeps.append,
+            )("aws-mcp", "list_regions", {})
+        self.assertFalse(result["isError"])
+        self.assertEqual(sleeps, [2.0])
+
+        operation_rate_limited = [
+            _HTTPResponse(200, {"jsonrpc": "2.0", "id": "smerc-oauth-initialize", "result": {}}),
+            _HTTPResponse(202, None),
+            _HTTPResponse(429, None, retry_after="1"),
+        ]
+        with patch(
+            "reference_engine.mcp_aws_enforcement_adapter.http.client.HTTPSConnection",
+            lambda *args, **kwargs: _HTTPSConnection(operation_rate_limited, *args, **kwargs),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "outcome is unconfirmed"):
+                AWSOAuthMCPExecutor(lambda refresh: "token", sleeper=sleeps.append)(
+                    "aws-mcp", "list_regions", {}
+                )
+        self.assertEqual(sleeps, [2.0])
+
     def test_oauth_executor_rejects_untrusted_endpoint_and_server(self):
         with self.assertRaises(ValueError):
             AWSOAuthMCPExecutor(lambda refresh: "token", endpoint="https://example.com/mcp")
@@ -479,10 +515,11 @@ class AWSMCPEnforcementAdapterTests(unittest.TestCase):
 
 
 class _HTTPResponse:
-    def __init__(self, status, payload, session_id=None):
+    def __init__(self, status, payload, session_id=None, retry_after=None):
         self.status = status
         self._raw = b"" if payload is None else json.dumps(payload).encode("utf-8")
         self._session_id = session_id
+        self._retry_after = retry_after
 
     def read(self, amount=None):
         return self._raw if amount is None else self._raw[:amount]
@@ -492,6 +529,8 @@ class _HTTPResponse:
             return self._session_id or default
         if name.lower() == "content-type":
             return "application/json"
+        if name.lower() == "retry-after":
+            return self._retry_after or default
         return default
 
 
