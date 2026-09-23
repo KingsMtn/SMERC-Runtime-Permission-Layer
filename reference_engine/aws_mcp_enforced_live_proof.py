@@ -8,9 +8,11 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from reference_engine.mcp_aws_enforcement_adapter import (
+    AWSOAuthMCPExecutor,
     AWSMCPEnforcementAdapter,
     Executor,
     ManagedAWSMCPProxyExecutor,
+    OAuthTokenHelperProvider,
     TOOL_NAME,
 )
 
@@ -160,14 +162,23 @@ def main() -> int:
     parser.add_argument("--aws-resource-region", default="us-east-1")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--timeout", type=float, default=60.0)
+    parser.add_argument(
+        "--oauth-token-helper-command",
+        nargs="+",
+        help="Fixed argv for a host credential helper implementing smerc.oauth-token-helper.v1.",
+    )
     args = parser.parse_args()
     if not args.confirm_read_only:
         parser.error("--confirm-read-only is required")
-    executor = ManagedAWSMCPProxyExecutor(
-        ["uvx", f"mcp-proxy-for-aws-cli@{PINNED_PROXY_VERSION}"],
-        resource_region=args.aws_resource_region,
-        timeout_seconds=args.timeout,
-    )
+    if args.oauth_token_helper_command:
+        provider = OAuthTokenHelperProvider(args.oauth_token_helper_command, timeout_seconds=args.timeout)
+        executor = AWSOAuthMCPExecutor(provider, timeout_seconds=args.timeout)
+    else:
+        executor = ManagedAWSMCPProxyExecutor(
+            ["uvx", f"mcp-proxy-for-aws-cli@{PINNED_PROXY_VERSION}"],
+            resource_region=args.aws_resource_region,
+            timeout_seconds=args.timeout,
+        )
     try:
         proof = run_proof(executor)
     except RuntimeError as exc:

@@ -9,6 +9,7 @@ from reference_engine.mcp_aws_enforcement_adapter import (
     AWSMCPEnforcementAdapter,
     AWSOAuthMCPExecutor,
     ManagedAWSMCPProxyExecutor,
+    OAuthTokenHelperProvider,
     StdioMCPExecutor,
     TOOL_NAME,
 )
@@ -142,6 +143,25 @@ class AWSMCPEnforcementAdapterTests(unittest.TestCase):
         executor = AWSOAuthMCPExecutor(lambda refresh: "token")
         with self.assertRaisesRegex(RuntimeError, "bound only"):
             executor("other", "list_regions", {})
+
+    def test_token_helper_uses_stdin_contract_and_returns_only_access_token(self):
+        script = (
+            "import json,sys; request=json.loads(sys.stdin.read()); "
+            "assert request['operation']=='get_access_token'; "
+            "assert request['force_refresh'] is True; "
+            "print(json.dumps({'token_type':'Bearer','access_token':'short-lived-token'}))"
+        )
+        provider = OAuthTokenHelperProvider([sys.executable, "-c", script])
+
+        self.assertEqual(provider(True), "short-lived-token")
+
+    def test_token_helper_failure_never_exposes_helper_output(self):
+        script = "import sys; print('secret diagnostic'); sys.exit(1)"
+        provider = OAuthTokenHelperProvider([sys.executable, "-c", script])
+
+        with self.assertRaisesRegex(RuntimeError, "helper failed") as context:
+            provider(False)
+        self.assertNotIn("secret diagnostic", str(context.exception))
 
     def test_required_github_admission_binds_commit_to_aws_receipt(self):
         request = call_request()
