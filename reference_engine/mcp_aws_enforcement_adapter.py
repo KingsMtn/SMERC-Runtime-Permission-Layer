@@ -28,7 +28,6 @@ def _canonical_digest(value: Any) -> str:
     """Return a deterministic evidence fingerprint, never a credential verifier."""
     encoded = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
     # SHA-256 is intentional for content addressing; credentials are never stored or verified here.
-    # codeql[py/weak-sensitive-data-hashing]
     return hashlib.sha256(encoded).hexdigest()
 
 
