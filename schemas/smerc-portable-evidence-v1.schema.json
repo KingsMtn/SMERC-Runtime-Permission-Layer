@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-portable-evidence-v1.schema.json",
+  "title": "SMERC Portable Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "record_id", "observed_at", "workload", "source_control", "runtime", "policy", "decision", "tool_activity", "containment", "data_handling", "verification", "claim_boundary"],
+  "properties": {
+    "version": {"const": "smerc.portable-evidence.v1"},
+    "record_id": {"$ref": "#/$defs/id"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "workload": {"$ref": "#/$defs/workload"},
+    "source_control": {"$ref": "#/$defs/sourceControl"},
+    "runtime": {"$ref": "#/$defs/runtime"},
+    "policy": {"$ref": "#/$defs/policy"},
+    "decision": {"$ref": "#/$defs/decision"},
+    "tool_activity": {"$ref": "#/$defs/toolActivity"},
+    "containment": {"$ref": "#/$defs/containment"},
+    "data_handling": {"$ref": "#/$defs/dataHandling"},
+    "verification": {"$ref": "#/$defs/verification"},
+    "claim_boundary": {"type": "string", "minLength": 1, "maxLength": 1024}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,191}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stringArray": {"type": "array", "maxItems": 128, "items": {"type": "string", "minLength": 1, "maxLength": 256}},
+    "workload": {"type": "object", "additionalProperties": false, "required": ["workload_id", "model_id", "model_digest"], "properties": {"workload_id": {"$ref": "#/$defs/id"}, "model_id": {"type": "string"}, "model_digest": {"$ref": "#/$defs/sha256"}}},
+    "sourceControl": {"type": "object", "additionalProperties": false, "required": ["repository", "commit_sha", "workflow", "ephemeral_ref"], "properties": {"repository": {"type": "string"}, "commit_sha": {"type": "string", "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$"}, "workflow": {"type": "string"}, "ephemeral_ref": {"type": ["string", "null"]}}},
+    "runtime": {"type": "object", "additionalProperties": false, "required": ["platform", "account", "region", "principal", "execution_boundary"], "properties": {"platform": {"type": "string"}, "account": {"type": "string"}, "region": {"type": "string"}, "principal": {"type": "string"}, "execution_boundary": {"type": "string"}}},
+    "policy": {"type": "object", "additionalProperties": false, "required": ["policy_id", "policy_revision", "policy_bundle_sha256", "enforcement_mode"], "properties": {"policy_id": {"type": "string"}, "policy_revision": {"type": "string"}, "policy_bundle_sha256": {"$ref": "#/$defs/sha256"}, "enforcement_mode": {"enum": ["OBSERVE", "ENFORCE"]}}},
+    "decision": {"type": "object", "additionalProperties": false, "required": ["admission", "posture", "explanation_code", "decision_id"], "properties": {"admission": {"enum": ["ADMIT", "REJECT"]}, "posture": {"enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE"]}, "explanation_code": {"type": "string"}, "decision_id": {"type": "string"}}},
+    "toolActivity": {"type": "object", "additionalProperties": false, "required": ["transcript_sha256", "call_count", "tools"], "properties": {"transcript_sha256": {"$ref": "#/$defs/sha256"}, "call_count": {"type": "integer", "minimum": 0}, "tools": {"$ref": "#/$defs/stringArray"}}},
+    "containment": {"type": "object", "additionalProperties": false, "required": ["isolation", "network_scope", "failure_contained", "cleanup_status", "cleanup_verified"], "properties": {"isolation": {"type": "string"}, "network_scope": {"type": "string"}, "failure_contained": {"type": "boolean"}, "cleanup_status": {"enum": ["NOT_REQUIRED", "SUCCEEDED", "FAILED", "UNVERIFIED"]}, "cleanup_verified": {"type": "boolean"}}},
+    "dataHandling": {"type": "object", "additionalProperties": false, "required": ["data_classes", "redacted_fields", "secrets_persisted"], "properties": {"data_classes": {"$ref": "#/$defs/stringArray"}, "redacted_fields": {"$ref": "#/$defs/stringArray"}, "secrets_persisted": {"const": false}}},
+    "verification": {"type": "object", "additionalProperties": false, "required": ["method", "issuer", "key_id", "payload_sha256", "signature"], "properties": {"method": {"enum": ["sha256", "hmac_sha256"]}, "issuer": {"$ref": "#/$defs/id"}, "key_id": {"type": ["string", "null"]}, "payload_sha256": {"$ref": "#/$defs/sha256"}, "signature": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}}}
+  }
+}
