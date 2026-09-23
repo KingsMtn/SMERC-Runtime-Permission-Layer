@@ -2,6 +2,7 @@ import unittest
 
 from reference_engine.aws_mcp_enforced_live_proof import SCHEMA, build_request, run_proof
 from reference_engine.mcp_aws_enforcement_adapter import AWSMCPEnforcementAdapter
+from reference_engine.portable_evidence import verify_portable_evidence
 
 
 class AWSMCPEnforcedLiveProofTests(unittest.TestCase):
@@ -24,6 +25,11 @@ class AWSMCPEnforcedLiveProofTests(unittest.TestCase):
         self.assertRegex(proof["smerc"]["execution_result"]["result_sha256"], r"^[0-9a-f]{64}$")
         self.assertNotIn("aws_result", proof)
         self.assertFalse(proof["sanitation"]["raw_aws_response_stored"])
+        portable = proof["portable_evidence"]
+        self.assertEqual(verify_portable_evidence(portable)["status"], "HASH_VERIFIED")
+        self.assertEqual(portable["decision"]["posture"], "ALLOW")
+        self.assertEqual(portable["containment"]["cleanup_status"], "NOT_REQUIRED")
+        self.assertFalse(portable["containment"]["cleanup_verified"])
 
     def test_failed_admission_never_reaches_executor(self):
         request = build_request()

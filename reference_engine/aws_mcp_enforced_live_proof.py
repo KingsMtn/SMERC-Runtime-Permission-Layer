@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
+from reference_engine.aws_portable_evidence import build_aws_portable_evidence
 from reference_engine.mcp_aws_enforcement_adapter import (
     AWSOAuthMCPExecutor,
     AWSMCPEnforcementAdapter,
@@ -119,7 +120,14 @@ def build_request() -> dict[str, Any]:
     }
 
 
-def run_proof(executor: Executor, *, observed_at: str | None = None) -> dict[str, Any]:
+def run_proof(
+    executor: Executor,
+    *,
+    observed_at: str | None = None,
+    repository: str = "KingsMtn/SMERC-Runtime-Permission-Layer",
+    commit_sha: str = "0" * 40,
+    ephemeral_ref: str = "not-observed",
+) -> dict[str, Any]:
     response = AWSMCPEnforcementAdapter(executor, approved_cost_usd=0.0).handle(build_request())
     if not isinstance(response, Mapping):
         raise RuntimeError("SMERC returned no proof response")
@@ -130,7 +138,7 @@ def run_proof(executor: Executor, *, observed_at: str | None = None) -> dict[str
     if not isinstance(structured, Mapping) or not isinstance(structured.get("smerc"), Mapping):
         raise RuntimeError("SMERC returned no structured execution evidence")
     evidence = dict(structured["smerc"])
-    return {
+    proof = {
         "schema": SCHEMA,
         "observed_at": observed_at or datetime.now(timezone.utc).isoformat(),
         "evidence_class": "enforced_live_read_only",
@@ -154,6 +162,14 @@ def run_proof(executor: Executor, *, observed_at: str | None = None) -> dict[str
             "does_not_prove": "All alternate AWS access paths are impossible, that AWS independently attested the SMERC decision, or that this is production enforcement.",
         },
     }
+    proof["portable_evidence"] = build_aws_portable_evidence(
+        proof,
+        repository=repository,
+        commit_sha=commit_sha,
+        ephemeral_ref=ephemeral_ref,
+        workflow="aws-mcp-enforced-live-proof",
+    )
+    return proof
 
 
 def main() -> int:
@@ -162,6 +178,9 @@ def main() -> int:
     parser.add_argument("--aws-resource-region", default="us-east-1")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--timeout", type=float, default=60.0)
+    parser.add_argument("--repository", default="KingsMtn/SMERC-Runtime-Permission-Layer")
+    parser.add_argument("--commit-sha", default="0" * 40)
+    parser.add_argument("--ephemeral-ref", default="not-observed")
     parser.add_argument(
         "--oauth-token-helper-command",
         nargs="+",
@@ -180,7 +199,12 @@ def main() -> int:
             timeout_seconds=args.timeout,
         )
     try:
-        proof = run_proof(executor)
+        proof = run_proof(
+            executor,
+            repository=args.repository,
+            commit_sha=args.commit_sha,
+            ephemeral_ref=args.ephemeral_ref,
+        )
     except RuntimeError as exc:
         print(json.dumps({"status": "failed_closed", "message": str(exc)}, sort_keys=True), file=sys.stderr)
         return 1

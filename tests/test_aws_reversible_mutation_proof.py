@@ -2,6 +2,7 @@ import unittest
 
 from reference_engine.aws_reversible_mutation_proof import AWS_MUTATION_SCRIPT, SCHEMA, TOOL_NAME, build_mutation_approval, build_mutation_request, run_mutation_proof
 from reference_engine.mcp_aws_enforcement_adapter import AWSMCPEnforcementAdapter
+from reference_engine.portable_evidence import verify_portable_evidence
 
 
 def result_payload(*, residual_count=0, deleted=True):
@@ -30,6 +31,11 @@ class AWSReversibleMutationProofTests(unittest.TestCase):
         )
         self.assertEqual(proof["aws_observation"]["rollback_latency_seconds"], 0.597)
         self.assertEqual(proof["aws_observation"]["residual_count"], 0)
+        portable = proof["portable_evidence"]
+        self.assertEqual(verify_portable_evidence(portable)["status"], "HASH_VERIFIED")
+        self.assertEqual(portable["decision"]["posture"], "THROTTLE")
+        self.assertEqual(portable["containment"]["cleanup_status"], "SUCCEEDED")
+        self.assertTrue(portable["containment"]["cleanup_verified"])
 
     def test_residual_state_fails_closed(self):
         with self.assertRaisesRegex(RuntimeError, "rollback or residual-state"):
