@@ -35,6 +35,7 @@ AWS metadata pilot CTA:
 
 Fast reviewer paths:
 
+- Collective Action Assurance (AA) evidence adapter for Runtime Assurance (RA): docs/Collective_Action_Assurance_Evidence_Adapter.md
 - SMERC whole system: `docs/SMERC_Whole_System.md`
 - Why this matters now: `docs/Why_This_Matters_Now.md`
 - Known data fallback brief: `docs/Known_Data_Fallback_Brief.md`
