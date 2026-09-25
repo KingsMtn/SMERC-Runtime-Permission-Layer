@@ -566,6 +566,7 @@ Start here before reading the code:
 - `docs/AWS_MCP_Supervised_Live_Proof.md` records a bounded read-only managed AWS MCP proof and states why it is not yet transport-enforced production evidence.
 - `docs/AWS_MCP_Enforced_Live_Proof.md` defines the fixed, zero-cost runner for proving one managed AWS MCP call crossed SMERC before execution, without storing credentials or the raw AWS response.
 - `docs/AWS_MCP_Recovery_Proof.md` provides a zero-spend three-case proof that missing, stale, and verified recovery evidence take distinct fail-closed paths before an AWS-shaped MCP mutation reaches normal governance.
+- `docs/IAM_And_SMERC_Decision_Comparison.md` turns that proof into a bounded IAM-versus-SMERC decision-delta report without claiming to replace IAM or using live AWS resources.
 - `docs/AWS_MCP_Denied_Write_Proof.md` proves a concrete destructive AWS request is denied by recoverability policy before the configured executor can run.
 - `docs/AWS_MCP_Dry_Run_Proof.md` binds a fixed EC2 authorization dry-run and zero-resource read-back to the enforced AWS MCP path.
 - `docs/AWS_Reversible_Mutation_Proof.md` defines the bounded create-delete proof and links the sanitized live AWS observation without overstating enforcement.
