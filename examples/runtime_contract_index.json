@@ -117,6 +117,15 @@
       "claim_boundary": "Pilot permit storage is not distributed replay prevention or production key management."
     },
     {
+      "layer": "mcp_pre_admission",
+      "contract": "smerc.mcp-recovery-boundary.v1",
+      "owner": "integration",
+      "role": "Require typed recovery evidence for mutating MCP calls before they become eligible for downstream runtime governance.",
+      "primary_artifacts": ["reference_engine/mcp_recovery_boundary.py", "docs/MCP_Recovery_Boundary.md"],
+      "hands_off_to": ["smerc.mcp-tool-governance.v1", "smerc.decision.v1"],
+      "claim_boundary": "Boundary admission is not authorization or execution; all results keep authority_effect NONE and should_execute_tool false."
+    },
+    {
       "layer": "recovery_capability",
       "contract": "smerc.recovery-capability.v1",
       "owner": "integration",

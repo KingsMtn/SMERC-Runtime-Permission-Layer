@@ -385,6 +385,7 @@ The current build includes:
 - static adapter conformance report that checks declared adapter capabilities across ALLOW, THROTTLE, FREEZE, DENY, and ESCALATE route behavior
 - GitHub deployment adapter route binding that verifies route replay, posture, executable state, and required controls before command execution
 - MCP-style tool governance adapter that maps proposed agent tool calls into SMERC recoverability posture, route behavior, and client/proxy recommendations before execution
+- MCP Recovery Boundary that requires typed, scoped, fresh recovery capability evidence for mutating tool calls before they become eligible for downstream governance
 - MCP Tool Risk Scanner that lets reviewers triage MCP tool definitions before granting autonomous agents tool access
 - MCP Proxy Runner that turns MCP-style tool-call governance into shadow/enforce proxy responses with optional agent identity admission and DLL evidence
 - MCP Transport Proxy sample that wraps a JSON-RPC-style `tools/call` request and returns either a forwarded result or a SMERC-blocked proxy error, with an identity-required pilot-hardening option
