@@ -442,6 +442,7 @@ The current build includes:
 - Earned Autonomy reference engine that converts historical review agreement, overrides, ref-gate history, rollback evidence, false releases, incidents, scope discipline, and evidence quality into a starting autonomy tier
 - Autonomy Continuance reference engine that evaluates Authority Provenance, Intent Integrity, Consequence Horizon, Collective Autonomy, and Right To Continue after an actor has already begun operating
 - Recovery Authority Gate that evaluates whether a paused, frozen, denied, or escalated action can be reopened through verified authority, fresh evidence, a bounded recovery path, action-bound permits, and ledger evidence
+- typed Recovery Capability Contract that binds a tool operation to its tested recovery mechanism, isolation boundary, latency, scope, mutation ceiling, evidence status, and validity window without granting authority
 - Ref-gated runtime proof loop showing hard mechanical evidence gates before SMERC recoverability scoring, SPARTa routing, autonomy budget impact, and DLL evidence
 - commercial-readiness language audit for checking public materials against evidence boundaries and unsupported claim risk
 - authenticated, tenant-scoped REST API service

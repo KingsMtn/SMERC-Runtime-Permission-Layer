@@ -22,6 +22,7 @@ class RuntimeContractIndexTests(unittest.TestCase):
             "smerc.sparta-route.v1",
             "smerc.sparta-vocabulary.v1",
             "smerc.permit.v1",
+            "smerc.recovery-capability.v1",
             "smerc.control-evidence.v1",
             "smerc.execution-report.v1",
             "smerc.decision-certificate.v1",
