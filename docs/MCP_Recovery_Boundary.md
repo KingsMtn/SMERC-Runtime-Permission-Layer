@@ -25,3 +25,7 @@ MCP tool descriptions are supplied metadata, not enforcement truth. A server say
 ## Boundary
 
 This is a reference contract, not native MCP protocol conformance, OAuth, authentication, sandboxing, or proof that an external recovery mechanism works. Production use still needs trusted adapter identity, action-to-resource binding, independent evidence, replay protection, and observed recovery outcomes.
+
+## Transport Enforcement
+
+The reference MCP Transport Proxy accepts `require_recovery_boundary`, `recovery_now_ms`, and a `recovery_boundary` envelope. When required evidence is missing or rejected, it returns JSON-RPC error `-32071` before the normal proxy and governance engine run. A valid boundary continues through existing Runtime Assurance checks and does not bypass posture, SPARTa routing, identity, permit, or enforcement requirements.
