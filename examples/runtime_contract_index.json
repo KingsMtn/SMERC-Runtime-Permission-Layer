@@ -117,6 +117,15 @@
       "claim_boundary": "Pilot permit storage is not distributed replay prevention or production key management."
     },
     {
+      "layer": "recovery_capability",
+      "contract": "smerc.recovery-capability.v1",
+      "owner": "integration",
+      "role": "Declare a typed, scoped, time-bounded, and tested recovery mechanism for a tool operation without granting execution authority.",
+      "primary_artifacts": ["schemas/smerc-recovery-capability-v1.schema.json", "reference_engine/recovery_capability_contract.py", "docs/Recovery_Capability_Contract.md"],
+      "hands_off_to": ["smerc.decision.v1", "smerc.recovery-authority-gate.v1", "smerc.control-evidence.v1"],
+      "claim_boundary": "Recovery capability evidence may constrain a runtime decision but cannot authorize execution, unlock a paused action, or independently prove external recovery truth."
+    },
+    {
       "layer": "control_evidence",
       "contract": "smerc.control-evidence.v1",
       "owner": "integration",

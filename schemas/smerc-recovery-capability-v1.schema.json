@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smerc.example/schemas/smerc-recovery-capability-v1.schema.json",
+  "title": "SMERC Recovery Capability v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version", "capability_id", "provider_id", "tool_family", "operation",
+    "scope", "mechanism", "evidence", "limits", "authority_effect",
+    "advisory_only", "issued_at_ms", "expires_at_ms", "capability_sha256"
+  ],
+  "properties": {
+    "version": {"const": "smerc.recovery-capability.v1"},
+    "capability_id": {"type": "string", "pattern": "^recovery_[0-9a-f]{24}$"},
+    "provider_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "tool_family": {"type": "string", "minLength": 1, "maxLength": 128},
+    "operation": {"type": "string", "minLength": 1, "maxLength": 128},
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["resource_patterns", "environment"],
+      "properties": {
+        "resource_patterns": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 256}},
+        "environment": {"type": "string", "minLength": 1, "maxLength": 128}
+      }
+    },
+    "mechanism": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "isolation", "trigger", "max_rollback_latency_seconds", "validity_window_seconds"],
+      "properties": {
+        "type": {"enum": ["TRANSACTION_ROLLBACK", "SNAPSHOT_RESTORE", "COMPENSATING_ACTION", "VERSION_RESTORE", "RECREATE_FROM_DECLARATION", "NONE"]},
+        "isolation": {"enum": ["SESSION", "ACTION", "RESOURCE", "ENVIRONMENT", "NONE"]},
+        "trigger": {"enum": ["AUTOMATED", "MANUAL", "EXTERNAL_AUTHORITY"]},
+        "max_rollback_latency_seconds": {"type": "integer", "minimum": 0},
+        "validity_window_seconds": {"type": "integer", "minimum": 1}
+      }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["plan_ref", "test_status", "tested_at_ms", "evidence_sha256"],
+      "properties": {
+        "plan_ref": {"type": "string", "minLength": 1, "maxLength": 256},
+        "test_status": {"enum": ["VERIFIED", "STALE", "UNVERIFIED", "FAILED"]},
+        "tested_at_ms": {"type": "integer", "minimum": 0},
+        "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "limits": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_scope_units", "max_mutations", "irreversible_side_effects"],
+      "properties": {
+        "max_scope_units": {"type": "number", "minimum": 0},
+        "max_mutations": {"type": "integer", "minimum": 0},
+        "irreversible_side_effects": {"type": "boolean"}
+      }
+    },
+    "authority_effect": {"const": "NONE"},
+    "advisory_only": {"const": true},
+    "issued_at_ms": {"type": "integer", "minimum": 0},
+    "expires_at_ms": {"type": "integer", "minimum": 1},
+    "capability_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
