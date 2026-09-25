@@ -1,4 +1,5 @@
 import json
+import hashlib
 import subprocess
 import sys
 import tempfile
@@ -22,7 +23,65 @@ def load(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def recovery_capability():
+    value = {
+        "version": "smerc.recovery-capability.v1", "provider_id": "mcp-adapter",
+        "tool_family": "mcp.internal_docs_mcp", "operation": "search_internal_docs",
+        "scope": {"resource_patterns": ["docs/*"], "environment": "pilot"},
+        "mechanism": {"type": "VERSION_RESTORE", "isolation": "RESOURCE", "trigger": "EXTERNAL_AUTHORITY",
+            "max_rollback_latency_seconds": 30, "validity_window_seconds": 3600},
+        "evidence": {"plan_ref": "evidence://recovery/1", "test_status": "VERIFIED",
+            "tested_at_ms": 1_000, "evidence_sha256": "a" * 64},
+        "limits": {"max_scope_units": 500, "max_mutations": 1, "irreversible_side_effects": False},
+        "authority_effect": "NONE", "advisory_only": True, "issued_at_ms": 1_000, "expires_at_ms": 2_000,
+    }
+    payload = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    value["capability_sha256"] = hashlib.sha256(payload.encode()).hexdigest()
+    value["capability_id"] = f"recovery_{value['capability_sha256'][:24]}"
+    return value
+
+
 class MCPTransportProxyTests(unittest.TestCase):
+    def test_required_recovery_boundary_stops_mutation_before_proxy(self):
+        envelope = load(DELETE_ENVELOPE)
+        envelope["require_recovery_boundary"] = True
+        envelope["recovery_now_ms"] = 1_500
+        report = run_mcp_transport_proxy(envelope)
+
+        self.assertIsNone(report["proxy_report"])
+        self.assertEqual(report["mcp_jsonrpc_response"]["error"]["code"], -32071)
+        self.assertEqual(report["recovery_boundary"]["boundary_state"], "REJECT")
+
+    def test_valid_recovery_boundary_continues_through_normal_governance(self):
+        envelope = load(SEARCH_ENVELOPE)
+        envelope["require_recovery_boundary"] = True
+        envelope["recovery_now_ms"] = 1_500
+        envelope["recovery_boundary"] = {
+            "version": "smerc.mcp-recovery-boundary.v1", "request_id": "MCP_SEARCH_DOCS_001",
+            "server_name": "internal_docs_mcp", "tool_name": "search_internal_docs", "operation": "read",
+            "environment": "pilot", "requested_scope_units": 5, "requested_mutations": 0,
+            "max_acceptable_rollback_latency_seconds": 60,
+            "recovery_capability": recovery_capability(),
+        }
+        report = run_mcp_transport_proxy(envelope)
+
+        self.assertIsNotNone(report["proxy_report"])
+        self.assertEqual(report["recovery_boundary"]["boundary_state"], "ADMIT_TO_GOVERNANCE")
+        self.assertIn("result", report["mcp_jsonrpc_response"])
+        self.assertFalse(report["recovery_boundary"]["should_execute_tool"])
+
+    def test_recovery_boundary_cannot_be_replayed_for_different_tool(self):
+        envelope = load(SEARCH_ENVELOPE)
+        envelope["require_recovery_boundary"] = True
+        envelope["recovery_now_ms"] = 1_500
+        envelope["recovery_boundary"] = {
+            "version": "smerc.mcp-recovery-boundary.v1", "request_id": "another-request",
+            "server_name": "different-server", "tool_name": "different-tool", "operation": "read",
+            "environment": "pilot", "requested_scope_units": 5, "requested_mutations": 0,
+            "max_acceptable_rollback_latency_seconds": 60,
+        }
+        with self.assertRaisesRegex(ValueError, "must match governance_request"):
+            run_mcp_transport_proxy(envelope)
     def test_enforce_mode_returns_jsonrpc_error_for_blocked_destructive_call(self):
         report = run_mcp_transport_proxy(load(DELETE_ENVELOPE))
         response = report["mcp_jsonrpc_response"]
