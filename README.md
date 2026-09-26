@@ -37,6 +37,9 @@ The Unified Decision Pipeline Contract keeps hard permission gates, mathematical
 scoring, execution routing, consequence-time reconciliation, and settlement as ordered stages with
 explicit non-override rules. See `docs/Unified_Decision_Pipeline_Contract.md`.
 
+The Decision Pipeline API exposes that ordered contract through dependency-free Lambda-compatible
+and API Gateway-compatible handlers for customer-hosted evaluation. See `docs/Decision_Pipeline_API.md`.
+
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
 ## External Technical Review Edition

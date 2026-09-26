@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a dependency-free Decision Pipeline API adapter for customer-hosted Lambda and API Gateway evaluation.
 - Added a Unified Decision Pipeline Contract that prevents mathematical scores from overriding hard gates or consequence-time settlement checks.
 - Added an Authorization-Afterlife Pilot Runner that converts validated metadata into evidence-bound consequence-time decisions.
 - Added a strict metadata-only Authorization-Afterlife Evidence Intake for labeled pilot observations, provenance digests, secret-field rejection, and reconciliation readiness.
