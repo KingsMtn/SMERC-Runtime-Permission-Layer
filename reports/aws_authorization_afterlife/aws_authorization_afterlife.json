@@ -1,0 +1,306 @@
+{
+  "version": "smerc.authorization-afterlife-scenario-runner.v1",
+  "title": "AWS Authorization-Afterlife Scenario Report",
+  "data_boundary": "Sanitized repository evidence and synthetic authority metadata only. No credentials, account IDs, ARNs, raw AWS responses, customer records, or live execution are used.",
+  "scenario_count": 3,
+  "decision_counts": {
+    "SETTLE": 1,
+    "QUARANTINE": 1,
+    "COMPENSATE": 1
+  },
+  "scenarios": [
+    {
+      "scenario_id": "AWS_AFTERLIFE_READ_ONLY_SETTLE",
+      "evidence_source": "CONTROLLED_AWS_PROOF",
+      "source_path": "examples/aws_mcp_supervised_live_proof.json",
+      "source_sha256": "0cb54e51c8e5343ae299e1e7e54b24b434c60f5a3d4023472b2ed331cc9f2b38",
+      "source_boundary": {
+        "sequence": "SMERC gate evaluated first; the authenticated managed AWS MCP call was then invoked under operator supervision.",
+        "proves": "The current SMERC policy allows this exact read-only action and the authenticated AWS MCP session can execute it successfully.",
+        "does_not_prove": "The managed AWS MCP transport is technically unable to bypass SMERC, or that AWS independently attested the SMERC decision and result.",
+        "next_requirement": "Route the managed AWS MCP transport through the trusted SMERC executor boundary and correlate the execution with native AWS audit evidence."
+      },
+      "synthetic_extension": "Current authority and settlement metadata are modeled.",
+      "result": {
+        "version": "smerc.consequence-time-reconciliation.v1",
+        "decision": "SETTLE",
+        "reasons": [],
+        "authority_effect": "NONE",
+        "should_commit": true,
+        "checkpoints": {
+          "delegated_continuance": {
+            "version": "smerc.delegated-continuance-contract.v1",
+            "contract_id": "dcc_5f7b17fdd25a4eb9a654d6cfbcdc6b1e",
+            "agent_id": "aws-worker",
+            "decision": "CONTINUE",
+            "reasons": [],
+            "remaining": {
+              "actions": 2,
+              "scope_units": 4.0,
+              "cost_usd": 1.0
+            },
+            "evidence": {
+              "contract_sha256": "695a96f5872a15768c78d6ead645502f752b1f1873bbaf97eadc207a5c303665",
+              "action_sha256": "17f92dc93c7cefd93a128d7cbf8e041c87101b199ede64458107a1ce1d893c23",
+              "authority_rechecked_at": 200
+            }
+          },
+          "authority_accretion": {
+            "version": "smerc.authority-accretion.v1",
+            "decision": "ELIGIBLE_FOR_ACTIVATION",
+            "reasons": [],
+            "authority_effect": "NONE",
+            "should_activate": false,
+            "envelope_id": "aws-envelope-7",
+            "resource_id": "aws-session-resource",
+            "resolver_version": "sanitized-aws-proof-v1",
+            "evidence": {
+              "envelope_sha256": "706ea7c5a4798a627ed641098b149b2dc4994af96adf9e12c4451de6c2202362",
+              "acquired_resource_sha256": "e85300b2e4d0145b2974038435004822f0cfc846318c8b26ddec5301bab094e5",
+              "observation_sha256": "147103831bd0a6514fdf37353e6a7a532da4daf750438ee8d6b237724efb9bf6"
+            }
+          },
+          "continuing_authority": {
+            "version": "smerc.continuing-authority.v1",
+            "decision": "SETTLE",
+            "reasons": [],
+            "authority_effect": "NONE",
+            "contract_id": "authority-aws-proof",
+            "phase": "settle",
+            "authority": {
+              "granted_epoch": 7,
+              "current_epoch": 7,
+              "valid_until": 500,
+              "observed_at": 200,
+              "accountable_principals": [
+                "coordinator",
+                "review-user"
+              ]
+            },
+            "propagation": {
+              "expected_descendants": [
+                "aws-worker-contract"
+              ],
+              "missing_acknowledgements": [],
+              "complete": true
+            },
+            "evidence": {
+              "grant_sha256": "4edfe30d2335b4543674d0046f9892d87d10d0d7bab9f28f909bbe12c942e7a5",
+              "runtime_sha256": "0d9cdebb33e8ab3c9444f28e7c23865471dc4438a124fe682174235e69c7d486",
+              "reconciled_at": 200
+            }
+          }
+        },
+        "evidence": {
+          "delegated_sha256": "5dd28ab69e63999f752dffa4ecdb09bc65f03e76093cfbe7b65537889153980b",
+          "acquired_sha256": "68337b274c584e5200412bc4d63b7f09f33c71538382ff9c50ae301fbbc0d5e1",
+          "continuing_sha256": "3cc82bfe90d7aa961d4a1dad4f6dcb29ab5a4b8d7062b37b2d86e51df1c24e4f",
+          "reconciled_at": 200
+        }
+      }
+    },
+    {
+      "scenario_id": "AWS_AFTERLIFE_EPOCH_DRIFT_QUARANTINE",
+      "evidence_source": "SYNTHETIC",
+      "source_path": "examples/aws_mcp_supervised_live_proof.json",
+      "source_sha256": "0cb54e51c8e5343ae299e1e7e54b24b434c60f5a3d4023472b2ed331cc9f2b38",
+      "source_boundary": {
+        "sequence": "SMERC gate evaluated first; the authenticated managed AWS MCP call was then invoked under operator supervision.",
+        "proves": "The current SMERC policy allows this exact read-only action and the authenticated AWS MCP session can execute it successfully.",
+        "does_not_prove": "The managed AWS MCP transport is technically unable to bypass SMERC, or that AWS independently attested the SMERC decision and result.",
+        "next_requirement": "Route the managed AWS MCP transport through the trusted SMERC executor boundary and correlate the execution with native AWS audit evidence."
+      },
+      "synthetic_extension": "Policy epoch change and acquired IAM capability expansion are modeled; AWS did not observe them.",
+      "result": {
+        "version": "smerc.consequence-time-reconciliation.v1",
+        "decision": "QUARANTINE",
+        "reasons": [
+          "acquired:authority_epoch_changed",
+          "acquired:capability_expansion",
+          "acquired:effect_expansion",
+          "continuing:authority_epoch_changed"
+        ],
+        "authority_effect": "NONE",
+        "should_commit": false,
+        "checkpoints": {
+          "delegated_continuance": {
+            "version": "smerc.delegated-continuance-contract.v1",
+            "contract_id": "dcc_5f7b17fdd25a4eb9a654d6cfbcdc6b1e",
+            "agent_id": "aws-worker",
+            "decision": "CONTINUE",
+            "reasons": [],
+            "remaining": {
+              "actions": 2,
+              "scope_units": 4.0,
+              "cost_usd": 1.0
+            },
+            "evidence": {
+              "contract_sha256": "695a96f5872a15768c78d6ead645502f752b1f1873bbaf97eadc207a5c303665",
+              "action_sha256": "17f92dc93c7cefd93a128d7cbf8e041c87101b199ede64458107a1ce1d893c23",
+              "authority_rechecked_at": 210
+            }
+          },
+          "authority_accretion": {
+            "version": "smerc.authority-accretion.v1",
+            "decision": "QUARANTINE",
+            "reasons": [
+              "authority_epoch_changed",
+              "capability_expansion",
+              "effect_expansion"
+            ],
+            "authority_effect": "NONE",
+            "should_activate": false,
+            "envelope_id": "aws-envelope-7",
+            "resource_id": "aws-session-resource",
+            "resolver_version": "sanitized-aws-proof-v1",
+            "evidence": {
+              "envelope_sha256": "706ea7c5a4798a627ed641098b149b2dc4994af96adf9e12c4451de6c2202362",
+              "acquired_resource_sha256": "0eab88d8ed81e1ebec8a696999f4bcadd8001a4d7ada2e7ec734f939474f65cf",
+              "observation_sha256": "8d6361c8768d0e6d7a3a5ea1c13807b7cad83a583e134be096c1574a0c6296d9"
+            }
+          },
+          "continuing_authority": {
+            "version": "smerc.continuing-authority.v1",
+            "decision": "QUARANTINE",
+            "reasons": [
+              "authority_epoch_changed"
+            ],
+            "authority_effect": "NONE",
+            "contract_id": "authority-aws-proof",
+            "phase": "settle",
+            "authority": {
+              "granted_epoch": 7,
+              "current_epoch": 8,
+              "valid_until": 500,
+              "observed_at": 200,
+              "accountable_principals": [
+                "coordinator",
+                "review-user"
+              ]
+            },
+            "propagation": {
+              "expected_descendants": [
+                "aws-worker-contract"
+              ],
+              "missing_acknowledgements": [],
+              "complete": true
+            },
+            "evidence": {
+              "grant_sha256": "4edfe30d2335b4543674d0046f9892d87d10d0d7bab9f28f909bbe12c942e7a5",
+              "runtime_sha256": "8435de88b972e81e2d3de3aee13ee9e7b4aaa2e8c2073811a64db6a2a037cb90",
+              "reconciled_at": 200
+            }
+          }
+        },
+        "evidence": {
+          "delegated_sha256": "65cadbf4283b9cb5dc55e5290dd67ed3810751a99241430730e37e11a909ab52",
+          "acquired_sha256": "0755bb223596ea30d32437bd726349296728b4ac7877679928eef66499591dbd",
+          "continuing_sha256": "b79b9a91780ec97ca624a837f4437917b821f8f49788289ff29ee7910977a375",
+          "reconciled_at": 210
+        }
+      }
+    },
+    {
+      "scenario_id": "AWS_AFTERLIFE_PARTIAL_EFFECT_COMPENSATE",
+      "evidence_source": "CONTROLLED_AWS_PROOF",
+      "source_path": "reports/aws_reversible_mutation_observation.json",
+      "source_sha256": "ee7c5d3b2f5ac4d1c0ae65865f0d1a7da1a47711c8bfbfb7d35b81f43c9f4101",
+      "source_boundary": {
+        "proves": "The authenticated AWS connector created and deleted one empty tagged security group and a read-back found no residual group.",
+        "does_not_prove": "The mutation crossed SMERC enforcement, every AWS path is governed, or the runner is production enforcement."
+      },
+      "synthetic_extension": "Revocation timing is modeled; creation, deletion, latency, residual count, and cost come from the controlled proof.",
+      "observed_recovery": {
+        "resource_created": true,
+        "resource_deleted": true,
+        "rollback_latency_seconds": 0.597,
+        "residual_count": 0,
+        "estimated_incremental_cost_usd": 0.0
+      },
+      "result": {
+        "version": "smerc.consequence-time-reconciliation.v1",
+        "decision": "COMPENSATE",
+        "reasons": [
+          "continuing:contract_revoked",
+          "continuing:partial_effects_require_compensation"
+        ],
+        "authority_effect": "NONE",
+        "should_commit": false,
+        "checkpoints": {
+          "delegated_continuance": {
+            "version": "smerc.delegated-continuance-contract.v1",
+            "contract_id": "dcc_5f7b17fdd25a4eb9a654d6cfbcdc6b1e",
+            "agent_id": "aws-worker",
+            "decision": "CONTINUE",
+            "reasons": [],
+            "remaining": {
+              "actions": 1,
+              "scope_units": 3.0,
+              "cost_usd": 1.0
+            },
+            "evidence": {
+              "contract_sha256": "695a96f5872a15768c78d6ead645502f752b1f1873bbaf97eadc207a5c303665",
+              "action_sha256": "a9643a07069521c054df3f18e163e5736e7431f07b511c5e13b4dc3d1a1e4c9f",
+              "authority_rechecked_at": 220
+            }
+          },
+          "authority_accretion": {
+            "version": "smerc.authority-accretion.v1",
+            "decision": "ELIGIBLE_FOR_ACTIVATION",
+            "reasons": [],
+            "authority_effect": "NONE",
+            "should_activate": false,
+            "envelope_id": "aws-envelope-7",
+            "resource_id": "aws-session-resource",
+            "resolver_version": "sanitized-aws-proof-v1",
+            "evidence": {
+              "envelope_sha256": "706ea7c5a4798a627ed641098b149b2dc4994af96adf9e12c4451de6c2202362",
+              "acquired_resource_sha256": "e85300b2e4d0145b2974038435004822f0cfc846318c8b26ddec5301bab094e5",
+              "observation_sha256": "147103831bd0a6514fdf37353e6a7a532da4daf750438ee8d6b237724efb9bf6"
+            }
+          },
+          "continuing_authority": {
+            "version": "smerc.continuing-authority.v1",
+            "decision": "COMPENSATE",
+            "reasons": [
+              "contract_revoked",
+              "partial_effects_require_compensation"
+            ],
+            "authority_effect": "NONE",
+            "contract_id": "authority-aws-proof",
+            "phase": "settle",
+            "authority": {
+              "granted_epoch": 7,
+              "current_epoch": 7,
+              "valid_until": 500,
+              "observed_at": 200,
+              "accountable_principals": [
+                "coordinator",
+                "review-user"
+              ]
+            },
+            "propagation": {
+              "expected_descendants": [
+                "aws-worker-contract"
+              ],
+              "missing_acknowledgements": [],
+              "complete": true
+            },
+            "evidence": {
+              "grant_sha256": "4edfe30d2335b4543674d0046f9892d87d10d0d7bab9f28f909bbe12c942e7a5",
+              "runtime_sha256": "d71a69511598f3a80e5b8b1cf81996e95692b99f31e6c324f528f82909aad7d6",
+              "reconciled_at": 200
+            }
+          }
+        },
+        "evidence": {
+          "delegated_sha256": "4536108cbb2f68d90f163d3badeb98daf3f80474904df0989112e5b8a4f690b1",
+          "acquired_sha256": "68337b274c584e5200412bc4d63b7f09f33c71538382ff9c50ae301fbbc0d5e1",
+          "continuing_sha256": "fe1aaaabbcd159f9cc983dfaf5e8a6b274e0a9c84c534c129428b7bb8d70fad4",
+          "reconciled_at": 220
+        }
+      }
+    }
+  ],
+  "claim_boundary": "This report demonstrates deterministic reconciliation over labeled evidence. It is not customer validation, AWS attestation, production enforcement, or proof that all execution paths are mediated."
+}

@@ -20,6 +20,10 @@ Accretion, and Continuing Authority at commit or settlement time. It prevents an
 passing checkpoint from masking stale authority, expanded acquired power, or exhausted
 delegated budget. See `docs/Consequence_Time_Reconciliation_Proof.md`.
 
+The AWS Authorization-Afterlife Scenario Runner converts that lifecycle into a
+reviewer-readable report using sanitized controlled AWS proof evidence and explicitly
+labeled synthetic authority changes. See `docs/AWS_Authorization_Afterlife_Scenario_Runner.md`.
+
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
 ## External Technical Review Edition
