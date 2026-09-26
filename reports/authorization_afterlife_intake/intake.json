@@ -1,0 +1,40 @@
+{
+  "version": "smerc.authorization-afterlife-evidence-intake-report.v1",
+  "generated_at": "2026-09-26T14:14:53Z",
+  "pilot_id": "aws-afterlife-metadata-pilot",
+  "manifest_sha256": "5328904214c2886f62b51defd75f6c599ecae768d4f07bae14f9c18497385b39",
+  "record_count": 2,
+  "evidence_class_counts": {
+    "CONTROLLED_AWS_PROOF": 1,
+    "CUSTOMER_METADATA": 0,
+    "PUBLIC_EXAMPLE": 0,
+    "SYNTHETIC": 1
+  },
+  "records_requiring_reconciliation": 1,
+  "records": [
+    {
+      "evidence_id": "aws-read-settlement-001",
+      "evidence_class": "CONTROLLED_AWS_PROOF",
+      "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "authority_changed": false,
+      "settlement_evidence_complete": true,
+      "requires_consequence_time_reconciliation": false,
+      "limitations": [
+        "Authority metadata is modeled for this public example."
+      ]
+    },
+    {
+      "evidence_id": "aws-revoked-partial-002",
+      "evidence_class": "SYNTHETIC",
+      "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "authority_changed": true,
+      "settlement_evidence_complete": true,
+      "requires_consequence_time_reconciliation": true,
+      "limitations": [
+        "Revocation timing and authority epoch drift are synthetic."
+      ]
+    }
+  ],
+  "readiness": "ready_for_scenario_reconciliation",
+  "evidence_boundary": "This intake validates metadata shape, provenance declarations, and the non-secret boundary. It does not verify source truth, AWS attestation, customer production safety, or authority itself."
+}

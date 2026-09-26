@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a strict metadata-only Authorization-Afterlife Evidence Intake for labeled pilot observations, provenance digests, secret-field rejection, and reconciliation readiness.
 - Added an AWS Authorization-Afterlife Scenario Runner that labels and composes sanitized controlled AWS proof evidence with explicit synthetic authority-change scenarios.
 - Added a Consequence-Time Reconciliation Proof that combines delegated continuance, authority accretion, and continuing-authority settlement into one fail-closed lifecycle.
 - Added an Authority Accretion Gate that quarantines resources acquired during a task until their resolved capabilities fit the current bounded authority envelope.
