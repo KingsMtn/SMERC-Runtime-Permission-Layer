@@ -16,7 +16,7 @@ VERSION = "smerc.authorization-afterlife-pilot-runner.v1"
 
 def run_manifest(payload: Mapping[str, Any]) -> dict[str, Any]:
     manifest = validate_manifest(payload)
-    decisions = [_evaluate(record) for record in manifest["records"]]
+    decisions = [evaluate_evidence_record(record) for record in manifest["records"]]
     names = ("SETTLE", "QUARANTINE", "COMPENSATE", "DENY")
     return {
         "version": VERSION,
@@ -32,7 +32,7 @@ def run_manifest(payload: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def _evaluate(record: Mapping[str, Any]) -> dict[str, Any]:
+def evaluate_evidence_record(record: Mapping[str, Any]) -> dict[str, Any]:
     observation = record["observations"]
     intent = hashlib.sha256(str(observation["action_id"]).encode("utf-8")).hexdigest()
     base = build_base_inputs(intent)
