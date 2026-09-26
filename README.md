@@ -35,6 +35,7 @@ AWS metadata pilot CTA:
 
 Fast reviewer paths:
 
+- Continuing Authority Contract for authorization afterlife: `docs/Continuing_Authority_Contract.md`
 - Collective Action Assurance (AA) evidence adapter for Runtime Assurance (RA): docs/Collective_Action_Assurance_Evidence_Adapter.md
 - SMERC whole system: `docs/SMERC_Whole_System.md`
 - Why this matters now: `docs/Why_This_Matters_Now.md`

@@ -16,6 +16,7 @@ This prevents SMERC from reading like unrelated schemas, reports, and integratio
 agent/tool proposes action
 -> action contract
 -> runtime decision
+-> continuing-authority reconciliation before consequential continuation or settlement
 -> executor fitness and policy context
 -> SPARTa route and vocabulary
 -> permit and control evidence when enforcement is active
@@ -35,6 +36,7 @@ agent/tool proposes action
 | Policy | `smerc.policy.v1` | Defines tenant thresholds, mode, evidence ceiling, and posture behavior. |
 | Policy authoring | `smerc.spl.v0` | Pilot-friendly profile that compiles to the runtime policy contract. |
 | Agent handshake | `smerc.agent_handshake.v1` | Connects discovery, agent declaration, executor fitness, action posture, and replay. |
+| Continuing authority | `smerc.continuing-authority.v1` | Reconciles authority epoch, lineage, revocation, checkpoints, descendant invalidation, and settlement evidence before delegated work continues or commits. |
 | SPARTa route | `smerc.sparta-route.v1` | Converts posture and tool plan into executable, constrained, paused, blocked, or review-required route behavior. |
 | SPARTa vocabulary | `smerc.sparta-vocabulary.v1` | Gives adapters and agents common route, control, evidence, and failure terms. |
 | Permit | `smerc.permit.v1` | Grants short-lived, action-bound execution authority for eligible enforcement decisions. |
