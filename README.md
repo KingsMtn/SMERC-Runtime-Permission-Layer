@@ -33,6 +33,10 @@ The Authorization-Afterlife Pilot Runner feeds validated observations into the c
 reconciler and returns evidence-bound `SETTLE`, `QUARANTINE`, `COMPENSATE`, or `DENY` decisions.
 See `docs/Authorization_Afterlife_Pilot_Runner.md`.
 
+The Unified Decision Pipeline Contract keeps hard permission gates, mathematical recoverability
+scoring, execution routing, consequence-time reconciliation, and settlement as ordered stages with
+explicit non-override rules. See `docs/Unified_Decision_Pipeline_Contract.md`.
+
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
 ## External Technical Review Edition
