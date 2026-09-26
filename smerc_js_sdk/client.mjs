@@ -47,6 +47,10 @@ export class SMERCClient {
     return this.request('POST', '/v1/admission/evaluate', { body: admission });
   }
 
+  evaluateDecisionPipeline(pipeline) {
+    return this.request('POST', '/v1/pipeline/evaluate', { body: pipeline });
+  }
+
   evaluateLanguageAction(actionEnvelope, options = {}) {
     return this.request('POST', '/v1/language/evaluate', {
       body: actionEnvelope,

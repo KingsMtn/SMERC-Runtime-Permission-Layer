@@ -105,6 +105,12 @@ The reviewable OpenAPI 3.1 contract is `schemas/smerc-runtime-api-openapi-v1.jso
 
 Legacy `/evaluate` and `/batch` aliases remain available. New integrations should use `/v1`.
 
+The bundled clients expose the unified pipeline as
+`SMERCClient.evaluate_decision_pipeline(...)` in Python and
+`SMERCClient.evaluateDecisionPipeline(...)` in JavaScript. Both call the
+evaluation-only endpoint; customers retain responsibility for executing or
+withholding the proposed action based on the returned controls.
+
 ## Idempotency
 
 Send `Idempotency-Key` on single evaluations. Repeating the same key and payload returns the original decision and sets `X-SMERC-Idempotent-Replay: true`. Reusing the key with a different payload returns HTTP `409`.

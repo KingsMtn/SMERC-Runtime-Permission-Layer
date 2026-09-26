@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added Python and JavaScript SDK methods for the customer-hosted Unified Decision Pipeline endpoint.
 - Added an authenticated Unified Decision Pipeline endpoint and OpenAPI contract for customer-hosted integration without granting SMERC execution authority.
 - Added a dependency-free Decision Pipeline API adapter for customer-hosted Lambda and API Gateway evaluation.
 - Added a Unified Decision Pipeline Contract that prevents mathematical scores from overriding hard gates or consequence-time settlement checks.

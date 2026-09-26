@@ -15,6 +15,9 @@ LANGUAGE_EXAMPLE = json.loads(
 )
 AGENT_HANDSHAKE_EXAMPLE = json.loads((ROOT / "examples" / "agent_handshake_request.json").read_text(encoding="utf-8"))
 ADMISSION_EXAMPLE = json.loads((ROOT / "examples" / "runtime_admission_request.json").read_text(encoding="utf-8"))
+DECISION_PIPELINE_EXAMPLE = json.loads(
+    (ROOT / "examples" / "decision_pipeline_request.json").read_text(encoding="utf-8")
+)
 
 
 def example_ledger_for(tenant_id: str, decision_id: str):
@@ -83,6 +86,17 @@ class PythonSDKTests(unittest.TestCase):
         self.assertEqual(admission["tenant_id"], "alpha")
         self.assertEqual(admission["decision"], "ADMIT")
         self.assertTrue(admission["admissible_for_recoverability_scoring"])
+
+    def test_evaluate_decision_pipeline_calls_runtime_api(self):
+        client = self.client()
+
+        decision = client.evaluate_decision_pipeline(DECISION_PIPELINE_EXAMPLE)
+
+        self.assertEqual(decision["version"], "smerc.decision-pipeline-contract.v1")
+        self.assertEqual(decision["tenant_id"], "alpha")
+        self.assertEqual(decision["final_decision"], "SETTLE")
+        self.assertTrue(decision["should_execute"])
+        self.assertTrue(decision["should_commit"])
 
     def test_language_evaluate_and_idempotent_replay(self):
         client = self.client()

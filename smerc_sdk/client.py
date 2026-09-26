@@ -64,6 +64,10 @@ class SMERCClient:
     def evaluate_admission(self, admission: Mapping[str, Any]) -> JsonObject:
         return self._request("POST", "/v1/admission/evaluate", body=dict(admission))
 
+    def evaluate_decision_pipeline(self, pipeline: Mapping[str, Any]) -> JsonObject:
+        """Evaluate admission, recoverability, and consequence settlement without executing the action."""
+        return self._request("POST", "/v1/pipeline/evaluate", body=dict(pipeline))
+
     def evaluate_language_action(
         self,
         action_envelope: Mapping[str, Any],

@@ -55,6 +55,34 @@ test('client sends authenticated admission evaluation request', async () => {
   });
 });
 
+test('client sends authenticated unified decision pipeline request', async () => {
+  const calls = [];
+  const client = new SMERCClient('https://smerc.example/api/', {
+    token: 'pilot-secret',
+    fetchImpl: async (url, options) => {
+      calls.push({ url, options });
+      return jsonResponse({
+        version: 'smerc.decision-pipeline-contract.v1',
+        final_decision: 'SETTLE',
+        should_execute: true,
+        should_commit: true,
+      });
+    },
+  });
+  const pipeline = {
+    version: 'smerc.decision-pipeline-contract.v1',
+    pipeline_id: 'pipeline-1',
+  };
+
+  const decision = await client.evaluateDecisionPipeline(pipeline);
+
+  assert.equal(decision.final_decision, 'SETTLE');
+  assert.equal(String(calls[0].url), 'https://smerc.example/api/v1/pipeline/evaluate');
+  assert.equal(calls[0].options.method, 'POST');
+  assert.equal(calls[0].options.headers.get('Authorization'), 'Bearer pilot-secret');
+  assert.deepEqual(JSON.parse(calls[0].options.body), pipeline);
+});
+
 test('client builds query parameters for decision and review queue reads', async () => {
   const urls = [];
   const client = new SMERCClient('https://smerc.example', {
@@ -93,6 +121,7 @@ test('client exposes replay, review, language, handshake, batch, permit, and tok
   await client.listReviews('replay_1');
   await client.reviewDecision('replay_1', { verdict: 'agree' });
   await client.evaluateAdmission({ version: 'smerc.runtime-admission-input.v1' });
+  await client.evaluateDecisionPipeline({ version: 'smerc.decision-pipeline-contract.v1' });
   await client.evaluateLanguageAction({ language_version: 'smerc.action.v1' });
   await client.agentHandshake({ schema_version: 'smerc.agent_handshake.v1', handshake_id: 'handshake_1' });
   await client.batch([{ action_id: 'a' }]);
@@ -114,6 +143,7 @@ test('client exposes replay, review, language, handshake, batch, permit, and tok
     'GET /v1/decisions/replay_1/reviews',
     'POST /v1/decisions/replay_1/reviews',
     'POST /v1/admission/evaluate',
+    'POST /v1/pipeline/evaluate',
     'POST /v1/language/evaluate',
     'POST /v1/agent/handshake',
     'POST /v1/batch',
@@ -127,7 +157,7 @@ test('client exposes replay, review, language, handshake, batch, permit, and tok
     'POST /v1/pilot/dll/ledgers/dll_1/certificate',
     'POST /v1/pilot/evidence-packages',
   ]);
-  assert.deepEqual(JSON.parse(calls[8].body), {
+  assert.deepEqual(JSON.parse(calls[9].body), {
     schema_version: 'smerc.agent_handshake.v1',
     handshake_id: 'handshake_1',
   });
