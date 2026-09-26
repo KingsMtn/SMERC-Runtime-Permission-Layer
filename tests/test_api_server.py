@@ -26,6 +26,9 @@ SPARTA_REGISTRY = load_sparta_adapter_registry(ROOT / "examples" / "sparta" / "a
 SPARTA_PLAN = json.loads((ROOT / "examples" / "sparta" / "github_actions_deploy_plan.json").read_text(encoding="utf-8"))
 AGENT_HANDSHAKE_EXAMPLE = json.loads((ROOT / "examples" / "agent_handshake_request.json").read_text(encoding="utf-8"))
 ADMISSION_EXAMPLE = json.loads((ROOT / "examples" / "runtime_admission_request.json").read_text(encoding="utf-8"))
+DECISION_PIPELINE_EXAMPLE = json.loads(
+    (ROOT / "examples" / "decision_pipeline_request.json").read_text(encoding="utf-8")
+)
 PILOT_DLL_BUNDLE = json.loads((ROOT / "reports" / "runtime_benchmark_dll_bundle.json").read_text(encoding="utf-8"))
 PILOT_DLL_INTAKE = json.loads((ROOT / "examples" / "pilot_ledger_intake_example.json").read_text(encoding="utf-8"))
 
@@ -101,9 +104,11 @@ class APIServerTests(unittest.TestCase):
         self.assertIn("ESCALATE", body["postures"])
         self.assertIn("POST /v1/evaluate", body["endpoints"])
         self.assertIn("POST /v1/admission/evaluate", body["endpoints"])
+        self.assertIn("POST /v1/pipeline/evaluate", body["endpoints"])
         self.assertIn("POST /v1/language/evaluate", body["endpoints"])
         self.assertEqual(body["language_versions"]["runtime_admission_gate"], "smerc.runtime-admission-gate.v1")
         self.assertEqual(body["language_versions"]["runtime_admission_input"], "smerc.runtime-admission-input.v1")
+        self.assertEqual(body["language_versions"]["decision_pipeline"], "smerc.decision-pipeline-contract.v1")
         self.assertEqual(body["language_versions"]["action"], "smerc.action.v1")
         self.assertEqual(body["language_versions"]["agent_handshake"], "smerc.agent_handshake.v1")
         self.assertEqual(body["language_versions"]["permit"], "smerc.permit.v1")
@@ -177,6 +182,52 @@ class APIServerTests(unittest.TestCase):
 
         events = self.request_json("/v1/security-events", key="alpha-secret")[2]["events"]
         self.assertIn("admission.evaluated", {event["event_type"] for event in events})
+
+    def test_decision_pipeline_endpoint_requires_bearer_authentication(self):
+        status, _, body = self.request_json(
+            "/v1/pipeline/evaluate",
+            method="POST",
+            payload=DECISION_PIPELINE_EXAMPLE,
+        )
+
+        self.assertEqual(status, 401)
+        self.assertEqual(body["error"], "authentication_required")
+
+    def test_decision_pipeline_endpoint_settles_and_records_event(self):
+        status, _, body = self.request_json(
+            "/v1/pipeline/evaluate",
+            method="POST",
+            payload=DECISION_PIPELINE_EXAMPLE,
+            key="alpha-secret",
+        )
+
+        self.assertEqual(status, 200)
+        self.assertEqual(body["version"], "smerc.decision-pipeline-contract.v1")
+        self.assertEqual(body["tenant_id"], "alpha")
+        self.assertEqual(body["final_decision"], "SETTLE")
+        self.assertTrue(body["should_execute"])
+        self.assertTrue(body["should_commit"])
+        self.assertEqual(body["authenticated_principal"]["tenant_id"], "alpha")
+        self.assertEqual(
+            body["runtime_observation"]["fail_behavior"],
+            "deny_before_scoring_or_withhold_consequence_settlement",
+        )
+
+        events = self.request_json("/v1/security-events", key="alpha-secret")[2]["events"]
+        self.assertIn("decision_pipeline.evaluated", {event["event_type"] for event in events})
+
+    def test_decision_pipeline_endpoint_rejects_invalid_contract(self):
+        payload = dict(DECISION_PIPELINE_EXAMPLE)
+        payload["unexpected"] = True
+        status, _, body = self.request_json(
+            "/v1/pipeline/evaluate",
+            method="POST",
+            payload=payload,
+            key="alpha-secret",
+        )
+
+        self.assertEqual(status, 400)
+        self.assertEqual(body["error"], "invalid_decision_pipeline_request")
 
     def test_admission_endpoint_rejects_invalid_identity_before_scoring(self):
         payload = json.loads(json.dumps(ADMISSION_EXAMPLE))

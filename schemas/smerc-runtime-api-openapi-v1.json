@@ -185,6 +185,45 @@
         }
       }
     },
+    "/v1/pipeline/evaluate": {
+      "post": {
+        "tags": ["Evaluation"],
+        "summary": "Evaluate the unified decision and settlement pipeline",
+        "description": "Requires actions.evaluate scope. Applies non-overridable hard gates, mathematical recoverability scoring, execution routing, consequence-time authority reconciliation, and settlement evaluation. This endpoint evaluates and records evidence but does not execute or commit the proposed action.",
+        "operationId": "evaluateSmercDecisionPipeline",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionPipelineRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Unified pipeline decision",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionPipelineResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
     "/v1/language/evaluate": {
       "post": {
         "tags": ["Evaluation"],
@@ -964,6 +1003,82 @@
           }
         },
         "additionalProperties": true
+      },
+      "DecisionPipelineRequest": {
+        "type": "object",
+        "required": ["version", "pipeline_id", "hard_gates", "action", "consequence_manifest"],
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "smerc.decision-pipeline-contract.v1"
+          },
+          "pipeline_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "hard_gates": {
+            "type": "object",
+            "required": ["identity_valid", "delegation_valid", "authority_current", "recovery_capability_present", "evidence_non_secret"],
+            "properties": {
+              "identity_valid": {"type": "boolean"},
+              "delegation_valid": {"type": "boolean"},
+              "authority_current": {"type": "boolean"},
+              "recovery_capability_present": {"type": "boolean"},
+              "evidence_non_secret": {"type": "boolean"}
+            },
+            "additionalProperties": false
+          },
+          "action": {
+            "type": "object",
+            "required": ["action_id", "description", "tool", "actor", "confidence", "harm", "consent", "reversibility", "external_effect", "sensitive_data"],
+            "properties": {
+              "action_id": {"type": "string", "minLength": 1},
+              "description": {"type": "string", "minLength": 1},
+              "tool": {"type": "string", "minLength": 1},
+              "actor": {"type": "string", "minLength": 1},
+              "confidence": {"$ref": "#/components/schemas/UnitScore"},
+              "harm": {"$ref": "#/components/schemas/UnitScore"},
+              "consent": {"$ref": "#/components/schemas/UnitScore"},
+              "reversibility": {"$ref": "#/components/schemas/UnitScore"},
+              "external_effect": {"type": "boolean"},
+              "sensitive_data": {"type": "boolean"},
+              "context": {"type": "object"}
+            },
+            "additionalProperties": false
+          },
+          "consequence_manifest": {
+            "type": "object",
+            "description": "One strict metadata-only smerc.authorization-afterlife-evidence-manifest.v1 object containing exactly one evidence record."
+          }
+        },
+        "additionalProperties": false
+      },
+      "DecisionPipelineResponse": {
+        "type": "object",
+        "required": ["version", "pipeline_id", "final_decision", "should_execute", "should_commit", "controls", "stages", "pipeline_sha256", "contract_rule", "tenant_id", "authenticated_principal", "runtime_observation"],
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "smerc.decision-pipeline-contract.v1"
+          },
+          "pipeline_id": {"type": "string"},
+          "final_decision": {
+            "type": "string",
+            "enum": ["ALLOW", "THROTTLE", "FREEZE", "DENY", "ESCALATE", "SETTLE", "QUARANTINE", "COMPENSATE"]
+          },
+          "should_execute": {"type": "boolean"},
+          "should_commit": {"type": "boolean"},
+          "controls": {"type": "array", "items": {"type": "string"}},
+          "stages": {"type": "array", "items": {"type": "object"}},
+          "scoring": {"type": ["object", "null"]},
+          "settlement": {"type": ["object", "null"]},
+          "pipeline_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "contract_rule": {"type": "string"},
+          "tenant_id": {"type": "string"},
+          "authenticated_principal": {"type": "object"},
+          "runtime_observation": {"type": "object"}
+        },
+        "additionalProperties": false
       },
       "AgentHandshakeRequest": {
         "type": "object",

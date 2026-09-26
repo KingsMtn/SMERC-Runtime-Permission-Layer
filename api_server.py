@@ -58,6 +58,10 @@ from reference_engine.github_oidc import (
     parse_github_oidc_trust,
 )
 from reference_engine.decision_certificate import CERTIFICATE_VERSION, build_decision_certificate
+from reference_engine.decision_pipeline_contract import (
+    VERSION as DECISION_PIPELINE_VERSION,
+    evaluate_pipeline,
+)
 from reference_engine.operator_status import STATUS_VERSION, build_operator_status
 from reference_engine.policy import POLICY_VERSION, PolicyRegistry
 from reference_engine.pilot_ledger_intake import (
@@ -506,6 +510,16 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
                 if not isinstance(payload, dict):
                     raise APIError(HTTPStatus.BAD_REQUEST, "invalid_payload", "Admission evaluation expects one JSON object.")
                 self._write_json(self._evaluate_admission(principal, payload), request_id=request_id)
+                return
+
+            if path == "/v1/pipeline/evaluate":
+                if not isinstance(payload, dict):
+                    raise APIError(
+                        HTTPStatus.BAD_REQUEST,
+                        "invalid_payload",
+                        "Decision pipeline evaluation expects one JSON object.",
+                    )
+                self._write_json(self._evaluate_decision_pipeline(principal, payload), request_id=request_id)
                 return
 
             if path == "/v1/pilot/dll/intake":
@@ -1680,6 +1694,40 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
         )
         return result
 
+    def _evaluate_decision_pipeline(
+        self,
+        principal: APIPrincipal,
+        payload: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        started_at = time.perf_counter()
+        try:
+            result = evaluate_pipeline(payload)
+        except (TypeError, ValueError) as exc:
+            raise APIError(HTTPStatus.BAD_REQUEST, "invalid_decision_pipeline_request", str(exc)) from exc
+        result["tenant_id"] = principal.tenant_id
+        result["authenticated_principal"] = principal.public_identity()
+        result["runtime_observation"] = {
+            "schema": "smerc.runtime-observation.v1",
+            "source": "smerc-runtime-api",
+            "integration_status": "ok",
+            "evaluation_latency_ms": round((time.perf_counter() - started_at) * 1000, 3),
+            "observed_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            "fail_behavior": "deny_before_scoring_or_withhold_consequence_settlement",
+        }
+        self.server.audit_store.record_security_event(
+            principal.tenant_id,
+            principal.principal_id,
+            "decision_pipeline.evaluated",
+            result["pipeline_id"],
+            {
+                "final_decision": result["final_decision"],
+                "should_execute": result["should_execute"],
+                "should_commit": result["should_commit"],
+                "pipeline_sha256": result["pipeline_sha256"],
+            },
+        )
+        return result
+
     def _evaluate_inline_admission(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         admission_payload = payload.get("admission")
         if admission_payload is None:
@@ -1926,6 +1974,8 @@ class SMERCRequestHandler(BaseHTTPRequestHandler):
             return "actions.evaluate"
         if path == "/v1/admission/evaluate":
             return "actions.evaluate"
+        if path == "/v1/pipeline/evaluate":
+            return "actions.evaluate"
         if path == "/v1/pilot/dll/intake":
             return "reviews.write"
         if path == "/v1/pilot/dll/metrics":
@@ -2090,6 +2140,7 @@ def schema() -> Dict[str, Any]:
             "decision": DECISION_VERSION,
             "runtime_admission_gate": RUNTIME_ADMISSION_GATE_VERSION,
             "runtime_admission_input": ADMISSION_INPUT_VERSION,
+            "decision_pipeline": DECISION_PIPELINE_VERSION,
             "agent_handshake": HANDSHAKE_VERSION,
             "permit": PERMIT_VERSION,
             "control_evidence": CONTROL_EVIDENCE_VERSION,
@@ -2149,6 +2200,7 @@ def schema() -> Dict[str, Any]:
             "GET /schema": "input and endpoint shape",
             "POST /v1/evaluate": "evaluate and persist one action",
             "POST /v1/admission/evaluate": "evaluate hard runtime admission checks before recoverability scoring",
+            "POST /v1/pipeline/evaluate": "evaluate hard admission, recoverability, execution routing, and consequence settlement",
             "POST /v1/auth/token": "exchange a static bootstrap credential for a short-lived narrowed token",
             "POST /v1/auth/github": "exchange one verified GitHub Actions OIDC token for a workload-bound session",
             "POST /v1/language/evaluate": "validate, compile, evaluate, and persist one Action Language envelope",

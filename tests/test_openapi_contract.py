@@ -50,6 +50,18 @@ class OpenAPIContractTests(unittest.TestCase):
         self.assertEqual(response_schema["properties"]["decision"]["enum"], ["ADMIT", "REJECT", "ESCALATE"])
         self.assertIn("admissible_for_recoverability_scoring", response_schema["required"])
 
+    def test_decision_pipeline_contract_declares_non_executing_settlement_boundary(self):
+        operation = self.contract["paths"]["/v1/pipeline/evaluate"]["post"]
+        request_schema = self.contract["components"]["schemas"]["DecisionPipelineRequest"]
+        response_schema = self.contract["components"]["schemas"]["DecisionPipelineResponse"]
+
+        self.assertEqual(operation["operationId"], "evaluateSmercDecisionPipeline")
+        self.assertIn("does not execute or commit", operation["description"])
+        self.assertIn("hard_gates", request_schema["required"])
+        self.assertIn("consequence_manifest", request_schema["required"])
+        self.assertIn("should_execute", response_schema["required"])
+        self.assertIn("should_commit", response_schema["required"])
+
     def test_evaluate_contract_documents_inline_admission_and_missing_signal_behavior(self):
         operation = self.contract["paths"]["/v1/evaluate"]["post"]
         request_schema = self.contract["components"]["schemas"]["RecoverabilityActionRequest"]
