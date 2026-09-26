@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an Authority Accretion Gate that quarantines resources acquired during a task until their resolved capabilities fit the current bounded authority envelope.
 - Added the Continuing Authority Contract to detect authorization afterlife through authority-epoch reconciliation, revocation and expiry handling, accountable-lineage checks, descendant invalidation evidence, compensation routing, and settlement gating.
 - Added a Why This Matters Now brief and Known Data Fallback Brief so reviewers can understand the urgency and the no-response evidence plan without treating fallback data as customer validation.
 - Added an AWS one-action reviewer ask with an outbound message, two-minute response template, GitHub issue paths, and no-response fallback plan.

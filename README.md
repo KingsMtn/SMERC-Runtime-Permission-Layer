@@ -9,6 +9,12 @@ in `integrations/github_ephemeral`, and `THIRD_PARTY_NOTICES.md`.
 The AWS MCP enforcement adapter can require that GitHub admission digest and binds the
 exact admitted commit into the AWS execution target and result receipt.
 
+The Authority Accretion Gate prevents credentials, accounts, services, agents, compute,
+and tools acquired after admission from silently becoming new execution authority. It
+requires quarantine, current-epoch and provider-provenance reconciliation, and bounded
+capability, effect, delegation, persistence, and spend. See
+`docs/Authority_Accretion_Gate.md`.
+
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
 ## External Technical Review Edition
