@@ -26,7 +26,7 @@ def _sha(value: Any) -> str:
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
 
 
-def _base_inputs(intent: str) -> dict[str, Any]:
+def build_base_inputs(intent: str) -> dict[str, Any]:
     signer = ContinuanceContractSigner("scenario-key", b"scenario-proof-key-material-00001")
     root = signer.issue_root(
         tenant_id="review-tenant", originating_user_id="review-user", agent_id="coordinator",
@@ -86,7 +86,7 @@ def build_report(repo_root: str | Path) -> dict[str, Any]:
     read_only = _load(root / "examples" / "aws_mcp_supervised_live_proof.json")
     reversible = _load(root / "reports" / "aws_reversible_mutation_observation.json")
     intent = hashlib.sha256(b"aws-authorization-afterlife-review").hexdigest()
-    base = _base_inputs(intent)
+    base = build_base_inputs(intent)
 
     read_action = {
         "capability": "aws:Read", "resource": "aws:account-summary", "intent_digest": intent,

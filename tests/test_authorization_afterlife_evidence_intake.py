@@ -17,10 +17,10 @@ class AuthorizationAfterlifeEvidenceIntakeTests(unittest.TestCase):
 
     def test_valid_manifest_produces_reconciliation_readiness(self):
         report = build_intake_report(self.payload)
-        self.assertEqual(report["record_count"], 2)
-        self.assertEqual(report["records_requiring_reconciliation"], 1)
+        self.assertEqual(report["record_count"], 3)
+        self.assertEqual(report["records_requiring_reconciliation"], 2)
         self.assertEqual(report["readiness"], "ready_for_scenario_reconciliation")
-        self.assertEqual(report["evidence_class_counts"]["SYNTHETIC"], 1)
+        self.assertEqual(report["evidence_class_counts"]["SYNTHETIC"], 2)
 
     def test_rejects_secret_shaped_fields_recursively(self):
         payload = deepcopy(self.payload)
