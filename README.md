@@ -24,6 +24,11 @@ The AWS Authorization-Afterlife Scenario Runner converts that lifecycle into a
 reviewer-readable report using sanitized controlled AWS proof evidence and explicitly
 labeled synthetic authority changes. See `docs/AWS_Authorization_Afterlife_Scenario_Runner.md`.
 
+The Authorization-Afterlife Evidence Intake adds a strict metadata-only pilot boundary for
+1 to 25 labeled observations. It validates provenance declarations, rejects secret-shaped
+fields, and identifies records requiring consequence-time reconciliation. See
+`docs/Authorization_Afterlife_Evidence_Intake.md`.
+
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
 ## External Technical Review Edition
