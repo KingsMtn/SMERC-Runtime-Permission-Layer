@@ -1053,6 +1053,12 @@ The resulting decision records verified repository, workflow, commit, run, actor
 
 Requires Python 3.10 or later. No third-party Python packages are required.
 
+The core runtime remains dependency-free. Release maintainers can optionally
+install `requirements-schema-validation.txt` and run
+`python -m reference_engine.schema_conformance --pretty` to validate every
+SMERC JSON Schema against its declared metaschema using the MIT-licensed
+`jsonschema` project.
+
 ```bash
 python -m reference_engine.agent_permission_layer examples/agent_permission_actions.json --pretty
 python -m reference_engine.constraint_eligibility examples/constraint_eligibility/prohibited_audit_log_delete.json --pretty
