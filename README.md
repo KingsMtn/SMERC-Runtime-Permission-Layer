@@ -112,6 +112,7 @@ Fast reviewer paths:
 - AWS customer metadata mini-pack: `docs/AWS_Customer_Metadata_Mini_Pack.md`
 - AWS Bedrock/Lambda decision handler pattern: `docs/AWS_Bedrock_Agent_Kill_Switch_Pattern.md`
 - AWS Lambda/OpenAPI decision surface: `docs/AWS_Decision_API_Surface.md`
+- Unified decision pipeline request: `examples/decision_pipeline_request.json`
 - Linux Foundation standards alignment: `docs/Linux_Foundation_Standards_Alignment.md`
 - TRACE-style evidence adapter: `docs/TRACE_Evidence_Adapter.md`
 - AWS cloud action reviewer: `docs/AWS_Cloud_Action_Replay.md`
