@@ -15,6 +15,11 @@ requires quarantine, current-epoch and provider-provenance reconciliation, and b
 capability, effect, delegation, persistence, and spend. See
 `docs/Authority_Accretion_Gate.md`.
 
+The Consequence-Time Reconciliation Proof composes Delegated Continuance, Authority
+Accretion, and Continuing Authority at commit or settlement time. It prevents any one
+passing checkpoint from masking stale authority, expanded acquired power, or exhausted
+delegated budget. See `docs/Consequence_Time_Reconciliation_Proof.md`.
+
 [![Tests](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml/badge.svg)](https://github.com/KingsMtn/SMERC-Runtime-Permission-Layer/actions/workflows/tests.yml)
 
 ## External Technical Review Edition

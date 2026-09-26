@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a Consequence-Time Reconciliation Proof that combines delegated continuance, authority accretion, and continuing-authority settlement into one fail-closed lifecycle.
 - Added an Authority Accretion Gate that quarantines resources acquired during a task until their resolved capabilities fit the current bounded authority envelope.
 - Added the Continuing Authority Contract to detect authorization afterlife through authority-epoch reconciliation, revocation and expiry handling, accountable-lineage checks, descendant invalidation evidence, compensation routing, and settlement gating.
 - Added a Why This Matters Now brief and Known Data Fallback Brief so reviewers can understand the urgency and the no-response evidence plan without treating fallback data as customer validation.
