@@ -1,0 +1,319 @@
+{
+  "version": "smerc.authorization-afterlife-pilot-runner.v1",
+  "pilot_id": "aws-afterlife-metadata-pilot",
+  "record_count": 3,
+  "decision_counts": {
+    "SETTLE": 1,
+    "QUARANTINE": 1,
+    "COMPENSATE": 1,
+    "DENY": 0
+  },
+  "decisions": [
+    {
+      "evidence_id": "aws-read-settlement-001",
+      "evidence_class": "CONTROLLED_AWS_PROOF",
+      "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "action_id": "aws-read-summary",
+      "operation": "read",
+      "decision": "SETTLE",
+      "should_commit": true,
+      "reasons": [],
+      "required_actions": [],
+      "limitations": [
+        "Authority metadata is modeled for this public example."
+      ],
+      "reconciliation": {
+        "version": "smerc.consequence-time-reconciliation.v1",
+        "decision": "SETTLE",
+        "reasons": [],
+        "authority_effect": "NONE",
+        "should_commit": true,
+        "checkpoints": {
+          "delegated_continuance": {
+            "version": "smerc.delegated-continuance-contract.v1",
+            "contract_id": "dcc_4a037f166fed4e99834429b0b7268286",
+            "agent_id": "aws-worker",
+            "decision": "CONTINUE",
+            "reasons": [],
+            "remaining": {
+              "actions": 2,
+              "scope_units": 4.0,
+              "cost_usd": 1.0
+            },
+            "evidence": {
+              "contract_sha256": "c7473df8485cb426ecc5e010f514a7dd4c06d7d8720398ff3dbbc8caa4c106fe",
+              "action_sha256": "cbe6df44d2ca2c3fff20af8e414bbf3d5fe53ebc3f870fbf30ed44ee9357fc8f",
+              "authority_rechecked_at": 200
+            }
+          },
+          "authority_accretion": {
+            "version": "smerc.authority-accretion.v1",
+            "decision": "ELIGIBLE_FOR_ACTIVATION",
+            "reasons": [],
+            "authority_effect": "NONE",
+            "should_activate": false,
+            "envelope_id": "aws-envelope-7",
+            "resource_id": "aws-session-resource",
+            "resolver_version": "sanitized-aws-proof-v1",
+            "evidence": {
+              "envelope_sha256": "706ea7c5a4798a627ed641098b149b2dc4994af96adf9e12c4451de6c2202362",
+              "acquired_resource_sha256": "e85300b2e4d0145b2974038435004822f0cfc846318c8b26ddec5301bab094e5",
+              "observation_sha256": "147103831bd0a6514fdf37353e6a7a532da4daf750438ee8d6b237724efb9bf6"
+            }
+          },
+          "continuing_authority": {
+            "version": "smerc.continuing-authority.v1",
+            "decision": "SETTLE",
+            "reasons": [],
+            "authority_effect": "NONE",
+            "contract_id": "authority-aws-proof",
+            "phase": "settle",
+            "authority": {
+              "granted_epoch": 7,
+              "current_epoch": 7,
+              "valid_until": 500,
+              "observed_at": 200,
+              "accountable_principals": [
+                "coordinator",
+                "review-user"
+              ]
+            },
+            "propagation": {
+              "expected_descendants": [
+                "aws-worker-contract"
+              ],
+              "missing_acknowledgements": [],
+              "complete": true
+            },
+            "evidence": {
+              "grant_sha256": "4edfe30d2335b4543674d0046f9892d87d10d0d7bab9f28f909bbe12c942e7a5",
+              "runtime_sha256": "0d9cdebb33e8ab3c9444f28e7c23865471dc4438a124fe682174235e69c7d486",
+              "reconciled_at": 200
+            }
+          }
+        },
+        "evidence": {
+          "delegated_sha256": "351d40ee2c65ae50e65c2e998145ad9956ba54557a47bed9cc08dff5e30066af",
+          "acquired_sha256": "68337b274c584e5200412bc4d63b7f09f33c71538382ff9c50ae301fbbc0d5e1",
+          "continuing_sha256": "3cc82bfe90d7aa961d4a1dad4f6dcb29ab5a4b8d7062b37b2d86e51df1c24e4f",
+          "reconciled_at": 200
+        }
+      }
+    },
+    {
+      "evidence_id": "aws-epoch-drift-002",
+      "evidence_class": "SYNTHETIC",
+      "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "action_id": "aws-policy-drift-read",
+      "operation": "read",
+      "decision": "QUARANTINE",
+      "should_commit": false,
+      "reasons": [
+        "acquired:authority_epoch_changed",
+        "continuing:authority_epoch_changed"
+      ],
+      "required_actions": [
+        "hold_commit",
+        "revalidate_authority_and_evidence"
+      ],
+      "limitations": [
+        "Authority epoch drift is synthetic."
+      ],
+      "reconciliation": {
+        "version": "smerc.consequence-time-reconciliation.v1",
+        "decision": "QUARANTINE",
+        "reasons": [
+          "acquired:authority_epoch_changed",
+          "continuing:authority_epoch_changed"
+        ],
+        "authority_effect": "NONE",
+        "should_commit": false,
+        "checkpoints": {
+          "delegated_continuance": {
+            "version": "smerc.delegated-continuance-contract.v1",
+            "contract_id": "dcc_f918168e3cf74e3b800f5f16232cf0e7",
+            "agent_id": "aws-worker",
+            "decision": "CONTINUE",
+            "reasons": [],
+            "remaining": {
+              "actions": 2,
+              "scope_units": 4.0,
+              "cost_usd": 1.0
+            },
+            "evidence": {
+              "contract_sha256": "4d772f12ebfac5a98e11a5174d4d7f9cae2fd5934bbfa4e8628acd4b69f4f355",
+              "action_sha256": "9bbc053261605d430b11d7574e2953d59d37efcd8f14ff959d209fae4823777e",
+              "authority_rechecked_at": 200
+            }
+          },
+          "authority_accretion": {
+            "version": "smerc.authority-accretion.v1",
+            "decision": "QUARANTINE",
+            "reasons": [
+              "authority_epoch_changed"
+            ],
+            "authority_effect": "NONE",
+            "should_activate": false,
+            "envelope_id": "aws-envelope-7",
+            "resource_id": "aws-session-resource",
+            "resolver_version": "sanitized-aws-proof-v1",
+            "evidence": {
+              "envelope_sha256": "706ea7c5a4798a627ed641098b149b2dc4994af96adf9e12c4451de6c2202362",
+              "acquired_resource_sha256": "e85300b2e4d0145b2974038435004822f0cfc846318c8b26ddec5301bab094e5",
+              "observation_sha256": "8d6361c8768d0e6d7a3a5ea1c13807b7cad83a583e134be096c1574a0c6296d9"
+            }
+          },
+          "continuing_authority": {
+            "version": "smerc.continuing-authority.v1",
+            "decision": "QUARANTINE",
+            "reasons": [
+              "authority_epoch_changed"
+            ],
+            "authority_effect": "NONE",
+            "contract_id": "authority-aws-proof",
+            "phase": "settle",
+            "authority": {
+              "granted_epoch": 7,
+              "current_epoch": 8,
+              "valid_until": 500,
+              "observed_at": 200,
+              "accountable_principals": [
+                "coordinator",
+                "review-user"
+              ]
+            },
+            "propagation": {
+              "expected_descendants": [
+                "aws-worker-contract"
+              ],
+              "missing_acknowledgements": [],
+              "complete": true
+            },
+            "evidence": {
+              "grant_sha256": "4edfe30d2335b4543674d0046f9892d87d10d0d7bab9f28f909bbe12c942e7a5",
+              "runtime_sha256": "681d3029e34449624ed42a0ff23505b7212cdbf81b2224018233e7ff4adb76dd",
+              "reconciled_at": 200
+            }
+          }
+        },
+        "evidence": {
+          "delegated_sha256": "0bde551c6b738ab8a7623612bf4a3dcca7558c37bc423ec07269471ed54098a9",
+          "acquired_sha256": "23b51faf08d243342c0892435500d479ad82703fce54840c2d5a8a5c42d74bb9",
+          "continuing_sha256": "33537ee7886d37c290e34d39bb049453c254db2d1faf85bf240410c21c6b4582",
+          "reconciled_at": 200
+        }
+      }
+    },
+    {
+      "evidence_id": "aws-revoked-partial-002",
+      "evidence_class": "SYNTHETIC",
+      "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "action_id": "aws-ephemeral-mutation",
+      "operation": "create_ephemeral",
+      "decision": "COMPENSATE",
+      "should_commit": false,
+      "reasons": [
+        "acquired:authority_epoch_changed",
+        "continuing:contract_revoked",
+        "continuing:authority_epoch_changed",
+        "continuing:partial_effects_require_compensation"
+      ],
+      "required_actions": [
+        "execute_compensation",
+        "verify_cleanup_before_settlement"
+      ],
+      "limitations": [
+        "Revocation timing and authority epoch drift are synthetic."
+      ],
+      "reconciliation": {
+        "version": "smerc.consequence-time-reconciliation.v1",
+        "decision": "COMPENSATE",
+        "reasons": [
+          "acquired:authority_epoch_changed",
+          "continuing:contract_revoked",
+          "continuing:authority_epoch_changed",
+          "continuing:partial_effects_require_compensation"
+        ],
+        "authority_effect": "NONE",
+        "should_commit": false,
+        "checkpoints": {
+          "delegated_continuance": {
+            "version": "smerc.delegated-continuance-contract.v1",
+            "contract_id": "dcc_b0e3334826ae4826baca3a0e54a8e4b7",
+            "agent_id": "aws-worker",
+            "decision": "CONTINUE",
+            "reasons": [],
+            "remaining": {
+              "actions": 2,
+              "scope_units": 4.0,
+              "cost_usd": 1.0
+            },
+            "evidence": {
+              "contract_sha256": "4af2609a323ff1fcf8e475510c865dda3ee91152036ce64a2c88c8936e1f36e0",
+              "action_sha256": "e3ff38fcea937d64620500a224801a1bc7411901f387c421f875b132ee8a13ff",
+              "authority_rechecked_at": 200
+            }
+          },
+          "authority_accretion": {
+            "version": "smerc.authority-accretion.v1",
+            "decision": "QUARANTINE",
+            "reasons": [
+              "authority_epoch_changed"
+            ],
+            "authority_effect": "NONE",
+            "should_activate": false,
+            "envelope_id": "aws-envelope-7",
+            "resource_id": "aws-session-resource",
+            "resolver_version": "sanitized-aws-proof-v1",
+            "evidence": {
+              "envelope_sha256": "706ea7c5a4798a627ed641098b149b2dc4994af96adf9e12c4451de6c2202362",
+              "acquired_resource_sha256": "e85300b2e4d0145b2974038435004822f0cfc846318c8b26ddec5301bab094e5",
+              "observation_sha256": "8d6361c8768d0e6d7a3a5ea1c13807b7cad83a583e134be096c1574a0c6296d9"
+            }
+          },
+          "continuing_authority": {
+            "version": "smerc.continuing-authority.v1",
+            "decision": "COMPENSATE",
+            "reasons": [
+              "contract_revoked",
+              "authority_epoch_changed",
+              "partial_effects_require_compensation"
+            ],
+            "authority_effect": "NONE",
+            "contract_id": "authority-aws-proof",
+            "phase": "settle",
+            "authority": {
+              "granted_epoch": 7,
+              "current_epoch": 8,
+              "valid_until": 500,
+              "observed_at": 200,
+              "accountable_principals": [
+                "coordinator",
+                "review-user"
+              ]
+            },
+            "propagation": {
+              "expected_descendants": [
+                "aws-worker-contract"
+              ],
+              "missing_acknowledgements": [],
+              "complete": true
+            },
+            "evidence": {
+              "grant_sha256": "4edfe30d2335b4543674d0046f9892d87d10d0d7bab9f28f909bbe12c942e7a5",
+              "runtime_sha256": "17b9582b6aa821166557341f4a00a360e41889c2e9d3308105730922a1956d29",
+              "reconciled_at": 200
+            }
+          }
+        },
+        "evidence": {
+          "delegated_sha256": "9a2527f0c7cc638c62004889dc867528a0f050c61bb7920ac1a9a3a8600be088",
+          "acquired_sha256": "23b51faf08d243342c0892435500d479ad82703fce54840c2d5a8a5c42d74bb9",
+          "continuing_sha256": "6979d5a0509d65dfbb7f6707010e499fc979f466e65ff682f7a0d790172f7d72",
+          "reconciled_at": 200
+        }
+      }
+    }
+  ],
+  "evidence_boundary": "Decisions are deterministic evaluations of supplied, validated metadata. SMERC preserves the declared evidence class and source digest but does not verify upstream truth, AWS attestation, customer production safety, or complete transport enforcement."
+}

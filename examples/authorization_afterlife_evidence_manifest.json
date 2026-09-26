@@ -25,6 +25,28 @@
       "limitations": ["Authority metadata is modeled for this public example."]
     },
     {
+      "evidence_id": "aws-epoch-drift-002",
+      "evidence_class": "SYNTHETIC",
+      "collected_at": "2026-09-26T00:00:30Z",
+      "source_system": "authorization-afterlife-scenario-runner",
+      "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "observations": {
+        "action_id": "aws-policy-drift-read",
+        "operation": "read",
+        "external_side_effect": false,
+        "authority_epoch": 7,
+        "current_authority_epoch": 8,
+        "revoked": false,
+        "partial_effects_present": false,
+        "outcome_verified": false,
+        "cleanup_verified": true,
+        "rollback_available": true,
+        "cost_usd": 0,
+        "scope_units": 1
+      },
+      "limitations": ["Authority epoch drift is synthetic."]
+    },
+    {
       "evidence_id": "aws-revoked-partial-002",
       "evidence_class": "SYNTHETIC",
       "collected_at": "2026-09-26T00:01:00Z",

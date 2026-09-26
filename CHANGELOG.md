@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an Authorization-Afterlife Pilot Runner that converts validated metadata into evidence-bound consequence-time decisions.
 - Added a strict metadata-only Authorization-Afterlife Evidence Intake for labeled pilot observations, provenance digests, secret-field rejection, and reconciliation readiness.
 - Added an AWS Authorization-Afterlife Scenario Runner that labels and composes sanitized controlled AWS proof evidence with explicit synthetic authority-change scenarios.
 - Added a Consequence-Time Reconciliation Proof that combines delegated continuance, authority accretion, and continuing-authority settlement into one fail-closed lifecycle.
