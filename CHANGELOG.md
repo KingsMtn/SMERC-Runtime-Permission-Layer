@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added an AWS Authorization-Afterlife Scenario Runner that labels and composes sanitized controlled AWS proof evidence with explicit synthetic authority-change scenarios.
 - Added a Consequence-Time Reconciliation Proof that combines delegated continuance, authority accretion, and continuing-authority settlement into one fail-closed lifecycle.
 - Added an Authority Accretion Gate that quarantines resources acquired during a task until their resolved capabilities fit the current bounded authority envelope.
 - Added the Continuing Authority Contract to detect authorization afterlife through authority-epoch reconciliation, revocation and expiry handling, accountable-lineage checks, descendant invalidation evidence, compensation routing, and settlement gating.
